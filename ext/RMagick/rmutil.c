@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.48 2004/12/30 03:11:47 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.49 2005/01/10 22:51:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -505,7 +505,11 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 
     class = class;      // defeat "never referenced" message from icc
 
-    Check_Type(hsl, T_ARRAY);
+    hsl = rb_Array(hsl);    // Ensure array
+    if (RARRAY(hsl)->len < 3)
+    {
+        rb_raise(rb_eArgError, "array argument must have at least 3 elements");
+    }
 
     hue        = NUM2DBL(rb_ary_entry(hsl, 0));
     saturation = NUM2DBL(rb_ary_entry(hsl, 1));
@@ -2557,7 +2561,7 @@ magick_error_handler(
 {
     char msg[1024];
 
-    if (severity > WarningException)
+    if (severity >= ErrorException)
     {
 #if defined(HAVE_SNPRINTF)
         snprintf(msg, sizeof(msg)-1,

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.81 2004/12/05 22:36:11 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.82 2004/12/05 23:24:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3847,7 +3847,11 @@ Image_inspect(VALUE self)
     }
 
     // Print bit depth
-    quantum_depth = GetImageQuantumDepth(image, MagickTrue);
+#if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+    quantum_depth = GetImageQuantumDepth(image);
+#else
+    quantum_depth = GetImageQuantumDepth(image, True);
+#endif
     x += sprintf(buffer+x, "%lu-bit", quantum_depth);
 
     // Print blob info if appropriate.

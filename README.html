@@ -51,8 +51,7 @@
     <b>Author:</b>&nbsp;Tim Hunter<br>
      <b>Email:</b>&nbsp;<a href=
     "mailto:rmagick@rubyforge.org">rmagick@rubyforge.org</a><br>
-    <b>RubyForge Forums:</b>&nbsp;<a href="http://rubyforge.org/projects/rmagick">RMagick project page</a><br>
-    <b>Mailing list:</b>&nbsp;<a href="mailto:rmagick-users@rubyforge.org">rmagick-users@rubyforge.org</a>
+    <b>RubyForge:</b>&nbsp;<a href="http://rubyforge.org/projects/rmagick">RMagick</a><br>
 
     <h2><a name="prerequisites">Prerequisites</a></h2>
     <dl>
@@ -72,12 +71,14 @@
         You can get GraphicsMagick from <a href="http://www.graphicsmagick.org">www.graphicsmagick.org</a>.</dd>
     </dl>
     <p>You only need one of ImageMagick or GraphicsMagick. RMagick
-    works equally well with both.</p>
+    works equally well with both. Some RMagick methods may not be supported in one or the other library.</p>
     <h2><a name="tips">Tips for installing and configuring
     ImageMagick and GraphicsMagick</a></h2>
-    <p>If you have never installed ImageMagick or GraphicsMagick
-    before, I strongly encourage you to install the newest version
-    of your choice from source. I also strongly encourage you to
+    <p>if you are installing RMagick by compiling the source code,
+    I <em>strongly</em> encourage you to install the latest version
+    of ImageMagick or GraphicsMagick <em>from source</em>.
+    If you have never installed ImageMagick or GraphicsMagick
+    before, I also strongly encourage you to
     read the README.txt file as many times as is necessary for you
     to understand how to configure it. ImageMagick and
     GraphicsMagick are large and complicated programs and can be
@@ -360,16 +361,16 @@ cc1: warning:   as it has already been specified as a non-system directory
     <p>Thanks to</p>
     <ul>
       <li>Akinori MUSHA, for his work making RMagick available on
-      FreeBSD</li>
+      FreeBSD.</li>
       <li>Tom Payne, for reporting bugs, sending me the Ruby 1.8.0
-      patches, and for the Gentoo ebuild</li>
-      <li>Bob Friesenhahn, for helping with the GraphicsMagick
-      support and in many other ways</li>
+      patches, and for the Gentoo ebuild.</li>
+      <li>Bob Friesenhahn, for GraphicsMagick. Also for his help with
+      the RMagick installation and many other things.</li>
       <li>
         Simple Systems, for hosting the RMagick documentation online.
       </li>
       <li>Mike Williams, for the RMagick Debian package</li>
-      <li>ImageMagick Studio LLC, for help with ImageMagick and for
+      <li>ImageMagick Studio LLC, for ImageMagick and for
       hosting the RMagick documentation.</li>
       <li>Kaspar Schiess, for the MS Windows gem.</li>
     </ul>

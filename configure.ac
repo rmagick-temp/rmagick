@@ -66,7 +66,11 @@ AC_CHECK_HEADER(magick/api.h, [],
     [AC_MSG_ERROR([Can't find magick/api.h])])
 
 # What functions?
-AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel ThumbnailImage RemoveFirstImageFromList GetNextImageInList SetLogFormat XImportImage ExportImagePixels ImportImagePixels ThresholdImageChannel RandomChannelThresholdImage StripImage AcquireMagickMemory])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
+AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList]) 
+AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
+AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
+AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

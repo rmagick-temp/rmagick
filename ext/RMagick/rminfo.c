@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.18 2004/03/19 01:32:22 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.19 2004/06/13 19:59:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -543,42 +543,14 @@ DEF_ATTR_READER(Info, fuzz, dbl)
 /*
     Method:     Info#fuzz=number
                 Info#fuzz=NN%
-    Notes:      If the fuzz value is a string in the form 'NN%',
-                set the fuzz to a percentage of MaxRGB.
-                See Image#fuzz
+    Notes:      See Image#fuzz
 */
-VALUE Info_fuzz_eq(VALUE self, VALUE fuzz_arg)
+VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
 {
     Info *info;
-    char *fuzz_str, *end;
-    double fuzz;
-
-    // If the fuzz argument is a string, convert it to a double.
-    // If the argument ends in '%', treat it as a percentage.
-    if(TYPE(fuzz_arg) == T_STRING)
-    {
-        fuzz_str = STRING_PTR(fuzz_arg);
-        fuzz = strtod(fuzz_str, &end);
-        if(*end == '%')
-        {
-            fuzz = (fuzz * MaxRGB) / 100;
-        }
-        else if(*end != '\0')
-        {
-            rb_raise(rb_eTypeError, "expected percentage, got `%s'", fuzz_str);
-        }
-    }
-
-    // Otherwise it's supposed to be a number.
-    else
-    {
-        fuzz = NUM2DBL(fuzz_arg);
-    }
 
     Data_Get_Struct(self, Info, info);
-
-    info->fuzz = fuzz;
-
+    info->fuzz = rm_fuzz_to_dbl(fuzz);
     return self;
 }
 

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.33 2004/06/12 21:55:25 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.34 2004/06/13 19:59:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -169,6 +169,74 @@ VALUE
 rm_obj_to_s(VALUE obj)
 {
     return TYPE(obj) == T_STRING ? obj : rb_funcall(obj, ID_to_s, 0);
+}
+
+
+
+/*
+ *  Static:     arg_is_number
+ *  Purpose:    Try to convert the argument to a double,
+ *              raise an exception if fail.
+*/
+static VALUE
+arg_is_number(VALUE arg)
+{
+    double d;
+    d = NUM2DBL(arg);
+    return arg;
+}
+
+
+/*
+ *  Static:     fuzz_arg_rescue
+ *  Purpose:    called when `rb_str_to_str' raised an exception below
+*/
+static VALUE
+fuzz_arg_rescue(VALUE arg)
+{
+    rb_raise(rb_eArgError, "argument must be a number or a string in the form 'NN%' (%s given)",
+            rb_class2name(CLASS_OF(arg)));
+}
+
+
+/*
+ *  Extern:     rm_fuzz_to_dbl(obj)
+ *  Purpose:    If the argument is a number, convert it to a double.
+ *              Otherwise it's supposed to be a string in the form 'NN%'.
+ *              Return a percentage of MaxRGB.
+ *  Notes:      Called from Image#fuzz= and Info#fuzz=
+*/
+double
+rm_fuzz_to_dbl(VALUE fuzz_arg)
+{
+    double fuzz;
+    char *fuzz_str, *end;
+    int not_num;
+
+    // Try to convert the argument to a number. If failure, sets not_num to non-zero.
+    rb_protect(arg_is_number, fuzz_arg, &not_num);
+
+    if (not_num)
+    {
+        // Convert to string, issue error message if failure.
+        fuzz_arg = rb_rescue(rb_str_to_str, fuzz_arg, fuzz_arg_rescue, fuzz_arg);
+        fuzz_str = STRING_PTR(fuzz_arg);
+        fuzz = strtod(fuzz_str, &end);
+        if(*end == '%')
+        {
+            fuzz = (fuzz * MaxRGB) / 100;
+        }
+        else if(*end != '\0')
+        {
+            rb_raise(rb_eArgError, "expected percentage, got `%s'", fuzz_str);
+        }
+    }
+    else
+    {
+        fuzz = NUM2DBL(fuzz_arg);
+    }
+
+    return fuzz;
 }
 
 

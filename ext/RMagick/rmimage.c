@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.56 2004/06/12 21:55:25 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.57 2004/06/13 19:59:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2456,20 +2456,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     map     = STRING_PTR_LEN(argv[4], mapL);
     if (argc == 6)
     {
-        switch (TYPE(argv[5]))
-        {
-            case T_TRUE:
-                stg_type = FloatPixel;
-                break;
-            case T_FALSE:
-            case T_NIL:
-                stg_type = FIX_STG_TYPE;
-                break;
-            default:
-                rb_raise(rb_eTypeError, "expecting true or false for last argument, got %s"
-                       , rb_class2name(CLASS_OF(argv[5])));
-            break;
-        }
+        stg_type = RTEST(argv[5]) ? FloatPixel : FIX_STG_TYPE;
     }
 
     // Compute the size of the pixel array and allocate the memory.
@@ -3236,44 +3223,15 @@ DEF_ATTR_READER(Image, fuzz, dbl)
 /*
     Method:     Image#fuzz=number
                 Image#fuzz=NN%
-    Notes:      If the fuzz value is a string in the form 'NN%',
-                set the fuzz to a percentage of MaxRGB.
-                See Info#fuzz.
+    Notes:      See Info#fuzz.
 */
-VALUE Image_fuzz_eq(VALUE self, VALUE fuzz_arg)
+VALUE Image_fuzz_eq(VALUE self, VALUE fuzz)
 {
     Image *image;
-    char *fuzz_str, *end;
-    double fuzz;
 
     rm_check_frozen(self);
-
-    // If the fuzz argument is a string, convert it to a double.
-    // If the argument ends in '%', treat it as a percentage.
-    if(TYPE(fuzz_arg) == T_STRING)
-    {
-        fuzz_str = STRING_PTR(fuzz_arg);
-        fuzz = strtod(fuzz_str, &end);
-        if(*end == '%')
-        {
-            fuzz = (fuzz * MaxRGB) / 100;
-        }
-        else if(*end != '\0')
-        {
-            rb_raise(rb_eTypeError, "expected percentage, got `%s'", fuzz_str);
-        }
-    }
-
-    // Otherwise it's supposed to be a number.
-    else
-    {
-        fuzz = NUM2DBL(fuzz_arg);
-    }
-
     Data_Get_Struct(self, Image, image);
-
-    image->fuzz = fuzz;
-
+    image->fuzz = rm_fuzz_to_dbl(fuzz);
     return self;
 }
 
@@ -5715,7 +5673,8 @@ Image_read(VALUE class, VALUE file_arg)
  *  Static:     file_arg_rescue
  *  Purpose:    called when `rm_obj_to_s' raised an exception
 */
-static VALUE file_arg_rescue(VALUE arg)
+static VALUE
+file_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
             rb_class2name(CLASS_OF(arg)));
@@ -5752,7 +5711,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     }
     else
     {
-        // Convert arg to string. Catch exceptions.
+        // Convert arg to string. If an exception occurs raise an error condition.
         file_arg = rb_rescue(rm_obj_to_s, file_arg, file_arg_rescue, file_arg);
 
         filename = STRING_PTR_LEN(file_arg, filename_l);

@@ -56,6 +56,7 @@
                   <li><a href="#Image.add_noise">add_noise</a></li>
                   <li><a href=
                   "#Image.affine_transform">affine_transform</a></li>
+                  <li><a href="#Image.annotate">annotate</a></li>
                   <li><a href=
                   "#Image.black_threshold">black_threshold</a>
                   <span class="imversion">&nbsp;(5.5.7)</span></li>
@@ -829,6 +830,30 @@ animated = Magick::Image.read("animated.gif") &raquo;
         <cite>Scalable Vector Graphics (SVG) 1.0
         Specification</cite> for more information about
         transformation matrices.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.annotate">annotate</a></td>
+        <td><em>img.</em>annotate(<i>draw, width, height, x, y,
+        text</i>) <i>[&nbsp;{ additional parameters }&nbsp;]</i>
+        -&gt; <i>img</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>This is the same method as the <var>annotate</var>
+        method in the Draw class, except that the first argument is
+        a Draw object. Refer to the documentation for <a href=
+        "draw.html#Draw.annotate">Draw#annotate</a> for more
+        information.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self</td>
+      </tr>
+      <tr>
+        <td valign="top">Notes</td>
+        <td>Some users feel like <var>annotate</var> is better
+        placed in Image than in Draw. Okay, here it is!</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=

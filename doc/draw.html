@@ -224,6 +224,8 @@
 
         <li><a href="#stroke_eq">stroke</a></li>
 
+        <li><a href="#stroke_width_eq">stroke_width</a></li>
+
         <li><a href="#text_antialias_eq">text_antialias</a></li>
 
         <li><a href="#undercolor_eq">undercolor</a></li>
@@ -2500,7 +2502,7 @@ draw.stroke_opacity('40%')
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the stroke width in pixels.</p>
+    <p>Specify the stroke width in pixels. The default is 1.</p>
 
     <h4>Returns</h4>
 
@@ -2644,7 +2646,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="text_antialias">text_antialias</h3>
 
-    <p><span class="arg">draw</span>.antialias(<code>true</code> or
+    <p><span class="arg">draw</span>.text_antialias(<code>true</code> or
     <code>false</code>) -&gt; <em>draw</em></p>
   </div>
 
@@ -2915,7 +2917,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="desc">
     <h4>Description</h4>
 
-    <p>A the font stretch.</p>
+    <p>The font stretch.</p>
 
     <h4>Argument</h4>A <a href=
     "constants.html#StretchType">StretchType</a> constant.
@@ -3043,11 +3045,27 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="desc">
     <h4>Description</h4>
 
-    <p>The stroke color . This is the color used to outline the
+    <p>The stroke color. This is the color used to outline the
     text. The default is "black".</p>
 
     <h4>Arguments</h4>A <a href="imusage.html#color_names">color
     name</a> or <a href="struct.html#Pixel">Pixel</a> object.
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_width_eq">stroke_width=</h3>
+
+    <p><span class="arg">draw</span>.stroke = <em>anInteger</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The stroke width in pixels. The default is 1.</p>
 
     <h4>Returns</h4>
 

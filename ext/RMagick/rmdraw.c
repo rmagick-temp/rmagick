@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.14 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.15 2004/07/31 22:04:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -321,6 +321,21 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->stroke, stroke);
     return self;
+}
+
+/*
+    Method:     Draw#stroke_width=
+    Purpose:    stroke_width attribute writer
+*/
+VALUE
+Draw_stroke_width_eq(VALUE self, VALUE stroke_width)
+{
+  Draw *draw;
+
+  rm_check_frozen(self);
+  Data_Get_Struct(self, Draw, draw);
+  draw->info->stroke_width = NUM2DBL(stroke_width);
+  return self;
 }
 
 /*

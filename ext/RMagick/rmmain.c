@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.62 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.63 2004/07/31 22:04:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -771,6 +771,7 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Draw, pointsize)
     DCL_ATTR_WRITER(Draw, rotation)
     DCL_ATTR_WRITER(Draw, stroke)
+    DCL_ATTR_WRITER(Draw, stroke_width)
     DCL_ATTR_WRITER(Draw, text_antialias)
     DCL_ATTR_WRITER(Draw, undercolor)
 
@@ -1441,7 +1442,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/06/19 20:41:18 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/07/31 22:04:09 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

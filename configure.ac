@@ -304,7 +304,7 @@ AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompos
      rm_cv_enum_ColorDodgeCompositeOp='no')])
 
 if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
-  AC_DEFINE(HAVE_ColorDodgeCompositeOp)
+  AC_DEFINE(HAVE_COLORDODGECOMPOSITEOP)
 fi
 
 

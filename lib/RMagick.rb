@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.8 2003/09/26 00:18:13 rmagick Exp $
+# $Id: RMagick.rb,v 1.9 2003/10/02 22:55:22 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -28,63 +28,63 @@ class Draw
     # Thse hashes are used to map Magick constant
     # values to the strings used in the primitives.
     ALIGN_TYPE_NAMES = {
-        LeftAlign => 'left',
-        RightAlign => 'right',
-        CenterAlign => 'center'
+        LeftAlign.to_i => 'left',
+        RightAlign.to_i => 'right',
+        CenterAlign.to_i => 'center'
         }
     ANCHOR_TYPE_NAMES = {
-        StartAnchor => 'start',
-        MiddleAnchor => 'middle',
-        EndAnchor => 'end'
+        StartAnchor.to_i => 'start',
+        MiddleAnchor.to_i => 'middle',
+        EndAnchor.to_i => 'end'
         }
     DECORATION_TYPE_NAMES = {
-        NoDecoration => 'none',
-        UnderlineDecoration => 'underline',
-        OverlineDecoration => 'overline',
-        LineThroughDecoration => 'line-through'
+        NoDecoration.to_i => 'none',
+        UnderlineDecoration.to_i => 'underline',
+        OverlineDecoration.to_i => 'overline',
+        LineThroughDecoration.to_i => 'line-through'
         }
     FONT_WEIGHT_NAMES = {
-        AnyWeight => 'all',
-        NormalWeight => 'normal',
-        BoldWeight => 'bold',
-        BolderWeight => 'bolder',
-        LighterWeight => 'lighter',
+        AnyWeight.to_i => 'all',
+        NormalWeight.to_i => 'normal',
+        BoldWeight.to_i => 'bold',
+        BolderWeight.to_i => 'bolder',
+        LighterWeight.to_i => 'lighter',
         }
     GRAVITY_NAMES = {
-        NorthWestGravity => 'northwest',
-        NorthGravity => 'north',
-        NorthEastGravity => 'northeast',
-        WestGravity => 'west',
-        CenterGravity => 'center',
-        EastGravity => 'east',
-        SouthWestGravity => 'southwest',
-        SouthGravity => 'south',
-        SouthEastGravity => 'southeast'
+        NorthWestGravity.to_i => 'northwest',
+        NorthGravity.to_i => 'north',
+        NorthEastGravity.to_i => 'northeast',
+        WestGravity.to_i => 'west',
+        CenterGravity.to_i => 'center',
+        EastGravity.to_i => 'east',
+        SouthWestGravity.to_i => 'southwest',
+        SouthGravity.to_i => 'south',
+        SouthEastGravity.to_i => 'southeast'
         }
     PAINT_METHOD_NAMES = {
-        PointMethod => 'point',
-        ReplaceMethod => 'replace',
-        FloodfillMethod => 'floodfill',
-        FillToBorderMethod => 'filltoborder',
-        ResetMethod => 'reset'
+        PointMethod.to_i => 'point',
+        ReplaceMethod.to_i => 'replace',
+        FloodfillMethod.to_i => 'floodfill',
+        FillToBorderMethod.to_i => 'filltoborder',
+        ResetMethod.to_i => 'reset'
         }
     STRETCH_TYPE_NAMES = {
-        NormalStretch => 'normal',
-        UltraCondensedStretch => 'ultra-condensed',
-        ExtraCondensedStretch => 'extra-condensed',
-        CondensedStretch => 'condensed',
-        SemiCondensedStretch => 'semi-condensed',
-        SemiExpandedStretch => 'semi-expanded',
-        ExpandedStretch => 'expanded',
-        ExtraExpandedStretch => 'extra-expanded',
-        UltraExpandedStretch => 'ultra-expanded',
-        AnyStretch => 'all'
+        NormalStretch.to_i => 'normal',
+        UltraCondensedStretch.to_i => 'ultra-condensed',
+        ExtraCondensedStretch.to_i => 'extra-condensed',
+        CondensedStretch.to_i => 'condensed',
+        SemiCondensedStretch.to_i => 'semi-condensed',
+        SemiExpandedStretch.to_i => 'semi-expanded',
+        ExpandedStretch.to_i => 'expanded',
+        ExtraExpandedStretch.to_i => 'extra-expanded',
+        UltraExpandedStretch.to_i => 'ultra-expanded',
+        AnyStretch.to_i => 'all'
         }
     STYLE_TYPE_NAMES = {
-        NormalStyle => 'normal',
-        ItalicStyle => 'italic',
-        ObliqueStyle => 'oblique',
-        AnyStyle => 'all'
+        NormalStyle.to_i => 'normal',
+        ItalicStyle.to_i => 'italic',
+        ObliqueStyle.to_i => 'oblique',
+        AnyStyle.to_i => 'all'
         }
 
     # Apply coordinate transformations to support scaling (s), rotation (r),
@@ -138,17 +138,17 @@ class Draw
     # Set color in image according to specified colorization rule. Rule is one of
     # point, replace, floodfill, filltoborder,reset
     def color(x, y, method)
-        if ( not PAINT_METHOD_NAMES.has_key?(method) )
+        if ( not PAINT_METHOD_NAMES.has_key?(method.to_i) )
             raise ArgumentError, "Unknown PaintMethod: #{method}"
         end
-        primitive "color #{x},#{y},#{PAINT_METHOD_NAMES[method]}"
+        primitive "color #{x},#{y},#{PAINT_METHOD_NAMES[method.to_i]}"
     end
 
     # Specify EITHER the text decoration (none, underline, overline,
     # line-through) OR the text solid background color (any color name or spec)
     def decorate(decoration)
-        if ( DECORATION_TYPE_NAMES.has_key?(decoration) )
-            primitive "decorate #{DECORATION_TYPE_NAMES[decoration]}"
+        if ( DECORATION_TYPE_NAMES.has_key?(decoration.to_i) )
+            primitive "decorate #{DECORATION_TYPE_NAMES[decoration.to_i]}"
         else
             primitive "decorate #{decoration}"
         end
@@ -213,24 +213,24 @@ class Draw
     end
 
     def font_stretch(stretch)
-        if ( not STRETCH_TYPE_NAMES.has_key?(stretch) )
+        if ( not STRETCH_TYPE_NAMES.has_key?(stretch.to_i) )
             raise ArgumentError, "Unknown stretch type"
         end
-        primitive "font-stretch #{STRETCH_TYPE_NAMES[stretch]}"
+        primitive "font-stretch #{STRETCH_TYPE_NAMES[stretch.to_i]}"
     end
 
     def font_style(style)
-        if ( not STYLE_TYPE_NAMES.has_key?(style) )
+        if ( not STYLE_TYPE_NAMES.has_key?(style.to_i) )
             raise ArgumentError, "Unknown style type"
         end
-        primitive "font-style #{STYLE_TYPE_NAMES[style]}"
+        primitive "font-style #{STYLE_TYPE_NAMES[style.to_i]}"
     end
 
     # The font weight argument can be either a font weight
     # constant or [100,200,...,900]
     def font_weight(weight)
-        if ( FONT_WEIGHT_NAMES.has_key?(weight) )
-            primitive "font-weight #{FONT_WEIGHT_NAMES[weight]}"
+        if ( FONT_WEIGHT_NAMES.has_key?(weight.to_i) )
+            primitive "font-weight #{FONT_WEIGHT_NAMES[weight.to_i]}"
         else
             primitive "font-weight #{weight}"
         end
@@ -239,10 +239,10 @@ class Draw
     # Specify the text positioning gravity, one of:
     # NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
     def gravity(grav)
-        if ( not GRAVITY_NAMES.has_key?(grav) )
+        if ( not GRAVITY_NAMES.has_key?(grav.to_i) )
             raise ArgumentError, "Unknown text positioning gravity"
         end
-        primitive "gravity #{GRAVITY_NAMES[grav]}"
+        primitive "gravity #{GRAVITY_NAMES[grav.to_i]}"
     end
 
     # Draw a line
@@ -253,10 +253,10 @@ class Draw
     # Set matte (make transparent) in image according to the specified
     # colorization rule
     def matte(x, y, rule)
-        if ( not PAINT_METHOD_NAMES.has_key?(method) )
+        if ( not PAINT_METHOD_NAMES.has_key?(method.to_i) )
             raise ArgumentError, "Unknown paint method"
         end
-        primitive "matte #{x},#{y} #{PAINT_METHOD_NAMES[method]}"
+        primitive "matte #{x},#{y} #{PAINT_METHOD_NAMES[method.to_i]}"
     end
 
     # Specify drawing fill and stroke opacities. If the value is a string
@@ -460,18 +460,18 @@ class Draw
 
     # Specify text alignment relative to a given point
     def text_align(alignment)
-        if ( not ALIGN_TYPE_NAMES.has_key?(alignment) )
+        if ( not ALIGN_TYPE_NAMES.has_key?(alignment.to_i) )
             raise ArgumentError, "Unknown alignment constant: #{alignment}"
         end
-        primitive "text-align #{ALIGN_TYPE_NAMES[alignment]}"
+        primitive "text-align #{ALIGN_TYPE_NAMES[alignment.to_i]}"
     end
 
     # SVG-compatible version of text_align
     def text_anchor(anchor)
-        if ( not ANCHOR_TYPE_NAMES.has_key?(anchor) )
+        if ( not ANCHOR_TYPE_NAMES.has_key?(anchor.to_i) )
             raise ArgumentError, "Unknown anchor constant: #{anchor}"
         end
-        primitive "text-anchor #{ANCHOR_TYPE_NAMES[anchor]}"
+        primitive "text-anchor #{ANCHOR_TYPE_NAMES[anchor.to_i]}"
     end
 
     # Specify if rendered text is to be antialiased.

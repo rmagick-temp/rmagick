@@ -1,7 +1,11 @@
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
-    o Added Image#quality and Image#orientation attributes (bug #1310)
-    o Fix bug #1314
+
+RMagick 1.7.3
+    o Fix build issue with ImageMagick 6.0.x
+
+RMagick 1.7.2
+    o Fix bugs #1308, #1310, #1314, #1533
 
 RMagick 1.7.1
     o Fix bugs #1250, #1253

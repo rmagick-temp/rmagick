@@ -330,6 +330,7 @@ Thanks to
    * Mike Williams, for the RMagick Debian package
    * ImageMagick Studio LLC, for ImageMagick and for hosting the RMagick documentation.
    * Kaspar Schiess, for the MS Windows gem.
+   * Jeremy Hinegardner, for the amd64 patch.
 
 <h2 id="license">License</h2>
 

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.76 2005/01/11 23:09:33 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.77 2005/02/27 16:36:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -602,7 +602,9 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Image, opacity)
     DCL_ATTR_READER(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
+#if defined(HAVE_IMAGE_QUALITY)
     DCL_ATTR_READER(Image, quality)
+#endif
     DCL_ATTR_READER(Image, quantum_depth)
     DCL_ATTR_ACCESSOR(Image, rendering_intent)
     DCL_ATTR_READER(Image, rows)
@@ -1424,17 +1426,17 @@ Init_RMagick(void)
     // namespace. The only way to use these classes is via the Magick:: namespace.
 
     // Magick::AffineMatrix
-    Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", 0);
+    Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", NULL);
     rb_define_const(Module_Magick, "AffineMatrix", Class_AffineMatrix);
 
 #if defined(HAVE_GETIMAGESTATISTICS)
     // These classes are defined for >= GM 1.1.
 
     // Magick::Statistics
-    Class_Statistics = rb_struct_define(NULL, "red", "green", "blue", "opacity", 0);
+    Class_Statistics = rb_struct_define(NULL, "red", "green", "blue", "opacity", NULL);
     rb_define_const(Module_Magick, "Statistics", Class_Statistics);
     // Magick::ChannelStatistics
-    Class_StatisticsChannel = rb_struct_define(NULL, "max", "min", "mean", "stddev", "var", 0);
+    Class_StatisticsChannel = rb_struct_define(NULL, "max", "min", "mean", "stddev", "var", NULL);
     rb_define_const(Class_Statistics, "Channel", Class_StatisticsChannel);
 #endif
 
@@ -1450,40 +1452,40 @@ Init_RMagick(void)
                                             , "green_primary"
                                             , "blue_primary"
                                             , "white_point"
-                                            , 0);
+                                            , NULL);
     rb_define_method(Class_Chromaticity, "to_s", ChromaticityInfo_to_s, 0);
     rb_define_const(Module_Magick, "Chromaticity", Class_Chromaticity);
 
     // Magick::Color
-    Class_Color = rb_struct_define(NULL, "name", "compliance", "color", 0);
+    Class_Color = rb_struct_define(NULL, "name", "compliance", "color", NULL);
     rb_define_method(Class_Color, "to_s", Color_to_s, 0);
     rb_define_const(Module_Magick, "Color", Class_Color);
 
     // Magick::Point
-    Class_Point = rb_struct_define(NULL, "x", "y", 0);
+    Class_Point = rb_struct_define(NULL, "x", "y", NULL);
     rb_define_const(Module_Magick, "Point", Class_Point);
 
     // Magick::Rectangle
-    Class_Rectangle = rb_struct_define(NULL, "width", "height", "x", "y", 0);
+    Class_Rectangle = rb_struct_define(NULL, "width", "height", "x", "y", NULL);
     rb_define_method(Class_Rectangle, "to_s", RectangleInfo_to_s, 0);
     rb_define_const(Module_Magick, "Rectangle", Class_Rectangle);
 
     // Magick::Segment
-    Class_Segment = rb_struct_define(NULL, "x1", "y1", "x2", "y2", 0);
+    Class_Segment = rb_struct_define(NULL, "x1", "y1", "x2", "y2", NULL);
     rb_define_method(Class_Segment, "to_s", SegmentInfo_to_s, 0);
     rb_define_const(Module_Magick, "Segment", Class_Segment);
 
     // Magick::Font
     Class_Font = rb_struct_define(NULL, "name", "description",
                                       "family", "style", "stretch", "weight",
-                                      "encoding", "foundry", "format", 0);
+                                      "encoding", "foundry", "format", NULL);
     rb_define_method(Class_Font, "to_s", Font_to_s, 0);
     rb_define_const(Module_Magick, "Font", Class_Font);
 
     // Magick::TypeMetric
     Class_TypeMetric = rb_struct_define(NULL, "pixels_per_em", "ascent", "descent",
                                         "width", "height", "max_advance", "bounds",
-                                        "underline_position", "underline_thickness", 0);
+                                        "underline_position", "underline_thickness", NULL);
     rb_define_method(Class_TypeMetric, "to_s", TypeMetric_to_s, 0);
     rb_define_const(Module_Magick, "TypeMetric", Class_TypeMetric);
 
@@ -1504,7 +1506,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/01/11 23:09:33 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/02/27 16:36:23 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

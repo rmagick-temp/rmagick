@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.49 2004/04/17 21:18:45 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.50 2004/06/11 00:22:15 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -58,6 +58,7 @@
 // Safe replacement for rb_str2cstr
 #define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
 
+#undef DegreesToRadians     // defined in ImageMagick.h in 6.0.2
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
 
 typedef ImageInfo Info; // Make type name match class name
@@ -85,6 +86,8 @@ typedef struct
    int val;
 } MagickEnum;
 
+#undef False    // defined in deprecate.h in 6.0.2
+#undef True     // defined in deprecate.h in 6.0.2
 typedef enum
 {
     False = 0,
@@ -705,6 +708,7 @@ extern VALUE Image_palette_q(VALUE);
 extern VALUE Image_ping(VALUE, VALUE);
 extern VALUE Image_pixel_color(int, VALUE *, VALUE);
 // VALUE Image_plasma(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_posterize(int, VALUE *, VALUE);
 extern VALUE Image_preview(VALUE, VALUE);
 extern VALUE Image_profile_bang(VALUE, VALUE, VALUE);
 extern VALUE Image_quantize(int, VALUE *, VALUE);

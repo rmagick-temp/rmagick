@@ -657,19 +657,28 @@ imagelist2 = imagelist1.copy
     <h3 id="deconstruct">deconstruct</h3>
 
     <p><span class="arg">imagelist.</span>deconstruct -&gt;
-    <em>anImage</em></p>
+    <em>anImageList</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p class="imquote">Compares each image with the next in a
-    sequence and returns the maximum bounding region of any pixel
-    differences it discovers.</p>
+    <p>This method constructs a new imagelist containing images
+    that include only the changed pixels between each image and its
+    successor. The resulting imagelist usually produces a much
+    smaller file.</p>
+
+    <p>The <code>desconstruct</code> method starts by copying the
+    first image in the list to the output imagelist. Then, for each
+    pair of images, <code>deconstruct</code> computes the smallest
+    rectangle that encompasses all the changes between the first
+    and second image and stores just the changed rectangle of the
+    second image, along with the offset of the rectangle relative
+    to the boundary of the first image.</p>
 
     <h4>Returns</h4>
 
-    <p>An image</p>
+    <p>A new imagelist</p>
 
     <h4>Magick API</h4>
 
@@ -1071,9 +1080,7 @@ geometry is "120x120+4+3&gt;".
         "granite" texture as the background, use:
         <pre>
 self.texture = Magick::Image.read("granite:").first
-</pre>
-
-        <p>The default is no texture.</p>
+</pre>The default is no texture.
       </dd>
 
       <dt>tile=</dt>
@@ -1086,19 +1093,16 @@ self.texture = Magick::Image.read("granite:").first
         <code>"&lt;columns&gt;x&lt;rows&gt;"</code>. If the value
         is a Geometry object, specify the number of columns as the
         <code>width</code> attribute and the number of rows as the
-        <code>height</code> attribute. <code>montage</code> always
-        generates all the rows, leaving empty cells if necessary.
-        To arrange the tiles 4 across and 10 down, use:
+        <code>height</code> attribute. To arrange the tiles 4
+        across and 10 down, use:
         <pre>
 self.tile = "4x10"
 </pre>or
         <pre>
 self.tile = Magick::Geometry.new(4,10)
-</pre>
-
-        <p>The default is "6x4". If there are too many tiles to fit
-        on one composite image, <code>montage</code> creates
-        multiple composite images.</p>
+</pre>The default is "6x4". If there are too many tiles to fit on
+one composite image, <code>montage</code> creates multiple
+composite images.
       </dd>
     </dl>
 

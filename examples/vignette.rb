@@ -16,7 +16,7 @@ puts <<END_INFO
 
 END_INFO
 
-ballerina = Image.read("../doc/ex/images/Ballerina.jpg")[0]
+ballerina = Image.read("../doc/ex/images/Ballerina3.jpg")[0]
 
 # Note: this technique won't work with every image. To make a pretty
 # vignette you need an image with a uniform, fairly dark background.
@@ -30,7 +30,9 @@ oval = Image.new(ballerina.columns, ballerina.rows) {self.background_color = 'wh
 gc = Draw.new
 gc.stroke('black')
 gc.fill('black')
-gc.ellipse(ballerina.columns/2, ballerina.rows/2, ballerina.columns/2-(ballerina.columns*0.10), ballerina.rows/2-(ballerina.rows*0.10), 0, 360)
+gc.ellipse(ballerina.columns/2, ballerina.rows/2,
+           ballerina.columns/2-(ballerina.columns*0.10),
+           ballerina.rows/2-(ballerina.rows*0.10), 0, 360)
 gc.draw(oval)
 
 # Add a lot of blurring to the oval. I use blur_image because it's
@@ -47,7 +49,7 @@ oval_copy = oval.copy               # We'll need this later.
 # grayer the pixels, the more transparent. The black center pixels are
 # entirely transparent. The outside white pixels are entirely opaque.
 
-puts 'Computing opacity...'
+puts 'Making oval transparent...'
 oval.rows.times do |y|
     pixels = oval.get_pixels(0, y, oval.columns, 1)
     pixels.each do |p|
@@ -74,7 +76,7 @@ vignette = ballerina.composite(oval, CenterGravity, OverCompositeOp)
 # gray pixels less so. The black center pixels are entirely opaque.
 
 vignette.matte = true
-puts 'Computing opacity again...'
+puts 'Making border transparent...'
 
 oval_copy.rows.times do |y|
     copy_pixels = oval_copy.get_pixels(0, y, oval_copy.columns, 1)
@@ -102,15 +104,12 @@ end
 
 # At this point the vignette is complete. However, the `display'
 # method only supports 1`level of transparency. Therefore,
-# composite the vignette over a pretty gradient. The resulting
-# image will be 100% opaque.
+# composite the vignette over a standard "checkerboard" background.
+# The resulting image will be 100% opaque.
 
 puts 'Preparing for display...'
-gradient = Image.new(vignette.columns, vignette.rows,
-                        GradientFill.new(0, 0, 0, vignette.rows, '#d8ad7f', '#856a4e'))
-
-vignette = gradient.composite(vignette, CenterGravity, OverCompositeOp)
+checkerboard = Image.read("pattern:checkerboard") {self.size = "#{ballerina.columns}x#{ballerina.rows}"}
+vignette = checkerboard[0].composite(vignette, CenterGravity, OverCompositeOp)
 vignette.display
-
 exit
 

@@ -1,15 +1,15 @@
 RMagick 1.4.0
     o Implemented xMagick enumeration values as instances of an Enum
       class. Based on a description by Paul Brannon in ruby-talk 79041.
-    o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
+    o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2 and
+      later)
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
-      CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
-      AnnotateCompositeOp. CopyCompositeOp constants (IM 5.5.8)
-    o Added color_histogram to Image class. (IM 5.5.8, GM 1.1)
-    o Added tint method to Image class (IM 5.5.8)
-    o Added each_profile to Image class. (IM 5.5.8)
-    o Added channel_extrema and extrema methods to Image class (IM 5.5.8)
-    o Added compare method to Image class (IM 5.5.8)
+      CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7 and
+      later)
+      AnnotateCompositeOp. CopyCompositeOp constants (IM 5.5.8 only)
+    o Added color_histogram to Image class. (IM 5.5.8, GM 1.1 only)
+    o Added tint method, each_profile, channel_extrema, compare,
+      channel_depth, quantum_depth methods to Image class (IM 5.5.8 only)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added fcmp, intensity to Pixel class
     o Added Version_long constant

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.27 2003/12/21 17:31:11 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.28 2003/12/23 02:54:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -27,9 +27,6 @@ typedef unsigned int (thresholder_t)(Image *, const char *);
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)
-static VALUE extrema(Image *, ChannelType);
-#endif
 static VALUE rd_image(VALUE, VALUE, reader_t);
 static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
@@ -650,46 +647,88 @@ Image_channel(VALUE self, VALUE channel)
     return rm_image_new(new_image);
 }
 
+
 /*
-    Method:     Image#channel_extrema
-    Purpose:    Returns an array [min, max] where 'min' and 'max'
-                are the minimum and maximum values of the specified
-                channel.
+    Method:     Image#channel_depth(channel_depth=AllChannels)
+    Purpose:    GetImageChannelDepth
 */
 VALUE
-Image_channel_extrema(VALUE self, VALUE channel_arg)
+Image_channel_depth(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+#if defined(HAVE_GETIMAGECHANNELDEPTH)
     Image *image;
-    ChannelType channel;
+    ChannelType channel_type, type;
+    unsigned long channel_depth;
+    ExceptionInfo exception;
+
+    if (argv == 0)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+        for(x = 0; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(channel_arg, channel, ChannelType);
+    GetExceptionInfo(&exception);
 
-    return extrema(image, channel);
+    channel_depth = GetImageChannelDepth(image, channel_type, &exception);
+    HANDLE_ERROR
+
+    return ULONG2NUM(channel_depth);
 #else
-    not_implemented("channel_extrema");
-    return (VALUE) 0;
+    not_implemented("channel_depth");
+    return (VALUE)0;
 #endif
 }
 
 
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)
-static VALUE
-extrema(Image *image, ChannelType channel)
+/*
+    Method:     Image#channel_extrema(channel=AllChannels)
+    Purpose:    Returns an array [min, max] where 'min' and 'max'
+                are the minimum and maximum values of all channels.
+*/
+VALUE
+Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+    Image *image;
+    ChannelType channel_type, type;
     ExceptionInfo exception;
     unsigned long min, max;
     unsigned int okay;
     volatile VALUE ary;
 
+    Data_Get_Struct(self, Image, image);
+
     GetExceptionInfo(&exception);
 
-    okay = GetImageChannelExtrema(image, channel, &min, &max, &exception);
+    if (argv == 0)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+        for(x = 0; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    okay = GetImageChannelExtrema(image, channel_type, &min, &max, &exception);
     if (!okay)
     {
         rb_raise(rb_eRuntimeError, "GetImageChannelExtrema failed.");
     }
+
     HANDLE_ERROR
 
     ary = rb_ary_new2(2);
@@ -698,8 +737,11 @@ extrema(Image *image, ChannelType channel)
 
     return ary;
 
-}
+#else
+    not_implemented("extrema");
+    return (VALUE) 0;
 #endif
+}
 
 
 /*
@@ -2443,27 +2485,6 @@ Image_extract_info_eq(VALUE self, VALUE rect)
     return self;
 #else
     not_implemented("extract_info=");
-    return (VALUE) 0;
-#endif
-}
-
-
-/*
-    Method:     Image#extrema
-    Purpose:    Returns an array [min, max] where 'min' and 'max'
-                are the minimum and maximum values of all channels.
-*/
-VALUE
-Image_extrema(VALUE self)
-{
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)
-    Image *image;
-
-    Data_Get_Struct(self, Image, image);
-
-    return extrema(image, AllChannels);
-#else
-    not_implemented("extrema");
     return (VALUE) 0;
 #endif
 }
@@ -4524,6 +4545,29 @@ Image_profile_bang(
     HANDLE_IMG_ERROR(image)
     return self;
 }
+
+
+/*
+    Method:     Image#quantum_depth -> 8, 16, or 32
+    Purpose:    Return image depth to nearest quantum
+*/
+VALUE
+Image_quantum_depth(VALUE self)
+{
+#if defined(HAVE_GETIMAGEQUANTUMDEPTH)
+    Image *image;
+    unsigned long quantum_depth;
+
+    Data_Get_Struct(self, Image, image);
+
+    quantum_depth = GetImageQuantumDepth(image);
+    return ULONG2NUM(quantum_depth);
+#else
+    not_implemented("quantum_depth");
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#quantize(<number_colors<, colorspace<, dither<, tree_depth<, measure_error>>>>>)

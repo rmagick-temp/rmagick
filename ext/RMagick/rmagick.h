@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.29 2003/12/21 17:31:11 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.30 2003/12/23 02:54:00 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -520,6 +520,7 @@ ATTR_READER(Image, number_colors)
 ATTR_ACCESSOR(Image, offset)
 ATTR_WRITER(Image, opacity)
 ATTR_ACCESSOR(Image, page)
+ATTR_READER(Image, quantum_depth)
 ATTR_ACCESSOR(Image, rendering_intent)
 ATTR_READER(Image, rows)
 ATTR_READER(Image, scene)
@@ -553,7 +554,8 @@ extern VALUE Image_capture(int, VALUE *, VALUE);
 extern VALUE Image_change_geometry(VALUE, VALUE);
 extern VALUE Image_changed_q(VALUE);
 extern VALUE Image_channel(VALUE, VALUE);
-extern VALUE Image_channel_extrema(VALUE, VALUE);
+extern VALUE Image_channel_depth(int, VALUE *, VALUE);
+extern VALUE Image_channel_extrema(int, VALUE *, VALUE);
 extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -584,7 +586,6 @@ extern VALUE Image_enhance(VALUE);
 extern VALUE Image_equalize(VALUE);
 extern VALUE Image_erase_bang(VALUE);
 extern VALUE Image_export_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
-extern VALUE Image_extrema(VALUE);
 extern VALUE Image_flip(VALUE);
 extern VALUE Image_flip_bang(VALUE);
 extern VALUE Image_flop(VALUE);

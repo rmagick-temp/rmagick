@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.35 2003/12/21 17:31:11 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.36 2003/12/23 02:54:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -415,6 +415,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, offset)
     DCL_ATTR_WRITER(Image, opacity)
     DCL_ATTR_ACCESSOR(Image, page)
+    DCL_ATTR_READER(Image, quantum_depth)
     DCL_ATTR_ACCESSOR(Image, rendering_intent)
     DCL_ATTR_READER(Image, rows)
     DCL_ATTR_READER(Image, scene)
@@ -440,7 +441,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "change_geometry!", Image_change_geometry, 1);
     rb_define_method(Class_Image, "changed?", Image_changed_q, 0);
     rb_define_method(Class_Image, "channel", Image_channel, 1);
-    rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, 1);
+    rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
+    rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
@@ -470,7 +472,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "equalize", Image_equalize, 0);
     rb_define_method(Class_Image, "erase!", Image_erase_bang, 0);
     rb_define_method(Class_Image, "export_pixels", Image_export_pixels, 5);
-    rb_define_method(Class_Image, "extrema", Image_extrema, 0);
     rb_define_method(Class_Image, "flip", Image_flip, 0);
     rb_define_method(Class_Image, "flip!", Image_flip_bang, 0);
     rb_define_method(Class_Image, "flop", Image_flop, 0);
@@ -1127,7 +1128,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/21 17:31:11 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/23 02:54:00 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

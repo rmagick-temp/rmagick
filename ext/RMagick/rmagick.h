@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.13 2003/09/04 13:00:32 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.14 2003/09/13 02:33:58 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -121,12 +121,32 @@ typedef struct
 
 #define MAGICK_LOC "magick_location"     // instance variable name in ImageMagickError class
 
-#ifndef HAVE_EXTENDEDSIGNEDINTEGRALTYPE
-typedef off_t ExtendedSignedIntegralType;
+/*
+    ImageMagick used simply size_t and off_t in 5.5.1, then defined the
+    Extended(Un)SignedIntegralType from 5.5.2 thru 5.5.7. The 5.5.8 release
+    deprecates these types and uses Magick(Un)SignedType instead.
+    GraphicsMagick 1.1. introduced the magick_(u)int64_t type.
+
+    Here, if we don't already have magick_(u)int64_t, define them.
+*/
+#if !defined(HAVE_MAGICK_INT64_T)
+#if defined(HAVE_MAGICKSIGNEDTYPE)
+typedef MagickSignedType magick_int64_t;
+#elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
+typedef ExtendedSignedIntegralType magick_int64_t;
+#else
+typedef off_t magick_int64_t;
+#endif
 #endif
 
-#ifndef HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE
-typedef size_t ExtendedUnsignedIntegralType;
+#if !defined(HAVE_MAGICK_UINT64_T)
+#if defined(HAVE_MAGICKUNSIGNEDTYPE)
+typedef MagickUnsignedType magick_uint64_t;
+#elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
+typedef ExtendedUnsignedIntegralType magick_uint64_t;
+#else
+typedef size_t magick_uint64_t;
+#endif
 #endif
 
 #undef EXTERN

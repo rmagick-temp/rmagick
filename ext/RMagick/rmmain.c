@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.15 2003/09/12 01:08:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.16 2003/09/13 02:33:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -192,8 +192,8 @@ Magick_init_formats(VALUE class)
 static unsigned int
 monitor_handler(
     const char *text,
-    const ExtendedSignedIntegralType quantum,
-    const ExtendedUnsignedIntegralType span,
+    const magick_int64_t quantum,
+    const magick_uint64_t span,
     ExceptionInfo *exception)
 {
     volatile VALUE monitor;

@@ -67,10 +67,10 @@ AC_CHECK_HEADER(magick/api.h, [],
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
-    
+
 # What ImageMagick/GraphicsMagick functions?
 AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
-AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList]) 
+AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
 AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
@@ -80,8 +80,12 @@ AC_CHECK_FUNCS([GetImageHistogram])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
+                magick_int64_t,
+                magick_uint64_t,
                 ExtendedSignedIntegralType,
-                ExtendedUnsignedIntegralType],
+                ExtendedUnsignedIntegralType,
+                MagickSignedType,
+                MagickUnsignedType],
                 [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H

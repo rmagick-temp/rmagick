@@ -6,7 +6,14 @@ require 'RMagick'
 img = Magick::Image.read('images/Flower_Hat.jpg').first
 
 # Make a blurry copy.
-img = img.radial_blur(10.0)
+begin
+    result = img.radial_blur(10.0)
 
-img.write('radial_blur.jpg')
+# Substitute the standard "Not Implemented" image
+rescue NotImplementedError
+    result = Magick::Image.read("images/notimplemented.gif").first
+    result.resize!(img.columns, img.rows)
+end
+
+result.write('radial_blur.jpg')
 exit

@@ -219,6 +219,12 @@ div.sig {
     margin-bottom: 1em;
   }
 
+  .example_cutline {
+     margin-left: 100px;
+     margin-right: 100px;
+     font-style: italic;
+  }
+
 /*
  *  The following three styles govern the display of example
  *  images with rollover effects and the "spin" image that

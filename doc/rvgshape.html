@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: Shapes</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <link rel="stylesheet" type="text/css" href="css/ref.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvgstyle.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgxform.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>Shapes</h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>About the shape methods</h3>
+
+    <h3>Shape methods</h3>
+
+    <ul>
+      <li><a href="#circle">circle</a></li>
+
+      <li><a href="#ellipse">ellipse</a></li>
+
+      <li><a href="#line">line</a></li>
+
+      <li><a href="#path">path</a></li>
+
+      <li><a href="#polygon">polygon</a></li>
+
+      <li><a href="#polyline">polyline</a></li>
+
+      <li><a href="#rect">rect</a></li>
+    </ul>
+  </div>
+
+  <div class="subhd">
+    <h2>About the shape methods</h2>
+  </div>
+
+  <div class="intro">
+    <p>The shape methods listed below are defined in the <a href=
+    "rvg.html">RVG</a>, <a href="rvgclip.html">RVG::ClipPath</a>,
+    <a href="rvggroup.html">RVG::Group</a>, and <a href=
+    "rvgpattern.html">RVG::Pattern</a> classes. You can chain the
+    <a href="rvgstyle.html">styles</a> method and the <a href=
+    "rvgxform.html">transform methods</a> to the shape methods.</p>
+  </div>
+
+  <div class="subhd">
+    <h2>Shape methods</h2>
+  </div>
+
+  <div class="sig">
+    <h4 id='circle'>circle</h4>
+
+    <p><span class="arg">obj</span>.circle(<span class=
+    "arg">radius</span>, <span class="arg">cx</span>=0,
+    <span class="arg">cy</span>=0) -&gt; <span class=
+    "arg">aCircle</span></p>
+  </div>
+
+  <div class='desc'>
+    <h5>Description</h5>
+
+    <p>Adds a circle to the target object. The arc of a circle
+    begins at the "3 o'clock" point on the radius and progresses
+    towards the "9 o'clock" point. The starting point and direction
+    of the arc are affected by the user space transform in the same
+    manner as the geometry of the object.</p>
+
+    <h5>Arguments</h5>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>The radius of the circle</dd>
+
+      <dt>cx, cy</dt>
+
+      <dd>The center of the circle</dd>
+    </dl>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('circle01.rb.html')"><img src=
+    "ex/circle01.gif" title="Click to see the example script" alt=
+    "circle example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='ellipse'>ellipse</h4>
+
+    <p><span class="arg">obj</span>.ellipse(<span class=
+    "arg">rx</span>, <span class="arg">ry</span>, <span class=
+    "arg">cx</span>=0, <span class="arg">cy</span>=0) -&gt;
+    <span class="arg">anEllipse</span></p>
+  </div>
+
+  <div class='desc'>
+    <h5>Description</h5>
+
+    <p>Adds an ellipse to the target object. The arc of an ellipse
+    begins at the "3 o'clock" point on the radius and progresses
+    towards the "9 o'clock" point. The starting point and direction
+    of the arc are affected by the user space transform in the same
+    manner as the geometry of the object.</p>
+
+    <h5>Arguments</h5>
+
+    <dl>
+      <dt>rx, ry</dt>
+
+      <dd>The <em>x</em>- and <em>y</em>-radii of the ellipse</dd>
+
+      <dt>cx, cy</dt>
+
+      <dd>The center of the ellipse</dd>
+    </dl>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('ellipse01.rb.html')"><img src=
+    "ex/ellipse01.gif" title="Click to see the example script" alt=
+    "ellipse example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='line'>line</h4>
+
+    <p><span class="arg">obj</span>.line(<span class=
+    "arg">x1</span>=0, y1=0, <span class="arg">x2</span>=0,
+    <span class="arg">y2</span>=0) -&gt; <span class=
+    "arg">aLine</span></p>
+  </div>
+
+  <div class='desc'>
+    <h5>Description</h5>
+
+    <p>Adds a line to the target object. Lines are never
+    filled.</p>
+
+    <h5>Arguments</h5>
+
+    <dl>
+      <dt>x1, y1</dt>
+
+      <dd>The starting point of the line</dd>
+
+      <dt>x2, y2</dt>
+
+      <dd>The ending point of the line</dd>
+    </dl>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('line01.rb.html')"><img src=
+    "ex/line01.gif" title="Click to see the example script" alt=
+    "line example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='path'>path</h4>
+
+    <p><span class="arg">obj</span>.path(<span class=
+    "arg">path_data</span>) -&gt; <span class=
+    "arg">aPath</span></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Adds a path to the target object.</p>
+
+    <h5>Arguments</h5>
+
+    <p>A path string. The path string has the same syntax as the
+    <strong>d=</strong> attribute on SVG's path element. See the
+    <a href="http://www.w3.org/TR/SVG11/paths.html">SVG
+    standard</a> for a complete description of the syntax.</p>
+
+    <h5>Examples</h5>
+
+    <p>moveto, lineto, and closepath commands<a href=
+    "javascript:popup('triangle01.rb.html')"><img src=
+    "ex/triangle01.gif" title="Click to see the example script"
+    alt="triangle example" /></a></p>
+
+    <p>simple uses of cubic B&eacute;zier commands within a
+    path<a href="javascript:popup('cubic01.rb.html')"><img src=
+    "ex/cubic01.gif" title="Click to see the example script" alt=
+    "cubic Bezier commands example" /></a></p>
+
+    <p>cubic B&eacute;zier commands change their shape according to
+    the position of the control points<a href=
+    "javascript:popup('cubic02.rb.html')"><img src="ex/cubic02.gif"
+    title="Click to see the example script" alt=
+    "cubic Bezier commands example" /></a></p>
+
+    <p>simple uses of quadratic B&eacute;zier commands within a
+    path <a href="javascript:popup('quad01.rb.html')"><img src=
+    "ex/quad01.gif" title="Click to see the example script" alt=
+    "quadratic Bezier commands example" /></a></p>
+
+    <p>simple uses of arc commands within a path<a href=
+    "javascript:popup('arcs01.rb.html')"><img src="ex/arcs01.gif"
+    title="Click to see the example script" alt=
+    "arc commands example" /></a></p>
+
+    <p>Elliptical arcs: The following illustrates the four
+    combinations of large-arc-flag and sweep-flag and the four
+    different arcs that will be drawn based on the values of these
+    flags. <a href="javascript:popup('arcs02.rb.html')"><img src=
+    "ex/arcs02.gif" title="Click to see the example script" alt=
+    "elliptical arc example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='polygon'>polygon</h4>
+
+    <p><span class="arg">obj</span>.polygon(<span class=
+    "arg">x1</span>, y1, <span class="arg">x2</span>, <span class=
+    "arg">y2</span>...) -&gt; <span class="arg">aPolygon</span></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Adds a closed shape consisting of a series of connected line
+    segments to the target object.</p>
+
+    <h5>Arguments</h5>
+
+    <p>A list of points that make up the polygon. It is an error to
+    define an odd number of points.</p>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('polygon01.rb.html')"><img src=
+    "ex/polygon01.gif" title="Click to see the example script" alt=
+    "polygon example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='polyline'>polyline</h4>
+
+    <p><span class="arg">obj</span>.polyline(<span class=
+    "arg">x1</span>, y1, <span class="arg">x2</span>, <span class=
+    "arg">y2</span>...) -&gt; <span class=
+    "arg">apolyline</span></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Adds a set of connected lines segments to the target object.
+    Typically a polyline defines an open shape.</p>
+
+    <h5>Arguments</h5>
+
+    <p>A list of points that make up the polyline. It is an error
+    to define an odd number of points.</p>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('polyline01.rb.html')"><img src=
+    "ex/polyline01.gif" title="Click to see the example script"
+    alt="polyline example" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h4 id='rect'>rect</h4>
+
+    <p><span class="arg">obj</span>.rect(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+    -&gt; <span class="arg">aRect</span></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Adds a rectangle to the target object.</p>
+
+    <h5>Arguments</h5>
+
+    <dl>
+      <dt>width, height</dt>
+
+      <dd>The width and height of the rectangle</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The <em>x</em>- and <em>y</em>-axis coordinates of the
+      upper-left corner</dd>
+    </dl>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('rect01.rb.html')"><img src=
+    "ex/rect01.gif" title="Click to see the example script" alt=
+    "rect example" /></a></p>
+
+    <h5>Rounded rectangles</h5>
+
+    <p>You can define a rounded rectangle by chaining the
+    <code>round</code> method to <code>rect</code>:</p>
+
+    <p><span class="arg">obj</span>.rect(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class="arg">x</span>=0, <span class=
+    "arg">y</span>=0).round(<code>rx</code>[, <code>ry</code>])</p>
+
+    <p>The round method accepts two arguments. The first argument
+    is the x-axis radius of the ellipse used to round off the
+    corners of the rectangle. The second argument is the y-axis
+    radius of the ellipse used to round off the corners of the
+    rectangle. If the second argument is omitted it defaults to the
+    value of the first argument.</p>
+
+    <h5>Example</h5>
+
+    <p><a href="javascript:popup('rect02.rb.html')"><img src=
+    "ex/rect02.gif" title="Click to see the example script" alt=
+    "rect example" /></a></p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo; <a href="rvgstyle.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgxform.html">Next</a>
+    &raquo;
+  </div>
+</body>
+</html>

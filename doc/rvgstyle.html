@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: Styles</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvguse.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgshape.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>styles</h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>instance methods</h3>
+
+    <div>
+      <ul>
+        <li><a href="#styles">styles</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="methods">styles</h2>
+
+  <div class="sig">
+    <h3 id='styles'>styles</h3>
+
+    <p><span class="arg">obj.</span>styles(<span class=
+    "arg">:style=&gt;value</span>[, <span class=
+    "arg">:style=&gt;value</span>...]) [{|obj| }] -&gt;
+    <span class="arg">obj</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Assigns <em>styles</em> to the target object, which may be a
+    container, shape, text, raster image, or pattern. Styles are
+    presentational attributes that define how the object is
+    rendered.</p>
+
+    <p><code>Styles</code> yields to a block if a block is present,
+    passing the target object as an argument. This is useful when
+    <code>styles</code> is chained to a container constructor
+    method such as <a href="rvg.html#RVG_g">g</a> or <a href=
+    "rvg.html#RVG_rvg">rvg</a>. By default, objects within a
+    container get the styles defined on the container.</p>
+
+    <p><code>Styles</code> returns the target object, so other
+    methods can be chained to it.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The argument is a hash. The hash keys are style name
+    symbols. The hash values are the style values. RVG supports the
+    following style names.</p>
+
+    <dl>
+      <dt>:clip_path</dt>
+
+      <dd>An outline used to clip a shape or collection of shapes.
+      The value is an <a href="#ClipPath_class">RVG::ClipPath</a>
+      object.</dd>
+
+      <dt>:clip_rule</dt>
+
+      <dd>If the <code>clip_path</code> style is used, how to
+      determine if a point is inside or outside a the clip path.
+      The value is a string, either 'nonzero' or 'evenodd'. The
+      default is 'nonzero'. See the <code>fill_rule</code> example
+      below.</dd>
+
+      <dt>:fill</dt>
+
+      <dd>The fill color. The value must be a <a href=
+      "imusage.html#color_names">color name</a>. The default is
+      'black'.</dd>
+
+      <dt>:fill_opacity</dt>
+
+      <dd>The opacity of the fill color. A number between 0.0
+      (fully transparent) and 1.0 (fully opaque). The default is
+      1.0</dd>
+
+      <dt>:fill_rule</dt>
+
+      <dd>How to determine if a point is inside or outside a shape.
+      The value is a string, either 'nonzero' or 'evenodd'. The
+      default is 'nonzero'.</dd>
+
+      <dd>
+        The following descriptions of 'nonzero' and 'evenodd' are
+        from the <a href=
+        "http://www.w3.org/TR/SVG11/painting.html#FillProperties">SVG
+        1.1 standard</a>.
+
+        <dl>
+          <dt>nonzero</dt>
+
+          <dd>This rule determines the "insideness" of a point on
+          the canvas by drawing a ray from that point to infinity
+          in any direction and then examining the places where a
+          segment of the shape crosses the ray. Starting with a
+          count of zero, add one each time a path segment crosses
+          the ray from left to right and subtract one each time a
+          path segment crosses the ray from right to left. After
+          counting the crossings, if the result is zero then the
+          point is outside the path. Otherwise, it is inside.</dd>
+
+          <dt>evenodd</dt>
+
+          <dd>This rule determines the "insideness" of a point on
+          the canvas by drawing a ray from that point to infinity
+          in any direction and counting the number of path segments
+          from the given shape that the ray crosses. If this number
+          is odd, the point is inside; if even, the point is
+          outside.</dd>
+        </dl>
+      </dd>
+
+      <dd>See the examples below.</dd>
+
+      <dt>:opacity</dt>
+
+      <dd>Both the stroke and the fill opacity. A number between
+      0.0 (fully transparent) and 1.0 (fully opaque). The default
+      is 1.0. See below for an example.</dd>
+
+      <dt>:stroke</dt>
+
+      <dd>The stroke color. The value must be a <a href=
+      "imusage.html#color_names">color name</a>. The default is
+      'none', that is, transparent black ("#000000ff").</dd>
+
+      <dt>:stroke_dasharray</dt>
+
+      <dd>An array of numbers that specify the length of the dashes
+      and gaps with which to draw a dashed line. If the array
+      contains an odd number of values, the values are repeated to
+      produce an even number of dashes and gaps. The numbers are in
+      user coordinates. By default all lines are drawn as solid
+      lines. See below for an example.</dd>
+
+      <dt>:stroke_dashoffset</dt>
+
+      <dd>Normally a dashed line is drawn using the first number in
+      the stroke_dasharray as the length of the first dash. This
+      style can be used to specify a different starting point in
+      the array.</dd>
+
+      <dt>:stroke_linecap</dt>
+
+      <dd>The shape of the end of a line. The value may be one of
+      the strings 'butt', 'round', or 'square'. The default is
+      'butt'. See below for an example.</dd>
+
+      <dt>:stroke_linejoin</dt>
+
+      <dd>The shape of the corner where two lines are joined. The
+      value may be one of the strings 'miter', 'round', or 'bevel'.
+      The default is 'miter'. See below for an example.</dd>
+
+      <dt>:stroke_miterlimit</dt>
+
+      <dd>If the <code>stroke_linejoin</code> value is 'miter', a
+      number specifying the ratio of the miter to the thickness of
+      the lines being joined. When the limit is exceeded the join
+      is converted from a miter to a bevel. The value must be a
+      number greater than or equal to 1.0. The default is 4.0.</dd>
+
+      <dt>:stroke_opacity</dt>
+
+      <dd>The opacity of the stroke color. A number between 0.0
+      (fully transparent) and 1.0 (fully opaque). The default is
+      1.0 unless <code>stroke</code> has the default value
+      'none'.</dd>
+
+      <dt>:stroke_width</dt>
+
+      <dd>The thickness of the stroke. The default is 1 user
+      coordinate.</dd>
+    </dl>
+
+    <p>(Text styles are described with the <a href=
+    "#Text_class">Text</a> class.)</p>
+
+    <h4>Examples</h4>
+
+    <p><strong>:fill=&gt;'#00ff00', :stroke=&gt;'blue',
+    :stroke_width=&gt;8</strong><a href=
+    "javascript:popup('stroke_fill.rb.html')"><img src=
+    "ex/stroke_fill.gif" title="Click to see the example script"
+    alt="stroke and fill example" /></a></p>
+
+    <p><strong>:fill_rule=&gt;'nonzero'</strong><a href=
+    "javascript:popup('nonzero.rb.html')"><img src="ex/nonzero.gif"
+    title="Click to see the example script" alt=
+    "nonzero example" /></a></p>
+
+    <p><strong>:fill_rule=&gt;'evenodd'</strong><a href=
+    "javascript:popup('evenodd.rb.html')"><img src="ex/evenodd.gif"
+    title="Click to see the example script" alt=
+    "evenodd example" /></a></p>
+
+    <p><strong>Three values of :opacity</strong><a href=
+    "javascript:popup('rvg_opacity.rb.html')"><img src=
+    "ex/rvg_opacity.gif" title="Click to see the example script"
+    alt="opacity example" /></a></p>
+
+    <p><strong>:stroke_dasharray=&gt;[10,5]</strong><a href=
+    "javascript:popup('rvg_stroke_dasharray.rb.html')"><img src=
+    "ex/rvg_stroke_dasharray.gif" title=
+    "Click to see the example script" alt=
+    "stroke_dasharray example" /></a></p>
+
+    <p><strong>Three values of :stroke_linecap</strong><a href=
+    "javascript:popup('rvg_linecap.rb.html')"><img src=
+    "ex/rvg_linecap.gif" title="Click to see the example script"
+    alt="stroke_linecap example" /></a></p>
+
+    <p><strong>Three values of :stroke_linejoin</strong><a href=
+    "javascript:popup('rvg_linejoin.rb.html')"><img src=
+    "ex/rvg_linejoin.gif" title="Click to see the example script"
+    alt="stroke_linejoin example" /></a></p>
+
+    <h4>Returns</h4>
+
+    <p><span class="arg">obj</span></p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo; <a href="rvguse.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgshape.html">Next</a>
+    &raquo;
+  </div>
+</body>
+</html>

@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+
   <title>RMagick: RVG Reference</title>
   <meta name="GENERATOR" content="Quanta Plus" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <link rel="stylesheet" type="text/css" href="css/ref.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
 <style type="text/css">
   /* <![CDATA[ */
 
   /* ]]> */
-  </style>
+</style>
 </head>
+
 <body>
   <h6 id="header">RMagick User's Guide and Reference</h6>
 
@@ -20,57 +28,1595 @@
     "index.html">Contents</a> | <a href=
     "index.html">Next</a>&nbsp;&raquo;
   </div>
- <h1>RVG Reference</h1>
- <div id="toc">
- <h2>Table of Contents</h2>
- <h3>Containers</h3>
- <ul>
-     <li>RVG
+
+  <h1>RVG Reference</h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>Containers</h3>
+
     <ul>
-    <li>viewbox</li>
-    <li>preserve_aspect_ratio</li></ul>
-    </li>
-    <li>Group</li>
-    <li>use</li>
-</ul>
- <h3>Transforms</h3>
- <ul>
-     <li>translate</li>
-    <li>rotate</li>
-    <li>scale</li>
-    <li>skewX</li>
-    <li>skewY</li>
-    <li>Nested transforms</li>
+      <li>
+        <a href="#RVG_class">class RVG</a>
+
+        <ul>
+          <li><a href="#RVG_new">new</a></li>
+
+          <li><a href=
+          "#RVG_background_fill">background_fill=</a></li>
+
+          <li><a href=
+          "#RVG_background_fill_opacity">background_fill_opacity=</a></li>
+
+          <li><a href=
+          "#RVG_background_image">background_image=</a></li>
+
+          <li><a href=
+          "#RVG_background_pattern">background_pattern=</a></li>
+
+          <li><a href=
+          "#RVG_background_position">background_position=</a></li>
+
+          <li><a href="#RVG_canvas">canvas</a></li>
+
+          <li><a href="#RVG_circle">circle</a></li>
+
+          <li><a href="#RVG_desc">desc, desc=</a></li>
+
+          <li><a href="#RVG_draw">draw</a></li>
+
+          <li><a href="#RVG_ellipse">ellipse</a></li>
+
+          <li><a href="#RVG_g">g</a></li>
+
+          <li><a href="#RVG_height">height</a></li>
+
+          <li><a href="#RVG_image">image</a></li>
+
+          <li><a href="#RVG_line">line</a></li>
+
+          <li><a href="#RVG_matrix">matrix</a></li>
+
+          <li><a href="#RVG_metadata">metadata, metadata=</a></li>
+
+          <li><a href="#RVG_path">path</a></li>
+
+          <li><a href="#RVG_polygon">polygon</a></li>
+
+          <li><a href="#RVG_polyline">polyline</a></li>
+
+          <li><a href=
+          "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a></li>
+
+          <li><a href="#RVG_rect">rect</a></li>
+
+          <li><a href="#RVG_rotate">rotate</a></li>
+
+          <li><a href="#RVG_rvg">rvg</a></li>
+
+          <li><a href="#RVG_scale">scale</a></li>
+
+          <li><a href="#RVG_skewX">skewX</a></li>
+
+          <li><a href="#RVG_skewY">skewY</a></li>
+
+          <li><a href="#RVG_styles">styles</a></li>
+
+          <li><a href="#RVG_text">text</a></li>
+
+          <li><a href="#RVG_title">title, title=</a></li>
+
+          <li><a href="#RVG_translate">translate</a></li>
+
+          <li><a href="#RVG_use">use</a></li>
+
+          <li><a href="#RVG_viewbox">viewbox</a></li>
+
+          <li><a href="#RVG_width">width</a></li>
+
+          <li><a href="#RVG_x">x</a></li>
+
+          <li><a href="#RVG_y">y</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#Group_class">class RVG::Group</a>
+
+        <ul>
+          <li><a href="#Group_g">g</a></li>
+
+          <li>circle</li>
+
+          <li>desc, desc=</li>
+
+          <li>ellipse</li>
+
+          <li>image</li>
+
+          <li>metadata, metadata=</li>
+
+          <li>line</li>
+
+          <li>matrix</li>
+
+          <li>path</li>
+
+          <li>polygon</li>
+
+          <li>polyline</li>
+
+          <li>rect</li>
+
+          <li>rotate</li>
+
+          <li>rvg</li>
+
+          <li>scale</li>
+
+          <li>skewX</li>
+
+          <li>skewY</li>
+
+          <li>styles</li>
+
+          <li>text</li>
+
+          <li>title, title=</li>
+
+          <li>translate</li>
+
+          <li>use</li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#Use_class">class RVG::Use</a>
+
+        <ul>
+          <li><a href="#Use_use">use</a></li>
+
+          <li><a href="#Use_matrix">matrix</a></li>
+
+          <li><a href="#Use_rotate">rotate</a></li>
+
+          <li><a href="#Use_scale">scale</a></li>
+
+          <li><a href="#Use_skewX">skewX</a></li>
+
+          <li><a href="#Use_skewY">skewY</a></li>
+
+          <li><a href="#Use_styles">styles</a></li>
+
+          <li><a href="#Use_translate">translate</a></li>
+        </ul>
+      </li>
     </ul>
- <h3>Shapes</h3>
- <ul>
- <li>rect</li>
- <li>circle</li>
- <li>ellipse</li>
- <li>line</li>
- <li>polyline</li>
- <li>polygon</li>
- </ul>
- <h3>Styles</h3>
-     <ul>
-    <li>Styles for shapes and text</li>
-    <li>Patterns</li>
+
+    <h3>Raster Images</h3>
+
+    <ul>
+      <li>class RVG::Image
+
+        <ul>
+          <li>image</li>
+
+          <li>desc, desc=</li>
+
+          <li>matrix</li>
+
+          <li>metadata, metadata=</li>
+
+          <li>preserve_aspect_ratio</li>
+
+          <li>rotate</li>
+
+          <li>scale</li>
+
+          <li>skewX</li>
+
+          <li>skewY</li>
+
+          <li>styles</li>
+
+          <li>title, title=</li>
+
+          <li>translate</li>
+        </ul>
+      </li>
     </ul>
- <h3>Text</h3>
- <ul>
- <li>text</li>
- <li>tspan</li>
- <li>tref</li>
- <li>Text styles
- </li>
- <li>More text styles
- </li>
- </ul>
- <h3>Images</h3>
- <ul><li>image</li></ul>
- <h3>Units of measurement</h3>
- </div>
-  <p class="spacer"> </p>
+
+    <h3>Shapes</h3>
+
+    <ul>
+      <li>module RVG::Embellishable
+
+        <ul>
+          <li>rect</li>
+
+          <li>circle</li>
+
+          <li>ellipse</li>
+
+          <li>line</li>
+
+          <li>polyline</li>
+
+          <li>polygon</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Styles</h3>
+
+    <ul>
+      <li>
+        <a href="#Stylable_module">module RVG::Stylable</a>
+
+        <ul>
+          <li><a href="#styles">styles</a></li>
+        </ul>
+      </li>
+
+      <li>
+        <a href="#Pattern_class">class RVG::Pattern</a>
+
+        <ul>
+          <li>new</li>
+
+          <li>circle</li>
+
+          <li>ellipse</li>
+
+          <li>g</li>
+
+          <li>image</li>
+
+          <li>line</li>
+
+          <li>path</li>
+
+          <li>preserve_aspect_ratio</li>
+
+          <li>polygon</li>
+
+          <li>polyline</li>
+
+          <li>rect</li>
+
+          <li>rvg</li>
+
+          <li>styles</li>
+
+          <li>text</li>
+
+          <li>use</li>
+
+          <li>viewbox</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Text</h3>
+
+    <ul>
+      <li>class RVG::Text
+
+        <ul>
+          <li>text</li>
+
+          <li>d</li>
+
+          <li>rotate</li>
+
+          <li>styles</li>
+
+          <li>tspan</li>
+
+          <li>tref</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Transforms</h3>
+
+    <ul>
+      <li>module RVG::Transformable
+
+        <ul>
+          <li>translate</li>
+
+          <li>rotate</li>
+
+          <li>scale</li>
+
+          <li>skewX</li>
+
+          <li>skewY</li>
+        </ul>
+      </li>
+
+      <li>Nested transforms</li>
+    </ul>
+
+    <h3><a href="#units">Units of measurement</a></h3>
+  </div>
+
+  <div class="subhd">
+    <h2>Containers</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>There are two <em>container</em> classes in RVG,
+      <strong>RVG</strong> and <strong>Group</strong>. Container
+      classes provide a way to group together multiple shapes,
+      text, raster images, or nested groups. An RVG object can
+      define its own user coordinate system.</p>
+
+      <p>The Use class defines the use method, which allows you to
+      insert a previously-defined drawable object into a
+      container.</p>
+    </div>
+
+    <h3 id="RVG_class">class RGV <span class=
+    "superclass">&lt;Object</span></h3>
+
+    <div class="sig">
+      <h4 id="RVG_new">new</h4>
+
+      <p>RVG.new(<span class="arg">width</span>=nil, <span class=
+      "arg">height</span>=nil) [ <span class="arg">{ |canvas|
+      drawing method calls }</span> ] -&gt; anRVG</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Creates a <em>container</em> that can have its own
+      coordinate system. An RVG object is always the outermost
+      container for a drawing. Within the block, call drawing
+      methods on <em>canvas</em> to render shapes, text, and raster
+      images in the container. Call the <a href="#draw">draw</a>
+      method on the returned RVG object to produce the final
+      image.</p>
+
+      <h5>Arguments</h5>
+
+      <p>If the RVG object is the outermost container, <span class=
+      "arg">width</span> and <span class="arg">height</span> are
+      required and specify the width and height of the final
+      drawing in pixels. You can call <a href="#units">conversion
+      methods</a> to use units such as inches and millimeters
+      instead of pixels.</p>
+
+      <p>Otherwise, wid<span class="arg">th</span> and <span class=
+      "arg">height</span> specify the area of the viewbox. If the
+      RVG object will be used as an argument to the <a href=
+      "#Use_use">use</a> method, then <span class=
+      "arg">width</span> and <span class="arg">height</span> may be
+      omitted here and specified as arguments to
+      <code>use</code>.</p>
+
+      <h5>Returns</h5>
+
+      <p>An RVG object</p>
+
+      <h5>Example</h5>
+
+      <p>See the <a href="rvgtut.html">tutorial</a> for a simple
+      example. The image below demonstrates an advanced use of
+      <code>RVG.new</code>. This example creates an RVG object that
+      draws an orange-and-green target. The <span class=
+      "arg">width</span> and <span class="arg">height</span>
+      arguments are omitted in the <code>RVG.new</code> call.
+      Instead, the viewport width and height are specified as
+      arguments to 4 invocations of <a href="#Use_use">use</a>.
+      Each <code>use</code> specifies a different viewport size, so
+      the same RVG object draws 4 different-sized targets.</p>
+
+      <p>Click the image to see the example script.</p>
+
+      <p><a href="javascript:popup('nested_rvg.rb.html')"><img src=
+      "ex/nested_rvg.gif" title="Click to see the example script"
+      alt="nested RVG example" /></a></p>
+
+      <h5>See also</h5>
+
+      <p><a href="#Group_class">Group</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_background_fill'>background_fill=</h4>
+
+      <p><span class="arg">canvas</span>.background_fill =
+      <span class="arg">value</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Specify a background fill color. The attribute value may
+      be either a <a href="struct.html#Pixel">pixel</a> or a
+      <a href="imusage.html#color_names">color name.</a> The
+      default fill color is "#000000ff". This color is usually
+      called "none".</p>
+
+      <h5>Example</h5>
+      <pre>
+canvas.background_fill = 'white'
+</pre>
+
+      <h5>Returns</h5><span class="arg">value</span>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_background_fill_opacity'>
+      background_fill_opacity=</h4>
+
+      <p><span class="arg">canvas</span>.background_fill_opacity =
+      <span class="arg">value</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Specify the opacity of the background fill color when the
+      <a href="#RVG_background_fill">background fill</a> is not the
+      default. The value is a number between 0.0 (fully
+      transparent) and 1.0 (fully opaque). The default is 1.0. The
+      attribute is ignored unless <code>background_fill</code> is
+      specified. .</p>
+
+      <h5>Example</h5>
+      <pre>
+canvas.background_fill = 'white'
+canvas.background_fill_opacity = 0.50
+</pre>
+
+      <h5>Returns</h5><span class="arg">value</span>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_background_image'>background_image=</h4>
+
+      <p><span class="arg">canvas</span>.background_image =
+      <span class="arg">anImage</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Specify an image to be used as the canvas background. The
+      value is an <a href="image1.html#new">Image</a> object. .</p>
+
+      <h5>Example</h5>
+      <pre>
+canvas.background_image = Magick::Image.read('myBackground.gif').first
+</pre>
+
+      <h5>Returns</h5><span class="arg">anImage</span>
+
+      <h5>See also</h5>
+
+      <p><a href=
+      "#RVG_background_position">background_position=</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_background_pattern'>background_pattern=</h4>
+
+      <p><span class="arg">canvas</span>.background_pattern =
+      <span class="arg">aFill</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Specify an <a href="struct.html#fill">Fill object</a> to
+      fill the canvas background. .</p>
+
+      <h5>Example</h5>
+      <pre>
+canvas.background_pattern = Magick::GradientFill.new(0, 0, 0, 100, "#900", "#000")
+</pre>
+
+      <h5>Returns</h5><span class="arg">aFill</span>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_background_position'>background_position=</h4>
+
+      <p><span class="arg">canvas</span>.background_position =
+      <span class="arg">pos</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If the dimensions of the image specified by <a href=
+      "#RVG_background_image">background_image</a> do not exactly
+      match the canvas dimensions, this attribute specifies how to
+      position the image on the background. .</p>
+
+      <h5>Argument</h5>The value of <span class="arg">pos</span>
+      can be any one of the following symbols :
+
+      <dl>
+        <dt>:scaled</dt>
+
+        <dd>The image is scaled to fit. The image proportions are
+        not retained.</dd>
+
+        <dt>:tiled</dt>
+
+        <dd>The image is tiled across the background.</dd>
+
+        <dt>:fit</dt>
+
+        <dd>The image is scaled to fit. The image proportions are
+        retained. Any part of the background that is not covered by
+        the image is colored with the <a href=
+        "#RVG_background_color">background color</a>.</dd>
+      </dl>
+
+      <h5>Example</h5>
+      <pre>
+canvas.background_image = Magick::Image.read('myBackground.gif').first
+canvas.background_position = :scaled
+</pre>
+
+      <h5>Returns</h5><span class="arg">pos</span>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_canvas'>canvas</h4>
+
+      <p><span class="arg">rvg</span>.canvas -&gt; anImage</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>After the <a href="#RVG_draw">draw</a> method has been
+      used, returns the rendered image. This is the same image that
+      <code>draw</code> returns.</p>
+
+      <h5>Returns</h5>
+
+      <p>An image</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_circle'>circle</h4>
+
+      <p><span class="arg">canvas.</span>circle(<span class=
+      "arg">radius</span>, <span class="arg">cx</span>=0,
+      <span class="arg">cy</span>=0) -&gt; <span class=
+      "arg">aCircle</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_circle">circle</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_desc">desc, desc=</h4>
+
+      <p><span class="arg">canvas</span>.desc -&gt; <span class=
+      "arg">aString</span><br />
+      <span class="arg">canvas</span>.desc = <span class=
+      "arg">aString</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>Use the <code>desc</code> attribute to
+      assign a text description to the drawing. The description
+      will be assigned to the "desc" property of the resulting
+      image.
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_draw'>draw</h4>
+
+      <p><span class="arg">rvg</span>.draw -&gt; anImage</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Causes all the drawing objects that have been added to the
+      canvas to be rendered.</p>
+
+      <h5>Returns</h5>
+
+      <p>An image</p>
+
+      <h5>Example</h5>
+      <pre>
+      img = rvg.draw
+      img.write('myDrawing.jpg')
+</pre>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_ellipse'>ellipse</h4>
+
+      <p><span class="arg">canvas.</span>ellipse(<span class=
+      "arg">rx</span>, <span class="arg">ry</span>, <span class=
+      "arg">cx</span>=0, <span class="arg">cy</span>=0) -&gt;
+      <span class="arg">anEllipse</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_ellipse">ellipse</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_g'>g</h4>
+
+      <p><span class="arg">canvas.</span>g() [{|<span class=
+      "arg">grp</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Group_g">g</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_height'>height</h4>
+
+      <p><span class="arg">canvas</span>.height -&gt; <span class=
+      "arg">height</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The height in pixels of the RVG object.</p>
+
+      <h5>See also</h5>
+
+      <p><a href="#RVG_width">width</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_image'>image</h4>
+
+      <p><span class="arg">canvas.</span>image(<span class=
+      "arg">raster_image</span>, <span class=
+      "arg">width</span>=nil, <span class="arg">height</span>=nil,
+      <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+      -&gt; <span class="arg">amImage</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Image_image">image</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_line'>line</h4>
+
+      <p><span class="arg">canvas.</span>line(<span class=
+      "arg">x1</span>=0, <span class="arg">y1</span>=0,
+      <span class="arg">x2</span>=0, <span class="arg">y2</span>=0)
+      -&gt; <span class="arg">aLine</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_line">line</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_matrix'>matrix</h4>
+
+      <p><span class="arg">canvas.</span>matrix(<span class=
+      "arg">sx</span>, <span class="arg">rx</span>, <span class=
+      "arg">ry</span>, <span class="arg">sy</span>, <span class=
+      "arg">tx</span>, <span class="arg">ty</span>) [{|<span class=
+      "arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_matrix">matrix</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_metadata">metadata, metadata=</h4>
+
+      <p><span class="arg">canvas</span>.metadata -&gt;
+      <span class="arg">aString</span><br />
+      <span class="arg">canvas</span>.metadata = <span class=
+      "arg">aString</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>Use the <code>metadata</code> attribute
+      to assign additional metadata to the drawing. The metadata
+      string will be assigned to the "metadata" property of the
+      resulting image.
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_path'>path</h4>
+
+      <p><span class="arg">canvas.</span>path(<span class=
+      "arg">path-data</span>) -&gt; <span class=
+      "arg">aPath</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_path">path</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_polygon'>polygon</h4>
+
+      <p><span class="arg">canvas.</span>polygon(<span class=
+      "arg">x1</span>, <span class="arg">y1</span>, <span class=
+      "arg">x2</span>, <span class="arg">y2</span> [, <span class=
+      "arg">x3</span>, <span class="arg">y3</span>...]) -&gt;
+      <span class="arg">aPolygon</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_polygon">polygon</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_polyline'>polyline</h4>
+
+      <p><span class="arg">canvas.</span>polyline(<span class=
+      "arg">x1</span>, <span class="arg">y1</span>, <span class=
+      "arg">x2</span>, <span class="arg">y2</span> [, <span class=
+      "arg">x3</span>, <span class="arg">y3</span>...]) -&gt;
+      <span class="arg">aPolyline</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_polyline">polyline</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_preserve_aspect_ratio'>preserve_aspect_ratio</h4>
+
+      <p><span class=
+      "arg">canvas</span>.preserve_aspect_ratio(<span class=
+      "arg">align</span>, <span class=
+      "arg">meet_or_slice</span>='meet') [{|<span class=
+      "arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If you use the <a href="#RVG_viewbox">viewbox</a> method
+      and the user coordinate system does not scale uniformly to
+      the default coordinate system (for example, the width and
+      height of the RVG object is 4x3 and the user coordinate
+      system is 16x9), use the <code>preserve_aspect_ratio</code>
+      method to specify whether or not the content is stretched to
+      fit. If not, you can specify how to fit the content into the
+      space.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>align</dt>
+
+        <dd>
+          When the value of the <code>meet_or_slice</code> argument
+          is 'meet' or 'slice', this argument controls the
+          placement of the content within the viewport. The
+          <code>align</code> argument is the concatenation of an
+          <em>x</em>-aligment and a <em>y</em>-alignment. The
+          values are shown in these lists:
+
+          <h6><em>x</em>-alignment</h6>
+
+          <dl>
+            <dt>xMin</dt>
+
+            <dd>align the minimum <em>x</em> value of the content
+            with the left corner of the viewport.</dd>
+
+            <dt>xMid</dt>
+
+            <dd>vertically center the content within the
+            viewport.</dd>
+
+            <dt>xMax</dt>
+
+            <dd>align the maximum <em>x</em> value of the content
+            with the right corner of the viewport.</dd>
+          </dl>
+
+          <h6><em>y</em>-alignment</h6>
+
+          <dl>
+            <dt>YMin</dt>
+
+            <dd>align the minimum <em>y</em> value of the content
+            with the top of the viewport.</dd>
+
+            <dt>YMid</dt>
+
+            <dd>horizontally center the content within the
+            viewport.</dd>
+
+            <dt>YMax</dt>
+
+            <dd>align the maximum <em>y</em> value of the content
+            with the bottom of the viewport</dd>
+          </dl>
+        </dd>
+
+        <dt>meet_or_slice</dt>
+
+        <dd>
+          This argument can have one of these three values:
+
+          <dl>
+            <dt>'none'</dt>
+
+            <dd>The content is scaled as necessary so that it fits
+            exactly within the viewport. The aspect ratio is
+            <em>not</em> maintained.</dd>
+
+            <dt>'meet'</dt>
+
+            <dd>The content is scaled as necessary so that the
+            larger dimension exactly fits the viewport. There may
+            be some unused space in the viewport. The aspect ratio
+            is maintained.</dd>
+
+            <dt>'slice'</dt>
+
+            <dd>The content is scaled as necessary so that the
+            smaller dimension exactly fits the viewport. Some of
+            the content in the larger dimension may be cut off. The
+            aspect ratio is maintained.</dd>
+          </dl>
+        </dd>
+      </dl>
+
+      <h5>Example</h5>
+
+      <p><a href=
+      "javascript:popup('PreserveAspectRatio.rb.html')"><img src=
+      "ex/PreserveAspectRatio.gif" title=
+      "Click to see the example script" alt=
+      "preserve_aspect_ratio example" /></a></p>
+
+      <h5>See Also</h5>
+
+      <p><a href="#RVG_viewbox">viewbox</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_rect'>rect</h4>
+
+      <p><span class="arg">canvas.</span>rect(<span class=
+      "arg">width</span>, <span class="arg">height</span>,
+      <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+      -&gt; <span class="arg">aRect</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Shapes_rect">rect</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_rotate'>rotate</h4>
+
+      <p><span class="arg">canvas.</span>rotate(<span class=
+      "arg">angle</span>[, <span class="arg">cx</span>,
+      <span class="arg">cy</span>]) [{|<span class=
+      "arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_rotate">rotate</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_rvg">rvg</h4>
+
+      <p><span class="arg">container</span>.rvg(<span class=
+      "arg">width</span>, <span class="arg">height</span>,
+      <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+      [{|<span class="arg">rvg</span>| ...}] -&gt; <span class=
+      "arg">anRVG</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>This method constructs a new RVG object and adds it to
+      <span class="arg">container</span>. Each RVG object can use
+      the <a href="#RVG_viewbox">viewbox</a> method to define its
+      own coordinate system. The <code>rvg</code> method yields to
+      a block, passing the new RVG object as an argument. Within
+      the block, any drawing objects added to the RVG object are
+      rendered within the new RVG object's viewport.</p>
+
+      <p><span class="arg">Container</span> may be another RVG
+      object, an <a href="Group_class">RVG::Group</a> object, or an
+      <a href="Pattern_class">RVG::Pattern</a> object.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>width, height</dt>
+
+        <dd>Specifies the viewport width and height. The units are
+        in the user coordinate system of the parent container.</dd>
+
+        <dt>x, y</dt>
+
+        <dd>The x- and y-axis offsets of the viewport upper-left
+        corner. The units are in the user coordinate system of the
+        parent container.</dd>
+      </dl>
+
+      <h5>Example</h5>
+
+      <p>See the example for <a href=
+      "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_scale'>scale</h4>
+
+      <p><span class="arg">canvas.</span>scale(<span class=
+      "arg">sx</span>, <span class="arg">sy</span>=nil)
+      [{|<span class="arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_scale">scale</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_skewX'>skewX</h4>
+
+      <p><span class="arg">canvas.</span>skewX(<span class=
+      "arg">angle</span>) [{|<span class="arg">canvas</span>| ...}]
+      -&gt; <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_skewX">skewX</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_skewY'>skewY</h4>
+
+      <p><span class="arg">canvas.</span>skewY(<span class=
+      "arg">angle</span>) [{|<span class="arg">canvas</span>| ...}]
+      -&gt; <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_skewY">skewY</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_styles'>styles</h4>
+
+      <p><span class="arg">canvas.</span>styles(<span class=
+      "arg">:style=&gt;value</span>[, <span class=
+      "arg">:style=&gt;value</span>...]) [{|canvas| }] -&gt;
+      <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="#styles">styles</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_text'>text</h4>
+
+      <p><span class="arg">canvas.</span>text(<span class=
+      "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
+      "arg">text</span>=nil) [{|<span class="arg">aText</span>|
+      ...}] -&gt; <span class="arg">aText</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Text_text">text</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_title">title, title=</h4>
+
+      <p><span class="arg">canvas</span>.title -&gt; <span class=
+      "arg">aString</span><br />
+      <span class="arg">canvas</span>.title = <span class=
+      "arg">aString</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>Use the <code>title</code> attribute to
+      assign a title to the drawing. The title will be assigned to
+      the "title" property of the resulting image.
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_translate'>translate</h4>
+
+      <p><span class="arg">canvas.</span>translate(<span class=
+      "arg">tx</span>, <span class="arg">ty</span>=nil)
+      [{|<span class="arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_translate">translate</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_viewbox">viewbox</h4>
+
+      <p>canvas.viewbox(<span class="arg">min_x</span>,
+      <span class="arg">min_y</span>, <span class=
+      "arg">width</span>, <span class="arg">height</span>)
+      [{|<span class="arg">canvas</span>| ...}] -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The area of the RVG object is called the
+      <em>viewport</em>. By default the origin of the coordinate
+      system for an RVG object is (0,0). The user coordinates are
+      pixels and the width and height are established by the
+      <span class="arg">width</span> and <span class=
+      "arg">height</span> arguments to <code>RVG.new</code>.</p>
+
+      <p>Use the <code>viewbox</code> method to superimpose a user
+      coordinate system on the viewport. The <code>viewbox</code>
+      method lets you set up a coordinate system using the units of
+      your choice.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>min_x, min_y</dt>
+
+        <dd>The minimum <em>x</em>-coordinate and
+        <em>y</em>-coordinate of the user coordinate system.</dd>
+
+        <dt>width, height</dt>
+
+        <dd>The width and height of the user coordinate
+        system.</dd>
+      </dl>
+
+      <h5>Example</h5>
+
+      <p>In the following examples, because the
+      <code>viewbox</code> method specifies the dimensions of the
+      coordinate system, the dimensions specified for the graphic
+      objects can remain the same while the size of the canvas
+      changes.</p>
+
+      <p><strong>Rendered into a 300x200 viewport</strong><a href=
+      "javascript:popup('ViewBox.rb.html')"><img src=
+      "ex/ViewBox_300x200.gif" title=
+      "Click to see the example script" alt=
+      "viewbox 300x200 example" /></a></p>
+
+      <p><strong>Rendered into a 150x200 viewport</strong><a href=
+      "javascript:popup('ViewBox.rb.html')"><img src=
+      "ex/ViewBox_150x200.gif" title=
+      "Click to see the example script" alt=
+      "viewbox 150x200 example" /></a></p>
+
+      <h5>See Also</h5>
+
+      <p><a href=
+      "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id="RVG_use">use</h4>
+
+      <p><span class="arg">canvas</span>.use(<span class=
+      "arg">obj</span>, <span class="arg">x</span>=0, <span class=
+      "arg">y</span>=0, <span class="arg">width</span>=nil,
+      <span class="arg">height</span>=nil) -&gt; <span class=
+      "arg">canvas</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="#Use_use">use</a>. When the referenced
+      argument is an RVG object, <span class="arg">width</span> and
+      <span class="arg">height</span> can be used to specify the
+      width and height of the viewport. If present and non-nil,
+      these arguments override any width and height specified when
+      the RVG object was created. You must specify the viewport
+      size either when creating the RVG object or when referencing
+      it with <code>use</code>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_width'>width</h4>
+
+      <p><span class="arg">canvas</span>.width -&gt; <span class=
+      "arg">width</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The width in pixels of the RVG object. .</p>
+
+      <h5>See also</h5>
+
+      <p><a href="#RVG_height">height</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_x'>x</h4>
+
+      <p><span class="arg">canvas</span>.x -&gt; <span class=
+      "arg">x-offset</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If this RVG object is nested within another RVG object,
+      returns the x-offset from the upper-left corner of the
+      enclosing RVG object. .</p>
+
+      <h5>See also</h5>
+
+      <p><a href="#RVG_y">y</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id='RVG_y'>y</h4>
+
+      <p><span class="arg">canvas</span>.y -&gt; <span class=
+      "arg">y-offset</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If this RVG object is nested within another RVG object,
+      returns the y-offset from the upper-left corner of the
+      enclosing RVG object. .</p>
+
+      <h5>See also</h5>
+
+      <p><a href="#RVG_x">x</a></p>
+    </div>
+
+    <h3 id="Group_class">class RGV::Group <span class=
+    "superclass">&lt;Object</span></h3>
+
+    <h3 id="Use_class">class RVG::Use <span class=
+    "superclass">&lt;Object</span></h3>
+
+    <div class="sig">
+      <h4 id="Use_use">use</h4>
+
+      <p><span class="arg">container</span>.use(<span class=
+      "arg">obj</span>, <span class="arg">x</span>=0, <span class=
+      "arg">y</span>=0, <span class="arg">width</span>=nil,
+      <span class="arg">height</span>=nil) -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>This method is defined in the <a href=
+      "#RVG_class">RVG</a>, <a href=
+      "#ClipPath_class">RVG::ClipPath</a>, <a href=
+      "#Group_class">RVG::Group</a>, and <a href=
+      "#Pattern_class">RVG::Pattern</a> classes.</p>
+
+      <p>The <code>use</code> method constructs an RVG::Use object
+      and adds it to the target container object. A
+      <code>Use</code> object links a previously-defined drawable
+      object into the container.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>obj</dt>
+
+        <dd>A container, shape, raster image, or text object.</dd>
+
+        <dt>x, y</dt>
+
+        <dd>Specifies an additional translation.</dd>
+
+        <dt>width, height</dt>
+
+        <dd>Only valid when the referenced object is an RVG object.
+        Specifies the width and height of the viewbox.</dd>
+      </dl>
+
+      <h5>Example</h5>
+
+      <p>See the <a href="rvgtut.html">tutorial</a>.</p>
+
+      <h5>Returns</h5>
+
+      <p>An RVG::Use object</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_matrix'>matrix</h4>
+
+      <p><span class="arg">use.</span>matrix(<span class=
+      "arg">sx</span>, <span class="arg">rx</span>, <span class=
+      "arg">ry</span>, <span class="arg">sy</span>, <span class=
+      "arg">tx</span>, <span class="arg">ty</span>) -&gt;
+      <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_matrix">matrix</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_rotate'>rotate</h4>
+
+      <p><span class="arg">use.</span>rotate(<span class=
+      "arg">angle</span>[, <span class="arg">cx</span>,
+      <span class="arg">cy</span>]) -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_rotate">rotate</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_scale'>scale</h4>
+
+      <p><span class="arg">use.</span>scale(<span class=
+      "arg">sx</span>, <span class="arg">sy</span>=nil) -&gt;
+      <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_scale">scale</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_skewX'>skewX</h4>
+
+      <p><span class="arg">use.</span>skewX(<span class=
+      "arg">angle</span>) -&gt; <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_skewX">skewX</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_skewY'>skewY</h4>
+
+      <p><span class="arg">use.</span>skewY(<span class=
+      "arg">angle</span>) -&gt; <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_skewY">skewY</a>.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_styles'>styles</h4>
+
+      <p><span class="arg">use.</span>styles(<span class=
+      "arg">:style=&gt;value</span>[, <span class=
+      "arg">:style=&gt;value</span>...]) -&gt; <span class=
+      "arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="#styles">styles</a>. Styles specified by
+      <code>use</code>'s <span class="arg">obj</span> argument
+      override the styles specified here.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id='Use_translate'>translate</h4>
+
+      <p><span class="arg">use.</span>translate(<span class=
+      "arg">tx</span>, <span class="arg">ty</span>=nil) -&gt;
+      <span class="arg">self</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>See <a href="Transformable_translate">translate</a>.</p>
+    </div>
+  </div>
+
+  <div class="subhd">
+    <h2>Styles</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>The <strong>Style</strong> module is mixed into the RVG,
+      RVG::Group, RVG::Text, RVG::ClipPath, RVG::Image,
+      RVG::Pattern and all the shape classes. It defines one
+      method, <code>styles</code>.</p>
+
+      <p>Use the <strong>RVG::Pattern</strong> class to create
+      custom patterns used as values of the <code>:stroke</code>
+      and <code>:fill</code> styles.</p>
+    </div>
+
+    <h3 id="Stylable_module">module RVG::Stylable</h3>
+
+    <div class="sig">
+      <h4 id='styles'>styles</h4>
+
+      <p><span class="arg">obj.</span>styles(<span class=
+      "arg">:style=&gt;value</span>[, <span class=
+      "arg">:style=&gt;value</span>...]) [{|obj| }] -&gt;
+      <span class="arg">obj</span></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Assigns <em>styles</em> to the target object, which may be
+      a container, shape, text, raster image, or pattern. Styles
+      are presentational attributes that define how the object is
+      rendered. By default, objects within a container get the
+      styles defined on the container.</p>
+
+      <h5>Arguments</h5>
+
+      <p>The argument is a hash. The hash keys are style name
+      symbols. The hash values are the style values. RVG supports
+      the following style names.</p>
+
+      <dl>
+        <dt>:clip_path</dt>
+
+        <dd>An outline used to clip a shape or collection of
+        shapes. The value is an <a href=
+        "#ClipPath_class">RVG::ClipPath</a> object.</dd>
+
+        <dt>:clip_rule</dt>
+
+        <dd>If the <code>clip_path</code> style is used, how to
+        determine if a point is inside or outside a the clip path.
+        The value is a string, either 'nonzero' or 'evenodd'. The
+        default is 'nonzero'. See the <code>fill_rule</code>
+        example below.</dd>
+
+        <dt>:fill</dt>
+
+        <dd>The fill color. The value must be a <a href=
+        "imusage.html#color_names">color name</a>. The default is
+        'black'.</dd>
+
+        <dt>:fill_opacity</dt>
+
+        <dd>The opacity of the fill color. A number between 0.0
+        (fully transparent) and 1.0 (fully opaque). The default is
+        1.0</dd>
+
+        <dt>:fill_rule</dt>
+
+        <dd>How to determine if a point is inside or outside a
+        shape. The value is a string, either 'nonzero' or
+        'evenodd'. The default is 'nonzero'.</dd>
+
+        <dd>
+          The following descriptions of 'nonzero' and 'evenodd' are
+          from the <a href=
+          "http://www.w3.org/TR/SVG11/painting.html#FillProperties">
+          SVG 1.1 standard</a>.
+
+          <dl>
+            <dt>nonzero</dt>
+
+            <dd>This rule determines the "insideness" of a point on
+            the canvas by drawing a ray from that point to infinity
+            in any direction and then examining the places where a
+            segment of the shape crosses the ray. Starting with a
+            count of zero, add one each time a path segment crosses
+            the ray from left to right and subtract one each time a
+            path segment crosses the ray from right to left. After
+            counting the crossings, if the result is zero then the
+            point is outside the path. Otherwise, it is
+            inside.</dd>
+
+            <dt>evenodd</dt>
+
+            <dd>This rule determines the "insideness" of a point on
+            the canvas by drawing a ray from that point to infinity
+            in any direction and counting the number of path
+            segments from the given shape that the ray crosses. If
+            this number is odd, the point is inside; if even, the
+            point is outside.</dd>
+          </dl>
+        </dd>
+
+        <dd>See the examples below.</dd>
+
+        <dt>:opacity</dt>
+
+        <dd>Both the stroke and the fill opacity. A number between
+        0.0 (fully transparent) and 1.0 (fully opaque). The default
+        is 1.0. See below for an example.</dd>
+
+        <dt>:stroke</dt>
+
+        <dd>The stroke color. The value must be a <a href=
+        "imusage.html#color_names">color name</a>. The default is
+        'none', that is, transparent black ("#000000ff").</dd>
+
+        <dt>:stroke_dasharray</dt>
+
+        <dd>An array of numbers that specify the length of the
+        dashes and gaps with which to draw a dashed line. If the
+        array contains an odd number of values, the values are
+        repeated to produce an even number of dashes and gaps. The
+        numbers are in user coordinates. By default all lines are
+        drawn as solid lines. See below for an example.</dd>
+
+        <dt>:stroke_dashoffset</dt>
+
+        <dd>Normally a dashed line is drawn using the first number
+        in the stroke_dasharray as the length of the first dash.
+        This style can be used to specify a different starting
+        point in the array.</dd>
+
+        <dt>:stroke_linecap</dt>
+
+        <dd>The shape of the end of a line. The value may be one of
+        the strings 'butt', 'round', or 'square'. The default is
+        'butt'. See below for an example.</dd>
+
+        <dt>:stroke_linejoin</dt>
+
+        <dd>The shape of the corner where two lines are joined. The
+        value may be one of the strings 'miter', 'round', or
+        'bevel'. The default is 'miter'. See below for an
+        example.</dd>
+
+        <dt>:stroke_miterlimit</dt>
+
+        <dd>If the <code>stroke_linejoin</code> value is 'miter', a
+        number specifying the ratio of the miter to the thickness
+        of the lines being joined. When the limit is exceeded the
+        join is converted from a miter to a bevel. The value must
+        be a number greater than or equal to 1.0. The default is
+        4.0.</dd>
+
+        <dt>:stroke_opacity</dt>
+
+        <dd>The opacity of the stroke color. A number between 0.0
+        (fully transparent) and 1.0 (fully opaque). The default is
+        1.0 unless <code>stroke</code> has the default value
+        'none'.</dd>
+
+        <dt>:stroke_width</dt>
+
+        <dd>The thickness of the stroke. The default is 1 user
+        coordinate.</dd>
+      </dl>
+
+      <p>(Text styles are described with the <a href=
+      "#Text_class">Text</a> class.)</p>
+
+      <h5>Examples</h5>
+
+      <p><strong>:fill=&gt;'#00ff00', :stroke=&gt;'blue',
+      :stroke_width=&gt;8</strong><a href=
+      "javascript:popup('stroke_fill.rb.html')"><img src=
+      "ex/stroke_fill.gif" title="Click to see the example script"
+      alt="stroke and fill example" /></a></p>
+
+      <p><strong>:fill_rule=&gt;'nonzero'</strong><a href=
+      "javascript:popup('nonzero.rb.html')"><img src=
+      "ex/nonzero.gif" title="Click to see the example script" alt=
+      "nonzero example" /></a></p>
+
+      <p><strong>:fill_rule=&gt;'evenodd'</strong><a href=
+      "javascript:popup('evenodd.rb.html')"><img src=
+      "ex/evenodd.gif" title="Click to see the example script" alt=
+      "evenodd example" /></a></p>
+
+      <p><strong>Three values of :opacity</strong><a href=
+      "javascript:popup('rvg_opacity.rb.html')"><img src=
+      "ex/rvg_opacity.gif" title="Click to see the example script"
+      alt="opacity example" /></a></p>
+
+      <p><strong>:stroke_dasharray=&gt;[10,5]</strong><a href=
+      "javascript:popup('rvg_stroke_dasharray.rb.html')"><img src=
+      "ex/rvg_stroke_dasharray.gif" title=
+      "Click to see the example script" alt=
+      "stroke_dasharray example" /></a></p>
+
+      <p><strong>Three values of :stroke_linecap</strong><a href=
+      "javascript:popup('rvg_linecap.rb.html')"><img src=
+      "ex/rvg_linecap.gif" title="Click to see the example script"
+      alt="stroke_linecap example" /></a></p>
+
+      <p><strong>Three values of :stroke_linejoin</strong><a href=
+      "javascript:popup('rvg_linejoin.rb.html')"><img src=
+      "ex/rvg_linejoin.gif" title="Click to see the example script"
+      alt="stroke_linejoin example" /></a></p>
+
+      <h5>Returns</h5>
+
+      <p>self</p>
+    </div>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
 
   <div class="nav">
     &laquo; <a href="rvgtut.html">Prev</a> | <a href=

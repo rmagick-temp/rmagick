@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: RVG::Group Class</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvg.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgimage.html">Next</a>&nbsp;&raquo;
+  </div>
+  <h1>class RVG::Group <span class="superclass">&lt; Object</span></h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>class methods</h3>
+
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+    <h3>attributes</h3>
+    <ul>
+        <li><a href="#desc">desc, desc=</a></li>
+
+        <li><a href="#metadata">metadata, metadata=</a></li>
+        <li><a href="#title">title, title=</a></li>
+
+    </ul>
+    <h3>instance methods</h3>
+    <ul>
+    <li><a href="#g">g</a></li>
+    <li><a href="#image">image</a></li>
+    <li><a href="#rvg">rvg</a></li>
+    <li><a href="#text">text</a></li>
+    <li><a href="#use">use</a></li>
+    </ul>
+    <h3>shared methods</h3>
+
+    <p>In addition to the methods listed above, <code>class
+    RVG</code> also implements the <a href=
+    "rvgstyle.html">styles</a> method, the <a href=
+    "rvgshape.html">shape methods</a> and the <a href=
+    "rvgxform.html">transform methods</a>.</p>
+  </div>
+
+  <h2 class="methods">class methods</h2>
+
+  <div class="sig">
+    <h3 id="new">new</h3>
+
+    <p><span class="arg">RVG::Group</span>.new [ <span class="arg">{ |<span class="arg">self</span>| drawing
+    method calls }</span> ] -&gt; <span class="arg">aGroup</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Drawing objects defined within a group share the transforms
+    and styles defined on the group. Groups can be nested
+    arbitrarily deep. <code>RVG::Group.new</code> is
+    commonly invoked within another group or RVG object by calling the <code>g</code> method, which adds
+    the group to the calling object.</p>
+
+    <p><code>RVG::Group.new</code> yields to a block if one is present, passing <code>self</code> as an argument.</p>
+
+    <h4>Returns</h4>
+
+    <p>An <code>RVG::Group</code> object</p>
+
+    <h4>Example</h4>
+    <p>See the tutorial for examples of the most common uses of groups. In this example, I use
+    RVG::Group.new to construct a "stand-alone" group that is then referenced in multiple calls to the <a href="rvguse.html">use</a> method.</p>
+
+    <p><a href="javascript:popup('group.rb.html')"><img src=
+    "ex/group.gif" title="Click to see the example script"
+    alt="group example" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="rvg.html">RVG</a></p>
+  </div>
+
+  <h2 class="methods">attributes</h2>
+  <div class="sig">
+    <h3 id="desc">desc, desc=</h3>
+
+    <p><span class="arg">group</span>.desc -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">group</span>.desc = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>desc</code> attribute to
+    assign a text description to the group.
+  </div>
+  <div class="sig">
+    <h3 id="metadata">metadata, metadata=</h3>
+
+    <p><span class="arg">group</span>.metadata -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">group</span>.metadata = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>metadata</code> attribute to
+    assign additional metadata to the group.
+  </div>
+
+  <div class="sig">
+    <h3 id="RVG_title">title, title=</h3>
+
+    <p><span class="arg">group</span>.title -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">group</span>.title = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>title</code> attribute to
+    assign a title to the group.
+  </div>
+
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo; <a href="rvg.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgimage.html">Next</a>
+    &raquo;
+  </div>
+</body>
+</html>

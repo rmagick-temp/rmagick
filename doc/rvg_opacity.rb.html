@@ -1,0 +1,41 @@
+<!DOCTYPE public PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="ex2html.rb" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link rel="stylesheet" type="text/css" href="css/popup.css" />
+
+  <title>RMagick example: rvg_opacity.rb</title>
+</head>
+
+<body>
+<h1>rvg_opacity.rb</h1>
+<div class="bodybox">
+<div class="bodyfloat">
+<pre>#! /usr/local/bin/ruby -w
+require 'rvg/rvg'
+include Magick
+
+FONT_STYLES = {:font_size=&gt;20, :font_weight=&gt;'bold', :fill=&gt;'white'}
+
+rvg = RVG.new(450, 150) do |canvas|
+    canvas.background_fill = 'white'
+    canvas.rect(400, 50, 25, 50)
+    canvas.circle(40, 100, 75).styles(:opacity=&gt;0.25, :stroke=&gt;'blue', :fill=&gt;'#00ff00',:stroke_width=&gt;8)
+    canvas.text(83, 83, '0.25').styles(FONT_STYLES)
+    canvas.circle(40, 225, 75).styles(:opacity=&gt;0.50, :stroke=&gt;'blue', :fill=&gt;'#00ff00',:stroke_width=&gt;8)
+    canvas.text(208, 83, '0.50').styles(FONT_STYLES)
+    canvas.circle(40, 350, 75).styles(:opacity=&gt;0.75, :stroke=&gt;'blue', :fill=&gt;'#00ff00',:stroke_width=&gt;8)
+    canvas.text(333, 83, '0.75').styles(FONT_STYLES)
+    canvas.rect(449,149).styles(:fill=&gt;'none',:stroke=&gt;'blue')
+end
+
+rvg.draw.write('rvg_opacity.gif')
+
+</pre>
+</div>
+</div>
+<div id="close"><a href="javascript:window.close();">Close window</a></div>
+</body>
+</html>

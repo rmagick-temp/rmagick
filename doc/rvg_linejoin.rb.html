@@ -1,0 +1,63 @@
+<!DOCTYPE public PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="ex2html.rb" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link rel="stylesheet" type="text/css" href="css/popup.css" />
+
+  <title>RMagick example: rvg_linejoin.rb</title>
+</head>
+
+<body>
+<h1>rvg_linejoin.rb</h1>
+<div class="bodybox">
+<div class="bodyfloat">
+<pre>require 'rvg/rvg'
+include Magick
+
+RVG.dpi = 90
+
+MITER = {:stroke=&gt;'black', :stroke_width=&gt;70, :fill=&gt;'none', :stroke_linejoin=&gt;'miter'}
+ROUND = {:stroke=&gt;'black', :stroke_width=&gt;70, :fill=&gt;'none', :stroke_linejoin=&gt;'round'}
+BEVEL = {:stroke=&gt;'black', :stroke_width=&gt;70, :fill=&gt;'none', :stroke_linejoin=&gt;'bevel'}
+THIN  = {:stroke=&gt;'#ffcccc', :stroke_width=&gt;5, :fill=&gt;'none'}
+TEXT   = {:text_anchor=&gt;'middle', :font_size=&gt;50, :font_family=&gt;'Verdana'}
+CIRCLE = {:fill=&gt;'#ffcccc', :stroke=&gt;'none'}
+
+rvg = RVG.new(12.cm, 3.5.cm).viewbox(0, 0, 1200, 350) do |canvas|
+    canvas.desc = 'Example linecap - demonstrates three stroke-linecap values'
+    canvas.background_fill = 'white'
+
+    canvas.g.translate(200, 75) do |miter|
+        miter.path("M -125,150 L 0,0 L 125,150").styles(MITER)
+        miter.path("M -125,150 L 0,0 L 125,150").styles(THIN)
+        miter.circle(8).styles(CIRCLE)
+        miter.text(0, 230, "'miter' join").styles(TEXT)
+    end
+
+    canvas.g.translate(600, 75) do |round|
+        round.path("M -125,150 L 0,0 L 125,150").styles(ROUND)
+        round.path("M -125,150 L 0,0 L 125,150").styles(THIN)
+        round.circle(8).styles(CIRCLE)
+        round.text(0, 230, "'round' join").styles(TEXT)
+    end
+
+    canvas.g.translate(1000, 75) do |bevel|
+        bevel.path("M -125,150 L 0,0 L 125,150").styles(BEVEL)
+        bevel.path("M -125,150 L 0,0 L 125,150").styles(THIN)
+        bevel.circle(8).styles(CIRCLE)
+        bevel.text(0, 230, "'bevel' join").styles(TEXT)
+    end
+
+    canvas.rect(1192, 345, 1, 1).styles(:stroke=&gt;'blue', :fill=&gt;'none')
+end
+
+rvg.draw.write('rvg_linejoin.gif')
+
+</pre>
+</div>
+</div>
+<div id="close"><a href="javascript:window.close();">Close window</a></div>
+</body>
+</html>

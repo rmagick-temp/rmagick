@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.11 2004/04/02 23:47:52 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.12 2004/04/07 23:05:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -809,7 +809,7 @@ Draw_inspect(VALUE self)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    return draw->primitives ? draw->primitives : rb_str_new2("");
+    return draw->primitives ? draw->primitives : rb_str_new2("(no primitives defined)");
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.89.2.1 2005/01/11 23:00:56 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.89.2.2 2005/02/27 15:42:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5625,7 +5625,9 @@ Image_radial_blur(VALUE self, VALUE angle)
 }
 
 
+#if defined(HAVE_IMAGE_QUALITY)
 DEF_ATTR_READER(Image, quality, ulong)
+#endif
 
 
 /*

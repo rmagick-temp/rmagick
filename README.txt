@@ -44,18 +44,22 @@ ImageMagick and GraphicsMagick image processing libraries.
 
     Prerequisites
 
-You must be running either Linux, Solaris, Cygwin, or FreeBSD. This
-version of RMagick does not run on MS Windows except with Cygwin.
+*O/S*
+    Linux, Sun Solaris, Cygwin, FreeBSD. RMagick does not run on MS
+    Windows except with Cygwin.
+*Ruby*
+    Ruby 1.6.7 or later. You can get Ruby from www.ruby-lang.org
+    <http://www.ruby-lang.org>
 
-You must have Version 1.6.7 or later of Ruby. If you do not have Ruby,
-you can get it from www.ruby-lang.org <http://www.ruby-lang.org>. You
-must have installed ImageMagick 5.5.1 or later, or GraphicsMagick 1.0 or
-later. If you have not already installed ImageMagick or GraphicsMagick,
-you can get ImageMagick from www.imagemagick.org
-<http://www.imagemagick.org>, and you can get GraphicsMagick from
-www.graphicsmagick.org <http://www.graphicsmagick.org>. For more
-information about installing ImageMagick and GraphicsMagick, read the
-tips below.
+One of
+
+*ImageMagick*
+    ImageMagick 5.5.1 or later. You can get ImageMagick from
+    www.imagemagick.org <http://www.imagemagick.org>.
+*GraphicsMagick*
+    GraphicsMagick is a friendly fork of ImageMagick 5.5.1. You can get
+    GraphicsMagick from www.graphicsmagick.org
+    <http://www.graphicsmagick.org>.
 
 You only need one of ImageMagick or GraphicsMagick. RMagick works
 equally well with both.

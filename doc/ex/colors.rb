@@ -59,6 +59,7 @@ montage.write('colors.miff')
 
 # Make a small sample of the full montage to display in the HTML file.
 sample = montage[8].crop(55, 325, 495, 110)
+sample.page = Rectangle.new(495,110)
 sample.write('colors.gif')
 
 exit

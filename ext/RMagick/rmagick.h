@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.54 2004/06/14 23:11:08 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.55 2004/06/15 00:01:50 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -127,8 +127,6 @@ typedef struct
 #define MAGICK_LOC "magick_location"     // instance variable name in ImageMagickError class
 
 #define MAX_GEOM_STR 51                 // max length of a geometry string
-
-#define NOT_IMPLEMENTED not_implemented(); return (VALUE)0;
 
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
 /*
@@ -678,6 +676,7 @@ extern VALUE Image_from_blob(VALUE, VALUE);
 extern VALUE Image_gamma_channel(int, VALUE *, VALUE);
 extern VALUE Image_gamma_correct(int, VALUE *, VALUE);
 extern VALUE Image_gaussian_blur(int, VALUE *, VALUE);
+extern VALUE Image_gaussian_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_get_pixels(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_gray_q(VALUE);
 extern VALUE Image_grayscale_pseudo_class(int, VALUE *, VALUE);

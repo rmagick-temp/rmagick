@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.58 2004/06/14 23:11:08 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.59 2004/06/15 00:01:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -437,7 +437,8 @@ Magick_set_log_format(VALUE class, VALUE format)
     SetLogFormat(STRING_PTR(format));
     return class;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -609,6 +610,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "gamma_channel", Image_gamma_channel, -1);
     rb_define_method(Class_Image, "gamma_correct", Image_gamma_correct, -1);
     rb_define_method(Class_Image, "gaussian_blur", Image_gaussian_blur, -1);
+    rb_define_method(Class_Image, "gaussian_blur_channel", Image_gaussian_blur_channel, -1);
     rb_define_method(Class_Image, "get_pixels", Image_get_pixels, 4);
     rb_define_method(Class_Image, "gray?", Image_gray_q, 0);
     rb_define_method(Class_Image, "grey?", Image_gray_q, 0);
@@ -1413,7 +1415,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/06/14 23:11:08 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/06/15 00:01:50 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

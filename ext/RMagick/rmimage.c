@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.59 2004/06/14 23:11:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.60 2004/06/15 00:01:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -72,7 +72,8 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -398,7 +399,8 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -582,7 +584,8 @@ Image_capture(
 
     return rm_image_new(image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -649,7 +652,8 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     return rb_yield(ary);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -761,7 +765,8 @@ VALUE Image_channel_compare(
 
     return ary;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -801,7 +806,8 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
 
     return ULONG2NUM(channel_depth);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -928,7 +934,8 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     return ary;
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -1049,7 +1056,8 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -1064,7 +1072,8 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_BLACKTHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, BlackThresholdImage);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -1262,7 +1271,8 @@ Image_color_histogram(VALUE self)
 
     return hash;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -2636,7 +2646,8 @@ Image_each_profile(VALUE self)
 
     return val;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -2882,7 +2893,8 @@ Image_export_pixels(
     return ary;
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -2899,7 +2911,8 @@ Image_extract_info(VALUE self)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     return Rectangle_from_RectangleInfo(&image->extract_info);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -2914,7 +2927,8 @@ Image_extract_info_eq(VALUE self, VALUE rect)
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
     return self;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -3264,7 +3278,8 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -3339,6 +3354,59 @@ VALUE
 Image_gaussian_blur(int argc, VALUE *argv, VALUE self)
 {
     return effect_image(self, argc, argv, GaussianBlurImage);
+}
+
+
+/*
+ *  Method:     Image#gaussian_blur_channel(radius=0, sigma=1, channel=AllChannels)
+ *  Notes:      new in IM 6.0.0
+*/
+VALUE
+Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GAUSSIANBLURIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+    double radius = 0.0, sigma = 1.0;
+    int x;
+
+    switch(argc)
+    {
+        default:
+            for(x = 2; x < argc; x++)
+            {
+                VALUE_TO_ENUM(argv[x], type, ChannelType);
+                channel_type |= type;
+            }
+            /* Fall thru */
+        case 2:
+            sigma = NUM2DBL(argv[1]);
+            /* Fall thru */
+        case 1:
+            radius = NUM2DBL(argv[0]);
+            /* Fall thru */
+        case 0:
+            /* If no channels specified, default to AllChannels */
+            if (channel_type == UndefinedChannel)
+            {
+                channel_type = AllChannels;
+            }
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+
+    Data_Get_Struct(self, Image, image);
+    new_image = GaussianBlurImageChannel(image, channel_type, radius, sigma, &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -3517,7 +3585,8 @@ Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 
 }
@@ -3643,7 +3712,8 @@ Image_import_pixels(
     return self;
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -4063,7 +4133,8 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -4585,7 +4656,8 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5150,7 +5222,8 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5176,7 +5249,8 @@ Image_preview(VALUE self, VALUE preview)
 
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5228,7 +5302,8 @@ Image_quantum_depth(VALUE self)
     quantum_depth = GetImageQuantumDepth(image);
     return ULONG2NUM(quantum_depth);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5403,7 +5478,8 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     return self;
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5429,7 +5505,8 @@ Image_radial_blur(VALUE self, VALUE angle)
 
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5519,7 +5596,8 @@ Image_random_channel_threshold(
 
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -5577,7 +5655,8 @@ Image_random_threshold_channel(
     return rm_image_new(new_image);
 
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -6333,7 +6412,8 @@ Image_statistics(VALUE self)
 
     return Statistics_new(&stats);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -6523,7 +6603,8 @@ Image_strip_bang(VALUE self)
     (void) StripImage(image);
     return self;
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -6754,7 +6835,8 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -6881,7 +6963,8 @@ Image_tint(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -7220,7 +7303,8 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_WHITETHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, WhiteThresholdImage);
 #else
-    NOT_IMPLEMENTED
+    not_implemented();
+    return (VALUE)0;
 #endif
 }
 

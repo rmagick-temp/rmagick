@@ -72,19 +72,22 @@
           <li><a href="#gaussian_blur">gaussian_blur</a></li>
 
           <li><a href=
+          "#gaussian_blur_channel">gaussian_blur_channel</a></li>
+
+          <li><a href=
           "#get_exif_by_entry">get_exif_by_entry</a></li>
 
           <li><a href=
           "#get_exif_by_number">get_exif_by_number</a></li>
 
           <li><a href="#get_pixels">get_pixels</a></li>
-
-          <li><a href="#gray_q">gray?</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#gray_q">gray?</a></li>
+
           <li><a href=
           "#grayscale_pseudo_class">grayscale_pseudo_class</a></li>
 
@@ -116,13 +119,13 @@
           <li><a href="#matte_replace">matte_replace</a></li>
 
           <li><a href="#matte_reset_bang">matte_reset!</a></li>
-
-          <li><a href="#median_filter">median_filter</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#median_filter">median_filter</a></li>
+
           <li><a href="#minify">minify</a></li>
 
           <li><a href="#minify_bang">minify!</a></li>
@@ -478,13 +481,14 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
     "Click to see the example script" /><!--
-                                                  This img tag displays the framed image when the mouse is not over
-                                                  --><img class=
-    "hide" id="framed" onmouseover=
-    "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example" /></a> <img src=
-    "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
-    "Mouse over the example to see the original image" /></p>
+                                                      This img tag displays the framed image when the mouse is not over
+                                                      --><img class="hide"
+         id="framed" onmouseover=
+         "this.style.display='none';frameless.style.display='';"
+         src="ex/frame.jpg" alt="frame example" /></a> <img src=
+         "ex/images/spin.gif" alt="" style="margin-bottom: 280px"
+         title=
+         "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="image1.html#border">border</a>
 
@@ -629,6 +633,54 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   </div>
 
   <div class="sig">
+    <h3 id="gaussian_blur_channel">gaussian_blur_channel</h3>
+
+    <p><span class=
+    "arg">image</span>.gaussian_blur_channel(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0[,
+    <span class="arg">channel</span>[, <span class=
+    "arg">channel</span>...]) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Blurs the selected channel or channels using a Gaussian
+    operator of the specified radius and standard deviation.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>A <code>Float</code> value representing <span class=
+      "imquote">the radius of the Gaussian, in pixels, not counting
+      the center pixel.</span></dd>
+
+      <dt>sigma</dt>
+
+      <dd>A <code>Float</code> value representing the standard
+      deviation of the Gaussian operator, in pixels. This argument
+      must be &gt; 0.0.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are blurred. This is
+      the same as using <a href=
+      "#gaussian_blur">gaussian_blur</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>GaussianBlurImageChannel (available in
+    ImageMagick 6.0.0)
+  </div>
+
+  <div class="sig">
     <h3 id="get_exif_by_entry">get_exif_by_entry</h3>
 
     <p><span class=
@@ -753,9 +805,9 @@ image.get_exif_by_number() &raquo;
     more opaque than the column on its left, so that the resulting
     composite changes smoothly from color on the left to
     black-and-white on the right.</p><!--
-                                                        Reduce the size of the original image by specifying
-                                                        the size of the example image.
-                                                        -->
+                                                            Reduce the size of the original image by specifying
+                                                            the size of the example image.
+                                                            -->
 
     <p class="rollover"><a href=
     "javascript:popup('get_pixels.rb.html')"><img width="384"

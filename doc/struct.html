@@ -717,16 +717,15 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h4>from_HSL</h4>
 
       <p>Pixel.<span class="arg">from_HSL</span>(<span class=
-      "arg">hue</span>, <span class="arg">saturation</span>,
-      <span class="arg">luminosity</span>) -&gt;
+      "arg">[hue, saturation, luminosity]</span>) -&gt;
       <em>aPixel</em></p>
     </div>
 
     <div class="desc">
       <h5>Description</h5>
 
-      <p>Constructs a pixel object from the specified hue,
-      saturation, and luminosity values.</p>
+      <p>Constructs a pixel object from the specified array
+      of 3 values: hue, saturation, and luminosity.</p>
     </div>
 
     <div class="sig">

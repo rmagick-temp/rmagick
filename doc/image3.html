@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 3)</title>
   <meta http-equiv="Content-Type" content=
@@ -13,9 +13,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <script type="text/javascript">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
   //<![CDATA[
     <!-- Pre-load this image so that the browser knows how big it is. -->
     <!-- Begin
@@ -23,8 +23,8 @@
     flower_hat.src = "ex/images/Flower_Hat.jpg";
     // End -->
   //]]>
-  </script>
-  <style type="text/css">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /*
@@ -47,7 +47,7 @@
   }
 
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -685,12 +685,12 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('random_threshold_channel.rb.html')"><img src="ex/random_threshold_channel.jpg"
-         alt="random_threshold_channel example" title=
-         "Click to see the example script" onmouseover=
-         "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-         "this.src='ex/random_threshold_channel.jpg'" /></a>
-         <img src="ex/images/spin.gif" alt="" class="spin" title=
-         "Mouse over the example to see the original image" /></p>
+    alt="random_threshold_channel example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/random_threshold_channel.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href=
     "image1.html#adaptive_threshold">adaptive_threshold</a>,
@@ -934,18 +934,18 @@ random_threshold_channel(geom, RedChannel)
                                                                     This img tag displays the original image when the mouse is over.
                                                                     Use CSS to add padding around the image to make it occupy the
                                                                     same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
-         id="notrotated" onmouseout=
-         "this.style.display='none'; rotated.style.display='';" src=
-         "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-         "Click to see the example script" /><!--
+    id="notrotated" onmouseout=
+    "this.style.display='none'; rotated.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="rotate example" title=
+    "Click to see the example script" name="notrotated" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
-         id="rotated" onmouseover=
-         "this.style.display='none'; notrotated.style.display='';"
-         src="ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
-         "ex/images/spin.gif" alt="" class="spin" style=
-         "left:322px;" title=
-         "Mouse over the example to see the original image" /></p>
+    id="rotated" onmouseover=
+    "this.style.display='none'; notrotated.style.display='';" src=
+    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" style=
+    "left:322px;" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
 
@@ -1375,17 +1375,17 @@ random_threshold_channel(geom, RedChannel)
     "javascript:popup('shear.rb.html')"><!--
                                                                       This img tag displays the original image when the mouse is over
                                                                       --><img style="padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
-         id="noshear" onmouseout=
-         "this.style.display='none'; sheared.style.display='';" src=
-         "ex/images/Flower_Hat.jpg" alt="shear example" title=
-         "Click to see the example script" /> <!--
+    id="noshear" onmouseout=
+    "this.style.display='none'; sheared.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="shear example" title=
+    "Click to see the example script" name="noshear" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example" /></a><img src=
-    "ex/images/spin.gif" alt="" class="spin" style=
-    "left: 253px; top: 34px" title=
+    "ex/shear.jpg" alt="shear example" name=
+    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
+    "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href=
@@ -1441,34 +1441,74 @@ img.properties &raquo;
     <p>SignatureImage</p>
   </div>
 
-<div class="sig">
-  <h3 id="splice">splice</h3>
-  <p><span class="arg">image</span>.splice(<span class="arg">geometry</span>[, <span class="arg">color</span>]) -&gt; <em>anImage</em></p>
-</div>
+  <div class="sig">
+    <h3 id="splice">splice</h3>
 
-<div class="desc">
-<h4>Description</h4>
-<p>Splice a solid color into the image as defined by the <code>geometry</code> argument.</p>
+    <p><span class="arg">image</span>.splice(<span class=
+    "arg">geometry</span>[, <span class="arg">color</span>]) -&gt;
+    <em>anImage</em></p>
+  </div>
 
-<h4>Arguments</h4>
-<dl>
-<dt>geometry</dt>
-<dd>A <a href="imusage.html#geometry">geometry string</a> or <a href="struct.html#Geometry">Geometry object</a>.</dd>
-<dt>color</dt>
-<dd>The color to be spliced. Either a <a href="imusage.html#color_names">color name</a> or a <a href="struct.html#Pixel">pixel</a>. If omitted, uses the image's background color.</dd>
-</dl>
+  <div class="desc">
+    <h4>Description</h4>
 
-<h4>Returns</h4>
-<p>A new image</p>
-<h4>See also</h4>
-<p><a href="image1.html#color_fill_to_border">color_fill_to_border</a>,
-<a href="image1.html#color_floodfill">color_floodfill</a>,
-<a href="image1.html#color_reset_bang">color_reset!</a>, <a href="image2.html#color_reset_bang">erase!</a>, <a href="image2.html#opaque">opaque</a></p>
-<h4>Magick API</h4>
-<p>SpliceImage (available in ImageMagick 6.0.0)</p>
-</div>
+    <p>Splice a solid color into the image as defined by the
+    <code>geometry</code> argument. This method is the opposite of
+    <a href="image1.html#chop">chop</a>.</p>
 
+    <h4>Arguments</h4>
 
+    <dl>
+      <dt>geometry</dt>
+
+      <dd>A <a href="imusage.html#geometry">geometry string</a> or
+      <a href="struct.html#Geometry">Geometry object</a>.</dd>
+
+      <dt>color</dt>
+
+      <dd>The color to be spliced. Either a <a href=
+      "imusage.html#color_names">color name</a> or a <a href=
+      "struct.html#Pixel">pixel</a>. If omitted, uses the image's
+      background color.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('splice.rb.html')">
+    <!-- This img tag displays the original image when the mouse is over -->
+     <img style=
+    "padding-left:8px;padding-right:8px;padding-bottom:10px;padding-bottom:10px; display:none"
+    id="nosplice" onmouseout=
+    "this.style.display='none';spliced.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="splice example" title=
+    "Click to see the example script" name="nosplice" /><!--
+                                                                                                                This img tag displays the spliced image when the mouse is not over
+                                                                                                                --><img class="hide"
+    id="spliced" onmouseover=
+    "this.style.display='none';nosplice.style.display='';" src=
+    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
+    <img src="ex/images/spin.gif" alt="" style=
+    "margin-bottom: 280px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image1.html#color_fill_to_border">color_fill_to_border</a>,
+    <a href="image1.html#color_floodfill">color_floodfill</a>,
+    <a href="image1.html#color_reset_bang">color_reset!</a>,
+    <a href="image2.html#color_reset_bang">erase!</a>, <a href=
+    "image2.html#opaque">opaque</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SpliceImage (available in ImageMagick 6.0.0)</p>
+  </div>
 
   <div class="sig">
     <h3 id="solarize">solarize</h3>
@@ -2329,8 +2369,8 @@ img.to_color(pixel)
 
     <p><a href=
     "javascript:popup:('unsharp_mask.rb.html')"><img src="ex/unsharp_mask.jpg"
-         alt="unsharp_mask example" title=
-         "Click to see the example script" /></a></p>
+    alt="unsharp_mask example" title=
+    "Click to see the example script" /></a></p>
 
     <h4>See also</h4><a href="image1.html#enhance">enhance</a>,
     <a href="image2.html#median_filter">median_filter</a>, <a href=
@@ -2476,14 +2516,15 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" />
+    <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
-         id="waved" onmouseover=
-         "this.style.display='none'; nowave.style.display='';" src=
-         "ex/wave.jpg" alt="wave example" /></a> <img src=
-         "ex/images/spin.gif" alt="" class="spin" title=
-         "Mouse over the example to see the original image" /></p>
+    id="waved" onmouseover=
+    "this.style.display='none'; nowave.style.display='';" src=
+    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>Magick API</h4>
 

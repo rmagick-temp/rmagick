@@ -151,12 +151,16 @@
     <div class="intro">
       <h3>Introduction</h3>
 
-      <p><code>Image::View</code> objects are created by the
-      <a href="image3.html#view">Image#view</a> method. This class
-      supports the reference of individual image pixels by their
-      [i][j] coordinates within the view. Pixel values thus
-      referenced may be accessed and modified individually or in
-      the aggregate.</p>
+      <p>A view is a rectangle in an image. Within the view pixels
+      can be addressed by specifying their <code>[i][j]</code>
+      coordinates. The <span class="arg">i</span>, <span class=
+      "arg">j</span> index values can identify a single pixel or
+      multiple pixels. Pixels can be accessed or modified
+      individually or collectively. Pixel <em>channels</em> (that
+      is, the red, green, blue, and opacity components) can be
+      accessed or modified individually or collectively. The
+      <a href="#view_sync">sync</a> method stores modified pixels
+      back into the image.</p>
     </div>
 
     <h3>class Image::View</h3>
@@ -171,16 +175,13 @@
     </div>
 
     <div class="desc">
-      <h5>Description</h5>A view is a rectangle in an image. Within
-      the view pixels can be addressed by specifying their
-      <code>[i][j]</code> coordinates. The <span class=
-      "arg">i</span>, <span class="arg">j</span> index values can
-      identify a single pixel or multiple pixels. Pixels can be
-      accessed or modified individually or collectively. Pixel
-      <em>channels</em> (that is, the red, green, blue, and opacity
-      components) can be accessed or modified individually or
-      collectively. The <a href="#view_sync">sync</a> method stores
-      modified pixels back into the image.
+      <h5>Description</h5>
+
+      <p>The easiest way to use an <code>Image::View</code> object
+      is to create it with the <a href=
+      "image3.html#view">Image#view</a> method, which provides a
+      block-scoped view and automatic sync'ing. You probably won't
+      want to create a view by calling <code>new</code>.</p>
 
       <h5>Arguments</h5>
 
@@ -199,11 +200,11 @@
         <dt>width, height</dt>
 
         <dd>The number of columns and the number of rows in the
-        view. It is an error to specify a view that exceeds the
-        boundaries of the image. Within the view, it is an error to
-        refer to a pixel that is outside the boundaries of the
         view.</dd>
       </dl>
+
+      <p>It is an error to specify a view that exceeds the
+      boundaries of the image.</p>
     </div>
 
     <div class="sig">
@@ -426,12 +427,12 @@
     <div class="desc">
       <h5>Description</h5>
 
-      <p>The <code>dirty</code> attribute returns true if any of
-      the pixels in the view have been modified, or false
-      otherwise. Set <code>dirty=true</code> to force
-      <code>sync</code> to store the pixels in the image, or set
-      <code>dirty=false</code> to keep <code>sync</code> from
-      storing the pixels.</p>
+      <p>Any modification to a pixel in the view causes the
+      <code>dirty</code> attribute to be set to <code>true</code>.
+      You can (although normally you don't need to) set
+      <code>dirty=true</code> to force <code>sync</code> to store
+      the pixels in the image, or set <code>dirty=false</code> to
+      keep <code>sync</code> from storing the pixels.</p>
     </div>
 
     <div class="sig">
@@ -606,85 +607,83 @@
 
         <dt>flag</dt>
 
-        <dd>
-          one of the constants shown in this table:
-
-          <table summary="geometry flag constants" class=
-          "simple_table">
-            <caption>
-              <strong>Geometry flag constants</strong>
-            </caption>
-
-            <tr>
-              <td align="center"><strong>Constant<br />
-              name</strong></td>
-
-              <td align="center"><strong>Geometry<br />
-              string flag</strong></td>
-
-              <td align="center"><strong>Explanation</strong></td>
-            </tr>
-
-            <tr>
-              <td>PercentGeometry</td>
-
-              <td align="center">%</td>
-
-              <td>Normally the attributes are treated as pixels.
-              Use this flag when the <code>width</code> and
-              <code>height</code> attributes represent
-              <em>percentages</em>. For example, 125x75 means 125%
-              of the height and 75% of the width. The
-              <code>x</code> and <code>y</code> attributes are not
-              affected by this flag.</td>
-            </tr>
-
-            <tr>
-              <td>AspectGeometry</td>
-
-              <td align="center">!</td>
-
-              <td>Use this flag when you want to force the new
-              image to have exactly the size specified by the the
-              <code>width</code> and <code>height</code>
-              attributes.</td>
-            </tr>
-
-            <tr>
-              <td>LessGeometry</td>
-
-              <td align="center">&lt;</td>
-
-              <td>Use this flag when you want to change the size of
-              the image only if both its width and height are
-              smaller the values specified by those attributes. The
-              image size is changed proportionally.</td>
-            </tr>
-
-            <tr>
-              <td>GreaterGeometry</td>
-
-              <td align="center">&gt;</td>
-
-              <td>Use this flag when you want to change the size of
-              the image if either its width and height exceed the
-              values specified by those attributes. The image size
-              is changed proportionally.</td>
-            </tr>
-
-            <tr>
-              <td>AreaGeometry</td>
-
-              <td align="center">@</td>
-
-              <td>This flag is useful only with a single
-              <code>width</code> attribute. When present, it means
-              the <code>width</code> attribute represents the total
-              area of the image in pixels.</td>
-            </tr>
-          </table>
-        </dd>
+        <dd>one of the constants shown in this table:</dd>
       </dl>
+
+      <table summary="geometry flag constants" class=
+      "simple_table">
+        <caption>
+          <strong>Geometry flag constants</strong>
+        </caption>
+
+        <tr>
+          <td align="center"><strong>Constant<br />
+          name</strong></td>
+
+          <td align="center"><strong>Geometry<br />
+          string flag</strong></td>
+
+          <td align="center"><strong>Explanation</strong></td>
+        </tr>
+
+        <tr>
+          <td>PercentGeometry</td>
+
+          <td align="center">%</td>
+
+          <td>Normally the attributes are treated as pixels. Use
+          this flag when the <code>width</code> and
+          <code>height</code> attributes represent
+          <em>percentages</em>. For example, 125x75 means 125% of
+          the height and 75% of the width. The <code>x</code> and
+          <code>y</code> attributes are not affected by this
+          flag.</td>
+        </tr>
+
+        <tr>
+          <td>AspectGeometry</td>
+
+          <td align="center">!</td>
+
+          <td>Use this flag when you want to force the new image to
+          have exactly the size specified by the the
+          <code>width</code> and <code>height</code>
+          attributes.</td>
+        </tr>
+
+        <tr>
+          <td>LessGeometry</td>
+
+          <td align="center">&lt;</td>
+
+          <td>Use this flag when you want to change the size of the
+          image only if both its width and height are smaller the
+          values specified by those attributes. The image size is
+          changed proportionally.</td>
+        </tr>
+
+        <tr>
+          <td>GreaterGeometry</td>
+
+          <td align="center">&gt;</td>
+
+          <td>Use this flag when you want to change the size of the
+          image if either its width and height exceed the values
+          specified by those attributes. The image size is changed
+          proportionally.</td>
+        </tr>
+
+        <tr>
+          <td>AreaGeometry</td>
+
+          <td align="center">@</td>
+
+          <td>This flag is useful only with a single
+          <code>width</code> attribute. When present, it means the
+          <code>width</code> attribute represents the total area of
+          the image in pixels.</td>
+        </tr>
+      </table>
 
       <p>If any attribute is omitted the default is nil or 0.</p>
 

@@ -1,6 +1,6 @@
-/* $Id: rmfill.c,v 1.10 2004/12/17 22:44:06 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.11 2005/03/05 16:18:39 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2004 by Timothy P. Hunter
+|                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmfill.c
 | Author:   Tim Hunter
 | Purpose:  GradientFill, TextureFill class definitions for RMagick

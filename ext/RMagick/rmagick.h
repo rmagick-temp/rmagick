@@ -1,6 +1,6 @@
-/* $Id: rmagick.h,v 1.77 2005/01/11 23:09:33 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.78 2005/03/05 16:18:39 rmagick Exp $ */
 /*=============================================================================
-|               Copyright (C) 2004 by Timothy P. Hunter
+|               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
 | Purpose:  RMagick declarations and definitions
 | Author:   Tim Hunter

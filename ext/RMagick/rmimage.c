@@ -1,6 +1,6 @@
-/* $Id: rmimage.c,v 1.93 2005/02/27 16:36:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.94 2005/03/05 16:18:39 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2004 by Timothy P. Hunter
+|                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
 | Author:   Tim Hunter
 | Purpose:  Image class method definitions for RMagick

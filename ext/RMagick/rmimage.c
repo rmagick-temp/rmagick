@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.71 2004/12/02 00:30:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.72 2004/12/03 00:13:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3833,6 +3833,7 @@ VALUE
 Image_inspect(VALUE self)
 {
     Image *image;
+    unsigned long quantum_depth;
     int x = 0;                  // # bytes used in buffer
     char buffer[2048];          // image description buffer
 
@@ -3846,7 +3847,7 @@ Image_inspect(VALUE self)
     // Print current filename.
     x += sprintf(buffer+x, "%s", image->filename);
     // Print scene number.
-    if (image->scene > 0)
+    if ((image->previous || image->next) && image->scene > 0)
     {
         x += sprintf(buffer+x, "[%lu]", image->scene);
     }
@@ -3862,12 +3863,11 @@ Image_inspect(VALUE self)
         }
     }
 
+    x += sprintf(buffer+x, "%lux%lu ", image->columns, image->rows);
+
     // Print current columnsXrows
-    if (image->page.width <= 1 || image->page.height <= 1)
-    {
-        x += sprintf(buffer+x, "%lux%lu ", image->columns, image->rows);
-    }
-    else
+    if (   image->page.width != 0 || image->page.height != 0
+        || image->page.x != 0     || image->page.y != 0)
     {
         x += sprintf(buffer+x, "%lux%lu%+ld%+ld ", image->page.width, image->page.height
                    , image->page.x, image->page.y);
@@ -3905,15 +3905,19 @@ Image_inspect(VALUE self)
         {
             x += sprintf(buffer+x, "PseudoClass %lu=>%luc ", image->total_colors
                        , image->colors);
-            x += sprintf(buffer+x, "%ld/%.6f/%.6fe "
-                       , (long) image->error.mean_error_per_pixel
-                       , image->error.normalized_mean_error
-                       , image->error.normalized_maximum_error);
+            if (image->error.mean_error_per_pixel != 0.0)
+            {
+                 x += sprintf(buffer+x, "%ld/%.6f/%.6fdb "
+                            , (long) (image->error.mean_error_per_pixel+0.5)
+                            , image->error.normalized_mean_error
+                            , image->error.normalized_maximum_error);
+            }
         }
     }
 
     // Print bit depth
-    x += sprintf(buffer+x, "%lu-bit", image->depth);
+    quantum_depth = GetImageQuantumDepth(image, MagickTrue);
+    x += sprintf(buffer+x, "%lu-bit", quantum_depth);
 
     // Print blob info if appropriate.
     if (SizeBlob(image) != 0)
@@ -3921,6 +3925,10 @@ Image_inspect(VALUE self)
         if (SizeBlob(image) >= (1 << 24))
         {
             x += sprintf(buffer+x, " %lumb", (unsigned long) (SizeBlob(image)/1024/1024));
+        }
+        else if (SizeBlob(image) >= 1024)
+        {
+            x += sprintf(buffer+x, " %lukb", (unsigned long) (SizeBlob(image)/1024));
         }
         else
         {

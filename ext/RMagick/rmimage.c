@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.73 2004/12/04 00:20:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.74 2004/12/04 15:57:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -32,7 +32,8 @@ static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
-static VALUE images_to_array(Image *);
+static VALUE array_from_images(Image *);
+static ChannelType extract_channels(int *, VALUE *);
 
 static ImageAttribute *Next_Attribute;
 
@@ -369,25 +370,14 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_BILEVELIMAGECHANNEL)
     Image *image, *new_image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
+
+    channels = extract_channels(&argc, argv);
 
     if (argc == 0)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
-    }
-    if (argc == 1)
-    {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        int x;
-        for(x = 1; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
     }
 
     GetExceptionInfo(&exception);
@@ -395,7 +385,7 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
     new_image = CloneImage(image, 0, 0, True, &exception);
 
-    (void)BilevelImageChannel(new_image, channel_type, NUM2DBL(argv[0]));
+    (void)BilevelImageChannel(new_image, channels, NUM2DBL(argv[0]));
 
     return rm_image_new(new_image);
 
@@ -447,35 +437,29 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_BLURIMAGECHANNEL)
      Image *image, *new_image;
      ExceptionInfo exception;
-     ChannelType channel = UndefinedChannel, type;
+     ChannelType channels;
      double radius = 0.0, sigma = 1.0;
-     int x;
 
      Data_Get_Struct(self, Image, image);
 
+     channels = extract_channels(&argc, argv);
+
+     // There can be 0, 1, or 2 remaining arguments.
      switch (argc)
      {
-         default:
-             for(x = 1; x < argc; x++)
-             {
-                 VALUE_TO_ENUM(argv[x], type, ChannelType);
-                 channel |= type;
-             }
          case 2:
              sigma = NUM2DBL(argv[1]);
          case 1:
              radius = NUM2DBL(argv[0]);
          case 0:
              break;
-     }
-
-     if (channel == UndefinedChannel)
-     {
-         channel = AllChannels;
+         default:
+             rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                     rb_class2name(CLASS_OF(argv[argc-1])));
      }
 
      GetExceptionInfo(&exception);
-     new_image = BlurImageChannel(image, channel, radius, sigma, &exception);
+     new_image = BlurImageChannel(image, channels, radius, sigma, &exception);
      HANDLE_ERROR
 
      return rm_image_new(new_image);
@@ -728,23 +712,23 @@ Image_changed_q(VALUE self)
                 component of each pixel in the image.
 */
 VALUE
-Image_channel(VALUE self, VALUE channel)
+Image_channel(VALUE self, VALUE channel_arg)
 {
     Image *image, *new_image;
-    ChannelType channel_type;
+    ChannelType channel;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
-    VALUE_TO_ENUM(channel, channel_type, ChannelType);
+    VALUE_TO_ENUM(channel_arg, channel, ChannelType);
 
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 #if defined(HAVE_SEPARATEIMAGECHANNEL)
-    (void) SeparateImageChannel(new_image, channel_type);
+    (void) SeparateImageChannel(new_image, channel);
 #else
-    (void) ChannelImage(new_image, channel_type);
+    (void) ChannelImage(new_image, channel);
 #endif
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
@@ -770,10 +754,10 @@ VALUE Image_channel_compare(
     double distortion;
     volatile VALUE ary;
     MetricType metric_type;
-    ChannelType channel_type;
+    ChannelType channels;
     ExceptionInfo exception;
-    int x;
 
+    channels = extract_channels(&argc, argv);
     if (argc < 2)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
@@ -783,27 +767,10 @@ VALUE Image_channel_compare(
     Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
     VALUE_TO_ENUM(argv[1], metric_type, MetricType);
 
-    if (argc < 3)
-    {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        ChannelType type;
-
-        channel_type = 0;
-        for(x = 2; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
-    }
-
-
     GetExceptionInfo(&exception);
     difference_image = CompareImageChannels(image
                                     , r_image
-                                    , channel_type
+                                    , channels
                                     , metric_type
                                     , &distortion
                                     , &exception);
@@ -830,28 +797,22 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GETIMAGECHANNELDEPTH)
     Image *image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     unsigned long channel_depth;
     ExceptionInfo exception;
 
-    if (argv == 0)
-    {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        int x;
-        for(x = 0; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
-    }
+    channels = extract_channels(&argc, argv);
 
+    // Ensure all arguments consumed.
+    if (argc > 0)
+    {
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
+    }
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    channel_depth = GetImageChannelDepth(image, channel_type, &exception);
+    channel_depth = GetImageChannelDepth(image, channels, &exception);
     HANDLE_ERROR
 
     return ULONG2NUM(channel_depth);
@@ -877,7 +838,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GETIMAGECHANNELEXTREMA)    // ImageMagick 6.0.0
     Image *image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
     unsigned long min, max;
     unsigned int okay;
@@ -887,21 +848,16 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-    if (argv == 0)
+    channels = extract_channels(&argc, argv);
+
+    // Ensure all arguments consumed.
+    if (argc > 0)
     {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        int x;
-        for(x = 0; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
     }
 
-    okay = GetImageChannelExtrema(image, channel_type, &min, &max, &exception);
+    okay = GetImageChannelExtrema(image, channels, &min, &max, &exception);
     if (!okay)
     {
         rb_raise(rb_eRuntimeError, "GetImageChannelExtrema failed.");
@@ -917,7 +873,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 
 #elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
     Image *image;
-    ChannelType channel_type;
+    ChannelType channel;
     ImageStatistics stats;
     ExceptionInfo exception;
     volatile VALUE ary;
@@ -933,8 +889,8 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
                                " Specify only 1 channel.");
     }
-    VALUE_TO_ENUM(argv[0], channel_type, ChannelType);
-    if (channel_type == AllChannels)
+    VALUE_TO_ENUM(argv[0], channel, ChannelType);
+    if (channel == AllChannels)
     {
         rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
                                " Specify only 1 channel.");
@@ -952,7 +908,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     }
 
     ary = rb_ary_new2(2);
-    switch(channel_type)
+    switch(channel)
     {
         case RedChannel:
         case CyanChannel:
@@ -999,7 +955,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GETIMAGECHANNELMEAN)   // ImageMagick 6.0.0
     Image *image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
     double mean, stddev;
     unsigned int okay;
@@ -1008,21 +964,16 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    if (argv == 0)
+    channels = extract_channels(&argc, argv);
+
+    // Ensure all arguments consumed.
+    if (argc > 0)
     {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        int x;
-        for(x = 0; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
     }
 
-    okay = GetImageChannelMean(image, channel_type, &mean, &stddev, &exception);
+    okay = GetImageChannelMean(image, channels, &mean, &stddev, &exception);
     if (!okay)
     {
         rb_raise(rb_eRuntimeError, "GetImageChannelMean failed.");
@@ -1038,7 +989,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 
 #elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
     Image *image;
-    ChannelType channel_type;
+    ChannelType channel;
     ImageStatistics stats;
     ExceptionInfo exception;
     volatile VALUE ary;
@@ -1054,8 +1005,8 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
                                " Specify only 1 channel.");
     }
-    VALUE_TO_ENUM(argv[0], channel_type, ChannelType);
-    if (channel_type == AllChannels)
+    VALUE_TO_ENUM(argv[0], channel, ChannelType);
+    if (channel == AllChannels)
     {
         rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
                                " Specify only 1 channel.");
@@ -1073,7 +1024,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     }
 
     ary = rb_ary_new2(2);
-    switch(channel_type)
+    switch(channel)
     {
         case RedChannel:
         case CyanChannel:
@@ -2255,34 +2206,21 @@ Image_convolve_channel(
     volatile double *kernel;
     volatile VALUE ary;
     unsigned int x, order;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
-    switch(argc)
+    channels = extract_channels(&argc, argv);
+
+    // There are 2 required arguments.
+    if (argc != 2)
     {
-        default:
-            for(x = 2; x < argc; x++)
-            {
-                VALUE_TO_ENUM(argv[x], type, ChannelType);
-                channel_type |= type;
-            }
-            /* Fall thru */
-        case 2:
-            order = NUM2INT(argv[0]);
-            ary = argv[1];
-            break;
-        case 1:
-        case 0:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
-            break;
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
 
-    if (channel_type == UndefinedChannel)
-    {
-        channel_type = AllChannels;
-    }
+    order = NUM2INT(argv[0]);
+    ary = argv[1];
 
     rm_check_ary_len(ary, order*order);
 
@@ -2296,7 +2234,7 @@ Image_convolve_channel(
 
     GetExceptionInfo(&exception);
 
-    new_image = ConvolveImageChannel(image, channel_type, order, (double *)kernel, &exception);
+    new_image = ConvolveImageChannel(image, channels, order, (double *)kernel, &exception);
     xfree((double *)kernel);
     HANDLE_ERROR
 
@@ -3325,7 +3263,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     images = BlobToImage(info,  blob, (size_t)length, &exception);
     HANDLE_ERROR
 
-    return images_to_array(images);
+    return array_from_images(images);
 }
 
 DEF_ATTR_READER(Image, fuzz, dbl)
@@ -3357,25 +3295,20 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GAMMAIMAGECHANNEL)
     Image *image, *new_image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
 
+    channels = extract_channels(&argc, argv);
+
+    // There must be exactly one remaining argument.
     if (argc == 0)
     {
-        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+        rb_raise(rb_eArgError, "missing gamma argument");
     }
-    if (argc == 1)
+    else if (argc > 1)
     {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        int x;
-        for(x = 1; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
     }
 
     GetExceptionInfo(&exception);
@@ -3383,7 +3316,7 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
     new_image = CloneImage(image, 0, 0, True, &exception);
 
-    (void)GammaImageChannel(new_image, channel_type, NUM2DBL(argv[0]));
+    (void)GammaImageChannel(new_image, channels, NUM2DBL(argv[0]));
 
     return rm_image_new(new_image);
 
@@ -3476,20 +3409,15 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GAUSSIANBLURIMAGECHANNEL)
     Image *image, *new_image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
     double radius = 0.0, sigma = 1.0;
-    int x;
 
+    channels = extract_channels(&argc, argv);
+
+    // There can be 0, 1, or 2 remaining arguments.
     switch(argc)
     {
-        default:
-            for(x = 2; x < argc; x++)
-            {
-                VALUE_TO_ENUM(argv[x], type, ChannelType);
-                channel_type |= type;
-            }
-            /* Fall thru */
         case 2:
             sigma = NUM2DBL(argv[1]);
             /* Fall thru */
@@ -3498,18 +3426,15 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
             /* Fall thru */
         case 0:
             break;
-    }
-
-    /* If no channels specified, default to AllChannels */
-    if (channel_type == UndefinedChannel)
-    {
-        channel_type = AllChannels;
+        default:
+            rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                    rb_class2name(CLASS_OF(argv[argc-1])));
     }
 
     GetExceptionInfo(&exception);
 
     Data_Get_Struct(self, Image, image);
-    new_image = GaussianBlurImageChannel(image, channel_type, radius, sigma, &exception);
+    new_image = GaussianBlurImageChannel(image, channels, radius, sigma, &exception);
     HANDLE_ERROR
 
     return rm_image_new(new_image);
@@ -3679,6 +3604,7 @@ Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
     {
         case 1:
            optimize = RTEST(argv[0]);
+           /* Fall thru */
         case 0:
            break;
         default:
@@ -4737,7 +4663,7 @@ Image_negate(int argc, VALUE *argv, VALUE self)
 
 
 /*
- *  Method:     Image#negate_channel(negate=false, channel=AllChannels)
+ *  Method:     Image#negate_channel(grayscale=false, channel=AllChannels)
  *  Returns     a new image
 */
 VALUE
@@ -4745,25 +4671,21 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_NEGATEIMAGECHANNEL)
     Image *image, *new_image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     ExceptionInfo exception;
-    unsigned int grayscale;
+    unsigned int grayscale = False;
 
-    grayscale = (argc == 0) ? False : RTEST(argv[0]);
+    channels = extract_channels(&argc, argv);
 
-    if (argc == 1)
+    // There can be at most 1 remaining argument.
+    if (argc > 1)
     {
-        channel_type = AllChannels;
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
     }
-    else
+    else if (argc == 1)
     {
-        int x;
-
-        for(x = 1; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
+        grayscale = RTEST(argv[0]);
     }
 
     GetExceptionInfo(&exception);
@@ -4772,7 +4694,7 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 
-    (void)NegateImageChannel(new_image, channel_type, grayscale);
+    (void)NegateImageChannel(new_image, channels, grayscale);
 
     return rm_image_new(new_image);
 
@@ -5452,7 +5374,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     Image *image;
     QuantumExpressionOperator operator;
     QuantumOperator qop;
-    ChannelType channel_type;
+    ChannelType channel;
     double rvalue;
     MagickPassFail okay;
     ExceptionInfo exception;
@@ -5460,7 +5382,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
 
     // The default channel is AllChannels
-    channel_type = AllChannels;
+    channel = AllChannels;
 
     /*
         If there are 3 arguments, argument 2 is a ChannelType argument.
@@ -5470,7 +5392,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     switch(argc)
     {
         case 3:
-            VALUE_TO_ENUM(argv[2], channel_type, ChannelType);
+            VALUE_TO_ENUM(argv[2], channel, ChannelType);
             /* Fall through */
         case 2:
             rvalue = NUM2DBL(argv[1]);
@@ -5517,7 +5439,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     }
 
     GetExceptionInfo(&exception);
-    okay = QuantumOperatorImage(image, channel_type, qop, rvalue, &exception);
+    okay = QuantumOperatorImage(image, channel, qop, rvalue, &exception);
     HANDLE_ERROR
     if (okay != MagickPass)
     {
@@ -5531,14 +5453,14 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     QuantumExpressionOperator operator;
     MagickEvaluateOperator qop;
     double rvalue;
-    ChannelType channel_type;
+    ChannelType channel;
     ExceptionInfo exception;
     unsigned int okay;
 
     Data_Get_Struct(self, Image, image);
 
     // The default channel is AllChannels
-    channel_type = AllChannels;
+    channel = AllChannels;
 
     /*
         If there are 3 arguments, argument 2 is a ChannelType argument.
@@ -5548,7 +5470,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     switch(argc)
     {
         case 3:
-            VALUE_TO_ENUM(argv[2], channel_type, ChannelType);
+            VALUE_TO_ENUM(argv[2], channel, ChannelType);
             /* Fall through */
         case 2:
             rvalue = NUM2DBL(argv[1]);
@@ -5595,7 +5517,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     }
 
     GetExceptionInfo(&exception);
-    okay = EvaluateImageChannel(image, channel_type, operator, rvalue, &exception);
+    okay = EvaluateImageChannel(image, channel, operator, rvalue, &exception);
     HANDLE_ERROR
     if (!okay)
     {
@@ -5743,40 +5665,35 @@ Image_random_threshold_channel(
 {
 #if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
     Image *image, *new_image;
-    ChannelType channel_type = UndefinedChannel, type;
+    ChannelType channels;
     char *thresholds;
-    int x;
     volatile VALUE geom_str;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
+    channels = extract_channels(&argc, argv);
+
+    // There must be 1 remaining argument.
     if (argc == 0)
     {
         rb_raise(rb_eArgError, "missing threshold argument");
     }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                rb_class2name(CLASS_OF(argv[argc-1])));
+    }
 
+    // Accept any argument that has a to_s method.
     geom_str = rb_funcall(argv[0], ID_to_s, 0);
     thresholds = STRING_PTR(geom_str);
-
-    if (argc == 1)
-    {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        for(x = 1; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
-    }
 
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 
-    (void) RandomThresholdImageChannel(new_image, channel_type, thresholds, &exception);
+    (void) RandomThresholdImageChannel(new_image, channels, thresholds, &exception);
     HANDLE_ERROR
 
     return rm_image_new(new_image);
@@ -5904,7 +5821,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     images = (reader)(info, &exception);
     HANDLE_ERROR
 
-    return images_to_array(images);
+    return array_from_images(images);
 }
 
 
@@ -5962,15 +5879,15 @@ Image_read_inline(VALUE self, VALUE content)
      HANDLE_ERROR
      magick_free((void *)blob);
 
-     return images_to_array(images);
+     return array_from_images(images);
 }
 
 
 /*
-     Static:    images_to_array
+     Static:    array_from_images
      Purpose:   convert a list of images to an array of Image objects
 */
-static VALUE images_to_array(Image *images)
+static VALUE array_from_images(Image *images)
 {
      volatile VALUE image_obj, image_ary;
      Image *image, *next;
@@ -6282,20 +6199,20 @@ DEF_ATTR_READER(Image, scene, ulong)
  *  Purpose:    Call SetImageChannelDepth
 */
 VALUE
-Image_set_channel_depth(VALUE self, VALUE channel, VALUE depth)
+Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 {
 #if defined(HAVE_SETIMAGECHANNELDEPTH)
      Image *image;
-     ChannelType channel_type;
+     ChannelType channel;
      unsigned long channel_depth;
      MagickBooleanType okay;
 
      rm_check_frozen(self);
      Data_Get_Struct(self, Image, image);
-     VALUE_TO_ENUM(channel, channel_type, ChannelType);
+     VALUE_TO_ENUM(channel_arg, channel, ChannelType);
      channel_depth = NUM2ULONG(depth);
 
-     okay = SetImageChannelDepth(image, channel_type, channel_depth);
+     okay = SetImageChannelDepth(image, channel, channel_depth);
      if (!okay)
      {
           rb_raise(rb_eRuntimeError, "SetImageChannelDepth failed.");
@@ -6462,46 +6379,42 @@ VALUE
 Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_SHARPENIMAGECHANNEL)
-     Image *image, *new_image;
-     ChannelType channel_type = UndefinedChannel, type;
-     ExceptionInfo exception;
-     double radius = 0.0, sigma = 1.0;
-     int x;
+    Image *image, *new_image;
+    ChannelType channels;
+    ExceptionInfo exception;
+    double radius = 0.0, sigma = 1.0;
 
-     switch(argc)
-     {
-          default:
-               for(x = 2; x < argc; x++)
-               {
-                    VALUE_TO_ENUM(argv[x], type, ChannelType);
-                    channel_type |= type;
-               }
-          case 2:
-               sigma = NUM2DBL(argv[1]);
-          case 1:
-               radius = NUM2DBL(argv[0]);
-          case 0:
-               break;
-     }
+    channels = extract_channels(&argc, argv);
 
-     if (channel_type == UndefinedChannel)
-     {
-         channel_type = AllChannels;
-     }
+    // There must be 0, 1, or 2 remaining arguments.
+    switch(argc)
+    {
+        case 2:
+             sigma = NUM2DBL(argv[1]);
+             /* Fall thru */
+        case 1:
+             radius = NUM2DBL(argv[0]);
+             /* Fall thru */
+        case 0:
+             break;
+        default:
+            rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
+                                    rb_class2name(CLASS_OF(argv[argc-1])));
+    }
 
-     GetExceptionInfo(&exception);
+    GetExceptionInfo(&exception);
 
-     Data_Get_Struct(self, Image, image);
-     new_image = CloneImage(image, 0, 0, True, &exception);
-     HANDLE_ERROR
+    Data_Get_Struct(self, Image, image);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
 
-     new_image = SharpenImageChannel(new_image, channel_type, radius, sigma, &exception);
-     HANDLE_ERROR
+    new_image = SharpenImageChannel(new_image, channels, radius, sigma, &exception);
+    HANDLE_ERROR
 
-     return rm_image_new(new_image);
+    return rm_image_new(new_image);
 #else
-     rm_not_implemented();
-     return (VALUE)0;
+    rm_not_implemented();
+    return (VALUE)0;
 #endif
 }
 
@@ -7899,3 +7812,42 @@ xform_image(
 
 DEF_ATTR_ACCESSOR(Image, y_resolution, dbl)
 
+
+/*
+    Static:     extract_channels
+    Purpose:    Remove all the ChannelType arguments from the
+                end of the argument list.
+    Returns:    A ChannelType value suitable for passing into
+                an xMagick function. Returns AllChannels if
+                no channel arguments were found. Returns the
+                number of remaining arguments.
+*/
+static ChannelType extract_channels(
+    int *argc,
+    VALUE *argv)
+{
+    volatile VALUE arg;
+    ChannelType channels, ch_arg;
+
+    channels = 0;
+    while (*argc > 0)
+    {
+        arg = argv[(*argc)-1];
+
+        // Stop when you find a non-ChannelType argument
+        if (CLASS_OF(arg) != Class_ChannelType)
+        {
+            break;
+        }
+        VALUE_TO_ENUM(arg, ch_arg, ChannelType);
+        channels |= ch_arg;
+        *argc -= 1;
+    }
+
+    if (channels == 0)
+    {
+        channels = AllChannels;
+    }
+
+    return channels;
+}

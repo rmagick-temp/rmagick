@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.57 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.58 2004/06/21 22:07:14 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -788,7 +788,6 @@ extern VALUE  TextureFill_fill(VALUE, VALUE);
 
 
 // rmutil.c
-extern VALUE  AffineMatrix_from_AffineMatrix(AffineMatrix *);
 extern VALUE  ChromaticityInfo_to_s(VALUE);
 extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
 extern void   Color_to_PixelPacket(PixelPacket *, VALUE);

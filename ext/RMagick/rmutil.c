@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.38 2004/06/20 23:54:02 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.39 2004/06/21 22:07:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -922,18 +922,6 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
     {
         rb_raise(rb_eArgError, "invalid color name %s", name);
     }
-}
-
-/*
-    Extern:     AffineMatrix_from_AffineMatrix
-    Purpose:    Create a Magick::AffineMatrix object from an AffineMatrix structure.
-*/
-VALUE
-AffineMatrix_from_AffineMatrix(AffineMatrix *am)
-{
-    return rb_funcall(Class_AffineMatrix, ID_new, 6
-                    , rb_float_new(am->sx), rb_float_new(am->rx), rb_float_new(am->ry)
-                    , rb_float_new(am->sy), rb_float_new(am->tx), rb_float_new(am->ty));
 }
 
 /*
@@ -2020,7 +2008,11 @@ VALUE rm_define_enum_type(char *tag)
 */
 VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
-    return rb_funcall(class, ID_new, 2, sym, val);
+    VALUE argv[2];
+
+    argv[0] = sym;
+    argv[1] = val;
+    return rb_class_new_instance(2, argv, class);
 }
 
 /*

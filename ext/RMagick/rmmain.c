@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.8 2003/07/28 00:40:07 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.9 2003/07/30 23:49:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1812,7 +1812,7 @@ Init_RMagick(void)
     // class Magick::ImageMagickError < StandardError
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, 2);
-    rb_enable_super(Class_ImageMagickError, "initialize");
+    RUBY16(rb_enable_super(Class_ImageMagickError, "initialize"));
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
 

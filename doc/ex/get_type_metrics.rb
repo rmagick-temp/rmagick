@@ -6,22 +6,32 @@ include Magick
 # is drawn as a pair of quadratic bezier curves.
 class Draw
 
-    # (x,y) - corner of rectangle enclosing brace
     # (w,h) - width & height of rectangle enclosing brace
-    # The orientation is affected by the current user coordinate system.
-    def brace(x, y, w, h)
+    # The placement & orientation is affected by the
+    # current user coordinate system.
+    def brace(w, h)
         raise(ArgumentError, "width must be > 0") unless w > 0
         raise(ArgumentError, "height must be > 0") unless h > 0
-        qx = x + w
-        qy = y
-        x0 = x + w / 2
-        y0 = y + h/4
-        tx = x + w
-        ty = y + h/2
-        path("M#{x},#{y}Q#{qx},#{qy} #{x0},#{y0}T#{tx},#{ty}")
-        qy = y + h
-        y0 = y + 3*h/4
-        path("M#{x},#{y+h}Q#{qx},#{qy} #{x0},#{y0}T#{tx},#{ty}")
+
+        qx = w
+        x0 =  w / 2.0
+        y0 = h/4.0
+        ty = h/2.0
+
+        push
+        #outline(x, y, qx, qy, x0, y0, qx, ty)
+        path("M0,0Q#{w},0 #{x0},#{y0}T#{w},#{ty}")
+
+        y0 = 3*h/4
+        #outline(tx, ty, qx, ty, x0, y0, 0, h)
+        path("M#{w},#{ty}Q0,#{ty} #{x0},#{y0}T0,#{h}")
+        pop
+    end
+
+    def rotate_about(degrees, x, y)
+        translate(x, y)
+        rotate(degrees)
+        translate(-x, -y)
     end
 
 end     # class Draw
@@ -99,34 +109,36 @@ gc.stroke('black')
 gc.stroke_width(1)
 
 # Draw a brace between the origin and descent
-gc.brace(Origin_x+metrics.width+23, Origin_y, 10, -metrics.descent)
+gc.push
+gc.translate(Origin_x+metrics.width+23, Origin_y)
+gc.brace(10, metrics.descent.abs)
+gc.pop
 
 # Draw a brace between the origin and ascent
-gc.brace(Origin_x+metrics.width+23, Origin_y-metrics.ascent, 10, metrics.ascent)
+gc.push
+gc.translate(Origin_x+metrics.width+23, Origin_y-metrics.ascent)
+gc.brace(10, metrics.ascent)
+gc.pop
 
 # Draw a brace between the origin and height
 gc.push
-gc.translate(Origin_x-13, Origin_y-metrics.height/2)
+gc.translate(Origin_x-13, Origin_y)
 gc.rotate(180)
-gc.translate(-(Origin_x-13), -(Origin_y-metrics.height/2))
-gc.brace(Origin_x-13, Origin_y-metrics.height, 10, metrics.height)
+gc.brace(10, metrics.height)
 gc.pop
 
 # Draw a brace between the origin and the width
 gc.push
 gc.translate(Origin_x, 27.0)
 gc.rotate(-90)
-gc.translate(-Origin_x, -27.0)
-gc.brace(Origin_x, 27, 10, metrics.width)
+gc.brace(10, metrics.width)
 gc.pop
 
 # Draw a brace between the origin and max_advance
 gc.push
-gc.translate(Origin_x, Origin_y-metrics.descent+13)
-gc.scale(-1, 1)
+gc.translate(Origin_x+metrics.max_advance, Origin_y-metrics.descent+14)
 gc.rotate(90)
-gc.translate(-Origin_x, -(Origin_y-metrics.descent+13))
-gc.brace(Origin_x, Origin_y-metrics.descent+13, 10, metrics.max_advance)
+gc.brace(10, metrics.max_advance)
 gc.pop
 
 # Add the labels

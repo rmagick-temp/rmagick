@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.51 2004/04/04 14:22:47 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.52 2004/04/07 23:08:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -23,17 +23,19 @@ static void version_constants(void);
 static VALUE Magick_Monitor;
 
 /*
-  Method:   Magick::colors [ { |colorinfo| } ]
-  Purpose:  If called with the optional block, iterates over the colors,
-            otherwise returns an array of Magick::Color objects
+    Method:     Magick::colors [ { |colorinfo| } ]
+    Purpose:    If called with the optional block, iterates over the colors,
+                otherwise returns an array of Magick::Color objects
+    Notes:      There are 3 implementations
+
 */
 VALUE
 Magick_colors(VALUE class)
 {
-#if defined(HAVE_GETCOLORINFOARRAY)
+#if defined(HAVE_GETCOLORINFOARRAY) // GraphicsMagick
     ColorInfo **color_ary;
     ExceptionInfo exception;
-    volatile VALUE ary, el;
+    volatile VALUE ary;
     int x;
 
     GetExceptionInfo(&exception);
@@ -41,18 +43,62 @@ Magick_colors(VALUE class)
     color_ary = GetColorInfoArray(&exception);
     HANDLE_ERROR
 
-    ary = rb_ary_new();
-
-    x = 0;
-    while (color_ary[x])
+    if (rb_block_given_p())
     {
-        rb_ary_push(ary, Color_from_ColorInfo(color_ary[x]));
-        x += 1;
+        x = 0;
+        while(color_ary[x])
+        {
+            rb_yield(Color_from_ColorInfo(color_ary[x]));
+            x += 1;
+        }
+        magick_free(color_ary);
+        return class;
+    }
+    else
+    {
+        ary = rb_ary_new();
+
+        x = 0;
+        while (color_ary[x])
+        {
+            rb_ary_push(ary, Color_from_ColorInfo(color_ary[x]));
+            x += 1;
+        }
+        magick_free(color_ary);
+        return ary;
     }
 
-    magick_free(color_ary);
+#elif defined(HAVE_GETCOLORINFOLIST)    // ImageMagick 6.0.0
 
-#else
+    const ColorInfo **color_info_list;
+    unsigned long number_colors, x;
+    volatile VALUE ary;
+
+    color_info_list = GetColorInfoList("*", &number_colors);
+
+    if (rb_block_given_p())
+    {
+        for(x = 0; x < number_colors; x++)
+        {
+            rb_yield(Color_from_ColorInfo(color_info_list[x]));
+        }
+        magick_free(color_info_list);
+        return class;
+    }
+    else
+    {
+        ary = rb_ary_new2((long) number_colors);
+        for(x = 0; x < number_colors; x++)
+        {
+            rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
+        }
+
+        magick_free(color_info_list);
+        return ary;
+    }
+
+#else   // ImageMagick < 6.0.0
+
     const ColorInfo *color_list;
     ColorInfo *color;
     ExceptionInfo exception;
@@ -61,9 +107,9 @@ Magick_colors(VALUE class)
     GetExceptionInfo(&exception);
 
     color_list = GetColorInfo("*", &exception);
-    HANDLE_ERROR
+    DestroyExceptionInfo(&exception);
 
-    // IM may change the order of the colors list in mid-iteration,
+    // The order of the colors list can change in mid-iteration,
     // so the only way we can guarantee a single pass thru the list
     // is to copy the elements into an array without returning to
     // IM. So, we always create a Ruby array and either return it
@@ -73,7 +119,6 @@ Magick_colors(VALUE class)
     {
         rb_ary_push(ary, Color_from_ColorInfo(color));
     }
-#endif
 
     // If block, iterate over colors
     if (rb_block_given_p())
@@ -88,6 +133,8 @@ Magick_colors(VALUE class)
     {
         return ary;
     }
+
+#endif
 }
 
 /*
@@ -98,6 +145,36 @@ Magick_colors(VALUE class)
 VALUE
 Magick_fonts(VALUE class)
 {
+#if defined(HAVE_GETTYPEINFOLIST)   // ImageMagick 6.0.0
+
+    const TypeInfo **type_info;
+    unsigned long number_types, x;
+    volatile VALUE ary;
+
+    type_info = GetTypeInfoList("*", &number_types);
+
+    if (rb_block_given_p())
+    {
+        for(x = 0; x < number_types; x++)
+        {
+            rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
+        }
+        magick_free(type_info);
+        return class;
+    }
+    else
+    {
+        ary = rb_ary_new2(number_types);
+        for(x = 0; x < number_types; x++)
+        {
+            rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
+        }
+        magick_free(type_info);
+        return ary;
+    }
+
+#else
+
     const TypeInfo *type_list;
     TypeInfo *type, *next;
     ExceptionInfo exception;
@@ -131,6 +208,8 @@ Magick_fonts(VALUE class)
         }
         return ary;
     }
+
+#endif
 }
 
 
@@ -147,41 +226,85 @@ Magick_fonts(VALUE class)
                 "W" is "w" if ImageMagick can write that format, or "-" otherwise.
                 "A" is "+" if the format supports multi-image files, or "-" otherwise.
   Notes:    Only called once.
+            There are 3 implementations.
 */
+
+static VALUE MagickInfo_to_format(MagickInfo *magick_info)
+{
+    char mode[4];
+
+    mode[0] = magick_info->blob_support ? '*': ' ';
+    mode[1] = magick_info->decoder ? 'r' : '-';
+    mode[2] = magick_info->encoder ? 'w' : '-';
+    mode[3] = magick_info->encoder && magick_info->adjoin ? '+' : '-';
+
+    return rb_str_new(mode, sizeof(mode));
+}
+
 VALUE
 Magick_init_formats(VALUE class)
 {
-    MagickInfo *m;
+#if defined(HAVE_GETMAGICKINFOARRAY)    // GraphicsMagick
+
+    MagickInfo *magick_info, *m;
     volatile VALUE formats;
     ExceptionInfo exception;
-    char mode[5] = {0};
 
     class = class;      // defeat "never referenced" message from icc
 
     formats = rb_hash_new();
 
     GetExceptionInfo(&exception);
-#if defined(HAVE_GETMAGICKINFOARRAY)
-    m = (MagickInfo *)GetMagickInfoArray(&exception);
+    magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
+    for(m = magick_info; m != NULL; m = m->next)
+    {
+        rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
+    }
+
+    magick_free(magick_info);
+    return formats;
+
+#elif defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
+
+    const MagickInfo **magick_info;
+    unsigned long number_formats, x;
+    volatile VALUE formats;
+
+    class = class;      // defeat "never referenced" message from icc
+    formats = rb_hash_new();
+
+    magick_info = GetMagickInfoList("*", &number_formats);
+
+    for(x = 0; x < number_formats; x++)
+    {
+        rb_hash_aset(formats
+            , rb_str_new2(magick_info[x]->name)
+            , MagickInfo_to_format((MagickInfo *)magick_info[x]));
+    }
+    return formats;
+
 #else
+
+    MagickInfo *m;
+    volatile VALUE formats;
+    ExceptionInfo exception;
+
+    class = class;      // defeat "never referenced" message from icc
+
+    formats = rb_hash_new();
+
+    GetExceptionInfo(&exception);
     m = (MagickInfo *)GetMagickInfo("*", &exception);
-#endif
     HANDLE_ERROR
 
     for ( ; m != NULL; m = m->next)
     {
-        mode[0] = m->blob_support ? '*': ' ';
-        mode[1] = m->decoder ? 'r' : '-';
-        mode[2] = m->encoder ? 'w' : '-';
-        mode[3] = m->encoder && m->adjoin ? '+' : '-';
-        rb_hash_aset(formats, rb_str_new2(m->name), rb_str_new2(mode));
+        rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
     }
 
-#if defined(HAVE_GETMAGICKINFOARRAY)
-    magick_free(m);
-#endif
-
     return formats;
+
+#endif
 }
 
 /*
@@ -641,6 +764,9 @@ Init_RMagick(void)
     observable = rb_const_get(rb_cObject, rb_intern("Observable"));
     rb_include_module(Class_Pixel, observable);
 
+    // include Comparable
+    rb_include_module(Class_Pixel, rb_mComparable);
+
     // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Pixel, Pixel_alloc);
@@ -657,6 +783,8 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Pixel, opacity)
 
     // Define the instance methods
+    rb_define_method(Class_Pixel, "<=>", Pixel_spaceship, 1);
+    rb_define_method(Class_Pixel, "===", Pixel_case_eq, 1);
     rb_define_method(Class_Pixel, "initialize", Pixel_initialize, -1);
     rb_define_method(Class_Pixel, "initialize_copy", Pixel_init_copy, 1);
     rb_define_method(Class_Pixel, "clone", Pixel_clone, 0);
@@ -1280,7 +1408,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/04/04 14:22:47 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/04/07 23:08:27 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.47 2004/04/07 23:07:13 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.48 2004/04/09 21:04:35 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -125,6 +125,29 @@ typedef struct
 
 #define MAX_GEOM_STR 51                 // max length of a geometry string
 
+
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
+/*
+ * Both ImageMagick and GraphicsMagick define an enum type for quantum-level
+ * expressions, but they're different types. The QuantumExpressionOperator
+ * type is an adapter type that can be mapped to either one.
+*/
+typedef enum _QuantumExpressionOperator
+{
+    UndefinedQuantumOperator,
+    AddQuantumOperator,
+    AndQuantumOperator,
+    DivideQuantumOperator,
+    LShiftQuantumOperator,
+    MultiplyQuantumOperator,
+    OrQuantumOperator,
+    RShiftQuantumOperator,
+    SubtractQuantumOperator,
+    XorQuantumOperator
+} QuantumExpressionOperator ;
+#endif
+
+
 /*
     ImageMagick used simply size_t and off_t in 5.5.1, then defined the
     Extended(Un)SignedIntegralType from 5.5.2 thru 5.5.7. The 5.5.8 release
@@ -191,8 +214,8 @@ EXTERN VALUE Class_TypeMetric;
 #if defined(HAVE_COMPAREIMAGECHANNELS)
 EXTERN VALUE Class_MetricType;
 #endif
-#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
-EXTERN VALUE Class_QuantumOperator;
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
+EXTERN VALUE Class_QuantumExpressionOperator;
 #endif
 #if defined(HAVE_GETIMAGESTATISTICS)
 EXTERN VALUE Class_Statistics;

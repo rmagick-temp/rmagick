@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.55 2004/06/15 00:01:50 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.56 2004/06/15 17:27:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -650,6 +650,7 @@ extern VALUE Image_compress_colormap_bang(VALUE);
 extern VALUE Image_constitute(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_contrast(int, VALUE *, VALUE);
 extern VALUE Image_convolve(VALUE, VALUE, VALUE);
+extern VALUE Image_convolve_channel(int, VALUE *, VALUE);
 extern VALUE Image_copy(VALUE);
 extern VALUE Image_crop(int, VALUE *, VALUE);
 extern VALUE Image_crop_bang(int, VALUE *, VALUE);
@@ -870,6 +871,7 @@ extern VALUE   Enum_case_eq(VALUE, VALUE);
 extern char *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char *rm_string_value_ptr_len(volatile VALUE *, long *);
+void rm_check_ary_len(VALUE, int);
 extern void rm_check_frozen(VALUE);
 extern VALUE rm_obj_to_s(VALUE);
 double rm_fuzz_to_dbl(VALUE fuzz);

@@ -89,6 +89,7 @@ AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel
 AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
 AC_CHECK_FUNCS([GetColorInfoList GetTypeInfoList GetMagickInfoList])
 AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
+AC_CHECK_FUNCS([ConvolveImageChannel])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

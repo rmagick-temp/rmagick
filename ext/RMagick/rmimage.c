@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.60 2004/06/15 00:01:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.61 2004/06/15 17:27:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1997,9 +1997,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     long mapL;
     union
     {
-       float *f;
-       Quantum *i;
-       void *v;
+       volatile float *f;
+       volatile Quantum *i;
+       volatile void *v;
     } pixels;
     int type;
     StorageType stg_type;
@@ -2033,12 +2033,12 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     pixel0 = rb_ary_entry(pixels_arg, 0);
     if (TYPE(pixel0) == T_FLOAT)
     {
-        pixels.f = (float *) ALLOC_N(float, npixels);
+        pixels.f = ALLOC_N(volatile float, npixels);
         stg_type = FloatPixel;
     }
     else if (TYPE(pixel0) == T_FIXNUM)
     {
-        pixels.i = (Quantum *) ALLOC_N(Quantum, npixels);
+        pixels.i = ALLOC_N(volatile Quantum, npixels);
         stg_type = FIX_STG_TYPE;
     }
     else
@@ -2087,7 +2087,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     image->columns = width;
     image->rows = height;
     SetImage(image, OpaqueOpacity);
-    okay = ImportImagePixels(image, 0, 0, width, height, map, stg_type, pixels.v);
+    okay = ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
     if (!okay)
     {
         // Save exception info, delete the image, then raise the exception.
@@ -2101,7 +2101,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 
     DestroyConstitute();
 
-    xfree(pixels.v);
+    xfree((void *)pixels.v);
     HANDLE_ERROR
 
     return rm_image_new(image);
@@ -2153,14 +2153,16 @@ Image_convolve(
     VALUE kernel_arg)
 {
     Image *image, *new_image;
-    double *kernel;
+    volatile double *kernel;
     unsigned int x, order;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
     order = NUM2UINT(order_arg);
-    kernel = ALLOC_N(double, order*order);
+    kernel = (volatile double *)ALLOC_N(double, order*order);
+
+    rm_check_ary_len(kernel_arg, order*order);
 
     // Convert the kernel array argument to an array of doubles
     for (x = 0; x < order*order; x++)
@@ -2170,12 +2172,82 @@ Image_convolve(
 
     GetExceptionInfo(&exception);
 
-    new_image = ConvolveImage(image, order, kernel, &exception);
-    xfree(kernel);
+    new_image = ConvolveImage(image, order, (double *)kernel, &exception);
+    xfree((double *)kernel);
     HANDLE_ERROR
 
     return rm_image_new(new_image);
 }
+
+
+/*
+ *  Method:     Image#convolve_channel(order, kernel[, channel[, channel...]])
+ *  Purpose:    call ConvolveImageChannel
+*/
+VALUE
+Image_convolve_channel(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+#if defined(HAVE_CONVOLVEIMAGECHANNEL)
+    Image *image, *new_image;
+    volatile double *kernel;
+    volatile VALUE ary;
+    unsigned int x, order;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    switch(argc)
+    {
+        default:
+            for(x = 2; x < argc; x++)
+            {
+                VALUE_TO_ENUM(argv[x], type, ChannelType);
+                channel_type |= type;
+            }
+            /* Fall thru */
+        case 2:
+            order = NUM2INT(argv[0]);
+            ary = argv[1];
+            break;
+        case 1:
+        case 0:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
+            break;
+    }
+
+    if (channel_type == UndefinedChannel)
+    {
+        channel_type = AllChannels;
+    }
+
+    rm_check_ary_len(ary, order*order);
+
+    kernel = ALLOC_N(double, order*order);
+
+    // Convert the kernel array argument to an array of doubles
+    for (x = 0; x < order*order; x++)
+    {
+        kernel[x] = NUM2DBL(rb_ary_entry(ary, x));
+    }
+
+    GetExceptionInfo(&exception);
+
+    new_image = ConvolveImageChannel(image, channel_type, order, (double *)kernel, &exception);
+    xfree((double *)kernel);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+#else
+    not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 
 /*
     Method:     Image#copy
@@ -2439,9 +2511,9 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     union
     {
-        Quantum *i;
-        float *f;
-        void *v;
+        volatile Quantum *i;
+        volatile float *f;
+        volatile void *v;
     } pixels;
 
     if (argc < 5 || argc > 6)
@@ -2476,12 +2548,12 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
 #else
            DispatchImage
 #endif
-                        (image, x, y, columns, rows, map, stg_type, pixels.v, &exception);
+                        (image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
     HANDLE_ERROR
 
     if (!okay)
     {
-        xfree(pixels.v);
+        xfree((void *)pixels.v);
         return pixels_ary;
     }
 
@@ -2503,7 +2575,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
         }
     }
 
-    xfree(pixels.v);
+    xfree((void *)pixels.v);
     return pixels_ary;
 }
 
@@ -2843,7 +2915,7 @@ Image_export_pixels(
     unsigned long n, npixels;
     unsigned int okay;
     char *map;
-    unsigned int *pixels;
+    volatile unsigned int *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
@@ -2872,10 +2944,10 @@ Image_export_pixels(
 
     GetExceptionInfo(&exception);
 
-    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, IntegerPixel, pixels, &exception);
+    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, IntegerPixel, (void *)pixels, &exception);
     if (!okay)
     {
-        xfree(pixels);
+        xfree((unsigned int *)pixels);
         HANDLE_ERROR
         // Should never get here...
         rb_raise(rb_eStandardError, "ExportImagePixels failed with no explanation.");
@@ -2888,7 +2960,7 @@ Image_export_pixels(
         rb_ary_push(ary, UINT2NUM(p));
     }
 
-    xfree(pixels);
+    xfree((unsigned int *)pixels);
 
     return ary;
 
@@ -3643,7 +3715,7 @@ Image_import_pixels(
     unsigned long npixels;
     long n;
     char *map;
-    int *pixels;
+    volatile int *pixels;
     unsigned int okay;
     ExceptionInfo exception;
 
@@ -3692,11 +3764,11 @@ Image_import_pixels(
     clone_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 
-    okay = ImportImagePixels(clone_image, x_off, y_off, cols, rows, map, IntegerPixel, pixels);
+    okay = ImportImagePixels(clone_image, x_off, y_off, cols, rows, map, IntegerPixel, (void *)pixels);
 
     // Free pixel array before checking for errors. If an error occurred, ImportImagePixels
     // destroyed the clone image, so we don't have to.
-    xfree(pixels);
+    xfree((void *)pixels);
 
     if (!okay)
     {

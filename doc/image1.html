@@ -169,6 +169,8 @@
 
           <li><a href="#convolve">convolve</a></li>
 
+          <li><a href="#convolve_channel">convolve_channel</a></li>
+
           <li><a href="#copy">copy</a></li>
 
           <li><a href="#crop">crop</a></li>
@@ -1719,7 +1721,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       structure</dd>
     </dl>
 
-    <h4>Returns</h4>A new image
+    <h4>Returns</h4>
+
+    <p>A new image</p>
 
     <h4>Example</h4>
 
@@ -2200,11 +2204,14 @@ f.colors &raquo; 108
       "arg">order</span> matrix of <code>Float</code> values.</dd>
     </dl>
 
-    <h4>Returns</h4>A new image
+    <h4>Returns</h4>
+
+    <p>A new image</p>
 
     <h4>See also</h4>
 
-    <p>The <a href="#edge">edge</a>, <a href=
+    <p><a href="#convolve_channel">convolve_channel</a>. The
+    <a href="#edge">edge</a>, <a href=
     "image2.html#emboss">emboss</a>, <a href=
     "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
     "image2.html#motion_blur">motion_blur</a> and <a href=
@@ -2222,6 +2229,54 @@ f.colors &raquo; 108
     the <a href=
     "http://www.dai.ed.ac.uk/HIPR2/copyrght.htm"><cite>Hypermedia
     Image Processing Reference</cite></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="convolve_channel">convolve_channel</h3>
+
+    <p><span class="arg">image</span>.convolve_channel(<span class=
+    "arg">order</span>, <span class="arg">kernel</span>[,
+    <span class="arg">channel</span>[, <span class=
+    "arg">channel</span>...]]) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Applies a custom convolution kernel to the specified channel
+    or channels in the image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>order</dt>
+
+      <dd>The number of columns and rows in the kernel.</dd>
+
+      <dt>kernel</dt>
+
+      <dd>An <span class="arg">order</span>*<span class=
+      "arg">order</span> matrix of <code>Float</code> values.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified the effect is the same as calling
+      <a href="#convolve">convolve</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>ConvolveImageChannel (available in ImageMagick 6.0.0)</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#convolve">convolve</a></p>
   </div>
 
   <div class="sig">
@@ -2386,7 +2441,9 @@ f2 = f.copy
       </dd>
     </dl>
 
-    <h4>Returns</h4>A new image
+    <h4>Returns</h4>
+
+    <p>A new image</p>
 
     <h4>Example</h4>
 
@@ -2733,7 +2790,9 @@ exit
     <h4>Arguments</h4>The radius of the convolution filter. If the
     radius is 0, <code>edge</code> selects a suitable default.
 
-    <h4>Returns</h4>A new image
+    <h4>Returns</h4>
+
+    <p>A new image</p>
 
     <h4>Example</h4>
 

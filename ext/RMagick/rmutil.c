@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.35 2004/06/14 23:11:08 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.36 2004/06/15 17:27:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -134,6 +134,20 @@ char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
 
 
 /*
+ *  Extern:     rm_check_ary_len(ary, len)
+ *  Purpose:    raise exception if array too short
+*/
+void
+rm_check_ary_len(VALUE ary, int len)
+{
+    if (RARRAY(ary)->len < len)
+    {
+        rb_raise(rb_eIndexError, "not enough elements in array - expecting %d, got %d",
+                        len, RARRAY(ary)->len);
+    }
+}
+
+/*
     Extern:     rm_check_frozen
     Purpose:    backport rb_check_frozen for 1.6.x releases
 */
@@ -183,6 +197,7 @@ arg_is_number(VALUE arg)
 {
     double d;
     d = NUM2DBL(arg);
+    d = d;      // satisfy icc
     return arg;
 }
 

@@ -1372,47 +1372,43 @@
         def &lt;=&gt;(other)
           r = to_i &lt;=&gt; other.to_i
           return r unless r == 0
-          return class &lt;=&gt; other.class
+          return self.class &lt;=&gt; other.class
         end
         def ===(other)
-          if class == other.class
+          if self.class == other.class
             return to_i == other.to_i
           end
           return false
         end
       end
     end
-   
 </pre>
       Each &times;Magick enumeration type is a separate subclass of
       <code>Enum</code>. For example, the AlignType enumeration is
-      defined as: 
+      defined as:
 <pre>
     class AlignType &lt; Enum
     end
-   
 </pre>
-      The AlignType constants are then created by the code: 
+      The AlignType constants are then created by the code:
 <pre>
     UndefinedAlign = AlignType.new(:UndefinedAlign, 0)
     LeftAlign = AlignType.new(:LeftAlign, 1)
     CenterAlign = AlignType.new(:CenterAlign, 2)
     RightAlign = AlignType.new(:RightAlign, 3)
-   
 </pre>
       <p>The other enumeration types and values are created in an
       equivalent manner.</p>
       <p>The benefit of this implementation is that a method that
       expects an argument to be a value of a specific enumeration
       type can check for that type and raise an exception if the
-      wrong type was used. For example, the <a href=
+      wrong type is used. For example, the <a href=
       "imageattrs.html#Image.units">units=</a> attribute will not
       accept a value of any type except
       <code>ResolutionType</code>:</p>
-<pre>
+<pre class="example">
 img.units=Magick::RedChannel # Buzz! Wrong! &raquo;
 TypeError: wrong enumeration type - expected Magick::ResolutionType, got Magick::ChannelType
-   
 </pre>
     </div>
     <table align="right" class="nav" cellpadding="3">

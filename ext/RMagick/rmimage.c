@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.75 2004/12/04 16:51:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.76 2004/12/04 22:21:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -34,6 +34,7 @@ static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE array_from_images(Image *);
 static ChannelType extract_channels(int *, VALUE *);
+static void raise_ChannelType_error(VALUE);
 
 static ImageAttribute *Next_Attribute;
 
@@ -454,8 +455,7 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
          case 0:
              break;
          default:
-             rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                     rb_class2name(CLASS_OF(argv[argc-1])));
+             raise_ChannelType_error(argv[argc-1]);
      }
 
      GetExceptionInfo(&exception);
@@ -646,7 +646,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
     {
-       rb_raise(rb_eArgError, "invalid geometry `%s'", geometry);
+       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
     }
 
     ary = rb_ary_new2(3);
@@ -813,8 +813,7 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
     // Ensure all arguments consumed.
     if (argc > 0)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
@@ -860,8 +859,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     // Ensure all arguments consumed.
     if (argc > 0)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
 
     okay = GetImageChannelExtrema(image, channels, &min, &max, &exception);
@@ -976,8 +974,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     // Ensure all arguments consumed.
     if (argc > 0)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
 
     okay = GetImageChannelMean(image, channels, &mean, &stddev, &exception);
@@ -3314,8 +3311,7 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     }
     else if (argc > 1)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
 
     GetExceptionInfo(&exception);
@@ -3434,8 +3430,7 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
         case 0:
             break;
         default:
-            rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                    rb_class2name(CLASS_OF(argv[argc-1])));
+            raise_ChannelType_error(argv[argc-1]);
     }
 
     GetExceptionInfo(&exception);
@@ -4687,8 +4682,7 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
     // There can be at most 1 remaining argument.
     if (argc > 1)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
     else if (argc == 1)
     {
@@ -5688,8 +5682,7 @@ Image_random_threshold_channel(
     }
     else if (argc > 1)
     {
-        rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                rb_class2name(CLASS_OF(argv[argc-1])));
+        raise_ChannelType_error(argv[argc-1]);
     }
 
     // Accept any argument that has a to_s method.
@@ -6405,8 +6398,7 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
         case 0:
              break;
         default:
-            rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)",
-                                    rb_class2name(CLASS_OF(argv[argc-1])));
+            raise_ChannelType_error(argv[argc-1]);
     }
 
     GetExceptionInfo(&exception);
@@ -7857,4 +7849,17 @@ static ChannelType extract_channels(
     }
 
     return channels;
+}
+
+
+/*
+    Static:     raise_ChannelType_error
+    Purpose:    raise ArgumentError when an non-ChannelType object
+                is unexpectedly encountered
+*/
+static void
+raise_ChannelType_error(VALUE arg)
+{
+    rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)"
+            , rb_class2name(CLASS_OF(arg)));
 }

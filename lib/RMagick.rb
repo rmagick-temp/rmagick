@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.15 2004/01/31 18:32:56 rmagick Exp $
+# $Id: RMagick.rb,v 1.16 2004/03/07 15:09:09 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -66,7 +66,7 @@ class Geometry
 
         @x    = x.to_i
         @y    = y.to_i
-        @flag = flag.to_i
+        @flag = flag
     end
 
     # Construct an object from a geometry string
@@ -94,7 +94,7 @@ class Geometry
         str << sprintf("%g", @width) if @width > 0
         str << sprintf("x%g", @height) if @height > 0
         str << sprintf("%+d%+d", @x, @y) if (@x != 0 || @y != 0)
-        str << FLAGS[@flag]
+        str << FLAGS[@flag.to_i]
     end
 end
 

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -13,15 +13,15 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <style type="text/css">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
 
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -54,6 +54,9 @@
       <li><a href="#draw">draw</a></li>
 
       <li><a href="#dup">dup</a></li>
+
+      <li><a href=
+      "#get_multiline_type_metrics">get_multiline_type_metrics</a></li>
 
       <li><a href="#get_type_metrics">get_type_metrics</a></li>
 
@@ -587,6 +590,16 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
   </div>
 
   <div class="sig">
+    <h3 id="get_multiline_type_metrics">
+    get_multiline_type_metrics</h3>
+
+    <p><span class=
+    "arg">draw</span>.get_multiline_type_metrics([<span class=
+    "arg">anImage</span>,] <span class="arg">aString</span>) -&gt;
+    <em>aTypeMetric</em></p>
+  </div>
+
+  <div class="sig">
     <h3 id="get_type_metrics">get_type_metrics</h3>
 
     <p><span class="arg">draw</span>.get_type_metrics([<span class=
@@ -598,7 +611,10 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
     <h4>Description</h4>
 
     <p>Returns information for a specific string if rendered on a
-    image.</p>
+    image. The <code>get_multiline_type_metrics</code> method is
+    the same as <code>get_type_metrics</code>, except the former
+    returns the maximum height and width for multiple lines of
+    text. (Text lines are separated by "\n" characters.)</p>
 
     <p>The Magick++ documentation for its TypeMetric class provides
     this useful additional information. (I've changed it a bit to
@@ -679,19 +695,6 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
       </tr>
 
       <tr>
-        <td>pixels_per_em.x</td>
-
-        <td>Character width. (See <a href=
-        "struct.html#Point">Point</a>.)</td>
-      </tr>
-
-      <tr>
-        <td>pixels_per_em.y</td>
-
-        <td>Character height</td>
-      </tr>
-
-      <tr>
         <td>ascent</td>
 
         <td>Distance in pixels from the text baseline to the
@@ -726,47 +729,29 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
         of a character to the beginning of the next character) in
         pixels.</td>
       </tr>
-
-      <tr>
-        <td>bounds.x1</td>
-
-        <td><em>?</em></td>
-      </tr>
-
-      <tr>
-        <td>bounds.x2</td>
-
-        <td><em>?</em></td>
-      </tr>
-
-      <tr>
-        <td>bounds.y1</td>
-
-        <td><em>?</em></td>
-      </tr>
-
-      <tr>
-        <td>bounds.y1</td>
-
-        <td><em>?</em></td>
-      </tr>
-
-      <tr>
-        <td>underline_position</td>
-
-        <td><em>?</em></td>
-      </tr>
-
-      <tr>
-        <td>underline_thickness</td>
-
-        <td><em>?</em></td>
-      </tr>
     </table>
+
+    <h4>Example</h4>
+
+    <p>This example shows the details of a TypeMetric struct.
+    <a href="javascript:popup('get_type_metrics.rb.html')" title=
+    "Click to see the example script"><img src=
+    "ex/get_type_metrics.gif" alt=
+    "get_type_metrics example" /></a></p>
+
+    <p>This example uses the <code>width</code> and
+    <code>height</code> values returned by
+    <code>get_multiline_type_metrics</code> to draw a border around
+    the text lines. <a href=
+    "javascript:popup('get_multiline_type_metrics.rb.html')" title=
+    "Click to see the example script"><img src=
+    "ex/get_multiline_type_metrics.gif" alt=
+    "get_multiline_type_metrics example" /></a></p>
 
     <h4>Magick API</h4>
 
-    <p>GetTypeMetrics</p>
+    <p>GetTypeMetrics, GetMultilineTypeMetrics (available in
+    ImageMagick 6.1.5)</p>
   </div>
 
   <div class="sig">
@@ -1070,8 +1055,8 @@ draw.inspect &raquo;
     shadow using a star-shaped clipping path.</p>
 
     <p><a href="javascript:popup('clip_path.rb.html')" id=
-    "clip_path_ex"><img src="ex/clip_path.gif" alt=
-    "clip_path example" title=
+    "clip_path_ex" name="clip_path_ex"><img src="ex/clip_path.gif"
+    alt="clip_path example" title=
     "Click to see the example script" /></a></p>
 
     <h4>See also</h4><a href=
@@ -2645,7 +2630,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="text_antialias">text_antialias</h3>
 
-    <p><span class="arg">draw</span>.text_antialias(<code>true</code> or
+    <p><span class=
+    "arg">draw</span>.text_antialias(<code>true</code> or
     <code>false</code>) -&gt; <em>draw</em></p>
   </div>
 
@@ -3058,7 +3044,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="stroke_width_eq">stroke_width=</h3>
 
-    <p><span class="arg">draw</span>.stroke = <em>anInteger</em></p>
+    <p><span class="arg">draw</span>.stroke =
+    <em>anInteger</em></p>
   </div>
 
   <div class="desc">

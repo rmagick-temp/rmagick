@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.3 2003/07/19 01:47:37 tim Exp $ */
+/* $Id: rmimage.c,v 1.4 2003/07/19 12:51:15 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2123,13 +2123,22 @@ Image_format_eq(VALUE self, VALUE magick)
 {
     Image *image;
     const MagickInfo *m;
+    char *mgk;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
-    m = GetMagickInfo(STRING_PTR(magick), &exception);
+
+    mgk = STRING_PTR(magick);
+    m = GetMagickInfo(mgk, &exception);
     HANDLE_ERROR
+
+    if (!m)
+    {
+        rb_raise(rb_eArgError, "unknown format: %s", mgk);
+    }
+
 
     strncpy(image->magick, m->name, MaxTextExtent-1);
     return self;

@@ -232,7 +232,20 @@ if test "$rm_cv_enum_indexchannel" = yes; then
   AC_DEFINE(HAVE_INDEXCHANNEL)
 fi
 
-# Determine documentation base URI
+AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = AllChannels],
+     rm_cv_enum_allchannels='yes',
+     rm_cv_enum_allchannels='no')])
+
+if test "$rm_cv_enum_allchannels" = yes; then
+  AC_DEFINE(HAVE_ALLCHANNELS)
+fi
 
 # Where is ****Magick installed?
 MAGICKPREFIX=`${MAGICKCONFIG} --prefix`

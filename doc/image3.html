@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 3)</title>
   <meta http-equiv="Content-Type" content=
@@ -945,12 +945,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" name="notrotated" /><!--
+    "Click to see the example script"  /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
+    "ex/rotate_f.jpg" alt="rotate example"  /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1474,13 +1474,12 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script" name="noshear" /> <!--
+    "Click to see the example script"  /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example" name=
-    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example"  /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1583,12 +1582,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" name="nosplice" /><!--
+    "Click to see the example script"  /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
+    "ex/splice.jpg" alt="splice example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2416,9 +2415,9 @@ img.to_color(pixel)
     <h3 id="unsharp_mask">unsharp_mask</h3>
 
     <p><span class="arg">image</span>.unsharp_mask(<span class=
-    "arg">radius</span>, <span class="arg">sigma</span>,
-    <span class="arg">amount</span>, <span class=
-    "arg">threshold</span>) -&gt; <em>anImage</em></p>
+    "arg">radius=0.0</span>, <span class="arg">sigma=1.0</span>,
+    <span class="arg">amount=1.0</span>, <span class=
+    "arg">threshold=0.05</span>) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -2435,27 +2434,30 @@ img.to_color(pixel)
 
     <h4>Arguments</h4>
 
+    <p>All arguments are optional.</p>
+
     <dl>
       <dt>radius</dt>
 
-      <dd>The radius of the Gaussian operator.</dd>
+      <dd>The radius of the Gaussian operator. The default is
+      0.0.</dd>
 
       <dt>sigma</dt>
 
       <dd>The standard deviation of the Gaussian operator. A good
-      starting value is 1.0.</dd>
+      starting value is 1.0, which is the default.</dd>
 
       <dt>amount</dt>
 
       <dd>The percentage of the blurred image to be added to the
       receiver, specified as a fraction between 0 and 1.0. A good
-      starting value is 1.0.</dd>
+      starting value is 1.0, which is the default.</dd>
 
       <dt>threshold</dt>
 
       <dd>The threshold needed to apply the amount, specified as a
-      fraction between 0 and 1.0. A good starting value is
-      0.05.</dd>
+      fraction between 0 and 1.0. A good starting value is 0.05,
+      which is the default.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2484,9 +2486,9 @@ img.to_color(pixel)
 
     <p><span class=
     "arg">image</span>.unsharp_mask_channel(<span class=
-    "arg">radius</span>, <span class="arg">sigma</span>,
-    <span class="arg">amount</span>, <span class=
-    "arg">threshold</span> [,<span class="arg">channel</span>,
+    "arg">radius=0.0</span>, <span class="arg">sigma=1.0</span>,
+    <span class="arg">amount=1.0</span>, <span class=
+    "arg">threshold=0.05</span> [,<span class="arg">channel</span>,
     <span class="arg">channel</span>...]) -&gt;
     <em>anImage</em></p>
   </div>
@@ -2507,27 +2509,30 @@ img.to_color(pixel)
 
     <h4>Arguments</h4>
 
+    <p>All arguments are optional.</p>
+
     <dl>
       <dt>radius</dt>
 
-      <dd>The radius of the Gaussian operator.</dd>
+      <dd>The radius of the Gaussian operator. The default is
+      0.0.</dd>
 
       <dt>sigma</dt>
 
       <dd>The standard deviation of the Gaussian operator. A good
-      starting value is 1.0.</dd>
+      starting value is 1.0, which is the default.</dd>
 
       <dt>amount</dt>
 
       <dd>The percentage of the blurred image to be added to the
       receiver, specified as a fraction between 0 and 1.0. A good
-      starting value is 1.0.</dd>
+      starting value is 1.0, which is the default.</dd>
 
       <dt>threshold</dt>
 
       <dd>The threshold needed to apply the amount, specified as a
-      fraction between 0 and 1.0. A good starting value is
-      0.05.</dd>
+      fraction between 0 and 1.0. A good starting value is 0.05,
+      which is the default.</dd>
 
       <dt>channel...</dt>
 
@@ -2688,13 +2693,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
+    "ex/images/Flower_Hat.jpg" alt="wave example"  />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
+    "ex/wave.jpg" alt="wave example"  /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

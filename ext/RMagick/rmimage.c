@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.83 2004/12/05 23:41:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.84 2004/12/10 00:00:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7516,36 +7516,71 @@ Image_units_eq(
 }
 
 /*
-    Method:     Image#unsharp_mask(radius, sigma, amount, threshold)
+    Method:     Image#unsharp_mask(radius=0.0, sigma=1.0, amount=1.0, threshold=0.05)
     Purpose:    sharpens an image. "amount" is the percentage of the difference
                 between the original and the blur image that is added back into
                 the original. "threshold" is the threshold in pixels needed to
                 apply the diffence amount.
 */
+static void
+unsharp_mask_args(
+    int argc,
+    VALUE *argv,
+    double *radius,
+    double *sigma,
+    double *amount,
+    double *threshold)
+{
+    switch (argc)
+    {
+        case 4:
+            *threshold = NUM2DBL(argv[3]);
+            if (*threshold < 0.0)
+            {
+                rb_raise(rb_eArgError, "threshold must be >= 0.0");
+            }
+        case 3:
+            *amount = NUM2DBL(argv[2]);
+            if (*amount <= 0.0)
+            {
+                rb_raise(rb_eArgError, "amount must be > 0.0");
+            }
+        case 2:
+            *sigma = NUM2DBL(argv[1]);
+            if (*sigma == 0.0)
+            {
+                rb_raise(rb_eArgError, "sigma must be != 0.0");
+            }
+        case 1:
+            *radius = NUM2DBL(argv[0]);
+            if (*radius < 0.0)
+            {
+                rb_raise(rb_eArgError, "radius must be >= 0.0");
+            }
+        case 0:
+            break;
+
+            // This case can't occur if we're called from Image_unsharp_mask_channel
+            // because it has already raised an exception for the the argc > 4 case.
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 4)", argc);
+    }
+}
+
+
 VALUE
-Image_unsharp_mask(
-    VALUE self,
-    VALUE radius,
-    VALUE sigma,
-    VALUE amount,
-    VALUE threshold)
+Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double sig;
+    double radius = 0.0, sigma = 1.0, amount = 1.0, threshold = 0.05;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
-    sig = NUM2DBL(sigma);
-    if (sig <= 0.0)
-    {
-        rb_raise(rb_eArgError, "sigma must be > 0.0");
-    }
+    unsharp_mask_args(argc, argv, &radius, &sigma, &amount, &threshold);
 
     GetExceptionInfo(&exception);
-    new_image = UnsharpMaskImage(image, NUM2DBL(radius), sig
-                               , NUM2DBL(amount), NUM2DBL(threshold)
-                               , &exception);
+    new_image = UnsharpMaskImage(image, radius, sigma, amount, threshold, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
 }
@@ -7562,7 +7597,7 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_UNSHARPMASKIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
-    double sigma;
+    double radius = 0.0, sigma = 1.0, amount = 1.0, threshold = 0.05;
     ExceptionInfo exception;
 
     channels = extract_channels(&argc, argv);
@@ -7570,22 +7605,13 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
     {
         raise_ChannelType_error(argv[argc-1]);
     }
-    else if (argc < 4)
-    {
-        rb_raise(rb_eArgError, "wrong number of arguments (%d for 4)", argc);
-    }
 
-    sigma = NUM2DBL(argv[1]);
-    if (sigma <= 0.0)
-    {
-        rb_raise(rb_eArgError, "sigma must be > 0.0");
-    }
+    unsharp_mask_args(argc, argv, &radius, &sigma, &amount, &threshold);
 
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
-    new_image = UnsharpMaskImageChannel(image, channels, NUM2DBL(argv[0])
-                                      , sigma, NUM2DBL(argv[2]), NUM2DBL(argv[3])
-                                      , &exception);
+    new_image = UnsharpMaskImageChannel(image, channels, radius, sigma, amount
+                                      , threshold, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
 #else

@@ -18,7 +18,6 @@ end
 
 # Get the metrics
 metrics = gc.get_multiline_type_metrics(background, TEXT)
-p metrics
 
 # Compute the corners for a rectangle surrounding the text
 x = (background.columns - metrics.width) / 2

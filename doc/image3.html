@@ -1445,24 +1445,25 @@ img.properties &raquo;
     <h3 id="splice">splice</h3>
 
     <p><span class="arg">image</span>.splice(<span class=
-    "arg">geometry</span>[, <span class="arg">color</span>]) -&gt;
-    <em>anImage</em></p>
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">width</span>, <span class="arg">height</span>[,
+    <span class="arg">color</span>]) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Splice a solid color into the image as defined by the
-    <code>geometry</code> argument. This method is the opposite of
+    <code>x</code>, <code>y</code>, <code>width</code>, and
+    <code>height</code> arguments. This method is the opposite of
     <a href="image1.html#chop">chop</a>.</p>
 
     <h4>Arguments</h4>
 
     <dl>
-      <dt>geometry</dt>
+      <dt>x, y, width, height</dt>
 
-      <dd>A <a href="imusage.html#geometry">geometry string</a> or
-      <a href="struct.html#Geometry">Geometry object</a>.</dd>
+      <dd>Describe the rectangle to be spliced.</dd>
 
       <dt>color</dt>
 
@@ -2516,7 +2517,7 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" />
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"

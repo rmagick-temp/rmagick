@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.66 2004/08/20 20:22:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.67 2004/08/21 14:06:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6441,12 +6441,12 @@ Image_spaceship(VALUE self, VALUE other)
 }
 
 /*
-    Method:     Image#splice(geometry[, color])
+    Method:     Image#splice(x, y, width, height[, color])
     Purpose:    Splice a solid color into the part of the image specified
-                by the geometry argument. If the color argument is specified
-                it must be a color name or Pixel. If not specified uses the
-                background color. The geometry argument can be a geometry
-                object or geometry string.
+                by the x, y, width, and height arguments. If the color
+                argument is specified it must be a color name or Pixel.
+                If not specified uses the background color.
+    Notes:      splice is the inverse of chop
 */
 
 VALUE
@@ -6454,47 +6454,40 @@ Image_splice(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_SPLICEIMAGE)
     Image *image, *new_image;
-    volatile VALUE geometry;
-    char *geom_str;
     PixelPacket color, old_color;
-    RectangleInfo rectangle = {0};
+    RectangleInfo rectangle;
     ExceptionInfo exception;
-    MagickStatusType flags;
 
     Data_Get_Struct(self, Image, image);
 
     switch(argc)
     {
-        case 1:
+        case 4:
             // use background color
             color = image->background_color;
             break;
-        case 2:
+        case 5:
             // Convert color argument to PixelPacket
-            Color_to_PixelPacket(&color, argv[1]);
+            Color_to_PixelPacket(&color, argv[4]);
             break;
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 4 or 5)", argc);
             break;
     }
-    
 
-    geometry = rb_funcall(argv[0], ID_to_s, 0);
-    geom_str = STRING_PTR(geometry);
+    rectangle.x      = NUM2ULONG(argv[0]);
+    rectangle.y      = NUM2ULONG(argv[1]);
+    rectangle.width  = NUM2ULONG(argv[2]);
+    rectangle.height = NUM2ULONG(argv[3]);
 
     GetExceptionInfo(&exception);
-    flags = ParseSizeGeometry(image, geom_str, &rectangle);
-    if (flags == NoValue)
-    {
-       rb_raise(rb_eArgError, "invalid geometry `%s'", geometry);
-    }
 
     // Swap in color for the duration of this call.
     old_color = image->background_color;
     image->background_color = color;
     new_image = SpliceImage(image, &rectangle, &exception);
     image->background_color = old_color;
-    
+
     if (!new_image)
     {
         rb_raise(rb_eRuntimeError, "SpliceImage failed.");
@@ -6502,7 +6495,7 @@ Image_splice(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
 
     return rm_image_new(new_image);
-    
+
 #else
 
     rm_not_implemented();

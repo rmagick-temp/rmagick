@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -87,6 +88,8 @@
           <li><a href="#directory">directory</a></li>
 
           <li><a href="#dispose">dispose</a></li>
+
+          <li><a href="#endian">endian</a></li>
 
           <li><a href="#extract_info">extract_info</a></li>
 
@@ -278,7 +281,7 @@
 
     <p>The image's <em>bounding box</em>. The bounding box is the
     rectangle that encloses all the pixels not in the border color.
-    Get-only.</p>
+    Uses the current <a href="#fuzz">fuzz</a> value. Get-only.</p>
 
     <h4>Returns</h4>A <a href="struct.html#Rectangle">Rectangle</a>
     object.
@@ -620,6 +623,32 @@
 
     <h4>Returns</h4>A <a href=
     "constants.html#DisposeType">DisposeType</a> constant.
+  </div>
+
+  <div class="sig">
+    <h3 id="endian">endian</h3>
+
+    <p><span class="arg">image.</span>endian -&gt;
+    <em>anEndianType</em><br />
+    <span class="arg">image.</span>endian = <span class=
+    "arg">anEndianType</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Get or set the endian attribute. <em>(As best I can tell,
+    only the TIFF format supports this attribute.)</em></p>
+
+    <h4>Arguments</h4>
+
+    <p>An <a href="constants.html#EndianType">EndianType</a>
+    value.</p>
+
+    <h4>Returns</h4>
+
+    <p>An <a href="constants.html#EndianType">EndianType</a>
+    value.</p>
   </div>
 
   <div class="sig">
@@ -992,7 +1021,8 @@
   <div class="sig">
     <h3 id="normalized_maximum_error">normalized_maximum_error</h3>
 
-    <p><span class="arg" style="padding-left: 20px;">image.</span>normalized_maximum_error
+    <p><span class="arg" style=
+    "padding-left: 20px;">image.</span>normalized_maximum_error
     -&gt; <em>aFloat</em></p>
   </div>
 

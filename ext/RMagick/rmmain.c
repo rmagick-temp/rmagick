@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.46 2004/02/27 00:17:09 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.47 2004/03/07 15:05:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -392,6 +392,7 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, depth)
     DCL_ATTR_READER(Image, directory)
     DCL_ATTR_ACCESSOR(Image, dispose)
+    DCL_ATTR_ACCESSOR(Image, endian)
     DCL_ATTR_ACCESSOR(Image, extract_info)
     DCL_ATTR_READER(Image, filename)
     DCL_ATTR_READER(Image, filesize)
@@ -932,6 +933,12 @@ Init_RMagick(void)
     END_ENUM
 #endif
 
+    DEF_ENUM(EndianType)
+        ENUM_VAL(UndefinedEndian)
+        ENUM_VAL(LSBEndian)
+        ENUM_VAL(MSBEndian)
+    END_ENUM
+
     // FilterTypes constants
     DEF_ENUM(FilterTypes)
         ENUM_VAL(UndefinedFilter)
@@ -1200,7 +1207,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/02/27 00:17:09 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/03/07 15:05:56 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

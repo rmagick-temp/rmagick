@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.23 2004/02/23 00:31:21 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.24 2004/03/07 15:05:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -792,9 +792,38 @@ FilterTypes_new(FilterTypes type)
     return rm_enum_new(Class_FilterTypes, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
+
+
 /*
-    External:  ImageType#new
-    Purpose: Construct an ImageType enum object for the specified value
+    External:   EndianType#new
+    Purpose:    Construct an EndianType enum object
+*/
+VALUE
+EndianType_new(EndianType type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedEndian:
+            name = "UndefinedEndian";
+            break;
+        case LSBEndian:
+            name = "LSBEndian";
+            break;
+        case MSBEndian:
+            name = "MSBEndian";
+            break;
+    }
+
+    return rm_enum_new(Class_EndianType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+
+/*
+    External:   ImageType#new
+    Purpose:    Construct an ImageType enum object for the specified value
 */
 VALUE
 ImageType_new(ImageType type)

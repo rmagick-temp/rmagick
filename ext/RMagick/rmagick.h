@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.41 2004/02/27 00:17:09 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.42 2004/03/07 15:05:56 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -202,6 +202,7 @@ EXTERN VALUE Class_CompositeOperator;
 EXTERN VALUE Class_CompressionType;
 EXTERN VALUE Class_DecorationType;
 EXTERN VALUE Class_DisposeType;
+EXTERN VALUE Class_EndianType;
 EXTERN VALUE Class_FilterTypes;
 EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
@@ -521,6 +522,7 @@ ATTR_ACCESSOR(Image, density)
 ATTR_READER(Image, depth)
 ATTR_READER(Image, directory)
 ATTR_ACCESSOR(Image, dispose)
+ATTR_ACCESSOR(Image, endian)
 ATTR_ACCESSOR(Image, extract_info)
 ATTR_READER(Image, filename)
 ATTR_READER(Image, filesize)
@@ -731,6 +733,7 @@ extern VALUE   Color_from_ColorInfo(const ColorInfo *);
 extern VALUE   ClassType_new(ClassType);
 extern VALUE   ColorspaceType_new(ColorspaceType);
 extern VALUE   CompressionType_new(CompressionType);
+extern VALUE   EndianType_new(EndianType);
 extern VALUE   FilterTypes_new(FilterTypes);
 extern VALUE   Font_to_s(VALUE);
 extern VALUE   ImageList_cur_image(VALUE);

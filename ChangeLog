@@ -2,6 +2,7 @@ RMagick 1.5.0
     o Added grayscale_pseudo_class method to Image class (GraphicsMagick 1.1)
     o Added radial_blur, random_threshold_channel methods to Image class
       (ImageMagick 6.0.0)
+    o Added endian attribute to Image class
     o Deprecated random_channel_threshold method when linked with ImageMagick 6.0.0.
 
 RMagick 1.4.0

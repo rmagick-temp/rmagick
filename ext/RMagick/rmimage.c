@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.45 2004/03/04 00:43:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.46 2004/03/07 15:05:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2503,6 +2503,36 @@ VALUE
 Image_emboss(int argc, VALUE *argv, VALUE self)
 {
     return effect_image(self, argc, argv, EmbossImage);
+}
+
+
+
+/*
+    Method:     Image#endian
+    Purpose:    Return endian option for images that support it.
+*/
+VALUE
+Image_endian(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return EndianType_new(image->endian);
+}
+
+
+/*
+    Method:     Image#endian=
+    Purpose:    Set endian option for images that support it.
+*/
+VALUE
+Image_endian_eq(VALUE self, VALUE type)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(type, image->endian, EndianType);
+    return self;
 }
 
 /*

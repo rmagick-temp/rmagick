@@ -99,11 +99,11 @@
 
     <div class="toccol">
       <ul>
-        <li>&nbsp;</li>
-
         <li><a href="#DecorationType">DecorationType</a></li>
 
         <li><a href="#DisposeType">DisposeType</a></li>
+
+        <li><a href="#EndianType">EndianType</a></li>
 
         <li><a href="#FilterType">FilterType</a></li>
 
@@ -144,6 +144,18 @@
   "Miscellaneous_constants">Miscellaneous constants</h3>
 
   <dl>
+    <dt>Long_version</dt>
+
+    <dd>An extended form of the <code>Version</code> constant with
+    the format shown here:<br />
+    <code>This is RMagick 1.4.0 ($Date: 2004/03/07 15:05:56 $)
+    Copyright (C) 2004 by Timothy P. Hunter<br />
+    Built with ImageMagick 6.0.0 02/25/04 Q8
+    http://www.imagemagick.org<br />
+    Built for ruby 1.8.1 (2003-12-25) [i686-linux]<br />
+    Web page: http://rmagick.rubyforge.org<br />
+    Email: rmagick@rubyforge.org</code></dd>
+
     <dt>MagickVersion</dt>
 
     <dd>The &times;Magick version string. This has the form:<br />
@@ -615,7 +627,7 @@
 
     <dt>NoCompression</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>The default for most formats.</dd>
 
     <dt>BZipCompression</dt>
 
@@ -634,7 +646,9 @@
 
     <dt>JPEGCompression</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>JPEG compression. See <a href=
+    "http://www.faqs.org/faqs/jpeg-faq/part1/">The JPEG image
+    compression FAQ</a>.</dd>
 
     <dt>LosslessJPEGCompression</dt>
 
@@ -647,7 +661,9 @@
 
     <dt>RunlengthEncodedCompression</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>See the Wikipedia page for <a href=
+    "http://en.wikipedia.org/wiki/Run_length_encoding">Run-length
+    encoding</a>.</dd>
 
     <dt>ZipCompression</dt>
 
@@ -692,6 +708,19 @@
     <dt>BackgroundDispose</dt>
 
     <dt>PreviousDispose</dt>
+  </dl>
+
+  <h3 class="const" id="EndianType">EndianType</h3>
+
+  <p>The value of the <a href="imageattrs.html#endian">endian</a>
+  attribute.</p>
+
+  <dl>
+    <dt>UndefinedEndian</dt>
+
+    <dt>LSBEndian</dt>
+
+    <dt>MSBEndian</dt>
   </dl>
 
   <h3 class="const" id="FilterType">FilterType</h3>

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.28 2004/04/03 21:11:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.29 2004/04/04 14:22:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1404,6 +1404,8 @@ Point_to_PointInfo(PointInfo *pi, VALUE sp)
     pi->y = m == Qnil ? 0 : FIX2INT(m);
 }
 
+
+
 /*
     Extern:     ChromaticityInfo_new(pp)
     Purpose:    Create a Magick::ChromaticityInfo object from a
@@ -2018,6 +2020,53 @@ Compliance_Const_Name(ComplianceType *c)
     }
 #endif
 }
+
+
+#if defined(HAVE_GETIMAGESTATISTICS)
+/*
+    Extern:     Statistics_new(stats)
+    Purpose:    Create a Magick::Statistics object from an
+                ImageStatistics structure.
+*/
+VALUE
+Statistics_new(ImageStatistics *stats)
+{
+    volatile VALUE red, green, blue, opacity;
+    volatile VALUE min, max, mean, stddev, var;
+
+    min = rb_float_new(stats->red.minimum);
+    max = rb_float_new(stats->red.maximum);
+    mean = rb_float_new(stats->red.mean);
+    stddev = rb_float_new(stats->red.standard_deviation);
+    var = rb_float_new(stats->red.variance);
+    red = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->green.minimum);
+    max = rb_float_new(stats->green.maximum);
+    mean = rb_float_new(stats->green.mean);
+    stddev = rb_float_new(stats->green.standard_deviation);
+    var = rb_float_new(stats->green.variance);
+    green = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->blue.minimum);
+    max = rb_float_new(stats->blue.maximum);
+    mean = rb_float_new(stats->blue.mean);
+    stddev = rb_float_new(stats->blue.standard_deviation);
+    var = rb_float_new(stats->blue.variance);
+    blue = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->opacity.minimum);
+    max = rb_float_new(stats->opacity.maximum);
+    mean = rb_float_new(stats->opacity.mean);
+    stddev = rb_float_new(stats->opacity.standard_deviation);
+    var = rb_float_new(stats->opacity.variance);
+    opacity = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    return rb_funcall(Class_Statistics, ID_new, 4, red, green, blue, opacity);
+
+}
+#endif  // HAVE_GETIMAGESTATISTICS
+
 
 /*
     Static:     StretchType_Const_Name

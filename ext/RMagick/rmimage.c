@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.50 2004/04/04 00:06:09 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.51 2004/04/04 14:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -901,6 +901,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
 
     okay = GetImageStatistics(image, &stats, &exception);
+    HANDLE_ERROR
     if (okay == MagickFail)
     {
         rb_raise(rb_eRuntimeError, "GetImageStatistics failed.");
@@ -1021,6 +1022,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
 
     okay = GetImageStatistics(image, &stats, &exception);
+    HANDLE_ERROR
     if (okay == MagickFail)
     {
         rb_raise(rb_eRuntimeError, "GetImageStatistics failed.");
@@ -6193,6 +6195,38 @@ Image_spread(int argc, VALUE *argv, VALUE self)
 }
 
 DEF_ATTR_ACCESSOR(Image, start_loop, bool)
+
+
+/*
+    Method:     Image#statistics
+    Notes:      Only supported in GM 1.1
+*/
+VALUE
+Image_statistics(VALUE self)
+{
+#if defined(HAVE_GETIMAGESTATISTICS)
+    Image *image;
+    ExceptionInfo exception;
+    ImageStatistics stats;
+    MagickPassFail okay;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    okay = GetImageStatistics(image, &stats, &exception);
+    HANDLE_ERROR
+    if (okay == MagickFail)
+    {
+        rb_raise(rb_eRuntimeError, "GetImageStatistics failed.");
+    }
+
+    return Statistics_new(&stats);
+#else
+    not_implemented("statistics");
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#stegano(watermark, offset)

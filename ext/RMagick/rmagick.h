@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.45 2004/04/02 23:47:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.46 2004/04/04 14:22:46 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -193,6 +193,10 @@ EXTERN VALUE Class_MetricType;
 #endif
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
 EXTERN VALUE Class_QuantumOperator;
+#endif
+#if defined(HAVE_GETIMAGESTATISTICS)
+EXTERN VALUE Class_Statistics;
+EXTERN VALUE Class_StatisticsChannel;
 #endif
 
 // Enum classes
@@ -707,6 +711,7 @@ extern VALUE Image_signature(VALUE);
 extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
+extern VALUE Image_statistics(VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);
 extern VALUE Image_stereo(VALUE, VALUE);
 extern VALUE Image_store_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -811,6 +816,9 @@ extern void    TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
 extern VALUE   Font_from_TypeInfo(TypeInfo *);
 extern VALUE   TypeMetric_to_s(VALUE);
 extern VALUE   TypeMetric_from_TypeMetric(TypeMetric *);
+#if defined(HAVE_GETIMAGESTATISTICS)
+extern VALUE   Statistics_new(ImageStatistics *);
+#endif
 
 extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
 extern VALUE   rm_no_freeze(VALUE);

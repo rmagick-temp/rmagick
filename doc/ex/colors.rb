@@ -62,7 +62,7 @@ montage.each { |f| f.compression = ZipCompression }
 montage.write('colors.miff')
 
 # Make a small sample of the full montage to display in the HTML file.
-sample = montage[9].crop(55, 325, 495, 110)
+sample = montage[8].crop(55, 325, 495, 110)
 sample.write('colors.gif')
 
 exit

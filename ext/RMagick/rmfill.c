@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.8 2004/06/15 17:28:32 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.9 2004/08/25 22:19:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -168,7 +168,7 @@ vertical_fill(
     // Keep in mind that x1 could be < 0 or > image->columns. If steps
     // is negative, swap the start and end colors and use the absolute
     // value.
-    steps = max(x1, ((long)image->columns)-x1);
+    steps = fmax(x1, ((long)image->columns)-x1);
     if (steps < 0)
     {
         PixelPacket t = *start_color;
@@ -240,7 +240,7 @@ horizontal_fill(
 
     // Bear in mind that y1 could be < 0 or > image->rows. If steps is
     // negative, swap the start and end colors and use the absolute value.
-    steps = max(y1, ((long)image->rows)-y1);
+    steps = fmax(y1, ((long)image->rows)-y1);
     if (steps < 0)
     {
         PixelPacket t = *start_color;
@@ -323,11 +323,11 @@ v_diagonal_fill(
 
     if (d1 < 0 && d2 < 0)
     {
-        steps += max(fabs(d1),fabs(d2));
+        steps += fmax(fabs(d1),fabs(d2));
     }
     else if (d1 > image->rows && d2 > image->rows)
     {
-        steps += max(d1-image->rows, d2-image->rows);
+        steps += fmax(d1-image->rows, d2-image->rows);
     }
 
     d1 = fmax(b, image->rows-b);
@@ -411,9 +411,9 @@ h_diagonal_fill(
         steps += fmax(fabs(image->columns-d1),fabs(image->columns-d2));
     }
 
-    d1 = max(d1, image->columns-d1);
-    d2 = max(d2, image->columns-d2);
-    steps += max(d1, d2);
+    d1 = fmax(d1, image->columns-d1);
+    d2 = fmax(d2, image->columns-d2);
+    steps += fmax(d1, d2);
 
     // If the line is entirely > image->columns, swap the start & end color
     if (steps < 0)

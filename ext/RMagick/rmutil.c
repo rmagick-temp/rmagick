@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.29 2004/04/04 14:22:47 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.30 2004/04/07 23:07:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -515,6 +515,40 @@ Pixel_opacity_eq(VALUE self, VALUE v)
 }
 
 
+/*
+    Method:     Pixel#<=>
+    Purpose:    Support Comparable mixin
+*/
+VALUE Pixel_spaceship(VALUE self, VALUE other)
+{
+    Pixel *this, *that;
+
+    Data_Get_Struct(self, Pixel, this);
+    Data_Get_Struct(other, Pixel, that);
+
+    if (this->red != that->red)
+    {
+        return INT2FIX(this->red - that->red);
+    }
+    else if(this->green != that->green)
+    {
+        return INT2FIX(this->green - that->green);
+    }
+    else if(this->blue != that->blue)
+    {
+        return INT2FIX(this->blue - that->blue);
+    }
+    else if(this->opacity != that->opacity)
+    {
+        return INT2FIX(this->opacity - that->opacity);
+    }
+
+    // Values are equal, check class.
+
+    return rb_funcall(CLASS_OF(self), rb_intern("<=>"), 1, CLASS_OF(other));
+
+}
+
 
 /*
     Static:     destroy_Pixel
@@ -604,6 +638,29 @@ Pixel_initialize(int argc, VALUE *argv, VALUE self)
     }
 
     return self;
+}
+
+
+/*
+    Method: Pixel#===
+    Purpose:    "Case equal" operator for Pixel
+*/
+
+VALUE Pixel_case_eq(VALUE self, VALUE other)
+{
+    Pixel *this, *that;
+
+    if (CLASS_OF(self) == CLASS_OF(other))
+    {
+        Data_Get_Struct(self, Pixel, this);
+        Data_Get_Struct(other, Pixel, that);
+        return (this->red == that->red
+            && this->blue == that->blue
+            && this->green == that->green
+            && this->opacity == that->opacity) ? Qtrue : Qfalse;
+    }
+
+    return Qfalse;
 }
 
 
@@ -1946,6 +2003,7 @@ VALUE Enum_spaceship(VALUE self, VALUE other)
 
     return rb_funcall(CLASS_OF(self), rb_intern("<=>"), 1, CLASS_OF(other));
 }
+
 
 /*
     Method:  Enum#===

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.46 2004/04/04 14:22:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.47 2004/04/07 23:07:13 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -780,6 +780,7 @@ ATTR_ACCESSOR(Pixel, red)
 ATTR_ACCESSOR(Pixel, green)
 ATTR_ACCESSOR(Pixel, blue)
 ATTR_ACCESSOR(Pixel, opacity)
+extern VALUE   Pixel_case_eq(VALUE, VALUE);
 extern VALUE   Pixel_clone(VALUE);
 extern VALUE   Pixel_dup(VALUE);
 extern VALUE   Pixel_fcmp(int, VALUE *, VALUE);
@@ -788,6 +789,7 @@ extern VALUE   Pixel_from_HSL(VALUE, VALUE);
 extern VALUE   Pixel_initialize(int, VALUE *, VALUE);
 extern VALUE   Pixel_init_copy(VALUE, VALUE);
 extern VALUE   Pixel_intensity(VALUE);
+extern VALUE   Pixel_spaceship(VALUE, VALUE);
 extern VALUE   Pixel_to_color(int, VALUE *, VALUE);
 extern VALUE   Pixel_to_HSL(VALUE);
 extern VALUE   Pixel_to_s(VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.20 2004/12/15 23:58:33 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.21 2004/12/17 22:42:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -8,6 +8,7 @@
 \============================================================================*/
 
 #include "rmagick.h"
+#include "float.h"
 
 static void mark_Draw(void *);
 static void destroy_Draw(void *);
@@ -287,7 +288,7 @@ Draw_rotation_eq(VALUE self, VALUE deg)
     Data_Get_Struct(self, Draw, draw);
 
     degrees = NUM2DBL(deg);
-    if (degrees != 0.0)
+    if (fabs(degrees) > DBL_EPSILON)
     {
         affine.sx=1.0;
         affine.rx=0.0;
@@ -405,7 +406,7 @@ VALUE Draw_annotate(
     // allowing the app a chance to modify the object's attributes
     if (rb_block_given_p())
     {
-        rb_obj_instance_eval(0, NULL, self);
+        (void)rb_obj_instance_eval(0, NULL, self);
     }
 
     rm_check_frozen(ImageList_cur_image(image_arg));
@@ -461,7 +462,7 @@ Draw_clone(VALUE self)
     clone = Draw_dup(self);
     if (OBJ_FROZEN(self))
     {
-        rb_obj_freeze(clone);
+        (void)rb_obj_freeze(clone);
     }
 
     return clone;
@@ -637,11 +638,11 @@ Draw_dup(VALUE self)
     volatile VALUE dup;
 
     draw = ALLOC(Draw);
-    memset(draw, '\0', sizeof(Draw));
+    memset(draw, 0, sizeof(Draw));
     dup = Data_Wrap_Struct(CLASS_OF(self), mark_Draw, destroy_Draw, draw);
     if (rb_obj_tainted(self))
     {
-        rb_obj_taint(dup);
+        (void)rb_obj_taint(dup);
     }
     return rb_funcall(dup, ID_initialize_copy, 1, self);
 }
@@ -773,7 +774,7 @@ Draw_new(VALUE class)
     volatile VALUE draw_obj;
 
     draw = ALLOC(Draw);
-    memset(draw, '\0', sizeof(Draw));
+    memset(draw, 0, sizeof(Draw));
     draw_obj = Data_Wrap_Struct(class, mark_Draw, destroy_Draw, draw);
 
 #if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
@@ -796,7 +797,7 @@ Draw_primitive(VALUE self, VALUE primitive)
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
-    if (!draw->primitives)
+    if (draw->primitives == (VALUE)0)
     {
         draw->primitives = primitive;
     }
@@ -818,7 +819,7 @@ mark_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
 
-    if (draw->primitives)
+    if (draw->primitives != (VALUE)0)
     {
         rb_gc_mark(draw->primitives);
     }
@@ -1252,9 +1253,9 @@ get_type_metrics(
      Image *image;
      Draw *draw;
      TypeMetric metrics;
-     char *text;
+     char *text = NULL;
      long text_l;
-     int x;
+     long x;
      unsigned int okay;
 
      switch (argc)

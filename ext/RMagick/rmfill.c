@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.9 2004/08/25 22:19:12 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.10 2004/12/17 22:44:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -119,11 +119,11 @@ point_fill(
     long x, y;
     double red_step, green_step, blue_step;
 
-    steps = sqrt((image->columns-x0)*(image->columns-x0)
-                + (image->rows-y0)*(image->rows-y0));
-    red_step = (stop_color->red - start_color->red) / steps;
-    green_step = (stop_color->green - start_color->green) / steps;
-    blue_step = (stop_color->blue - start_color->blue) / steps;
+    steps = sqrt((double)((image->columns-x0)*(image->columns-x0)
+                + (image->rows-y0)*(image->rows-y0)));
+    red_step = ((double)(stop_color->red - start_color->red)) / steps;
+    green_step = ((double)(stop_color->green - start_color->green)) / steps;
+    blue_step = ((double)(stop_color->blue - start_color->blue)) / steps;
 
     for (y = 0; y < image->rows; y++)
     {

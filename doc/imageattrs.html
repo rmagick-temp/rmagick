@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Image (attribute methods)</title>
   <meta http-equiv="Content-Type" content=
@@ -78,13 +78,13 @@
           <li><a href="#compression">compression</a></li>
 
           <li><a href="#delay">delay</a></li>
+
+          <li><a href="#density">density</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#density">density</a></li>
-
           <li><a href="#depth">depth</a></li>
 
           <li><a href="#directory">directory</a></li>
@@ -119,13 +119,13 @@
 
           <li><a href=
           "#mean_error_per_pixel">mean_error_per_pixel</a></li>
+
+          <li><a href="#mime_type">mime_type</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#mime_type">mime_type</a></li>
-
           <li><a href="#montage">montage</a></li>
 
           <li><a href=
@@ -140,7 +140,11 @@
 
           <li><a href="#opacity_eq">opacity</a></li>
 
+          <li><a href="#orientation">orientation</a></li>
+
           <li><a href="#page">page</a></li>
+
+          <li><a href="#quality">quality</a></li>
 
           <li><a href="#quantum_depth">quantum_depth</a></li>
 
@@ -1090,6 +1094,49 @@
   </div>
 
   <div class="sig">
+    <h3 id="orientation">orientation</h3>
+
+    <p><span class="arg">image</span>.orientation -&gt;
+    <em>anOrientationType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the value of the Exif Orientation Tag.</p>
+
+    <h4>Returns</h4>
+
+    <p>One of the following OrientationType values:</p>
+
+    <ul>
+      <li>UndefinedOrientation</li>
+
+      <li>TopLeftOrientation</li>
+
+      <li>TopRightOrientation</li>
+
+      <li>BottomRightOrientation</li>
+
+      <li>BottomLeftOrientation</li>
+
+      <li>LeftTopOrientation</li>
+
+      <li>RightTopOrientation</li>
+
+      <li>RightBottomOrientation</li>
+
+      <li>LeftBottomOrientation</li>
+    </ul>
+
+    <h4>Magick API</h4>Available in ImageMagick 6.0.0.
+
+    <h4>Notes</h4>See <a href=
+    "http://jpegclub.org/exif_orientation.html">http://jpegclub.org/exif_orientation.html</a>
+    for more information about the Exif Orientation Tag.
+  </div>
+
+  <div class="sig">
     <h3 id="page">page</h3>
 
     <p><span class="arg">image.</span>page -&gt;
@@ -1114,6 +1161,30 @@
     <h4>Returns</h4>
 
     <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="quality">quality</h3>
+
+    <p><span class="arg">image</span>.quality -&gt;
+    <em>aFixnum</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>For JPEG images, returns the Independent
+    JPEG Group quality value. This number is a measurement of the
+    amount of compression used when the image was saved. Lower
+    numbers mean higher compression.
+
+    <h4>Returns</h4>
+
+    <p>A number between 0-100.</p>
+
+    <h4>Notes</h4>
+
+    <p>For more information, see <a href=
+    "http://www.faqs.org/faqs/jpeg-faq/part1/">The JPEG image
+    compression FAQ</a>.</p>
   </div>
 
   <div class="sig">
@@ -1270,8 +1341,10 @@
     <p>A <a href="constants.html#ResolutionType">ResolutionType</a>
     constant.</p>
 
-    <h4>See also</h4><p><a href="#x_resolution">x_resolution</a>,
-    <a href="y_resolution">y_resolution</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#x_resolution">x_resolution</a>, <a href=
+    "y_resolution">y_resolution</a></p>
   </div>
 
   <div class="sig">
@@ -1288,7 +1361,9 @@
 
     <p class="imquote">Horizontal resolution of the image.</p>
 
-    <h4>See also</h4><p><a href="#units">units</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#units">units</a></p>
   </div>
 
   <div class="sig">
@@ -1305,7 +1380,9 @@
 
     <p class="imquote">Vertical resolution of the image.</p>
 
-    <h4>See also</h4><p><a href="#units">units</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#units">units</a></p>
   </div>
 
   <p class="spacer">&nbsp;</p>

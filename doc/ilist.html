@@ -592,7 +592,7 @@ f = imagelist.cur_image
         <td>Both the ImageList class and the Image class support
         the <var>cur_image</var> method. Of course, in the Image
         class, <var>cur_image</var> simply returns <var>self</var>.
-        When a RubyMagick method accepts either an image or a
+        When an RMagick method accepts either an image or a
         imagelist as an argument, it sends the <var>cur_image</var>
         method to the argument to get the current image.</td>
       </tr>
@@ -836,7 +836,7 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
         <td>
           <dl>
             <dt>reference</dt>
-            <dd>An image or a image. If an image, <var>map</var>
+            <dd>An image or a imagelist. If an imagelist, <var>map</var>
             uses the current image as the reference image.</dd>
             <dt>dither</dt>
             <dd>if <var>true</var>, dither the mapped images.</dd>
@@ -888,12 +888,12 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
         <td valign="top">Description</td>
         <td>
           Creates a composite image by reducing the size of the
-          image images and arranging them in a grid on the
+          input images and arranging them in a grid on the
           background color or texture of your choice. There are
           many configuration options. For example, you can specify
           the number of columns and rows, the distance between
           images, and include a label with each small image
-          (<i>tile</i>).
+          (called a <i>tile</i>).
           <p>All of <var>montage</var>'s configuration options are
           specified by assigning values to attribute methods in a
           block associated with the method call.</p>
@@ -965,7 +965,7 @@ self.compose = Magick::AtopCompositeOp
             <tr>
               <td valign="top"><i>filename=</i></td>
               <td>The filename of the composite image.
-              (<i>Note:</i> Currently RubyMagick does not use this
+              (<i>Note:</i> Currently RMagick does not use this
               value.)</td>
             </tr>
             <tr>
@@ -1147,7 +1147,7 @@ img[2]['Label'] = "Mom's Birthday"
       </tr>
       <tr>
         <td valign="top">Returns</td>
-        <td>An image containing as many images as were necessary to
+        <td>An imagelist containing as many images as were necessary to
         tile all the images in the original image.</td>
       </tr>
       <tr>

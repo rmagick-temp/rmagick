@@ -1020,11 +1020,30 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     "ex/images/spin.gif" alt="" class="spin" style="left: 224px;"
     title="Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><a href="image2.html#frame">frame</a>
+    <h4>See also</h4><a href="#border_bang">border!</a>, <a href=
+    "image2.html#frame">frame</a>
 
     <h4>Magick API</h4>
 
     <p>BorderImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="border_bang">border</h3>
+
+    <p><span class="arg">image</span>.border!(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class="arg">color</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#border">border</a></p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2015,12 +2034,14 @@ f.color_reset!(red)
     "Click the image to see the example script" /></a></p>
 
     <h4>See also</h4>
+
     <p><a href="#composite_bang">composite!</a></p>
 
     <h4>Magick API</h4>
 
     <p>CompositeImage</p>
   </div>
+
   <div class="sig">
     <h3 id="composite_bang">composite!</h3>
 
@@ -2035,14 +2056,16 @@ f.color_reset!(red)
     <span class="arg">image</span>.composite!(<span class=
     "arg">img</span>, <span class="arg">gravity</span>,
     <span class="arg">x</span>, <span class="arg">y</span>,
-    <span class="arg">composite_op</span>) -&gt;
-    <em>self</em></p>
+    <span class="arg">composite_op</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
+
     <p>In-place form of <a href="#composite">composite</a>.</p>
+
     <h4>Returns</h4>
+
     <p>self</p>
   </div>
 

@@ -65,7 +65,7 @@
 
   <h3><a name="formats">Image formats and filenames</a></h3>
 
-  <p>&times;Magick supports over 87 major <a href=
+  <p>&times;Magick supports over 89 major <a href=
   "http://www.imagemagick.org/www/formats.html">image
   formats</a>.</p>
 
@@ -97,7 +97,7 @@
     usually <code>/usr/X11R6/lib/X11/rgb.txt</code>.)</li>
 
     <li>an <a href=
-    "http://www.w3.org/TR/SVG/types.html#DataTypeColor">SVG color
+    "http://www.w3.org/TR/SVG/types.html#ColorKeywords">SVG color
     name</a> (similar to the X color names), or</li>
 
     <li>a hex digit string in one of the following forms:
@@ -176,8 +176,8 @@
   converts a color name to a pixel. There are two methods to
   convert a pixel to a color name. The <a href=
   "struct.html#Pixel.to_color">Pixel#to_color</a> method requires
-  that you specify whether the alpha channel is used, the depth (8
-  or 16) and the color standard to use. The <a href=
+  that you specify whether the alpha (opacity) channel is used, the
+  depth (8 or 16) and the color standard to use. The <a href=
   "image.html#Image.to_color">Image#to_color</a> method uses the
   image's depth and <a href="imageattrs.html#Image.matte">matte</a>
   attributes. If <var>matte</var> is false the opacity value is
@@ -296,8 +296,7 @@
   create a image in the gradient format that is 100 pixels wide and
   200 pixels high, use:</p>
   <pre class="example">
-i = Image.new
-i.read("gradient:red-blue") { self.size = "100x200" }
+i = Image.read("gradient:red-blue") { self.size = "100x200" }
 </pre>
 
   <p>See <a href="demo.rb.html" target="_blank">demo.rb</a> for

@@ -186,9 +186,9 @@
 
   <p>Within the block you can do whatever you want with the new
   values. Typically you'll call one of the resize methods mentioned
-  in the previous section. Return the resized image. The return
-  value from <var>change_geometry</var> is the return value from
-  the block.</p>
+  in the previous section and make the resized image the return
+  value from the block. The <var>change_geometry</var> method then
+  returns that value to its caller.</p>
 
   <h3>Converting a color image to grayscale</h3><a name=
   "gray">Use</a> the <a href=
@@ -204,12 +204,12 @@
 
   <p><a name="shadow">Here's</a> one way to make a drop shadow
   behind text. Make the shadow first by drawing the text in a light
-  gray color. Use the <a href=
-  "image.html#Image.gaussian_blur"><var>gaussian_blur</var></a>
-  method to blur the text, then position the shadow slightly to the
-  right and down from where the real text will be. Then draw the
-  text again in whatever color you want. <i>(Click the image to see
-  the Ruby program that created it.)</i></p>
+  gray color. Position the text slightly to the right and down from
+  where the real text will be. Then use the <a href=
+  "image.html#Image.blur_image"><var>blur_image</var></a> method to
+  make the shadow by blurring the text. Finally, draw the text
+  again in whatever color you want. <i>(Click the image to see the
+  Ruby program that created it.)</i></p>
 
   <div align="center">
     <a href="drop_shadow.rb.html" target="_blank"><img src=

@@ -80,11 +80,11 @@ can be difficult to configure. Follow these tips to minimize the amount
 of time you'll spend and your frustration level.
 
 Do /not/ simply type ./configure and expect the defaults to be correct
-for you. Through version 5.5.7, by default, ImageMagick is configured to
-use a color depth ("quantum-depth") of 16. Unless you have very special
-image processing needs you should use the --with-quantum-depth=8 option.
-This will cause ImageMagick run faster and use half as much memory. If
-you need to use 16 as the color depth, you'll know it.
+for you. By default, ImageMagick is configured to use a color depth
+("quantum-depth") of 16. Unless you have very special image processing
+needs you should use the --with-quantum-depth=8 option. This will cause
+ImageMagick run faster and use half as much memory. If you need to use
+16 as the color depth, you'll know it.
 
 GraphicsMagick defaults to a color depth of 8, so you need do nothing.
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.67 2004/08/21 14:06:28 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.68 2004/11/22 01:28:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -434,6 +434,47 @@ Image_border_color_eq(VALUE self, VALUE color)
 }
 
 DEF_ATTR_ACCESSOR(Image, blur, dbl)
+
+
+/*
+ *  Method:     Image#blur_channel(channel, radius, sigma)
+ *  Purpose:    Call BlurImageChannel
+*/
+VALUE
+Image_blur_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_BLURIMAGECHANNEL)
+     Image *image, *new_image;
+     ExceptionInfo exception;
+     ChannelType channel;
+     double radius = 0.0, sigma = 1.0;
+
+     Data_Get_Struct(self, Image, image);
+
+     switch (argc)
+     {
+         case 3:
+             sigma = NUM2DBL(argv[2]);
+         case 2:
+             radius = NUM2DBL(argv[1]);
+         case 1:
+             VALUE_TO_ENUM(argv[0], channel, ChannelType);
+             break;
+         default:
+             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
+             break;
+     }
+
+     GetExceptionInfo(&exception);
+     new_image = BlurImageChannel(image, channel, radius, sigma, &exception);
+     HANDLE_ERROR
+
+     return rm_image_new(new_image);
+#else
+     rm_not_implemented();
+     return (VALUE)0;
+#endif
+}
 
 /*
     Method:     Image#blur_image(radius=0.0, sigma=1.0)
@@ -6170,6 +6211,39 @@ scale_image(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
 
 DEF_ATTR_READER(Image, scene, ulong)
 
+
+/*
+ *  Method:     Image#set_channel_depth(channel, depth)
+ *  Purpose:    Call SetImageChannelDepth
+*/
+VALUE
+Image_set_channel_depth(VALUE self, VALUE channel, VALUE depth)
+{
+#if defined(HAVE_SETIMAGECHANNELDEPTH)
+     Image *image;
+     ChannelType channel_type;
+     unsigned long channel_depth;
+     MagickBooleanType okay;
+
+     rm_check_frozen(self);
+     Data_Get_Struct(self, Image, image);
+     VALUE_TO_ENUM(channel, channel_type, ChannelType);
+     channel_depth = NUM2ULONG(depth);
+
+     okay = SetImageChannelDepth(image, channel_type, channel_depth);
+     if (!okay)
+     {
+          rb_raise(rb_eRuntimeError, "SetImageChannelDepth failed.");
+     }
+
+     return self;
+#else
+     rm_not_implemented();
+     return (VALUE)0;
+#endif
+}
+
+
 /*
     Method:     Image#segment(colorspace=RGBColorspace,
                                    cluster_threshold=1.0,
@@ -7130,6 +7204,7 @@ Image_to_blob(VALUE self)
     Image *image;
     Info *info;
     volatile VALUE info_obj;
+    volatile VALUE blob_str;
     void *blob = NULL;
     size_t length = 2048;       // Do what Magick++ does
     ExceptionInfo exception;
@@ -7169,7 +7244,12 @@ Image_to_blob(VALUE self)
     {
         return Qnil;
     }
-    return rb_str_new(blob, length);
+
+    blob_str = rb_str_new(blob, length);
+
+    magick_free((void*)blob);
+
+    return blob_str;
 }
 
 /*

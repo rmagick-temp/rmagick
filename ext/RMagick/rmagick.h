@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.62 2004/10/05 23:04:17 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.63 2004/11/22 01:28:15 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -634,6 +634,7 @@ extern VALUE Image_properties(VALUE);
 extern VALUE Image_bilevel_channel(int, VALUE *, VALUE);
 extern VALUE Image_black_threshold(int, VALUE *, VALUE);
 extern VALUE Image_blur_image(int, VALUE *, VALUE);
+extern VALUE Image_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_border(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_border_bang(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_capture(int, VALUE *, VALUE);
@@ -740,6 +741,7 @@ extern VALUE Image_sample_bang(int, VALUE *, VALUE);
 extern VALUE Image_scale(int, VALUE *, VALUE);
 extern VALUE Image_scale_bang(int, VALUE *, VALUE);
 extern VALUE Image_segment(int, VALUE *, VALUE);
+extern VALUE Image_set_channel_depth(VALUE, VALUE, VALUE);
 extern VALUE Image_shade(int, VALUE *, VALUE);
 extern VALUE Image_sharpen(int, VALUE *, VALUE);
 extern VALUE Image_shave(VALUE, VALUE, VALUE);

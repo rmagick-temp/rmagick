@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -103,6 +103,8 @@
           <li><a href="#bilevel_channel">bilevel_channel</a></li>
 
           <li><a href="#black_threshold">black_threshold</a></li>
+
+          <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
 
@@ -902,6 +904,55 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
   </div>
 
   <div class="sig">
+    <h3 id="blur_channel">blur_channel</h3>
+
+    <p><span class="arg">image</span>.blur_channel(<span class=
+    "arg">channel</span>, <span class="arg">radius=0.0</span>,
+    <span class="arg">sigma=1.0</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Blurs the specified channel. <span class="imquote">We
+    convolve the image with a Gaussian operator of the given radius
+    and standard deviation (sigma) . The
+    <code>blur_channel</code> method differs from <a href=
+    "image2.html#gaussian_blur_channel">gaussian_blur_channel</a>
+    in that it uses a separable kernel which is faster but
+    mathematically equivalent to the non-separable
+    kernel.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel</dt>
+
+      <dd>A <a href="constants.html#ChannelType">ChannelType</a>
+      value</dd>
+    </dl>
+
+    <p class="imquote">For reasonable results, the <span class=
+    "arg">radius</span> should be larger than <span class=
+    "arg">sigma</span>. Use a radius of 0 and
+    <code>blur_channel</code> selects a suitable radius for
+    you.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image2.html#gaussian_blur_channel">gaussian_blur_channel</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>BlurImageChannel (available in ImageMagick 6.0.1)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="blur_image">blur_image</h3>
 
     <p><span class="arg">image</span>.blur_image(<span class=
@@ -1269,6 +1320,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Returns</h4>
 
     <p>The maximum depth</p>
+
+    <h4>See also</h4><a href=
+    "image3.html#set_channel_depth">set_channel_depth</a>
 
     <h4>Magick API</h4>
 

@@ -91,6 +91,7 @@ AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram]
 AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
 AC_CHECK_FUNCS([CompareImageChannels PreviewImage SetImageColorspace])
+AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel])
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.
@@ -105,7 +106,30 @@ AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
 AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
-AC_CHECK_FUNCS([GetColorInfoList GetTypeInfoList GetMagickInfoList])
+
+# We need to be able to query these symbols later in the configure script, so set a shell
+# variable here as well as defining symbols.
+AC_CHECK_FUNC(GetColorInfoList,
+              rm_have_getcolorinfolist=yes,
+              rm_have_getcolorinfolist=no)
+if test "$rm_have_getcolorinfolist" = yes; then
+   AC_DEFINE(HAVE_GETCOLORINFOLIST)
+fi
+
+AC_CHECK_FUNC(GetTypeInfoList,
+              rm_have_gettypeinfolist=yes,
+              rm_have_gettypeinfolist=no)
+if test "$rm_have_gettypeinfolist" = yes; then
+   AC_DEFINE(HAVE_GETTYPEINFOLIST)
+fi
+
+AC_CHECK_FUNC(GetMagickInfoList,
+              rm_have_getmagickinfolist=yes,
+              rm_have_getmagickinfolist=no)
+if test "$rm_have_getmagickinfolist" = yes; then
+   AC_DEFINE(HAVE_GETMAGICKINFOLIST)
+fi
+
 AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage])
 
@@ -328,6 +352,60 @@ if test "$rm_have_getimagequantumdepth" = yes; then
 
    if test "$rm_cv_args_get_image_quantum_depth" = yes; then
       AC_DEFINE(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+   fi
+fi
+
+if test "$rm_have_getcolorinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetColorInfoList
+   AC_CACHE_CHECK(if GetColorInfoList has only 2 arguments, rm_cv_args_get_color_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetColorInfoList(pattern, &ncolors)],
+        rm_cv_args_get_color_info_list='yes',
+        rm_cv_args_get_color_info_list='no')])
+
+   if test "$rm_cv_args_get_color_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETCOLORINFOLIST)
+   fi
+fi
+
+if test "$rm_have_gettypeinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetTypeInfoList
+   AC_CACHE_CHECK(if GetTypeInfoList has only 2 arguments, rm_cv_args_get_type_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetTypeInfoList(pattern, &ncolors)],
+        rm_cv_args_get_type_info_list='yes',
+        rm_cv_args_get_type_info_list='no')])
+
+   if test "$rm_cv_args_get_type_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETTYPEINFOLIST)
+   fi
+fi
+
+if test "$rm_have_getmagickinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetMagickInfoList
+   AC_CACHE_CHECK(if GetMagickInfoList has only 2 arguments, rm_cv_args_get_magick_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
+        rm_cv_args_get_magick_info_list='yes',
+        rm_cv_args_get_magick_info_list='no')])
+
+   if test "$rm_cv_args_get_magick_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETMAGICKINFOLIST)
    fi
 fi
 

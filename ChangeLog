@@ -1,5 +1,12 @@
 RMagick 1.7.0
     o Added splice method to Image class (ImageMagick 6.0.0)
+    o Added set_channel_depth to Image class (ImageMagick 6.0.0)
+    o Added blur_channel to Image class (ImageMagick 6.0.1)
+    o Fixed bug #1048, memory leak in Image#to_blob
+
+RMagick 1.6.1
+    o Changed to match changes in ImageMagick 6.1.4 API
+    o Fixed bug #950
 
 RMagick 1.6.0
     o Added posterize, gaussian_blur_channel, convolve_channel methods to Image class

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 2)</title>
   <meta http-equiv="Content-Type" content=
@@ -13,9 +13,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <script type="text/javascript">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
   //<![CDATA[
     <!-- Pre-load this image so that the browser knows how big it is. -->
     <!-- Begin
@@ -23,7 +23,7 @@
     flower_hat.src = "ex/images/Flower_Hat.jpg";
     // End -->
   //]]>
-  </script>
+</script>
 </head>
 
 <body>
@@ -482,15 +482,15 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script" name="frameless" /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img class="hide"
-         id="framed" onmouseover=
-         "this.style.display='none';frameless.style.display='';"
-         src="ex/frame.jpg" alt="frame example" /></a> <img src=
-         "ex/images/spin.gif" alt="" style="margin-bottom: 280px"
-         title=
-         "Mouse over the example to see the original image" /></p>
+    id="framed" onmouseover=
+    "this.style.display='none';frameless.style.display='';" src=
+    "ex/frame.jpg" alt="frame example" name="framed" /></a>
+    <img src="ex/images/spin.gif" alt="" style=
+    "margin-bottom: 280px" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="image1.html#border">border</a>
 
@@ -679,6 +679,10 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Returns</h4>
 
     <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#blur_channel">blur_channel</a></p>
 
     <h4>Magick API</h4>GaussianBlurImageChannel (available in
     ImageMagick 6.0.0)

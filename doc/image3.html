@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 3)</title>
   <meta http-equiv="Content-Type" content=
@@ -113,6 +113,9 @@
           <li><a href="#scale_bang">scale!</a></li>
 
           <li><a href="#segment">segment</a></li>
+
+          <li><a href=
+          "#set_channel_depth">set_channel_depth</a></li>
 
           <li><a href="#shade">shade</a></li>
 
@@ -937,12 +940,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script" name="notrotated" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example" /></a>
+    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1182,6 +1185,46 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="set_channel_depth">set_channel_depth</h3>
+
+    <p><span class=
+    "arg">image.</span>set_channel_depth(<span class="arg">channel</span>,
+    <span class="arg">depth</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Sets the depth of the image channel.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel</dt>
+
+      <dd>A <a href="constants.html#ChannelType">ChannelType</a>
+      value</dd>
+
+      <dt>depth</dt>
+
+      <dd>The desired depth (must be no greater than <a href=
+      "constants.html">QuantumDepth</a>)</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href=
+    "image1.html#channel_depth">channel_depth</a>
+
+    <h4>Magick API</h4>
+
+    <p>SetImageChannelDepth (available in ImageMagick 6.0.0,
+    GraphicsMagick 1.1)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="shade">shade</h3>
 
     <p><span class="arg">image</span>.shade(<span class=
@@ -1378,13 +1421,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script" /> <!--
+    "Click to see the example script" name="noshear" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example" name=
+    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1487,12 +1530,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script" name="nosplice" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example" /></a>
+    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2517,13 +2560,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" />
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example" /></a> <img src=
+    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

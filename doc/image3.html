@@ -162,6 +162,8 @@
 
           <li><a href="#unsharp_mask">unsharp_mask</a></li>
 
+          <li><a href="#view">view</a></li>
+
           <li><a href="#wave">wave</a></li>
 
           <li><a href="#white_threshold">white_threshold</a></li>
@@ -463,14 +465,14 @@
     <p><span class="imquote">Performs the requested integer
     arithmetic operation on the selected channels of the image over
     the specified region.</span> This method allows simple
-    arithmetic operations on the component values of all pixels
-    within an image or region within an image. Of course, you could
-    also do this in Ruby using <a href=
+    arithmetic operations on the component values of all pixels in
+    an image or a region within an image. Of course, you could also
+    do this in Ruby using <a href=
     "image2.html#get_pixels">get_pixels</a> and <a href=
     "#store_pixels">store_pixels</a>, but
-    <code>quantum_operator</code> will be faster since it does not
-    need to convert the pixels from C to Ruby, especially for large
-    numbers of pixels.</p>
+    <code>quantum_operator</code> will be faster, especially for
+    large numbers of pixels, since it does not need to convert the
+    pixels from C to Ruby.</p>
 
     <h4>Arguments</h4>
 
@@ -926,16 +928,16 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                                This img tag displays the original image when the mouse is over.
-                                Use CSS to add padding around the image to make it occupy the
-                                same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+                                        This img tag displays the original image when the mouse is over.
+                                        Use CSS to add padding around the image to make it occupy the
+                                        same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
          id="notrotated" onmouseout=
          "this.style.display='none'; rotated.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="rotate example" title=
          "Click to see the example script" /><!--
-                                  This img tag displays the rotated image.
-                                  --><img class="hide" id="rotated"
-    onmouseover=
+                                          This img tag displays the rotated image.
+                                          --><img class="hide" id=
+    "rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
     "ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" style="left:322px;"
@@ -1367,15 +1369,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                                  This img tag displays the original image when the mouse is over
-                                  --><img style=
+                                          This img tag displays the original image when the mouse is over
+                                          --><img style=
     "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                                   This img tag displays the sheared image when the mouse is not over
-                                   -->
+                                           This img tag displays the sheared image when the mouse is not over
+                                           -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -1643,10 +1645,10 @@ img.properties &raquo;
     <p>Also see the example for <a href=
     "image2.html#get_pixels"><code>get_pixels</code></a>.</p>
 
-    <h4>See also</h4><a href=
-    "image2.html#get_pixels">get_pixels</a>
+    <p>See also <a href="image2.html#get_pixels">get_pixels</a>,
+    <a href="#view">view</a></p>
 
-    <h4>Magick API</h4>SetImagePixels, SyncImagePixels
+    <h4>Magick API</h4><p>SetImagePixels, SyncImagePixels</p>
   </div>
 
   <div class="sig">
@@ -2211,8 +2213,8 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-                          This img tag displays the framed image when the mouse is not over
-                          --><img class="hide" id="waved"
+                                  This img tag displays the framed image when the mouse is not over
+                                  --><img class="hide" id="waved"
     onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
     "ex/wave.jpg" alt="wave example" /></a> <img src=
@@ -2222,6 +2224,112 @@ img.to_color(pixel)
     <h4>Magick API</h4>
 
     <p>WaveImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="view">view</h3>
+
+    <p><span class="arg">image</span>.view(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">width</span>, <span class="arg">height</span>) -&gt;
+    <em>aView</em><br />
+    <span class="arg">image</span>.view(<span class="arg">x</span>,
+    <span class="arg">y</span>, <span class="arg">width</span>,
+    <span class="arg">height</span>) {&nbsp;|view|
+    <em>block</em>&nbsp;} -&gt; <em>nil</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4><code>View</code> is a convenience method
+    that supports getting and setting individual image pixels by
+    <code>[i][j]</code> coordinates. With no associated block,
+    <code>view</code> returns an <a href=
+    "struct.html#view">Image::View</a> object. If the optional code
+    block is given, it will be passed the <code>Image::View</code>
+    object as an argument. The <a href=
+    "struct.html#view_sync">sync</a> method will be called
+    automatically when the block terminates. In this case,
+    <code>view</code> returns <code>nil</code>.
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The offset of the view from the top-left corner of the
+      image. Within the view, pixels are relative to the top-left
+      corner of the view, <em>not</em> the image.</dd>
+
+      <dt>width, height</dt>
+
+      <dd>The width and height of the view. The view may not extend
+      past the boundaries of <span class="arg">image</span>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>If the optional code block is present, <code>view</code>
+    returns <code>nil</code>. If it is not present,
+    <code>view</code> returns an <code>Image::View</code>
+    object.</p>
+
+    <h4>See</h4>
+
+    <p><a href="struct.html#view">Image::View</a></p>
+
+    <h4>Examples</h4>
+
+    <p>The example image below has been scaled 500% for
+    clarity.</p>
+
+    <p><a href="javascript:popup('viewex.rb.html')"><img src=
+    "ex/viewex.gif" title="Click to see the example script" alt=
+    "view example" /></a></p>
+    <pre>
+img = Image.new(40, 40) {self.background_color = 'lightcyan2'}
+
+# The view is 400 pixels square, starting at
+# column 10, row 5 from the top of the image.
+img.view( 10, 5, 20, 20) do |view|
+
+    # Set all the pixels in the view to green.
+    view[][] = Pixel.new(0, MaxRGB)
+
+    # Change the top and bottom rows to red.
+    view[0][] = 'red'
+    view[-1,1][] = 'red'
+
+    # Set 6 pixels to black.
+    view[[13,15]][[12,14,16]] = 'black'
+
+    # Set 1 pixel to yellow.
+    view[5][7] = 'yellow'
+
+    # Change the green channel of all the
+    # pixels on row 8.
+    view[8][].green = MaxRGB/2
+
+    # Change the blue channel of 8 pixels
+    # on column 10.
+    view[4,8][10].blue = MaxRGB
+end
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#pixel_color">pixel_color</a>, <a href=
+    "image2.html#get_pixels">get_pixels</a>, <a href=
+    "#store_pixels">store_pixels</a></p>
+
+    <h4>Notes</h4>
+
+    <p>The <code>view</code> method introduces a relatively high
+    level of overhead to pixel manipulation compared to methods
+    that use the &times;Magick API to identify and change pixels. I
+    recommend that you use <code>view</code> only when the number
+    of pixels identified in the view is fairly small (a few hundred
+    to a few thousand, depending on the speed of your computer) and
+    there is no other way to get the effect you want.</p>
   </div>
 
   <div class="sig">

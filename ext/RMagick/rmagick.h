@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.23 2003/10/09 22:33:03 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.24 2003/10/11 15:29:57 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -720,7 +720,7 @@ extern void    Font_to_TypeInfo(TypeInfo *, VALUE);
 extern void    TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
 extern VALUE   Font_from_TypeInfo(TypeInfo *);
 extern VALUE   TypeMetric_to_s(VALUE);
-extern VALUE   TypeMetric_to_Struct(TypeMetric *);
+extern VALUE   TypeMetric_from_TypeMetric(TypeMetric *);
 
 extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.3 2003/10/06 00:00:57 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.4 2003/10/11 15:29:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -666,7 +666,7 @@ Draw_get_type_metrics(
         rb_warning("RMagick: get_type_metrics failed");
         return Qnil;
     }
-    return TypeMetric_to_Struct(&metrics);
+    return TypeMetric_from_TypeMetric(&metrics);
 }
 
 /*

@@ -13,7 +13,7 @@ circle.fill_opacity(0)
 circle.circle(50,50,55,55)
 circle.draw(f)
 
-f = f.border(1,1,'black')
+f.border!(1,1,'black')
 #f.display
 f.write('color_point.gif')
 exit

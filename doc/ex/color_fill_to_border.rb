@@ -7,7 +7,7 @@ before = Magick::Image.new(200,200) {
     self.background_color = 'white'
     self.border_color = 'black'
     }
-before = before.border(2,2,'black')
+before.border!(2,2,'black')
 
 circle = Magick::Draw.new
 circle.fill('transparent')

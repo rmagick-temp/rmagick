@@ -13,7 +13,7 @@ img2 = img.channel_threshold(Magick::MaxRGB*0.75,
 img2['Label'] = "channel_threshold(\nMagick::MaxRGB*0.75,\nMagick::MaxRGB*0.50)"
 
 img3 = img.channel_threshold(Magick::MaxRGB*0.50,
-                	         Magick::MaxRGB*0.25,
+                             Magick::MaxRGB*0.25,
                              Magick::MaxRGB*0.25)
 img3['Label'] = 'channel_threshold(\nMagick::MaxRGB*0.50,\nMagick::MaxRGB*0.25,\nMagick::MaxRGB*0.25)'
 
@@ -22,12 +22,13 @@ imgs = Magick::ImageList.new
 imgs << img2 << img3
 
 montage = imgs.montage {
+    self.background_color = "white"
     self.geometry = "#{img.columns}x#{img.rows}+10+10"
     self.tile = "2x1"
     }
 
 # Give the montage a black border
-montage = montage.border(1,1,'black')
+montage.border!(1,1,'black')
 
 #montage.display
 montage.write('channel_threshold.jpg')

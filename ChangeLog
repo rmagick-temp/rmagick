@@ -9,7 +9,8 @@ RMagick 1.4.0
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added fcmp, intensity to Pixel class
     o Added Version_long constant
-    o Added TintImage (IM 5.5.8)
+    o Added Image#tint (IM 5.5.8)
+    o Added Image#border!
 
 RMagick 1.3.1
     o Fixed default base URI in the links to the installed xMagick doc

@@ -43,7 +43,7 @@ gc.arc(40, 50, 250,180, 0, 270)
 # Draw on the canvas
 gc.draw(i)
 
-i = i.border(1,1, "gray50")
+i.border!(1,1, "gray50")
 
 #i.display
 i.write("arc.gif")

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.21 2003/10/09 22:52:49 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.22 2003/10/31 13:10:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -402,11 +402,12 @@ Image_blur_image(int argc, VALUE *argv, VALUE self)
 
 /*
     Method:     Image#border(width, height, color)
+                Image#border!(width, height, color)
     Purpose:    surrounds the image with a border of the specified width,
                 height, and named color
 */
-VALUE
-Image_border(
+static VALUE border(
+    int bang,
     VALUE self,
     VALUE width,
     VALUE height,
@@ -429,8 +430,38 @@ Image_border(
     GetExceptionInfo(&exception);
     new_image = BorderImage(image, &rect, &exception);
     HANDLE_ERROR
+
+    if (bang)
+    {
+        new_image->border_color = old_border;
+        DATA_PTR(self) = new_image;
+        DestroyImage(image);
+        return self;
+    }
+
     image->border_color = old_border;
     return rm_image_new(new_image);
+}
+
+VALUE
+Image_border_bang(
+    VALUE self,
+    VALUE width,
+    VALUE height,
+    VALUE color)
+{
+    return border(True, self, width, height, color);
+}
+
+
+VALUE
+Image_border(
+    VALUE self,
+    VALUE width,
+    VALUE height,
+    VALUE color)
+{
+    return border(False, self, width, height, color);
 }
 
 /*

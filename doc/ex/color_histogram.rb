@@ -35,7 +35,7 @@ pixels.each { |pixel|
     start = start.succ
 }
 
-hatch = HatchFill.new("white", "gray95")                                          
+hatch = HatchFill.new("white", "gray95")
 canvas = Image.new(NUM_COLORS, HIST_HEIGHT, hatch)
 gc.draw(canvas)
 
@@ -46,9 +46,9 @@ text.annotate(canvas, 0, 0, 0, 20, "Color Frequency\nHistogram") {
     self.stroke = 'transparent'
     }
 
-canvas = canvas.border(1, 1, "white")
-canvas = canvas.border(1, 1, "black")
-canvas = canvas.border(3, 3, "white")
+canvas.border!(1, 1, "white")
+canvas.border!(1, 1, "black")
+canvas.border!(3, 3, "white")
 #canvas.display
 canvas.write("color_histogram.gif")
 

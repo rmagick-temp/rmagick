@@ -26,7 +26,7 @@ gc.text(30,35, "'20,20'")
 gc.text(230,175, "'280,180'")
 
 gc.draw(i)
-i = i.border(1,1, '#e0ffff')
+i.border!(1,1, '#e0ffff')
 #i.display
 i.write("rectangle.gif")
 exit

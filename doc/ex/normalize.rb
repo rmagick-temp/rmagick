@@ -11,7 +11,7 @@ after = before.normalize
 # Make a before-and-after composite
 after.crop!(after.columns/2, 0, after.columns/2, after.rows)
 composite = before.composite(after, Magick::EastGravity, Magick::OverCompositeOp)
-composite = composite.border(1,1,'black')
+composite.border!(1,1,'black')
 
 #composite.display
 composite.write('normalize.jpg')

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.24 2003/10/11 15:29:57 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.25 2003/10/31 13:10:32 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -541,6 +541,7 @@ extern VALUE Image_properties(VALUE);
 extern VALUE Image_black_threshold(int, VALUE *, VALUE);
 extern VALUE Image_blur_image(int, VALUE *, VALUE);
 extern VALUE Image_border(VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_border_bang(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_capture(int, VALUE *, VALUE);
 extern VALUE Image_change_geometry(VALUE, VALUE);
 extern VALUE Image_changed_q(VALUE);

@@ -65,6 +65,7 @@
                   <li><a href=
                   "#Image.blur_image">blur_image</a></li>
                   <li><a href="#Image.border">border</a></li>
+                  <li><a href="#Image.border_bang">border!</a></li>
                   <li><a href=
                   "#Image.change_geometry">change_geometry</a></li>
                   <li><a href="#Image.changed_q">changed?</a></li>
@@ -1001,6 +1002,20 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <tr>
         <td valign="top">See also</td>
         <td><a href="#Image.frame">frame</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.border_bang">border!</a></td>
+        <td><i>image</i>.border!(<i>width</i>, <i>height</i>,
+        <i>color</i>) -&gt; <i>image</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>In-place form of <a href="#Image.border">border</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=

@@ -4,7 +4,7 @@ require 'RMagick'
 # Demonstrate the Image#color_floodfill method
 
 before = Magick::Image.new(200,200) { self.background_color = 'white' }
-before = before.border(1,1,'black')
+before.border!(1,1,'black')
 
 circle = Magick::Draw.new
 circle.fill('transparent')

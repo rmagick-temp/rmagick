@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.84 2004/12/10 00:00:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.85 2004/12/12 00:19:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5184,6 +5184,13 @@ Image_pixel_color(
             old_color.opacity = OpaqueOpacity;
         }
         return Pixel_from_PixelPacket(&old_color);
+    }
+
+    // ImageMagick segfaults if the pixel location is out of bounds.
+    // Do what IM does and return the background color.
+    if (x < 0 || y < 0 || x >= image->columns || y >= image->rows)
+    {
+        return Pixel_from_PixelPacket(&image->background_color);
     }
 
     // Set the color of a pixel. Return previous color.

@@ -197,17 +197,25 @@
     <span class="example">blue background</span>.</p>
     <h3>How to get help</h3>
     If you have a question that is not answered by these pages,
+    you can post it at the <a href="http://rubyforge.org/projects/rmagick">
+    Support Request Tracker</a> or the
+    <a href="http://rubyforge.org/projects/rmagick">
+    Feature Request Tracker</a> on RubyForge, or
     email me at <a href=
-    "mailto:cyclists@nc.rr.com"><code>cyclists@nc.rr.com</code></a>.
-    
+    "mailto:rmagick at rubyforge.org"><code>rmagick at
+    rubyforge.org</code></a>.
+
     <h3><a name="bugs">Reporting bugs</a></h3>
     <p>Please report problems with RMagick installation and usage
-    to <code><a href=
-    "mailto:cyclists@nc.rr.com">cyclists@nc.rr.com</a></code>. If
+    to the <a href="http://rubyforge.org/projects/rmagick/">
+    Bug Tracker</a> at RubyForge, or email me at
+    <code><a href=
+    "mailto:rmagick at rubyforge.org">rmagick at rubyforge.org</a>
+    </code>. If
     you include "RMagick" in the subject I'll probably give your
     email top priority.</p>
-    <p>For quickest results, include the RMagick and &times;Magick
-    version numbers, along with a thorough description of the
+    <p>For quickest results, include the RMagick, &times;Magick
+    and Ruby version numbers, along with a thorough description of the
     problem.<sup><a href="#truth">1</a></sup> RMagick will tell you
     both its version number and &times;Magick's version number.
     Simply bring up irb and print the <code>Magick::Version</code>
@@ -217,7 +225,7 @@
 irb -r RMagick
 p Magick::Version &raquo; "RMagick 1.3.0"
 p Magick::Magick_version &raquo; "ImageMagick 5.5.7 05/23/03 Q8 http://www.imagemagick.org"
-p Magick::Magick_version &raquo; GraphicsMagick 1.0 05/05/03 Q8 http://www.GraphicsMagick.org/"
+p Magick::Magick_version &raquo; "GraphicsMagick 1.0 05/05/03 Q8 http://www.GraphicsMagick.org/"
 </pre>
     <p>It will help a lot if you supply a small Ruby program that
     reproduces the problem. (Don't forget to include any input

@@ -6,7 +6,7 @@ require 'mkmf'
 # Pass along Ruby's version number
 VERSION_NUMBER = '0x'+RUBY_VERSION.tr('.','')
 
-$CFLAGS = "-std=gnu99 -Wall @CFLAGS@"
+$CFLAGS = "-std=gnu99 -Wall -g @CFLAGS@"
 $CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} @CPPFLAGS@"
 
 if RUBY_VERSION >= '1.8.0'

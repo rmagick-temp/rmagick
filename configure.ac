@@ -420,10 +420,10 @@ if test "x$prefix" != xNONE; then
   RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --prefix=$prefix"
 fi
 if test `eval echo $bindir` != NONE/bin; then
-  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --bindir=`eval echo $bindir`"
+  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --bin-dir=`eval echo $bindir`"
 fi
 if test `eval echo $datadir` != ${prefix}/share; then
-  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --datadir=`eval echo $datadir`"
+  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --data-dir=`eval echo $datadir`"
 fi
 
 AC_ARG_WITH(doc-dir,

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.19 2004/04/03 15:31:23 rmagick Exp $
+# $Id: RMagick.rb,v 1.20 2004/04/09 20:53:47 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -765,7 +765,7 @@ class Image
         # Get update from Rows - if @dirty ever becomes
         # true, don't change it back to false!
         def update(rows)
-            @dirty ||= true
+            @dirty = true
             rows.delete_observer(self)      # No need to tell us again.
             nil
         end
@@ -784,7 +784,7 @@ class Image
                     def #{c}=(v)
                         each { |p| p.#{c} = v }
                         changed
-                        notify_observers(true)
+                        notify_observers(self)
                         nil
                     end
                 END_EVAL

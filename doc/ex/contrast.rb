@@ -11,7 +11,7 @@ legend = Magick::Draw.new
 legend.font_family = 'Helvetica'
 legend.stroke = 'transparent'
 legend.pointsize = 12
-legend.gravity = Magick::SouthGravity
+legend.gravity = Magick::SouthEastGravity
 
 # Add 3 images, each one having slightly less contrast
 f = 1
@@ -19,12 +19,12 @@ f = 1
     img << img.contrast
 
     # Annotate the previous image
-    legend.annotate(img[f-1], 0,0,10,20, f.to_s)
+    legend.annotate(img[f-1], 0,0,7,10, f.to_s)
     f += 1
     }
 
 # Annotate the last image
-legend.annotate(img, 0,0,10,20, f.to_s)
+legend.annotate(img, 0,0,7,10, f.to_s)
 
 # Montage into a single image
 imgs = img.montage {

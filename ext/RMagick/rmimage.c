@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.94 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.95 2005/04/02 20:49:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1381,11 +1381,15 @@ Image_color_profile_eq(VALUE self, VALUE profile)
 
     if (profile == Qnil)
     {
+#if defined(HAVE_NEW_REMOVEIMAGEPROFILE)
+        (void)RemoveImageProfile(image, "icc");
+#else
         str_info = RemoveImageProfile(image, "icc");
         if(str_info)
         {
             DestroyStringInfo(str_info);
         }
+#endif
     }
     else
     {
@@ -4011,11 +4015,15 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
 
     if (profile == Qnil)
     {
+#if defined(HAVE_NEW_REMOVEIMAGEPROFILE)
+        (void)RemoveImageProfile(image, "iptc");
+#else
         str_info = RemoveImageProfile(image, "iptc");
         if(str_info)
         {
             DestroyStringInfo(str_info);
         }
+#endif
     }
     else
     {

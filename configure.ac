@@ -86,7 +86,7 @@ AC_CHECK_FUNCS([CompareImageChannels GetImageQuantumDepth PreviewImage])
 AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
 AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
-AC_CHECK_FUNCS([QuantumOperatorRegionImage])
+AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
@@ -235,40 +235,6 @@ fi
 # Where is ****Magick installed?
 MAGICKPREFIX=`${MAGICKCONFIG} --prefix`
 
-AC_CACHE_CHECK(for documentation base URI, rm_cv_path_doc_base_uri,
-  [rm_cv_path_doc_base_uri=''
-  # Look for ImageMagick.html.
-  for docroot in $MAGICKPREFIX/share/$MAGICKNAME*
-    do
-      if test -f "$docroot/$MAGICKNAME.html"; then
-        rm_cv_path_doc_base_uri=file://${docroot}
-        break 1
-      fi
-    done
-    # In IM 5.5.7 and later, and GM 1.0, there is no ImageMagick.html file.
-    # Look for www directory.
-    if test "${rm_cv_path_doc_base_uri}x" = 'x'; then
-      for docroot in $MAGICKPREFIX/share/$MAGICKNAME*
-        do
-        if test -d "$docroot/www"; then
-          rm_cv_path_doc_base_uri="file://${docroot}"
-          break 1
-        fi
-        done
-    fi
-    # Give up and use the default.
-    if test "${rm_cv_path_doc_base_uri}x" = 'x'; then
-      case "$MAGICKNAME" in
-        ImageMagick )
-          rm_cv_path_doc_base_uri=http://www.imagemagick.org
-          ;;
-        GraphicsMagick )
-          rm_cv_path_doc_base_uri=http://www.graphicsmagick.org
-          ;;
-      esac
-    fi
-  ])
-
 # Options to pass to ruby config step
 
 RUBY_CONFIG_OPTS=''
@@ -336,11 +302,9 @@ AC_ARG_ENABLE(allow-example-errors,
     AC_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [--disable-allow-example-errors]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --allow-example-errors"], )
 
-MAGICKBASEURI="$rm_cv_path_doc_base_uri"
 
 RUBY_VERSION_STRING=`$RUBY --version`
 AC_DEFINE_UNQUOTED(RUBY_VERSION_STRING, "$RUBY_VERSION_STRING")
-AC_SUBST(MAGICKBASEURI)
 AC_SUBST(RUBY)
 AC_SUBST(RUBY_CONFIG_OPTS)
 

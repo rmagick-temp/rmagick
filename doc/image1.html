@@ -1253,8 +1253,11 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>[channel [, channel...]]</dt>
 
       <dd>Zero or more <a href=
-      "constants.html#ChannelType">ChannelType</a> constants. If no
-      arguments are specified, the default is all channels.</dd>
+      "constants.html#ChannelType">ChannelType</a> values. If no
+      arguments are specified, the default is all channels.
+      <em>GraphicsMagick users note:</em> Specify exactly one
+      channel. The <code>AllChannels</code> value is not
+      supported.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1264,7 +1267,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <h4>Magick API</h4>
 
-    <p>GetImageChannelExtrema (available in ImageMagick 6.0.0)</p>
+    <p>GetImageChannelExtrema (available in ImageMagick 6.0.0),
+    GetImageStatistics (available in GraphicsMagick 1.1)</p>
   </div>
 
   <div class="sig">
@@ -1287,8 +1291,11 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>[channel [, channel...]]</dt>
 
       <dd>Zero or more <a href=
-      "constants.html#ChannelType">ChannelType</a> constants. If no
-      arguments are specified, the default is all channels.</dd>
+      "constants.html#ChannelType">ChannelType</a> values. If no
+      arguments are specified, the default is all channels.
+      <em>GraphicsMagick users note:</em> Specify exactly one
+      channel. The <code>AllChannels</code> value is not
+      supported.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1298,7 +1305,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <h4>Magick API</h4>
 
-    <p>GetImageChannelMean (available in ImageMagick 6.0.0)</p>
+    <p>GetImageChannelMean (available in ImageMagick 6.0.0),
+    GetImageStatistics (available in GraphicsMagick 1.1)</p>
   </div>
 
   <div class="sig">

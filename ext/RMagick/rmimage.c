@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.49 2004/04/02 23:52:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.50 2004/04/04 00:06:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -724,7 +724,7 @@ VALUE Image_channel_compare(
 
     Image *image, *r_image, *difference_image;
     double distortion;
-    VALUE ary;
+    volatile VALUE ary;
     MetricType metric_type;
     ChannelType channel_type;
     ExceptionInfo exception;
@@ -822,11 +822,16 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
     Method:     Image#channel_extrema(channel=AllChannels)
     Purpose:    Returns an array [min, max] where 'min' and 'max'
                 are the minimum and maximum values of all channels.
+    Notes:      GM's implementation is very different from ImageMagick.
+                This method follows the IM API very closely and then
+                shoehorn's the GM API to more-or-less fit. Note that
+                IM allows you to specify more than one channel argument.
+                GM does not.
 */
 VALUE
 Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)    // ImageMagick 6.0.0
     Image *image;
     ChannelType channel_type = UndefinedChannel, type;
     ExceptionInfo exception;
@@ -866,6 +871,73 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 
     return ary;
 
+#elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
+    Image *image;
+    ChannelType channel_type;
+    ImageStatistics stats;
+    ExceptionInfo exception;
+    volatile VALUE ary;
+    volatile VALUE type_name;
+    MagickPassFail okay;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick requires at least one channel argument.");
+    }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+    VALUE_TO_ENUM(argv[0], channel_type, ChannelType);
+    if (channel_type == AllChannels)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    okay = GetImageStatistics(image, &stats, &exception);
+    if (okay == MagickFail)
+    {
+        rb_raise(rb_eRuntimeError, "GetImageStatistics failed.");
+    }
+
+    ary = rb_ary_new2(2);
+    switch(channel_type)
+    {
+        case RedChannel:
+        case CyanChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.red.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.red.maximum)));
+            break;
+        case GreenChannel:
+        case MagentaChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.green.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.green.maximum)));
+            break;
+        case BlueChannel:
+        case YellowChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.blue.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.blue.maximum)));
+            break;
+        case OpacityChannel:
+        case BlackChannel:
+        case MatteChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.opacity.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.opacity.maximum)));
+            break;
+        default:
+            type_name = Enum_to_s(argv[0]);
+            rb_raise(rb_eArgError, "unsupported channel type: %s",
+                    STRING_PTR(type_name));
+    }
+
+    return ary;
+
 #else
     not_implemented("channel_extrema");
     return (VALUE) 0;
@@ -880,7 +952,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_channel_mean(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELMEAN)
+#if defined(HAVE_GETIMAGECHANNELMEAN)   // ImageMagick 6.0.0
     Image *image;
     ChannelType channel_type = UndefinedChannel, type;
     ExceptionInfo exception;
@@ -918,6 +990,74 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     rb_ary_store(ary, 1, rb_float_new(stddev));
 
     return ary;
+
+#elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
+    Image *image;
+    ChannelType channel_type;
+    ImageStatistics stats;
+    ExceptionInfo exception;
+    volatile VALUE ary;
+    volatile VALUE type_name;
+    MagickPassFail okay;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick requires at least one channel argument.");
+    }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+    VALUE_TO_ENUM(argv[0], channel_type, ChannelType);
+    if (channel_type == AllChannels)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    okay = GetImageStatistics(image, &stats, &exception);
+    if (okay == MagickFail)
+    {
+        rb_raise(rb_eRuntimeError, "GetImageStatistics failed.");
+    }
+
+    ary = rb_ary_new2(2);
+    switch(channel_type)
+    {
+        case RedChannel:
+        case CyanChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.red.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.red.standard_deviation));
+            break;
+        case GreenChannel:
+        case MagentaChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.green.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.green.standard_deviation));
+            break;
+        case BlueChannel:
+        case YellowChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.blue.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.blue.standard_deviation));
+            break;
+        case OpacityChannel:
+        case BlackChannel:
+        case MatteChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.opacity.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.opacity.standard_deviation));
+            break;
+        default:
+            type_name = Enum_to_s(argv[0]);
+            rb_raise(rb_eArgError, "unsupported channel type: %s",
+                    STRING_PTR(type_name));
+    }
+
+    return ary;
+
 
 #else
     not_implemented("channel_mean");

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.87 2004/12/17 23:54:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.88 2004/12/22 00:38:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3828,14 +3828,16 @@ Image_inspect(VALUE self)
     }
     else
     {
+        // Cast `image->colors' to long to suppress gcc warnings when
+        // building with GM. GM defines that field as an unsigned int.
         if (image->total_colors <= image->colors)
         {
-            x += sprintf(buffer+x, "PseudoClass %luc ", image->colors);
+            x += sprintf(buffer+x, "PseudoClass %luc ", (long) image->colors);
         }
         else
         {
             x += sprintf(buffer+x, "PseudoClass %lu=>%luc ", image->total_colors
-                       , image->colors);
+                       , (long)image->colors);
             if (image->error.mean_error_per_pixel != 0.0)
             {
                  x += sprintf(buffer+x, "%ld/%.6f/%.6fdb "

@@ -2,11 +2,6 @@
 require 'RMagick'
 include Magick
 
-Compliance = {SVGCompliance => 'SVG',
-              X11Compliance => 'X11',
-              XPMCompliance => 'XPM',
-              AllCompliance => 'All'}
-
 puts("Creating colors.miff. This may take a few seconds...")
 
 colors = ImageList.new
@@ -20,14 +15,15 @@ puts("\tCreating color swatches...")
 # Create a 200x25 image for each named color.
 # Label with the name, RGB values, and compliance type.
 colors { |c|
-    if c.name !~ /gray/ then    # omit SVG 'grays'
+    if c.name !~ /grey/ then    # omit SVG 'grays'
         colors.new_image(200, 25) {
             self.background_color = c.color
             self.border_color = 'gray50'
             }
         rgb  = sprintf('#%02x%02x%02x', c.color.red&0xff,  c.color.green&0xff, c.color.blue&0xff)
         rgb += sprintf('%02x', c.color.opacity&0xff) if c.color.opacity != 0
-        colors.cur_image['Label'] = "#{c.name} (#{rgb}) #{Compliance[c.compliance]}"
+        m = /(.*?)Compliance/.match c.compliance.to_s
+        colors.cur_image['Label'] = "#{c.name} (#{rgb}) #{m[1]}"
     end
 }
 

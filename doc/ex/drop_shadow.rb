@@ -31,7 +31,7 @@ text.annotate(ex, 0,0,2,2, Text) {
     }
 
 # Save the first frame of the animation.
-anim << ex
+anim << ex.copy
 
 # Blur the shadow. Save a copy of the image as the 2nd frame.
 ex = ex.blur_image(0,3)
@@ -50,7 +50,7 @@ anim << ex.copy
 anim.delay = 100
 
 # Set the delay after the last frame to 2 seconds.
-anim.cur_image.delay = 200
+anim.cur_image.delay = 300
 
 # Iterate forever.
 anim.iterations = 0

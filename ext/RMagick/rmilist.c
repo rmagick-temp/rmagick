@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.19 2004/12/05 21:28:01 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.20 2004/12/05 22:36:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -234,7 +234,7 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
     (void) MapImages(clone_images, map, dither);
-    HANDLE_IMG_ERROR(clone_images)
+    HANDLE_ERROR_IMG(clone_images)
 
     // Set @scene in new ImageList object to same value as in self.
     new_imagelist = rm_imagelist_from_images(clone_images);

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.18 2004/12/02 00:30:07 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.19 2004/12/05 22:36:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -443,7 +443,7 @@ VALUE Draw_annotate(
 
     draw->info->affine = keep;
 
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
     return self;
 }
@@ -614,7 +614,7 @@ Draw_draw(VALUE self, VALUE image_arg)
     magick_clone_string(&(draw->info->primitive), STRING_PTR(draw->primitives));
 
     (void) DrawImage(image, draw->info);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
     magick_free(draw->info->primitive);
     draw->info->primitive = NULL;

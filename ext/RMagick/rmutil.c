@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.45 2004/12/05 22:08:44 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.46 2004/12/05 22:36:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -813,7 +813,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
     GetExceptionInfo(&exception);
 
     (void) QueryColorname(image, color, X11Compliance, name, &exception);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
     return rb_str_new2(name);
 }
@@ -2336,7 +2336,7 @@ rm_write_temp_image(Image *image, char *tmpnam)
     {
         rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
     }
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
     sprintf(tmpnam, "mpri:%ld", registry_id);
 }

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.80 2004/12/05 22:27:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.81 2004/12/05 22:36:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -728,7 +728,7 @@ Image_channel(VALUE self, VALUE channel_arg)
 #else
     (void) ChannelImage(new_image, channel);
 #endif
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -1181,7 +1181,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         clip_mask = CloneImage(mask_image, 0, 0, 1, &exception);
         HANDLE_ERROR
         SetImageClipMask(image, clip_mask);
-        HANDLE_IMG_ERROR(mask_image)
+        HANDLE_ERROR_IMG(mask_image)
     }
     else
     {
@@ -1508,7 +1508,7 @@ Image_color_flood_fill(
     }
     draw_info->fill = fill;
     (void) ColorFloodfillImage(new_image, draw_info, target, x, y, (PaintMethod)fill_method);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     DestroyDrawInfo(draw_info);
     return rm_image_new(new_image);
 }
@@ -1686,7 +1686,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     // SetImageColorspace was introduced in 5.5.7. It is essentially
     // identical to the code below. It either works or throws an exception.
     (void) SetImageColorspace(image, new_cs);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
 #else
 
@@ -1704,17 +1704,17 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
             image->colorspace != GRAYColorspace)
         {
            TransformRGBImage(image, image->colorspace);
-           HANDLE_IMG_ERROR(image)
+           HANDLE_ERROR_IMG(image)
         }
         RGBTransformImage(image, new_cs);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_ERROR_IMG(image)
     }
     else if (new_cs == RGBColorspace ||
         new_cs == TransparentColorspace ||
         new_cs == GRAYColorspace)
     {
         TransformRGBImage(image, image->colorspace);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_ERROR_IMG(image)
     }
 #endif
 
@@ -1874,7 +1874,7 @@ static VALUE composite(
     if (bang)
     {
         (void) CompositeImage(image, operator, comp_image, x_offset, y_offset);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_ERROR_IMG(image)
         return self;
     }
     else
@@ -1883,7 +1883,7 @@ static VALUE composite(
         new_image = CloneImage(image, 0, 0, True, &exception);
         HANDLE_ERROR
         (void) CompositeImage(new_image, operator, comp_image, x_offset, y_offset);
-        HANDLE_IMG_ERROR(new_image)
+        HANDLE_ERROR_IMG(new_image)
         return rm_image_new(new_image);
     }
 }
@@ -1929,7 +1929,7 @@ Image_composite_affine(
     HANDLE_ERROR
     AffineMatrix_to_AffineMatrix(&affine, affine_matrix);
     (void) DrawAffineImage(new_image, composite, &affine);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -1971,7 +1971,7 @@ Image_compress_colormap_bang(VALUE self)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) CompressImageColormap(image);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
     return self;
 }
 
@@ -2145,7 +2145,7 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) ContrastImage(new_image, sharpen);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -2313,7 +2313,7 @@ Image_cycle_colormap(VALUE self, VALUE amount)
     HANDLE_ERROR
     amt = NUM2INT(amount);
     (void) CycleColormapImage(new_image, amt);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -2467,8 +2467,8 @@ VALUE Image_difference(VALUE self, VALUE other)
     Data_Get_Struct(ImageList_cur_image(other), Image, image2);
 
     (void) IsImagesEqual(image, image2);
-    HANDLE_IMG_ERROR(image)
-    HANDLE_IMG_ERROR(image2)
+    HANDLE_ERROR_IMG(image)
+    HANDLE_ERROR_IMG(image2)
 
     mean  = rb_float_new(image->error.mean_error_per_pixel);
     nmean = rb_float_new(image->error.normalized_mean_error);
@@ -2598,7 +2598,7 @@ VALUE Image_display(VALUE self)
     ok = DisplayImages(info, image);
     if (!ok)
     {
-        HANDLE_IMG_ERROR(image)
+        HANDLE_ERROR_IMG(image)
     }
 
     return self;
@@ -3381,7 +3381,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) GammaImage(new_image, gamma);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -3735,7 +3735,7 @@ Image_import_pixels(
 
     if (!okay)
     {
-        HANDLE_IMG_ERROR(clone_image)
+        HANDLE_ERROR_IMG(clone_image)
         // Shouldn't get here...
         rb_raise(rb_eStandardError, "ImportImagePixels failed with no explanation.");
     }
@@ -4117,7 +4117,7 @@ Image_level(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     sprintf(level, "%f,%f,%f", black_point, mid_point, white_point);
     (void) LevelImage(new_image, level);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -4169,7 +4169,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
                            , black_point
                            , mid_point
                            , white_point);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 #else
     rm_not_implemented();
@@ -4324,7 +4324,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     map_obj = ImageList_cur_image(map_arg);
     Data_Get_Struct(map_obj, Image, map);
     (void) MapImage(new_image, map, dither);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -4406,7 +4406,7 @@ Image_matte_flood_fill(
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) MatteFloodfillImage(new_image, target, op, x, y, pm);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -4532,7 +4532,7 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) ModulateImage(new_image, modulate);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -4648,7 +4648,7 @@ Image_negate(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) NegateImage(new_image, grayscale);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -5010,7 +5010,7 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
     Color_to_PixelPacket(&fill_pp, fill);
 
     (void) OpaqueImage(new_image, target_pp, fill_pp);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -5051,7 +5051,7 @@ Image_ordered_dither(VALUE self)
     HANDLE_ERROR
 
     (void) OrderedDitherImage(new_image);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -5353,7 +5353,7 @@ Image_profile_bang(
     }
     (void) ProfileImage(image, STRING_PTR(name), (const unsigned char *)prof
                       , (size_t)prof_l, True);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
     return self;
 }
 
@@ -5774,7 +5774,7 @@ Image_raise(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) RaiseImage(new_image, &rect, raised);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -6295,7 +6295,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) SegmentImage(new_image, colorspace, verbose, cluster_threshold, smoothing_threshold);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -6524,7 +6524,7 @@ Image_solarize(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) SolarizeImage(new_image, threshold);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -6982,7 +6982,7 @@ Image_texture_flood_fill(
     }
 
     (void) ColorFloodfillImage(new_image, draw_info, color, x, y, method);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
 
     DestroyDrawInfo(draw_info);
 
@@ -7006,7 +7006,7 @@ Image_threshold(VALUE self, VALUE threshold)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) ThresholdImage(new_image, NUM2DBL(threshold));
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -7062,7 +7062,7 @@ VALUE threshold_image(
     HANDLE_ERROR
 
     (thresholder)(new_image, ctarg);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
 
     return rm_image_new(new_image);
 }
@@ -7280,7 +7280,7 @@ Image_to_blob(VALUE self)
     if (info->depth != 0)
     {
         (void) SetImageDepth(image, info->depth);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_ERROR_IMG(image)
     }
 
     GetExceptionInfo(&exception);
@@ -7379,7 +7379,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
     (void) TransparentImage(new_image, color, opacity);
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
 
@@ -7409,7 +7409,7 @@ trimmer(int bang, VALUE self)
 
     new_image = CropImage(image, &geometry, &exception);
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
     if (!new_image)
     {
         rb_raise(rb_eRuntimeError, "CropImage failed - "
@@ -7694,7 +7694,7 @@ Image_write(VALUE self, VALUE file)
 
     info->adjoin = False;
     (void) WriteImage(info, image);
-    HANDLE_IMG_ERROR(image)
+    HANDLE_ERROR_IMG(image)
 
     return self;
 }
@@ -7868,7 +7868,7 @@ xform_image(
 
     // An exception can occur in either the old or the new images
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_ERROR_IMG(new_image)
 
     if (bang)
     {

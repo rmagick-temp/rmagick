@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.72 2004/12/05 22:08:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.73 2004/12/05 22:36:11 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -310,7 +310,7 @@ EXTERN ID ID_y;                 // "y"
 */
 #define HANDLE_ERROR rm_handle_error(&exception);
 // For ExceptionInfo structures in images.
-#define HANDLE_IMG_ERROR(img) rm_handle_error(&((img)->exception));
+#define HANDLE_ERROR_IMG(img) rm_handle_error(&((img)->exception));
 
 /*
     Map the QuantumDepth to a StorageType.

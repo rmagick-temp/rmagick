@@ -2272,6 +2272,10 @@ draw.stroke_opacity('40%')
           one or more of the special characters shown in this
           table. 
           <table border="1" bgcolor="#F0F0F0">
+            <caption>
+              <b><a name="Draw.spec_chars_table">Special
+              characters</a></b>
+            </caption>
             <tr>
               <td>%b</td>
               <td>the file size in bytes</td>
@@ -2398,7 +2402,7 @@ draw.stroke_opacity('40%')
       <tr class="method">
         <td class="methodname"><a name=
         "Draw.get_type_metrics">get_type_metrics</a></td>
-        <td><i>draw</i>.get_type_metrics(<i>anImage</i>,
+        <td><i>draw</i>.get_type_metrics([<i>anImage</i>,]
         <i>aString</i>) -&gt; <i>aTypeMetric</i></td>
       </tr>
       <tr>
@@ -2410,12 +2414,20 @@ draw.stroke_opacity('40%')
         <td valign="top">Arguments</td>
         <td>
           <dl>
-            <dt>image</dt>
+            <dt>image <i>(optional)</i></dt>
             <dd>The image on which the string will be rendered.
             &times;Magick uses the attributes of the image (font
-            name, pointsize, etc.) to compute the metrics.</dd>
+            name, pointsize, etc.) to compute the metrics. If this
+            argument is omitted, <var>get_type_metrics</var>
+            substitutes a dummy image with default attributes. The
+            <i>string</i> argument may not contain any of the
+            special characters shown in the table <a href=
+            "#Draw.spec_chars_table">above</a>.</dd>
             <dt>string</dt>
-            <dd>The string to be rendered.</dd>
+            <dd>The string to be rendered. If <i>image</i> is
+            specified, the string may contain special characters
+            that refer to the image attributes. See the table <a
+            href="#Draw.spec_chars_table">above</a>.</dd>
           </dl>
         </td>
       </tr>

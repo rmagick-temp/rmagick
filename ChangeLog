@@ -5,6 +5,8 @@ RMagick 1.6.0
     o Added trim and trim! methods to Image class
     o Added each method to Enum subclasses
     o Added stroke_width= attribute to the Draw class
+    o Fixed bugs #624, #642, #716, applied patch #819 (thanks to Daniel Quimper)
+    o Tested with ImageMagick 6.0.5-2, GraphicsMagick 1.1.3, Ruby 1.8.2
 
 RMagick 1.5.0
     o Added meaningful implementations of dup and clone to the Image and Draw

@@ -73,7 +73,7 @@
           <li><a href="#raise">raise</a></li>
 
           <li><a href=
-          "#random_channel_threshold">random_channel_threshold</a></li>
+          "#random_threshold_channel">random_threshold_channel</a></li>
 
           <li><a href="#reduce_noise">reduce_noise</a></li>
 
@@ -534,11 +534,11 @@
   </div>
 
   <div class="sig">
-    <h3 id="random_channel_threshold">random_channel_threshold</h3>
+    <h3 id="random_threshold_channel">random_threshold_channel</h3>
 
-    <p><span class=
-    "arg">image</span>.random_channel_threshold(<span class=
-    "arg">channel</span>, <span class="arg">thresholds</span>)
+    <p><span class="arg">image</span>.random_threshold_channel(
+    <span class="arg">thresholds</span>, [<span class=
+    "arg">channel</span>, <span class="arg">channel</span>...] )
     -&gt; <em>anImage</em></p>
   </div>
 
@@ -552,12 +552,6 @@
     <h4>Arguments</h4>
 
     <dl>
-      <dt>channel</dt>
-
-      <dd><span class="imquote">The channel or channels to be
-      thresholded.</span> One of the strings "all", "intensity",
-      "matte", or "opacity".</dd>
-
       <dt>thresholds</dt>
 
       <dd><span class="imquote">A geometry string containing
@@ -567,7 +561,15 @@
       are assumed to be percentages of MaxRGB. <span class=
       "imquote">If the string contains 2x2, 3x3, or 4x4, then an
       ordered dither of order 2, 3, or 4 will be performed
-      instead.</span></dd>
+      instead.</span> A <a href="struct.html#Geometry">Geometry</a>
+      object may be used as well.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are
+      thresholded.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -575,16 +577,17 @@
     <p>A new image</p>
 
     <h4>Example</h4>
-
-    <p>This image has been transformed by
-    <code>random_channel_threshold('intensity', '35%')</code></p>
+    <pre>
+geom = Geometry.new(MaxRGB/2)
+random_threshold_channel(geom, RedChannel)
+</pre>
 
     <p class="rollover"><a href=
-    "javascript:popup('random_channel_threshold.rb.html')"><img src="ex/random_channel_threshold.jpg"
-         alt="random_channel_threshold example" title=
+    "javascript:popup('random_threshold_channel.rb.html')"><img src="ex/random_threshold_channel.jpg"
+         alt="random_threshold_channel example" title=
          "Click to see the example script" onmouseover=
          "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-         "this.src='ex/random_channel_threshold.jpg'" /></a>
+         "this.src='ex/random_threshold_channel.jpg'" /></a>
          <img src="ex/images/spin.gif" alt="" class="spin" title=
          "Mouse over the example to see the original image" /></p>
 
@@ -595,8 +598,8 @@
 
     <h4>Magick API</h4>
 
-    <p>RandomChannelThreshold (available in ImageMagick 5.5.7 and
-    GraphicsMagick 1.0.1)</p>
+    <p>RandomThresholdImageChannel (available in ImageMagick
+    6.0.0)</p>
   </div>
 
   <div class="sig">
@@ -827,21 +830,20 @@
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                    This img tag displays the original image when the mouse is over.
-                    Use CSS to add padding around the image to make it occupy the
-                    same space as the rotated image. --><img style=
-    "padding-top:34px;padding-bottom:34px; display:none" id=
-    "notrotated" onmouseout=
-    "this.style.display='none'; rotated.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" /><!--
-                      This img tag displays the rotated image.
-                      --><img class="hide" id="rotated"
-    onmouseover="this.style.display='none'; notrotated.style.display='';"
-         src="ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
-         "ex/images/spin.gif" alt="" class="spin" style=
-         "left:322px;" title=
-         "Mouse over the example to see the original image" /></p>
+                        This img tag displays the original image when the mouse is over.
+                        Use CSS to add padding around the image to make it occupy the
+                        same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+         id="notrotated" onmouseout=
+         "this.style.display='none'; rotated.style.display='';" src=
+         "ex/images/Flower_Hat.jpg" alt="rotate example" title=
+         "Click to see the example script" /><!--
+                          This img tag displays the rotated image.
+                          --><img class="hide" id="rotated"
+    onmouseover=
+    "this.style.display='none'; notrotated.style.display='';" src=
+    "ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left:322px;"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
 
@@ -1269,15 +1271,15 @@
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                      This img tag displays the original image when the mouse is over
-                      --><img style=
+                          This img tag displays the original image when the mouse is over
+                          --><img style=
     "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                       This img tag displays the sheared image when the mouse is not over
-                       -->
+                           This img tag displays the sheared image when the mouse is not over
+                           -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -2113,8 +2115,8 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-              This img tag displays the framed image when the mouse is not over
-              --><img class="hide" id="waved" onmouseover=
+                  This img tag displays the framed image when the mouse is not over
+                  --><img class="hide" id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
     "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.43 2004/02/26 21:52:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.44 2004/02/27 00:17:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -875,11 +875,11 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     Image *image;
     ChannelType channel_type = UndefinedChannel, type;
     ExceptionInfo exception;
-    Data_Get_Struct(self, Image, image);
     double mean, stddev;
     unsigned int okay;
     volatile VALUE ary;
 
+    Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
     if (argv == 0)
@@ -5030,6 +5030,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
                 string includes a '%', the number(s) is/are treated as percentage(s)
                 of MaxRGB.
     Notes:      Christy says TO DO: red, green, blue, cyan, magenta, yellow, black.
+                Added in 5.5.7, deprecated in 6.0.0.
 */
 VALUE
 Image_random_channel_threshold(
@@ -5040,8 +5041,12 @@ Image_random_channel_threshold(
 #if defined(HAVE_RANDOMCHANNELTHRESHOLDIMAGE)
     Image *image, *new_image;
     char *channel, *thresholds;
-    unsigned int okay;
     ExceptionInfo exception;
+
+#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
+    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
+               ". Use Image#random_threshold_channel instead.");
+#endif
 
     Data_Get_Struct(self, Image, image);
 
@@ -5052,17 +5057,72 @@ Image_random_channel_threshold(
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 
-    okay = RandomChannelThresholdImage(new_image, channel, thresholds, &exception);
-    if (!okay)
-    {
-        HANDLE_ERROR
-        HANDLE_IMG_ERROR(image)
-    }
+    (void) RandomChannelThresholdImage(new_image, channel, thresholds, &exception);
+    HANDLE_ERROR
 
     return rm_image_new(new_image);
 #else
     not_implemented("random_channel_threshold");
     return (VALUE) 0;
+#endif
+}
+
+
+/*
+    Method:     Image#random_threshold_channel
+    PUrpose:    Call RandomThresholdImageChannel
+    Notes:      Very similar to above. This method was added in IM 6.0.0
+                and the RandomChannelThresholdImage method was deprecated.
+*/
+VALUE
+Image_random_threshold_channel(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channel_type = UndefinedChannel, type;
+    char *thresholds;
+    int x;
+    volatile VALUE geom_str;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "missing threshold argument");
+    }
+
+    geom_str = rb_funcall(argv[0], to_s_ID, 0);
+    thresholds = STRING_PTR(geom_str);
+
+    if (argc == 1)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        for(x = 1; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    (void) RandomThresholdImageChannel(new_image, channel_type, thresholds, &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("random_threshold_channel");
+    return (VALUE)0;
 #endif
 }
 

@@ -193,11 +193,11 @@ div.sig {
  * The next 2 styles are for example scripts.
  */
 .example, .desc pre {
-  padding: 0 .5em 1em .5em;   /* Tell Kong to not pad at the top. */
+  padding: 0 .5em 1em .5em;   /* Tell Konq to not pad at the top. */
   padd\ing-top: 1em;          /* Tell everybody else to use 1em padding at the top. */
   background-color: #f8f8f8;
-  border-left: thin dashed black;
-  border-top: thin dashed black;
+  border-left: thin dotted black;
+  border-top: thin dotted black;
   border-bottom: 4px solid #c0c0c0;
   border-right: 4px solid #c0c0c0
 }

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.2 2003/07/12 18:54:02 tim Exp $ */
+/* $Id: rmagick.h,v 1.3 2003/07/16 22:42:20 tim Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -116,6 +116,8 @@ typedef struct
 #define DUMPED_IMAGE_ID      0xd1
 #define DUMPED_IMAGE_MAJOR_VERS 1
 #define DUMPED_IMAGE_MINOR_VERS 0
+
+#define MAGICK_LOC "magick_location"     // instance variable name in ImageMagickError class
 
 #ifndef HAVE_EXTENDEDSIGNEDINTEGRALTYPE
 typedef off_t ExtendedSignedIntegralType;
@@ -530,11 +532,11 @@ extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE   AffineMatrix_to_Struct(AffineMatrix *);
 extern void    Struct_to_AffineMatrix(AffineMatrix *, VALUE);
-extern VALUE   ColorInfo_to_Struct(ColorInfo *);
+extern VALUE   ColorInfo_to_Struct(const ColorInfo *);
 extern void    Struct_to_ColorInfo(ColorInfo *, VALUE);
 extern VALUE   Color_to_s(VALUE);
 extern VALUE   PixelPacket_to_Struct(PixelPacket *);
-extern void Struct_to_PixelPacket(PixelPacket *, VALUE);
+extern void    Struct_to_PixelPacket(PixelPacket *, VALUE);
 extern void    Color_to_PixelPacket(PixelPacket *, VALUE);
 extern VALUE   Pixel_from_color(VALUE, VALUE);
 extern VALUE   Pixel_to_color(int, VALUE *, VALUE);
@@ -559,6 +561,7 @@ extern VALUE   Font_to_s(VALUE);
 extern void    Struct_to_TypeMetric(TypeMetric *, VALUE);
 extern VALUE   TypeMetric_to_Struct(TypeMetric *);
 extern VALUE   TypeMetric_to_s(VALUE);
+extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
 
 extern const char *    Str_to_CompositeOperator(VALUE);
 extern AlignType       Num_to_AlignType(VALUE);
@@ -594,7 +597,6 @@ extern void magick_clone_string(char **, const char *);
 extern void write_temp_image(Image *, char *);
 extern void delete_temp_image(char *);
 extern void handle_error(ExceptionInfo *);
-extern void magick_error_handler(ExceptionType, const char *, const char *);
 extern void attr_write(VALUE, VALUE);
 extern Image *toseq(VALUE);
 extern void unseq(Image *);

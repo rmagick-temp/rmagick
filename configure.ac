@@ -71,6 +71,7 @@ AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
 AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
+AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
@@ -83,8 +84,16 @@ AC_CHECK_TYPES([DisposeType,
                  #endif
                  #include "magick/api.h"])
 
+
+AC_CHECK_MEMBERS([ExceptionInfo.module],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
 # Don't use AC_CHECK_MEMBERS!
-AC_CACHE_CHECK(if Image has extract_info, rm_cv_member_Image_extract_info,
+AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
   AC_TRY_COMPILE([
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
@@ -98,7 +107,7 @@ if test "$rm_cv_member_Image_extract_info" = yes; then
   AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
 fi
 
-AC_CACHE_CHECK(if ImageInfo has number_scenes, rm_cv_member_ImageInfo_number_scenes,
+AC_CACHE_CHECK(for ImageInfo.number_scenes, rm_cv_member_ImageInfo_number_scenes,
   AC_TRY_COMPILE([
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmutil.c,v 1.2 2003/07/16 22:42:20 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -496,7 +496,7 @@ Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
     Purpose:    Convert a ColorInfo structure to a Magick::Color
 */
 VALUE
-ColorInfo_to_Struct(ColorInfo *ci)
+ColorInfo_to_Struct(const ColorInfo *ci)
 {
     VALUE name;
     VALUE compliance;
@@ -1931,14 +1931,108 @@ delete_temp_image(char *tmpnam)
     }
 }
 
+
+/*
+    Static:     raise_error(msg, loc)
+    Purpose:    create a new ImageMagickError object and raise an exception
+    Notes:      does not return
+                This funky technique allows me to safely add additional
+                information to the ImageMagickError object in both 1.6.8 and
+                1.8.0. See www.ruby_talk.org/36408.
+*/
+static void
+raise_error(const char *msg, const char *loc)
+{
+    VALUE exc, mesg, extra;
+
+    mesg = rb_str_new2(msg);
+    extra = loc ? rb_str_new2(loc) : Qnil;
+
+    exc = rb_funcall(Class_ImageMagickError, new_ID, 2, mesg, extra);
+    rb_funcall(rb_cObject, rb_intern("raise"), 1, exc);
+}
+
+
+/*
+    Method:     ImageMagickError#initialize(msg, loc)
+    Purpose:    initialize a new ImageMagickError object - store
+                the "loc" string in the @magick_location instance variable
+*/
+VALUE
+ImageMagickError_initialize(VALUE self, VALUE mesg, VALUE extra)
+{
+    VALUE argv[1];
+
+    argv[0] = mesg;
+    rb_call_super(1, argv);
+    rb_iv_set(self, "@"MAGICK_LOC, extra);
+
+    return self;
+}
+
+
+/*
+    Static:     magick_error_handler
+    Purpose:    Build error or warning message string. If the error
+                is severe, raise the ImageMagickError exception,
+                otherwise print an optional warning.
+*/
+static void
+magick_error_handler(
+    ExceptionType severity,
+    const char *reason,
+    const char *description
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    ,
+    const char *module,
+    const char *function,
+    unsigned long line
+#endif
+    )
+{
+    char msg[1024];
+
+    if (severity >= ERROR_SEVERITY)
+    {
+        strcpy(msg, GetLocaleExceptionMessage(severity, reason));
+        if (description)
+        {
+            strcat(msg, ": ");
+            strcat(msg, GetLocaleExceptionMessage(severity, description));
+        }
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+        {
+        char extra[100];
+
+        sprintf(extra, "%s at %s:%lu", function, module, line);
+        raise_error(msg, extra);
+        }
+#else
+        raise_error(msg, NULL);
+#endif
+    }
+    else if (severity != UndefinedException)
+    {
+        strcpy(msg, "RMagick: ");
+        strcat(msg, GetLocaleExceptionMessage(severity, reason));
+        if (description)
+        {
+            strcat(msg, ": ");
+            strcat(msg, GetLocaleExceptionMessage(severity, description));
+        }
+        rb_warning(msg);
+    }
+}
+
+
 /*
     Extern:     handle_error
     Purpose:    Called from RMagick routines to issue warning messages
                 and raise the ImageMagickError exception.
-    Notes:      In order to free up memory before calling rb_raise, this
-                routine copies the reason and description to local storage
-                and then calls DestroyExceptionInfo before calling rb_raise.
-
+    Notes:      In order to free up memory before calling raise, this
+                routine copies the ExceptionInfo data to local storage
+                and then calls DestroyExceptionInfo before raising
+                the error.
 
                 If the exception is an error, DOES NOT RETURN!
 */
@@ -1949,7 +2043,15 @@ handle_error(ExceptionInfo *ex)
     char reason[251];
     char desc[251];
 
-    if (ex->severity == UndefinedException)
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    char module[251], function[251];
+    unsigned long line;
+#endif
+
+    reason[0] = '\0';
+    desc[0] = '\0';
+
+    if (sev== UndefinedException)
     {
         return;
     }
@@ -1964,6 +2066,23 @@ handle_error(ExceptionInfo *ex)
         desc[250] = '\0';
     }
 
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    module[0] = '\0';
+    function[0] = '\0';
+
+    if (ex->module)
+    {
+        strncpy(module, ex->module, 250);
+        module[250] = '\0';
+    }
+    if (ex->function)
+    {
+        strncpy(function, ex->function, 250);
+        function[250] = '\0';
+    }
+    line = ex->line;
+#endif
+
     // Let ImageMagick reclaim its storage
     DestroyExceptionInfo(ex);
     // Reset the severity. If the exception structure is in an
@@ -1971,27 +2090,13 @@ handle_error(ExceptionInfo *ex)
     // we need the Image to be pristine!
     ex->severity = UndefinedException;
 
+#if !defined(HAVE_EXCEPTIONINFO_MODULE)
     magick_error_handler(sev, reason, desc);
+#else
+    magick_error_handler(sev, reason, desc, module, function, line);
+#endif
 }
 
-/*
-    Extern:     magick_error_handler
-    Purpose:    called from ImageMagick to print warnings
-                and raise the ImageMagickError exception.
-*/
-void
-magick_error_handler(ExceptionType severity, const char *reason, const char *description)
-{
-
-    if (severity >= ERROR_SEVERITY)
-    {
-        rb_raise(Class_ImageMagickError, "%s: %s", reason, description);
-    }
-    else if (severity != UndefinedException)
-    {
-        rb_warning("RMagick: %.1024s: %.1024s", reason, description);
-    }
-}
 
 
 /*

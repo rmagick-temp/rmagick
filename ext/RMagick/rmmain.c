@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.2 2003/07/12 18:54:02 tim Exp $ */
+/* $Id: rmmain.c,v 1.3 2003/07/16 22:42:20 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -21,7 +21,6 @@ static void mark_Draw(void *);
 static void destroy_Draw(void *);
 static void destroy_Montage(void *);
 
-static VALUE Magick_Format_Hash;
 
 #define MAGICK_MONITOR_CVAR "@@__rmagick_monitor__"
 static VALUE Magick_Monitor;
@@ -34,6 +33,29 @@ static VALUE Magick_Monitor;
 VALUE
 Magick_colors(VALUE class)
 {
+#if defined(HAVE_GETCOLORINFOARRAY)
+    const ColorInfo **color_ary;
+    ExceptionInfo exception;
+    VALUE ary, el;
+    int x;
+
+    GetExceptionInfo(&exception);
+
+    color_ary = GetColorInfoArray(&exception);
+    HANDLE_ERROR
+
+    ary = rb_ary_new();
+
+    x = 0;
+    while (color_ary[x])
+    {
+        rb_ary_push(ary, ColorInfo_to_Struct(color_ary[x]));
+        x += 1;
+    }
+
+    magick_free(color_ary);
+
+#else
     const ColorInfo *color_list;
     ColorInfo *color;
     ExceptionInfo exception;
@@ -54,6 +76,7 @@ Magick_colors(VALUE class)
     {
         rb_ary_push(ary, ColorInfo_to_Struct(color));
     }
+#endif
 
     // If block, iterate over colors
     if (rb_block_given_p())
@@ -68,7 +91,6 @@ Magick_colors(VALUE class)
     {
         return ary;
     }
-
 }
 
 /*
@@ -116,14 +138,8 @@ Magick_fonts(VALUE class)
 
 
 /*
-  Method:   Magick::formats [ { |f,m| } ]
-  Purpose:  If called with the optional block, iterates over the formats,
-            otherwise returns a hash.
-
-            The first time this routine is called w/o a block, it creates
-            a hash and stores its value in the Magick_Format_Hash static
-            variable. After the 1st call it simply uses the previously
-            stored value.
+  Method:   Magick.init_formats
+  Purpose:  Build the @@formats hash
 
             The hash keys are image formats. The hash values
             specify the format "mode string", i.e. a description of what
@@ -133,57 +149,40 @@ Magick_fonts(VALUE class)
                 "R" is "r" if ImageMagick can read that format, or "-" otherwise.
                 "W" is "w" if ImageMagick can write that format, or "-" otherwise.
                 "A" is "+" if the format supports multi-image files, or "-" otherwise.
+  Notes:    Only called once.
 */
 VALUE
-Magick_formats(VALUE class)
+Magick_init_formats(VALUE class)
 {
     MagickInfo *m;
+    VALUE formats;
     ExceptionInfo exception;
     char mode[5] = {0};
 
-    // If block, iterate over formats
-    if (rb_block_given_p())
+    formats = rb_hash_new();
+
+    GetExceptionInfo(&exception);
+#if defined(HAVE_GETMAGICKINFOARRAY)
+    m = (MagickInfo *)GetMagickInfoArray(&exception);
+#else
+    m = (MagickInfo *)GetMagickInfo("*", &exception);
+#endif
+    HANDLE_ERROR
+
+    for ( ; m != NULL; m = m->next)
     {
-        VALUE ary = rb_ary_new2(2);
-
-        GetExceptionInfo(&exception);
-        m = (MagickInfo *)GetMagickInfo("*", &exception);
-        HANDLE_ERROR
-
-        for ( ; m != NULL; m = m->next)
-        {
-            mode[0] = m->blob_support ? '*': ' ';
-            mode[1] = m->decoder ? 'r' : '-';
-            mode[2] = m->encoder ? 'w' : '-';
-            mode[3] = m->encoder && m->adjoin ? '+' : '-';
-            rb_ary_store(ary, 0, rb_str_new2(m->name));
-            rb_ary_store(ary, 1, rb_str_new2(mode));
-            rb_yield(ary);
-        }
-
-        return class;
+        mode[0] = m->blob_support ? '*': ' ';
+        mode[1] = m->decoder ? 'r' : '-';
+        mode[2] = m->encoder ? 'w' : '-';
+        mode[3] = m->encoder && m->adjoin ? '+' : '-';
+        rb_hash_aset(formats, rb_str_new2(m->name), rb_str_new2(mode));
     }
 
-    // Otherwise return format hash
-    if (!Magick_Format_Hash)
-    {
-        Magick_Format_Hash = rb_hash_new();
+#if defined(HAVE_GETMAGICKINFOARRAY)
+    magick_free(m);
+#endif
 
-        GetExceptionInfo(&exception);
-        m = (MagickInfo *)GetMagickInfo("*", &exception);
-        HANDLE_ERROR
-
-        for ( ; m != NULL; m = m->next)
-        {
-            mode[0] = m->blob_support ? '*': ' ';
-            mode[1] = m->decoder ? 'r' : '-';
-            mode[2] = m->encoder ? 'w' : '-';
-            mode[3] = m->encoder && m->adjoin ? '+' : '-';
-            rb_hash_aset(Magick_Format_Hash, rb_str_new2(m->name), rb_str_new2(mode));
-        }
-    }
-
-    return Magick_Format_Hash;
+    return formats;
 }
 
 /*
@@ -663,8 +662,8 @@ static Draw_annotate(
     long x, y;
     AffineMatrix keep;
     char geometry_str[50];
-                              
-    // Save the affine matrix in case it is modified by 
+
+    // Save the affine matrix in case it is modified by
     // Draw#rotation=
     Data_Get_Struct(self, Draw, draw);
     keep = draw->info->affine;
@@ -710,9 +709,7 @@ static Draw_annotate(
 
     draw->info->affine = keep;
 
-    magick_error_handler(image->exception.severity
-                       , image->exception.reason
-                       , image->exception.description);
+    HANDLE_IMG_ERROR(image)
 
     return self;
 }
@@ -1412,16 +1409,12 @@ Init_RMagick(void)
     }
 #endif
 
-    SetWarningHandler(magick_error_handler);
-    SetErrorHandler(magick_error_handler);
-    SetFatalErrorHandler(magick_error_handler);
-
     Module_Magick = rb_define_module("Magick");
 
     // Module Magick methods
     rb_define_module_function(Module_Magick, "colors", Magick_colors, 0);
     rb_define_module_function(Module_Magick, "fonts", Magick_fonts, 0);
-    rb_define_module_function(Module_Magick, "formats", Magick_formats, 0);
+    rb_define_module_function(Module_Magick, "init_formats", Magick_init_formats, 0);
     rb_define_module_function(Module_Magick, "set_monitor", Magick_set_monitor, 1);
     rb_define_module_function(Module_Magick, "set_cache_threshold", Magick_set_cache_threshold, 1);
     rb_define_module_function(Module_Magick, "set_log_event_mask", Magick_set_log_event_mask, -1);
@@ -1755,6 +1748,10 @@ Init_RMagick(void)
 
     // class Magick::ImageMagickError < StandardError
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
+    rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, 2);
+    rb_enable_super(Class_ImageMagickError, "initialize");
+    rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
+
 
     // Miscellaneous constants
     rb_define_const(Module_Magick, "MaxRGB", INT2FIX(MaxRGB));

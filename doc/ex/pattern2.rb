@@ -16,12 +16,12 @@ gc.fill('rose')
 gc.ellipse(150, 75, 140, 70, 0, 360)
 
 # Create a canvas to draw on
-i = Magick::ImageList.new
-i.new_image(300, 150, Magick::HatchFill.new('white','gray90',8))
+imgl = Magick::ImageList.new
+imgl.new_image(300, 150, Magick::HatchFill.new('white','lightcyan2',8))
 
 # Draw the ellipse using the rose fill
-gc.draw(i)
+gc.draw(imgl)
 
-#i.display
-i.write('pattern2.gif')
+imgl.border!(1,1, "lightcyan2")
+imgl.write('pattern2.gif')
 exit

@@ -2,8 +2,8 @@
 
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(500,80) { self.background_color = "white" }
+imgl = Magick::ImageList.new
+imgl.new_image(500,80, Magick::HatchFill.new('white','lightcyan2'))
 
 gc = Magick::Draw.new
 
@@ -40,14 +40,8 @@ gc.text(180,70,"'10'")
 gc.text(300,70,"'20'")
 gc.text(420,70,"'40'")
 
-# Highlight border
-gc.fill('transparent')
-gc.stroke('thistle')
-gc.stroke_width(1)
-gc.stroke_dasharray()
-gc.rectangle(0,0, 499,79)
+gc.draw(imgl)
+imgl.border!(1,1,"lightcyan2")
 
-gc.draw(i)
-#i.display
-i.write('stroke_width.gif')
+imgl.write('stroke_width.gif')
 exit

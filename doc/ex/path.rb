@@ -1,67 +1,62 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(500, 400)  {self.background_color = 'white'}
+imgl = Magick::ImageList.new
+imgl.new_image(390, 240, Magick::HatchFill.new('white','lightcyan2'))
 
-primitives = Magick::Draw.new
+gc = Magick::Draw.new
 
 # Draw path
-primitives.fill_opacity 0
-primitives.stroke 'red'
-primitives.stroke_width 3
-primitives.path "M100,200 C100,100 250,100 250,200 S400,300 400,200"
+gc.fill_opacity 0
+gc.stroke 'red'
+gc.stroke_width 3
+gc.path "M20,120 C20,20 170,20 170,120 S320,220 320,120"
 
 # Annotate
 # Show end points
-primitives.fill_opacity 0
-primitives.stroke 'gray50'
-primitives.stroke_width 1
-primitives.circle 100,200, 103, 203
-primitives.circle 250,200, 253, 203
-primitives.circle 400,200, 403, 203
+gc.fill_opacity 0
+gc.stroke 'gray50'
+gc.stroke_width 1
+gc.circle  20,120,  23, 123
+gc.circle 170,120, 173, 123
+gc.circle 320,120, 323, 123
 
 # Show control points
-primitives.fill_opacity 1
-primitives.circle 100,100, 103, 103
-primitives.circle 250,100, 253, 103
-primitives.circle 400,300, 403, 303
+gc.fill_opacity 1
+gc.circle  20, 20,  23,  23
+gc.circle 170, 20, 173,  23
+gc.circle 320,220, 323, 223
 
 # Show connector lines
-primitives.line 100,200, 100,100
-primitives.line 250,300, 250,100
-primitives.line 400,200, 400,300
+gc.line  20,120,  20, 20
+gc.line 170, 20, 170,220
+gc.line 320,220, 320,120
 
 # Show auto control point
-primitives.fill_opacity 0
-primitives.stroke 'blue'
-primitives.stroke_width 3
-primitives.circle 250,300, 253,303
+gc.fill_opacity 0
+gc.stroke 'blue'
+gc.stroke_width 3
+gc.circle 170,220, 173,223
 
 # Add labels
-primitives.stroke "#000000ff"       # unset stroke color
-primitives.fill 'black'
+gc.stroke "#000000ff"       # unset stroke color
+gc.fill 'black'
 
 # Add end point labels
-primitives.text 110,205, "'100,200'"
-primitives.text 260,205, "'250,200'"
-primitives.text 410,205, "'400,200'"
+gc.text  30,125, "'20,120'"
+gc.text 180,125, "'170,120'"
+gc.text 330,125, "'320,120'"
 
 # Add control point labels
-primitives.text 110,105, "'100,100'"
-primitives.text 260,105, "'250,100'"
-primitives.text 410,305, "'400,300'"
+gc.text  30, 25, "'20,20'"
+gc.text 180, 25, "'170,20'"
+gc.text 330,225, "'320,320'"
 
 # Add auto control point label
-primitives.text 260,305, "'auto ctl point'"
+gc.text 180,225, "'auto ctl point'"
 
-# Outline
-primitives.stroke('gray50')
-primitives.stroke_width(1)
-primitives.fill_opacity(0)
-primitives.rectangle(0,0, 499, 399)
+gc.draw imgl
 
-primitives.draw i
+imgl.border!(1,1, 'lightcyan2')
+imgl.write 'path.gif'
 
-#i.display
-i.write 'path.gif'

@@ -5,43 +5,44 @@ require 'RMagick'
 # coordinate space to put the origin in the lower
 # left corner.
 
-i = Magick::ImageList.new
-i.new_image 250, 250, Magick::HatchFill.new('LightCyan')
+imgl = Magick::ImageList.new
+imgl.new_image 200, 200, Magick::HatchFill.new('white','lightcyan2')
 
-primitive = Magick::Draw.new
+gc = Magick::Draw.new
 
-max_x = i.columns-1
-max_y = i.rows-1
+max_x = imgl.columns
+max_y = imgl.rows
 
 # Translate the y origin to the bottom of the window.
 # Invert the y points by scaling by -1. Combine the
 # two operations using the affine method. That is, the
 # affine method is equivalent to:
-#       primitive.translate 0, max_y
-#       primitive.scale 1, -1
-primitive.affine 1, 0, 0, -1, 0, max_y
+#       gc.translate 0, max_y
+#       gc.scale 1, -1
+gc.affine(1, 0, 0, -1, 0, max_y)
+gc.stroke('gray50')
+gc.fill('gray50')
+gc.stroke_width(1)
+
 # Draw up-pointing arrow.
-primitive.stroke 'red'
-primitive.stroke_width 3
-primitive.line 1, 0, 1, max_y
-primitive.line 1, max_y, 10, max_y-10
+gc.polyline(10, 10, 10, max_y-10, 5, max_y-15, 15, max_y-15, 10, max_y-10)
 
 # Draw right-pointing arrow
-primitive.line 0, 1, max_x, 1
-primitive.line max_x, 1, max_x-10, 10
-primitive.draw i
+gc.polyline(10, 10, max_x-10, 10, max_x-15, 5, max_x-15, 15, max_x-10, 10)
+
+gc.draw(imgl)
 
 # Add labels. Use a different graphics context with a "normal"
 # coordinate system so the text isn't inverted.
-text_primitive = Magick::Draw.new
-text_primitive.pointsize 14
-text_primitive.font_weight Magick::BoldWeight
-text_primitive.stroke 'transparent'
+text_gc = Magick::Draw.new
+text_gc.pointsize(14)
+text_gc.font_weight(Magick::NormalWeight)
+text_gc.stroke('transparent')
+text_gc.text(15, max_y-15, "'0,0'")
+text_gc.text(max_x-20, max_y-16, "'+x'")
+text_gc.text(12, 15, "'+y'")
+text_gc.draw(imgl)
 
-text_primitive.text 12, max_y-12, "'0,0'"
-text_primitive.text max_x-20, max_y-16, "'+x'"
-text_primitive.text 12, 15, "'+y'"
-text_primitive.draw i
+imgl.border!(1, 1, "lightcyan2")
 
-#i.display
-i.write "affine.gif"
+imgl.write("affine.gif")

@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(360, 250, Magick::HatchFill.new('LightCyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(360, 250, Magick::HatchFill.new('white','LightCyan2'))
 
 gc = Magick::Draw.new
 
@@ -36,7 +36,8 @@ gc.text(253, 118, "'Start 0 degrees'")
 gc.text(187, 50, "'End 270 degrees'")
 gc.text(127, 100, "'Height=75'")
 gc.text(85, 140, "'Width=150'")
-gc.draw(i)
+gc.draw(imgl)
 
-#i.display
-i.write("ellipse.gif")
+imgl.border!(1,1, "LightCyan2")
+
+imgl.write("ellipse.gif")

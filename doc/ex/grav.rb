@@ -2,13 +2,13 @@
 
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(400,200, Magick::HatchFill.new('cornsilk', 'cornsilk2'))
+imgl = Magick::ImageList.new
+imgl.new_image(400,200, Magick::HatchFill.new('white', 'lightcyan2'))
 
 gc = Magick::Draw.new
 
-# Draw red lines to indicate positioning
-gc.stroke('red')
+# Draw blue lines to indicate positioning
+gc.stroke('blue')
 gc.fill('transparent')
 gc.rectangle(20,20, 380,180)
 gc.line(200,20, 200,180)
@@ -35,9 +35,10 @@ gc.gravity(Magick::SouthGravity)
 gc.text( 0,20, 'SouthGravity')
 gc.gravity(Magick::SouthEastGravity)
 gc.text(20,20, 'SouthEastGravity')
-gc.draw(i)
+gc.draw(imgl)
 
-#i.display
-i.write("grav.gif")
+imgl.border!(1,1, "lightcyan2")
+
+imgl.write("grav.gif")
 exit
 

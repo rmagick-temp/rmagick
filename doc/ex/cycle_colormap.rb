@@ -4,7 +4,6 @@ require 'RMagick'
 # Demonstrate the Image#cycle_colormap method
 
 balloons = Magick::Image.read('images/Hot_Air_Balloons.jpg').first
-balloons.scale!(250.0/balloons.rows)
 balloons = balloons.quantize(256, Magick::RGBColorspace)
 
 jump = balloons.colors / 10

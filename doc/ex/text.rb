@@ -2,14 +2,8 @@
 
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(190,190) { self.background_color = 'white' }
-
-image = Magick::Draw.new
-image.stroke('thistle')
-image.fill('transparent')
-image.rectangle(0,0, i.columns-1,i.rows-1)
-image.draw(i)
+imgl = Magick::ImageList.new
+imgl.new_image(190,190)
 
 sample = Magick::Draw.new
 sample.stroke('transparent')
@@ -32,8 +26,7 @@ sample.text(20,130, 'BoldWeight')
 sample.font_weight(Magick::LighterWeight)
 sample.text(20,160, 'LighterWeight')
 
-sample.draw(i)
+sample.draw(imgl)
 
-#i.display
-i.write('text.gif')
+imgl.write('text.gif')
 exit

@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(300, 200, Magick::HatchFill.new('LightCyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(300, 200, Magick::HatchFill.new('white','LightCyan2'))
 
 gc = Magick::Draw.new
 
@@ -25,6 +25,8 @@ gc.stroke('transparent')
 gc.text(30,35, "'20,20'")
 gc.text(230, 175, "'280,180'")
 
-gc.draw(i)
-#i.display
-i.write("roundrect.gif")
+gc.draw(imgl)
+imgl.border!(1,1, "lightcyan2")
+
+imgl.write("roundrect.gif")
+

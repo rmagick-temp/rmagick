@@ -1,23 +1,23 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(600, 200) { self.background_color = 'white' }
+imgl = Magick::ImageList.new
+imgl.new_image(300, 100, Magick::HatchFill.new('white','lightcyan2'))
+
+points = [12,93.75,   37,93.75,  37,81.25,  62,81.25,
+          62,93.75,   87,93.75,  87,62,    112,62,    112,93.75,
+          137,93.75, 137,43.75, 162,43.75, 162,93.75,
+          187,93.75, 187,25,    212,25,    212,93.75, 237,93.75,
+          237,6.25,  262,6.25,  262,93.75, 287,93.75]
 
 gc = Magick::Draw.new
 gc.stroke('blue').stroke_width(3)
 gc.fill_opacity(0)
+gc.polyline(*points)
 
-gc.polyline( 25,187.5,  75,187.5, 75, 162.5, 125,162.5, 125,187.5,
-            175,187.5, 175,125,   225,125,   225,187.5,
-            275,187.5, 275,87.5,  325, 87.5, 325,187.5,
-            375,187.5, 375,50,    425, 50,   425,187.5,
-            475,187.5, 475,12.5,  525, 12.5, 525,187.5,
-            575,187.5)
+gc.draw(imgl)
 
-gc.fill_opacity(0)
-gc.stroke('lavender')
-gc.rectangle(0,0, 599, 199)
-gc.draw(i)
-#i.display
-i.write("polyline.gif")
+imgl.border!(1,1, "lightcyan2")
+
+imgl.write("polyline.gif")
+

@@ -1,37 +1,50 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(250, 250, Magick::HatchFill.new('light cyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(250, 250, Magick::HatchFill.new('white','lightcyan2'))
 
 gc = Magick::Draw.new
 
 # Move the origin to the center.
-gc.translate(124.5, 124.5)
-max_x = (i.columns-1)/2
-max_y = (i.rows-1)/2
+gc.translate(125, 125)
+max_x = imgl.columns/2
+max_y = imgl.rows/2 - 5
 
 # Skew x 30 degrees
 gc.skewx(30)
 
 # Draw down-pointing arrow
 gc.fill('red')
-gc.line(0, -max_y,   0, max_y)
-gc.line(0,  max_y,  10, max_y-10)
-gc.line(0,  max_y, -10, max_y-10)
+gc.stroke('red')
+gc.stroke_width(3)
+gc.line(0, -max_y,  0, max_y)
+gc.line(0,  max_y,  7, max_y-7)
+gc.line(0,  max_y, -7, max_y-7)
 
 # Draw right-pointing arrow
-gc.fill('black')
-gc.line(-max_x, 0, max_x,     0)
-gc.line( max_x, 0, max_x-10, -10)
-gc.line( max_x, 0, max_x-10,  10)
+gc.stroke('gray50')
+gc.stroke_width(1)
+gc.line(-max_x, 0, max_x,    0)
+gc.line( max_x, 0, max_x-5, -5)
+gc.line( max_x, 0, max_x-5,  5)
 
-# Add labels
-gc.text(8, 15, "'0,0'")
-gc.text(105, 16, "x")
-gc.text(12, 120, "y")
+gc.draw(imgl)
 
-gc.draw(i)
+# Add labels using "normal" skew
+gc = Magick::Draw.new
+gc.pointsize(14)
+gc.stroke('transparent')
+gc.gravity(Magick::CenterGravity)
+gc.text(10, -10, "'0,0'")
+gc.gravity(Magick::EastGravity)
+gc.text(10, 10, "'+x'")
+gc.gravity(Magick::SouthGravity)
+gc.text(0, 20, "'+y'")
 
-#i.display
-i.write("skewx.gif")
+gc.draw(imgl)
+
+imgl.border!(1,1, "lightcyan2")
+
+imgl.write("skewx.gif")
+

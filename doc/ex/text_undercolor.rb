@@ -20,11 +20,7 @@ gc.text(0,0,"text_undercolor('yellow')")
 gc.text_undercolor('pink')
 gc.text(0,20,"text_undercolor('pink')")
 
-gc.stroke('thistle')
-gc.fill('transparent')
-gc.rectangle(1,1,249,99)
-
 gc.draw(canvas)
-#canvas.display
+
 canvas.write('text_undercolor.gif')
 exit

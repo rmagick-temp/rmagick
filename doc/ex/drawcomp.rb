@@ -33,12 +33,10 @@ begin
                        (coffee.columns-sign.columns)/2, 0, 0, sign)
     nocoffee.draw(coffee)
 
-    #coffee.display
-    #snake.display
     coffee.write("drawcomp1.gif")
     snake.write("drawcomp2.gif")
 
 rescue Magick::ImageMagickError
-	puts "#{$0}: ImageMagickError - #{$!}"
+    puts "#{$0}: ImageMagickError - #{$!}"
 end
 exit

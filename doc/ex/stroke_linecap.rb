@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(610, 125) { self.background_color = 'white' }
+imgl = Magick::ImageList.new
+imgl.new_image(615, 100)
 
 gc = Magick::Draw.new
 gc.stroke('black').stroke_width(30)
@@ -39,11 +39,6 @@ gc.text(55,90, "\"'butt' cap\"")
 gc.text(250,90, "\"'round' cap\"")
 gc.text(450,90, "\"'square' cap\"")
 
-# Outline
-gc.stroke('lavender')
-gc.fill('transparent')
-gc.rectangle(0,0, 609, 124)
+gc.draw(imgl)
 
-gc.draw(i)
-#i.display
-i.write("stroke_linecap.gif")
+imgl.write("stroke_linecap.gif")

@@ -1,54 +1,49 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(600, 300) {self.background_color = 'white'}
+imgl = Magick::ImageList.new
+imgl.new_image(500, 300, Magick::HatchFill.new('white','lightcyan2'))
 
-primitives = Magick::Draw.new
+gc = Magick::Draw.new
 
 # Draw path with quadratic bezier commands
-primitives.fill_opacity 0
-primitives.stroke 'red'
-primitives.stroke_width 3
-primitives.path "M100,150 Q200,25 300,150 T500,150"
+gc.fill_opacity 0
+gc.stroke 'red'
+gc.stroke_width 3
+gc.path "M20,150 Q120,25 220,150 T420,150"
 
 # Annotate
 # Show end points
-primitives.fill_opacity 1
-primitives.stroke 'grey50'
-primitives.stroke_width 1
-primitives.circle 100,150, 103, 153
-primitives.circle 300,150, 303, 153
-primitives.circle 500,150, 503, 153
+gc.fill_opacity 1
+gc.stroke 'grey50'
+gc.stroke_width 1
+gc.circle 20,150,   23, 153
+gc.circle 220,150, 223, 153
+gc.circle 420,150, 423, 153
 
 # Show control points
-primitives.fill 'black'
-primitives.stroke 'transparent'
-primitives.circle 200,25, 203, 28
-primitives.circle 400,275, 403, 278
+gc.fill 'black'
+gc.stroke 'transparent'
+gc.circle 120,25,  123, 28
+gc.circle 320,275, 323, 278
 
 # Show connector lines
-primitives.line 100,150, 200,25
-primitives.line 200,25, 400,275
-primitives.line 400,275, 500,150
+gc.line  20,150, 120,25
+gc.line 120,25,  320,275
+gc.line 320,275, 420,150
 
 # Add labels
 # Add end point labels
-primitives.text 110,155, "'100,150'"
-primitives.text 310,155, "'300,150'"
-primitives.text 510,155, "'500,150'"
+gc.text  30,155, "'20,150'"
+gc.text 230,155, "'220,150'"
+gc.text 430,155, "'420,150'"
 
 # Add control point labels
-primitives.text 210,30, "'200,25'"
-primitives.text 410,280, "'400,275'"
+gc.text 130,30, "'120,25'"
+gc.text 330,280, "'320,275'"
 
-# Outline
-primitives.stroke 'gray50'
-primitives.stroke_width 1
-primitives.fill_opacity 0
-primitives.rectangle 0,0, 599, 299
+gc.draw imgl
 
-primitives.draw i
-
-#i.display
-i.write "qbezierpath.gif"
+imgl.border!(1,1, "lightcyan2")
+#imgl.display
+imgl.write "qbezierpath.gif"

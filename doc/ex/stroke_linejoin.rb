@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(400, 150) { self.background_color = 'white' }
+imgl = Magick::ImageList.new
+imgl.new_image(400, 150) { self.background_color = 'white' }
 
 gc = Magick::Draw.new
 
@@ -43,11 +43,6 @@ gc.text(35,120, "\"'miter' join\"")
 gc.text(160,120, "\"'round' join\"")
 gc.text(280,120, "\"'bevel' join\"")
 
-# Outline
-gc.stroke('lavender')
-gc.fill('transparent')
-gc.rectangle(0,0, 399, 149)
-gc.draw(i)
+gc.draw(imgl)
 
-#i.display
-i.write("stroke_linejoin.gif")
+imgl.write("stroke_linejoin.gif")

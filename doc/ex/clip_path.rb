@@ -2,43 +2,55 @@
 
 require 'RMagick'
 
+points = [145, 65, 174,151, 264,151, 192,205,
+          218,291, 145,240,  72,291,  98,205,
+           26,151, 116,151]
+
 pr = Magick::Draw.new
 
-# Outline the image
-pr.stroke('lavender')
-pr.fill_opacity(0)
-pr.stroke_width(1)
-pr.rectangle(0,0,249,199)
-
 # Define a clip-path.
-pr.define_clip_path('example') {    # The name of the clip-path is "example"
-    pr.polygon(125,37.5,    139.5,80.5, 184.5,80.5,  148.5,107.5,
-               161.5,150.5, 125,125,    88.5,150.5,  101.5,107.5,
-               65.5,80.5,   110.5,80.5)
-    }                               # End the clip-path definition
+# The name of the clip-path is "example"
+pr.define_clip_path('example') {
+    pr.polygon(*points)
+    }
 
-pr.clip_path('example')             # Enable the clip-path
+# Enable the clip-path
+pr.clip_path('example')
 
-# Composite the Balloon Girl image over
+# Composite the Flower Hat image over
 # the background using the clip-path
-bg = Magick::ImageList.new "images/Balloon_Girl.jpg"
-pr.composite(0,0, 250,200, bg)
+girl = Magick::ImageList.new
+girl.read("images/Flower_Hat.jpg")
 
-# Just for illustration, outline the clip-path in blue.
-pr.stroke('blue')
-pr.stroke_width(2)
-pr.fill_opacity(0)
-pr.polygon(125,37.5,    139.5,80.5, 184.5,80.5,  148.5,107.5,
-           161.5,150.5, 125,125,    88.5,150.5,  101.5,107.5,
-           65.5,80.5,   110.5,80.5)
+cols = rows = nil
 
-# Create a canvas to draw on
-img = Magick::ImageList.new
-img.new_image(250,200) { self.background_color = 'transparent' }
+# Our final image is about 290 pixels wide, so here
+# we widen our picture to fit. The change_geometry
+# method will adjust the height proportionately.
 
-# Execute the primitives
-pr.draw(img)
-#img.display
-img.write("clip_path.gif")
+girl.change_geometry("290") do |c,r|
+    pr.composite(0,0, c, r, girl)
+    cols = c
+    rows = r
+end
+
+# Create a canvas to draw on, a bit bigger than the star.
+canvas = Magick::Image.new(cols, rows)
+
+star = Magick::Draw.new
+star.stroke('black')
+star.fill('black')
+star.polygon(*points)
+star.draw(canvas)
+canvas = canvas.blur_image(0, 20)
+
+# Draw the star over the background
+pr.draw(canvas)
+
+# Crop away all the solid white border pixels.
+crop = canvas.bounding_box
+canvas.crop!(crop.x, crop.y, crop.width, crop.height)
+
+canvas.write("clip_path.gif")
 
 exit

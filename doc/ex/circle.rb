@@ -1,8 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(250, 250, Magick::HatchFill.new('LightCyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(250, 250, Magick::HatchFill.new('white','LightCyan2'))
 
 gc = Magick::Draw.new
 
@@ -25,5 +25,7 @@ gc.fill('black')
 gc.stroke('transparent')
 gc.text(132,125, "'125,125'")
 gc.text(32,125, "'25,125'")
-gc.draw(i)
-i.write("circle.gif")
+gc.draw(imgl)
+
+imgl.border!(1,1, 'lightcyan2')
+imgl.write("circle.gif")

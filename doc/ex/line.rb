@@ -1,15 +1,17 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(250, 250, Magick::HatchFill.new('LightCyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(250, 250, Magick::HatchFill.new('white','LightCyan2'))
 
 gc = Magick::Draw.new
+
+gc.stroke_linejoin('round')
 
 # Draw 3 lines in 3 colors.
 # Make each line 2 pixels wide.
 gc.stroke('red')
-gc.stroke_width(2)
+gc.stroke_width(3)
 gc.line(50,50, 50,200)
 gc.stroke('blue')
 gc.line(50,200, 200,200)
@@ -31,6 +33,8 @@ gc.text(30,40, "'50,50'")
 gc.text(30,220, "'50,200'")
 gc.text(180, 220, "'200,200'")
 
-gc.draw(i)
-#i.display
-i.write("line.gif")
+gc.draw(imgl)
+imgl.border!(1,1, "LightCyan2")
+
+imgl.write("line.gif")
+

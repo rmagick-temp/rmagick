@@ -1,20 +1,21 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(250, 250, Magick::HatchFill.new('light cyan'))
+imgl = Magick::ImageList.new
+imgl.new_image(200, 200, Magick::HatchFill.new('white','lightcyan2'))
 
 gc = Magick::Draw.new
 
 # Move the origin to the center.
-gc.translate(124.5, 124.5)
-max_x = (i.columns-1)/2
-max_y = (i.rows-1)/2
+gc.translate(100, 100)
+max_x = imgl.columns/2
+max_y = imgl.rows/2
 
 # Rotate 45 degrees
 gc.rotate(45)
 
 gc.stroke('red')
+gc.stroke_width(3)
 
 # Draw down-pointing arrow
 gc.line(0, -max_y,   0, max_y)
@@ -34,6 +35,9 @@ gc.text(8, 15, "'0,0'")
 gc.text(110, 16, "x")
 gc.text(12, 115, "y")
 
-gc.draw(i)
-#i.display
-i.write("rotate.gif")
+gc.draw(imgl)
+
+imgl.border!(1,1, "lightcyan2")
+
+imgl.write("rotate.gif")
+

@@ -3,7 +3,7 @@ require 'RMagick'
 
 # Demonstrate the Draw#text_align method
 
-canvas = Magick::Image.new(200, 100) {self.background_color ='white'}
+canvas = Magick::Image.new(200, 100)
 gc = Magick::Draw.new
 
 # Draw three samples of text, each using
@@ -30,11 +30,7 @@ gc.line( 98, 30, 102, 30)
 gc.line( 98, 50, 102, 50)
 gc.line( 98, 70, 102, 70)
 
-gc.stroke('thistle')
-gc.fill('transparent')
-gc.rectangle(0,0,199,99)
-
 gc.draw(canvas)
-#canvas.display
+canvas.border!(1,1,'gray50')
 canvas.write('text_align.gif')
 exit

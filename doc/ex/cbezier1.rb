@@ -1,38 +1,40 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-i = Magick::ImageList.new
-i.new_image(500, 350, Magick::HatchFill.new('seashell'))
+imgl = Magick::ImageList.new
+imgl.new_image(390, 140, Magick::HatchFill.new('white','lightcyan2'))
 gc = Magick::Draw.new
 
 # Draw Bezier curve
 gc.stroke('red')
 gc.stroke_width(2)
 gc.fill_opacity(0)
-gc.bezier(100,200, 100,100, 400, 100, 400,200)
+gc.bezier(20,120, 20,20, 320, 20, 320,120)
 
 # Draw circles around endpoints
 gc.fill_opacity(0)
 gc.stroke('gray50').stroke_width(1)
-gc.circle(100,200, 103, 203)
-gc.circle(400,200, 403, 203)
+gc.circle(20,120, 23, 123)
+gc.circle(320,120, 323, 123)
 
 # Draw filled circles around control points
-gc.line(100,200, 100,100)
-gc.line(400,200, 400,100)
+gc.line(20,120, 20,20)
+gc.line(320,120, 320,20)
 gc.fill_opacity(1)
 gc.fill('gray50')
-gc.circle(100,100, 103,103)
-gc.circle(400,100, 403,103)
+gc.circle(20,20, 23,23)
+gc.circle(320,20, 323,23)
 
 # Annotate
 gc.fill('black')
 gc.stroke('transparent')
-gc.text(107,200, "'100,200'")
-gc.text(107,100, "'100,100'")
-gc.text(407,200, "'400,200'")
-gc.text(407,100, "'400,100'")
-gc.draw(i)
-i.write('cbezier1.gif')
+gc.text(27,120, "'20,120'")
+gc.text(27,20, "'20,20'")
+gc.text(327,120, "'320,120'")
+gc.text(327,20, "'320,20'")
+gc.draw(imgl)
+
+imgl.border!(1, 1, "lightcyan2")
+imgl.write('cbezier1.gif')
 exit(0)
 

@@ -3,17 +3,18 @@ require 'RMagick'
 
 # Demonstrate the Magick::TextureFill class.
 
-rose = Magick::Image.read('rose:').first
-fill = Magick::TextureFill.new(rose)
+granite = Magick::Image.read('granite:').first
+fill = Magick::TextureFill.new(granite)
 img = Magick::ImageList.new
-img.new_image(7*rose.columns, 2*rose.rows, fill)
+img.new_image(300, 100, fill)
 
 # Annotate the filled image with the code that created the fill.
 
 ann = Magick::Draw.new
-ann.annotate(img, 0,0,0,0, "Magick::TextureFill.new(rose)") {
-	self.gravity = Magick::CenterGravity
+ann.annotate(img, 0,0,0,0, "TextureFill.new(granite)") {
+    self.gravity = Magick::CenterGravity
     self.fill = 'white'
+    self.font_weight = Magick::BoldWeight
     self.stroke = 'transparent'
     self.pointsize = 14
     }

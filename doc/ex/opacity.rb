@@ -1,36 +1,38 @@
 #! /usr/local/bin/ruby -w
+
 require 'RMagick'
+include Magick
 
-i = Magick::ImageList.new
-i.new_image(400, 400) { self.background_color = "white" }
+canvas = Image.new(260, 125)
+gc = Draw.new
+gc.fill('black')
+gc.rectangle(10,20, 250,90)
 
-gc = Magick::Draw.new
-
-gc.font('Helvetica').pointsize(72)
-
-# Draw large black percentages
-gc.text( 10,120,"'100%%'")
-gc.text(235,120,"'75%%'")
-gc.text( 35,320,"'50%%'")
-gc.text(235,320,"'25%%'")
-
-# Establish the stroke and fill parameters
-gc.stroke("'blue'").stroke_width(10).stroke_linejoin('round')
+gc.stroke('blue')
 gc.fill('yellow')
+gc.stroke_width(10)
 
-# For each of the 4 opacity levels, draw a blue-rimmed
-# yellow triangle over the corresponding number.
-# Note that the opacity argument can be either a number
-# between 0 and 1 or a string 'NN%'.
-gc.opacity('100%') #  or 1.00
-gc.polygon(25,175, 175, 25, 25,25)
-gc.opacity('75%')  #  or 0.75
-gc.polygon(225,175, 375,25, 225,25)
-gc.opacity(0.50)   #  or '50%'
-gc.polygon( 25,375, 175, 225, 25,225)
-gc.opacity(0.25)   #  or '25%'
-gc.polygon(225,375, 375,225, 225,225)
+gc.opacity('25%')
+gc.roundrectangle(20,20, 60,90, 5,5)
 
-gc.draw(i)
-#i.display
-i.write("opacity.gif")
+gc.opacity('50%')
+gc.roundrectangle(80,20, 120,90, 5,5)
+
+gc.opacity(0.75)
+gc.roundrectangle(140,20, 180,90, 5,5)
+
+gc.opacity(1)
+gc.roundrectangle(200,20, 240,90, 5,5)
+
+gc.stroke('transparent')
+gc.fill('black')
+gc.gravity(SouthGravity)
+gc.text(-90,20, '"25%%"')
+gc.text(-30,20, '"50%%"')
+gc.text( 30,20, '"75%%"')
+gc.text( 90,20, '"100%%"')
+
+gc.draw(canvas)
+
+canvas.write("opacity.gif")
+exit

@@ -50,7 +50,8 @@ puts "This may take a few seconds..."
 cells.delay = 10
 cells.iterations = 10000
 res = cells.coalesce
-res.write "coalesce.gif"
+res.write "coalesce_anim.gif"
+res[25].write "coalesce.gif"
 exit
 
 

@@ -85,12 +85,21 @@ AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
 AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
 AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
-AC_CHECK_FUNCS([AcquireMagickMemory AcquireStringInfo BlackThresholdImage WhiteThresholdImage])
+AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
 AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
 AC_CHECK_FUNCS([CompareImageChannels PreviewImage SetImageColorspace])
+
+# We need to be able to query this later in the configure script, so set a shell variable here
+# as well as defining a symbol.
+AC_CHECK_FUNC(AcquireStringInfo,
+              rm_have_acquirestringinfo=yes,
+              rm_have_acquirestringinfo=no)
+if test "$rm_have_acquirestringinfo" = yes; then
+   AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
+fi
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.
@@ -135,14 +144,27 @@ AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel])
 
 # What typedefs?
+
+# Need a separate test for this so we can set an env. variable to test below.
+AC_CHECK_TYPE(MagickBooleanType,
+              rm_have_magickbooleantype=yes,
+              rm_have_magickbooleantype=no,
+              [#include <stdio.h>
+               #if HAVE_SYS_TYPES_H
+               #include <sys/types.h>
+               #endif
+               #include "magick/api.h"])
+if test "$rm_have_magickbooleantype" = yes; then
+   AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
+fi
+
 AC_CHECK_TYPES([DisposeType,
                 magick_int64_t,
                 magick_uint64_t,
                 ExtendedSignedIntegralType,
                 ExtendedUnsignedIntegralType,
                 MagickOffsetType,
-                MagickSizeType,
-                MagickBooleanType],
+                MagickSizeType],
                 [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
@@ -424,6 +446,27 @@ if test "$rm_have_getmagickinfolist" = yes; then
       AC_DEFINE(HAVE_OLD_GETMAGICKINFOLIST)
    fi
 fi
+
+# IM 6.2.1 changed the return value from RemoveImageProfile from StringInfo * to
+# MagickBooleanType. The presence of StringInfo implies RemoveImageProfile.
+if test "$rm_have_acquirestringinfo" = yes -a "$rm_have_magickbooleantype" = yes; then
+   AC_CACHE_CHECK(if RemoveImageProfile returns MagickBooleanType, rv_cv_args_remove_image_profile,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [MagickBooleanType bool; Image *image; bool=RemoveImageProfile(image, "icc")],
+        rv_cv_args_remove_image_profile='yes',
+        rv_cv_args_remove_image_profile='no')])
+
+   if test "$rv_cv_args_remove_image_profile" = yes; then
+      AC_DEFINE(HAVE_NEW_REMOVEIMAGEPROFILE)
+   fi
+fi
+
+
 
 # Where is ****Magick installed?
 MAGICKPREFIX=`${MAGICKCONFIG} --prefix`

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.16 2004/01/31 17:56:25 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.17 2004/02/14 19:35:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -123,6 +123,111 @@ Info_compression_eq(VALUE self, VALUE type)
     Data_Get_Struct(self, Info, info);
     VALUE_TO_ENUM(type, info->compression, CompressionType);
     return self;
+}
+
+/*
+    Method:     Info#define(format, key[, value])
+    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
+    Note:       The only method in Info that is not an
+                attribute accessor.
+*/
+VALUE
+Info_define(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    char *format, *key, *value = "";
+    long format_l, key_l;
+    char ckey[100];
+    unsigned int okay;
+    volatile VALUE fmt_arg;
+
+    Data_Get_Struct(self, Info, info);
+
+    switch(argc)
+    {
+        case 3:
+            /* Allow any argument that supports to_s */
+            fmt_arg = rb_funcall(argv[2], to_s_ID, 0);
+            value = STRING_PTR(fmt_arg);
+        case 2:
+            key = STRING_PTR_LEN(argv[1], key_l);
+            format = STRING_PTR_LEN(argv[0], format_l);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+    }
+
+    if (2 + format_l + key_l > sizeof(ckey))
+    {
+        rb_raise(rb_eArgError, "%.20s:%.20s not defined - format or key too long", format, key);
+    }
+    (void) sprintf(ckey, "%s:%s", format, key);
+
+    okay = SetImageOption(info, ckey, value);
+    if (!okay)
+    {
+        rb_warn("%.20s=\"%.78s\" not defined - SetImageOption failed.", ckey, value);
+        return Qnil;
+    }
+
+    return self;
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    char *format, *key, *value = NULL;
+    long format_l, key_l, value_l = 0;
+    unsigned int okay;
+    volatile VALUE fmt_arg;
+    ExceptionInfo exception;
+    char definitions[200];      /* Make this buffer longer than the buffer used   */
+                                /* for SetImageOptions since AddDefinitions cats  */
+                                /* the value onto the format:key pair.            */
+
+    Data_Get_Struct(self, Info, info);
+
+    switch(argc)
+    {
+        case 3:
+            /* Allow any argument that supports to_s */
+            fmt_arg = rb_funcall(argv[2], to_s_ID, 0);
+            value = STRING_PTR_LEN(fmt_arg, value_l);
+            /* Fall through */
+        case 2:
+            key = STRING_PTR_LEN(argv[1], key_l);
+            format = STRING_PTR_LEN(argv[0], format_l);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
+    }
+
+
+    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
+    {
+        rb_raise(rb_eArgError, "%.20s:%.20s not defined - too long", format, key);
+    }
+    (void)sprintf(definitions, "%s:%s=", format, key);
+    if (value)
+    {
+        strcat(definitions, value);
+    }
+
+    GetExceptionInfo(&exception);
+    okay = AddDefinitions(info, definitions, &exception);
+    HANDLE_ERROR
+    if (!okay)
+    {
+        rb_warn("%.*s not defined - AddDefinitions failed.", sizeof(definitions), definitions);
+        return Qnil;
+    }
+
+    return self;
+
+#else
+    not_implemented("define");
+    return (VALUE)0;
+#endif
 }
 
 DEF_ATTR_READER(Info, density, str)

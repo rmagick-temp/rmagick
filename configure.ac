@@ -84,6 +84,7 @@ AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImage
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
 AC_CHECK_FUNCS([CompareImageChannels GetImageQuantumDepth PreviewImage])
 AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
+AC_CHECK_FUNCS([SetImageOption AddDefinitions])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

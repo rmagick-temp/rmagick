@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Image (class and instance methods, part
   1)</title>
@@ -2461,8 +2461,9 @@ f2 = f.copy
         <dl>
           <dt>x, y</dt>
 
-          <dd>The x- and y-offset of the rectangle relative to the
-          upper-left corner of the image</dd>
+          <dd>The <em>x-</em> and <em>y-</em>offset of the
+          rectangle relative to the upper-left corner of the
+          image</dd>
 
           <dt>width, height</dt>
 
@@ -2546,17 +2547,19 @@ f2 = f.copy
           <dd>A <a href=
           "constants.html#GravityType">GravityType</a> constant. If
           the argument is NorthEastGravity, EastGravity, or
-          SouthEastGravity, the x-offset is measured from the right
-          side of the image. If the argument is SouthEastGravity,
-          SouthGravity, or SouthWestGravity, the y-offset is
-          measured from the bottom of the image. All other values
-          are ignored and the x- and y-offsets are measured from
-          the upper-left corner of the image.</dd>
+          SouthEastGravity, the <em>x-</em>offset is measured from
+          the right side of the image. If the argument is
+          SouthEastGravity, SouthGravity, or SouthWestGravity, the
+          <em>y-</em>offset is measured from the bottom of the
+          image. All other values are ignored and the <em>x-</em>
+          and <em>y-</em>offsets are measured from the upper-left
+          corner of the image.</dd>
 
           <dt>x, y</dt>
 
-          <dd>The x- and y-offset of the rectangle from the sides
-          specified by the <em>gravity</em> argument.</dd>
+          <dd>The <em>x-</em> and <em>y-</em>offset of the
+          rectangle from the sides specified by the
+          <em>gravity</em> argument.</dd>
 
           <dt>width, height</dt>
 
@@ -2589,6 +2592,23 @@ f2 = f.copy
 
     <h4>See also</h4><a href="#crop_bang">crop!</a>, <a href=
     "#chop">chop</a>
+
+    <h4>Notes</h4>
+
+    <p>In very recent versions of ImageMagick (6.1.x and later) the
+    image retains the <em>x-</em> and <em>y-</em>offsets in its
+    <a href="imageattrs.html#page">page</a> attribute after
+    cropping. This may cause the cropped image to be displayed by
+    external viewers (the GIMP, for example) with invisible left
+    and top borders. You can set the <em>x-</em> and
+    <em>y-</em>offsets to 0 by changing the <code>page</code>
+    attribute to a new <a href=
+    "struct.html#Rectangle">rectangle</a>. For example:</p>
+    <pre>
+    img.crop!(x, y, width, height)
+    img.page = Rectangle.new(width, height, 0, 0)
+    
+</pre>
 
     <h4>Magick API</h4>
 

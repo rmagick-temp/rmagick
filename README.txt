@@ -264,7 +264,7 @@ earlier release.
 
     Uninstalling
 
-The `uninstall' target will uninstall RMagick completely:
+The 'uninstall' target will uninstall RMagick completely:
 
     |make uninstall|
 

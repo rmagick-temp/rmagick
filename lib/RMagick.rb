@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.2 2003/07/04 21:34:35 tim Exp $
+# $Id: RMagick.rb,v 1.3 2003/07/18 01:56:37 tim Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -11,6 +11,17 @@
 require 'RMagick.so'
 
 module Magick
+    @@formats = nil
+
+def Magick.formats(&block)
+    @@formats ||= Magick.init_formats
+    if block_given?
+        @@formats.each { |k,v| yield(k,v) }
+        self
+    else
+        @@formats
+    end
+end
 
 class Draw
 

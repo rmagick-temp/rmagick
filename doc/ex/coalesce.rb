@@ -19,6 +19,7 @@ cells = Magick::ImageList.new
 cells.new_image buttons.columns*5, buttons.rows*5 do
     self.background_color = "#000000ff"     # transparent
     end
+cells.matte = true
 
 offset = Magick::Rectangle.new(0,0,0,0)
 
@@ -43,6 +44,7 @@ srand 1234
     offset.x = x*button.columns
     offset.y = y*button.rows
     button.page = offset
+    button.matte = true
     cells << button
     }
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.7 2003/07/26 23:01:10 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.8 2003/07/28 00:43:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -72,7 +72,7 @@
 
 // Safe replacement for rb_str2cstr
 #define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
-1747
+
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
 
 RUBY18(typedef long Strlen_t;)
@@ -164,6 +164,7 @@ EXTERN ID length_ID;       // "length"
 EXTERN ID values_ID;       // "values"
 EXTERN ID cur_image_ID;    // "cur_image"
 EXTERN ID call_ID;         // "call"
+EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.14 2003/09/18 19:53:01 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.15 2003/09/20 22:41:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -8,28 +8,12 @@
 
 #include "rmagick.h"
 
-static const char *Compliance_Const_Name(ComplianceType);
-static const char *Style_Const_Name(StyleType);
-static const char *Stretch_Const_Name(StretchType);
+static const char *Compliance_Const_Name(ComplianceType *);
+static const char *StyleType_Const_Name(StyleType);
+static const char *StretchType_Const_Name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 
 
-/*
-    Static:     strfcmp
-    Purpose:    compare strings, ignoring case
-    Returns:    same as strcmp
-*/
-static int
-strfcmp(const char *s1, const char *s2)
-{
-    while (*s1 && *s2 && tolower(*s1) == tolower(*s2))
-    {
-        s1++;
-        s2++;
-    }
-
-    return *s2-*s1;
-}
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
@@ -283,7 +267,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
        case 2:
             matte = RTEST(argv[1]);
         case 1:
-            NUM_TO_ENUM(argv[0], compliance, ComplianceType);
+            VALUE_TO_ENUM(argv[0], compliance, ComplianceType);
         case 0:
             break;
         default:
@@ -372,7 +356,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            NUM_TO_ENUM(argv[2], colorspace, ColorspaceType);
+            VALUE_TO_ENUM(argv[2], colorspace, ColorspaceType);
         case 2:
             fuzz = NUM2DBL(argv[1]);
         case 1:
@@ -582,6 +566,22 @@ Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
     am->ty = v == Qnil ? 0.0 : NUM2DBL(v);
 }
 
+
+/*
+ *  Static:     ComplianceType_To_Enum
+    Purpose:    construct a ComplianceType enum object for the specified value
+*/
+static VALUE
+ComplianceType_To_Enum(ComplianceType compliance)
+{
+    const char *name;
+
+    // Turn off undefined bits
+    compliance &= (SVGCompliance|X11Compliance|XPMCompliance);
+    name = Compliance_Const_Name(&compliance);
+    return rm_enum_new(Class_ComplianceType, ID2SYM(rb_intern(name)), INT2FIX(compliance));
+}
+
 /*
     External:   ColorInfo_to_Struct
     Purpose:    Convert a ColorInfo structure to a Magick::Color
@@ -589,17 +589,21 @@ Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
 VALUE
 ColorInfo_to_Struct(const ColorInfo *ci)
 {
+    ComplianceType compliance_type;
     volatile VALUE name;
     volatile VALUE compliance;
     volatile VALUE color;
 
     name       = rb_str_new2(ci->name);
-    compliance = INT2FIX(ci->compliance);
+
+    compliance_type = ci->compliance;
+    compliance = ComplianceType_To_Enum(compliance_type);
     color      = PixelPacket_to_Struct((PixelPacket *)(&(ci->color)));
 
     return rb_funcall(Class_Color, new_ID, 3
                     , name, compliance, color);
 }
+
 
 /*
     External:   Struct_to_ColorInfo
@@ -628,7 +632,7 @@ Struct_to_ColorInfo(ColorInfo *ci, VALUE st)
     m = rb_ary_entry(members, 1);
     if (m != Qnil)
     {
-        ci->compliance = FIX2INT(m);
+        VALUE_TO_ENUM(m, ci->compliance, ComplianceType);
     }
     m = rb_ary_entry(members, 2);
     if (m != Qnil)
@@ -662,7 +666,7 @@ Color_to_s(VALUE self)
     sprintf(buff, "name=%s, compliance=%s, "
                   "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
                   ci.name,
-                  Compliance_Const_Name(ci.compliance),
+                  Compliance_Const_Name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
 
     destroy_ColorInfo(&ci);
@@ -969,6 +973,33 @@ Struct_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 }
 
 /*
+    Static:     StretchType_To_Enum
+    Purpose:    Construct a StretchType enum for a specified StretchType value
+*/
+static VALUE
+StretchType_To_Enum(StretchType stretch)
+{
+    const char *name;
+
+    name = StretchType_Const_Name(stretch);
+    return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2FIX(stretch));
+}
+
+
+/*
+    Static:     StyleType_To_Enum
+    Purpose:    Construct a StyleType enum for a specified StyleType value
+*/
+static VALUE
+StyleType_To_Enum(StyleType style)
+{
+    const char *name;
+
+    name = StyleType_Const_Name(style);
+    return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
+}
+
+/*
     External:   TypeInfo_to_Struct
     Purpose:    Convert a TypeInfo structure to a Magick::Font
 */
@@ -982,8 +1013,8 @@ TypeInfo_to_Struct(TypeInfo *ti)
     name        = rb_str_new2(ti->name);
     description = rb_str_new2(ti->description);
     family      = rb_str_new2(ti->family);
-    style       = INT2FIX(ti->style);
-    stretch     = INT2FIX(ti->stretch);
+    style       = StyleType_To_Enum(ti->style);
+    stretch     = StretchType_To_Enum(ti->stretch);
     weight      = INT2NUM(ti->weight);
     encoding    = ti->encoding ? rb_str_new2(ti->encoding) : Qnil;
     foundry     = ti->foundry  ? rb_str_new2(ti->foundry)  : Qnil;
@@ -1095,8 +1126,8 @@ Font_to_s(VALUE self)
                   ti.name,
                   ti.description,
                   ti.family,
-                  Style_Const_Name(ti.style),
-                  Stretch_Const_Name(ti.stretch),
+                  StyleType_Const_Name(ti.style),
+                  StretchType_Const_Name(ti.stretch),
                   weight,
                   ti.encoding ? ti.encoding : "",
                   ti.foundry ? ti.foundry : "",
@@ -1337,31 +1368,62 @@ VALUE Enum_case_eq(VALUE self, VALUE other)
 /*
     Static:     Compliance_Const_Name
     Purpose:    Return the string representation of a ComplianceType value
+    Notes:      xMagick will OR multiple compliance types so we have to
+                arbitrarily pick one name. Set the compliance argument
+                to the selected value.
 */
 static const char *
-Compliance_Const_Name(ComplianceType c)
+Compliance_Const_Name(ComplianceType *c)
 {
-    switch (c)
+    if ((*c & (SVGCompliance|X11Compliance|XPMCompliance))
+        == (SVGCompliance|X11Compliance|XPMCompliance))
     {
-        case NoCompliance:
-            return "NoCompliance";
-        case SVGCompliance:
-            return "SVGCompliance";
-        case X11Compliance:
-            return "X11Compliance";
-        case XPMCompliance:
-            return "XPMCompliance";
-// AllCompliance is not defined in 5.4.9
-        case AllCompliance:
-            return "AllCompliance";
-        default:
-            return "unknown";
-        }
+        return "AllCompliance";
+    }
+    else if (*c & SVGCompliance)
+    {
+        *c = SVGCompliance;
+        return "SVGCompliance";
+    }
+    else if (*c & X11Compliance)
+    {
+        *c = X11Compliance;
+        return "X11Compliance";
+    }
+    else if (*c & XPMCompliance)
+    {
+        *c = XPMCompliance;
+        return "XPMCompliance";
+    }
+#if defined(HAVE_NOCOMPLIANCE)
+    else if (*c != NoCompliance)
+    {
+        return "unknown";
+    }
+    else
+    {
+        *c = NoCompliance;
+        return "NoCompliance";
+    }
+#else
+    else if (*c != UnknownCompliance)
+    {
+        return "unknown";
+    }
+    else
+    {
+        *c = UnknownCompliance;
+        return "UnknownCompliance";
+    }
+#endif
 }
 
-
+/*
+    Static:     StretchType_Const_Name
+    Purpose:    Return the string representation of a StretchType value
+*/
 static const char *
-Stretch_Const_Name(StretchType stretch)
+StretchType_Const_Name(StretchType stretch)
 {
     switch (stretch)
     {
@@ -1391,8 +1453,12 @@ Stretch_Const_Name(StretchType stretch)
 }
 
 
+/*
+    Static:     StyleType_Const_Name
+    Purpose:    Return the string representation of a StyleType value
+*/
 static const char *
-Style_Const_Name(StyleType style)
+StyleType_Const_Name(StyleType style)
 {
     switch (style)
     {
@@ -1407,40 +1473,6 @@ Style_Const_Name(StyleType style)
         default:
             return "unknown";
     }
-}
-
-/*
-    External:   Str_to_CompositeOperator
-    Purpose:    Validate a composition operator
-    Returns:    pointer to the operator as a C string
-*/
-
-const char *
-Str_to_CompositeOperator(VALUE str)
-{
-    char *oper;
-    int x;
-
-    // The array of valid composition operators
-    static const char * const ops[] =
-        {
-        "Over", "In", "Out", "Atop", "Xor", "Plus", "Minus",
-        "Add", "Subtract", "Difference", "Multiply",
-        "Bumpmap", "Copy", "CopyRed", "CopyGreen",
-        "CopyBlue", "CopyOpacity", "Clear", NULL
-        };
-
-    oper = STRING_PTR(str);
-    for (x = 0; ops[x]; x++)
-    {
-        if (strfcmp(oper, ops[x]) == 0)
-        {
-            return ops[x];
-        }
-    }
-
-    rb_raise(rb_eArgError, "invalid composition operator: %s", oper);
-    return NULL;
 }
 
 

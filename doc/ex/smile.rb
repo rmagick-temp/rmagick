@@ -2,6 +2,7 @@
 # RMagick version of ImageMagick's "smile.c" example program.
 
 require 'RMagick'
+include Magick
 
 SmileWidth = 48
 SmileHeight = 48
@@ -100,9 +101,8 @@ SmileBits = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0 ]
 
-    i = Magick::ImageList.new                   # Create a new image
-    i.new_image(SmileWidth, SmileHeight)    # Add a image
-
+	img = Image.new(SmileWidth, SmileHeight)
+    
     q = Array.new                           # Create an array of pixels one
     SmileWidth.times do                     # row long
         q << Magick::Pixel.new(0,0,0,0)
@@ -110,15 +110,15 @@ SmileBits = [
 
     SmileHeight.times do |y|                # Store pixels a row at a time
         SmileWidth.times do |x|             # Build a row of pixels
-            q[x].red   = Magick::MaxRGB * SmileBits.first
-            q[x].green = Magick::MaxRGB * SmileBits.first
-            q[x].blue  = Magick::MaxRGB * SmileBits.first
+            q[x].red   = MaxRGB * SmileBits.first
+            q[x].green = MaxRGB * SmileBits.first
+            q[x].blue  = MaxRGB * SmileBits.first
             SmileBits.shift
         end
                                             # Store the row of pixels
-        i.store_pixels(0, y, SmileWidth, 1, q)
+        img.store_pixels(0, y, SmileWidth, 1, q)
     end
 
-#   i.display                               # Now display the result
-    i.write('smile.gif')
+#   img.display                               # Now display the result
+    img.write('smile.gif')
     exit

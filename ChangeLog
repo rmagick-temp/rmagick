@@ -1,10 +1,11 @@
 RMagick 1.7.4
     o Fix bug #1727
-    o Correct affine_transform.rb example
+    o Fix affine_transform.rb
     o Tested with ImageMagick 6.2.1
 
 RMagick 1.7.3
     o Fix bug #1553
+
 
 RMagick 1.7.2
     o Fix bugs #1308, #1310, #1314, #1533

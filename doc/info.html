@@ -11,7 +11,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -52,6 +53,12 @@
 
   <div id="toc">
     <h2>Table of Contents</h2>
+
+    <h3>instance methods</h3>
+
+    <ul>
+      <li><a href="#define">define</a></li>
+    </ul>
 
     <h3>attribute methods</h3>
 
@@ -153,8 +160,61 @@
 
     <p>All the attributes in the Image::Info class are read/write.
     For simplicity, and because usually you only set these
-    attributes, just the setter version of each method is
+    attributes, just the setter version of each attribute method is
     described.</p>
+  </div>
+
+  <h2 class="methods">instance methods</h2>
+
+  <div class="sig">
+    <h3 id="define">define</h3>
+
+    <p><span class="arg">self</span>.define(<span class=
+    "arg">format</span>, <span class="arg">key</span>[,
+    <span class="arg">value</span>])</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Define a format-specific option. The
+    <code>define</code> method is a new, general-purpose way of
+    specifying options that apply to specific image formats. This
+    method is available in ImageMagick 6.0.0 and GraphicsMagick
+    1.1.
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>format</dt>
+
+      <dd>An image format name such as "ps" or "tiff".</dd>
+
+      <dt>key</dt>
+
+      <dd>A string that identifies the option.</dd>
+
+      <dt>value</dt>
+
+      <dd>The value of the option. If omitted, the key is simply
+      defined to an null value.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>See the &times;Magick documentation for the -define utility
+    command option for a list of valid formats, keys, and
+    values.</p>
+    <pre>
+self.define("tiff", "bits-per-sample", 2)   
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>SetImageOption (ImageMagick 6.0.0), AddDefinitions
+    (GraphicsMagick 1.1)</p>
   </div>
 
   <h2 class="methods">attribute methods</h2>

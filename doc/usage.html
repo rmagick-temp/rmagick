@@ -22,7 +22,7 @@
          background-color: #f0f0f0;
          vertical-align: top;
       }
-            </style>
+                </style>
   </head>
   <body>
     <table width="100%">
@@ -62,135 +62,115 @@
         <tr>
           <td>
 <pre>
-1. #! /usr/local/bin/ruby -w
-2.
-3. require 'RMagick'
-4.
-5. cat = Magick::ImageList.new("Cheetah.jpg")
-6. cat.display
+1. require 'RMagick'
+2. include Magick
+3.
+4. cat = ImageList.new("Cheetah.jpg")
+5. cat.display
+6. exit
+</pre>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <p>Line 1 requires the RMagick.rb file, which defines the
+    <b>Magick</b> module. The Magick module contains 3 major
+    classes, <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. Thi
+    You don't have to write the file using the same format that it
+    was in when you read it.s section describes the ImageList and
+    Image classes. The Draw class is explained in <i><a href=
+    "#drawing">Drawing on and adding text to images</a></i>, below.
+    The statement on line 5 creates an imagelist object and
+    initializes it by reading the <code>Cheetah.jpg</code>
+    file<sup><a href="#cwd">1</a></sup>. Line 6 sends the
+    <var>display</var> method to <code>cat</code>. When you send
+    <var>display</var> to an imagelist, it causes all the images in
+    the imagelist to be displayed on the default X Window
+    screen<sup><a href="#0.0">2</a></sup> . In this case, the
+    <var>display</var> method makes a picture of a cheetah appear
+    on your monitor.</p>
+    <p>Type this program in and try running it now. The
+    <code>Cheetah.jpg</code> file is in the <code>ex/images</code>
+    subdirectory where you installed the RMagick documentation.</p>
+    <p>Let's talk about RMagick's Image and ImageList classes. An
+    <i>Image</i> object describes one image or one frame in an
+    image with multiple frames. (An animated GIF or a Photoshop
+    image with multiple layers are examples of images with multiple
+    frames.) You can create a image object from an image file such
+    as a GIF, PNG, or JPEG. You can create a image from scratch.
+    You can write an image to disk, display it on a screen, change
+    its size or orientation, convert it to another format, or
+    otherwise modify it using one of over 100 Image methods.</p>
+    <p>An <i>ImageList</i> object is a <i>list</i> of images. It
+    contains zero or more images and a <i>scene number</i>. The
+    scene number indicates the <i>current image</i>. ImageList
+    methods operate on all the images in the list. Also, with a
+    very few exceptions, any method defined in the Image class can
+    be used as well. Since Image methods always operate on a single
+    image, when an Image method is sent to an imagelist, the
+    ImageList class sends the method to the current image, that is
+    the image specified by the scene number.</p>
+    <p>The ImageList class is a subclass of the Array class, so you
+    can use most Array methods to change the images in the
+    imagelist. For example, you can use the <code>&lt;&lt;</code>
+    method to add images to the list.</p>
+    <p>Going back to the example, let's make one modification.</p>
+    <div align="center">
+      <table class="example">
+        <tr>
+          <td>
+<pre>
+1. require 'RMagick'
+2. include Magick
+3.
+4. cat = ImageList.new("Cheetah.jpg")
+5. smallcat = cat.minify
+6. smallcat.display
 7. exit
 </pre>
           </td>
         </tr>
       </table>
     </div>
-    <p>Line 1 is the usual "shebang" statement that identifies this
-    file as a Ruby program file.</p>
-    <p>Line 3 requires the RMagick.rb file, which defines the
-    <b>Magick</b> module. The Magick module contains 3 major
-    classes, <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. This
-    section describes the ImageList and Image classes. The Draw
-    class is explained in <i><a href="#drawing">Drawing on and
-    adding text to images</a></i>, below.</p>
-    <p>Before continuing with the example, here's a description of
-    RMagick's Image and ImageList classes.</p>
-    <p>An <i>Image</i> object describes one image or one frame in a
-    multi-frame image. You can create a image object from an image
-    file such as a GIF, PNG, or JPEG, or you can create a image
-    from scratch. You can write an image to disk, display it on a
-    screen, enlarge or shrink it, convert it to another format, or
-    otherwise modify it using one of the scores of Image
-    methods.</p>
-    <p>An <i>ImageList</i> object is a <i>list</i> of images and
-    contains one or more images and a <i>scene number</i>. The
-    scene number is an index into the ImageList object that
-    indicates the <i>current image</i>. If the imagelist contains
-    only one image, the scene number is always 0. If the imagelist
-    contains no images, the scene number is <code>nil</code>. With
-    a very few exceptions, any method defined in the Image class
-    can be sent to an ImageList object. Since Image methods always
-    operate on a single image, when an Image method is sent to an
-    imagelist, the ImageList class sends the method to the current
-    image. Like images, imagelists can be read, written, and
-    displayed. Imagelist objects can also be used to produce
-    animations. The ImageList class defines a handful of methods
-    that operate on all the images in the imagelist. However in
-    most cases you must modify each image individually. You can get
-    and set the scene number with the <a href=
-    "ilist.html#ImageList.scene">scene</a> and <a href=
-    "ilist.html#ImageList.scene_eq">scene=</a> methods,
-    respectively. The <a href=
-    "ilist.html#ImageList.cur_image">cur_image</a> method returns
-    the current image. The ImageList class is a subclass of the
-    Array class, so you can change the images in the imagelist with
-    the usual Array methods. For example, you can use the
-    <code>&lt;&lt;</code> method to add images to the list.</p>
-    <p>Returning to the example, line 5 is where the magic starts.
-    This statement creates an imagelist object and initializes it
-    by reading the <code>Cheetah.jpg</code> file<sup><a href=
-    "#cwd">1</a></sup>.</p>
-    <p>The statement on line 6 sends the <var>display</var> method
-    to <code>cat</code>. When sent to an imagelist, the
-    <var>display</var> method displays all the images in the
-    imagelist to the default X Window screen<sup><a href=
-    "#0.0">2</a></sup> . In this case, the <var>display</var>
-    method makes a picture of a cheetah appear on your monitor.</p>
-    <p>Type this program in and try running it now. The
-    <code>Cheetah.jpg</code> file is in the <code>ex/images</code>
-    subdirectory where you installed the RMagick documentation.</p>
-    <p>Now let's make one modification.</p>
+    <p>The difference is the statement on line 5. This statement
+    sends the <var>minify</var> method to <code>cat</code>. The
+    <var>minify</var> method is an Image method that reduces the
+    size of an image to half its original size. Remember, since
+    <var>minify</var> is an Image method, the ImageList class sends
+    <var>minify</var> to the current (and only) image. The return
+    value is a new image, half the size of the original.</p>
+    <p>The Image class has its own <var>display</var> method, which
+    displays the single image on the X Window screen. Like
+    <var>ImageList#display</var>, <var>Image#display</var> makes a
+    picture of a (in this case, small) cheetah appear on your
+    monitor.</p>
+    <p>Here's how to write the small cheetah to a file in GIF
+    format.</p>
     <div align="center">
       <table class="example">
         <tr>
           <td>
 <pre>
-1. #! /usr/local/bin/ruby -w
-2.
-3. require 'RMagick'
-4.
-5. cat = Magick::ImageList.new("Cheetah.jpg")
-6. smallcat = cat.minify
-7. smallcat.display
+1. require 'RMagick'
+2. include Magick
+3.
+4. cat = ImageList.new("Cheetah.jpg")
+5. smallcat = cat.minify
+6. smallcat.display
+7. smallcat.write("Small-Cheetah.gif")
 8. exit
 </pre>
           </td>
         </tr>
       </table>
     </div>
-    <p>The difference is the statement on line 6. This statement
-    sends the <var>minify</var> method to <code>cat</code>. The
-    <var>minify</var> method is an Image method that reduces the
-    size of an image to half its original size. Since
-    <var>minify</var> is an Image method, the ImageList class sends
-    <var>minify</var> to the current (and only) image. The return
-    value is a new image, half the size of the original. The image
-    in the <code>cat</code> imagelist is unchanged.</p>
-    <p>The Image class has its own <var>display</var> method, which
-    displays the single image on the X Window screen. Like
-    <var>ImageList#display</var>, <var>Image#display</var> makes a
-    picture of a (in this case, small) cheetah appear on your
-    monitor.</p>
-    <p>Here's one more example.</p>
-    <div align="center">
-      <table class="example">
-        <tr>
-          <td>
-<pre>
-1. #! /usr/local/bin/ruby -w
-2.
-3. require 'RMagick'
-4.
-5. cat = Magick::ImageList.new("Cheetah.jpg")
-6. smallcat = cat.minify
-7. smallcat.display
-8. smallcat.write("Small-Cheetah.gif")
-9. exit
-</pre>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <p>The statement on line 8 sends the <var>write</var> method to
-    <code>smallcat</code>. The <var>write</var> method, as you
-    might reasonably expect, writes the image to a file. Notice
-    that the filename extension is <code>gif</code>. You don't have
-    to write the file using the same format that it was in when you
-    read it. When writing images, &times;Magick uses the filename
-    extension<sup><a href="#ext">3</a></sup> to determine what
-    image format to write. In this example, the
-    <code>Small-Cheetah.gif</code> file will be in the GIF format.
-    Notice how easy it is to covert an image from one format to
-    another?</p>
+    <p>The statement on line 7 writes the image to a file. Notice
+    that the filename extension is <code>gif</code>. When writing
+    images, &times;Magick uses the filename extension<sup><a href=
+    "#ext">3</a></sup> to determine what image format to write. In
+    this example, the <code>Small-Cheetah.gif</code> file will be
+    in the GIF format. Notice how easy it is to covert an image
+    from one format to another?</p>
     <p>So why, in the previous example, did I create
     <code>cat</code> as an ImageList object containing just one
     image, instead of creating an Image object? No reason, really.
@@ -214,8 +194,7 @@
     fact, <var>new</var> can take any number of file name
     arguments. If the file contains a single image, <var>new</var>
     reads the file, creates an image, and adds it to the imagelist.
-    If the file is a multi-image file (say, an animated GIF or a
-    Photoshop file with multiple layers), <var>new</var> adds an
+    If the file is a multi-frame image file, <var>new</var> adds an
     image for each frame or layer in the file. Lastly,
     <var>new</var> changes the scene number to point to the last
     image in the imagelist. In the simple case, <var>new</var>
@@ -257,10 +236,10 @@
         <tr>
           <td>
 <pre>
-#! /usr/local/bin/ruby -w
 require 'RMagick'
+include Magick
 # Create a 100x100 red image.
-f = Magick::Image.new(100,100) { self.background_color = "red" }
+f = Image.new(100,100) { self.background_color = "red" }
 f.display
 exit
 </pre>
@@ -281,13 +260,6 @@ exit
     number, or perform an interactive capture whereby you designate
     the desired window by clicking it or by drawing a rectangle on
     the screen with your mouse.</p>
-    <p>In addition to <var>new</var>, <var>read</var>, and
-    <var>capture</var>, there are 3 other ways to create a new
-    image, <a href=
-    "image.html#Image.constitute"><var>constitute</var></a>, <a
-    href="image.html#Image.from_blob"><var>from_blob</var></a>, and
-    <a href="image.html#Image.ping"><var>ping</var></a>. These
-    methods are less generally useful.</p>
     <p>Both the Image class and the ImageList class have
     <var>write</var> methods. Both accept a single argument, the
     name of the file to be written. <a href=
@@ -896,12 +868,6 @@ exit
           <td><a href=
           "image.html#Image.matte_point">matte_point</a></td>
           <td>Make the target pixel transparent</td>
-        </tr>
-        <tr>
-          <td><a href=
-          "image.html#Image.matte_replace">matte_replace</a></td>
-          <td>Make all the neighbor pixels that are the same color
-          as the target pixel transparent</td>
         </tr>
         <tr>
           <td><a href=

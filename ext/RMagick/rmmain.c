@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.41 2004/01/31 18:34:05 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.42 2004/02/09 23:46:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -433,6 +433,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "[]", Image_aref, 1);
     rb_define_method(Class_Image, "[]=", Image_aset, 2);
     rb_define_method(Class_Image, "properties", Image_properties, 0);
+    rb_define_method(Class_Image, "bilevel_channel", Image_bilevel_channel, -1);
     rb_define_method(Class_Image, "black_threshold", Image_black_threshold, -1);
     rb_define_method(Class_Image, "blur_image", Image_blur_image, -1);
     rb_define_method(Class_Image, "border", Image_border, 3);
@@ -444,6 +445,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "channel_compare", Image_channel_compare, -1);
     rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
     rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
+    rb_define_method(Class_Image, "channel_mean", Image_channel_mean, -1);
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
@@ -479,6 +481,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "flop", Image_flop, 0);
     rb_define_method(Class_Image, "flop!", Image_flop_bang, 0);
     rb_define_method(Class_Image, "frame", Image_frame, -1);
+    rb_define_method(Class_Image, "gamma_channel", Image_gamma_channel, -1);
     rb_define_method(Class_Image, "gamma_correct", Image_gamma_correct, -1);
     rb_define_method(Class_Image, "gaussian_blur", Image_gaussian_blur, -1);
     rb_define_method(Class_Image, "get_pixels", Image_get_pixels, 4);
@@ -500,6 +503,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "monochrome?", Image_monochrome_q, 0);
     rb_define_method(Class_Image, "motion_blur", Image_motion_blur, 3);
     rb_define_method(Class_Image, "negate", Image_negate, -1);
+    rb_define_method(Class_Image, "negate_channel", Image_negate_channel, -1);
     rb_define_method(Class_Image, "normalize", Image_normalize, 0);
     rb_define_method(Class_Image, "oil_paint", Image_oil_paint, -1);
     rb_define_method(Class_Image, "opaque", Image_opaque, 2);
@@ -887,8 +891,7 @@ Init_RMagick(void)
         ENUM_VAL(CopyBlackCompositeOp)
 #endif
 
-#if defined(HAVE_ANNOTATECOMPOSITEOP)   // Added 5.5.8
-        ENUM_VAL(AnnotateCompositeOp)
+#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUM_VAL(ReplaceCompositeOp)    // synonym for CopyCompositeOp
 #endif
     END_ENUM
@@ -1193,7 +1196,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/01/31 18:34:05 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/02/09 23:46:49 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

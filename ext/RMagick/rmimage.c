@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.37 2004/02/08 19:40:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.38 2004/02/09 23:46:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -359,6 +359,54 @@ VALUE Image_base_rows(VALUE self)
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->magick_rows);
 }
+
+
+
+/*
+ *  Method:     Image#bilevel_channel(threshold, channel=AllChannels)
+ *  Returns     a new image
+*/
+VALUE
+Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_BILEVELIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+    }
+    if (argc == 1)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+        for(x = 1; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    GetExceptionInfo(&exception);
+
+    Data_Get_Struct(self, Image, image);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+
+    (void)BilevelImageChannel(new_image, channel_type, NUM2DBL(argv[0]));
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("bilevel_channel");
+    return (VALUE) 0;
+#endif
+}
+
 
 /*
     Method:     Image#border_color
@@ -809,11 +857,63 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     return ary;
 
 #else
-    not_implemented("extrema");
+    not_implemented("channel_extrema");
     return (VALUE) 0;
 #endif
 }
 
+
+/*
+ *  Method:     Image#channel_mean(channel=AllChannels)
+ *  Returns     An array [mean, std. deviation]
+*/
+VALUE
+Image_channel_mean(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GETIMAGECHANNELMEAN)
+    Image *image;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+    Data_Get_Struct(self, Image, image);
+    double mean, stddev;
+    unsigned int okay;
+    volatile VALUE ary;
+
+    GetExceptionInfo(&exception);
+
+    if (argv == 0)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+        for(x = 0; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    okay = GetImageChannelMean(image, channel_type, &mean, &stddev, &exception);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "GetImageChannelMean failed.");
+    }
+
+    HANDLE_ERROR
+
+    ary = rb_ary_new2(2);
+    rb_ary_store(ary, 0, rb_float_new(mean));
+    rb_ary_store(ary, 1, rb_float_new(stddev));
+
+    return ary;
+
+#else
+    not_implemented("channel_mean");
+    return (VALUE) 0;
+#endif
+}
 
 /*
  *  Method:     Image#black_threshold(red_channel [, green_channel
@@ -2848,6 +2948,53 @@ VALUE Image_fuzz_eq(VALUE self, VALUE fuzz_arg)
 
 DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 
+
+/*
+ *  Method:     Image#gamma_channel(gamma, channel=AllChannels)
+ *  Returns     a new image
+*/
+VALUE
+Image_gamma_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GAMMAIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+    }
+    if (argc == 1)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+        for(x = 1; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    GetExceptionInfo(&exception);
+
+    Data_Get_Struct(self, Image, image);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+
+    (void)GammaImageChannel(new_image, channel_type, NUM2DBL(argv[0]));
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("gamma_channel");
+    return (VALUE) 0;
+#endif
+}
+
+
 /*
     Method:     Image#gamma_correct(red_gamma<, green_gamma<, blue_gamma
                                          <, opacity_gamma>>>)
@@ -4033,6 +4180,54 @@ Image_negate(int argc, VALUE *argv, VALUE self)
     (void) NegateImage(new_image, grayscale);
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
+}
+
+
+
+/*
+ *  Method:     Image#negate_channel(negate=false, channel=AllChannels)
+ *  Returns     a new image
+*/
+VALUE
+Image_negate_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_NEGATEIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channel_type = UndefinedChannel, type;
+    ExceptionInfo exception;
+    unsigned int grayscale;
+
+    grayscale = (argc == 0) ? False : RTEST(argv[0]);
+
+    if (argc == 1)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        int x;
+
+        for(x = 1; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+    GetExceptionInfo(&exception);
+
+    Data_Get_Struct(self, Image, image);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    (void)NegateImageChannel(new_image, channel_type, grayscale);
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("negate_channel");
+    return (VALUE) 0;
+#endif
 }
 
 

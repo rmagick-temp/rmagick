@@ -6,10 +6,11 @@ RMagick 1.4.0
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
       CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7 and
       later)
-      AnnotateCompositeOp. CopyCompositeOp constants (IM 6.0.0 only)
+    o Added ReplaceCompositeOp. CopyCompositeOp constants (IM 6.0.0 only)
     o Added color_histogram to Image class. (IM 6.0.0, GM 1.1 only)
-    o Added tint method, each_profile, channel_extrema, channel_compare,
-      channel_depth, quantum_depth, preview methods to Image class (IM 6.0.0 only)
+    o Added tint, each_profile, channel_extrema, channel_compare,
+      channel_depth, channel_mean, quantum_depth, preview, gamma_channel,
+      negate_channel, bilevel_channel methods to Image class (IM 6.0.0 only)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added border! method to Image class
     o Added fcmp, intensity to Pixel class

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.35 2004/01/31 18:34:05 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.36 2004/02/09 23:46:49 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -569,6 +569,7 @@ extern VALUE Image_affine_transform(VALUE, VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);
 extern VALUE Image_properties(VALUE);
+extern VALUE Image_bilevel_channel(int, VALUE *, VALUE);
 extern VALUE Image_black_threshold(int, VALUE *, VALUE);
 extern VALUE Image_blur_image(int, VALUE *, VALUE);
 extern VALUE Image_border(VALUE, VALUE, VALUE, VALUE);
@@ -580,6 +581,7 @@ extern VALUE Image_channel(VALUE, VALUE);
 extern VALUE Image_channel_compare(int, VALUE *, VALUE);
 extern VALUE Image_channel_depth(int, VALUE *, VALUE);
 extern VALUE Image_channel_extrema(int, VALUE *, VALUE);
+extern VALUE Image_channel_mean(int, VALUE *, VALUE);
 extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -615,6 +617,7 @@ extern VALUE Image_flop(VALUE);
 extern VALUE Image_flop_bang(VALUE);
 extern VALUE Image_frame(int, VALUE *, VALUE);
 extern VALUE Image_from_blob(VALUE, VALUE);
+extern VALUE Image_gamma_channel(int, VALUE *, VALUE);
 extern VALUE Image_gamma_correct(int, VALUE *, VALUE);
 extern VALUE Image_gaussian_blur(int, VALUE *, VALUE);
 extern VALUE Image_get_pixels(VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -636,6 +639,7 @@ extern VALUE Image_modulate(int, VALUE *, VALUE);
 extern VALUE Image_monochrome_q(VALUE);
 extern VALUE Image_motion_blur(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_negate(int, VALUE *, VALUE);
+extern VALUE Image_negate_channel(int, VALUE *, VALUE);
 extern VALUE Image_normalize(VALUE);
 extern VALUE Image_oil_paint(int, VALUE *, VALUE);
 extern VALUE Image_opaque(VALUE, VALUE, VALUE);

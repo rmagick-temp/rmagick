@@ -80,8 +80,10 @@ AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
-AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetImageChannelExtrema])
-AC_CHECK_FUNCS([CompareImageChannels GetImageChannelDepth GetImageQuantumDepth PreviewImage])
+AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile])
+AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
+AC_CHECK_FUNCS([CompareImageChannels GetImageQuantumDepth PreviewImage])
+AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
@@ -195,19 +197,19 @@ if test "$rm_cv_enum_copycyancompositeop" = yes; then
   AC_DEFINE(HAVE_COPYCYANCOMPOSITEOP)
 fi
 
-AC_CACHE_CHECK(for AnnotateCompositeOp enum value, rm_cv_enum_annotatecompositeop,
+AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
   [AC_TRY_COMPILE(
 [#include <stdio.h>
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
 #include "magick/api.h"],
-     [CompositeOperator x; x = AnnotateCompositeOp],
-     rm_cv_enum_annotatecompositeop='yes',
-     rm_cv_enum_annotatecompositeop='no')])
+     [CompositeOperator x; x = ReplaceCompositeOp],
+     rm_cv_enum_replacecompositeop='yes',
+     rm_cv_enum_replacecompositeop='no')])
 
-if test "$rm_cv_enum_annotatecompositeop" = yes; then
-  AC_DEFINE(HAVE_ANNOTATECOMPOSITEOP)
+if test "$rm_cv_enum_replacecompositeop" = yes; then
+  AC_DEFINE(HAVE_REPLACECOMPOSITEOP)
 fi
 
 AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,

@@ -12,7 +12,7 @@
 
 ### begin compat.rb
 
-unless Enumerable.instance_methods.include? 'inject' then
+unless Enumerable.instance_methods(false).include? 'inject' then
 module Enumerable
   def inject( result )
     each do |i|

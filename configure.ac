@@ -188,6 +188,21 @@ if test "$rm_cv_enum_hwbcolorspace" = yes; then
   AC_DEFINE(HAVE_HWBCOLORSPACE)
 fi
 
+AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = HSBColorspace],
+     rm_cv_enum_hsbcolorspace='yes',
+     rm_cv_enum_hsbcolorspace='no')])
+
+if test "$rm_cv_enum_hsbcolorspace" = yes; then
+  AC_DEFINE(HAVE_HSBCOLORSPACE)
+fi
+
 AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
   [AC_TRY_COMPILE(
 [#include <stdio.h>
@@ -217,6 +232,37 @@ AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
 if test "$rm_cv_enum_replacecompositeop" = yes; then
   AC_DEFINE(HAVE_REPLACECOMPOSITEOP)
 fi
+
+AC_CACHE_CHECK(for DstCompositeOp enum value, rm_cv_enum_dstcompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = DstCompositeOp],
+     rm_cv_enum_dstcompositeop='yes',
+     rm_cv_enum_dstcompositeop='no')])
+
+if test "$rm_cv_enum_dstcompositeop" = yes; then
+  AC_DEFINE(HAVE_DSTCOMPOSITEOP)
+fi
+
+AC_CACHE_CHECK(for ColorizeCompositeOp enum value, rm_cv_enum_colorizecompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = ColorizeCompositeOp],
+     rm_cv_enum_colorizecompositeop='yes',
+     rm_cv_enum_colorizecompositeop='no')])
+
+if test "$rm_cv_enum_colorizecompositeop" = yes; then
+  AC_DEFINE(HAVE_COLORIZECOMPOSITEOP)
+fi
+
 
 AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
   [AC_TRY_COMPILE(

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.60 2004/06/15 17:27:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.61 2004/06/15 20:27:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1015,6 +1015,9 @@ Init_RMagick(void)
 #if defined(HAVE_HWBCOLORSPACE)
         ENUM_VAL(HWBColorspace)       // 5.5.7
 #endif
+#if defined(HAVE_HSBCOLORSPACE)
+        ENUM_VAL(HSBColorspace)       // 6.0.0
+#endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -1038,48 +1041,68 @@ Init_RMagick(void)
     // CompositeOperator constants
     DEF_ENUM(CompositeOperator)
         ENUM_VAL(UndefinedCompositeOp)
-        ENUM_VAL(OverCompositeOp)
-        ENUM_VAL(InCompositeOp)
-        ENUM_VAL(OutCompositeOp)
-        ENUM_VAL(AtopCompositeOp)
-        ENUM_VAL(XorCompositeOp)
-        ENUM_VAL(PlusCompositeOp)
-        ENUM_VAL(MinusCompositeOp)
-        ENUM_VAL(AddCompositeOp)
-        ENUM_VAL(SubtractCompositeOp)
-        ENUM_VAL(DifferenceCompositeOp)
-        ENUM_VAL(MultiplyCompositeOp)
-        ENUM_VAL(BumpmapCompositeOp)
-        ENUM_VAL(CopyCompositeOp)
-        ENUM_VAL(CopyRedCompositeOp)
-        ENUM_VAL(CopyGreenCompositeOp)
-        ENUM_VAL(CopyBlueCompositeOp)
-        ENUM_VAL(CopyOpacityCompositeOp)
-        ENUM_VAL(ClearCompositeOp)
-        ENUM_VAL(DissolveCompositeOp)
-        ENUM_VAL(DisplaceCompositeOp)
-        ENUM_VAL(ModulateCompositeOp)
-        ENUM_VAL(ThresholdCompositeOp)
         ENUM_VAL(NoCompositeOp)
-        ENUM_VAL(DarkenCompositeOp)
-        ENUM_VAL(LightenCompositeOp)
-        ENUM_VAL(HueCompositeOp)
-        ENUM_VAL(SaturateCompositeOp)
+        ENUM_VAL(AddCompositeOp)
+        ENUM_VAL(AtopCompositeOp)
+        ENUM_VAL(BumpmapCompositeOp)
+        ENUM_VAL(ClearCompositeOp)
         ENUM_VAL(ColorizeCompositeOp)
-        ENUM_VAL(LuminizeCompositeOp)
-        ENUM_VAL(ScreenCompositeOp)
-        ENUM_VAL(OverlayCompositeOp)
-
+        ENUM_VAL(CopyBlueCompositeOp)
+        ENUM_VAL(CopyCompositeOp)
+        ENUM_VAL(CopyGreenCompositeOp)
+        ENUM_VAL(CopyOpacityCompositeOp)
+        ENUM_VAL(CopyRedCompositeOp)
 #if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
         ENUM_VAL(CopyCyanCompositeOp)
         ENUM_VAL(CopyMagentaCompositeOp)
         ENUM_VAL(CopyYellowCompositeOp)
         ENUM_VAL(CopyBlackCompositeOp)
 #endif
-
+        ENUM_VAL(DarkenCompositeOp)
+        ENUM_VAL(DifferenceCompositeOp)
+        ENUM_VAL(DisplaceCompositeOp)
+        ENUM_VAL(DissolveCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
+        ENUM_VAL(DstAtopCompositeOp)    // Added 6.0.2?
+        ENUM_VAL(DstCompositeOp)
+        ENUM_VAL(DstInCompositeOp)
+        ENUM_VAL(DstOutCompositeOp)
+        ENUM_VAL(DstOverCompositeOp)
+#endif
+        ENUM_VAL(HueCompositeOp)
+        ENUM_VAL(InCompositeOp)
+        ENUM_VAL(LightenCompositeOp)
+        ENUM_VAL(LuminizeCompositeOp)
+        ENUM_VAL(MinusCompositeOp)
+        ENUM_VAL(ModulateCompositeOp)
+        ENUM_VAL(MultiplyCompositeOp)
+        ENUM_VAL(OutCompositeOp)
+        ENUM_VAL(OverCompositeOp)
+        ENUM_VAL(OverlayCompositeOp)
+        ENUM_VAL(PlusCompositeOp)
 #if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUM_VAL(ReplaceCompositeOp)    // synonym for CopyCompositeOp
 #endif
+        ENUM_VAL(SaturateCompositeOp)
+        ENUM_VAL(ScreenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
+        ENUM_VAL(SrcAtopCompositeOp)
+        ENUM_VAL(SrcCompositeOp)
+        ENUM_VAL(SrcInCompositeOp)
+        ENUM_VAL(SrcOutCompositeOp)
+        ENUM_VAL(SrcOverCompositeOp)
+#endif
+        ENUM_VAL(SubtractCompositeOp)
+        ENUM_VAL(ThresholdCompositeOp)
+        ENUM_VAL(XorCompositeOp)
+
+#if defined(HAVE_COLORIZECOMPOSITEOP)
+        ENUM_VAL(ColorDodgeCompositeOp)
+        ENUM_VAL(ExclusionCompositeOp)
+        ENUM_VAL(HardLightCompositeOp)
+        ENUM_VAL(SoftLightCompositeOp)
+#endif
+
     END_ENUM
 
     // CompressionType constants
@@ -1416,7 +1439,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/06/15 17:27:59 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/06/15 20:27:44 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

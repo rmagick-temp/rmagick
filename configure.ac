@@ -302,6 +302,9 @@ AC_ARG_ENABLE(allow-example-errors,
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --allow-example-errors"], )
 
 MAGICKBASEURI="$rm_cv_path_doc_base_uri"
+
+RUBY_VERSION_STRING=`$RUBY --version`
+AC_DEFINE_UNQUOTED(RUBY_VERSION_STRING, "$RUBY_VERSION_STRING")
 AC_SUBST(MAGICKBASEURI)
 AC_SUBST(RUBY)
 AC_SUBST(RUBY_CONFIG_OPTS)
@@ -311,6 +314,6 @@ AC_OUTPUT(Makefile ext/RMagick/extconf.rb metaconfig)
 echo ""
 echo ""
 echo "This installation of $PACKAGE_STRING is configured for"
-echo "`$RUBY --version` and $MAGICKNAME `$MAGICKCONFIG --version`."
+echo "$RUBY_VERSION_STRING and $MAGICKNAME `$MAGICKCONFIG --version`."
 
 

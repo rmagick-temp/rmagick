@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.20 2003/09/24 00:21:05 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.21 2003/09/29 00:03:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -20,6 +20,7 @@ void Init_RMagick(void);
 static void mark_Draw(void *);
 static void destroy_Draw(void *);
 static void destroy_Montage(void *);
+static void version_constants(void);
 
 
 #define MAGICK_MONITOR_CVAR "@@__rmagick_monitor__"
@@ -1476,7 +1477,6 @@ Montage_title_eq(VALUE self, VALUE title)
 void
 Init_RMagick(void)
 {
-    const char *mgk_version;
 
     InitializeMagick("RMagick");
 
@@ -1833,10 +1833,7 @@ Init_RMagick(void)
     rb_define_const(Module_Magick, "MaxRGB", INT2FIX(MaxRGB));
     rb_define_const(Module_Magick, "QuantumDepth", INT2FIX(QuantumDepth));
 
-    mgk_version = GetMagickVersion(NULL);
-    rb_define_const(Module_Magick, "Magick_version", rb_str_new2(mgk_version));
-
-    rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
+    version_constants();
 
     // Opacity constants
     DEF_CONST(OpaqueOpacity);
@@ -2185,4 +2182,28 @@ Init_RMagick(void)
     cur_image_ID = rb_intern("cur_image");
     values_ID = rb_intern("values");
     _dummy_img__ID = rb_intern("_dummy_img_");
+}
+
+/*
+    Static:     version_constants
+    Purpose:    create Version, Magick_version, and Version_long constants.
+*/
+static void version_constants(void)
+{
+    const char *mgk_version;
+    char long_version[300];
+
+    mgk_version = GetMagickVersion(NULL);
+    rb_define_const(Module_Magick, "Magick_version", rb_str_new2(mgk_version));
+
+    rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
+    sprintf(long_version,
+        "This is %s ($Date: 2003/09/29 00:03:47 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "Built with %s\n"
+        "Built for %s\n"
+        "http://rmagick.rubyforge.org\n"
+        "rmagick@rubyforge.org\n",
+        PACKAGE_STRING, mgk_version, RUBY_VERSION_STRING);
+    rb_define_const(Module_Magick, "Long_version", rb_str_new2(long_version));
+
 }

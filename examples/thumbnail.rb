@@ -40,7 +40,7 @@ geom = "#{size}x#{size}"
 # return value of the block is the return value of the method.
 
 img = Image.read(image)[0]
-img = img.change_geometry(geom) { |cols, rows| img.thumbnail(cols, rows) }
+img.change_geometry!(geom) { |cols, rows| img.thumbnail! cols, rows }
 
 # We need a background to display the thumbnail.
 # Create a square, neutral gray background with raised edges.

@@ -15,10 +15,12 @@
    .typetable {
       padding-bottom: 1em;
    }
-                                       </style>
+                                               </style>
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="info.html">&lt;-
@@ -59,6 +61,8 @@
       <li><a href="#StretchType">StretchType</a></li>
       <li><a href="#StyleType">StyleType</a></li>
       <li><a href="#WeightType">WeightType</a></li>
+      <li><a href="#RMagick_Enums">RMagick Enums: Implementation
+      details</a></li>
     </ul>
     <table>
       <tr class="typetable">
@@ -89,27 +93,36 @@
                 quantum is one of the red, green, blue, or opacity
                 elements of a pixel in the RGB colorspace, or cyan,
                 yellow, magenta, or black elements in the CYMK
-                colorspace.
+                colorspace.</td>
               </tr>
               <tr valign="top">
                 <td>QuantumDepth</td>
-                <td>The number of bits in a quantum.
-                <div align="center">
-                <table border="1">
-                    <caption>
-                        <b>How MaxRGB and QuantumDepth are related</b>
-                    </caption>
-                    <tr>
-                    <td>
-                        <b>QuantumDepth</b>
-                    </td>
-                    <td><b>MaxRGB</b></td>
-                    </tr>
-                    <tr><td>8</td><td>255</td></tr>
-                    <tr><td>16</td><td>65535</td></tr>
-                    <tr><td>32</td><td>4294967295</td></tr>
-                </table>
-                </div>
+                <td>
+                  The number of bits in a quantum. 
+                  <div align="center">
+                    <table border="1">
+                      <caption>
+                        <b>How MaxRGB and QuantumDepth are
+                        related</b>
+                      </caption>
+                      <tr>
+                        <td><b>QuantumDepth</b></td>
+                        <td><b>MaxRGB</b></td>
+                      </tr>
+                      <tr>
+                        <td>8</td>
+                        <td>255</td>
+                      </tr>
+                      <tr>
+                        <td>16</td>
+                        <td>65535</td>
+                      </tr>
+                      <tr>
+                        <td>32</td>
+                        <td>4294967295</td>
+                      </tr>
+                    </table>
+                  </div>
                 </td>
               </tr>
               <tr valign="top">
@@ -200,7 +213,7 @@
                 <td colspan="2">
                   <a name="ClassType"><b>ClassType</b></a> - The
                   ClassType constants specify the image storage
-                  class.
+                  class. 
                   <p>See <a href=
                   "imageattrs.html#Image.class_type">Image#class_type</a></p>
                 </td>
@@ -584,7 +597,7 @@
                   available compression types. If the compression
                   type specified is incompatable with the image,
                   &times;Magick selects a compression type
-                  compatable with the image type.</span>
+                  compatable with the image type.</span> 
                   <p>See <a href=
                   "imageattrs.html#Image.compression">Image#compression</a>.</p>
                 </td>
@@ -731,7 +744,7 @@
                   TriangleFilter) may execute much faster but may
                   show artifacts when the image is re-sized or
                   around diagonal lines. The only way to be sure is
-                  to test the filter with sample images.</span>
+                  to test the filter with sample images.</span> 
                   <p>See <a href=
                   "image.html#Image.resize">Image#resize</a>.</p>
                 </td>
@@ -806,7 +819,7 @@
                   region, in other words, you don't need to provide
                   absolute coordinates in order to position an
                   object. A common default for gravity is
-                  <i>NorthWestGravity</i>.</span>
+                  <i>NorthWestGravity</i>.</span> 
                   <p>See <a href=
                   "draw.html#Draw.annotate">Draw#annotate</a> and
                   <a href=
@@ -878,7 +891,7 @@
                   <a name="ImageType"><b>ImageType</b></a> - The
                   ImageType constants indicate <span class=
                   "imquote">the type classification of the
-                  image.</span>
+                  image.</span> 
                   <p>See <a href=
                   "imageattrs.html#Image.image_type">Image#image_type</a>
                   and <a href=
@@ -952,7 +965,7 @@
                   For example, interlacing allows images on the Web
                   to be recognizable sooner and satellite images to
                   accumulate/render with image resolution
-                  increasing over time.</span>
+                  increasing over time.</span> 
                   <div class="imquote">
                     Use <i>LineInterlace</i> or
                     <i>PlaneInterlace</i> to create an interlaced
@@ -1004,7 +1017,7 @@
                   <a name="NoiseType"><b>NoiseType</b></a> - The
                   NoiseType constants <span class="imquote">select
                   the type of noise to be added to the
-                  image.</span>
+                  image.</span> 
                   <p>See <a href=
                   "image.html#Image.add_noise">Image#add_noise</a>.</p>
                 </td>
@@ -1072,7 +1085,7 @@
                   <a name="PaintMethod"><b>PaintMethod</b></a> -
                   The PaintMethod constants <span class=
                   "imquote">specify how pixel colors are to be
-                  replaced in the image.</span>
+                  replaced in the image.</span> 
                   <p>See <a href=
                   "image.html#Image.matte_floodfill">Image#matte_floodfill</a>
                   and <a href=
@@ -1125,7 +1138,7 @@
                   concept defined by ICC Spec ICC.1:1998-09, "File
                   Format for Color Profiles". &times;Magick uses
                   RenderingIntent in order to support ICC Color
-                  Profiles.</span>
+                  Profiles.</span> 
                   <p class="imquote">From the specification:
                   "Rendering intent specifies the style of
                   reproduction to be used during the evaluation of
@@ -1184,7 +1197,7 @@
                   <span class="imquote">By default, &times;Magick
                   defines resolutions in pixels per inch.
                   ResolutionType provides a means to adjust
-                  this.</span>
+                  this.</span> 
                   <p>See <a href=
                   "imageattrs.html#Image.units">Image#units</a>.</p>
                 </td>
@@ -1326,6 +1339,82 @@
         </td>
       </tr>
     </table>
+    <h3>RMagick Enums: Implementation details</h3>
+    <div style="font-size: small">
+      <p><a name="RMagick_Enums">With the exception of the</a> <a
+      href="#Miscellaneous_constants">miscellaneous constants</a>,
+      the constants listed on this page are references to instances
+      of subclasses of the <code>Magick::Enum</code> class. This
+      class is based on Paul Brannon's Ruby implementation of
+      type-safe enums in <a href=
+      "http://blade.nagaokaut.ac.jp/cgi-bin/scat.rb/ruby/ruby-talk/79041">
+      ruby-talk:79401</a>. Credit should go to Mr. Brannon for the
+      design, but any faults in the RMagick implementation are my
+      own.</p>
+      <p>If you don't need to know the details of how these
+      constants are implemented you don't need to read the rest of
+      this section.</p>
+      <p>Although the actual Magick::Enum class is written in C,
+      the Ruby equivalent code is:</p>
+<pre>
+    module Magick
+      class Enum
+        def initialize(sym, value)
+          @sym = sym
+          @value = value
+        end
+        def to_s
+          return sym.to_s
+        end
+        def to_i
+          return value
+        end
+        def &lt;=&gt;(other)
+          r = to_i &lt;=&gt; other.to_i
+          return r unless r == 0
+          return class &lt;=&gt; other.class
+        end
+        def ===(other)
+          if class == other.class
+            return to_i == other.to_i
+          end
+          return false
+        end
+      end
+    end
+   
+</pre>
+      Each &times;Magick enumeration type is a separate subclass of
+      <code>Enum</code>. For example, the AlignType enumeration is
+      defined as: 
+<pre>
+    class AlignType &lt; Enum
+    end
+   
+</pre>
+      The AlignType constants are then created by the code: 
+<pre>
+    UndefinedAlign = AlignType.new(:UndefinedAlign, 0)
+    LeftAlign = AlignType.new(:LeftAlign, 1)
+    CenterAlign = AlignType.new(:CenterAlign, 2)
+    RightAlign = AlignType.new(:RightAlign, 3)
+   
+</pre>
+      <p>The other enumeration types and values are created in an
+      equivalent manner.</p>
+      <p>The benefit of this implementation is that a method that
+      expects an argument to be a value of a specific enumeration
+      type can check for that type and raise an exception if the
+      wrong type was used. For example, the <a href=
+      "imageattrs.html#Image.units">units=</a> attribute will not
+      accept a value of any type except
+      <code>ResolutionType</code>:</p>
+<pre>
+img.units=Magick::RedChannel # Buzz! Wrong! &raquo;
+TypeError: wrong enumeration type - expected Magick::ResolutionType, got Magick::ChannelType
+   
+</pre>
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="info.html">&lt;-

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.9 2003/07/30 23:49:03 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.10 2003/08/03 21:49:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1563,6 +1563,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "black_threshold", Image_black_threshold, -1);
     rb_define_method(Class_Image, "blur_image", Image_blur_image, -1);
     rb_define_method(Class_Image, "border", Image_border, 3);
+    rb_define_method(Class_Image, "change_geometry", Image_change_geometry, 1);
+    rb_define_method(Class_Image, "change_geometry!", Image_change_geometry, 1);
     rb_define_method(Class_Image, "changed?", Image_changed_q, 0);
     rb_define_method(Class_Image, "channel", Image_channel, 1);
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);

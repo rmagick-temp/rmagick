@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.67 2004/08/21 14:06:28 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.64.2.1 2004/11/30 22:47:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1682,15 +1682,6 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
-#if defined(HAVE_SETIMAGECOLORSPACE)
-
-    // SetImageColorspace was introduced in 5.5.7. It is essentially
-    // identical to the code below. It either works or throws an exception.
-    (void) SetImageColorspace(image, new_cs);
-    HANDLE_IMG_ERROR(image)
-
-#else
-
     if (new_cs == image->colorspace)
     {
         return self;
@@ -1708,16 +1699,17 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
            HANDLE_IMG_ERROR(image)
         }
         RGBTransformImage(image, new_cs);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_IMG_ERROR(image);
+        return self;
     }
-    else if (new_cs == RGBColorspace ||
+
+    if (new_cs == RGBColorspace ||
         new_cs == TransparentColorspace ||
         new_cs == GRAYColorspace)
     {
         TransformRGBImage(image, image->colorspace);
-        HANDLE_IMG_ERROR(image)
+        HANDLE_IMG_ERROR(image);
     }
-#endif
 
     return self;
 }
@@ -2017,7 +2009,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 
     class = class;  // Suppress "never referenced" message from icc
 
-    Check_Type(pixels_arg, T_ARRAY);
+    // rb_Array converts objects that are not Arrays to Arrays if possible,
+    // and raises TypeError if it can't.
+    pixels_arg = rb_Array(pixels_arg);
 
     width = NUM2INT(width_arg);
     height = NUM2INT(height_arg);
@@ -3741,11 +3735,12 @@ Image_import_pixels(
         rb_raise(rb_eArgError, "invalid import geometry");
     }
 
-
     npixels = cols * rows * strlen(map);
 
-    // Got enough pixels?
-    Check_Type(pixel_ary, T_ARRAY);
+    // rb_Array converts objects that are not Arrays to Arrays if possible,
+    // and raises TypeError if it can't.
+    pixel_ary = rb_Array(pixel_ary);
+
     if (RARRAY(pixel_ary)->len < npixels)
     {
         rb_raise(rb_eArgError, "pixel array too small (need %lu, got %ld)"
@@ -6441,69 +6436,6 @@ Image_spaceship(VALUE self, VALUE other)
 }
 
 /*
-    Method:     Image#splice(x, y, width, height[, color])
-    Purpose:    Splice a solid color into the part of the image specified
-                by the x, y, width, and height arguments. If the color
-                argument is specified it must be a color name or Pixel.
-                If not specified uses the background color.
-    Notes:      splice is the inverse of chop
-*/
-
-VALUE
-Image_splice(int argc, VALUE *argv, VALUE self)
-{
-#if defined(HAVE_SPLICEIMAGE)
-    Image *image, *new_image;
-    PixelPacket color, old_color;
-    RectangleInfo rectangle;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-
-    switch(argc)
-    {
-        case 4:
-            // use background color
-            color = image->background_color;
-            break;
-        case 5:
-            // Convert color argument to PixelPacket
-            Color_to_PixelPacket(&color, argv[4]);
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 4 or 5)", argc);
-            break;
-    }
-
-    rectangle.x      = NUM2ULONG(argv[0]);
-    rectangle.y      = NUM2ULONG(argv[1]);
-    rectangle.width  = NUM2ULONG(argv[2]);
-    rectangle.height = NUM2ULONG(argv[3]);
-
-    GetExceptionInfo(&exception);
-
-    // Swap in color for the duration of this call.
-    old_color = image->background_color;
-    image->background_color = color;
-    new_image = SpliceImage(image, &rectangle, &exception);
-    image->background_color = old_color;
-
-    if (!new_image)
-    {
-        rb_raise(rb_eRuntimeError, "SpliceImage failed.");
-    }
-    HANDLE_ERROR
-
-    return rm_image_new(new_image);
-
-#else
-
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-}
-
-/*
     Method:     Image#spread(radius=3)
     Purpose:    randomly displaces each pixel in a block defined by "radius"
     Returns:    a new image
@@ -7130,6 +7062,7 @@ Image_to_blob(VALUE self)
     Image *image;
     Info *info;
     volatile VALUE info_obj;
+    volatile VALUE blob_str;
     void *blob = NULL;
     size_t length = 2048;       // Do what Magick++ does
     ExceptionInfo exception;
@@ -7169,7 +7102,12 @@ Image_to_blob(VALUE self)
     {
         return Qnil;
     }
-    return rb_str_new(blob, length);
+
+    blob_str = rb_str_new(blob, length);
+
+    magick_free((void*)blob);
+
+    return blob_str;
 }
 
 /*
@@ -7272,7 +7210,7 @@ trimmer(int bang, VALUE self)
 
     new_image = CropImage(image, &geometry, &exception);
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_IMG_ERROR(new_image);
     if (!new_image)
     {
         rb_raise(rb_eRuntimeError, "CropImage failed - "
@@ -7687,7 +7625,7 @@ xform_image(
 
     // An exception can occur in either the old or the new images
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image)
+    HANDLE_IMG_ERROR(new_image);
 
     if (bang)
     {

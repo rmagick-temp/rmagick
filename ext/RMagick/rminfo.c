@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.17 2004/02/14 19:35:47 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.18 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -148,7 +148,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     {
         case 3:
             /* Allow any argument that supports to_s */
-            fmt_arg = rb_funcall(argv[2], to_s_ID, 0);
+            fmt_arg = rb_funcall(argv[2], ID_to_s, 0);
             value = STRING_PTR(fmt_arg);
         case 2:
             key = STRING_PTR_LEN(argv[1], key_l);
@@ -190,7 +190,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     {
         case 3:
             /* Allow any argument that supports to_s */
-            fmt_arg = rb_funcall(argv[2], to_s_ID, 0);
+            fmt_arg = rb_funcall(argv[2], ID_to_s, 0);
             value = STRING_PTR_LEN(fmt_arg, value_l);
             /* Fall through */
         case 2:
@@ -253,7 +253,7 @@ Info_density_eq(VALUE self, VALUE density_arg)
         return self;
     }
 
-    density = rb_funcall(density_arg, to_s_ID, 0);
+    density = rb_funcall(density_arg, ID_to_s, 0);
     dens = STRING_PTR(density);
     if (!IsGeometry(dens))
     {
@@ -328,7 +328,7 @@ Info_extract_eq(VALUE self, VALUE extract_arg)
         return self;
     }
 
-    extract = rb_funcall(extract_arg, to_s_ID, 0);
+    extract = rb_funcall(extract_arg, ID_to_s, 0);
     extr = STRING_PTR(extract);
     if (!IsGeometry(extr))
     {
@@ -410,7 +410,7 @@ Info_tile_eq(VALUE self, VALUE tile_arg)
         return self;
     }
 
-    tile = rb_funcall(tile_arg, to_s_ID, 0);
+    tile = rb_funcall(tile_arg, ID_to_s, 0);
     til = STRING_PTR(tile);
     if (!IsGeometry(til))
     {
@@ -715,7 +715,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         info->page = NULL;
         return self;
     }
-    geom_str = rb_funcall(page_arg, to_s_ID, 0);
+    geom_str = rb_funcall(page_arg, ID_to_s, 0);
     geometry=PostscriptGeometry(STRING_PTR(geom_str));
     if (*geometry == '\0')
     {
@@ -861,7 +861,7 @@ Info_size_eq(VALUE self, VALUE size_arg)
         return self;
     }
 
-    size = rb_funcall(size_arg, to_s_ID, 0);
+    size = rb_funcall(size_arg, ID_to_s, 0);
     sz = STRING_PTR(size);
     if (!IsGeometry(sz))
     {

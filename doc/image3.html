@@ -37,6 +37,15 @@
     margin-bottom: 0;
   }
 
+  /*
+   * This style is used for the list of QuantumOperator
+   * constants defined for the quantum_operator method, below.
+  *
+  */
+  #quantum_op_list {
+    list-style-type: none;
+  }
+
   /*]]>*/
   </style>
 </head>
@@ -68,6 +77,8 @@
 
           <li><a href="#quantize">quantize</a></li>
 
+          <li><a href="#quantum_operator">quantum_operator</a></li>
+
           <li><a href="#radial_blur">radial_blur</a></li>
 
           <li><a href="#raise">raise</a></li>
@@ -88,13 +99,13 @@
           <li><a href="#rotate_bang">rotate!</a></li>
 
           <li><a href="#sample">sample</a></li>
-
-          <li><a href="#sample_bang">sample!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#sample_bang">sample!</a></li>
+
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
@@ -435,6 +446,93 @@
     <h4>Magick API</h4>
 
     <p>QuantizeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="quantum_operator">quantum_operator</h3>
+
+    <p><span class="arg">image</span>.quantum_operator(<span class=
+    "arg">operator</span>, <span class="arg">rvalue</span>,
+    <span class="arg">region</span>=<code>nil</code>, <span class=
+    "arg">channel</span>=AllChannels) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Performs the requested integer
+    arithmetic operation on the selected channels of the image over
+    the specified region.</span> This method allows simple
+    arithmetic operations on the component values of all pixels
+    within an image or region within an image. Of course, you could
+    also do this in Ruby using <a href=
+    "image2.html#get_pixels">get_pixels</a> and <a href=
+    "#store_pixels">store_pixels</a>, but
+    <code>quantum_operator</code> will be faster since it does not
+    need to convert the pixels from C to Ruby, especially for large
+    numbers of pixels.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>operator</dt>
+
+      <dd>
+        One of the following QuantumOperator constants:
+
+        <ul id="quantum_op_list">
+          <li>AddQuantumOp</li>
+
+          <li><code>AndQuantumOp</code></li>
+
+          <li><code>DivideQuantumOp</code></li>
+
+          <li><code>LShiftQuantumOp</code></li>
+
+          <li><code>MultiplyQuantumOp</code></li>
+
+          <li><code>OrQuantumOp</code></li>
+
+          <li><code>RShiftQuantumOp</code></li>
+
+          <li><code>SubtractQuantumOp</code></li>
+
+          <li><code>XorQuantumOp</code></li>
+        </ul>
+      </dd>
+
+      <dt>rvalue</dt>
+
+      <dd>the operation rvalue</dd>
+
+      <dt>region</dt>
+
+      <dd>The default region is nil, which means the entire image
+      is affected. You may also specify a subset of the image by
+      passing a <a href="struct.html#Geometry">Geometry</a> object
+      or a geometry string.</dd>
+
+      <dt>channel</dt>
+
+      <dd>A <a href="constants.html#ChannelType">ChannelType</a>
+      constant. The default is to operate on all channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>For all pixels in the 10x10 rectangle at the upper-left
+    corner of the image, divide the red component by 2:</p>
+    <pre>
+region = Geometry.new(10,10,0,0)
+img.quantum_operator(DivideQuantumOp, 2, region, RedChannel)
+</pre>
+
+    <h4>Magick API</h4>QuantumOperatorRegionImage (available in
+    GraphicsMagick 1.1)
   </div>
 
   <div class="sig">
@@ -828,15 +926,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                            This img tag displays the original image when the mouse is over.
-                            Use CSS to add padding around the image to make it occupy the
-                            same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+                                This img tag displays the original image when the mouse is over.
+                                Use CSS to add padding around the image to make it occupy the
+                                same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
          id="notrotated" onmouseout=
          "this.style.display='none'; rotated.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="rotate example" title=
          "Click to see the example script" /><!--
-                              This img tag displays the rotated image.
-                              --><img class="hide" id="rotated"
+                                  This img tag displays the rotated image.
+                                  --><img class="hide" id="rotated"
     onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
     "ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
@@ -1269,15 +1367,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                              This img tag displays the original image when the mouse is over
-                              --><img style=
+                                  This img tag displays the original image when the mouse is over
+                                  --><img style=
     "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                               This img tag displays the sheared image when the mouse is not over
-                               -->
+                                   This img tag displays the sheared image when the mouse is not over
+                                   -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -2113,8 +2211,9 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-                      This img tag displays the framed image when the mouse is not over
-                      --><img class="hide" id="waved" onmouseover=
+                          This img tag displays the framed image when the mouse is not over
+                          --><img class="hide" id="waved"
+    onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
     "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=

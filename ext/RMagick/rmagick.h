@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.43 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.44 2004/03/19 01:32:22 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -180,6 +180,7 @@ EXTERN VALUE Class_Chromaticity;
 EXTERN VALUE Class_Color;
 EXTERN VALUE Class_Font;
 EXTERN VALUE Class_Geometry;
+EXTERN VALUE Class_GeometryValue;   // Defined in RMagick.rb
 EXTERN VALUE Class_Pixel;
 EXTERN VALUE Class_Point;
 EXTERN VALUE Class_Primary;
@@ -188,6 +189,9 @@ EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
 #if defined(HAVE_COMPAREIMAGECHANNELS)
 EXTERN VALUE Class_MetricType;
+#endif
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
+EXTERN VALUE Class_QuantumOperator;
 #endif
 
 // Enum classes
@@ -219,16 +223,24 @@ EXTERN VALUE Class_WeightType;
 /*
 *   Commonly-used IDs
 */
-EXTERN ID new_ID;               // "new"
-EXTERN ID push_ID;              // "push"
-EXTERN ID length_ID;            // "length"
-EXTERN ID values_ID;            // "values"
-EXTERN ID cur_image_ID;         // "cur_image"
-EXTERN ID call_ID;              // "call"
-EXTERN ID to_s_ID;              // "to_s"
-EXTERN ID _dummy_img__ID;       // "_dummy_img_"
-EXTERN ID initialize_copy_ID;   // "initialize_copy"
-EXTERN ID dup_ID;               // "dup"
+EXTERN ID ID__dummy_img_;       // "_dummy_img_"
+EXTERN ID ID_call;              // "call"
+EXTERN ID ID_cur_image;         // "cur_image"
+EXTERN ID ID_dup;               // "dup"
+EXTERN ID ID_flag;              // "flag"
+EXTERN ID ID_from_s;            // "from_s"
+EXTERN ID ID_Geometry;          // "Geometry"
+EXTERN ID ID_GeometryValue;     // "GeometryValue"
+EXTERN ID ID_height;            // "height"
+EXTERN ID ID_initialize_copy;   // "initialize_copy"
+EXTERN ID ID_length;            // "length"
+EXTERN ID ID_new;               // "new"
+EXTERN ID ID_push;              // "push"
+EXTERN ID ID_to_s;              // "to_s"
+EXTERN ID ID_values;            // "values"
+EXTERN ID ID_width;             // "width"
+EXTERN ID ID_x;                 // "x"
+EXTERN ID ID_y;                 // "y"
 
 
 #if defined(HAVE_GETNEXTIMAGEINLIST)
@@ -665,6 +677,7 @@ extern VALUE Image_preview(VALUE, VALUE);
 extern VALUE Image_profile_bang(VALUE, VALUE, VALUE);
 extern VALUE Image_quantize(int, VALUE *, VALUE);
 extern VALUE Image_quantization_error(VALUE);
+extern VALUE Image_quantum_operator(int, VALUE *, VALUE);
 extern VALUE Image_radial_blur(VALUE, VALUE);
 extern VALUE Image_raise(int, VALUE *, VALUE);
 extern VALUE Image_random_channel_threshold(VALUE, VALUE, VALUE);
@@ -810,6 +823,7 @@ extern void not_implemented(const char *);
 extern void handle_error(ExceptionInfo *);
 extern void handle_all_errors(Image *);
 extern void attr_write(VALUE, VALUE);
+extern void get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
 extern Image *toseq(VALUE);
 extern void unseq(Image *);
 

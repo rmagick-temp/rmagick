@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.25 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.26 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -152,7 +152,7 @@ rm_no_freeze(VALUE obj)
 VALUE
 ImageList_cur_image(VALUE img)
 {
-    return rb_funcall(img, cur_image_ID, 0);
+    return rb_funcall(img, ID_cur_image, 0);
 }
 
 /*
@@ -546,7 +546,7 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 VALUE
 AffineMatrix_from_AffineMatrix(AffineMatrix *am)
 {
-    return rb_funcall(Class_AffineMatrix, new_ID, 6
+    return rb_funcall(Class_AffineMatrix, ID_new, 6
                     , rb_float_new(am->sx), rb_float_new(am->rx), rb_float_new(am->ry)
                     , rb_float_new(am->sy), rb_float_new(am->tx), rb_float_new(am->ty));
 }
@@ -566,7 +566,7 @@ AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(st)));
     }
-    values = rb_funcall(st, values_ID, 0);
+    values = rb_funcall(st, ID_values, 0);
     v = rb_ary_entry(values, 0);
     am->sx = v == Qnil ? 1.0 : NUM2DBL(v);
     v = rb_ary_entry(values, 1);
@@ -989,7 +989,7 @@ Color_from_ColorInfo(const ColorInfo *ci)
     compliance = ComplianceType_new(compliance_type);
     color      = Pixel_from_PixelPacket((PixelPacket *)(&(ci->color)));
 
-    return rb_funcall(Class_Color, new_ID, 3
+    return rb_funcall(Class_Color, ID_new, 3
                     , name, compliance, color);
 }
 
@@ -1011,7 +1011,7 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
 
     memset(ci, '\0', sizeof(ColorInfo));
 
-    members = rb_funcall(st, values_ID, 0);
+    members = rb_funcall(st, ID_values, 0);
 
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
@@ -1069,7 +1069,7 @@ Color_to_s(VALUE self)
 VALUE
 Pixel_from_PixelPacket(PixelPacket *pp)
 {
-    return rb_funcall(Class_Pixel, new_ID, 4
+    return rb_funcall(Class_Pixel, ID_new, 4
                     , INT2FIX(pp->red), INT2FIX(pp->green)
                     , INT2FIX(pp->blue), INT2FIX(pp->opacity));
 }
@@ -1091,7 +1091,7 @@ Pixel_to_PixelPacket(PixelPacket *pp, VALUE st)
                  rb_class2name(CLASS_OF(st)));
     }
 
-    values = rb_funcall(st, values_ID, 0);
+    values = rb_funcall(st, ID_values, 0);
     c = rb_ary_entry(values, 0);
     pp->red = c != Qnil ? NUM2INT(c) : 0;
     c = rb_ary_entry(values, 1);
@@ -1134,7 +1134,7 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
 VALUE
 PrimaryInfo_from_PrimaryInfo(PrimaryInfo *p)
 {
-    return rb_funcall(Class_Primary, new_ID, 3
+    return rb_funcall(Class_Primary, ID_new, 3
                     , INT2FIX(p->x), INT2FIX(p->y), INT2FIX(p->z));
 }
 
@@ -1152,7 +1152,7 @@ PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(sp)));
     }
-    members = rb_funcall(sp, values_ID, 0);
+    members = rb_funcall(sp, ID_values, 0);
     m = rb_ary_entry(members, 0);
     pi->x = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 1);
@@ -1168,7 +1168,7 @@ PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 VALUE
 PointInfo_to_Point(PointInfo *p)
 {
-    return rb_funcall(Class_Point, new_ID, 2
+    return rb_funcall(Class_Point, ID_new, 2
                     , INT2FIX(p->x), INT2FIX(p->y));
 }
 
@@ -1186,7 +1186,7 @@ Point_to_PointInfo(PointInfo *pi, VALUE sp)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(sp)));
     }
-    members = rb_funcall(sp, values_ID, 0);
+    members = rb_funcall(sp, ID_values, 0);
     m = rb_ary_entry(members, 0);
     pi->x = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 1);
@@ -1211,7 +1211,7 @@ ChromaticityInfo_new(ChromaticityInfo *ci)
     blue_primary  = PrimaryInfo_from_PrimaryInfo(&ci->blue_primary);
     white_point   = PrimaryInfo_from_PrimaryInfo(&ci->white_point);
 
-    return rb_funcall(Class_Chromaticity, new_ID, 4
+    return rb_funcall(Class_Chromaticity, ID_new, 4
                     , red_primary, green_primary, blue_primary, white_point);
 }
 
@@ -1233,7 +1233,7 @@ ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(chrom)));
     }
-    values_id = values_ID;
+    values_id = ID_values;
 
     // Get the struct members in an array
     chrom_members = rb_funcall(chrom, values_id, 0);
@@ -1290,7 +1290,7 @@ Rectangle_from_RectangleInfo(RectangleInfo *rect)
     height = UINT2NUM(rect->height);
     x      = INT2NUM(rect->x);
     y      = INT2NUM(rect->y);
-    return rb_funcall(Class_Rectangle, new_ID, 4
+    return rb_funcall(Class_Rectangle, ID_new, 4
                     , width, height, x, y);
 }
 
@@ -1308,7 +1308,7 @@ Rectangle_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(sr)));
     }
-    members = rb_funcall(sr, values_ID, 0);
+    members = rb_funcall(sr, ID_values, 0);
     m = rb_ary_entry(members, 0);
     rect->width  = m == Qnil ? 0 : NUM2ULONG(m);
     m = rb_ary_entry(members, 1);
@@ -1332,7 +1332,7 @@ Segment_from_SegmentInfo(SegmentInfo *segment)
     y1 = rb_float_new(segment->y1);
     x2 = rb_float_new(segment->x2);
     y2 = rb_float_new(segment->y2);
-    return rb_funcall(Class_Segment, new_ID, 4, x1, y1, x2, y2);
+    return rb_funcall(Class_Segment, ID_new, 4, x1, y1, x2, y2);
 }
 
 /*
@@ -1350,7 +1350,7 @@ Segment_to_SegmentInfo(SegmentInfo *segment, VALUE s)
                  rb_class2name(CLASS_OF(s)));
     }
 
-    members = rb_funcall(s, values_ID, 0);
+    members = rb_funcall(s, ID_values, 0);
     m = rb_ary_entry(members, 0);
     segment->x1 = m == Qnil ? 0.0 : NUM2DBL(m);
     m = rb_ary_entry(members, 1);
@@ -1409,7 +1409,7 @@ Font_from_TypeInfo(TypeInfo *ti)
     foundry     = ti->foundry  ? rb_str_new2(ti->foundry)  : Qnil;
     format      = ti->format   ? rb_str_new2(ti->format)   : Qnil;
 
-    return rb_funcall(Class_Font, new_ID, 9
+    return rb_funcall(Class_Font, ID_new, 9
                     , name, description, family, style
                     , stretch, weight, encoding, foundry, format);
 }
@@ -1431,7 +1431,7 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
 
     memset(ti, '\0', sizeof(TypeInfo));
 
-    members = rb_funcall(st, values_ID, 0);
+    members = rb_funcall(st, ID_values, 0);
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
@@ -1549,7 +1549,7 @@ TypeMetric_from_TypeMetric(TypeMetric *tm)
     underline_position  = rb_float_new(tm->underline_position);
     underline_thickness = rb_float_new(tm->underline_position);
 
-    return rb_funcall(Class_TypeMetric, new_ID, 9
+    return rb_funcall(Class_TypeMetric, ID_new, 9
                     , pixels_per_em, ascent, descent, width
                     , height, max_advance, bounds
                     , underline_position, underline_thickness);
@@ -1570,7 +1570,7 @@ TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
         rb_raise(rb_eTypeError, "type mismatch: %s given",
                  rb_class2name(CLASS_OF(st)));
     }
-    members = rb_funcall(st, values_ID, 0);
+    members = rb_funcall(st, ID_values, 0);
 
     pixels_per_em   = rb_ary_entry(members, 0);
     Point_to_PointInfo(&tm->pixels_per_em, pixels_per_em);
@@ -1938,7 +1938,7 @@ raise_error(const char *msg, const char *loc)
     mesg = rb_str_new2(msg);
     extra = loc ? rb_str_new2(loc) : Qnil;
 
-    exc = rb_funcall(Class_ImageMagickError, new_ID, 2, mesg, extra);
+    exc = rb_funcall(Class_ImageMagickError, ID_new, 2, mesg, extra);
     rb_funcall(rb_cObject, rb_intern("raise"), 1, exc);
 }
 
@@ -1958,6 +1958,55 @@ ImageMagickError_initialize(VALUE self, VALUE mesg, VALUE extra)
     rb_iv_set(self, "@"MAGICK_LOC, extra);
 
     return self;
+}
+
+/*
+ *  Extern:     get_geometry
+ *  Purpose:    Get the values from a Geometry object and return
+ *              them in C variables.
+*/
+void
+get_geometry(
+    VALUE geom,
+    long *x,
+    long *y,
+    unsigned long *width,
+    unsigned long *height,
+    int *flag)
+{
+    VALUE v;
+
+    v = rb_funcall(geom, ID_x, 0);
+    *x = NUM2LONG(v);
+    v = rb_funcall(geom, ID_y, 0);
+    *y = NUM2LONG(v);
+    v = rb_funcall(geom, ID_width, 0);
+    *width = NUM2ULONG(v);
+    v = rb_funcall(geom, ID_height, 0);
+    *height = NUM2ULONG(v);
+
+    // Getting the flag field is a bit more difficult since it's
+    // supposed to be an instance of the GeometryValue Enum class. We
+    // may not know the VALUE for the GeometryValue class, and we
+    // need to check that the flag field is an instance of that class.
+    if (flag)
+    {
+        MagickEnum *magick_enum;
+
+        v = rb_funcall(geom, ID_flag, 0);
+        if (!Class_GeometryValue)
+        {
+            Class_GeometryValue = rb_const_get(Module_Magick, ID_GeometryValue);
+        }
+        if (CLASS_OF(v) != Class_GeometryValue)
+        {
+            rb_raise(rb_eTypeError, "wrong enumeration type - expected %s, got %s"
+                        , rb_class2name(Class_GeometryValue),rb_class2name(CLASS_OF(v)));
+        }
+        Data_Get_Struct(v, MagickEnum, magick_enum);
+        *flag = magick_enum->val;
+    }
+
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.47 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.48 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -612,7 +612,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     volatile VALUE ary;
 
     Data_Get_Struct(self, Image, image);
-    geom_str = rb_funcall(geom_arg, to_s_ID, 0);
+    geom_str = rb_funcall(geom_arg, ID_to_s, 0);
     geometry = STRING_PTR(geom_str);
 
     flags = ParseSizeGeometry(image, geometry, &rect);
@@ -638,7 +638,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     volatile VALUE geom_str;
 
     Data_Get_Struct(self, Image, image);
-    geom_str = rb_funcall(geom_arg, to_s_ID, 0);
+    geom_str = rb_funcall(geom_arg, ID_to_s, 0);
     geometry = STRING_PTR(geom_str);
 
     width = image->columns;
@@ -2440,7 +2440,7 @@ Image_dup(VALUE self)
     {
         rb_obj_taint(dup);
     }
-    return rb_funcall(dup, initialize_copy_ID, 1, self);
+    return rb_funcall(dup, ID_initialize_copy, 1, self);
 }
 
 /*
@@ -3250,7 +3250,7 @@ Image_geometry_eq(
     }
 
 
-    geom_str = rb_funcall(geometry, to_s_ID, 0);
+    geom_str = rb_funcall(geometry, ID_to_s, 0);
     geom = STRING_PTR(geom_str);
     if (!IsGeometry(geom))
     {
@@ -5077,6 +5077,95 @@ Image_quantum_depth(VALUE self)
 
 
 /*
+    Method:     Image#quantum_operator(operator, rvalue[, region[, channel...]] )
+    Purpose:    Call the QuantumOperatorRegionImage method
+    Notes:      If the `region' argument is nil or not present, then the region is
+                the entire image.  If `region' is present then it can be nil.  If not nil,
+                then it must be either a Geometry object or a Geometry string that
+                describes a region within the image.  The effects of the operator are
+                limited to the region.  If no channel arguments are used, the default is
+                AllChannels.
+*/
+VALUE
+Image_quantum_operator(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
+    Image *image;
+    volatile VALUE geom;
+    long x, y;
+    unsigned long cols, rows;
+    QuantumOperator quantum_operator;
+    ChannelType channel_type;
+    Quantum rvalue;
+    MagickPassFail okay;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    // The default channel is AllChannels
+    channel_type = AllChannels;
+
+    // The default region is the entire image.
+    x    = 0;
+    y    = 0;
+    cols = image->columns;
+    rows = image->rows;
+
+    /*
+        If there are 4 arguments, argument 4 is a ChannelType argument.  If there
+        are 3 arguments, argument 2 is a Geometry object or a Geometry string.
+        Arguments 1 and 0 are required and are the rvalue and operator,
+        respectively.
+    */
+    switch(argc)
+    {
+        case 4:
+            VALUE_TO_ENUM(argv[3], channel_type, ChannelType);
+            /* Fall through */
+        case 3:
+            if (TYPE(argv[2]) == T_STRING)
+            {
+                if (!Class_Geometry)
+                {
+                    Class_Geometry = rb_const_get(Module_Magick, ID_Geometry);
+                }
+                geom = rb_funcall(Class_Geometry, ID_from_s, 1, argv[2]);
+                get_geometry(geom, &x, &y, &cols, &rows, NULL);
+            }
+            else if(argv[2] != Qnil)
+            {
+                get_geometry(argv[2], &x, &y, &cols, &rows, NULL);
+            }
+            /* Fall through */
+        case 2:
+            rvalue = (Quantum) NUM2LONG(argv[1]);
+            VALUE_TO_ENUM(argv[0], quantum_operator, QuantumOperator);
+            break;
+        case 1:
+        case 0:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2, 3, or 4)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    okay = QuantumOperatorRegionImage(image, x, y, cols, rows,
+                                    channel_type, quantum_operator, rvalue, &exception);
+    HANDLE_ERROR
+    if (okay != MagickPass)
+    {
+        rb_raise(rb_eRuntimeError, "QuantumOperatorRegionImage failed.");
+    }
+
+    return self;
+#else
+    not_implemented("quantum_operator");
+    return (VALUE)0;
+#endif
+}
+
+
+
+/*
     Method:     Image#radial_blur(angle)
     Purpose:    Call RadialBlurImage
     Notes:      Angle is in degrees
@@ -5220,7 +5309,7 @@ Image_random_threshold_channel(
         rb_raise(rb_eArgError, "missing threshold argument");
     }
 
-    geom_str = rb_funcall(argv[0], to_s_ID, 0);
+    geom_str = rb_funcall(argv[0], ID_to_s, 0);
     thresholds = STRING_PTR(geom_str);
 
     if (argc == 1)

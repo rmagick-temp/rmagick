@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.48 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.49 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -209,7 +209,7 @@ monitor_handler(
         args[2] = UINT2NUM((unsigned long) span);
 
         monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2((VALUE)monitor, call_ID, 3, (VALUE *)args);
+        (void) rb_funcall2((VALUE)monitor, ID_call, 3, (VALUE *)args);
     }
 
     return True;
@@ -230,7 +230,7 @@ Magick_set_monitor(VALUE class, VALUE monitor)
     {
         Magick_Monitor = rb_intern(MAGICK_MONITOR_CVAR);
         rb_define_class_variable(Module_Magick, MAGICK_MONITOR_CVAR, monitor);
-        call_ID = rb_intern("call");
+        ID_call = rb_intern("call");
     }
 
     // If nil, turn off monitoring.
@@ -518,6 +518,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "preview", Image_preview, 1);
     rb_define_method(Class_Image, "profile!", Image_profile_bang, 2);
     rb_define_method(Class_Image, "quantize", Image_quantize, -1);
+    rb_define_method(Class_Image, "quantum_operator", Image_quantum_operator, -1);
     rb_define_method(Class_Image, "radial_blur", Image_radial_blur, 1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
     rb_define_method(Class_Image, "random_channel_threshold", Image_random_channel_threshold, 2);
@@ -805,6 +806,7 @@ Init_RMagick(void)
 #if defined(HAVE_INDEXCHANNEL)
         ENUM_VAL(IndexChannel)    // 5.5.8
 #endif
+        ENUM_VAL(AllChannels)
     END_ENUM
 
     // ClassType constants
@@ -1066,6 +1068,21 @@ Init_RMagick(void)
         ENUM_VAL(JPEGPreview)
     END_ENUM
 
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
+    DEF_ENUM(QuantumOperator)
+        ENUM_VAL(UndefinedQuantumOp)
+        ENUM_VAL(AddQuantumOp)
+        ENUM_VAL(AndQuantumOp)
+        ENUM_VAL(DivideQuantumOp)
+        ENUM_VAL(LShiftQuantumOp)
+        ENUM_VAL(MultiplyQuantumOp)
+        ENUM_VAL(OrQuantumOp)
+        ENUM_VAL(RShiftQuantumOp)
+        ENUM_VAL(SubtractQuantumOp)
+        ENUM_VAL(XorQuantumOp)
+    END_ENUM
+#endif
+
     // RenderingIntent
     DEF_ENUM(RenderingIntent)
         ENUM_VAL(UndefinedIntent)
@@ -1185,18 +1202,26 @@ Init_RMagick(void)
 
 
     /*-----------------------------------------------------------------------*/
-    /* Create IDs for frequently used methods                                */
+    /* Create IDs for frequently used methods, etc.                          */
     /*-----------------------------------------------------------------------*/
 
-    new_ID = rb_intern("new");
-    push_ID = rb_intern("push");
-    length_ID = rb_intern("length");
-    cur_image_ID = rb_intern("cur_image");
-    values_ID = rb_intern("values");
-    to_s_ID = rb_intern("to_s");
-    _dummy_img__ID = rb_intern("_dummy_img_");
-    initialize_copy_ID = rb_intern("initialize_copy");
-    dup_ID = rb_intern("dup");
+    ID__dummy_img_     = rb_intern("_dummy_img_");
+    ID_cur_image       = rb_intern("cur_image");
+    ID_dup             = rb_intern("dup");
+    ID_flag            = rb_intern("flag");
+    ID_from_s          = rb_intern("from_s");
+    ID_Geometry        = rb_intern("Geometry");
+    ID_GeometryValue   = rb_intern("GeometryValue");
+    ID_height          = rb_intern("height");
+    ID_initialize_copy = rb_intern("initialize_copy");
+    ID_length          = rb_intern("length");
+    ID_new             = rb_intern("new");
+    ID_push            = rb_intern("push");
+    ID_to_s            = rb_intern("to_s");
+    ID_values          = rb_intern("values");
+    ID_width           = rb_intern("width");
+    ID_x               = rb_intern("x");
+    ID_y               = rb_intern("y");
 }
 
 /*
@@ -1213,7 +1238,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/03/10 01:11:36 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/03/19 01:32:22 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

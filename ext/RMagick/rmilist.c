@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.11 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.12 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -407,7 +407,7 @@ ImageList_mosaic(VALUE self)
 VALUE
 rm_imagelist_new()
 {
-    return rb_funcall(Class_ImageList, new_ID, 0);
+    return rb_funcall(Class_ImageList, ID_new, 0);
 }
 
 /*
@@ -419,7 +419,7 @@ rm_imagelist_length(VALUE imagelist)
 {
     volatile VALUE len;
 
-    len = rb_funcall(imagelist, length_ID, 0);
+    len = rb_funcall(imagelist, ID_length, 0);
     return FIX2INT(len);
 }
 
@@ -431,7 +431,7 @@ VALUE
 rm_imagelist_push(VALUE imagelist, VALUE image)
 {
     rb_check_frozen(imagelist);
-    return rb_funcall(imagelist, push_ID, 1, image);
+    return rb_funcall(imagelist, ID_push, 1, image);
 }
 
 /*

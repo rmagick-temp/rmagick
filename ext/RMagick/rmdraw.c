@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.9 2004/03/10 01:11:36 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.10 2004/03/19 01:32:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -626,7 +626,7 @@ Draw_dup(VALUE self)
     {
         rb_obj_taint(dup);
     }
-    return rb_funcall(dup, initialize_copy_ID, 1, self);
+    return rb_funcall(dup, ID_initialize_copy, 1, self);
 }
 
 
@@ -644,7 +644,7 @@ static VALUE get_dummy_tm_img(VALUE klass)
     Info *info;
     Image *image;
 
-    if (rb_cvar_defined(klass, _dummy_img__ID) != Qtrue)
+    if (rb_cvar_defined(klass, ID__dummy_img_) != Qtrue)
     {
 
         info = CloneImageInfo(NULL);
@@ -660,10 +660,10 @@ static VALUE get_dummy_tm_img(VALUE klass)
         DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
 
-        RUBY18(rb_cvar_set(klass, _dummy_img__ID, dummy_img, 0));
-        RUBY16(rb_cvar_set(klass, _dummy_img__ID, dummy_img));
+        RUBY18(rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0));
+        RUBY16(rb_cvar_set(klass, ID__dummy_img_, dummy_img));
     }
-    dummy_img = rb_cvar_get(klass, _dummy_img__ID);
+    dummy_img = rb_cvar_get(klass, ID__dummy_img_);
 
     return dummy_img;
 }
@@ -1020,7 +1020,7 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
     volatile VALUE frame;
 
     Data_Get_Struct(self, Montage, montage);
-    frame = rb_funcall(frame_arg, to_s_ID, 0);
+    frame = rb_funcall(frame_arg, ID_to_s, 0);
     magick_clone_string(&montage->info->frame, STRING_PTR(frame));
 
     return self;
@@ -1037,7 +1037,7 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
     volatile VALUE geometry;
 
     Data_Get_Struct(self, Montage, montage);
-    geometry = rb_funcall(geometry_arg, to_s_ID, 0);
+    geometry = rb_funcall(geometry_arg, ID_to_s, 0);
     magick_clone_string(&montage->info->geometry, STRING_PTR(geometry));
 
     return self;
@@ -1242,7 +1242,7 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
     volatile VALUE tile;
 
     Data_Get_Struct(self, Montage, montage);
-    tile = rb_funcall(tile_arg, to_s_ID, 0);
+    tile = rb_funcall(tile_arg, ID_to_s, 0);
     magick_clone_string(&montage->info->tile, STRING_PTR(tile));
 
     return self;

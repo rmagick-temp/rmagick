@@ -91,7 +91,7 @@ AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram]
 AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
 AC_CHECK_FUNCS([CompareImageChannels PreviewImage SetImageColorspace])
-AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel])
+AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.

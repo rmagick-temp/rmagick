@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.67 2004/11/22 01:28:15 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.68 2004/11/24 00:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -818,6 +818,7 @@ Init_RMagick(void)
     rb_define_method(Class_Draw, "draw", Draw_draw, 1);
     rb_define_method(Class_Draw, "dup", Draw_dup, 0);
     rb_define_method(Class_Draw, "get_type_metrics", Draw_get_type_metrics, -1);
+    rb_define_method(Class_Draw, "get_multiline_type_metrics", Draw_get_multiline_type_metrics, -1);
     rb_define_method(Class_Draw, "initialize", Draw_initialize, 0);
     rb_define_method(Class_Draw, "initialize_copy", Draw_init_copy, 1);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
@@ -1479,7 +1480,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/11/22 01:28:15 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/11/24 00:08:23 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.15 2004/07/31 22:04:09 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.16 2004/11/24 00:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -12,6 +12,10 @@
 static void mark_Draw(void *);
 static void destroy_Draw(void *);
 static void destroy_Montage(void *);
+
+typedef MagickBooleanType (get_type_metrics_func_t)(Image *, const DrawInfo *, TypeMetric *);
+static VALUE get_type_metrics(int, VALUE *, VALUE, get_type_metrics_func_t *);
+
 
 /*
     Method:     Draw#affine=
@@ -686,63 +690,17 @@ Draw_get_type_metrics(
     VALUE *argv,
     VALUE self)
 {
-    static char attrs[] = "bcdefghiklmnopqrstuwxyz";
-#define ATTRS_L (sizeof(attrs)-1)
-    Image *image;
-    Draw *draw;
-    TypeMetric metrics;
-    char *text;
-    long text_l;
-    int x;
-    unsigned int okay;
+    return get_type_metrics(argc, argv, self, GetTypeMetrics);
+}
 
-    switch (argc)
-    {
-        case 1:                   // use default image
-            text = STRING_PTR_LEN(argv[0], text_l);
 
-            for (x = 0; x < text_l; x++)
-            {
-                // Ensure text string doesn't refer to image attributes.
-                if (text[x] == '%' && x < text_l-1)
-                {
-                    int y;
-                    char spec = text[x+1];
-
-                    for (y = 0; y < ATTRS_L; y++)
-                    {
-                        if (spec == attrs[y])
-                        {
-                            rb_raise(rb_eArgError,
-                                "text string contains image attribute reference `%%%c'",
-                                spec);
-                        }
-                    }
-                }
-            }
-
-            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
-            break;
-        case 2:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
-            text = STRING_PTR(argv[1]);
-            break;                  // okay
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
-            break;
-    }
-
-    Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->text, text);
-
-    okay = GetTypeMetrics(image, draw->info, &metrics);
-
-    if (!okay)
-    {
-        rb_warning("RMagick: get_type_metrics failed");
-        return Qnil;
-    }
-    return TypeMetric_from_TypeMetric(&metrics);
+VALUE
+Draw_get_multiline_type_metrics(
+     int argc,
+     VALUE *argv,
+     VALUE self)
+{
+     return get_type_metrics(argc, argv, self, GetMultilineTypeMetrics);
 }
 
 /*
@@ -1273,3 +1231,74 @@ Montage_title_eq(VALUE self, VALUE title)
     return self;
 }
 
+
+/*
+ *  Static:     get_type_metrics
+ *  Purpose:    Call a get-type-metrics function
+ *  Notes:      called by Draw_get_type_metrics and Draw_get_multiline_type_metrics
+*/
+static VALUE
+get_type_metrics(
+     int argc,
+     VALUE *argv,
+     VALUE self,
+     get_type_metrics_func_t *getter)
+{
+     static char attrs[] = "bcdefghiklmnopqrstuwxyz";
+ #define ATTRS_L (sizeof(attrs)-1)
+     Image *image;
+     Draw *draw;
+     TypeMetric metrics;
+     char *text;
+     long text_l;
+     int x;
+     unsigned int okay;
+
+     switch (argc)
+     {
+         case 1:                   // use default image
+             text = STRING_PTR_LEN(argv[0], text_l);
+
+             for (x = 0; x < text_l; x++)
+             {
+                 // Ensure text string doesn't refer to image attributes.
+                 if (text[x] == '%' && x < text_l-1)
+                 {
+                     int y;
+                     char spec = text[x+1];
+
+                     for (y = 0; y < ATTRS_L; y++)
+                     {
+                         if (spec == attrs[y])
+                         {
+                             rb_raise(rb_eArgError,
+                                 "text string contains image attribute reference `%%%c'",
+                                 spec);
+                         }
+                     }
+                 }
+             }
+
+             Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
+             break;
+         case 2:
+             Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
+             text = STRING_PTR(argv[1]);
+             break;                  // okay
+         default:
+             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+             break;
+     }
+
+     Data_Get_Struct(self, Draw, draw);
+     magick_clone_string(&draw->info->text, text);
+
+     okay = (*getter)(image, draw->info, &metrics);
+
+     if (!okay)
+     {
+         rb_warning("RMagick: get_type_metrics failed");
+         return Qnil;
+     }
+     return TypeMetric_from_TypeMetric(&metrics);
+}

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.63 2004/11/22 01:28:15 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.64 2004/11/24 00:08:23 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -452,6 +452,7 @@ extern VALUE Draw_clone(VALUE);
 extern VALUE Draw_composite(int, VALUE *, VALUE);
 extern VALUE Draw_draw(VALUE, VALUE);
 extern VALUE Draw_dup(VALUE);
+extern VALUE Draw_get_multiline_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_init_copy(VALUE, VALUE);
 extern VALUE Draw_initialize(VALUE);

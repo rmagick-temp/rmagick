@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.6 2003/07/20 13:09:04 tim Exp $ */
+/* $Id: rmmain.c,v 1.7 2003/07/26 23:01:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1390,25 +1390,9 @@ Montage_title_eq(VALUE self, VALUE title)
 void
 Init_RMagick(void)
 {
-    // This is unsigned int in older versions of IM
-    unsigned long magick_version;
     const char *mgk_version;
 
     InitializeMagick("RMagick");
-
-    mgk_version = GetMagickVersion(&magick_version);
-
-#ifndef GRAPHICSMAGICK
-    if (magick_version < MIN_LIBVER)
-    {
-        rb_raise(rb_eStandardError, "Incompatible version of " Q(MAGICKNAME) ".\n%s.", mgk_version);
-    }
-    else if (magick_version > MAX_LIBVER)
-    {
-        rb_warning("RMagick has not been tested with this version "
-                   "of " Q(MAGICKNAME) ". Some methods may not work correctly.");
-    }
-#endif
 
     Module_Magick = rb_define_module("Magick");
 
@@ -1758,6 +1742,8 @@ Init_RMagick(void)
     // Miscellaneous constants
     rb_define_const(Module_Magick, "MaxRGB", INT2FIX(MaxRGB));
     rb_define_const(Module_Magick, "QuantumDepth", INT2FIX(QuantumDepth));
+
+    mgk_version = GetMagickVersion(NULL);
     rb_define_const(Module_Magick, "Magick_version", rb_str_new2(mgk_version));
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));

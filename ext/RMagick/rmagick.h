@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.6 2003/07/22 13:14:15 tim Exp $ */
+/* $Id: rmagick.h,v 1.7 2003/07/26 23:01:10 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -72,17 +72,7 @@
 
 // Safe replacement for rb_str2cstr
 #define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
-
-// Define range of acceptable ImageMagick version numbers
-
-#if !defined(GRAPHICSMAGICK)
-#define MIN_LIBVER 0x0551
-#define MAX_LIBVER 0x0558
-#endif
-
-#define Q(a) Q2(a)     // Create quoted macro symbol
-#define Q2(a) #a
-
+1747
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
 
 RUBY18(typedef long Strlen_t;)

@@ -108,6 +108,12 @@
       <li><a href="#view">Image::View</a></li>
     </ul>
 
+    <h3><a href="#Geometry">The Geometry class</a></h3>
+
+    <ul>
+      <li><a href="#Geometry">Geometry</a></li>
+    </ul>
+
     <h3><a href="#Pixel">The Pixel class</a></h3>
 
     <ul>
@@ -120,8 +126,6 @@
       <li><a href="#AffineMatrix">AffineMatrix</a></li>
 
       <li><a href="#Chromaticity">Chromaticity</a></li>
-
-      <li><a href="#Geometry">Geometry</a></li>
 
       <li><a href="#Pixel">Pixel</a></li>
 
@@ -464,8 +468,173 @@
     </div>
   </div>
 
+  <div class="class" id="Geometry">
+    <h2>The Geometry class</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>The Geometry class contains the same information as an
+      &times;Magick <a href="imusage.html#geometry">geometry
+      string</a>. Geometry objects are interchangable with geometry
+      strings.</p>
+    </div>
+
+    <h3>class Geometry <span class="superclass">&lt;
+    Object</span></h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>Geometry.<span class="arg">new</span>(<span class=
+      "arg">width</span>=nil, <span class="arg">height</span>=nil,
+      <span class="arg">x</span>=nil, <span class=
+      "arg">y</span>=nil, <span class="arg">flag</span>=nil) -&gt;
+      <em>aGeometry</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Constructs a new <code>Geometry</code> object.</p>
+
+      <h5>Attributes</h5>
+
+      <p>A geometry string has the general form
+      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object,</p>
+
+      <dl>
+        <dt>width</dt>
+
+        <dd>specifies the W value</dd>
+
+        <dt>height</dt>
+
+        <dd>specifies the H value</dd>
+
+        <dt>x, y</dt>
+
+        <dd>specify the x and y values, respectively</dd>
+
+        <dt>flag</dt>
+
+        <dd>one of the constants shown in this table:</dd>
+      </dl>
+
+      <table summary="geometry flag constants" class=
+      "simple_table">
+        <caption>
+          <strong>Geometry flag constants</strong>
+        </caption>
+
+        <tr>
+          <td align="center"><strong>Constant<br />
+          name</strong></td>
+
+          <td align="center"><strong>Geometry<br />
+          string flag</strong></td>
+
+          <td align="center"><strong>Explanation</strong></td>
+        </tr>
+
+        <tr>
+          <td>PercentGeometry</td>
+
+          <td align="center">%</td>
+
+          <td>Normally the attributes are treated as pixels. Use
+          this flag when the <code>width</code> and
+          <code>height</code> attributes represent
+          <em>percentages</em>. For example, 125x75 means 125% of
+          the height and 75% of the width. The <code>x</code> and
+          <code>y</code> attributes are not affected by this
+          flag.</td>
+        </tr>
+
+        <tr>
+          <td>AspectGeometry</td>
+
+          <td align="center">!</td>
+
+          <td>Use this flag when you want to force the new image to
+          have exactly the size specified by the the
+          <code>width</code> and <code>height</code>
+          attributes.</td>
+        </tr>
+
+        <tr>
+          <td>LessGeometry</td>
+
+          <td align="center">&lt;</td>
+
+          <td>Use this flag when you want to change the size of the
+          image only if both its width and height are smaller the
+          values specified by those attributes. The image size is
+          changed proportionally.</td>
+        </tr>
+
+        <tr>
+          <td>GreaterGeometry</td>
+
+          <td align="center">&gt;</td>
+
+          <td>Use this flag when you want to change the size of the
+          image if either its width and height exceed the values
+          specified by those attributes. The image size is changed
+          proportionally.</td>
+        </tr>
+
+        <tr>
+          <td>AreaGeometry</td>
+
+          <td align="center">@</td>
+
+          <td>This flag is useful only with a single
+          <code>width</code> attribute. When present, it means the
+          <code>width</code> attribute represents the total area of
+          the image in pixels.</td>
+        </tr>
+      </table>
+
+      <p>If any attribute is omitted the default is nil or 0.</p>
+
+      <h5>Example</h5>
+      <pre>
+g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
+</pre>
+    </div>
+  </div>
+
+  <div class="sig">
+    <h4>from_s</h4>
+
+    <p>Geometry.<span class="arg">from_s</span>(<span class=
+    "arg">string</span>) -&gt; <em>aGeometry</em></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Constructs a new <code>Geometry</code> object from a
+    <a href="imusage.html#geometry">geometry string</a>.</p>
+  </div>
+
+  <div class="sig">
+    <h4>to_s</h4>
+
+    <p><span class="arg">geometry.</span>to_s() -&gt;
+    <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h5>Description</h5>
+
+    <p>Returns the string equivalent of the <code>Geometry</code>
+    object..</p>
+  </div>
+
   <div class="class" id="Pixel">
-    <h2 id="Pixelw">The Pixel class</h2>
+    <h2>The Pixel class</h2>
 
     <div class="intro">
       <h3>Introduction</h3>
@@ -833,162 +1002,6 @@
         <dd>White point (e.g. white_point.x=0.3127,
         white_point.y=0.329)</dd>
       </dl>
-    </div>
-
-    <h3 id="Geometry">class Geometry <span class="superclass">&lt;
-    Object</span></h3>
-
-    <div class="sig">
-      <h4>new</h4>
-
-      <p>Geometry.<span class="arg">new</span>(<span class=
-      "arg">width</span>=nil, <span class="arg">height</span>=nil,
-      <span class="arg">x</span>=nil, <span class=
-      "arg">y</span>=nil, <span class="arg">flag</span>=nil) -&gt;
-      <em>aGeometry</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Constructs a new <code>Geometry</code> object. A
-      <code>Geometry</code> object is the equivalent of a <a href=
-      "imusage.html#geometry">geometry string</a>. A
-      <code>Geometry</code> object can be used almost anywhere a
-      geometry string can be used.</p>
-
-      <h5>Attributes</h5>
-
-      <p>A geometry string has the general form
-      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object,</p>
-
-      <dl>
-        <dt>width</dt>
-
-        <dd>specifies the W value</dd>
-
-        <dt>height</dt>
-
-        <dd>specifies the H value</dd>
-
-        <dt>x, y</dt>
-
-        <dd>specify the x and y values, respectively</dd>
-
-        <dt>flag</dt>
-
-        <dd>one of the constants shown in this table:</dd>
-      </dl>
-
-      <table summary="geometry flag constants" class=
-      "simple_table">
-        <caption>
-          <strong>Geometry flag constants</strong>
-        </caption>
-
-        <tr>
-          <td align="center"><strong>Constant<br />
-          name</strong></td>
-
-          <td align="center"><strong>Geometry<br />
-          string flag</strong></td>
-
-          <td align="center"><strong>Explanation</strong></td>
-        </tr>
-
-        <tr>
-          <td>PercentGeometry</td>
-
-          <td align="center">%</td>
-
-          <td>Normally the attributes are treated as pixels. Use
-          this flag when the <code>width</code> and
-          <code>height</code> attributes represent
-          <em>percentages</em>. For example, 125x75 means 125% of
-          the height and 75% of the width. The <code>x</code> and
-          <code>y</code> attributes are not affected by this
-          flag.</td>
-        </tr>
-
-        <tr>
-          <td>AspectGeometry</td>
-
-          <td align="center">!</td>
-
-          <td>Use this flag when you want to force the new image to
-          have exactly the size specified by the the
-          <code>width</code> and <code>height</code>
-          attributes.</td>
-        </tr>
-
-        <tr>
-          <td>LessGeometry</td>
-
-          <td align="center">&lt;</td>
-
-          <td>Use this flag when you want to change the size of the
-          image only if both its width and height are smaller the
-          values specified by those attributes. The image size is
-          changed proportionally.</td>
-        </tr>
-
-        <tr>
-          <td>GreaterGeometry</td>
-
-          <td align="center">&gt;</td>
-
-          <td>Use this flag when you want to change the size of the
-          image if either its width and height exceed the values
-          specified by those attributes. The image size is changed
-          proportionally.</td>
-        </tr>
-
-        <tr>
-          <td>AreaGeometry</td>
-
-          <td align="center">@</td>
-
-          <td>This flag is useful only with a single
-          <code>width</code> attribute. When present, it means the
-          <code>width</code> attribute represents the total area of
-          the image in pixels.</td>
-        </tr>
-      </table>
-
-      <p>If any attribute is omitted the default is nil or 0.</p>
-
-      <h5>Example</h5>
-      <pre>
-g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
-</pre>
-    </div>
-
-    <div class="sig">
-      <h4>from_s</h4>
-
-      <p>Geometry.<span class="arg">from_s</span>(<span class=
-      "arg">string</span>) -&gt; <em>aGeometry</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Constructs a new <code>Geometry</code> object from a
-      <a href="imusage.html#geometry">geometry string</a>.</p>
-    </div>
-
-    <div class="sig">
-      <h4>to_s</h4>
-
-      <p><span class="arg">geometry.</span>to_s() -&gt;
-      <em>aString</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Returns the string equivalent of the <code>Geometry</code>
-      object..</p>
     </div>
 
     <h3 id="Point">class Point <span class="superclass">&lt;

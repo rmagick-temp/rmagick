@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.30 2004/04/07 23:07:13 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.31 2004/04/09 21:01:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -528,19 +528,19 @@ VALUE Pixel_spaceship(VALUE self, VALUE other)
 
     if (this->red != that->red)
     {
-        return INT2FIX(this->red - that->red);
+        return LONG2NUM((this->red - that->red)/abs(this->red - that->red));
     }
     else if(this->green != that->green)
     {
-        return INT2FIX(this->green - that->green);
+        return LONG2NUM((this->green - that->green)/abs(this->green - that->green));
     }
     else if(this->blue != that->blue)
     {
-        return INT2FIX(this->blue - that->blue);
+        return LONG2NUM((this->blue - that->blue)/abs(this->blue - that->blue));
     }
     else if(this->opacity != that->opacity)
     {
-        return INT2FIX(this->opacity - that->opacity);
+        return LONG2NUM((this->opacity - that->opacity)/abs(this->opacity - that->opacity));
     }
 
     // Values are equal, check class.

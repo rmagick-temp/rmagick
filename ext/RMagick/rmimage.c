@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.72 2004/12/03 00:13:30 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.73 2004/12/04 00:20:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -438,7 +438,7 @@ DEF_ATTR_ACCESSOR(Image, blur, dbl)
 
 
 /*
- *  Method:     Image#blur_channel(channel, radius, sigma)
+ *  Method:     Image#blur_channel(radius = 0.0, sigma = 1.0, channel=AllChannels)
  *  Purpose:    Call BlurImageChannel
 */
 VALUE
@@ -447,23 +447,31 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_BLURIMAGECHANNEL)
      Image *image, *new_image;
      ExceptionInfo exception;
-     ChannelType channel;
+     ChannelType channel = UndefinedChannel, type;
      double radius = 0.0, sigma = 1.0;
+     int x;
 
      Data_Get_Struct(self, Image, image);
 
      switch (argc)
      {
-         case 3:
-             sigma = NUM2DBL(argv[2]);
-         case 2:
-             radius = NUM2DBL(argv[1]);
-         case 1:
-             VALUE_TO_ENUM(argv[0], channel, ChannelType);
-             break;
          default:
-             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
+             for(x = 1; x < argc; x++)
+             {
+                 VALUE_TO_ENUM(argv[x], type, ChannelType);
+                 channel |= type;
+             }
+         case 2:
+             sigma = NUM2DBL(argv[1]);
+         case 1:
+             radius = NUM2DBL(argv[0]);
+         case 0:
              break;
+     }
+
+     if (channel == UndefinedChannel)
+     {
+         channel = AllChannels;
      }
 
      GetExceptionInfo(&exception);
@@ -2095,7 +2103,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     }
     else
     {
-        rb_raise(rb_eTypeError, "element 0 in pixel array is %s, must be Numeric"
+        rb_raise(rb_eTypeError, "element 0 in pixel array is %s, must be Fixnum or Double"
                , rb_class2name(CLASS_OF(pixel0)));
     }
 
@@ -3489,12 +3497,13 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
             radius = NUM2DBL(argv[0]);
             /* Fall thru */
         case 0:
-            /* If no channels specified, default to AllChannels */
-            if (channel_type == UndefinedChannel)
-            {
-                channel_type = AllChannels;
-            }
             break;
+    }
+
+    /* If no channels specified, default to AllChannels */
+    if (channel_type == UndefinedChannel)
+    {
+        channel_type = AllChannels;
     }
 
     GetExceptionInfo(&exception);
@@ -6454,7 +6463,7 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_SHARPENIMAGECHANNEL)
      Image *image, *new_image;
-     ChannelType channel_type = AllChannels, type;
+     ChannelType channel_type = UndefinedChannel, type;
      ExceptionInfo exception;
      double radius = 0.0, sigma = 1.0;
      int x;
@@ -6473,6 +6482,11 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
                radius = NUM2DBL(argv[0]);
           case 0:
                break;
+     }
+
+     if (channel_type == UndefinedChannel)
+     {
+         channel_type = AllChannels;
      }
 
      GetExceptionInfo(&exception);

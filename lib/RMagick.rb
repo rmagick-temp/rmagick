@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.7 2003/08/24 18:46:17 rmagick Exp $
+# $Id: RMagick.rb,v 1.8 2003/09/26 00:18:13 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -101,7 +101,9 @@ class Draw
 
     # Draw a bezier curve.
     def bezier(*points)
-        if points.length % 2 != 0
+        if points.length == 0
+            raise ArgumentError, "no points specified"
+        elsif points.length % 2 != 0
             raise ArgumentError, "odd number of arguments specified"
         end
         primitive "bezier " + points.join(',')
@@ -113,8 +115,8 @@ class Draw
     end
 
     # Invoke a clip-path defined by def_clip_path.
-    def clip_path(path)
-        primitive "clip-path #{path}"
+    def clip_path(name)
+        primitive "clip-path #{name}"
     end
 
     # Define the clipping rule.
@@ -305,16 +307,20 @@ class Draw
 
     # Draw a polygon
     def polygon(*points)
-        if points.length % 2 != 0
-            raise ArgumentError, "odd number of arguments specified"
+        if points.length == 0
+            raise ArgumentError, "no points specified"
+        elsif points.length % 2 != 0
+            raise ArgumentError, "odd number of points specified"
         end
         primitive "polygon " + points.join(',')
     end
 
     # Draw a polyline
     def polyline(*points)
-        if points.length % 2 != 0
-            raise ArgumentError, "odd number of arguments specified"
+        if points.length == 0
+            raise ArgumentError, "no points specified"
+        elsif points.length % 2 != 0
+            raise ArgumentError, "odd number of points specified"
         end
         primitive "polyline " + points.join(',')
     end
@@ -406,7 +412,7 @@ class Draw
     end
 
     # Specify the initial offset in the dash pattern
-    def stroke_dashoffset(value)
+    def stroke_dashoffset(value=0)
         primitive "stroke-dashoffset #{value}"
     end
 
@@ -446,6 +452,9 @@ class Draw
     # quotes. For example,
     #      gc.text(100, 100, "'embedded blanks'")
     def text(x, y, text)
+        if text.to_s.empty?
+            raise ArgumentError, "missing text argument"
+        end
         primitive "text #{x},#{y} #{text}"
     end
 
@@ -486,13 +495,13 @@ end # class Magick::Draw
 # Ruby-level Magick::Image methods
 class Image
     include Comparable
-    
-    # Provide an alternate version of Draw#annotate, for folks who 
+
+    # Provide an alternate version of Draw#annotate, for folks who
     # want to find it in this class.
     def annotate(draw, width, height, x, y, text, &block)
       draw.annotate(self, width, height, x, y, text, &block)
       self
-    end    
+    end
 
     # Set the color at x,y
     def color_point(x, y, fill)
@@ -539,9 +548,9 @@ class Image
     # Make the pixel at (x,y) transparent.
     def matte_point(x, y)
         f = copy
-        f.opacity = Magick::OpaqueOpacity unless f.matte
+        f.opacity = OpaqueOpacity unless f.matte
         pixel = f.pixel_color(x,y)
-        pixel.opacity = Magick::TransparentOpacity
+        pixel.opacity = TransparentOpacity
         f.pixel_color(x, y, pixel)
         return f
     end
@@ -550,7 +559,7 @@ class Image
     # pixel at (x, y).
     def matte_replace(x, y)
         f = copy
-        f.opacity = Magick::OpaqueOpacity unless f.matte
+        f.opacity = OpaqueOpacity unless f.matte
         target = f.pixel_color(x, y)
         f.transparent(target)
     end
@@ -559,18 +568,18 @@ class Image
     # at (x,y) and is a neighbor.
     def matte_floodfill(x, y)
         f = copy
-        f.opacity = Magick::OpaqueOpacity unless f.matte
+        f.opacity = OpaqueOpacity unless f.matte
         target = f.pixel_color(x, y)
-        f.matte_flood_fill(target, Magick::TransparentOpacity,
-                           x, y, Magick::FloodfillMethod)
+        f.matte_flood_fill(target, TransparentOpacity,
+                           x, y, FloodfillMethod)
     end
 
     # Make transparent any neighbor pixel that is not the border color.
     def matte_fill_to_border(x, y)
         f = copy
         f.opacity = Magick::OpaqueOpacity unless f.matte
-        f.matte_flood_fill(border_color, Magick::TransparentOpacity,
-                           x, y, Magick::FillToBorderMethod)
+        f.matte_flood_fill(border_color, TransparentOpacity,
+                           x, y, FillToBorderMethod)
     end
 
     # Make all pixels transparent.
@@ -581,12 +590,12 @@ class Image
     # Replace matching neighboring pixels with texture pixels
     def texture_floodfill(x, y, texture)
         target = pixel_color(x, y)
-        texture_flood_fill(target, texture, x, y, Magick::FloodfillMethod)
+        texture_flood_fill(target, texture, x, y, FloodfillMethod)
     end
 
     # Replace neighboring pixels to border color with texture pixels
     def texture_fill_to_border(x, y, texture)
-        texture_flood_fill(border_color, texture, x, y, Magick::FillToBorderMethod)
+        texture_flood_fill(border_color, texture, x, y, FillToBorderMethod)
     end
 
     # Retrieve EXIF data by entry or all. If one or more entry names specified,
@@ -830,7 +839,7 @@ public
         set_cf cfid
         return a
     end
-	
+
     def fill(obj, *args)
         is_a_image obj
         cfid = self[@scene].id rescue nil

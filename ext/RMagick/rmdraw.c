@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.5 2003/12/16 00:12:48 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.6 2003/12/17 23:45:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -175,7 +175,7 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
 
     if (FIXNUM_P(weight))
     {
-        w = FIX2INT(weight);
+        w = (WeightType) FIX2INT(weight);
         if (w < 100 || w > 900)
             rb_raise(rb_eArgError, "invalid font weight (%d given)", w);
     }

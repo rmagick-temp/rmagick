@@ -101,13 +101,13 @@
           <li><a href="#rotate_bang">rotate!</a></li>
 
           <li><a href="#sample">sample</a></li>
+
+          <li><a href="#sample_bang">sample!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#sample_bang">sample!</a></li>
-
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
@@ -135,15 +135,15 @@
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
+
+          <li><a href="#store_pixels">store_pixels</a></li>
+
+          <li><a href="#strip_bang">strip!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#store_pixels">store_pixels</a></li>
-
-          <li><a href="#strip_bang">strip!</a></li>
-
           <li><a href="#swirl">swirl</a></li>
 
           <li><a href=
@@ -163,6 +163,10 @@
           <li><a href="#to_color">to_color</a></li>
 
           <li><a href="#transparent">transparent</a></li>
+
+          <li><a href="#trim">trim</a></li>
+
+          <li><a href="#trim_bang">trim!</a></li>
 
           <li><a href="#unsharp_mask">unsharp_mask</a></li>
 
@@ -925,15 +929,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                                                                This img tag displays the original image when the mouse is over.
-                                                                Use CSS to add padding around the image to make it occupy the
-                                                                same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+                                                                    This img tag displays the original image when the mouse is over.
+                                                                    Use CSS to add padding around the image to make it occupy the
+                                                                    same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
          id="notrotated" onmouseout=
          "this.style.display='none'; rotated.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="rotate example" title=
          "Click to see the example script" /><!--
-                                                                  This img tag displays the rotated image.
-                                                                  --><img class="hide"
+                                                                      This img tag displays the rotated image.
+                                                                      --><img class="hide"
          id="rotated" onmouseover=
          "this.style.display='none'; notrotated.style.display='';"
          src="ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
@@ -1367,14 +1371,14 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                                                                  This img tag displays the original image when the mouse is over
-                                                                  --><img style="padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
+                                                                      This img tag displays the original image when the mouse is over
+                                                                      --><img style="padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                                                                   This img tag displays the sheared image when the mouse is not over
-                                                                   -->
+                                                                       This img tag displays the sheared image when the mouse is not over
+                                                                       -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -2192,6 +2196,55 @@ img.to_color(pixel)
   </div>
 
   <div class="sig">
+    <h3 id="trim">trim</h3>
+
+    <p><span class="arg">image</span>.trim -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Removes the edges that are exactly the same
+    color as the corner pixels. Use the <a href=
+    "imageattrs.html#fuzz">fuzz</a> attribute to make
+    <code>trim</code> remove edges that are nearly the same color
+    as the corner pixels.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('trim.rb.html')"><img src="ex/trim_after.jpg"
+    onmouseover="this.src='ex/trim_before.jpg'" onmouseout=
+    "this.src='ex/trim_after.jpg'" alt="trim example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>CropImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="trim_bang">trim!</h3>
+
+    <p><span class="arg">image</span>.trim! -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <p>In-place form of <a href="#trim">trim</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
     <h3 id="unsharp_mask">unsharp_mask</h3>
 
     <p><span class="arg">image</span>.unsharp_mask(<span class=
@@ -2393,8 +2446,8 @@ end
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-                                                          This img tag displays the framed image when the mouse is not over
-                                                          --><img class="hide"
+                                                              This img tag displays the framed image when the mouse is not over
+                                                              --><img class="hide"
          id="waved" onmouseover=
          "this.style.display='none'; nowave.style.display='';" src=
          "ex/wave.jpg" alt="wave example" /></a> <img src=

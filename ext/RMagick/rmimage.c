@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.54 2004/06/11 00:23:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.55 2004/06/11 23:09:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7070,6 +7070,64 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 }
+
+
+/*
+ *  Method:     Image#trim, Image#trim!
+ *  Purpose:    convenience front-end to CropImage
+ *  Notes:      respects fuzz attribute
+*/
+
+static VALUE
+trimmer(int bang, VALUE self)
+{
+    Image *image, *new_image;
+    RectangleInfo geometry;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    SetGeometry(image,&geometry);
+    geometry.width = 0;
+    geometry.height = 0;
+    geometry.x = 0;
+    geometry.y = 0;
+
+    GetExceptionInfo(&exception);
+
+    new_image = CropImage(image, &geometry, &exception);
+    HANDLE_ERROR
+    HANDLE_IMG_ERROR(new_image);
+    if (!new_image)
+    {
+        rb_raise(rb_eRuntimeError, "CropImage failed - "
+                "probably not enough memory to complete the operation");
+    }
+
+    if (bang)
+    {
+        DATA_PTR(self) = new_image;
+        DestroyImage(image);
+        return self;
+    }
+
+    return rm_image_new(new_image);
+}
+
+
+VALUE
+Image_trim(VALUE self)
+{
+    return trimmer(False, self);
+}
+
+VALUE
+Image_trim_bang(VALUE self)
+{
+    return trimmer(True, self);
+}
+
+
 
 /*
     Method:     Image#image_type=(type)

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.30 2003/12/01 00:00:41 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.31 2003/12/13 17:59:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -332,7 +332,10 @@ Init_RMagick(void)
 
     Module_Magick = rb_define_module("Magick");
 
-    // Module Magick methods
+    /*-----------------------------------------------------------------------*/
+    /* Module Magick methods                                                 */
+    /*-----------------------------------------------------------------------*/
+
     rb_define_module_function(Module_Magick, "colors", Magick_colors, 0);
     rb_define_module_function(Module_Magick, "fonts", Magick_fonts, 0);
     rb_define_module_function(Module_Magick, "init_formats", Magick_init_formats, 0);
@@ -341,7 +344,10 @@ Init_RMagick(void)
     rb_define_module_function(Module_Magick, "set_log_event_mask", Magick_set_log_event_mask, -1);
     rb_define_module_function(Module_Magick, "set_log_format", Magick_set_log_format, 1);
 
-    // Class Magick::Image methods
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::Image methods                                           */
+    /*-----------------------------------------------------------------------*/
+
     Class_Image = rb_define_class_under(Module_Magick, "Image", rb_cObject);
 
     // Define an alias for Object#display before we override it
@@ -536,7 +542,10 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "white_threshold", Image_white_threshold, -1);
     rb_define_method(Class_Image, "write", Image_write, 1);
 
-    // class Magick::ImageList methods (in addition to the methods defined in RMagick.rb)
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::ImageList methods (see also RMagick.rb)                 */
+    /*-----------------------------------------------------------------------*/
+
     Class_ImageList = rb_define_class_under(Module_Magick, "ImageList", rb_cArray);
 
     // Define an alias for Object#display before we override it
@@ -560,7 +569,10 @@ Init_RMagick(void)
     rb_define_method(Class_ImageList, "to_blob", ImageList_to_blob, 0);
     rb_define_method(Class_ImageList, "write", ImageList_write, 1);
 
-    // class Magick::Draw methods
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::Draw methods                                            */
+    /*-----------------------------------------------------------------------*/
+
     Class_Draw = rb_define_class_under(Module_Magick, "Draw", rb_cObject);
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Draw, Draw_alloc);
@@ -594,7 +606,10 @@ Init_RMagick(void)
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
 
-    // Class Magick::ImageList::Montage methods
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::ImageList::Montage methods                              */
+    /*-----------------------------------------------------------------------*/
+
     Class_Montage = rb_define_class_under(Class_ImageList, "Montage", rb_cObject);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
@@ -624,7 +639,10 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Montage, tile)
     DCL_ATTR_WRITER(Montage, title)
 
-    // class Magick::Image::Info methods
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::Image::Info                                             */
+    /*-----------------------------------------------------------------------*/
+
     Class_Info = rb_define_class_under(Class_Image, "Info", rb_cObject);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
@@ -654,9 +672,6 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
     DCL_ATTR_ACCESSOR(Info, page)
-//  DCL_ATTR_ACCESSOR(Info, pen) obsolete
-//  DCL_ATTR_ACCESSOR(Info, ping)
-//  DCL_ATTR_ACCESSOR(Info, pointsize)
     DCL_ATTR_ACCESSOR(Info, quality)
     DCL_ATTR_ACCESSOR(Info, scene)      // new in 5.5.6, replaces subimage
     DCL_ATTR_ACCESSOR(Info, server_name)
@@ -667,7 +682,10 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
-//  DCL_ATTR_ACCESSOR(Info, verbose) obsolete
+
+    /*-----------------------------------------------------------------------*/
+    /* Magick::******Fill classes and methods                                */
+    /*-----------------------------------------------------------------------*/
 
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
@@ -693,7 +711,10 @@ Init_RMagick(void)
     rb_define_method(Class_TextureFill, "initialize", TextureFill_initialize, 1);
     rb_define_method(Class_TextureFill, "fill", TextureFill_fill, 1);
 
-    // class Magick::ImageMagickError < StandardError
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::ImageMagickError < StandardError                        */
+    /*-----------------------------------------------------------------------*/
+
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, 2);
     RUBY16(rb_enable_super(Class_ImageMagickError, "initialize");)
@@ -711,10 +732,10 @@ Init_RMagick(void)
     DEF_CONST(TransparentOpacity);
 
     /*-----------------------------------------------------------------------*/
-    /* Define Enumeration types                                              */
+    /* Class Magick::Enum                                                    */
     /*-----------------------------------------------------------------------*/
 
-    // class Magick::Enum includes Comparable
+    // includes Comparable
     Class_Enum = rb_define_class_under(Module_Magick, "Enum", rb_cObject);
     rb_include_module(Class_Enum, rb_mComparable);
 
@@ -847,6 +868,7 @@ Init_RMagick(void)
 #if defined(HAVE_ANNOTATECOMPOSITEOP)
                                         // Added 5.5.8
     ENUM_VAL(CompositeOperator, AnnotateCompositeOp);
+    ENUM_VAL(CompositeOperator, ReplaceCompositeOp);    // synonym for CopyCompositeOp
 #endif
 
     // CompressionType constants
@@ -992,9 +1014,12 @@ Init_RMagick(void)
     ENUM_VAL(WeightType, BolderWeight);
     ENUM_VAL(WeightType, LighterWeight);
 
-    // Struct class constants - pass NULL as the structure name to
-    // keep from polluting the Struct namespace. The only way to
-    // use these classes is via the Magick:: namespace.
+    /*-----------------------------------------------------------------------*/
+    /* Struct classes                                                        */
+    /*-----------------------------------------------------------------------*/
+
+    // Pass NULL as the structure name to keep them from polluting the Struct
+    // namespace. The only way to use these classes is via the Magick:: namespace.
 
     // Magick::AffineMatrix
     Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", 0);
@@ -1059,6 +1084,11 @@ Init_RMagick(void)
     rb_define_method(Class_TypeMetric, "to_s", TypeMetric_to_s, 0);
     rb_define_const(Module_Magick, "TypeMetric", Class_TypeMetric);
 
+
+    /*-----------------------------------------------------------------------*/
+    /* Create IDs for frequently used methods                                */
+    /*-----------------------------------------------------------------------*/
+
     new_ID = rb_intern("new");
     push_ID = rb_intern("push");
     length_ID = rb_intern("length");
@@ -1081,7 +1111,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/01 00:00:41 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/13 17:59:55 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

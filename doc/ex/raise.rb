@@ -17,7 +17,7 @@ begin
     snake = snake.quantize(256, Magick::GRAYColorspace)
     snake = snake.matte_replace(0,0)
 
-    # Now make the button background using ImageListMagick's
+    # Now make the button background using ImageMagick's
     # builtin "granite" image format.  Make the background
     # a bit larger than the snake so the snake's edges
     # don't get folded into the raised edges of the background.

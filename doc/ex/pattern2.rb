@@ -2,7 +2,7 @@
 
 require 'RMagick'
 
-# "Read" the ImageListMagick built-in rose image.
+# "Read" the ImageMagick built-in rose image.
 rose = Magick::ImageList.new("rose:")
 
 # Construct a pattern using the rose

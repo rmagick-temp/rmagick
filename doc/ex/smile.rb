@@ -1,5 +1,5 @@
 #! /usr/local/bin/ruby -w
-# RMagick version of ImageListMagick's "smile.c" example program.
+# RMagick version of ImageMagick's "smile.c" example program.
 
 require 'RMagick'
 

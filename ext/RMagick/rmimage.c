@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.16 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.8.2.1 2003/09/26 13:02:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -72,7 +72,7 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     return rm_image_new(new_image);
 #else
-    not_implemented("adaptive_threshold");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -86,14 +86,12 @@ VALUE
 Image_add_noise(VALUE self, VALUE noise)
 {
     Image *image, *new_image;
-    NoiseType nt;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    VALUE_TO_ENUM(noise, nt, NoiseType);
-    new_image = AddNoiseImage(image, nt, &exception);
+    new_image = AddNoiseImage(image, Num_to_NoiseType(noise), &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
 }
@@ -256,14 +254,14 @@ Image_properties(VALUE self)
 {
     Image *image;
     const ImageAttribute *attr;
-    volatile VALUE attr_hash;
+    VALUE attr_hash;
 
     Data_Get_Struct(self, Image, image);
 
     // If block, iterate over attributes
     if (rb_block_given_p())
     {
-        volatile VALUE ary = rb_ary_new2(2);
+        VALUE ary = rb_ary_new2(2);
         for (attr = image->attributes; attr; attr = Next_Attribute)
         {
             // Store the next ptr where Image#aset can see it.
@@ -467,7 +465,7 @@ Image_capture(
 #ifdef HAVE_XIMPORTIMAGE
     Image *image;
     ImageInfo *image_info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
     XImportInfo ximage_info;
 
     XGetImportInfo(&ximage_info);
@@ -504,7 +502,7 @@ Image_capture(
 
     return rm_image_new(image);
 #else
-    not_implemented("capture");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -522,7 +520,7 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     RectangleInfo rect = {0};
     char *geometry;
     unsigned int flags;
-    volatile VALUE ary;
+    VALUE ary;
 
     Data_Get_Struct(self, Image, image);
     geometry = STRING_PTR(geom_str);
@@ -546,7 +544,7 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     unsigned int flags;
     long x, y;
     unsigned long width, height;
-    volatile VALUE ary;
+    VALUE ary;
 
     Data_Get_Struct(self, Image, image);
     geometry = STRING_PTR(geom_str);
@@ -568,7 +566,7 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     return rb_yield(ary);
 
 #else
-    not_implemented("change_geometry");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -602,7 +600,7 @@ Image_channel(VALUE self, VALUE channel)
 
     Data_Get_Struct(self, Image, image);
 
-    VALUE_TO_ENUM(channel, channel_type, ChannelType);
+    channel_type = Num_to_ChannelType(channel);
 
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
@@ -624,8 +622,7 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_BLACKTHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, BlackThresholdImage);
 #else
-    not_implemented("black_threshold");
-    return (VALUE) 0;
+    rb_notimplement();
 #endif
 }
 
@@ -739,76 +736,6 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
 }
 
 /*
-    Method:     Image_color_histogram(VALUE self);
-    Purpose:    Call GetColorHistogram (>= GM 1.1)
-                     GetImageHistogram (>= IM 5.5.8)
-    Notes:      returns hash {aPixel=>count}
-*/
-VALUE
-Image_color_histogram(VALUE self)
-{
-#if defined(HAVE_GETCOLORHISTOGRAM)
-    Image *image;
-    volatile VALUE hash, pixel;
-    unsigned long x, colors;
-    HistogramColorPacket *histogram;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    histogram = GetColorHistogram(image, &colors, &exception);
-    HANDLE_ERROR
-
-    hash = rb_hash_new();
-    for (x = 0; x < colors; x++)
-    {
-        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
-    }
-
-    /*
-        The histogram array is specifically allocated by malloc because it is
-        supposed to be freed by the caller.
-    */
-    free(histogram);
-
-    return hash;
-
-
-#elif defined(HAVE_GETIMAGEHISTOGRAM)
-    Image *image;
-    volatile VALUE hash, pixel;
-    unsigned long x, colors;
-    ColorPacket *histogram;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    histogram = GetImageHistogram(image, &colors, &exception);
-    HANDLE_ERROR
-
-    hash = rb_hash_new();
-    for (x = 0; x < colors; x++)
-    {
-        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
-    }
-
-    /*
-        Christy evidently didn't agree with Bob's memory management.
-    */
-    RelinquishMagickMemory(histogram);
-
-    return hash;
-#else
-    not_implemented("color_histogram");
-    return (VALUE) 0;
-#endif
-}
-
-/*
     Method:     Image#color_profile
     Purpose:    Return the ICC color profile as a String.
     Notes:      If there is no profile, returns ""
@@ -913,7 +840,7 @@ Image_color_flood_fill(
                , x, y, image->columns, image->rows);
     }
 
-    VALUE_TO_ENUM(method, fill_method, PaintMethod);
+    fill_method = Num_to_PaintMethod(method);
     if (!(fill_method == FloodfillMethod || fill_method == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -1092,40 +1019,27 @@ VALUE
 Image_colorspace_eq(VALUE self, VALUE colorspace)
 {
     Image *image;
-    ColorspaceType new_cs;
+    ColorspaceType new_cs = Num_to_ColorspaceType(colorspace);
 
-    VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
-    if (new_cs == image->colorspace)
+    if (image->colorspace != new_cs)
     {
-        return self;
-    }
-
-    if (new_cs != RGBColorspace &&
-        new_cs != TransparentColorspace &&
-        new_cs != GRAYColorspace)
-    {
-        if (image->colorspace != RGBColorspace &&
-            image->colorspace != TransparentColorspace &&
-            image->colorspace != GRAYColorspace)
+        if (image->colorspace == RGBColorspace
+        || image->colorspace == TransparentColorspace
+        || image->colorspace == GRAYColorspace)
         {
-           TransformRGBImage(image, image->colorspace);
-           HANDLE_IMG_ERROR(image)
+            (void) RGBTransformImage(image, new_cs);
+            HANDLE_IMG_ERROR(image)
         }
-        RGBTransformImage(image, new_cs);
-        HANDLE_IMG_ERROR(image);
-        return self;
+        else if (new_cs == RGBColorspace
+            || new_cs == TransparentColorspace
+            || new_cs == GRAYColorspace)
+        {
+            (void) TransformRGBImage(image, new_cs);
+            HANDLE_IMG_ERROR(image)
+        }
     }
-
-    if (new_cs == RGBColorspace ||
-        new_cs == TransparentColorspace ||
-        new_cs == GRAYColorspace)
-    {
-        TransformRGBImage(image, image->colorspace);
-        HANDLE_IMG_ERROR(image);
-    }
-
     return self;
 }
 
@@ -1143,7 +1057,7 @@ VALUE Image_compose_eq(
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
+    image->compose = Num_to_CompositeOperator(compose_arg);
     return self;
 }
 
@@ -1175,8 +1089,8 @@ VALUE Image_composite(
     switch (argc)
     {
         case 3:                 // argv[1] is gravity, argv[2] is composite_op
-            VALUE_TO_ENUM(argv[1], gravity, GravityType);
-            VALUE_TO_ENUM(argv[2], operator, CompositeOperator);
+            gravity = Num_to_GravityType(argv[1]);
+            operator = Num_to_CompositeOperator(argv[2]);
 
                                 // convert gravity to x, y offsets
             switch (gravity)
@@ -1227,7 +1141,7 @@ VALUE Image_composite(
                                 // argv[3] is composite_op
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
-            VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
+            operator = Num_to_CompositeOperator(argv[3]);
         break;
 
         default:
@@ -1293,7 +1207,7 @@ Image_compression_eq(VALUE self, VALUE compression)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(compression, image->compression, CompressionType);
+    image->compression = Num_to_CompressionType(compression);
     return self;
 }
 
@@ -1335,7 +1249,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 {
     Image *image;
     ExceptionInfo exception;
-    volatile VALUE pixel, pixel0;
+    VALUE pixel, pixel0;
     unsigned long width, height;
     unsigned long x, npixels;
     char *map;
@@ -1642,9 +1556,6 @@ Image_density_eq(VALUE self, VALUE density_arg)
 /*
     Method:     Image#depth
     Purpose:    Return the image depth (8 or 16).
-    Note:       If all pixels have lower-order bytes equal to higher-order
-                bytes, the depth will be reported as 8 even if the depth
-                field in the Image structure says 16.
 */
 VALUE
 Image_depth(VALUE self)
@@ -1696,7 +1607,7 @@ VALUE Image_difference(VALUE self, VALUE other)
 {
     Image *image;
     Image *image2;
-    volatile VALUE mean, nmean, nmax;
+    VALUE mean, nmean, nmax;
 
     Data_Get_Struct(self, Image, image);
     Data_Get_Struct(ImageList_cur_image(other), Image, image2);
@@ -1734,7 +1645,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     Image *image;
     unsigned long x, y, columns, rows;
     unsigned long n, npixels;
-    volatile VALUE pixels_ary;
+    VALUE pixels_ary;
     StorageType stg_type = FIX_STG_TYPE;
     char *map;
     Strlen_t mapL;
@@ -1831,7 +1742,7 @@ VALUE Image_display(VALUE self)
 {
     Image *image;
     Info *info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
     unsigned int ok;
 
     Data_Get_Struct(self, Image, image);
@@ -1869,7 +1780,7 @@ Image__dump(VALUE self, VALUE depth)
     void *blob;
     size_t length;
     DumpedImage mi;
-    volatile VALUE str;
+    VALUE str;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -2061,7 +1972,7 @@ Image_export_pixels(
     unsigned int okay;
     char *map;
     unsigned int *pixels;
-    volatile VALUE ary;
+    VALUE ary;
     ExceptionInfo exception;
 
 
@@ -2110,7 +2021,7 @@ Image_export_pixels(
     return ary;
 
 #else
-    not_implemented("export_pixels");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -2128,7 +2039,7 @@ Image_extract_info(VALUE self)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     return RectangleInfo_to_Struct(&image->extract_info);
 #else
-    not_implemented("extract_info");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -2143,7 +2054,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
     Struct_to_RectangleInfo(&image->extract_info, rect);
     return self;
 #else
-    not_implemented("extract_info=");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -2174,7 +2085,7 @@ Image_filter_eq(VALUE self, VALUE filter)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(filter, image->filter, FilterTypes);
+    image->filter = Num_to_FilterType(filter);
     return self;
 }
 
@@ -2382,7 +2293,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
 {
     Image *image;
     Info *info;
-    volatile VALUE info_obj, image_ary;
+    VALUE info_obj, image_ary;
     ExceptionInfo exception;
     void *blob;
     Strlen_t length;
@@ -2403,7 +2314,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     // Orphan the image, create an Image object, add it to the array.
     while (image)
     {
-        volatile VALUE image_obj;
+        VALUE image_obj;
         Image *next;
 
 #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
@@ -2529,7 +2440,6 @@ Image_geometry_eq(
     magick_clone_string(&image->geometry, geom);
     return self;
 }
-
 
 /*
     Method:     Image#get_pixels(x, y, columns. rows)
@@ -2727,7 +2637,7 @@ Image_import_pixels(
 
     for (n = 0; n < npixels; n++)
     {
-        volatile VALUE p = rb_ary_entry(pixel_ary, n);
+        VALUE p = rb_ary_entry(pixel_ary, n);
         long q = ScaleQuantumToLong(NUM2LONG(p));
         pixels[n] = (int) q;
     }
@@ -2757,7 +2667,7 @@ Image_import_pixels(
     return self;
 
 #else
-    not_implemented("import_pixels");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -2887,7 +2797,7 @@ Image_interlace_eq(VALUE self, VALUE interlace)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
+    image->interlace = Num_to_InterlaceType(interlace);
     return self;
 }
 
@@ -3043,7 +2953,8 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    VALUE_TO_ENUM(argv[0], channel, ChannelType);
+    channel = Num_to_ChannelType(argv[0]);
+
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
@@ -3057,7 +2968,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 #else
-    not_implemented("level_channel");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -3184,7 +3095,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     Image *map;
     ExceptionInfo exception;
-    volatile VALUE map_obj, map_arg;
+    VALUE map_obj, map_arg;
     unsigned int dither = False;
 
     switch (argc)
@@ -3269,7 +3180,7 @@ Image_matte_flood_fill(
         rb_raise(rb_eArgError, "opacity (%d) exceeds MaxRGB", op);
     }
 
-    VALUE_TO_ENUM(method, pm, PaintMethod);
+    pm = Num_to_PaintMethod(method);
     if (!(pm == FloodfillMethod || pm == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -3336,7 +3247,7 @@ Image_mime_type(VALUE self)
 {
     Image *image;
     char *type;
-    volatile VALUE mime_type;
+    VALUE mime_type;
 
     Data_Get_Struct(self, Image, image);
     type = MagickToMime(image->magick);
@@ -3546,8 +3457,8 @@ Image_new(int argc, VALUE *argv, VALUE class)
 {
     Info *info;
     Image *image;
-    volatile VALUE info_obj;
-    volatile VALUE new_image;
+    VALUE info_obj;
+    VALUE new_image;
     VALUE init_arg[4];
 
     if (argc < 2 || argc > 3)
@@ -3566,7 +3477,7 @@ Image_new(int argc, VALUE *argv, VALUE class)
     init_arg[2] = argv[1];
     init_arg[3] = argc == 3 ? argv[2] : 0;
 
-    rb_obj_call_init((VALUE)new_image, 4, init_arg);
+    rb_obj_call_init(new_image, 4, init_arg);
     return new_image;
 }
 
@@ -3623,7 +3534,7 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
 VALUE
 Image_alloc(VALUE class)
 {
-    volatile VALUE image_obj;
+    VALUE image_obj;
 
     image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, NULL);
     return image_obj;
@@ -3637,9 +3548,9 @@ Image_alloc(VALUE class)
 VALUE
 Image_initialize(int argc, VALUE *argv, VALUE self)
 {
-    volatile VALUE fill = 0;
+    VALUE fill = 0;
     Info *info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
     Image *image;
     int cols, rows;
 
@@ -4101,7 +4012,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
         case 3:
             quantize_info.dither = RTEST(argv[2]);
         case 2:
-            VALUE_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
+            quantize_info.colorspace = Num_to_ColorspaceType(argv[1]);
         case 1:
             quantize_info.number_colors = NUM2INT(argv[0]);
         case 0:
@@ -4161,7 +4072,7 @@ Image_random_channel_threshold(
 
     return rm_image_new(new_image);
 #else
-    not_implemented("random_channel_threshold");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -4238,8 +4149,8 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     char *filename;
     Strlen_t filenameL;
     Info *info;
-    volatile VALUE info_obj;
-    volatile VALUE image_obj, image_ary;
+    VALUE info_obj;
+    VALUE image_obj, image_ary;
     Image *image, *images, *next;
     ExceptionInfo exception;
 
@@ -4331,7 +4242,7 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
+    image->rendering_intent = Num_to_RenderingIntent(ri);
     return self;
 }
 
@@ -4368,7 +4279,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
         case 4:
             blur = NUM2DBL(argv[3]);
         case 3:
-            VALUE_TO_ENUM(argv[2], filter, FilterTypes);
+            filter = Num_to_FilterType(argv[2]);
         case 2:
             rows = NUM2ULONG(argv[1]);
             columns = NUM2ULONG(argv[0]);
@@ -4590,7 +4501,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
         case 2:
             cluster_threshold = NUM2DBL(argv[1]);
         case 1:
-            VALUE_TO_ENUM(argv[0], colorspace, ColorspaceType);
+            colorspace = Num_to_ColorspaceType(argv[0]);
         case 0:
             break;
         default:
@@ -4805,8 +4716,8 @@ Image_spaceship(VALUE self, VALUE other)
 #if RUBY_VERSION < 0x180
         // In 1.6, raise TypeError
         rb_raise(rb_eTypeError, "%s compared with %s",
-                                rb_class2name(CLASS_OF(self)),
-                                rb_class2name(CLASS_OF(other)));
+                                  rb_class2name(CLASS_OF(self)),
+                                  rb_class2name(CLASS_OF(other)));
 #else
         // In 1.8, return nil
         return Qnil;
@@ -4877,7 +4788,7 @@ Image_stegano(
     VALUE offset)
 {
     Image *image, *new_image;
-    volatile VALUE wm_image;
+    VALUE wm_image;
     Image *watermark;
     ExceptionInfo exception;
 
@@ -4908,7 +4819,7 @@ Image_stereo(
     VALUE offset_image_arg)
 {
     Image *image, *new_image;
-    volatile VALUE offset_image;
+    VALUE offset_image;
     Image *offset;
     ExceptionInfo exception;
 
@@ -4950,7 +4861,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     QuantizeInfo qinfo;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(new_class_type, class_type, ClassType);
+    class_type = Num_to_ClassType(new_class_type);
 
     if (image->class == PseudoClass && class_type == DirectClass)
     {
@@ -5042,7 +4953,7 @@ Image_strip_bang(VALUE self)
     (void) StripImage(image);
     return self;
 #else
-    not_implemented("strip!");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -5091,7 +5002,7 @@ Image_texture_flood_fill(
     Image *image, *new_image;
     Image *texture_image;
     PixelPacket color;
-    volatile VALUE texture;
+    VALUE texture;
     DrawInfo *draw_info;
     long x, y;
     PaintMethod method;
@@ -5109,7 +5020,7 @@ Image_texture_flood_fill(
                , x, y, image->columns, image->rows);
     }
 
-    VALUE_TO_ENUM(method_obj, method, PaintMethod);
+    method = Num_to_PaintMethod(method_obj);
     if (method != FillToBorderMethod && method != FloodfillMethod)
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -5274,7 +5185,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
-    not_implemented(bang ? "thumbnail!" : "thumbnail");
+    rb_notimplement();
     return (VALUE) 0;
 #endif
 }
@@ -5326,84 +5237,6 @@ Image_tile_info_eq(VALUE self, VALUE rect)
     return self;
 }
 
-
-/*
-    Method:     Image#tint
-    Purpose:    Call TintImage
-    Notes:      New for 5.5.8
-                Opacity values are percentages: 0.10 -> 10%.
-*/
-VALUE
-Image_tint(int argc, VALUE *argv, VALUE self)
-{
-#if defined(HAVE_TINTIMAGE)
-    Image *image, *new_image;
-    PixelPacket tint;
-    double red_pct_opaque, green_pct_opaque, blue_pct_opaque;
-    double alpha_pct_opaque = 1.0;
-    char opacity[50];
-    ExceptionInfo exception;
-
-    switch(argc)
-    {
-        case 2:
-            red_pct_opaque   = NUM2DBL(argv[1]);
-            green_pct_opaque = blue_pct_opaque = red_pct_opaque;
-            break;
-        case 3:
-            red_pct_opaque   = NUM2DBL(argv[1]);
-            green_pct_opaque = NUM2DBL(argv[2]);
-            blue_pct_opaque  = red_pct_opaque;
-            break;
-        case 4:
-            red_pct_opaque     = NUM2DBL(argv[1]);
-            green_pct_opaque   = NUM2DBL(argv[2]);
-            blue_pct_opaque    = NUM2DBL(argv[3]);
-            break;
-        case 5:
-            red_pct_opaque     = NUM2DBL(argv[1]);
-            green_pct_opaque   = NUM2DBL(argv[2]);
-            blue_pct_opaque    = NUM2DBL(argv[3]);
-            alpha_pct_opaque   = NUM2DBL(argv[4]);
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 5)", argc);
-            break;
-    }
-
-    if (red_pct_opaque < 0.0 || green_pct_opaque < 0.0
-        || blue_pct_opaque < 0.0 || alpha_pct_opaque < 0.0)
-    {
-        rb_raise(rb_eArgError, "opacity percentages must be non-negative.");
-    }
-
-#if defined(HAVE_SNPRINTF)
-    snprintf(opacity, sizeof(opacity),
-#else
-    sprintf(opacity,
-#endif
-                     "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
-                   , blue_pct_opaque*100.0, alpha_pct_opaque*100.0);
-
-    Struct_to_PixelPacket(&tint, argv[0]);
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    new_image = TintImage(image, opacity, tint, &exception);
-    HANDLE_ERROR
-
-    if (!new_image)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
-
-    return rm_image_new(new_image);
-#else
-    not_implemented("tint");
-    return (VALUE) 0;
-#endif
-}
-
 /*
     Method:     Image#to_blob
     Purpose:    Return a "blob" (a String) from the image
@@ -5416,7 +5249,7 @@ Image_to_blob(VALUE self)
 {
     Image *image;
     Info *info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
     void *blob = NULL;
     size_t length = 2048;       // Do what Magick++ does
     ExceptionInfo exception;
@@ -5541,12 +5374,9 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 VALUE Image_image_type_eq(VALUE self, VALUE type)
 {
     Image *image;
-    ImageType it;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(type, it, ImageType);
-    SetImageType(image, it);
-
+    SetImageType(image, Num_to_ImageType(type));
     return self;
 }
 
@@ -5580,7 +5410,7 @@ Image_units_eq(
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(restype, image->units, ResolutionType);
+    image->units = Num_to_ResolutionType(restype);
     return self;
 }
 
@@ -5666,8 +5496,7 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_WHITETHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, WhiteThresholdImage);
 #else
-    not_implemented("white_threshold");
-    return (VALUE) 0;
+    rb_notimplement();
 #endif
 }
 
@@ -5682,7 +5511,7 @@ Image_write(VALUE self, VALUE file)
 {
     Image *image;
     Info *info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
     char *filename;
     Strlen_t filenameL;
     ExceptionInfo exception;
@@ -5748,7 +5577,7 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
 static VALUE
 cropper(int bang, int argc, VALUE *argv, VALUE self)
 {
-    volatile VALUE x, y, width, height;
+    VALUE x, y, width, height;
     unsigned long nx = 0, ny = 0;
     unsigned long columns, rows;
     GravityType gravity;
@@ -5767,7 +5596,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             // Convert the width & height arguments to unsigned longs.
             // Compute the x & y offsets from the gravity and then
             // convert them to VALUEs.
-            VALUE_TO_ENUM(argv[0], gravity, GravityType);
+            gravity = Num_to_GravityType(argv[0]);
             width   = argv[1];
             height  = argv[2];
             columns = NUM2ULONG(width);

@@ -211,7 +211,7 @@
     command option for a list of valid formats, keys, and
     values.</p>
     <pre>
-self.define("tiff", "bits-per-sample", 2)   
+self.define("tiff", "bits-per-sample", 2)
 </pre>
 
     <h4>Magick API</h4>
@@ -442,7 +442,7 @@ self.define("tiff", "bits-per-sample", 2)
 
         <td><strong>NoCompression</strong>, FaxCompression,
         Group4Compression, JPEGCompression, LZWCompression,
-        NoCompression, RLECompression, ZipCompression</td>
+        RLECompression, ZipCompression</td>
       </tr>
     </table>
 
@@ -452,17 +452,17 @@ self.define("tiff", "bits-per-sample", 2)
       <li>NoCompression is accepted for all image formats. Except
       as noted in the table, it is the default.</li>
 
-      <li>After July 10, 2004, the default for GIF images will be
-      LZWCompression.</li>
+      <li>After July 10, 2004, ImageMagick will change the default
+      for GIF images to LZWCompression.</li>
 
       <li>&times;Magick must be configured and built with extra
       support to use LZWCompression (in releases prior to July 10,
       2004) and LosslessJPEGCompression.</li>
 
       <li>This table is based on my examination of the
-      &times;Magick source code. It is not intended to be
-      authoritative. If your needs require an authoritative or
-      exhaustive list, consult the &times;Magick developers.</li>
+      &times;Magick source code. It is not necessarily complete and
+      it may contain mistakes. If you need an authoritative list,
+      you should consult the &times;Magick developers.</li>
     </ol>
 
     <h4>Arguments</h4>A <a href=

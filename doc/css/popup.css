@@ -6,7 +6,7 @@ body {
   }
 
 h1 {
-  color: #516650;
+  color: #663;
   width: 100%;
   text-align: center;
 }
@@ -17,7 +17,7 @@ h1 {
   text-align:left;
 }
 
-.bodyfloat	{
+.bodyfloat  {
   padding:10px;
   color:black;
   text-align:left;
@@ -29,6 +29,6 @@ h1 {
 }
 
 a:link {
-  color:#516650;
+  color:#663;
   font-weight:bold;
 }

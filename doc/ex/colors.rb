@@ -44,7 +44,7 @@ montage = colors.montage {
 # Add the title at the top, over the 'null:'
 # tiles we added at the very beginning.
 title = Draw.new
-title.annotate(montage, 0,0,0,40, 'Named Colors') {
+title.annotate(montage, 0,0,0,20, 'Named Colors') {
     self.font_family = 'Helvetica'
     self.fill = 'white'
     self.stroke = 'transparent'

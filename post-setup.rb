@@ -163,15 +163,22 @@ def filetoHTML(file, html)
   File.open(file) do |src|
     File.open(html, 'w') do |dest|
       dest.puts <<-END_EXHTMLHEAD
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<HTML>
-<HEAD>
-<META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<TITLE>Example: #{file}</TITLE>
-</HEAD>
-<BODY style=\"background-color: #fffff0;\">
-<PRE>
+<!DOCTYPE public PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content="ex2html.rb" />
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <link rel="stylesheet" type="text/css" href="css/popup.css" />
+
+  <title>RMagick example: #{file}</title>
+</head>
+
+<body>
+<h1>#{file}</h1>
+<div class="bodybox">
+<div class="bodyfloat">
+<pre>
         END_EXHTMLHEAD
 
       src.each do |line|
@@ -180,9 +187,12 @@ def filetoHTML(file, html)
       end
 
       dest.puts <<-END_EXHTMLTAIL
-</PRE>
-</BODY>
-</HTML>
+</pre>
+</div>
+</div>
+<div id="close"><a href="javascript:window.close();">Close window</a></div>
+</body>
+</html>
         END_EXHTMLTAIL
     end
     File.chmod(0644, html)

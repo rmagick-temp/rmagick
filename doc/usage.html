@@ -1,16 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: How to use RMagick</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
   <style type="text/css">
+  /*<![CDATA[*/
       .grpname {
          background-color: #C3C3C3;
          font-weight: bold;
@@ -22,6 +24,7 @@
          background-color: #f0f0f0;
          vertical-align: top;
       }
+  /*]]>*/
   </style>
 </head>
 
@@ -80,7 +83,7 @@
     </tr>
   </table>
 
-  <h2><a name="basics">Basic concepts</a></h2>
+  <h2><a name="basics" id="basics">Basic concepts</a></h2>
 
   <p>Let's look at the RMagick equivalent of "Hello, world". This
   program reads an image file named "Cheetah.jpg" and displays it
@@ -228,7 +231,7 @@
   "image.html#Image.resize_bang"><var>resize!</var></a> method
   resizes the receiver in place.)</p>
 
-  <h2><a name="reading">Reading, writing, and creating
+  <h2><a name="reading" id="reading">Reading, writing, and creating
   images</a></h2>
 
   <p>You've already seen that you can create an imagelist and
@@ -346,7 +349,8 @@ exit
     </table>
   </div>
 
-  <h2><a name="displaying">Displaying images</a></h2>
+  <h2><a name="displaying" id="displaying">Displaying
+  images</a></h2>
 
   <p>RMagick defines 3 methods for displaying images and
   imagelists. Both the Image class and the ImageList class have a
@@ -369,7 +373,8 @@ exit
   "ilist.html#ImageList.delay_eq"><var>ImageList#delay=</var></a>
   method.</p>
 
-  <h2><a name="modifying">Examining and modifying images</a></h2>
+  <h2><a name="modifying" id="modifying">Examining and modifying
+  images</a></h2>
 
   <p>Once you've created an image or imagelist, what can you do
   with it? The Image and ImageList classes define over 100 methods
@@ -1301,7 +1306,8 @@ exit
     </table>
   </div>
 
-  <h2><a name="marshaling">Marshaling images</a></h2>
+  <h2><a name="marshaling" id="marshaling">Marshaling
+  images</a></h2>
 
   <p>Image and ImageList objects can be serialized using Ruby's
   <b>Marshal</b> module. Marshaling is supported via
@@ -1322,7 +1328,7 @@ exit
     image.</li>
   </ol>
 
-  <h2><a name="drawing">Drawing on and adding text to
+  <h2><a name="drawing" id="drawing">Drawing on and adding text to
   images</a></h2>
 
   <p>The <b>Draw</b> class is the third major class in the Magick
@@ -1383,7 +1389,7 @@ exit
         </td>
 
         <td><a href="axes.rb.html" target="_blank"><img src=
-        "ex/axes.gif" alt="ex/axes.gif"></a></td>
+        "ex/axes.gif" alt="ex/axes.gif" border="0" /></a></td>
       </tr>
     </table>
   </div>
@@ -1478,7 +1484,7 @@ exit
 
   <div style="padding: 1em;" align="center">
     <a href="rubyname.rb.html" target="_blank"><img src=
-    "ex/rubyname.gif" alt="ex/rubyname.rb"></a>
+    "ex/rubyname.gif" alt="ex/rubyname.rb" border="0" /></a>
   </div>
 
   <div align="center">
@@ -1556,7 +1562,7 @@ exit
   the center. The last call, on lines 25-27, draws the text a third
   time, in dark red, exactly in the center of the image.</p>
 
-  <h2><a name="more">Where to go from here</a></h2>
+  <h2><a name="more" id="more">Where to go from here</a></h2>
 
   <p>The next section, <a href=
   "imusage.html">"ImageMagick/GraphicsMagick Conventions,"</a>
@@ -1575,18 +1581,18 @@ exit
   demonstrated in one of the examples.</p>
 
   <p>Good luck!</p>
-  <hr>
+  <hr />
 
   <h4>Footnotes</h4>
 
-  <p><sup><a name="imdoc">1</a></sup>Most of the content in this
-  table is taken from the &times;Magick documentation.</p>
+  <p><sup><a name="imdoc" id="imdoc">1</a></sup>Most of the content
+  in this table is taken from the &times;Magick documentation.</p>
 
-  <p><sup><a name="degrees">2</a></sup>The rotation attributes
-  <code>rx</code> and <code>ry</code> in the <a href=
+  <p><sup><a name="degrees" id="degrees">2</a></sup>The rotation
+  attributes <code>rx</code> and <code>ry</code> in the <a href=
   "struct.html#AffineMatrix"><var>AffineMatrix</var></a> class use
   radians instead of degrees.</p>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

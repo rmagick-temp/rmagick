@@ -1,15 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: Common Tasks</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
 </head>
 
 <body>
@@ -68,9 +69,9 @@
 
   <h3>Getting information about an image</h3>
 
-  <p><a name="info">One</a> of the most fundamental operations on
-  an image is simply getting basic information about the image.
-  RMagick assigns dozens of <a href=
+  <p><a name="info" id="info">One</a> of the most fundamental
+  operations on an image is simply getting basic information about
+  the image. RMagick assigns dozens of <a href=
   "imageattrs.html">attributes</a> to an image. All you have to do
   is read the image and then call the attribute methods. Here's a
   Ruby program that takes image filenames from the command line and
@@ -113,14 +114,14 @@
 
   <h3>Converting an image to another format</h3>
 
-  <p><a name="convert">Converting</a> an image to another format is
-  as simple as writing the image to a file. &times;Magick uses the
-  output filename suffix (".jpg" for JPEG, ".gif" for GIF, for
-  example) or prefix ("ps:" for PostScript, for example) to
-  determine the format of the output image.</p>
+  <p><a name="convert" id="convert">Converting</a> an image to
+  another format is as simple as writing the image to a file.
+  &times;Magick uses the output filename suffix (".jpg" for JPEG,
+  ".gif" for GIF, for example) or prefix ("ps:" for PostScript, for
+  example) to determine the format of the output image.</p>
 
-  <h3>Making thumbnails</h3><a name="thumb">RMagick</a> gives you
-  four different methods for resizing an image: <a href=
+  <h3>Making thumbnails</h3><a name="thumb" id="thumb">RMagick</a>
+  gives you four different methods for resizing an image: <a href=
   "image.html#Image.resize"><var>resize</var></a>, <a href=
   "image.html#Image.sample"><var>sample</var></a>, <a href=
   "image.html#Image.scale"><var>scale</var></a>, and <a href=
@@ -165,8 +166,8 @@
   <var>resize</var> if the thumbnail is less than 10% of the size
   of the original image.</p>
 
-  <h3><a name="resizing">Resizing</a> to a maximum (or minimum)
-  size</h3>
+  <h3><a name="resizing" id="resizing">Resizing</a> to a maximum
+  (or minimum) size</h3>
 
   <p>Say you need to make all your thumbnails no bigger than 64x64
   but with the same aspect ratio as the original. Or, you don't
@@ -190,7 +191,7 @@
   value from the block. The <var>change_geometry</var> method then
   returns that value to its caller.</p>
 
-  <h3>Converting a color image to grayscale</h3><a name=
+  <h3>Converting a color image to grayscale</h3><a name="gray" id=
   "gray">Use</a> the <a href=
   "image.html#Image.quantize"><var>quantize</var></a> method with
   the <a href=
@@ -202,10 +203,10 @@
 
   <h3>Making a drop shadow</h3>
 
-  <p><a name="shadow">Here's</a> one way to make a drop shadow
-  behind text. Make the shadow first by drawing the text in a light
-  gray color. Position the text slightly to the right and down from
-  where the real text will be. Then use the <a href=
+  <p><a name="shadow" id="shadow">Here's</a> one way to make a drop
+  shadow behind text. Make the shadow first by drawing the text in
+  a light gray color. Position the text slightly to the right and
+  down from where the real text will be. Then use the <a href=
   "image.html#Image.blur_image"><var>blur_image</var></a> method to
   make the shadow by blurring the text. Finally, draw the text
   again in whatever color you want. <i>(Click the image to see the
@@ -213,9 +214,10 @@
 
   <div align="center">
     <a href="drop_shadow.rb.html" target="_blank"><img src=
-    "ex/drop_shadow.gif" alt="drop shadow example"></a>
+    "ex/drop_shadow.gif" border="0" alt=
+    "drop shadow example" /></a>
   </div>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

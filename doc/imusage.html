@@ -1,15 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: ImageMagick/GraphicsMagick Conventions</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
 </head>
 
 <body>
@@ -63,7 +64,8 @@
     </tr>
   </table>
 
-  <h3><a name="formats">Image formats and filenames</a></h3>
+  <h3><a name="formats" id="formats">Image formats and
+  filenames</a></h3>
 
   <p>&times;Magick supports over 89 major <a href=
   "http://www.imagemagick.org/www/formats.html">image
@@ -86,7 +88,7 @@
   <p><i>Note:</i> Keep in mind that files in some formats may only
   be read by &times;Magick, not written.</p>
 
-  <h3><a name="color_names">Color names</a></h3>
+  <h3><a name="color_names" id="color_names">Color names</a></h3>
 
   <p>Many RMagick methods expect color name arguments or return
   color names. A color name can be</p>
@@ -189,7 +191,7 @@
   <p><a href="http://www.imagemagick.org/www/color.html">This</a>
   is &times;Magick's page about color names.</p>
 
-  <h3><a name="geometry">The geometry string</a></h3>
+  <h3><a name="geometry" id="geometry">The geometry string</a></h3>
 
   <p>RMagick methods frequently require a <var>geometry</var>
   string argument. This string generally specifies width and height
@@ -251,7 +253,8 @@
   differently. Where this is the case the documentation for the
   method will explain the differences.</p>
 
-  <h3><a name="classtype">DirectClass and PseudoClass</a></h3>
+  <h3><a name="classtype" id="classtype">DirectClass and
+  PseudoClass</a></h3>
 
   <p>&times;Magick classifies all images into two <i>classes</i>,
   <b>PseudoClass</b> and <b>DirectClass</b>.</p>
@@ -280,7 +283,8 @@
   "imageattrs.html#Image.class_type_eq">Image#class_type=</a></var>
   method.</p>
 
-  <h3><a name="builtin_formats">Built-in image formats</a></h3>
+  <h3><a name="builtin_formats" id="builtin_formats">Built-in image
+  formats</a></h3>
 
   <p>Some of the image formats that &times;Magick supports are
   special-purpose formats that are built-in to &times;Magick
@@ -358,7 +362,7 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
     <code>"xc:red"</code>. This format is simply an image of the
     specified color.</dd>
   </dl>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

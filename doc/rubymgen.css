@@ -54,8 +54,6 @@ div.stdtitle {
 }
 
 .method {
-   padding-top: 1em;
-   padding-bottom: 1em;
    background-color: #DCDCDC;
 }
 
@@ -64,19 +62,19 @@ div.stdtitle {
 }
 
 .methodname {
-	font-size: large;
-	font-weight: bold;
-	vertical-align: top;
+   font-size: large;
+   font-weight: bold;
+   vertical-align: top;
 }
 
 .methodname2 {
-	font-weight: bold;
+   font-weight: bold;
 }
 
 /* Quoted from ImageMagick documentation */
 blockquote.imquote {
 /* color: #990000; */
- color: #005A9C
+ color: #005A9C;
  font-style: italic;
  text-indent: 1em;
 }

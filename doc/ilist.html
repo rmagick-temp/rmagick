@@ -1,15 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: class ImageList</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <script language="JavaScript" type="text/javascript">
+  //<![CDATA[
+    <!-- Pre-load this image so that the browser knows how big it is. -->
+    <!-- Begin
+    img = new Image();
+    img.src = "ex/average_before.gif";
+    // End -->
+  //]]>
+  </script>
 </head>
 
 <body>
@@ -127,10 +137,10 @@
     </tr>
 
     <tr class="method">
-      <td class="methodname" valign="top"><a name=
-      "ImageList.new">new</a></td>
+      <td class="methodname" valign="top"><a name="ImageList.new"
+      id="ImageList.new">new</a></td>
 
-      <td>Magick::ImageList.new -&gt; <i>image</i><br>
+      <td>Magick::ImageList.new -&gt; <i>image</i><br />
       Magick::ImageList.new(<i>filename[, filename...]]</i>) -&gt;
       <i>image</i></td>
     </tr>
@@ -179,7 +189,7 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.delay_eq" id=
       "ImageList.delay_eq">delay=</a></td>
 
       <td><i>imagelist.</i>delay=<i>n</i></td>
@@ -202,7 +212,7 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
     <tr>
       <td valign="top">Returns</td>
 
-      <td><var>self</var></td>
+      <td><code>self</code></td>
     </tr>
 
     <tr>
@@ -233,14 +243,14 @@ imagelist.delay = 20 # delay 1/5 of a second between images.
     <tr>
       <td valign="top">Advanced</td>
 
-      <td>The ImageList class <var>delay=</var> attribute assigns
+      <td>The ImageList class <code>delay=</code> attribute assigns
       the same delay to all the images in the imagelist. Use
       <a href="imageattrs.html#Image.delay">Image#delay=</a> to set
       different delay values on individual images.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.iterations_eq" id=
       "ImageList.iterations_eq">iterations=</a></td>
 
       <td><i>imagelist.</i>iterations=<i>n</i></td>
@@ -284,11 +294,11 @@ imagelist.iterations = 10
       the ImageMagick animate/GraphicsMagick gm utilities do not
       respect this number. Both will repeat the animation until you
       stop them. Mozilla (and presumably Netscape) do respect the
-      value of <var>iterations</var>.</td>
+      value of <code>iterations</code>.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.length" id=
       "ImageList.length">length</a></td>
 
       <td><i>imagelist.</i>length -&gt; <i>anInteger</i></td>
@@ -312,11 +322,12 @@ i.length &raquo; 2
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
-      "ImageList.scene">scene</a><br>
-      <a name="ImageList.scene_eq">scene=</a></td>
+      <td class="methodname"><a name="ImageList.scene" id=
+      "ImageList.scene">scene</a><br />
+      <a name="ImageList.scene_eq" id=
+      "ImageList.scene_eq">scene=</a></td>
 
-      <td>scene -&gt; <i>anInteger</i><br>
+      <td>scene -&gt; <i>anInteger</i><br />
       scene=<i>anInteger</i></td>
     </tr>
 
@@ -346,7 +357,7 @@ imagelist.scene &raquo; 10
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.array_methods" id=
       "ImageList.array_methods">Array methods</a></td>
 
       <td>&nbsp;</td>
@@ -361,7 +372,7 @@ imagelist.scene &raquo; 10
         Array method. Many of these methods will also update the
         scene number. The scene number will never exceed the number
         of images in the list, and if the imagelist contains no
-        images the scene number will be <var>nil</var>.
+        images the scene number will be <code>nil</code>.
 
         <p>Most array methods keep the current image current. If
         the method moves the current image to a new position, the
@@ -390,7 +401,7 @@ imagelist.scene &raquo; 10
             <tr>
               <td valign="top">clear</td>
 
-              <td>set to <var>nil</var></td>
+              <td>set to <code>nil</code></td>
             </tr>
 
             <tr>
@@ -435,19 +446,19 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#ImageList.scene">scene</a><br>
-      <a href="#ImageList.scene_eq">scene=</a><br></td>
+      <td><a href="#ImageList.scene">scene</a><br />
+      <a href="#ImageList.scene_eq">scene=</a><br /></td>
     </tr>
 
     <tr>
-      <td valign="top"><a name=
-      "ImageList.array_methods.advanced">Advanced</a></td>
+      <td valign="top"><a name="ImageList.array_methods.advanced"
+      id="ImageList.array_methods.advanced">Advanced</a></td>
 
       <td>
-        <p>The <var>assoc</var>, <var>flatten</var>,
-        <var>flatten!</var>, <var>join</var>, <var>pack</var>, and
-        <var>rassoc</var> methods are not defined in the ImageList
-        class.</p>
+        <p>The <code>assoc</code>, <code>flatten</code>,
+        <code>flatten!</code>, <code>join</code>,
+        <code>pack</code>, and <code>rassoc</code> methods are not
+        defined in the ImageList class.</p>
 
         <p>Array methods defined in the ImageList class that would
         normally return an array return an ImageList.</p>
@@ -459,7 +470,7 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.spaceship" id=
       "ImageList.spaceship">&lt;=&gt;</a></td>
 
       <td><i>imagelist &lt;=&gt; anOtherImageList</i> -&gt; -1, 0,
@@ -508,7 +519,7 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.animate" id=
       "ImageList.animate">animate</a></td>
 
       <td><i>imagelist.</i>animate(<i>[delay]</i>) <i>[&nbsp;{
@@ -520,7 +531,7 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
 
       <td>Animate the images to an X Window screen. By default
       displays to the local screen. You can specify a different
-      screen by assigning the name to the <var>server_name</var>
+      screen by assigning the name to the <code>server_name</code>
       attribute in the optional arguments block.</td>
     </tr>
 
@@ -534,7 +545,8 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
       <td valign="top">Example</td>
 
       <td class="example">
-        <pre>imagelist.animate
+        <pre>
+imagelist.animate
 imagelist.animate { self.server_name = "other:0.0" }
 </pre>
       </td>
@@ -555,7 +567,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.append" id=
       "ImageList.append">append</a></td>
 
       <td><i>imagelist.</i>append(<code>true</code> or
@@ -598,7 +610,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.average" id=
       "ImageList.average">average</a></td>
 
       <td><i>imagelist.</i>average -&gt; <i>anImage</i></td>
@@ -627,8 +639,20 @@ imagelist.animate { self.server_name = "other:0.0" }
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="average.rb.html" target="_blank"><img src=
-      "ex/average.gif" alt="average example" border="0"></a></td>
+      <td><a href="average.rb.html" target="_blank">
+      <!-- This img tag displays the original image when the mouse is over -->
+       <img style="display:none" id="notaveraged" onmouseover=
+      "this.style.display=''" onmouseout=
+      "this.style.display='none';averaged.style.display='';"
+      border="0" src="ex/average_before.gif" alt=
+      "average example" /><!--
+                This img tag displays the averaged image when the mouse is not over
+                --><img style="display:" id="averaged" onmouseover=
+      "this.style.display='none';notaveraged.style.display='';"
+      onmouseout="this.style.display=''" border="0" src=
+      "ex/average_after.gif" alt="average example" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -640,7 +664,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.coalesce" id=
       "ImageList.coalesce">coalesce</a></td>
 
       <td><i>imagelist.</i>coalesce -&gt; <i>anImageList</i></td>
@@ -684,7 +708,7 @@ imagelist.animate { self.server_name = "other:0.0" }
           <tr>
             <td><a href="coalesce.rb.html" target=
             "_blank"><img border="0" alt="coalesce example" src=
-            "ex/coalesce.gif"></a></td>
+            "ex/coalesce.gif" /></a></td>
 
             <td>This animated GIF is created by coalescing 25 small
             images in a grid.</td>
@@ -709,7 +733,8 @@ imagelist.animate { self.server_name = "other:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="ImageList.copy">copy</a></td>
+      <td class="methodname"><a name="ImageList.copy" id=
+      "ImageList.copy">copy</a></td>
 
       <td><i>imagelist.</i>copy -&gt; <i>anImageList</i></td>
     </tr>
@@ -738,7 +763,8 @@ imagelist.animate { self.server_name = "other:0.0" }
       <td valign="top">Example</td>
 
       <td class="example">
-        <pre>imagelist2 = imagelist1.copy
+        <pre>
+imagelist2 = imagelist1.copy
 </pre>
       </td>
     </tr>
@@ -750,7 +776,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.cur_image" id=
       "ImageList.cur_image">cur_image</a></td>
 
       <td><i>imagelist.</i>cur_image -&gt; <i>anImage</i></td>
@@ -782,7 +808,8 @@ imagelist.animate { self.server_name = "other:0.0" }
       <td valign="top">Example</td>
 
       <td class="example">
-        <pre>f = imagelist.cur_image
+        <pre>
+f = imagelist.cur_image
 </pre>
       </td>
     </tr>
@@ -791,15 +818,15 @@ imagelist.animate { self.server_name = "other:0.0" }
       <td valign="top">Advanced</td>
 
       <td>Both the ImageList class and the Image class support the
-      <var>cur_image</var> method. Of course, in the Image class,
-      <var>cur_image</var> simply returns <var>self</var>. When a
-      RMagick method accepts either an image or a imagelist as an
-      argument, it sends the <var>cur_image</var> method to the
+      <code>cur_image</code> method. Of course, in the Image class,
+      <code>cur_image</code> simply returns <code>self</code>. When
+      a RMagick method accepts either an image or a imagelist as an
+      argument, it sends the <code>cur_image</code> method to the
       argument to get the current image.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.deconstruct" id=
       "ImageList.deconstruct">deconstruct</a></td>
 
       <td><i>imagelist.</i>deconstruct -&gt; <i>anImage</i></td>
@@ -850,7 +877,7 @@ f = imagelist.deconstruct
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.display" id=
       "ImageList.display">display</a></td>
 
       <td><i>imagelist.</i>display <i>[&nbsp;{ optional arguments
@@ -863,7 +890,7 @@ f = imagelist.deconstruct
       <td>Displays the images in the imagelist to any X Window
       screen. By default displays to the local screen. You can
       specify a different screen by assigning the name to the
-      <var>server_name</var> attribute in the optional arguments
+      <code>server_name</code> attribute in the optional arguments
       block.</td>
     </tr>
 
@@ -899,7 +926,7 @@ imagelist.display { self.server_name = "other.lnx:0.0" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.flatten_images" id=
       "ImageList.flatten_images">flatten_images</a></td>
 
       <td><i>imagelist.</i>flatten_images -&gt; <i>anImage</i></td>
@@ -935,7 +962,7 @@ imagelist.display { self.server_name = "other.lnx:0.0" }
 
       <td><a href="flatten_images.rb.html" target=
       "_blank"><img border="0" alt="flatten_images example" src=
-      "ex/flatten_images.gif"></a></td>
+      "ex/flatten_images.gif" /></a></td>
     </tr>
 
     <tr>
@@ -962,12 +989,12 @@ imagelist.display { self.server_name = "other.lnx:0.0" }
     <tr>
       <td valign="top">Notes</td>
 
-      <td>Since the Array class defines a <var>flatten</var> method
-      I used a different name for this method.</td>
+      <td>Since the Array class defines a <code>flatten</code>
+      method I used a different name for this method.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.from_blob" id=
       "ImageList.from_blob">from_blob</a></td>
 
       <td><i>imagelist.</i>from_blob(blob<i>[, blob...]</i>)
@@ -1000,7 +1027,7 @@ imagelist.display { self.server_name = "other.lnx:0.0" }
       <td valign="top">Returns</td>
 
       <td>An image created from the blob argument(s). The
-      <var>scene</var> attribute is set to the last image in the
+      <code>scene</code> attribute is set to the last image in the
       imagelist.</td>
     </tr>
 
@@ -1029,14 +1056,14 @@ imagelist.from_blob(blob) {
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#ImageList.to_blob">to_blob</a><br>
-      <a href="image.html#Image.to_blob">Image#to_blob</a><br>
+      <td><a href="#ImageList.to_blob">to_blob</a><br />
+      <a href="image.html#Image.to_blob">Image#to_blob</a><br />
       <a href=
-      "image.html#Image.from_blob">Image.from_blob</a><br></td>
+      "image.html#Image.from_blob">Image.from_blob</a><br /></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.inspect" id=
       "ImageList.inspect">inspect</a></td>
 
       <td><i>imagelist.</i>inspect -&gt; <i>aString</i></td>
@@ -1092,7 +1119,8 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="ImageList.map">map</a></td>
+      <td class="methodname"><a name="ImageList.map" id=
+      "ImageList.map">map</a></td>
 
       <td><i>imagelist.map</i>(<i>reference</i>, <i>dither</i>)
       -&gt; <i>anImageList</i></td>
@@ -1113,12 +1141,12 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
           <dt>reference</dt>
 
           <dd>An image or a imagelist. If an imagelist,
-          <var>map</var> uses the current image as the reference
+          <code>map</code> uses the current image as the reference
           image.</dd>
 
           <dt>dither</dt>
 
-          <dd>if <var>true</var>, dither the mapped images.</dd>
+          <dd>if <code>true</code>, dither the mapped images.</dd>
         </dl>
       </td>
     </tr>
@@ -1137,15 +1165,27 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
         <table summary="map example" class="example">
           <tr>
             <td>This example demonstrates how to map images into
-            the 216 "Web safe" colors. The top half of the images
-            are in the original colors. The bottom half of the
-            images have been mapped using &times;Magick's built-in
-            "NETSCAPE:" format.</td>
+            the 216 "Web safe" colors. Mouse over the image to see
+            the images before mapping.</td>
           </tr>
 
           <tr>
-            <td><a href="map.rb.html" target="_blank"><img border=
-            "0" alt="map example" src="ex/map.jpg"></a></td>
+            <td>
+              <table summary="example">
+                <tr>
+                  <td><a href="map.rb.html" target=
+                  "_blank"><img src="ex/map_after.jpg" alt=
+                  "map example" border="0" onmouseover=
+                  "this.src='ex/map_before.jpg'" onmouseout=
+                  "this.src='ex/map_after.jpg'" /></a></td>
+
+                  <td valign="bottom"><img src="ex/images/spin.gif"
+                  alt=
+                  "Mouse over the example to see the original image" />
+                  </td>
+                </tr>
+              </table>
+            </td>
           </tr>
         </table>
       </td>
@@ -1161,12 +1201,12 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="image.html#Image.map">Image#map</a><br>
+      <td><a href="image.html#Image.map">Image#map</a><br />
       <a href="#ImageList.quantize">quantize</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.montage" id=
       "ImageList.montage">montage</a></td>
 
       <td><i>imagelist.</i>montage <i>[&nbsp;{ optional arguments
@@ -1184,7 +1224,7 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
         and rows, the distance between images, and include a label
         with each small image (called a <i>tile</i>).
 
-        <p>All of <var>montage</var>'s configuration options are
+        <p>All of <code>montage</code>'s configuration options are
         specified by assigning values to attribute methods in a
         block associated with the method call.</p>
       </td>
@@ -1256,7 +1296,7 @@ self.compose = Magick::AtopCompositeOp
               operator for each tile by setting each image's
               <a href="imageattrs.html#Image.compose">compose=</a>
               attribute to the desired operator. In the optional
-              arguments block, set <var>compose</var> to
+              arguments block, set <code>compose</code> to
               UndefinedCompositeOp.</p>
             </td>
           </tr>
@@ -1298,8 +1338,8 @@ self.font = "Courier"
               tile. The frame specification may be either a string
               or a <a href="struct.html#Geometry">Geometry</a>
               object. If the argument is a string, it must have the
-              form <var>&lt;width&gt;x&lt;height&gt;+&lt;outer
-              bevel width&gt;+&lt;inner bevel width&gt;</var>. If
+              form <code>&lt;width&gt;x&lt;height&gt;+&lt;outer
+              bevel width&gt;+&lt;inner bevel width&gt;</code>. If
               the argument is a Geometry object, specify the width
               and height of the frame with the <code>width</code>
               and <code>height</code> attributes, and specify the
@@ -1329,7 +1369,7 @@ The default is to have no frame.
               The value can be either a string or a <a href=
               "struct.html#Geometry">Geometry</a> object. If a
               string, it should be in the form
-              <var>&lt;tile-width&gt;x&lt;tile-height&gt;+&lt;distance-between-columns&gt;+&lt;distance-between-rows&gt;</var>.
+              <code>&lt;tile-width&gt;x&lt;tile-height&gt;+&lt;distance-between-columns&gt;+&lt;distance-between-rows&gt;</code>.
               If a Geometry object, the tile width and height are
               specified by the <code>width</code> and
               <code>height</code> attributes, and the distance
@@ -1346,7 +1386,7 @@ self.geometry = Magick::Geometry.new(130, 194, 10, 5)
 </pre>The default geometry is "120x120+4+3&gt;".
 
               <p>See <a href=
-              "imusage.html#geometry"><var>geometry</var></a>.</p>
+              "imusage.html#geometry"><code>geometry</code></a>.</p>
             </td>
           </tr>
 
@@ -1385,11 +1425,11 @@ self.pointsize = 20
             <td valign="top"><i>shadow=</i></td>
 
             <td>
-              If set to <var>true</var>, adds a drop shadow to each
-              tile.
+              If set to <code>true</code>, adds a drop shadow to
+              each tile.
               <pre>
 self.shadow = true
-</pre>The default is <var>false</var>.
+</pre>The default is <code>false</code>.
             </td>
           </tr>
 
@@ -1428,7 +1468,7 @@ self.texture = Magick::Image.read("granite:").first
               either a string or a <a href=
               "struct.html#Geometry">Geometry</a> object. If the
               value is a string, it should have the form
-              <var>"&lt;columns&gt;x&lt;rows&gt;"</var>. If the
+              <code>"&lt;columns&gt;x&lt;rows&gt;"</code>. If the
               value is a Geometry object, specify the number of
               columns as the <code>width</code> attribute and the
               number of rows as the <code>height</code> attribute.
@@ -1439,7 +1479,7 @@ self.tile = "4x10"
               <pre>
 self.tile = Magick::Geometry.new(4,10)
 </pre>The default is "6x4". <i>Note:</i> If there are too many
-tiles to fit on one composite image, <var>montage</var> creates
+tiles to fit on one composite image, <code>montage</code> creates
 multiple composite images.
             </td>
           </tr>
@@ -1458,8 +1498,8 @@ get this to actually put a title on the composite image.
         </table>
 
         <p><i>Note:</i>In the above examples, the reference to
-        <var>self</var> is necessary to distinguish the method call
-        from an assignment to a local variable.</p>
+        <code>self</code> is necessary to distinguish the method
+        call from an assignment to a local variable.</p>
 
         <p><i>Note:</i>You may assign a <a href=
         "struct.html#Pixel">Pixel</a> object to any attribute that
@@ -1472,7 +1512,7 @@ get this to actually put a title on the composite image.
 
       <td>
         To add labels to the tiles, assign a "Label" attribute to
-        each image. The <var>montage</var> method will use the
+        each image. The <code>montage</code> method will use the
         value of the attribute as the tile's label. For example,
         <pre>
 img[2]['Label'] = "Mom's Birthday"
@@ -1509,7 +1549,7 @@ img[2]['Label'] = "Mom's Birthday"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.morph" id=
       "ImageList.morph">morph</a></td>
 
       <td><i>imagelist.</i>morph(<i>n</i>) -&gt;
@@ -1520,9 +1560,9 @@ img[2]['Label'] = "Mom's Birthday"
       <td valign="top">Description</td>
 
       <td>Transforms a image into another image by inserting
-      <var>n</var> in-between images. Requires at least two images.
-      If more images are present, the 2nd image is transformed into
-      the 3rd, the 3rd to the 4th, etc.</td>
+      <code>n</code> in-between images. Requires at least two
+      images. If more images are present, the 2nd image is
+      transformed into the 3rd, the 3rd to the 4th, etc.</td>
     </tr>
 
     <tr>
@@ -1546,11 +1586,13 @@ img[2]['Label'] = "Mom's Birthday"
         <table summary="morph example" class="example">
           <tr>
             <td><a href="morph.rb.html" target="_blank"><img src=
-            "ex/morph.gif" alt="morph example" border="0"></a></td>
+            "ex/morph.gif" alt="morph example" border=
+            "0" /></a></td>
 
-            <td>This animated GIF is created by reading the "0",
-            "1", "2" and "3" images, then using <var>morph</var> to
-            create 8 images between each original image.</td>
+            <td valign="top">This animated GIF is created by
+            reading the "0", "1", "2" and "3" images, then using
+            <code>morph</code> to create 8 images between each
+            original image.</td>
           </tr>
         </table>
       </td>
@@ -1564,7 +1606,7 @@ img[2]['Label'] = "Mom's Birthday"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.mosaic" id=
       "ImageList.mosaic">mosaic</a></td>
 
       <td><i>imagelist.</i>mosaic -&gt; <i>anImage</i></td>
@@ -1594,7 +1636,7 @@ img[2]['Label'] = "Mom's Birthday"
       <td valign="top">Example</td>
 
       <td><a href="mosaic.rb.html" target="_blank"><img src=
-      "ex/mosaic.gif" alt="mosaic example" border="0"></a></td>
+      "ex/mosaic.gif" alt="mosaic example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -1608,13 +1650,13 @@ img[2]['Label'] = "Mom's Birthday"
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#ImageList.coalesce">coalesce</a><br>
-      <a href="#ImageList.flatten_images">flatten_images</a><br>
+      <td><a href="#ImageList.coalesce">coalesce</a><br />
+      <a href="#ImageList.flatten_images">flatten_images</a><br />
       <a href="#ImageList.montage">montage</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.new_image" id=
       "ImageList.new_image">new_image</a></td>
 
       <td><i>imagelist.</i>new_image(<i>columns</i>,
@@ -1634,8 +1676,8 @@ img[2]['Label'] = "Mom's Birthday"
 
       <td>
         Creates a new image with the specified number of rows and
-        columns. If the optional <var>fill</var> argument is used,
-        calls the <var>fill</var> method to fill the image.
+        columns. If the optional <code>fill</code> argument is
+        used, calls the <code>fill</code> method to fill the image.
         Otherwise, the image is filled with the background color.
 
         <p>You can set any <a href="info.html">Image::Info</a>
@@ -1669,7 +1711,8 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="ImageList.ping">ping</a></td>
+      <td class="methodname"><a name="ImageList.ping" id=
+      "ImageList.ping">ping</a></td>
 
       <td><i>imagelist.</i>ping(<i>filename</i>[,
       <i>filename</i>...]) -&gt; <i>self</i></td>
@@ -1680,9 +1723,10 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
 
       <td>Reads the image files and creates one or more images that
       contain all the image attributes but without the pixel data.
-      If all you need is the image attributes, the <var>ping</var>
-      method is much faster and consumes less memory than <a href=
-      "#ImageList.read"><var>read</var></a>.</td>
+      If all you need is the image attributes, the
+      <code>ping</code> method is much faster and consumes less
+      memory than <a href=
+      "#ImageList.read"><code>read</code></a>.</td>
     </tr>
 
     <tr>
@@ -1725,7 +1769,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.quantize" id=
       "ImageList.quantize">quantize</a></td>
 
       <td><i>imagelist.</i>quantize(nc=256,
@@ -1821,15 +1865,28 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
         <table summary="quanitze example" class="example">
           <tr>
             <td>This example shows the effect of quantizing 3
-            images to a set of 16 colors in the RGB colorspace. The
-            original images are on top. The quantized images are on
-            the bottom.</td>
+            images to a set of 16 colors in the RGB colorspace.
+            Mouse over the image to see the images before
+            quantizing.</td>
           </tr>
 
           <tr>
-            <td><a href="quantize-m.rb.html" target=
-            "_blank"><img alt="quantize example" src=
-            "ex/quantize-m.jpg" border="0"></a></td>
+            <td>
+              <table>
+                <tr>
+                  <td><a href="quantize-m.rb.html" target=
+                  "_blank"><img src="ex/quantize-m_after.jpg" alt=
+                  "quantize example" border="0" onmouseover=
+                  "this.src='ex/quantize-m_before.jpg'" onmouseout=
+                  "this.src='ex/quantize-m_after.jpg'" /></a></td>
+
+                  <td valign="bottom"><img src="ex/images/spin.gif"
+                  alt=
+                  "Mouse over the example to see the original image" />
+                  </td>
+                </tr>
+              </table>
+            </td>
           </tr>
         </table>
       </td>
@@ -1851,11 +1908,12 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="ImageList.read">read</a></td>
+      <td class="methodname"><a name="ImageList.read" id=
+      "ImageList.read">read</a></td>
 
       <td><i>imagelist.</i>read(<i>filename[, filename...]</i>)
       <i>[&nbsp;{ optional arguments }&nbsp;]</i> -&gt;
-      <i>self</i><br>
+      <i>self</i><br />
       <i>imagelist.</i>read(<i>file[, file...]</i>) <i>[&nbsp;{
       optional arguments }&nbsp;]</i> -&gt; <i>self</i></td>
     </tr>
@@ -1870,7 +1928,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
         the list.
 
         <p>The image files may be multi-frame (animated or layered)
-        files. In this case <var>read</var> adds multiple images
+        files. In this case <code>read</code> adds multiple images
         per file to the imagelist.</p>
       </td>
     </tr>
@@ -1928,13 +1986,13 @@ number = '0'
       <td valign="top">Advanced</td>
 
       <td>You can create images using &times;Magick's built-in
-      formats with the <var>read</var> method. See <a href=
+      formats with the <code>read</code> method. See <a href=
       "imusage.html#builtin_formats">Built-in image
       formats</a>.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.to_blob" id=
       "ImageList.to_blob">to_blob</a></td>
 
       <td><i>imagelist.</i>to_blob <i>[&nbsp;{ optional arguments
@@ -1985,18 +2043,18 @@ s = i.to_blob &raquo; a string representing the image.
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#ImageList.from_blob">from_blob</a><br>
-      <a href="image.html#Image.to_blob">Image#to_blob</a><br>
+      <td><a href="#ImageList.from_blob">from_blob</a><br />
+      <a href="image.html#Image.to_blob">Image#to_blob</a><br />
       <a href=
-      "image.html#Image.from_blob">Image.from_blob</a><br></td>
+      "image.html#Image.from_blob">Image.from_blob</a><br /></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="ImageList.write" id=
       "ImageList.write">write</a></td>
 
       <td><i>imagelist.</i>write(<i>filename</i>) <i>[&nbsp;{
-      optional arguments }&nbsp;]</i> -&gt; <i>self</i><br>
+      optional arguments }&nbsp;]</i> -&gt; <i>self</i><br />
       <i>imagelist.</i>write(<i>file</i>) <i>[&nbsp;{ optional
       arguments }&nbsp;]</i> -&gt; <i>self</i></td>
     </tr>
@@ -2008,11 +2066,11 @@ s = i.to_blob &raquo; a string representing the image.
         If the image format <a href=
         "imusage.html#formats">indicated by the filename</a>
         supports multiple images per file (animated images),
-        <var>write</var> writes all the images in the imagelist to
-        a single file. Otherwise, writes each image to a separate
-        file.
+        <code>write</code> writes all the images in the imagelist
+        to a single file. Otherwise, writes each image to a
+        separate file.
 
-        <p>Regardless of the original format, <var>write</var>
+        <p>Regardless of the original format, <code>write</code>
         converts the images to the format specified by the
         filename.</p>
 
@@ -2100,7 +2158,7 @@ imagelist.each { |f| f.write "#{image}_#{x}.gif"; x.succ! }
       </td>
     </tr>
   </table>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

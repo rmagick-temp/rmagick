@@ -1,15 +1,25 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: class Image</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <script language="JavaScript" type="text/javascript">
+  //<![CDATA[
+    <!-- Pre-load this image so that the browser knows how big it is. -->
+    <!-- Begin
+    img = new Image();
+    img.src = "ex/images/Flower_Hat.jpg";
+    // End -->
+  //]]>
+  </script>
 </head>
 
 <body>
@@ -414,7 +424,7 @@
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.capture" id=
       "Image.capture">capture</a></td>
 
       <td>Image.capture(<i>silent=</i><code>false</code>,
@@ -432,11 +442,11 @@
         <p>Reads an image from an X Window.</p>
 
         <p>In the optional arguments, you can set the
-        <var>filename</var> attribute to "root", a numeric window
+        <code>filename</code> attribute to "root", a numeric window
         ID, or a window name. If you don't set filename to any
-        value, <var>capture</var> performs an interactive capture.
-        Either click the desired window or press a mouse button and
-        drag to draw the desired rectangle.</p>
+        value, <code>capture</code> performs an interactive
+        capture. Either click the desired window or press a mouse
+        button and drag to draw the desired rectangle.</p>
       </td>
     </tr>
 
@@ -499,7 +509,7 @@ img = Magick::Image.capture {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.constitute" id=
       "Image.constitute">constitute</a></td>
 
       <td>Image.constitute(<i>width</i>, <i>height</i>, <i>map</i>,
@@ -559,8 +569,8 @@ img = Magick::Image.capture {
       <td valign="top">Example</td>
 
       <td><a href="Zconstitute.rb.html" target="_blank"><img src=
-      "ex/constitute.gif" alt="constitute example" border=
-      "0"></a></td>
+      "ex/constitute.jpg" alt="constitute example" border=
+      "0" /></a></td>
     </tr>
 
     <tr>
@@ -583,15 +593,16 @@ img = Magick::Image.capture {
       <td valign="top">Advanced</td>
 
       <td>
-        <p>This method is the reverse of <var>dispatch</var>.</p>
+        <p>This method is the reverse of <code>dispatch</code>.</p>
 
         <p>Since all the pixel data must be in memory at once,
-        <var>constitute</var> is useful for constructing only
+        <code>constitute</code> is useful for constructing only
         relatively small images, or processing large images in many
         small chunks. For medium-to-large images, use
-        <var>set_pixels</var> instead.</p>
+        <code>set_pixels</code> instead.</p>
 
-        <p>Also, <var>constitute</var> is as slow as Christmas.</p>
+        <p>Also, <code>constitute</code> is as slow as
+        Christmas.</p>
       </td>
     </tr>
 
@@ -599,11 +610,11 @@ img = Magick::Image.capture {
       <td>Notes</td>
 
       <td>This method is deprecated in ImageMagick 5.5.7 and later.
-      Use the <var>import_pixels</var> method instead.</td>
+      Use the <code>import_pixels</code> method instead.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.from_blob" id=
       "Image.from_blob">from_blob</a></td>
 
       <td>Image.from_blob(<i>aString</i>) [ <i>{ optional arguments
@@ -657,7 +668,8 @@ img = Magick::Image.capture {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.new">new</a></td>
+      <td class="methodname"><a name="Image.new" id=
+      "Image.new">new</a></td>
 
       <td>Image.new(<i>width</i>, <i>height</i> [, <i>fill</i>]) [
       <i>{ optional arguments }</i> ] -&gt; <i>anImage</i></td>
@@ -669,7 +681,7 @@ img = Magick::Image.capture {
       <td>Creates a new instance with the specified number of
       columns and rows. You can specify other arguments by setting
       <a href="info.html">Image::Info</a> attributes in the
-      optional block. If the optional <var>fill</var> argument is
+      optional block. If the optional <code>fill</code> argument is
       not specified, the image is set to the background color.</td>
     </tr>
 
@@ -715,10 +727,11 @@ img = Magick::Image.capture {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.ping">ping</a></td>
+      <td class="methodname"><a name="Image.ping" id=
+      "Image.ping">ping</a></td>
 
       <td>Image.ping(<i>filename</i>) [ <i>{ optional arguments
-      }</i> ] -&gt; <i>anArray</i><br>
+      }</i> ] -&gt; <i>anArray</i><br />
       Image.ping(<i>file</i>) [ <i>{ optional arguments }</i> ]
       -&gt; <i>anArray</i></td>
     </tr>
@@ -728,8 +741,8 @@ img = Magick::Image.capture {
 
       <td>Creates one or more images from the image file, omitting
       the pixel data. Only the attributes are stored in the images.
-      This method is faster than <var><a href=
-      "#Image.read">read</a></var> and uses less memory.</td>
+      This method is faster than <code><a href=
+      "#Image.read">read</a></code> and uses less memory.</td>
     </tr>
 
     <tr>
@@ -775,10 +788,11 @@ p cheetah[0].columns &raquo; 1024
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.read">read</a></td>
+      <td class="methodname"><a name="Image.read" id=
+      "Image.read">read</a></td>
 
       <td>Image.read(<i>filename</i>) [ <i>{ optional arguments
-      }</i> ] -&gt; <i>anArray</i><br>
+      }</i> ] -&gt; <i>anArray</i><br />
       Image.read(<i>file</i>) [ <i>{ optional arguments }</i> ]
       -&gt; <i>anArray</i></td>
     </tr>
@@ -835,7 +849,8 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.aref">[&nbsp;]</a></td>
+      <td class="methodname"><a name="Image.aref" id=
+      "Image.aref">[&nbsp;]</a></td>
 
       <td>image[<i>key</i>] -&gt; <i>value</i></td>
     </tr>
@@ -893,7 +908,7 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.aset" id=
       "Image.aset">[&nbsp;]=</a></td>
 
       <td>image[<i>key</i>] = <i>value</i> -&gt; <i>image</i></td>
@@ -935,7 +950,7 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.spaceship" id=
       "Image.spaceship">&lt;=&gt;</a></td>
 
       <td>image &lt;=&gt; anOtherImage -&gt; -1, 0, 1</td>
@@ -965,18 +980,19 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <td valign="top">Advanced</td>
 
       <td>
-        <p>The <var>difference</var> method compares images (for
+        <p>The <code>difference</code> method compares images (for
         equality only) but also returns information about the
         amount two images differ, which may be more useful.</p>
 
         <p>In addition to &lt;=&gt;, <code>Image</code> mixes in
         the <code>Comparable</code> module, which defines the &lt;,
-        &lt;=, == &gt;=, &gt;, and <var>between?</var> methods.</p>
+        &lt;=, == &gt;=, &gt;, and <code>between?</code>
+        methods.</p>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.adaptive_threshold" id=
       "Image.adaptive_threshold">adaptive_threshold</a>
       <span class="imversion">(5.5.2)</span></td>
 
@@ -1021,20 +1037,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td align="left"><a href="adaptive_threshold.rb.html"
-            target="_blank"><img src="ex/adaptive_threshold.jpg"
-            alt="adaptive_threshold example"></a></td>
-
-            <td valign="top" width="50%">The right-hand side of
-            this image shows the effect of the
-            <var>adaptive_threshold</var> method with the default
-            arguments.</td>
-          </tr>
-        </table>
-      </td>
+      <td valign="top"><a href="colorize.rb.html" target=
+      "_blank"><img src="ex/adaptive_threshold.jpg" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/adaptive_threshold.jpg'" alt=
+      "adaptive_threshold example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1057,12 +1066,12 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Advanced</td>
 
-      <td>The <var>adaptive_threshold</var> method is only
+      <td>The <code>adaptive_threshold</code> method is only
       available in ImageMagick 5.5.2 and later.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.add_noise" id=
       "Image.add_noise">add_noise</a></td>
 
       <td><i>image</i>.add_noise(<i>aNoiseType</i>) -&gt;
@@ -1091,20 +1100,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td valign="top" width="50%">The right-hand side of
-            this image shows the effect of the <var>add_noise</var>
-            method with the MultiplicativeGaussianNoise
-            argument.</td>
-
-            <td align="left"><a href="add_noise.rb.html" target=
-            "_blank"><img src="ex/add_noise.jpg" alt=
-            "add_noise example"></a></td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="add_noise.rb.html" target=
+      "_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/add_noise.jpg'" src="ex/add_noise.jpg" alt=
+      "add_noise example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1118,12 +1120,12 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Advanced</td>
 
-      <td>The amount of time <var>add_noise</var> requires depends
-      on the NoiseType constant.</td>
+      <td>The amount of time <code>add_noise</code> requires
+      depends on the NoiseType constant.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.affine_transform" id=
       "Image.affine_transform">affine_transform</a></td>
 
       <td><i>image</i>.affine_transform(<i>anAffineMatrix</i>)
@@ -1157,13 +1159,20 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <td>
         <table summary="example" class="example">
           <tr>
-            <td><a href="affine_transform.rb.html" target=
-            "_blank"><img src="ex/affine_transform.jpg" alt=
-            "affine_transform example"></a></td>
+            <td width="273" height="256"><a href=
+            "affine_transform.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/affine_transform.jpg'" src=
+            "ex/affine_transform.jpg" alt=
+            "affine_transform example" border="0" /></a> <img src=
+            "ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
 
-            <td>The affine matrix in this example scales the
-            receiver by -1 in both the x- and y-direction, and
-            skews it by &pi;/6 radians along both axes.</td>
+            <td valign="top">The affine matrix in this example
+            scales the receiver by -1 in both the x- and
+            y-direction, and skews it by &pi;/6 radians along both
+            axes.</td>
           </tr>
         </table>
       </td>
@@ -1193,7 +1202,7 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.annotate" id=
       "Image.annotate">annotate</a></td>
 
       <td><em>image.</em>annotate(<i>draw, width, height, x, y,
@@ -1204,9 +1213,9 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Description</td>
 
-      <td>This is the same method as the <var>annotate</var> method
-      in the Draw class, except that the first argument is a Draw
-      object. Refer to the documentation for <a href=
+      <td>This is the same method as the <code>annotate</code>
+      method in the Draw class, except that the first argument is a
+      Draw object. Refer to the documentation for <a href=
       "draw.html#Draw.annotate">Draw#annotate</a> for more
       information.</td>
     </tr>
@@ -1220,12 +1229,12 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Notes</td>
 
-      <td>Some users feel like <var>annotate</var> is better placed
-      in Image than in Draw. Okay, here it is!</td>
+      <td>Some users feel like <code>annotate</code> is better
+      placed in Image than in Draw. Okay, here it is!</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.blur_image" id=
       "Image.blur_image">blur_image</a></td>
 
       <td><i>image</i>.blur_image(<i>radius</i>=0.0,
@@ -1249,19 +1258,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td valign="top" width="50%">The right-hand side of
-            this image shows the effect of the
-            <var>blur_image</var> method.</td>
-
-            <td align="left"><a href="blur_image.rb.html" target=
-            "_blank"><img src="ex/blur_image.jpg" alt=
-            "blur_image example"></a></td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="blur_image.rb.html" target=
+      "_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/blur_image.jpg'" src="ex/blur_image.jpg" alt=
+      "blur_image example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1279,7 +1282,7 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.black_threshold" id=
       "Image.black_threshold">black_threshold</a> <span class=
       "imversion">(5.5.7)</span><span class=
       "gmversion">(1.1)</span></td>
@@ -1302,10 +1305,11 @@ animated = Magick::Image.read("animated.gif") &raquo;
 
       <td>Each channel argument is a number between 0 and MaxRGB.
       All arguments except the first may be omitted. If the
-      <var>green_channel</var> or <var>blue_channel</var> argument
-      is omitted, the default value is the <var>red_channel</var>
-      value. If the <var>opacity_channel</var> argument is omitted,
-      the default value is <a href=
+      <code>green_channel</code> or <code>blue_channel</code>
+      argument is omitted, the default value is the
+      <code>red_channel</code> value. If the
+      <code>opacity_channel</code> argument is omitted, the default
+      value is <a href=
       "constants.html#Opacity">OpaqueOpacity</a>.</td>
     </tr>
 
@@ -1331,7 +1335,8 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.border">border</a></td>
+      <td class="methodname"><a name="Image.border" id=
+      "Image.border">border</a></td>
 
       <td><i>image</i>.border(<i>width</i>, <i>height</i>,
       <i>color</i>) -&gt; <i>anImage</i></td>
@@ -1374,8 +1379,20 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="border.rb.html" target="_blank"><img src=
-      "ex/border.jpg" alt="border example"></a></td>
+      <td><a href="border.rb.html" target="_blank">
+      <!-- This img tag displays the original image when the mouse is over -->
+       <img style="padding:10px; display:none" id="borderless"
+      onmouseover="this.style.display=''" onmouseout=
+      "this.style.display='none'; bordered.style.display='';"
+      border="0" src="ex/images/Flower_Hat.jpg" alt=
+      "border example" /><!--
+                        This img tag displays the framed image when the mouse is not over --><img style="display:"
+           id="bordered" onmouseover=
+           "this.style.display='none'; borderless.style.display='';"
+           onmouseout="this.style.display=''" border="0" src=
+           "ex/border.jpg" alt="border example" /></a> <img src=
+           "ex/images/spin.gif" alt=
+           "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1393,7 +1410,7 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.border_bang" id=
       "Image.border_bang">border!</a></td>
 
       <td><i>image</i>.border!(<i>width</i>, <i>height</i>,
@@ -1413,12 +1430,12 @@ animated = Magick::Image.read("animated.gif") &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.change_geometry" id=
       "Image.change_geometry">change_geometry</a></td>
 
       <td><i>image</i>.change_geometry(<i>aString</i>)
       {|cols,rows,image| <i>block</i>} -&gt; <i>??? (see
-      Returns)</i><br>
+      Returns)</i><br />
       <i>image</i>.change_geometry(<i>aGeometry</i>)
       {|cols,rows,image| <i>block</i>} -&gt; <i>??? (see
       Returns)</i></td>
@@ -1428,20 +1445,20 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <td valign="top">Description</td>
 
       <td>
-        <p>The <var>change_geometry</var> method supports resizing
-        a method by specifying constraints. For example, you can
-        specify that the image should be resized such that the
-        aspect ratio should be retained but the resulting image
+        <p>The <code>change_geometry</code> method supports
+        resizing a method by specifying constraints. For example,
+        you can specify that the image should be resized such that
+        the aspect ratio should be retained but the resulting image
         should be no larger than 640 pixels wide and 480 pixels
         tall.</p>
 
         <p>The argument may be either a <a href=
         "imusage.html#geometry">geometry string</a> or a <a href=
         "struct.html#Geometry">Geometry</a> object.
-        <var>Change_geometry</var> yields to the block, passing new
-        width and height values based on the argument with respect
-        to <code>self</code>. The return value is the return value
-        of the block.</p>
+        <code>Change_geometry</code> yields to the block, passing
+        new width and height values based on the argument with
+        respect to <code>self</code>. The return value is the
+        return value of the block.</p>
       </td>
     </tr>
 
@@ -1461,8 +1478,8 @@ animated = Magick::Image.read("animated.gif") &raquo;
     <tr>
       <td>Notes</td>
 
-      <td><var>change_geometry!</var> is an alias for
-      <var>change_geometry</var>.</td>
+      <td><code>change_geometry!</code> is an alias for
+      <code>change_geometry</code>.</td>
     </tr>
 
     <tr>
@@ -1486,7 +1503,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.changed_q" id=
       "Image.changed_q">changed?</a></td>
 
       <td><i>image</i>.changed? -&gt; <code>true</code> or
@@ -1508,7 +1525,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.channel" id=
       "Image.channel">channel</a></td>
 
       <td><i>image</i>.channel(<i>aChannelType</i>) -&gt;
@@ -1548,12 +1565,12 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td>
         <table summary="example" class="example" align="left">
           <tr>
-            <td width="50%" valign="top">The channel image
-            preserves the tone of the selected RGB component.</td>
-
             <td align="center"><a href="channel.rb.html" target=
             "_blank"><img src="ex/channel.jpg" alt=
-            "channel example"></a></td>
+            "channel example" border="0" /></a></td>
+
+            <td width="50%" valign="top">The channel image
+            preserves the tone of the selected RGB component.</td>
           </tr>
         </table>
       </td>
@@ -1567,7 +1584,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.channel_compare" id=
       "Image.channel_compare">channel_compare</a><span class=
       "imversion">&nbsp;(5.5.8)</span></td>
 
@@ -1637,7 +1654,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.channel_depth" id=
       "Image.channel_depth">channel_depth</a> <span class=
       "imversion">5.5.8</span></td>
 
@@ -1682,7 +1699,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.channel_extrema" id=
       "Image.channel_extrema">channel_extrema</a> <span class=
       "imversion">5.5.8</span></td>
 
@@ -1726,7 +1743,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.channel_threshold" id=
       "Image.channel_threshold">channel_threshold</a></td>
 
       <td><i>image</i>.channel_threshold(<i>red_channel</i>,
@@ -1746,10 +1763,11 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <td>Each channel argument is a number between 0 and MaxRGB.
       All arguments except the first may be omitted. If the
-      <var>green_channel</var> or <var>blue_channel</var> argument
-      is omitted, the default value is the <var>red_channel</var>
-      value. If the <var>opacity_channel</var> argument is omitted,
-      the default value is <a href=
+      <code>green_channel</code> or <code>blue_channel</code>
+      argument is omitted, the default value is the
+      <code>red_channel</code> value. If the
+      <code>opacity_channel</code> argument is omitted, the default
+      value is <a href=
       "constants.html#Opacity">OpaqueOpacity</a>.</td>
     </tr>
 
@@ -1763,8 +1781,13 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">Example</td>
 
       <td><a href="channel_threshold.rb.html" target=
-      "_blank"><img src="ex/channel_threshold.jpg" alt=
-      "channel_threshold example"></a></td>
+      "_blank"><img onmouseover=
+      "this.src='ex/channel_threshold_before.jpg'" onmouseout=
+      "this.src='ex/channel_threshold_after.jpg'" src=
+      "ex/channel_threshold_after.jpg" alt=
+      "channel_threshold example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1787,7 +1810,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.charcoal" id=
       "Image.charcoal">charcoal</a></td>
 
       <td><i>image</i>.charcoal(<i>radius</i>=0.0,
@@ -1798,8 +1821,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">Description</td>
 
       <td>Adds a "charcoal" effect to the image. You can alter the
-      intensity of the effect by changing the <var>radius</var> and
-      <var>sigma</var> arguments.</td>
+      intensity of the effect by changing the <code>radius</code>
+      and <code>sigma</code> arguments.</td>
     </tr>
 
     <tr>
@@ -1829,8 +1852,13 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="charcoal.rb.html" target="_blank"><img src=
-      "ex/charcoal.jpg" alt="charcoal example"></a></td>
+      <td><a href="charcoal.rb.html" target=
+      "_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/charcoal.jpg'" src="ex/charcoal.jpg" alt=
+      "charcoal example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -1841,7 +1869,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.chop">chop</a></td>
+      <td class="methodname"><a name="Image.chop" id=
+      "Image.chop">chop</a></td>
 
       <td><i>image</i>.chop(<i>x</i>, <i>y</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>anImage</i></td>
@@ -1890,16 +1919,20 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">Example</td>
 
       <td>
-        <table summary="example" class="example">
+        <table summary="example">
           <tr>
-            <td valign="top" width="50%">The darkened rectangle in
-            the upper-left corner of the left-hand image
-            corresponds to the rectangle that is to be chopped
-            away. The right-hand image shows the result of
-            <var>chop</var>.</td>
+            <td><a href="chop.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/chop_before.jpg'" onmouseout=
+            "this.src='ex/chop_after.jpg'" src="ex/chop_after.jpg"
+            border="0" alt="chop example" /></a></td>
 
-            <td><a href="chop.rb.html" target="_blank"><img src=
-            "ex/chop.jpg" alt="chop example"></a></td>
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td style="padding-right:25%" valign="top">The chop
+            rectangle is highlighted in the "before" image. The
+            result may seem counter-intuitive!</td>
           </tr>
         </table>
       </td>
@@ -1920,8 +1953,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
-      "Image.color_fill_to_border">color_fill_to_border</a></td>
+      <td class="methodname"><a name="Image.color_fill_to_border"
+      id="Image.color_fill_to_border">color_fill_to_border</a></td>
 
       <td><i>image</i>.color_fill_to_border(<i>x</i>, <i>y</i>,
       <i>fill</i>) -&gt; <i>anImage</i></td>
@@ -1965,15 +1998,23 @@ mona.change_geometry!('320x240') { |cols, rows, img|
         <table summary="example" class="example">
           <tr>
             <td><a href="color_fill_to_border.rb.html" target=
-            "_blank"><img src="ex/color_fill_to_border.gif" alt=
-            "color_fill_to_border example"></a></td>
+            "_blank"><img onmouseover=
+            "this.src='ex/color_fill_to_border_before.gif'"
+            onmouseout=
+            "this.src='ex/color_fill_to_border_after.gif'" src=
+            "ex/color_fill_to_border_after.gif" alt=
+            "color_fill_to_border example" border="0" /></a></td>
 
-            <td width="50%">The left-hand side of the circle is
-            before the call to <var>color_fill_to_border</var>. The
-            right-hand side is after filling with aquamarine,
-            starting from the center and using black as the border
-            color. Contrast the result with the
-            <var>color_floodfill</var> example, below.</td>
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example, the aquamarine fill
+            starts at the center of the circle and fills to the
+            black border. All non-black pixels are replaced by the
+            fill color. Contrast the result of
+            <code>color_fill_to_border</code> with that of
+            <code>color_floodfill</code> example, below.</td>
           </tr>
         </table>
       </td>
@@ -1992,7 +2033,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.color_floodfill" id=
       "Image.color_floodfill">color_floodfill</a></td>
 
       <td><i>image</i>.color_floodfill(<i>x</i>, <i>y</i>,
@@ -2033,18 +2074,24 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">Example</td>
 
       <td>
-        <table summary="example" class="example">
+        <table summary="example">
           <tr>
-            <td width="50%">The left-hand side of the circle is
-            before the call to <var>color_floodfill</var>. The
-            right half is after filling with aquamarine, starting
-            from the center. Notice that the small plum circles are
-            not changed, unlike in the
-            <var>color_fill_to_border</var> example above.</td>
-
             <td><a href="color_floodfill.rb.html" target=
-            "_blank"><img src="ex/color_floodfill.gif" alt=
-            "color_floodfill example"></a></td>
+            "_blank"><img onmouseover=
+            "this.src='ex/color_floodfill_before.gif'" onmouseout=
+            "this.src='ex/color_floodfill_after.gif'" src=
+            "ex/color_floodfill_after.gif" alt=
+            "color_floodfill example" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example, the aquamarine fill
+            starts at the center of the circle and replaces all
+            neighboring white pixels. Contrast the result of
+            <code>color_floodfill</code> with that of
+            <code>color_fill_to_border</code>, above.</td>
           </tr>
         </table>
       </td>
@@ -2065,7 +2112,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.color_histogram" id=
       "Image.color_histogram">color_histogram</a><span class=
       "imversion">&nbsp;(5.5.8)</span> <span class=
       "gmversion">&nbsp;(1.1)</span></td>
@@ -2099,13 +2146,13 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td>
         <table summary="example" width="80%">
           <tr>
-            <td>This histogram was produced by sorting the hash
-            returned by <code>color_histogram</code> by increasing
-            frequency.</td>
-
             <td><a href="color_histogram.rb.html" target=
             "_blank"><img src="ex/color_histogram.gif" alt=
-            "color_histogram example"></a></td>
+            "color_histogram example" border="0" /></a></td>
+
+            <td valign="top">This histogram was produced by sorting
+            the hash returned by <code>color_histogram</code> by
+            increasing frequency.</td>
           </tr>
         </table>
       </td>
@@ -2114,12 +2161,12 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <tr>
       <td valign="top">&times;Magick API</td>
 
-      <td>GetColorHistogram (for GraphicsMagick)<br>
+      <td>GetColorHistogram (for GraphicsMagick)<br />
       GetImageHistogram (for ImageMagick)</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.colorize" id=
       "Image.colorize">colorize</a></td>
 
       <td><i>image</i>.colorize(<i>red_pct</i>, <i>green_pct</i>,
@@ -2169,12 +2216,18 @@ mona.change_geometry!('320x240') { |cols, rows, img|
         <table summary="example" class="example">
           <tr>
             <td><a href="colorize.rb.html" target=
-            "_blank"><img src="ex/colorize.jpg" alt=
-            "colorize example"></a></td>
+            "_blank"><img onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/colorize.jpg'" src="ex/colorize.jpg"
+            border="0" alt="colorize example" /></a></td>
 
-            <td>Convert a color image to sepia-tone using the
-            <a href="#Image.quantize">quantize</a> and
-            <var>colorize</var> methods</td>
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">This example converts a color image to
+            sepia-tone using the <a href=
+            "#Image.quantize">quantize</a> and
+            <code>colorize</code> methods</td>
           </tr>
         </table>
       </td>
@@ -2188,7 +2241,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.colormap" id=
       "Image.colormap">colormap</a></td>
 
       <td><i>image</i>.colormap(<i>index</i>[, <i>new_color</i>])
@@ -2212,8 +2265,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
           <dd>A number between 0 and the number of colors in the
           color map. If the value is out of range,
-          <var>colormap</var> raises an IndexError. You can get the
-          number of colors in the color map from the <a href=
+          <code>colormap</code> raises an IndexError. You can get
+          the number of colors in the color map from the <a href=
           "imageattrs.html#Image.colors">colors</a> attribute.</dd>
 
           <dt>new_color</dt>
@@ -2241,7 +2294,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.color_point" id=
       "Image.color_point">color_point</a></td>
 
       <td><i>image</i>.color_point(<i>x</i>, <i>y</i>, <i>fill</i>)
@@ -2285,18 +2338,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example">
-          <tr>
-            <td><code>f.color_point(50,50, red)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="color_point.rb.html" target=
-            "_blank"><img src="ex/color_point.gif" alt=
-            "color_point example"></a></td>
-          </tr>
-        </table>
+      <td class="example">
+        <pre>
+f.color_point(50,50, 'red')
+</pre>
       </td>
     </tr>
 
@@ -2317,7 +2362,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.color_reset_bang" id=
       "Image.color_reset_bang">color_reset!</a></td>
 
       <td><i>image</i>.color_reset!(<i>fill</i>) -&gt;
@@ -2347,18 +2392,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example">
-          <tr>
-            <td><code>f.color_reset!(red)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="color_reset.rb.html" target=
-            "_blank"><img src="ex/color_reset.gif" alt=
-            "color_reset example"></a></td>
-          </tr>
-        </table>
+      <td class="example">
+        <pre>
+f.color_reset!(red)
+</pre>
       </td>
     </tr>
 
@@ -2376,13 +2413,13 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.composite" id=
       "Image.composite">composite</a></td>
 
       <td><i>image</i>.composite(<i>img</i>, <i>x</i>, <i>y</i>,
-      <i>composite_op</i>) -&gt; <i>anImage</i><br>
+      <i>composite_op</i>) -&gt; <i>anImage</i><br />
       <i>image</i>.composite(<i>img</i>, <i>gravity</i>,
-      <i>composite_op</i>) -&gt; <i>anImage</i><br>
+      <i>composite_op</i>) -&gt; <i>anImage</i><br />
       <i>image</i>.composite(<i>img</i>, <i>gravity</i>, <i>x</i>,
       <i>y</i>, <i>composite_op</i>) -&gt; <i>anImage</i></td>
     </tr>
@@ -2555,14 +2592,12 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td>
         <table summary="example" class="example">
           <tr>
+            <td><a href="composite.rb.html" target=
+            "_blank"><img src="ex/composite.gif" alt=
+            "composite example" border="0" /></a></td>
+
             <td valign="top">This example shows the effect of some
             of the composite operators.</td>
-          </tr>
-
-          <tr>
-            <td align="center"><a href="composite.rb.html" target=
-            "_blank"><img src="ex/composite.gif" alt=
-            "composite example"></a></td>
           </tr>
         </table>
       </td>
@@ -2577,7 +2612,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.composite_affine" id=
       "Image.composite_affine">composite_affine</a></td>
 
       <td><i>image</i>.composite(<i>img</i>, <i>affine</i>) -&gt;
@@ -2629,8 +2664,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
-      "Image.compress_colormap_bang">compress_colormap!</a></td>
+      <td class="methodname"><a name="Image.compress_colormap_bang"
+      id="Image.compress_colormap_bang">compress_colormap!</a></td>
 
       <td><i>image</i>.compress_colormap! -&gt; <i>image</i></td>
     </tr>
@@ -2673,7 +2708,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.contrast" id=
       "Image.contrast">contrast</a></td>
 
       <td><i>image</i>.contrast(<i>sharpen</i>=<code>false</code>)
@@ -2691,8 +2726,8 @@ f.colors &raquo; 108
     <tr>
       <td valign="top">Arguments</td>
 
-      <td>If <var>sharpen</var> is <code>true</code>, the contrast
-      is increased, otherwise it is reduced.</td>
+      <td>If <code>sharpen</code> is <code>true</code>, the
+      contrast is increased, otherwise it is reduced.</td>
     </tr>
 
     <tr>
@@ -2707,14 +2742,12 @@ f.colors &raquo; 108
       <td>
         <table summary="example">
           <tr>
-            <td>Starting at the upper-left, the contrast is
-            <i>reduced</i> in each image.</td>
-          </tr>
-
-          <tr>
             <td><a href="contrast.rb.html" target=
             "_blank"><img src="ex/contrast.jpg" alt=
-            "contrast example"></a></td>
+            "contrast example" border="0" /></a></td>
+
+            <td valign="top">In this example the contrast is
+            <i>reduced</i> in each successive image.</td>
           </tr>
         </table>
       </td>
@@ -2729,7 +2762,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.convolve" id=
       "Image.convolve">convolve</a></td>
 
       <td><i>image</i>.convolve(<i>order</i>, <i>kernel</i>) -&gt;
@@ -2795,7 +2828,8 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.copy">copy</a></td>
+      <td class="methodname"><a name="Image.copy" id=
+      "Image.copy">copy</a></td>
 
       <td><i>image</i>.copy -&gt; <i>anImage</i></td>
     </tr>
@@ -2827,12 +2861,13 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.crop">crop</a></td>
+      <td class="methodname"><a name="Image.crop" id=
+      "Image.crop">crop</a></td>
 
       <td><i>image</i>.crop(<i>x</i>, <i>y</i>, <i>width</i>,
-      <i>height</i>) -&gt; <i>anImage</i><br>
+      <i>height</i>) -&gt; <i>anImage</i><br />
       <i>image</i>.crop(<i>gravity</i>, <i>x</i>, <i>y</i>,
-      <i>width</i>, <i>height</i>) -&gt; <i>anImage</i><br>
+      <i>width</i>, <i>height</i>) -&gt; <i>anImage</i><br />
       <i>image</i>.crop(<i>gravity</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>anImage</i></td>
     </tr>
@@ -2850,8 +2885,8 @@ f.colors &raquo; 108
         The crop method can be called three different ways:
 
         <dl>
-          <dt style="font-style:normal">1.&nbsp;Without a gravity
-          argument:</dt>
+          <dt style="font-style:normal">1.&nbsp;Without a
+          <em>gravity</em> argument:</dt>
 
           <dd>
             <dl>
@@ -2976,8 +3011,28 @@ f.colors &raquo; 108
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="crop.rb.html" target="_blank"><img src=
-      "ex/crop.jpg" alt="crop example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="crop.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/crop_before.jpg'" onmouseout=
+            "this.src='ex/crop_after.jpg'" src="ex/crop_after.jpg"
+            alt="crop example" border="0" /></a></td>
+
+            <td></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td><!--
+                                                Crowd the explanation closer to the cropped image
+                                                so it doesn't get lost in all the white space.
+                                            -->
+
+            <td valign="top" style="padding-right:30%">The crop
+            rectangle is highlighted in the "before" image.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -3003,13 +3058,13 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.crop_bang" id=
       "Image.crop_bang">crop!</a></td>
 
       <td><i>image</i>.crop!(<i>x</i>, <i>y</i>, <i>width</i>,
-      <i>height</i>) -&gt; <i>image</i><br>
+      <i>height</i>) -&gt; <i>image</i><br />
       <i>image</i>.crop!(<i>gravity</i>, <i>x</i>, <i>y</i>,
-      <i>width</i>, <i>height</i>) -&gt; <i>image</i><br>
+      <i>width</i>, <i>height</i>) -&gt; <i>image</i><br />
       <i>image</i>.crop!(<i>gravity</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>image</i></td>
     </tr>
@@ -3027,7 +3082,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.cycle_colormap" id=
       "Image.cycle_colormap">cycle_colormap</a></td>
 
       <td><i>image</i>.cycle_colormap(<i>amount</i>) -&gt;
@@ -3060,13 +3115,13 @@ f.colors &raquo; 108
       <td>
         <table summary="example">
           <tr>
-            <td width="40%">This example is an animation made from
-            a number of copies of the original image, cycling the
-            colormap between each copy.</td>
-
             <td><a href="cycle_colormap.rb.html" target=
             "_blank"><img src="ex/cycle_colormap.gif" alt=
-            "cycle_colormap example"></a></td>
+            "cycle_colormap example" border="0" /></a></td>
+
+            <td valign="top">This example is an animation made from
+            a number of copies of the original image, cycling the
+            colormap between each copy.</td>
           </tr>
         </table>
       </td>
@@ -3081,7 +3136,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.despeckle" id=
       "Image.despeckle">despeckle</a></td>
 
       <td><i>image</i>.despeckle -&gt; <i>anImage</i></td>
@@ -3109,7 +3164,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.difference" id=
       "Image.difference">difference</a></td>
 
       <td><i>image</i>.difference(<i>other</i>) -&gt;
@@ -3161,7 +3216,7 @@ f.colors &raquo; 108
         error...suggests the images are very similiar in spatial
         layout and color.</p>
 
-        <p>After <var>difference</var> returns, these values are
+        <p>After <code>difference</code> returns, these values are
         also available from the <a href=
         "imageattrs.html#Image.mean_error_per_pixel">mean_error_per_pixel</a>,
         <a href=
@@ -3187,7 +3242,7 @@ f.colors &raquo; 108
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.dispatch" id=
       "Image.dispatch">dispatch</a></td>
 
       <td><i>image</i>.dispatch(<i>x</i>, <i>y</i>, <i>columns</i>,
@@ -3203,8 +3258,8 @@ f.colors &raquo; 108
         returns it as an array of either <code>Integer</code> or
         <code>Float</code> values.
 
-        <p>The array returned by <var>dispatch</var> is suitable
-        for use as an argument to <var>constitute</var>.</p>
+        <p>The array returned by <code>dispatch</code> is suitable
+        for use as an argument to <code>constitute</code>.</p>
       </td>
     </tr>
 
@@ -3299,11 +3354,11 @@ exit
       <td>Notes</td>
 
       <td>This method is deprecated in ImageMagick 5.5.7 and later.
-      Use the <var>export_pixels</var> method instead.</td>
+      Use the <code>export_pixels</code> method instead.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.display" id=
       "Image.display">display</a></td>
 
       <td><i>image</i>.display [ <i>{ optional arguments }</i> ]
@@ -3327,8 +3382,8 @@ exit
       <td>You can specify additional arguments by setting Info
       attributes in a block associated with the method call.
       Specifically, you can set the name of a non-default X Window
-      screen with the <var><a href=
-      "info.html#Info.server_name_eq">server_name</a></var>
+      screen with the <code><a href=
+      "info.html#Info.server_name_eq">server_name</a></code>
       attribute.</td>
     </tr>
 
@@ -3347,7 +3402,7 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.each_profile" id=
       "Image.each_profile">each_profile</a><span class=
       "imversion">&nbsp;(5.5.8)</span></td>
 
@@ -3377,7 +3432,8 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.edge">edge</a></td>
+      <td class="methodname"><a name="Image.edge" id=
+      "Image.edge">edge</a></td>
 
       <td><i>image</i>.edge(<i>radius</i>=0.0) -&gt;
       <i>anImage</i></td>
@@ -3393,7 +3449,7 @@ exit
       <td valign="top">Arguments</td>
 
       <td>The radius of the convolution filter. If the radius is 0,
-      <var>edge</var> selects a suitable default.</td>
+      <code>edge</code> selects a suitable default.</td>
     </tr>
 
     <tr>
@@ -3405,17 +3461,11 @@ exit
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td>The right-hand side of the image has been altered
-            by <var>edge</var>.</td>
-
-            <td><a href="edge.rb.html" target="_blank"><img src=
-            "ex/edge.jpg" alt="edge example"></a></td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="edge.rb.html" target="_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/edge.jpg'" border="0" src="ex/edge.jpg" alt=
+      "edge example" /></a> <img src="ex/images/spin.gif" alt=
+      "rollover" /></td>
     </tr>
 
     <tr>
@@ -3426,7 +3476,8 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.emboss">emboss</a></td>
+      <td class="methodname"><a name="Image.emboss" id=
+      "Image.emboss">emboss</a></td>
 
       <td><i>image</i>.emboss(<i>radius</i>=0.0, <i>sigma</i>=1.0)
       -&gt; <i>anImage</i></td>
@@ -3464,17 +3515,12 @@ exit
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td><a href="emboss.rb.html" target="_blank"><img src=
-            "ex/emboss.jpg" alt="emboss example"></a></td>
-
-            <td>The right-hand side of the image has been altered
-            by <var>emboss</var>.</td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="emboss.rb.html" target=
+      "_blank"><img onmouseover="this.src='ex/images/Flower_Hat.jpg'"
+           onmouseout="this.src='ex/emboss.jpg'" border="0" src=
+           "ex/emboss.jpg" alt="emboss example" /></a> <img src=
+           "ex/images/spin.gif" alt=
+           "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -3485,7 +3531,7 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.enhance" id=
       "Image.enhance">enhance</a></td>
 
       <td><i>image</i>.enhance -&gt; <i>anImage</i></td>
@@ -3510,14 +3556,15 @@ exit
       <td>
         <table summary="example" class="example" align="left">
           <tr>
-            <td width="50%" valign="top">The left-hand side has had
-            noise added by <var><a href=
-            "#Image.add_noise">add_noise</a></var>. The right-hand
-            side is the result after using <var>enhance</var>.</td>
-
             <td align="center"><a href="enhance.rb.html" target=
-            "_blank"><img src="ex/enhance.jpg" alt=
-            "enhance example"></a></td>
+            "_blank"><img src="ex/enhance.jpg" border="0" alt=
+            "enhance example" /></a></td>
+
+            <td width="50%" valign="top">The left-hand side has had
+            noise added by <code><a href=
+            "#Image.add_noise">add_noise</a></code>. The right-hand
+            side is the result after using
+            <code>enhance</code>.</td>
           </tr>
         </table>
       </td>
@@ -3540,7 +3587,7 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.equalize" id=
       "Image.equalize">equalize</a></td>
 
       <td><i>image</i>.equalize -&gt; <i>anImage</i></td>
@@ -3562,18 +3609,13 @@ exit
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td><a href="equalize.rb.html" target=
-            "_blank"><img src="ex/equalize.jpg" alt=
-            "equalize example"></a></td>
-
-            <td>The right-hand side has been altered by
-            <var>equalize</var>.</td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="equalize.rb.html" target=
+      "_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/equalize.jpg'" src="ex/equalize.jpg" alt=
+      "equalize example" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -3585,7 +3627,7 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.erase_bang" id=
       "Image.erase_bang">erase!</a></td>
 
       <td><i>image</i>.erase! -&gt; <i>image</i></td>
@@ -3619,7 +3661,7 @@ exit
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.export_pixels" id=
       "Image.export_pixels">export_pixels</a> <span class=
       "imversion">(5.5.7)</span><span class=
       "gmversion">(1.1)</span></td>
@@ -3636,9 +3678,9 @@ exit
         Extracts the pixel data from the specified rectangle and
         returns it as an array of <code>Integer</code> values.
 
-        <p>The array returned by <var>export_pixels</var> is
+        <p>The array returned by <code>export_pixels</code> is
         suitable for use as an argument to
-        <var>import_pixels</var>.</p>
+        <code>import_pixels</code>.</p>
       </td>
     </tr>
 
@@ -3703,11 +3745,13 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <tr>
       <td>Notes</td>
 
-      <td>This method replaces the <var>dispatch</var> method.</td>
+      <td>This method replaces the <code>dispatch</code>
+      method.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.flip">flip</a></td>
+      <td class="methodname"><a name="Image.flip" id=
+      "Image.flip">flip</a></td>
 
       <td><i>image</i>.flip -&gt; <i>anImage</i></td>
     </tr>
@@ -3727,8 +3771,11 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="flip.rb.html" target="_blank"><img src=
-      "ex/flip.jpg" alt="flip example"></a></td>
+      <td><a href="flip.rb.html" target="_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/flip.jpg'" src="ex/flip.jpg" alt="flip example"
+      border="0" /></a> <img src="ex/images/spin.gif" alt=
+      "rollover" /></td>
     </tr>
 
     <tr>
@@ -3748,7 +3795,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.flip_bang" id=
       "Image.flip_bang">flip!</a></td>
 
       <td><i>image</i>.flip! -&gt; <i>image</i></td>
@@ -3767,7 +3814,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.flop">flop</a></td>
+      <td class="methodname"><a name="Image.flop" id=
+      "Image.flop">flop</a></td>
 
       <td><i>image</i>.flop -&gt; <i>anImage</i></td>
     </tr>
@@ -3787,8 +3835,11 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="flop.rb.html" target="_blank"><img src=
-      "ex/flop.jpg" alt="flop example"></a></td>
+      <td><a href="flop.rb.html" target="_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/flop.jpg'" src="ex/flop.jpg" alt="flop example"
+      border="0" /></a> <img src="ex/images/spin.gif" alt=
+      "rollover" /></td>
     </tr>
 
     <tr>
@@ -3808,7 +3859,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.flop_bang" id=
       "Image.flop_bang">flop!</a></td>
 
       <td><i>image</i>.flop! -&gt; <i>image</i></td>
@@ -3827,12 +3878,13 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.frame">frame</a></td>
+      <td class="methodname"><a name="Image.frame" id=
+      "Image.frame">frame</a></td>
 
       <td><i>image</i>.frame(<i>width</i>=25, <i>height</i>=25,
       <i>x</i>=25, <i>y</i>=25, <i>inner_bevel</i>=6,
-      <i>outer_bevel</i>=6, <i>color</i>=<var><a href=
-      "imageattrs.html#Image.matte_color">matte_color</a></var>)
+      <i>outer_bevel</i>=6, <i>color</i>=<code><a href=
+      "imageattrs.html#Image.matte_color">matte_color</a></code>)
       -&gt; <i>anImage</i></td>
     </tr>
 
@@ -3886,8 +3938,20 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="frame.rb.html" target="_blank"><img src=
-      "ex/frame.jpg" alt="frame example"></a></td>
+      <td><a href="frame.rb.html" target="_blank">
+      <!-- This img tag displays the original image when the mouse is over -->
+       <img style="padding:25px; display:none" id="frameless"
+      onmouseover="this.style.display=''" onmouseout=
+      "this.style.display='none';framed.style.display='';" border=
+      "0" src="ex/images/Flower_Hat.jpg" alt="frame example" /><!--
+                        This img tag displays the framed image when the mouse is not over
+                        --><img style="display:" id="framed"
+      onmouseover=
+      "this.style.display='none';frameless.style.display='';"
+      onmouseout="this.style.display=''" border="0" src=
+      "ex/frame.jpg" alt="frame example" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -3905,7 +3969,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.gamma_correct" id=
       "Image.gamma_correct">gamma_correct</a></td>
 
       <td>
@@ -3946,7 +4010,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.gaussian_blur" id=
       "Image.gaussian_blur">gaussian_blur</a></td>
 
       <td><i>image</i>.gaussian_blur(<i>radius</i>=0.0,
@@ -3993,14 +4057,18 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
       <td>
         <table summary="example">
           <tr>
-            <td align="center"><code>gaussian_blur(0.0,
-            3.0)</code></td>
-          </tr>
-
-          <tr>
             <td align="center"><a href="gaussian_blur.rb.html"
-            target="_blank"><img src="ex/gaussian_blur.jpg" alt=
-            "gaussian_blur example"></a></td>
+            target="_blank"><img onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/gaussian_blur.jpg'" src=
+            "ex/gaussian_blur.jpg" border="0" alt=
+            "gaussian_blur example" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top"><code>gaussian_blur(0.0,
+            3.0)</code></td>
           </tr>
         </table>
       </td>
@@ -4022,7 +4090,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.get_exif_by_entry" id=
       "Image.get_exif_by_entry">get_exif_by_entry</a></td>
 
       <td><i>image</i>.get_exif_by_entry(<i>[name]*</i>) -&gt;
@@ -4071,7 +4139,7 @@ image.get_exif_by_entry() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.get_exif_by_number" id=
       "Image.get_exif_by_number">get_exif_by_number</a></td>
 
       <td><i>image</i>.get_exif_by_number(<i>[tag]*</i>) -&gt;
@@ -4116,7 +4184,7 @@ image.get_exif_by_number() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.get_pixels" id=
       "Image.get_pixels">get_pixels</a></td>
 
       <td><i>image</i>.get_pixels(<i>x</i>, <i>y</i>,
@@ -4163,7 +4231,7 @@ image.get_exif_by_number() &raquo;
             <td>This example <a href=
             "#Image.composite">composites</a> a black-and-white
             version of an image over the same image in its original
-            colors. It uses <var>get_pixels</var> and <a href=
+            colors. It uses <code>get_pixels</code> and <a href=
             "#Image.store_pixels">store_pixels</a> to make each
             column of pixels in the black-and-white image slightly
             more opaque than the column on its left, so that the
@@ -4172,9 +4240,17 @@ image.get_exif_by_number() &raquo;
           </tr>
 
           <tr>
-            <td align="center"><a href="get_pixels.rb.html" target=
-            "_blank"><img src="ex/get_pixels.jpg" alt=
-            "get_pixels example"></a></td>
+            <td><!--
+                                                   Reduce the size of the original image by specifying
+                                                   the size of the example image.
+                                                -->
+            <a href="get_pixels.rb.html" target=
+            "_blank"><img width="384" height="249" onmouseover=
+            "this.src='ex/images/Red_Rocks.jpg'" onmouseout=
+            "this.src='ex/get_pixels.jpg'" src="ex/get_pixels.jpg"
+            border="0" alt="get_pixels example" /></a> <img src=
+            "ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
           </tr>
         </table>
       </td>
@@ -4195,7 +4271,8 @@ image.get_exif_by_number() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.gray_q">gray?</a></td>
+      <td class="methodname"><a name="Image.gray_q" id=
+      "Image.gray_q">gray?</a></td>
 
       <td><i>image</i>.gray? -&gt; <code>true</code> or
       <code>false</code></td>
@@ -4228,7 +4305,8 @@ image.get_exif_by_number() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.grey_q">grey?</a></td>
+      <td class="methodname"><a name="Image.grey_q" id=
+      "Image.grey_q">grey?</a></td>
 
       <td><i>image</i>.qrey? -&gt; <code>true</code> or
       <code>false</code></td>
@@ -4241,7 +4319,7 @@ image.get_exif_by_number() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.implode" id=
       "Image.implode">implode</a></td>
 
       <td><i>image</i>.implode(<i>amount</i>=0.50) -&gt;
@@ -4273,7 +4351,7 @@ image.get_exif_by_number() &raquo;
       <td valign="top">Example</td>
 
       <td><a href="implode.rb.html" target="_blank"><img src=
-      "ex/implode.gif" alt="implode example"></a></td>
+      "ex/implode.gif" border="0" alt="implode example" /></a></td>
     </tr>
 
     <tr>
@@ -4284,7 +4362,7 @@ image.get_exif_by_number() &raquo;
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.import_pixels" id=
       "Image.import_pixels">import_pixels</a> <span class=
       "imversion">(5.5.7)</span><span class=
       "gmversion">(1.1)</span></td>
@@ -4332,7 +4410,7 @@ image.get_exif_by_number() &raquo;
           top-to-bottom. The elements in the array must be
           <code>Numeric</code> values in the range [0..MaxRGB]. The
           easiest way to obtain such an array is by using the
-          <var>export_pixels</var> method.</dd>
+          <code>export_pixels</code> method.</dd>
         </dl>
       </td>
     </tr>
@@ -4376,19 +4454,19 @@ img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
 
       <td>
         <p>This method is the reverse of
-        <var>export_pixels</var>.</p>
+        <code>export_pixels</code>.</p>
       </td>
     </tr>
 
     <tr>
       <td>Note</td>
 
-      <td>This method replaces the <var>constitute</var> class
+      <td>This method replaces the <code>constitute</code> class
       method.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.inspect" id=
       "Image.inspect">inspect</a></td>
 
       <td><i>image</i>.inspect -&gt; <i>aString</i></td>
@@ -4412,7 +4490,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.level">level</a></td>
+      <td class="methodname"><a name="Image.level" id=
+      "Image.level">level</a></td>
 
       <td><i>image</i>.level(<i>black_point</i>=<code>0.0</code>,
       <i>mid_point</i>=<code>1.0</code>,
@@ -4465,8 +4544,22 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="level.rb.html" target="_blank"><img src=
-      "ex/level.jpg" alt="level example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="level.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/level.jpg'" border="0" src="ex/level.jpg"
+            alt="level example" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top"><code>level(0,1.50)</code></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -4484,7 +4577,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.level_channel" id=
       "Image.level_channel">level_channel</a><span class=
       "imversion">(5.5.3)</span></td>
 
@@ -4537,20 +4630,13 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example">
-          <tr>
-            <td><a href="level_channel.rb.html" target=
-            "_blank"><img src="ex/level_channel.jpg" alt=
-            "level_channel example"></a></td>
-
-            <td>This example shows the results of 3 calls to
-            <code>level_channel</code>. The left-most strip has the
-            RedChannel enhanced. The center strip has the
-            GreenChannel, and the right-most the BlueChannel.</td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="level_channel.rb.html" target=
+      "_blank"><img onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/level_channel.jpg'" src="ex/level_channel.jpg"
+      border="0" alt="level_channel example" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -4568,7 +4654,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.magnify" id=
       "Image.magnify">magnify</a></td>
 
       <td><i>image</i>.magnify -&gt; <i>anImage</i></td>
@@ -4606,7 +4692,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.magnify_bang" id=
       "Image.magnify_bang">magnify!</a></td>
 
       <td><i>image</i>.magnify! -&gt; <i>image</i></td>
@@ -4626,7 +4712,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.map">map</a></td>
+      <td class="methodname"><a name="Image.map" id=
+      "Image.map">map</a></td>
 
       <td><i>image</i>.map(<i>img</i>,
       <i>dither</i>=<code>false</code>) -&gt; <i>anImage</i></td>
@@ -4668,11 +4755,17 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td>
         <table summary="example" class="example">
           <tr>
-            <td>The bottom half of this image has been mapped to
-            the Netscape 216-color cube.</td>
+            <td><a href="map_f.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/map_f.jpg'" src="ex/map_f.jpg" alt=
+            "map_f example" border="0" /></a></td>
 
-            <td><a href="map_f.rb.html" target="_blank"><img src=
-            "ex/map_f.jpg" alt="map_f example"></a></td>
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top">This image has been mapped to the
+            Netscape 216-color cube.</td>
           </tr>
         </table>
       </td>
@@ -4692,8 +4785,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
-      "Image.matte_fill_to_border">matte_fill_to_border</a></td>
+      <td class="methodname"><a name="Image.matte_fill_to_border"
+      id="Image.matte_fill_to_border">matte_fill_to_border</a></td>
 
       <td><i>image</i>.matte_fill_to_border(<i>x</i>, <i>y</i>)
       -&gt; <i>anImage</i></td>
@@ -4722,9 +4815,30 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="matte_fill_to_border.rb.html" target=
-      "_blank"><img src="ex/matte_fill_to_border.gif" alt=
-      "matte_fill_to_border example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="matte_fill_to_border.rb.html" target=
+            "_blank"><img src="ex/matte_fill_to_border_after.gif"
+            onmouseover=
+            "this.src='ex/matte_fill_to_border_before.gif'"
+            onmouseout=
+            "this.src='ex/matte_fill_to_border_after.gif'" alt=
+            "matte_fill_to_border example" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example the border color is
+            black. The fill starts in the center and makes all the
+            pixels transparent until it reaches a black pixel. The
+            resulting image has been composited over a plasma
+            background, which shows through the transparent
+            pixels.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -4743,7 +4857,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.matte_floodfill" id=
       "Image.matte_floodfill">matte_floodfill</a></td>
 
       <td><i>image</i>.matte_floodfill(<i>x</i>, <i>y</i>) -&gt;
@@ -4773,9 +4887,28 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="matte_floodfill.rb.html" target=
-      "_blank"><img src="ex/matte_floodfill.gif" alt=
-      "matte_floodfill example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="matte_floodfill.rb.html" target=
+            "_blank"><img src="ex/matte_floodfill_after.gif"
+            onmouseover="this.src='ex/matte_floodfill_before.gif'"
+            onmouseout="this.src='ex/matte_floodfill_after.gif'"
+            alt="matte_floodfill example" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example the fill starts at the
+            center pixel and replaces all the pixels that are the
+            same color - yellow - as the center pixel. The
+            resulting image has been composited over a plasma
+            background, which shows through the transparent
+            pixels.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -4794,7 +4927,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.matte_point" id=
       "Image.matte_point">matte_point</a></td>
 
       <td><i>image</i>.matte_point(<i>x</i>, <i>y</i>) -&gt;
@@ -4820,23 +4953,6 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example" class="example">
-          <tr>
-            <td width="50%">This example creates a transparent
-            pixel in the upper-left portion of the "M".</td>
-
-            <td><a href="matte_point.rb.html" target=
-            "_blank"><img src="ex/matte_point.gif" alt=
-            "matte_point example"></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
       <td valign="top">See also</td>
 
       <td><a href="draw.html#Draw.matte">Draw#matte</a></td>
@@ -4847,11 +4963,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
       <td>This method makes a copy of the image, just to make one
       pixel transparent. I recommend using the
-      <var>Draw#matte</var> method instead.</td>
+      <code>Draw#matte</code> method instead.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.matte_replace" id=
       "Image.matte_replace">matte_replace</a></td>
 
       <td><i>image</i>.matte_replace(<i>x</i>, <i>y</i>) -&gt;
@@ -4880,8 +4996,29 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="matte_replace.rb.html" target="_blank"><img src=
-      "ex/matte_replace.gif" alt="matte_replace example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="matte_replace.rb.html" target=
+            "_blank"><img onmouseover=
+            "this.src='ex/matte_replace_before.gif'" onmouseout=
+            "this.src='ex/matte_replace_after.gif'" src=
+            "ex/matte_replace_after.gif" alt=
+            "matte_replace example" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "rollover" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example the target pixel is a
+            black pixel in the center of the uppermost circle. The
+            <code>matte_replace</code> method makes all the black
+            pixels in the image transparent. The resulting image
+            has been composited over a plasma background, which
+            shows through the transparent pixels.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -4900,7 +5037,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.matte_reset_bang" id=
       "Image.matte_reset_bang">matte_reset!</a></td>
 
       <td><i>image</i>.matte_reset! -&gt; <i>anImage</i></td>
@@ -4934,7 +5071,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.median_filter" id=
       "Image.median_filter">median_filter</a></td>
 
       <td><i>image</i>.median_filter(<i>radius</i>=1.0) -&gt;
@@ -4971,16 +5108,15 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td>
         <table summary="example" class="example">
           <tr>
-            <td>The left side of the image has been modified by
-            <a href="#Image.add_noise"><var>add_noise</var></a>.
-            The right side has been filtered by
-            <var>median_filter(0.05)</var></td>
-          </tr>
-
-          <tr>
             <td align="center"><a href="median_filter.rb.html"
             target="_blank"><img src="ex/median_filter.jpg" alt=
-            "median_filter example"></a></td>
+            "median_filter example" border="0" /></a></td>
+
+            <td valign="top">The left side of the image has been
+            modified by <a href=
+            "#Image.add_noise"><code>add_noise</code></a>. The
+            right side has been filtered by
+            <code>median_filter(0.05)</code></td>
           </tr>
         </table>
       </td>
@@ -5003,7 +5139,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.minify">minify</a></td>
+      <td class="methodname"><a name="Image.minify" id=
+      "Image.minify">minify</a></td>
 
       <td><i>image</i>.minify -&gt; <i>anImage</i></td>
     </tr>
@@ -5039,7 +5176,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.minify_bang" id=
       "Image.minify_bang">minify!</a></td>
 
       <td><i>image</i>.minify! -&gt; <i>image</i></td>
@@ -5058,7 +5195,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.modulate" id=
       "Image.modulate">modulate</a></td>
 
       <td><i>image</i>.modulate(<i>brightness</i>=1.0,
@@ -5090,8 +5227,22 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="modulate.rb.html" target="_blank"><img src=
-      "ex/modulate.jpg" alt="modulate example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="modulate.rb.html" target=
+            "_blank"><img src="ex/modulate.jpg" alt=
+            "modulate example" onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/modulate.jpg'" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top"><code>modulate(0.85)</code></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -5103,7 +5254,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.monochrome_q" id=
       "Image.monochrome_q">monochrome?</a></td>
 
       <td><i>image</i>.monochrome? -&gt; <code>true</code> or
@@ -5133,7 +5284,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.motion_blur" id=
       "Image.motion_blur">motion_blur</a></td>
 
       <td><i>image</i>.motion_blur(<i>radius</i>, <i>sigma</i>,
@@ -5146,7 +5297,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td><span class="imquote">Simulates motion blur. We convolve
       the image with a Gaussian operator of the given radius and
       standard deviation (sigma). Use a radius of 0 and
-      <var>motion_blur</var> selects a suitable radius for you.
+      <code>motion_blur</code> selects a suitable radius for you.
       <code>Angle</code> gives the angle of the blurring
       motion.</span></td>
     </tr>
@@ -5182,7 +5333,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Example</td>
 
       <td><a href="motion_blur.rb.html" target="_blank"><img src=
-      "ex/motion_blur.jpg" alt="motion_blur example"></a></td>
+      "ex/motion_blur.jpg" alt="motion_blur example" border="0"
+      onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/motion_blur.jpg'" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5201,7 +5356,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.negate">negate</a></td>
+      <td class="methodname"><a name="Image.negate" id=
+      "Image.negate">negate</a></td>
 
       <td><i>image</i>.negate(<i>grayscale</i>=<code>false</code>)
       -&gt; <i>anImage</i></td>
@@ -5230,7 +5386,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Example</td>
 
       <td><a href="negate.rb.html" target="_blank"><img src=
-      "ex/negate.jpg" alt="negate example"></a></td>
+      "ex/negate.jpg" alt="negate example" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/negate.jpg'" border="0" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5242,7 +5402,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.normalize" id=
       "Image.normalize">normalize</a></td>
 
       <td><i>image</i>.normalize -&gt; <i>anImage</i></td>
@@ -5266,7 +5426,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Example</td>
 
       <td><a href="normalize.rb.html" target="_blank"><img src=
-      "ex/normalize.jpg" alt="normalize example"></a></td>
+      "ex/normalize.jpg" alt="normalize example" border="0"
+      onmouseover="this.src='ex/images/Hot_Air_Balloons.jpg'"
+      onmouseout="this.src='ex/normalize.jpg'" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5278,7 +5442,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.oil_paint" id=
       "Image.oil_paint">oil_paint</a></td>
 
       <td><i>image</i>.oil_paint(<i>radius</i>=3.0) -&gt;
@@ -5304,7 +5468,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Example</td>
 
       <td><a href="oil_paint.rb.html" target="_blank"><img src=
-      "ex/oil_paint.jpg" alt="oil_paint example"></a></td>
+      "ex/oil_paint.jpg" border="0" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/oil_paint.jpg'" alt="oil_paint example" /></a>
+      <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5315,7 +5483,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.opaque">opaque</a></td>
+      <td class="methodname"><a name="Image.opaque" id=
+      "Image.opaque">opaque</a></td>
 
       <td><i>image</i>.opaque(<i>target</i>, <i>fill</i>) -&gt;
       <i>anImage</i></td>
@@ -5355,8 +5524,23 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="opaque.rb.html" target="_blank"><img src=
-      "ex/opaque.gif" alt="opaque example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="opaque.rb.html" target="_blank"><img src=
+            "ex/opaque.jpg" alt="opaque example" onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/opaque.jpg'" border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">This example replaces white pixels
+            with red pixels. Set the <code>fuzz</code> attribute to
+            specify how closely the target pixels must match.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -5373,7 +5557,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.opaque_q" id=
       "Image.opaque_q">opaque?</a></td>
 
       <td><i>image</i>.opaque? -&gt; <code>true</code> or
@@ -5403,7 +5587,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.ordered_dither" id=
       "Image.ordered_dither">ordered_dither</a></td>
 
       <td><i>image</i>.ordered_dither -&gt; <i>anImage</i></td>
@@ -5429,7 +5613,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
       <td><a href="ordered_dither.rb.html" target=
       "_blank"><img src="ex/ordered_dither.jpg" alt=
-      "ordered_dither example"></a></td>
+      "ordered_dither example" border="0" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/ordered_dither.jpg'" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5447,7 +5635,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.palette_q" id=
       "Image.palette_q">palette?</a></td>
 
       <td><i>image</i>.palette? -&gt; <code>true</code> or
@@ -5478,7 +5666,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.pixel_color" id=
       "Image.pixel_color">pixel_color</a></td>
 
       <td><i>image</i>.pixel_color(<i>x</i>, <i>y</i>[,
@@ -5525,8 +5713,9 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.preview">preview</a>
-      <span class="imversion">(5.5.8)</span></td>
+      <td class="methodname"><a name="Image.preview" id=
+      "Image.preview">preview</a> <span class=
+      "imversion">(5.5.8)</span></td>
 
       <td><i>image</i>.preview(<i>aPreviewType</i>) -&gt;
       <i>anImage</i></td>
@@ -5555,35 +5744,35 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
         <table summary="preview types" border="0">
           <tr valign="top">
-            <td>RotatePreview<br>
-            ShearPreview<br>
-            RollPreview<br>
-            HuePreview<br>
-            SaturationPreview<br>
-            BrightnessPreview<br>
-            GammaPreview<br>
-            SpiffPreview<br>
-            DullPreview<br>
-            GrayscalePreview<br>
-            QuantizePreview<br>
-            DespecklePreview<br>
-            ReduceNoisePreview<br>
-            AddNoisePreview<br>
+            <td>RotatePreview<br />
+            ShearPreview<br />
+            RollPreview<br />
+            HuePreview<br />
+            SaturationPreview<br />
+            BrightnessPreview<br />
+            GammaPreview<br />
+            SpiffPreview<br />
+            DullPreview<br />
+            GrayscalePreview<br />
+            QuantizePreview<br />
+            DespecklePreview<br />
+            ReduceNoisePreview<br />
+            AddNoisePreview<br />
             SharpenPreview</td>
 
-            <td>BlurPreview<br>
-            ThresholdPreview<br>
-            EdgeDetectPreview<br>
-            SpreadPreview<br>
-            SolarizePreview<br>
-            ShadePreview<br>
-            RaisePreview<br>
-            SegmentPreview<br>
-            SwirlPreview<br>
-            ImplodePreview<br>
-            WavePreview<br>
-            OilPaintPreview<br>
-            CharcoalDrawingPreview<br>
+            <td>BlurPreview<br />
+            ThresholdPreview<br />
+            EdgeDetectPreview<br />
+            SpreadPreview<br />
+            SolarizePreview<br />
+            ShadePreview<br />
+            RaisePreview<br />
+            SegmentPreview<br />
+            SwirlPreview<br />
+            ImplodePreview<br />
+            WavePreview<br />
+            OilPaintPreview<br />
+            CharcoalDrawingPreview<br />
             JPEGPreview</td>
           </tr>
         </table>
@@ -5608,7 +5797,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
           <tr>
             <td><a href="preview.rb.html" target="_blank"><img src=
-            "ex/preview.jpg" alt="preview example"></a></td>
+            "ex/preview.jpg" alt="preview example" border=
+            "0" /></a></td>
           </tr>
         </table>
       </td>
@@ -5623,7 +5813,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.profile_bang" id=
       "Image.profile_bang">profile!</a></td>
 
       <td><i>image</i>.profile!(<i>name</i>, <i>profile</i>) -&gt;
@@ -5634,7 +5824,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Description</td>
 
       <td><span class="imquote">Adds or removes a ICM, IPTC, or
-      generic profile from an image.</span> If <var>profile</var>
+      generic profile from an image.</span> If <code>profile</code>
       is <code>nil</code>, the specified profile is removed from
       the image. Use <code>profile('*', nil)</code> to remove all
       profiles from the image.</td>
@@ -5678,31 +5868,32 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td>&times;Magick does not automatically remove profiles when
       resizing images. If you are trying to make your JPEG
       thumbnail images as small as possible, use
-      <var>profile!</var> to remove any profiles from the image as
-      well. See <a href=
+      <code>profile!</code> to remove any profiles from the image
+      as well. See <a href=
       "http://www.imagemagick.org/www/FAQ.html#C31"><cite>Why are
       my JPEG files larger than expected?</cite></a> in the
       &times;Magick FAQ.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.properties" id=
       "Image.properties">properties</a></td>
 
       <td><i>image</i>.properties <i>[ {|name,value| block} ]</i>
-      -&gt; <i>image</i><br>
+      -&gt; <i>image</i><br />
       <i>image</i>.properties -&gt; <i>aHash</i></td>
     </tr>
 
     <tr>
       <td valign="top">Description</td>
 
-      <td>If called with an associated block, <var>properties</var>
-      runs the block once for each property defined for the image.
-      The block arguments are the property name and its value. If
-      there is no block, <var>properties</var> returns a hash with
-      one element for each property. The hash key is the property
-      name and the associated value is the property value.</td>
+      <td>If called with an associated block,
+      <code>properties</code> runs the block once for each property
+      defined for the image. The block arguments are the property
+      name and its value. If there is no block,
+      <code>properties</code> returns a hash with one element for
+      each property. The hash key is the property name and the
+      associated value is the property value.</td>
     </tr>
 
     <tr>
@@ -5720,7 +5911,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.quantize" id=
       "Image.quantize">quantize</a></td>
 
       <td><i>image</i>.quantize(<i>number_colors</i>=256,
@@ -5818,7 +6009,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.raise">raise</a></td>
+      <td class="methodname"><a name="Image.raise" id=
+      "Image.raise">raise</a></td>
 
       <td><i>image</i>.raise(<i>width</i>=6, <i>height</i>=6,
       <i>raised</i>=<code>true</code>) -&gt; <i>anImage</i></td>
@@ -5865,7 +6057,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td valign="top">Example</td>
 
       <td><a href="raise.rb.html" target="_blank"><img src=
-      "ex/raise.gif" alt="raise example"></a></td>
+      "ex/raise.jpg" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/raise.jpg'" alt="raise example" border=
+      "0" /></a> <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -5878,6 +6074,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
     <tr class="method">
       <td class="methodname"><a name=
+      "Image.random_channel_threshold" id=
       "Image.random_channel_threshold">random_channel_threshold</a>
       <span class="imversion">(5.5.7)</span> <span class=
       "gmversion">(1.0.1)</span></td>
@@ -5937,11 +6134,17 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
           <tr>
             <td><a href="random_channel_threshold.rb.html" target=
             "_blank"><img src="ex/random_channel_threshold.jpg"
-            alt="randomc_channel_threshold example"></a></td>
+            alt="random_channel_threshold example" border="0"
+            onmouseover="this.src='ex/images/Flower_Hat.jpg'"
+            onmouseout=
+            "this.src='ex/random_channel_threshold.jpg'" /></a></td>
 
-            <td>The right side of the image has been transformed by
-            <var>random_channel_threshold('intensity',
-            '35%')</var></td>
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">This image has been transformed by
+            <code>random_channel_threshold('intensity',
+            '35%')</code></td>
           </tr>
         </table>
       </td>
@@ -5965,7 +6168,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.reduce_noise" id=
       "Image.reduce_noise">reduce_noise</a></td>
 
       <td><i>image</i>.reduce_noise(<i>radius</i>) -&gt;
@@ -5989,7 +6192,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
           <dt>radius</dt>
 
           <dd class="imquote">A neighbor is defined by radius. Use
-          a radius of 0 and <var>reduce_noise</var> selects a
+          a radius of 0 and <code>reduce_noise</code> selects a
           suitable radius for you.</dd>
         </dl>
       </td>
@@ -6007,16 +6210,15 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td>
         <table summary="example" class="example">
           <tr>
-            <td>The left side of the image has been modified by
-            <a href="#Image.add_noise"><var>add_noise</var></a>.
-            The right side has been filtered by
-            <var>reduce_noise(0)</var></td>
-          </tr>
-
-          <tr>
             <td align="center"><a href="reduce_noise.rb.html"
-            target="_blank"><img src="ex/reduce_noise.jpg" alt=
-            "reduce_noise example"></a></td>
+            target="_blank"><img src="ex/reduce_noise.jpg" border=
+            "0" alt="reduce_noise example" /></a></td>
+
+            <td valign="top">The left side of the image has been
+            modified by <a href=
+            "#Image.add_noise"><code>add_noise</code></a>. The
+            right side has been filtered by
+            <code>reduce_noise(0)</code>.</td>
           </tr>
         </table>
       </td>
@@ -6039,12 +6241,13 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.resize">resize</a></td>
+      <td class="methodname"><a name="Image.resize" id=
+      "Image.resize">resize</a></td>
 
       <td><i>image</i>.resize(<i>new_width</i>, <i>new_height</i>,
       <i>filter</i>=<a href=
       "constants.html#FilterType">LanczosFilter</a>,
-      <i>blur</i>=1.0) -&gt; <i>anImage</i><br>
+      <i>blur</i>=1.0) -&gt; <i>anImage</i><br />
       <i>image</i>.resize(<i>scale_factor</i>) -&gt;
       <i>anImage</i></td>
     </tr>
@@ -6084,7 +6287,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
           <dd>The blur factor. Values &gt; 1 increase the
           blurriness. Values &lt; 1 increase the sharpness. If this
-          argument is not specified, <var>resize</var> uses the
+          argument is not specified, <code>resize</code> uses the
           value of the receiver's <a href=
           "imageattrs.html#Image.blur">blur</a> attribute.</dd>
 
@@ -6123,13 +6326,13 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.resize_bang" id=
       "Image.resize_bang">resize!</a></td>
 
       <td><i>image</i>.resize!(<i>new_width</i>, <i>new_height</i>,
       <i>filter</i>=<a href=
       "constants.html#FilterType">LanczosFilter</a>,
-      <i>blur</i>=1.0) -&gt; <i>image</i><br>
+      <i>blur</i>=1.0) -&gt; <i>image</i><br />
       <i>image</i>.resize!(<i>scale_factor</i>) -&gt;
       <i>image</i></td>
     </tr>
@@ -6147,7 +6350,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.roll">roll</a></td>
+      <td class="methodname"><a name="Image.roll" id=
+      "Image.roll">roll</a></td>
 
       <td><i>image</i>.roll(<i>x_offset</i>, <i>y_offset</i>) -&gt;
       <i>anImage</i></td>
@@ -6188,11 +6392,16 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <td>
         <table summary="example" class="example">
           <tr>
+            <td><a href="roll.rb.html" target="_blank"><img src=
+            "ex/roll.jpg" border="0" alt="roll example"
+            onmouseover="this.src='ex/images/Flower_Hat.jpg'"
+            onmouseout="this.src='ex/roll.jpg'" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
             <td valign="top" width="50%">This image has been offset
             25% in both directions.</td>
-
-            <td><a href="roll.rb.html" target="_blank"><img src=
-            "ex/roll.jpg" alt="roll example"></a></td>
           </tr>
         </table>
       </td>
@@ -6207,7 +6416,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.rotate">rotate</a></td>
+      <td class="methodname"><a name="Image.rotate" id=
+      "Image.rotate">rotate</a></td>
 
       <td><i>image</i>.rotate(<i>amount</i>) -&gt;
       <i>anImage</i></td>
@@ -6240,8 +6450,23 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="rotate_f.rb.html" target="_blank"><img src=
-      "ex/rotate_f.jpg" alt="rotate example"></a></td>
+      <td><a href="rotate_f.rb.html" target="_blank"><!--
+                              This img tag displays the original image when the mouse is over.
+                              Use CSS to add padding around the image to make it occupy the
+                              same space as the rotated image.
+                          --><img style=
+      "padding-top:34px;padding-bottom:34px; display:none" id=
+      "notrotated" onmouseover="this.style.display=''" onmouseout=
+      "this.style.display='none'; rotated.style.display='';"
+      border="0" src="ex/images/Flower_Hat.jpg" alt=
+      "rotate example" /><!--
+                              This img tag displays the rotated image.
+                          --><img style="display:" id="rotated"
+      border="0" onmouseover=
+      "this.style.display='none'; notrotated.style.display='';"
+      onmouseout="this.style.display=''" src="ex/rotate_f.jpg" alt=
+      "rotate example" /></a> <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -6259,7 +6484,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.rotate_bang" id=
       "Image.rotate_bang">rotate!</a></td>
 
       <td><i>image</i>.rotate!(<i>amount</i>) -&gt;
@@ -6279,10 +6504,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.sample">sample</a></td>
+      <td class="methodname"><a name="Image.sample" id=
+      "Image.sample">sample</a></td>
 
       <td><i>image</i>.sample(<i>new_width</i>, <i>new_height</i>)
-      -&gt; <i>anImage</i><br>
+      -&gt; <i>anImage</i><br />
       <i>image</i>.sample(<i>scale_factor</i>) -&gt;
       <i>anImage</i></td>
     </tr>
@@ -6340,11 +6566,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.sample_bang" id=
       "Image.sample_bang">sample!</a></td>
 
       <td><i>image</i>.sample!(<i>new_width</i>, <i>new_height</i>)
-      -&gt; <i>image</i><br>
+      -&gt; <i>image</i><br />
       <i>image</i>.sample!(<i>scale_factor</i>) -&gt;
       <i>image</i></td>
     </tr>
@@ -6362,10 +6588,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.scale">scale</a></td>
+      <td class="methodname"><a name="Image.scale" id=
+      "Image.scale">scale</a></td>
 
       <td><i>image</i>.scale(<i>new_width</i>, <i>new_height</i>)
-      -&gt; <i>anImage</i><br>
+      -&gt; <i>anImage</i><br />
       <i>image</i>.scale(<i>scale_factor</i>) -&gt;
       <i>anImage</i></td>
     </tr>
@@ -6422,11 +6649,11 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.scale_bang" id=
       "Image.scale_bang">scale!</a></td>
 
       <td><i>image</i>.scale!(<i>new_width</i>, <i>new_height</i>)
-      -&gt; <i>image</i><br>
+      -&gt; <i>image</i><br />
       <i>image</i>.scale!(<i>scale_factor</i>) -&gt;
       <i>image</i></td>
     </tr>
@@ -6438,7 +6665,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.segment" id=
       "Image.segment">segment</a></td>
 
       <td>image.segment(<i>colorspace</i>=RGBColorspace,
@@ -6484,7 +6711,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
           <dt>verbose</dt>
 
-          <dd>If <code>true</code>, <var>segment</var> prints
+          <dd>If <code>true</code>, <code>segment</code> prints
           detailed information about the identified classes.</dd>
         </dl>
       </td>
@@ -6499,9 +6726,22 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td align="center"><a href="segment.rb.html" target=
-      "_blank"><img src="ex/segment.jpg" alt=
-      "segment example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="segment.rb.html" target="_blank"><img src=
+            "ex/segment.jpg" alt="segment example" border="0"
+            onmouseover="this.src='ex/images/Flower_Hat.jpg'"
+            onmouseout="this.src='ex/segment.jpg'" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top"><code>segment(Magick::YUVColorspace,
+            0.4, 0.4)</code></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -6513,7 +6753,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.shade">shade</a></td>
+      <td class="methodname"><a name="Image.shade" id=
+      "Image.shade">shade</a></td>
 
       <td><i>image</i>.shade(<i>shading</i>=<code>false</code>,
       <i>azimuth</i>=30, <i>elevation</i>=30) -&gt;
@@ -6538,7 +6779,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
         <dl>
           <dt>shading</dt>
 
-          <dd>If <code>true</code>, <var>shade</var> shades the
+          <dd>If <code>true</code>, <code>shade</code> shades the
           intensity of each pixel.</dd>
 
           <dt>azimuth, elevation</dt>
@@ -6557,8 +6798,21 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="shade.rb.html" target="_blank"><img src=
-      "ex/shade.jpg" alt="shade example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="shade.rb.html" target="_blank"><img src=
+            "ex/shade.jpg" alt="shade example" border="0"
+            onmouseover="this.src='ex/images/Flower_Hat.jpg'"
+            onmouseout="this.src='ex/shade.jpg'" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top"><code>shade(true, 50, 50)</code></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -6569,7 +6823,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.sharpen" id=
       "Image.sharpen">sharpen</a></td>
 
       <td><i>image</i>.sharpen(<i>radius</i>=0.0, <i>sigma</i>=1.0)
@@ -6583,8 +6837,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       image with a Gaussian operator of the given radius and
       standard deviation (sigma). For reasonable results,
       <i>radius</i> should be larger than <i>sigma</i>. Use a
-      radius of 0 and <var>sharpen</var> selects a suitable radius
-      for you.</span></td>
+      radius of 0 and <code>sharpen</code> selects a suitable
+      radius for you.</span></td>
     </tr>
 
     <tr>
@@ -6608,7 +6862,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.shave">shave</a></td>
+      <td class="methodname"><a name="Image.shave" id=
+      "Image.shave">shave</a></td>
 
       <td><i>image</i>.shave(<i>width</i>, <i>height</i>) -&gt;
       <i>anImage</i></td>
@@ -6649,19 +6904,12 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <table summary="example" bgcolor="#DCDCDC">
-          <tr>
-            <td width="50%"><a href="shave.rb.html" target=
-            "_blank"><img src="ex/shave1.jpg" alt=
-            "shave example (before)"></a></td>
-
-            <td width="50%" align="center" valign="middle"><a href=
-            "shave.rb.html" target="_blank"><img src=
-            "ex/shave2.jpg" alt="shave example (after)"></a></td>
-          </tr>
-        </table>
-      </td>
+      <td><a href="shave.rb.html" target="_blank"><img src=
+      "ex/shave.jpg" border="0" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/shave.jpg'" alt="shave example" /></a>
+      <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -6680,7 +6928,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.shave_bang" id=
       "Image.shave_bang">shave!</a></td>
 
       <td><i>image</i>.shave!(<i>width</i>, <i>height</i>) -&gt;
@@ -6700,7 +6948,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.shear">shear</a></td>
+      <td class="methodname"><a name="Image.shear" id=
+      "Image.shear">shear</a></td>
 
       <td><i>image</i>.shear(<i>x_shear</i>, <i>y_shear</i>) -&gt;
       <i>anImage</i></td>
@@ -6738,8 +6987,21 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="shear.rb.html" target="_blank"><img src=
-      "ex/shear.jpg" alt="shear example"></a></td>
+      <td><a href="shear.rb.html" target="_blank"><!--
+                          This img tag displays the original image when the mouse is over
+                          --><img style=
+      "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
+           id="noshear" border="0" onmouseover=
+           "this.style.display=''" onmouseout=
+           "this.style.display='none'; shear.style.display='';" src=
+           "ex/images/Flower_Hat.jpg" alt="shear example" /><!--
+                         This img tag displays the framed image when the mouse is not over
+                         --><img style="display:" id="shear"
+      border="0" onmouseover=
+      "this.style.display='none'; noshear.style.display='';"
+      onmouseout="this.style.display=''" src="ex/shear.jpg" alt=
+      "shear example" /></a> <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -6757,7 +7019,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.signature" id=
       "Image.signature">signature</a></td>
 
       <td><i>image</i>.signature -&gt; <i>aString</i></td>
@@ -6809,7 +7071,7 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.solarize" id=
       "Image.solarize">solarize</a></td>
 
       <td><i>image</i>.solarize(<i>threshold</i>=50) -&gt;
@@ -6849,7 +7111,11 @@ puts jj.signature
       <td valign="top">Example</td>
 
       <td><a href="solarize.rb.html" target="_blank"><img src=
-      "ex/solarize.jpg" alt="solarize example"></a></td>
+      "ex/solarize.jpg" border="0" alt="solarize example"
+      onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/solarize.jpg'" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -6860,7 +7126,8 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.spread">spread</a></td>
+      <td class="methodname"><a name="Image.spread" id=
+      "Image.spread">spread</a></td>
 
       <td><i>image</i>.spread(<i>radius</i>=3) -&gt;
       <i>anImage</i></td>
@@ -6883,7 +7150,11 @@ puts jj.signature
       <td valign="top">Example</td>
 
       <td><a href="spread.rb.html" target="_blank"><img src=
-      "ex/spread.jpg" alt="spread example"></a></td>
+      "ex/spread.jpg" alt="spread example" border="0" onmouseover=
+      "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+      "this.src='ex/spread.jpg'" /></a> <img src=
+      "ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -6894,7 +7165,7 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.stegano" id=
       "Image.stegano">stegano</a></td>
 
       <td><i>image</i>.stegano(<i>watermark</i>, <i>offset</i>)
@@ -6945,7 +7216,7 @@ puts jj.signature
       <td valign="top">Example</td>
 
       <td><a href="stegano.rb.html" target="_blank"><img src=
-      "ex/stegano.gif" alt="stegano example"></a></td>
+      "ex/stegano.gif" border="0" alt="stegano example" /></a></td>
     </tr>
 
     <tr>
@@ -6966,7 +7237,8 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.stereo">stereo</a></td>
+      <td class="methodname"><a name="Image.stereo" id=
+      "Image.stereo">stereo</a></td>
 
       <td><i>image</i>.stereo(<i>offset_image</i>) -&gt;
       <i>anImage</i></td>
@@ -7002,7 +7274,7 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.store_pixels" id=
       "Image.store_pixels">store_pixels</a></td>
 
       <td><i>image</i>.store_pixels(<i>x</i>, <i>y</i>,
@@ -7050,13 +7322,10 @@ puts jj.signature
     <tr>
       <td valign="top">Example</td>
 
-      <td>
-        <a href="smile.rb.html" target="_blank"><img src=
-        "ex/smile.gif" alt="smile example"></a>
-
-        <p>Also see the example for <a href=
-        "#Image.get_pixels">get_pixels</a>.</p>
-      </td>
+      <td><a href="smile.rb.html" target="_blank"><img src=
+      "ex/smile.gif" border="0" alt="smile example" align=
+      "top" /></a> Also see the example for <a href=
+      "#Image.get_pixels"><code>get_pixels</code></a>.</td>
     </tr>
 
     <tr>
@@ -7076,8 +7345,9 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.strip_bang">strip!</a>
-      <span class="imversion">&nbsp;(5.5.8)</span><span class=
+      <td class="methodname"><a name="Image.strip_bang" id=
+      "Image.strip_bang">strip!</a> <span class=
+      "imversion">&nbsp;(5.5.8)</span><span class=
       "gmversion">(1.1)</span></td>
 
       <td><i>image</i>.strip! -&gt; <i>image</i></td>
@@ -7107,7 +7377,8 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.swirl">swirl</a></td>
+      <td class="methodname"><a name="Image.swirl" id=
+      "Image.swirl">swirl</a></td>
 
       <td><i>image</i>.swirl(<i>degrees</i>) -&gt;
       <i>anImage</i></td>
@@ -7138,7 +7409,7 @@ puts jj.signature
       <td valign="top">Example</td>
 
       <td><a href="swirl.rb.html" target="_blank"><img src=
-      "ex/swirl.gif" alt="swirl example"></a></td>
+      "ex/swirl.gif" alt="swirl example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -7149,7 +7420,8 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.texture_fill_to_border"
+      id=
       "Image.texture_fill_to_border">texture_fill_to_border</a></td>
 
       <td><i>image</i>.texture_fill_to_border(<i>x</i>, <i>y</i>,
@@ -7192,9 +7464,30 @@ puts jj.signature
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="texture_fill_to_border.rb.html" target=
-      "_blank"><img src="ex/texture_fill_to_border.gif" alt=
-      "texture_fill_to_border example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="texture_fill_to_border.rb.html" target=
+            "_blank"><img src="ex/texture_fill_to_border_after.gif"
+            alt="texture_fill_to_border example" onmouseover=
+            "this.src='ex/texture_fill_to_border_before.gif'"
+            onmouseout=
+            "this.src='ex/texture_fill_to_border_after.gif'"
+            border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example the target is the pixel
+            in the center of the image. The rose texture replaces
+            this pixel and its neighbors until reaching a black
+            pixel. Notice the plum-colored circles are replaced as
+            well. Compare this result with the result of
+            <code>texture_floodfill</code>, below.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -7215,7 +7508,7 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.texture_floodfill" id=
       "Image.texture_floodfill">texture_floodfill</a></td>
 
       <td><i>image</i>.texture_floodfill(<i>x</i>, <i>y</i>,
@@ -7259,9 +7552,29 @@ puts jj.signature
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="texture_floodfill.rb.html" target=
-      "_blank"><img src="ex/texture_floodfill.gif" alt=
-      "texture_floodfill example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="texture_floodfill.rb.html" target=
+            "_blank"><img src="ex/texture_floodfill_after.gif" alt=
+            "texture_floodfill example" onmouseover=
+            "this.src='ex/texture_floodfill_before.gif'"
+            onmouseout="this.src='ex/texture_floodfill_after.gif'"
+            border="0" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example the target is the pixel
+            in the center of the image. The rose texture replaces
+            this pixel and its same-colored neighbors. Notice the
+            plum-colored circles are not replaced. Compare this
+            result with the result of
+            <code>texture_fill_to_border</code>, above.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -7280,7 +7593,7 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.threshold" id=
       "Image.threshold">threshold</a></td>
 
       <td><i>image</i>.threshold(<i>threshold</i>) -&gt;
@@ -7311,8 +7624,23 @@ puts jj.signature
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="threshold.rb.html" target="_blank"><img src=
-      "ex/threshold.jpg" alt="threshold example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="threshold.rb.html" target=
+            "_blank"><img src="ex/threshold.jpg" onmouseover=
+            "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+            "this.src='ex/threshold.jpg'" border="0" alt=
+            "threshold example" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">
+            <code>threshold(Magick::MaxRGB*0.55)</code></td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -7333,12 +7661,12 @@ puts jj.signature
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.thumbnail" id=
       "Image.thumbnail">thumbnail</a> &nbsp;<span class=
       "imversion">(5.5.2)</span></td>
 
       <td><i>image</i>.thumbnail(<i>new_width</i>,
-      <i>new_height</i>) -&gt; <i>anImage</i><br>
+      <i>new_height</i>) -&gt; <i>anImage</i><br />
       <i>image</i>.thumbnail(<i>scale_factor</i>) -&gt;
       <i>anImage</i></td>
     </tr>
@@ -7346,17 +7674,17 @@ puts jj.signature
     <tr>
       <td valign="top">Description</td>
 
-      <td>The <var>thumbnail</var> method is a fast resizing method
-      suitable for use when the size of the resulting image is &lt;
-      10% of the original.</td>
+      <td>The <code>thumbnail</code> method is a fast resizing
+      method suitable for use when the size of the resulting image
+      is &lt; 10% of the original.</td>
     </tr>
 
     <tr>
       <td valign="top">Arguments</td>
 
       <td>
-        You can call <var>thumbnail</var> with either the new width
-        and height or the scale factor.
+        You can call <code>thumbnail</code> with either the new
+        width and height or the scale factor.
 
         <dl>
           <dt>new_width, new_height</dt>
@@ -7410,17 +7738,17 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
     <tr>
       <td valign="top">Notes</td>
 
-      <td>The <var>thumbnail</var> method is only available with
+      <td>The <code>thumbnail</code> method is only available with
       ImageMagick 5.5.2 and later.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.thumbnail_bang" id=
       "Image.thumbnail_bang">thumbnail!</a> &nbsp;<span class=
       "imversion">(5.5.2)</span></td>
 
       <td><i>image</i>.thumbnail!(<i>new_width</i>,
-      <i>new_height</i>) -&gt; <i>image</i><br>
+      <i>new_height</i>) -&gt; <i>image</i><br />
       <i>image</i>.thumbnail!(<i>scale_factor</i>) -&gt;
       <i>image</i></td>
     </tr>
@@ -7441,12 +7769,12 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
     <tr>
       <td valign="top">Notes</td>
 
-      <td>The <var>thumbnail!</var> method is only available with
+      <td>The <code>thumbnail!</code> method is only available with
       ImageMagick 5.5.2 and later.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.to_blob" id=
       "Image.to_blob">to_blob</a></td>
 
       <td><i>image</i>.to_blob <i>[ { optional arguments }
@@ -7484,7 +7812,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
       <td valign="top">Example</td>
 
       <td><a href="to_blob.rb.html" target="_blank"><img src=
-      "ex/to_blob.gif" alt="to_blob example"></a></td>
+      "ex/to_blob.gif" alt="to_blob example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -7501,7 +7829,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.to_color" id=
       "Image.to_color">to_color</a></td>
 
       <td><i>image</i>.to_color(<i>aPixel</i>) -&gt;
@@ -7512,8 +7840,8 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
       <td valign="top">Description</td>
 
       <td>Returns the color name for a pixel. Unlike the
-      <var>Pixel#to_color</var> method, to_color uses the <a href=
-      "imageattrs.html#Image.depth">depth</a> and <a href=
+      <code>Pixel#to_color</code> method, to_color uses the
+      <a href="imageattrs.html#Image.depth">depth</a> and <a href=
       "imageattrs.html#Image.matte">matte</a> attributes of the
       image to determine the color name.</td>
     </tr>
@@ -7543,7 +7871,7 @@ f = Magick::Image.read('images/Jean_Jacket.jpg').first &raquo;
 p = f.pixel_color(0,0) &raquo;
         #&lt;Magick::Pixel red=16191, green=15677, blue=12593, opacity=0&gt;
 f.to_color(p) &raquo; "#3F3D31"
-       
+
 </pre>
       </td>
     </tr>
@@ -7564,7 +7892,7 @@ f.to_color(p) &raquo; "#3F3D31"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.transparent" id=
       "Image.transparent">transparent</a></td>
 
       <td><i>image</i>.transparent(<i>color</i>,
@@ -7612,8 +7940,26 @@ f.to_color(p) &raquo; "#3F3D31"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="transparent.rb.html" target="_blank"><img src=
-      "ex/transparent.gif" alt="transparent example"></a></td>
+      <td>
+        <table summary="example">
+          <tr>
+            <td><a href="transparent.rb.html" target=
+            "_blank"><img src="ex/transparent_after.gif" border="0"
+            onmouseover="this.src='ex/transparent_before.gif'"
+            onmouseout="this.src='ex/transparent_after.gif'" alt=
+            "transparent example" /></a></td>
+
+            <td valign="bottom"><img src="ex/images/spin.gif" alt=
+            "Mouse over the example to see the original image" /></td>
+
+            <td valign="top">Mouse over the image to see the
+            original image. In this example, all the black pixels
+            are made transparent. The resulting image has been
+            composited over a plasma background, which shows
+            through the transparent pixels.</td>
+          </tr>
+        </table>
+      </td>
     </tr>
 
     <tr>
@@ -7632,7 +7978,7 @@ f.to_color(p) &raquo; "#3F3D31"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.unsharp_mask" id=
       "Image.unsharp_mask">unsharp_mask</a></td>
 
       <td><i>image</i>.unsharp_mask(<i>radius</i>, <i>sigma</i>,
@@ -7646,7 +7992,7 @@ f.to_color(p) &raquo; "#3F3D31"
       image with a Gaussian operator of the given radius and
       standard deviation (<i>sigma</i>). For reasonable results,
       <i>radius</i> should be larger than <i>sigma</i>. Use a
-      radius of 0 and <var>unsharp_mask</var> selects a suitable
+      radius of 0 and <code>unsharp_mask</code> selects a suitable
       radius for you.</span></td>
     </tr>
 
@@ -7689,7 +8035,8 @@ f.to_color(p) &raquo; "#3F3D31"
       <td valign="top">Example</td>
 
       <td><a href="unsharp_mask.rb.html" target="_blank"><img src=
-      "ex/unsharp_mask.jpg" alt="unsharp_mask example"></a></td>
+      "ex/unsharp_mask.jpg" alt="unsharp_mask example" border=
+      "0" /></a></td>
     </tr>
 
     <tr>
@@ -7709,7 +8056,8 @@ f.to_color(p) &raquo; "#3F3D31"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.wave">wave</a></td>
+      <td class="methodname"><a name="Image.wave" id=
+      "Image.wave">wave</a></td>
 
       <td><i>image</i>.wave(<i>amplitude</i>=25.0,
       <i>wavelength</i>=150.0) -&gt; <i>anImage</i></td>
@@ -7733,8 +8081,21 @@ f.to_color(p) &raquo; "#3F3D31"
     <tr>
       <td valign="top">Example</td>
 
-      <td><a href="wave.rb.html" target="_blank"><img src=
-      "ex/wave.jpg" alt="wave example"></a></td>
+      <td><a href="wave.rb.html" target="_blank">
+      <!-- This img tag displays the original image when the mouse is over -->
+       <img style=
+      "padding-top:25px; padding-bottom:25px; display:none" id=
+      "nowave" border="0" onmouseover="this.style.display=''"
+      onmouseout=
+      "this.style.display='none'; wave.style.display='';" src=
+      "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
+                              This img tag displays the framed image when the mouse is not over
+                              --><img style="display:" id="wave"
+      border="0" onmouseover=
+      "this.style.display='none'; nowave.style.display='';"
+      onmouseout="this.style.display=''" src="ex/wave.jpg" alt=
+      "wave example" /></a> <img src="ex/images/spin.gif" alt=
+      "Mouse over the example to see the original image" /></td>
     </tr>
 
     <tr>
@@ -7745,7 +8106,7 @@ f.to_color(p) &raquo; "#3F3D31"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Image.white_threshold" id=
       "Image.white_threshold">white_threshold</a> <span class=
       "imversion">(5.5.7)</span><span class=
       "gmversion">(1.1)</span></td>
@@ -7768,10 +8129,11 @@ f.to_color(p) &raquo; "#3F3D31"
 
       <td>Each channel argument is a number between 0 and MaxRGB.
       All arguments except the first may be omitted. If the
-      <var>green_channel</var> or <var>blue_channel</var> argument
-      is omitted, the default value is the <var>red_channel</var>
-      value. If the <var>opacity_channel</var> argument is omitted,
-      the default value is <a href=
+      <code>green_channel</code> or <code>blue_channel</code>
+      argument is omitted, the default value is the
+      <code>red_channel</code> value. If the
+      <code>opacity_channel</code> argument is omitted, the default
+      value is <a href=
       "constants.html#Opacity">OpaqueOpacity</a>.</td>
     </tr>
 
@@ -7797,10 +8159,11 @@ f.to_color(p) &raquo; "#3F3D31"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.write">write</a></td>
+      <td class="methodname"><a name="Image.write" id=
+      "Image.write">write</a></td>
 
       <td><i>image</i>.write(<i>filename</i>) <i>[ { optional
-      arguments } ]</i> -&gt; <i>image</i><br>
+      arguments } ]</i> -&gt; <i>image</i><br />
       <i>image</i>.write(<i>file</i>) <i>[ { optional arguments }
       ]</i> -&gt; <i>image</i></td>
     </tr>
@@ -7832,7 +8195,7 @@ f.to_color(p) &raquo; "#3F3D31"
     <tr>
       <td valign="top">Example</td>
 
-      <td>Almost all of the examples call <var>write</var>.</td>
+      <td>Almost all of the examples call <code>write</code>.</td>
     </tr>
 
     <tr>
@@ -7858,7 +8221,7 @@ f.to_color(p) &raquo; "#3F3D31"
       "ilist.html#ImageList.write">ImageList#write</a></td>
     </tr>
   </table>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

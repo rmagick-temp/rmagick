@@ -1,15 +1,16 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org">
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
   <title>RMagick: class Draw</title>
   <meta http-equiv="Content-Type" content=
-  "text/html; charset=us-ascii">
-  <meta name="GENERATOR" content="Quanta Plus">
-  <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
 </head>
 
 <body>
@@ -51,7 +52,7 @@
           <li><a href="#Draw.new">new</a></li>
         </ul>
 
-        <h3><a name="#attribute_writers">attribute writers</a></h3>
+        <h3><a href="#attribute_writers">attribute writers</a></h3>
 
         <ul>
           <li><a href="#Draw.affine_eq">affine=</a></li>
@@ -263,7 +264,8 @@
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.new">new</a></td>
+      <td class="methodname"><a name="Draw.new" id=
+      "Draw.new">new</a></td>
 
       <td>Magick::Draw.new <i>[&nbsp;{ additional parameters
       }&nbsp;]</i> -&gt; <i>draw</i></td>
@@ -278,7 +280,7 @@
         However, you will usually find it more useful to use one of
         the Draw instance methods to set these values while the
         primitives are being executed. When the values are
-        initialized by <var>new</var>, they will be overridden by
+        initialized by <code>new</code>, they will be overridden by
         the corresponding instance method.
 
         <p>The attributes you can set are shown in the following
@@ -363,7 +365,8 @@ primitives = Magick::Draw.new {
 
     <tr class="methodsection">
       <td colspan="2">
-        <h2><a name="attribute_writers">attribute writers</a></h2>
+        <h2><a name="attribute_writers" id=
+        "attribute_writers">attribute writers</a></h2>
       </td>
     </tr>
 
@@ -371,7 +374,7 @@ primitives = Magick::Draw.new {
       <td colspan="2">
         <p>These methods are usually used to set attribute values
         for the <a href="#Draw.annotate">annotate</a> method. They
-        may be set prior to calling <var>annotate</var> or in a
+        may be set prior to calling <code>annotate</code> or in a
         block associated with the call. To set a value to be used
         when drawing with the <a href="#Draw.draw">draw</a> method,
         use one of the drawing methods listed in the <b>drawing
@@ -380,7 +383,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.affine_eq" id=
       "Draw.affine_eq">affine=</a></td>
 
       <td><i>draw.</i>affine = <i>anAffineMatrix</i></td>
@@ -396,7 +399,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.align_eq" id=
       "Draw.align_eq">align=</a></td>
 
       <td><i>draw.</i>align = <i>anAlignType</i></td>
@@ -412,7 +415,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.decorate_eq" id=
       "Draw.decorate_eq">decorate=</a></td>
 
       <td><i>draw.</i>decorate = <i>aDecorationType</i></td>
@@ -427,7 +430,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.density_eq" id=
       "Draw.density_eq">density=</a></td>
 
       <td><i>draw.</i>density = <i>aString</i></td>
@@ -441,7 +444,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.encoding_eq" id=
       "Draw.encoding_eq">encoding=</a></td>
 
       <td><i>draw.</i>encoding = <i>aString</i></td>
@@ -457,9 +460,10 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.fill_eq">fill=</a></td>
+      <td class="methodname"><a name="Draw.fill_eq" id=
+      "Draw.fill_eq">fill=</a></td>
 
-      <td><i>draw.</i>fill = <i>aString</i><br>
+      <td><i>draw.</i>fill = <i>aString</i><br />
       <i>draw.</i>fill = <i>aPixel</i></td>
     </tr>
 
@@ -473,7 +477,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.font_eq">font=</a></td>
+      <td class="methodname"><a name="Draw.font_eq" id=
+      "Draw.font_eq">font=</a></td>
 
       <td><i>draw.</i>font = <i>aString</i></td>
     </tr>
@@ -486,7 +491,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_family_eq" id=
       "Draw.font_family_eq">font_family=</a></td>
 
       <td><i>draw.</i>font_family = <i>aString</i></td>
@@ -500,7 +505,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_stretch_eq" id=
       "Draw.font_stretch_eq">font_stretch=</a></td>
 
       <td><i>draw.</i>font_stretch = <i>aStretchType</i></td>
@@ -514,7 +519,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_style_eq" id=
       "Draw.font_style_eq">font_style=</a></td>
 
       <td><i>draw.</i>font_style = <i>aStyleType</i></td>
@@ -528,7 +533,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_weight_eq" id=
       "Draw.font_weight_eq">font_weight=</a></td>
 
       <td><i>draw.</i>font_weight = <i>aWeightType</i></td>
@@ -543,7 +548,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.gravity_eq" id=
       "Draw.gravity_eq">gravity=</a></td>
 
       <td><i>draw.</i>gravity = <i>aGravityType</i></td>
@@ -558,7 +563,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.pointsize_eq" id=
       "Draw.pointsize_eq">pointsize=</a></td>
 
       <td><i>draw.</i>pointsize = <i>anInteger</i></td>
@@ -571,7 +576,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.rotation_eq" id=
       "Draw.rotation_eq">rotation=</a></td>
 
       <td><i>draw.</i>rotation = <i>aNumber</i></td>
@@ -592,10 +597,10 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_eq" id=
       "Draw.stroke_eq">stroke=</a></td>
 
-      <td><i>draw.</i>stroke = <i>aString</i><br>
+      <td><i>draw.</i>stroke = <i>aString</i><br />
       <i>draw.</i>stroke = <i>aPixel</i></td>
     </tr>
 
@@ -609,7 +614,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.text_antialias_eq" id=
       "Draw.text_antialias_eq">text_antialias=</a></td>
 
       <td><i>draw.</i>text_antialias = <i><code>true</code> or
@@ -624,10 +629,10 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.undercolor_eq" id=
       "Draw.undercolor_eq">undercolor=</a></td>
 
-      <td><i>draw.</i>undercolor = <i>aString</i><br>
+      <td><i>draw.</i>undercolor = <i>aString</i><br />
       <i>draw.</i>undercolor = <i>aPixel</i></td>
     </tr>
 
@@ -665,7 +670,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="drawattrs.rb.html" target=
             "_blank"><img src="ex/drawattrs.gif" alt=
-            "draw attribute methods example" border="0"></a></td>
+            "draw attribute methods example" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -689,7 +694,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.affine">affine</a></td>
+      <td class="methodname"><a name="Draw.affine" id=
+      "Draw.affine">affine</a></td>
 
       <td><i>draw</i>.affine(<i>sx, rx, ry, sy, tx, ty</i>) -&gt;
       <i>draw</i></td>
@@ -734,14 +740,12 @@ primitives = Magick::Draw.new {
       <td>
         <table summary="example 2">
           <tr>
-            <td><code>draw.affine(1, 0, 0, -1, 0,
-            max_y)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="affine.rb.html" target="_blank"><img src=
             "ex/affine.gif" alt="affine example" border=
-            "0"></a></td>
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.affine(1, 0, 0, -1, 0,
+            max_y)</code></td>
           </tr>
         </table>
       </td>
@@ -757,7 +761,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.arc">arc</a></td>
+      <td class="methodname"><a name="Draw.arc" id=
+      "Draw.arc">arc</a></td>
 
       <td><i>draw</i>.arc(<i>start_x, start_y, end_x, end_y,
       start_degrees, end_degrees</i>) -&gt; <i>draw</i></td>
@@ -805,20 +810,20 @@ primitives = Magick::Draw.new {
       <td>
         <table summary="example 3">
           <tr>
-            <td colspan="2"><code>draw.arc(40, 50, 250, 180, 0,
-            270)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="arc.rb.html" target="_blank"><img src=
-            "ex/arc.gif" alt="arc example" border="0"></a></td>
+            "ex/arc.gif" alt="arc example" border="0" /></a></td>
 
-            <td>The <code>arc</code> method is broken in all
-            releases of ImageMagick prior to 5.5.8, and all
-            releases of GraphicsMagick prior to 1.1. If you see a
-            diagonal line here instead of an arc, it's broken.
-            Either upgrade to the newest version or use the SVG
-            <a href="#Draw.path">path</a> method.</td>
+            <td colspan="2" valign="top">
+              <p><code>draw.arc(40, 50, 250, 180, 0,
+              270)</code></p>
+
+              <p>The <code>arc</code> method is broken in all
+              releases of ImageMagick prior to 5.5.8, and all
+              releases of GraphicsMagick prior to 1.1. If you see a
+              diagonal line here instead of an arc, it's broken.
+              Either upgrade to the newest version or use the SVG
+              <a href="#Draw.path">path</a> method.</p>
+            </td>
           </tr>
         </table>
       </td>
@@ -832,7 +837,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.bezier">bezier</a></td>
+      <td class="methodname"><a name="Draw.bezier" id=
+      "Draw.bezier">bezier</a></td>
 
       <td><i>draw</i>.bezier(<i>x1,y1, cx1,cy1, cx2,cy2, x2,
       y2...</i>) -&gt; <i>draw</i></td>
@@ -879,7 +885,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier1.rb.html" target=
             "_blank"><img src="ex/cbezier1.gif" alt=
-            "bezier example 1" border="0"></a></td>
+            "bezier example 1" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -894,7 +900,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier2.rb.html" target=
             "_blank"><img src="ex/cbezier2.gif" alt=
-            "bezier example 2" border="0"></a></td>
+            "bezier example 2" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -909,7 +915,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier3.rb.html" target=
             "_blank"><img src="ex/cbezier3.gif" alt=
-            "bezier example 3" border="0"></a></td>
+            "bezier example 3" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -924,7 +930,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier4.rb.html" target=
             "_blank"><img src="ex/cbezier4.gif" alt=
-            "bezier example 4" border="0"></a></td>
+            "bezier example 4" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -939,7 +945,7 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier5.rb.html" target=
             "_blank"><img src="ex/cbezier5.gif" alt=
-            "bezier example 5" border="0"></a></td>
+            "bezier example 5" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -954,14 +960,15 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="cbezier6.rb.html" target=
             "_blank"><img src="ex/cbezier6.gif" alt=
-            "bezier example 6" border="0"></a></td>
+            "bezier example 6" border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.circle">circle</a></td>
+      <td class="methodname"><a name="Draw.circle" id=
+      "Draw.circle">circle</a></td>
 
       <td><i>draw</i>.circle(<i>origin_x, origin_y, perim_x,
       perim_y</i>) -&gt; <i>draw</i></td>
@@ -981,20 +988,19 @@ primitives = Magick::Draw.new {
       <td>
         <table summary="example 5">
           <tr>
-            <td><code>draw.circle(125,125, 25,125)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="circle.rb.html" target="_blank"><img src=
             "ex/circle.gif" alt="circle example" border=
-            "0"></a></td>
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.circle(125,125,
+            25,125)</code></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.clip_path" id=
       "Draw.clip_path">clip_path</a></td>
 
       <td><i>draw</i>.clip_path(<i>pathname</i>) -&gt;
@@ -1028,13 +1034,13 @@ primitives = Magick::Draw.new {
       <td>
         <table summary="example 6">
           <tr>
-            <td><code>draw.clip_path('example')</code></td>
-          </tr>
-
-          <tr>
             <td><a href="clip_path.rb.html" name="clip_path_ex"
-            target="_blank"><img src="ex/clip_path.gif" alt=
-            "clip_path example" border="0"></a></td>
+            target="_blank" id="clip_path_ex"><img src=
+            "ex/clip_path.gif" alt="clip_path example" border=
+            "0" /></a></td>
+
+            <td valign="top">
+            <code>draw.clip_path('example')</code></td>
           </tr>
         </table>
       </td>
@@ -1048,7 +1054,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.clip_rule" id=
       "Draw.clip_rule">clip_rule</a></td>
 
       <td><i>draw</i>.clip_rule(<code>"evenodd"</code> <i>or</i>
@@ -1060,8 +1066,8 @@ primitives = Magick::Draw.new {
 
       <td>Specify how to determine if a point on the image is
       inside clipping region. See <a href=
-      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><var>
-      the <b>'fill-rule'</b> property</var></a> in the
+      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
+      the <b>'fill-rule'</b> property</code></a> in the
       <cite>Scalable Vector Graphics (SVG) 1.0 Specification</cite>
       for a complete description and examples.</td>
     </tr>
@@ -1073,7 +1079,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.clip_units" id=
       "Draw.clip_units">clip_units</a></td>
 
       <td><i>draw</i>.clip_units(<code>"userSpace"</code> <i>or</i>
@@ -1100,7 +1106,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.color">color</a></td>
+      <td class="methodname"><a name="Draw.color" id=
+      "Draw.color">color</a></td>
 
       <td><i>draw</i>.color(<i>x</i>, <i>y</i>,
       <i>aPaintMethod</i>) -&gt; <i>draw</i></td>
@@ -1127,7 +1134,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.composite" id=
       "Draw.composite">composite</a></td>
 
       <td><i>draw</i>.composite(<i>x, y, width, height,
@@ -1181,11 +1188,11 @@ primitives = Magick::Draw.new {
           <tr>
             <td><a href="drawcomp.rb.html" target=
             "_blank"><img src="ex/drawcomp1.gif" alt=
-            "composite example 1" border="0"></a></td>
+            "composite example 1" border="0" /></a></td>
 
             <td><a href="drawcomp.rb.html" target=
             "_blank"><img src="ex/drawcomp2.gif" alt=
-            "composite example 2" border="0"></a></td>
+            "composite example 2" border="0" /></a></td>
           </tr>
         </table>
       </td>
@@ -1199,7 +1206,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.decorate" id=
       "Draw.decorate">decorate</a></td>
 
       <td><i>draw</i>.decorate(<i>aDecorationType</i>) -&gt;
@@ -1234,7 +1241,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.define_clip_path" id=
       "Draw.define_clip_path">define_clip_path</a></td>
 
       <td><i>draw</i>.define_clip_path(<i>aString</i>) {
@@ -1245,14 +1252,15 @@ primitives = Magick::Draw.new {
       <td valign="top">Description</td>
 
       <td>Define a clip-path. Within <i>block</i>, call other
-      drawing primitive methods (<var>rectangle</var>,
-      <var>polygon</var>, <var>text</var>, etc.) to define the
+      drawing primitive methods (<code>rectangle</code>,
+      <code>polygon</code>, <code>text</code>, etc.) to define the
       clip-path. The union of all the primitives (excluding the
-      effects of rendering methods such as <var>stroke_width</var>,
-      etc.) is the clip-path. After the clip-path is invoked by the
-      <a href="#Draw.clip_path">clip-path</a> method, anything
-      drawn on the image inside the clip-path will appear. Anything
-      drawn outside the clip-path will be hidden. (See <a href=
+      effects of rendering methods such as
+      <code>stroke_width</code>, etc.) is the clip-path. After the
+      clip-path is invoked by the <a href=
+      "#Draw.clip_path">clip-path</a> method, anything drawn on the
+      image inside the clip-path will appear. Anything drawn
+      outside the clip-path will be hidden. (See <a href=
       "#Draw.clip_rule">clip_rule</a> for a definition of how
       &times;Magick decides what is "inside" and what is "outside"
       of the clip-path.)</td>
@@ -1278,7 +1286,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.ellipse" id=
       "Draw.ellipse">ellipse</a></td>
 
       <td>draw.ellipse(<i>origin_x, origin_y, width, height,
@@ -1322,21 +1330,19 @@ primitives = Magick::Draw.new {
       <td>
         <table summary="example 7">
           <tr>
-            <td><code>draw.ellipse(180,125, 150,75, 0,
-            270)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="ellipse.rb.html" target="_blank"><img src=
             "ex/ellipse.gif" alt="ellipse example" border=
-            "0"></a></td>
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.ellipse(180,125, 150,75, 0,
+            270)</code></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.encoding" id=
       "Draw.encoding">encoding</a></td>
 
       <td><i>draw</i>.encoding(<code>"UTF-8"</code>) -&gt;
@@ -1363,7 +1369,8 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.fill">fill</a></td>
+      <td class="methodname"><a name="Draw.fill" id=
+      "Draw.fill">fill</a></td>
 
       <td><i>draw</i>.fill(<i>aString</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -1395,11 +1402,11 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.fill_opacity" id=
       "Draw.fill_opacity">fill_opacity</a></td>
 
       <td><i>draw</i>.fill_opacity(<i>aFloat</i>) -&gt;
-      <i>draw</i><br>
+      <i>draw</i><br />
       <i>draw</i>.fill_opacity(<i>aString</i> -&gt;
       <i>draw</i>)</td>
     </tr>
@@ -1435,12 +1442,12 @@ draw.fill_opacity('40%')
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#Draw.opacity">opacity</a><br>
+      <td><a href="#Draw.opacity">opacity</a><br />
       <a href="#Draw.stroke_opacity">stroke_opacity</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.fill_rule" id=
       "Draw.fill_rule">fill_rule</a></td>
 
       <td><i>draw</i>.fill_rule(<code>"evenodd"</code> <i>or</i>
@@ -1452,8 +1459,8 @@ draw.fill_opacity('40%')
 
       <td>Specify how to determine if a point on the image is
       inside a shape. See <a href=
-      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><var>
-      the <b>'fill-rule'</b> property</var></a> in the
+      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
+      the <b>'fill-rule'</b> property</code></a> in the
       <cite>Scalable Vector Graphics (SVG) 1.0 Specification</cite>
       for a complete description and examples.</td>
     </tr>
@@ -1465,7 +1472,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.font">font</a></td>
+      <td class="methodname"><a name="Draw.font" id=
+      "Draw.font">font</a></td>
 
       <td><i>draw</i>.font(<i>aString</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -1499,7 +1507,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_family" id=
       "Draw.font_family">font_family</a></td>
 
       <td><i>draw</i>.font_family(<i>aString</i>) -&gt; draw</td>
@@ -1524,7 +1532,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_stretch" id=
       "Draw.font_stretch">font_stretch</a></td>
 
       <td><i>draw</i>.font_stretch(<i>aStretchType</i>) -&gt;
@@ -1552,7 +1560,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_style" id=
       "Draw.font_style">font_style</a></td>
 
       <td><i>draw</i>.font_style(<i>aStyleType</i>) -&gt;
@@ -1580,7 +1588,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.font_weight" id=
       "Draw.font_weight">font_weight</a></td>
 
       <td><i>draw</i>.font_weight(<i>aWeightType</i>) -&gt;
@@ -1609,7 +1617,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.gravity" id=
       "Draw.gravity">gravity</a></td>
 
       <td><i>draw</i>.gravity(<i>aGravityType</i>) -&gt;
@@ -1634,7 +1642,7 @@ draw.fill_opacity('40%')
       <td valign="top">Example</td>
 
       <td><a href="grav.rb.html" target="_blank"><img src=
-      "ex/grav.gif" alt="gravity example" border="0"></a></td>
+      "ex/grav.gif" alt="gravity example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -1644,7 +1652,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.line">line</a></td>
+      <td class="methodname"><a name="Draw.line" id=
+      "Draw.line">line</a></td>
 
       <td><i>draw</i>.line(<i>here_x</i>, <i>here_y</i>,
       <i>there_x</i>, <i>there_y</i>) -&gt; <i>draw</i></td>
@@ -1678,21 +1687,20 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 8">
           <tr>
-            <td><code>draw.line(50,50, 50,200)<br>
-            draw.line(50,200, 200,200)<br>
-            draw.line(200,200, 50,50)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="line.rb.html" target="_blank"><img src=
-            "ex/line.gif" alt="line example" border="0"></a></td>
+            "ex/line.gif" alt="line example" border="0" /></a></td>
+
+            <td valign="top"><code>draw.line(50,50, 50,200)<br />
+            draw.line(50,200, 200,200)<br />
+            draw.line(200,200, 50,50)</code></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.matte">matte</a></td>
+      <td class="methodname"><a name="Draw.matte" id=
+      "Draw.matte">matte</a></td>
 
       <td><i>draw</i>.matte(<i>x</i>,<i>y</i>, <i>aPaintMethod</i>)
       -&gt; <i>draw</i></td>
@@ -1767,7 +1775,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.opacity" id=
       "Draw.opacity">opacity</a></td>
 
       <td><i>draw</i>.opacity(<i>opacity</i>) -&gt;
@@ -1793,18 +1801,19 @@ draw.fill_opacity('40%')
       <td valign="top">Example</td>
 
       <td><a href="opacity.rb.html" target="_blank"><img src=
-      "ex/opacity.gif" alt="opacity example" border="0"></a></td>
+      "ex/opacity.gif" alt="opacity example" border="0" /></a></td>
     </tr>
 
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#Draw.fill_opacity">fill_opacity</a><br>
+      <td><a href="#Draw.fill_opacity">fill_opacity</a><br />
       <a href="#Draw.stroke_opacity">stroke_opacity</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.path">path</a></td>
+      <td class="methodname"><a name="Draw.path" id=
+      "Draw.path">path</a></td>
 
       <td><i>draw</i>.path(<i>aString</i>)</td>
     </tr>
@@ -1843,7 +1852,7 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="arcpath.rb.html" target="_blank"><img src=
             "ex/arcpath.gif" alt="path example 1" border=
-            "0"></a></td>
+            "0" /></a></td>
           </tr>
 
           <tr>
@@ -1853,7 +1862,7 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="qbezierpath.rb.html" target=
             "_blank"><img src="ex/qbezierpath.gif" alt=
-            "path example 2" border="0"></a></td>
+            "path example 2" border="0" /></a></td>
           </tr>
 
           <tr>
@@ -1863,14 +1872,14 @@ draw.fill_opacity('40%')
           <tr>
             <td align="center"><a href="path.rb.html" target=
             "_blank"><img src="ex/path.gif" alt="path example 3"
-            border="0"></a></td>
+            border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.pattern" id=
       "Draw.pattern">pattern</a></td>
 
       <td><i>draw</i>.pattern(<i>name</i>, <i>x</i>, <i>y</i>,
@@ -1920,11 +1929,11 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="pattern1.rb.html" target=
             "_blank"><img src="ex/pattern1.gif" alt=
-            "pattern example 1" border="0"></a></td>
+            "pattern example 1" border="0" /></a></td>
 
             <td><a href="pattern2.rb.html" target=
             "_blank"><img src="ex/pattern2.gif" alt=
-            "pattern example 2" border="0"></a></td>
+            "pattern example 2" border="0" /></a></td>
           </tr>
         </table>
       </td>
@@ -1938,7 +1947,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.point">point</a></td>
+      <td class="methodname"><a name="Draw.point" id=
+      "Draw.point">point</a></td>
 
       <td><i>draw</i>.point(<i>x</i>, <i>y</i>) -&gt;
       <i>draw</i></td>
@@ -1970,7 +1980,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.pointsize" id=
       "Draw.pointsize">pointsize</a></td>
 
       <td><i>draw</i>.pointsize(<i>anInteger</i>) -&gt;
@@ -1996,7 +2006,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.polygon" id=
       "Draw.polygon">polygon</a></td>
 
       <td><i>draw</i>.polygon(<i>x1</i>, <i>y1</i>,...,<i>xN</i>,
@@ -2033,14 +2043,14 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="polygon.rb.html" target="_blank"><img src=
             "ex/polygon.gif" alt="polygon example" border=
-            "0"></a></td>
+            "0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.polyline" id=
       "Draw.polyline">polyline</a></td>
 
       <td>draw.polyline(x1, y1,...,xN, yN) -&gt; draw</td>
@@ -2074,14 +2084,15 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="polyline.rb.html" target=
             "_blank"><img src="ex/polyline.gif" alt=
-            "polyline example" border="0"></a></td>
+            "polyline example" border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.pop">pop</a></td>
+      <td class="methodname"><a name="Draw.pop" id=
+      "Draw.pop">pop</a></td>
 
       <td><i>draw</i>.pop -&gt; <i>draw</i></td>
     </tr>
@@ -2105,7 +2116,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.push">push</a></td>
+      <td class="methodname"><a name="Draw.push" id=
+      "Draw.push">push</a></td>
 
       <td><i>draw</i>.push -&gt; <i>draw</i></td>
     </tr>
@@ -2116,7 +2128,7 @@ draw.fill_opacity('40%')
       <td>
         Save the current state of the graphics context, including
         the attribute settings and the current set of primitives.
-        Use the <var>pop</var> primitive to restore the state.
+        Use the <code>pop</code> primitive to restore the state.
 
         <p><i>Note:</i> The push and pop primitives are probably
         not as useful in RMagick as they are in C language
@@ -2139,7 +2151,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.rectangle" id=
       "Draw.rectangle">rectangle</a></td>
 
       <td><i>draw</i>.rectangle(<i>x1</i>, <i>y1</i>, <i>x2</i>,
@@ -2174,13 +2186,12 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 12">
           <tr>
-            <td><code>draw.rectangle(20,20, 280,180)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="rectangle.rb.html" target=
             "_blank"><img src="ex/rectangle.gif" alt=
-            "rectangle example" border="0"></a></td>
+            "rectangle example" border="0" /></a></td>
+
+            <td valign="top"><code>draw.rectangle(20,20,
+            280,180)</code></td>
           </tr>
         </table>
       </td>
@@ -2189,7 +2200,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.rotate">rotate</a></td>
+      <td class="methodname"><a name="Draw.rotate" id=
+      "Draw.rotate">rotate</a></td>
 
       <td><i>draw</i>.rotate(<i>degrees</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -2214,13 +2226,11 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 13">
           <tr>
-            <td><code>draw.rotate(45)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="rotate.rb.html" target="_blank"><img src=
             "ex/rotate.gif" alt="rotate example" border=
-            "0"></a></td>
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.rotate(45)</code></td>
           </tr>
         </table>
       </td>
@@ -2233,7 +2243,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.roundrectangle" id=
       "Draw.roundrectangle">roundrectangle</a></td>
 
       <td><i>draw</i>.roundrectangle(<i>x1</i>, <i>y1</i>,
@@ -2273,21 +2283,20 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 14">
           <tr>
-            <td><code>draw.roundrectangle(20,20, 280,180, 8,
-            8)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="roundrect.rb.html" target=
             "_blank"><img src="ex/roundrect.gif" alt=
-            "roundrectangle example" border="0"></a></td>
+            "roundrectangle example" border="0" /></a></td>
+
+            <td valign="top"><code>draw.roundrectangle(20,20,
+            280,180, 8, 8)</code></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.scale">scale</a></td>
+      <td class="methodname"><a name="Draw.scale" id=
+      "Draw.scale">scale</a></td>
 
       <td><i>draw</i>.scale(<i>sx</i>, <i>sy</i>) -&gt;
       <i>draw</i></td>
@@ -2318,12 +2327,12 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 15">
           <tr>
-            <td><code>draw.scale(1.5, 1.25)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="scale.rb.html" target="_blank"><img src=
-            "ex/scale.gif" alt="scale example" border="0"></a></td>
+            "ex/scale.gif" alt="scale example" border=
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.scale(1.5,
+            1.25)</code></td>
           </tr>
         </table>
       </td>
@@ -2332,13 +2341,14 @@ draw.fill_opacity('40%')
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#Draw.affine">affine</a><br>
-      <a href="#Draw.skewx">skewx</a><br>
+      <td><a href="#Draw.affine">affine</a><br />
+      <a href="#Draw.skewx">skewx</a><br />
       <a href="#Draw.skewy">skewy</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.skewx">skewx</a></td>
+      <td class="methodname"><a name="Draw.skewx" id=
+      "Draw.skewx">skewx</a></td>
 
       <td><i>draw</i>.skewx(<i>aFloat</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -2361,12 +2371,11 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 16">
           <tr>
-            <td><code>draw.skewx(30)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="skewx.rb.html" target="_blank"><img src=
-            "ex/skewx.gif" alt="skewx example" border="0"></a></td>
+            "ex/skewx.gif" alt="skewx example" border=
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.skewx(30)</code></td>
           </tr>
         </table>
       </td>
@@ -2380,7 +2389,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.skewy">skewy</a></td>
+      <td class="methodname"><a name="Draw.skewy" id=
+      "Draw.skewy">skewy</a></td>
 
       <td><i>draw</i>.skewy(<i>aFloat</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -2403,12 +2413,11 @@ draw.fill_opacity('40%')
       <td>
         <table summary="example 17">
           <tr>
-            <td><code>draw.skewy(30)</code></td>
-          </tr>
-
-          <tr>
             <td><a href="skewy.rb.html" target="_blank"><img src=
-            "ex/skewy.gif" alt="skewy example" border="0"></a></td>
+            "ex/skewy.gif" alt="skewy example" border=
+            "0" /></a></td>
+
+            <td valign="top"><code>draw.skewy(30)</code></td>
           </tr>
         </table>
       </td>
@@ -2422,7 +2431,8 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.stroke">stroke</a></td>
+      <td class="methodname"><a name="Draw.stroke" id=
+      "Draw.stroke">stroke</a></td>
 
       <td><i>draw</i>.stroke(<i>aString</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -2453,7 +2463,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_antialias" id=
       "Draw.stroke_antialias">stroke_antialias</a></td>
 
       <td><i>draw</i>.stroke_antialias(<code>true</code> or
@@ -2474,7 +2484,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_dasharray" id=
       "Draw.stroke_dasharray">stroke_dasharray</a></td>
 
       <td><i>draw</i>.stroke_dasharray(<i>x1</i>,...,<i>xn</i>)
@@ -2510,7 +2520,7 @@ draw.fill_opacity('40%')
 
       <td><a href="stroke_dasharray.rb.html" target=
       "_blank"><img src="ex/stroke_dasharray.gif" alt=
-      "stroke_dasharray example" border="0"></a></td>
+      "stroke_dasharray example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -2521,7 +2531,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_dashoffset" id=
       "Draw.stroke_dashoffset">stroke_dashoffset</a></td>
 
       <td><i>draw</i>.stroke_dashoffset(<i>anInteger</i>) -&gt;
@@ -2556,7 +2566,7 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_linecap" id=
       "Draw.stroke_linecap">stroke_linecap</a></td>
 
       <td><i>draw</i>.stroke_linecap(<i>aString</i>) -&gt;
@@ -2590,14 +2600,14 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="stroke_linecap.rb.html" target=
             "_blank"><img src="ex/stroke_linecap.gif" alt=
-            "stroke_linecap example" border="0"></a></td>
+            "stroke_linecap example" border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_linejoin" id=
       "Draw.stroke_linejoin">stroke_linejoin</a></td>
 
       <td><i>draw</i>.stroke_linejoin(<i>aString</i>) -&gt;
@@ -2631,14 +2641,14 @@ draw.fill_opacity('40%')
           <tr>
             <td><a href="stroke_linejoin.rb.html" target=
             "_blank"><img src="ex/stroke_linejoin.gif" alt=
-            "stroke_linejoin example" border="0"></a></td>
+            "stroke_linejoin example" border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_miterlimit" id=
       "Draw.stroke_miterlimit">stroke_miterlimit</a></td>
 
       <td><i>draw</i>.stroke_miterlimit(<i>aFloat</i>) -&gt;
@@ -2669,11 +2679,11 @@ draw.fill_opacity('40%')
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_opacity" id=
       "Draw.stroke_opacity">stroke_opacity</a></td>
 
       <td><i>draw</i>.stroke_opacity(<i>aFloat</i>) -&gt;
-      <i>draw</i><br>
+      <i>draw</i><br />
       <i>draw</i>.stroke_opacity(<i>aString</i>) -&gt;
       <i>draw</i></td>
     </tr>
@@ -2709,12 +2719,12 @@ draw.stroke_opacity('40%')
     <tr>
       <td valign="top">See also</td>
 
-      <td><a href="#Draw.opacity">opacity</a><br>
+      <td><a href="#Draw.opacity">opacity</a><br />
       <a href="#Draw.fill_opacity">fill_opacity</a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.stroke_width" id=
       "Draw.stroke_width">stroke_width</a></td>
 
       <td><i>draw</i>.stroke_width(<i>anInteger</i>) -&gt;
@@ -2732,11 +2742,12 @@ draw.stroke_opacity('40%')
 
       <td><a href="stroke_width.rb.html" target="_blank"><img src=
       "ex/stroke_width.gif" alt="stroke_width example" border=
-      "0"></a></td>
+      "0" /></a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.text">text</a></td>
+      <td class="methodname"><a name="Draw.text" id=
+      "Draw.text">text</a></td>
 
       <td><i>draw</i>.text(<i>x</i>,<i>y</i>, <i>text</i>) -&gt;
       <i>draw</i></td>
@@ -2796,7 +2807,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
       <td valign="top">Example</td>
 
       <td><a href="text.rb.html" target="_blank"><img src=
-      "ex/text.gif" alt="text example" border="0"></a></td>
+      "ex/text.gif" alt="text example" border="0" /></a></td>
     </tr>
 
     <tr>
@@ -2806,7 +2817,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.text_align" id=
       "Draw.text_align">text_align</a></td>
 
       <td><i>draw</i>.text_align(<i>anAlignType</i>) -&gt;
@@ -2831,11 +2842,11 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
       <td><a href="text_align.rb.html" target="_blank"><img src=
       "ex/text_align.gif" alt="text_align example" border=
-      "0"></a></td>
+      "0" /></a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.text_anchor" id=
       "Draw.text_anchor">text_anchor</a></td>
 
       <td><i>draw</i>.text_anchor(<i>anAnchorType</i>) -&gt;
@@ -2859,7 +2870,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.text_antialias" id=
       "Draw.text_antialias">text_antialias</a></td>
 
       <td><i>draw</i>.antialias(<code>true</code> or
@@ -2892,14 +2903,14 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
           <tr>
             <td><a href="text_antialias.rb.html" target=
             "_blank"><img src="ex/text_antialias.jpg" alt=
-            "text_antialias example" border="0"></a></td>
+            "text_antialias example" border="0" /></a></td>
           </tr>
         </table>
       </td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.text_undercolor" id=
       "Draw.text_undercolor">text_undercolor</a></td>
 
       <td><i>draw</i>.undercolor(<i>aString</i>) -&gt;
@@ -2924,11 +2935,11 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
       <td><a href="text_undercolor.rb.html" target=
       "_blank"><img src="ex/text_undercolor.gif" alt=
-      "text_undercolor example" border="0"></a></td>
+      "text_undercolor example" border="0" /></a></td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.translate" id=
       "Draw.translate">translate</a></td>
 
       <td><i>draw</i>.translate(<i>tx</i>, <i>ty</i>) -&gt;
@@ -2960,7 +2971,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
       <td><a href="translate.rb.html" target="_blank"><img src=
       "ex/translate.gif" alt="translate example" border=
-      "0"></a></td>
+      "0" /></a></td>
     </tr>
 
     <tr>
@@ -2976,7 +2987,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.annotate" id=
       "Draw.annotate">annotate</a></td>
 
       <td><em>draw.</em>annotate(<i>img, width, height, x, y,
@@ -2989,7 +3000,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
       <td>
         <p>Annotates a image with text. The text is positioned
-        according to the <var>gravity</var> attribute around the
+        according to the <code>gravity</code> attribute around the
         rectangle described by the x, y, width, and height
         arguments. If either of the width or height arguments are
         omitted, uses the image width - x and the image height - y
@@ -3044,7 +3055,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <tr>
       <td valign="top">Example</td>
 
-      <td>See <a name="#attribute writers">attribute writers</a>,
+      <td>See <a href="#attribute_writers">attribute writers</a>,
       also <a href="gravity.rb.html" target=
       "_blank">gravity.rb</a></td>
     </tr>
@@ -3069,8 +3080,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
         <table summary="annotate special characters" border="1"
         bgcolor="#F0F0F0">
           <caption>
-            <b><a name="Draw.spec_chars_table">Special
-            characters</a></b>
+            <b><a name="Draw.spec_chars_table" id=
+            "Draw.spec_chars_table">Special characters</a></b>
           </caption>
 
           <tr>
@@ -3219,7 +3230,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Draw.draw">draw</a></td>
+      <td class="methodname"><a name="Draw.draw" id=
+      "Draw.draw">draw</a></td>
 
       <td><i>draw</i>.draw(<i>img</i>) -&gt; <i>draw</i></td>
     </tr>
@@ -3254,20 +3266,20 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <tr>
       <td valign="top">Notes</td>
 
-      <td>Calling <var>draw</var> does not affect the list of
-      primitives. Each time you call <var>draw</var> the primitives
-      will be re-executed from the beginning. However, if you
-      establish the initial value of some draw object attributes
-      using the optional parameters to <var>new</var>, or by
-      setting one or more <a href=
+      <td>Calling <code>draw</code> does not affect the list of
+      primitives. Each time you call <code>draw</code> the
+      primitives will be re-executed from the beginning. However,
+      if you establish the initial value of some draw object
+      attributes using the optional parameters to <code>new</code>,
+      or by setting one or more <a href=
       "#attribute_writers">attributes</a>, keep in mind that the
-      initial state will not be restored after <var>draw</var>
+      initial state will not be restored after <code>draw</code>
       completes. If you want to use the draw object again, you must
       reset the attributes yourself.</td>
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.get_type_metrics" id=
       "Draw.get_type_metrics">get_type_metrics</a></td>
 
       <td><i>draw</i>.get_type_metrics([<i>anImage</i>,]
@@ -3291,7 +3303,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
           <dd>The image on which the string will be rendered.
           &times;Magick uses the attributes of the image (font
           name, pointsize, etc.) to compute the metrics. If this
-          argument is omitted, <var>get_type_metrics</var>
+          argument is omitted, <code>get_type_metrics</code>
           substitutes a dummy image with default attributes. The
           <i>string</i> argument may not contain any of the special
           characters shown in the table <a href=
@@ -3467,7 +3479,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name=
+      <td class="methodname"><a name="Draw.inspect" id=
       "Draw.inspect">inspect</a></td>
 
       <td><i>draw</i>.inspect -&gt; <i>draw</i></td>
@@ -3477,7 +3489,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
       <td valign="top">Description</td>
 
       <td>Displays the list of primitives that have been added to
-      the <var>draw</var> object.</td>
+      the <code>draw</code> object.</td>
     </tr>
 
     <tr>
@@ -3497,7 +3509,7 @@ draw.inspect &raquo;
       </td>
     </tr>
   </table>
-  <hr>
+  <hr />
 
   <table summary="navigation" align="right" class="nav"
   cellpadding="3">

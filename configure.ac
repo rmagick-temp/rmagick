@@ -162,9 +162,6 @@ AC_CACHE_CHECK(for documentation base URI, rm_cv_path_doc_base_uri,
     fi
   ])
 
-MAGICKBASEURI="$rm_cv_path_doc_base_uri"
-AC_SUBST(MAGICKBASEURI)
-
 # Options to pass to ruby config step
 
 RUBY_CONFIG_OPTS=''
@@ -181,7 +178,7 @@ fi
 
 AC_ARG_WITH(imdoc-base-uri,
     AC_HELP_STRING([--with-imdoc-base-uri=URI], [ImageMagick/GraphicsMagick documentation URI]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --imdoc-base-uri=$withval"],
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --imdoc-base-uri=$withval"; rm_cv_path_doc_base_uri=$withval],
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --imdoc-base-uri=$rm_cv_path_doc_base_uri"])
 
 AC_ARG_WITH(doc-dir,
@@ -237,6 +234,8 @@ AC_ARG_ENABLE(allow-example-errors,
     AC_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [--disable-allow-example-errors]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --allow-example-errors"], )
 
+MAGICKBASEURI="$rm_cv_path_doc_base_uri"
+AC_SUBST(MAGICKBASEURI)
 AC_SUBST(RUBY)
 AC_SUBST(RUBY_CONFIG_OPTS)
 

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.37 2003/12/24 23:33:55 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.38 2003/12/25 21:15:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -506,6 +506,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "palette?", Image_palette_q, 0);
     rb_define_method(Class_Image, "pixel_color", Image_pixel_color, -1);
 //  rb_define_method(Class_Image, "plasma", Image_plasma, 6);
+    rb_define_method(Class_Image, "preview", Image_preview, 1);
     rb_define_method(Class_Image, "profile!", Image_profile_bang, 2);
     rb_define_method(Class_Image, "quantize", Image_quantize, -1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
@@ -988,6 +989,39 @@ Init_RMagick(void)
     ENUM_VAL(PaintMethod, FillToBorderMethod);
     ENUM_VAL(PaintMethod, ResetMethod);
 
+    // PreviewType
+    DEF_ENUM(PreviewType);
+    ENUM_VAL(PreviewType, UndefinedPreview);
+    ENUM_VAL(PreviewType, RotatePreview);
+    ENUM_VAL(PreviewType, ShearPreview);
+    ENUM_VAL(PreviewType, RollPreview);
+    ENUM_VAL(PreviewType, HuePreview);
+    ENUM_VAL(PreviewType, SaturationPreview);
+    ENUM_VAL(PreviewType, BrightnessPreview);
+    ENUM_VAL(PreviewType, GammaPreview);
+    ENUM_VAL(PreviewType, SpiffPreview);
+    ENUM_VAL(PreviewType, DullPreview);
+    ENUM_VAL(PreviewType, GrayscalePreview);
+    ENUM_VAL(PreviewType, QuantizePreview);
+    ENUM_VAL(PreviewType, DespecklePreview);
+    ENUM_VAL(PreviewType, ReduceNoisePreview);
+    ENUM_VAL(PreviewType, AddNoisePreview);
+    ENUM_VAL(PreviewType, SharpenPreview);
+    ENUM_VAL(PreviewType, BlurPreview);
+    ENUM_VAL(PreviewType, ThresholdPreview);
+    ENUM_VAL(PreviewType, EdgeDetectPreview);
+    ENUM_VAL(PreviewType, SpreadPreview);
+    ENUM_VAL(PreviewType, SolarizePreview);
+    ENUM_VAL(PreviewType, ShadePreview);
+    ENUM_VAL(PreviewType, RaisePreview);
+    ENUM_VAL(PreviewType, SegmentPreview);
+    ENUM_VAL(PreviewType, SwirlPreview);
+    ENUM_VAL(PreviewType, ImplodePreview);
+    ENUM_VAL(PreviewType, WavePreview);
+    ENUM_VAL(PreviewType, OilPaintPreview);
+    ENUM_VAL(PreviewType, CharcoalDrawingPreview);
+    ENUM_VAL(PreviewType, JPEGPreview);
+
     // RenderingIntent
     DEF_ENUM(RenderingIntent);
     ENUM_VAL(RenderingIntent, UndefinedIntent);
@@ -1128,7 +1162,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/24 23:33:55 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/25 21:15:37 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

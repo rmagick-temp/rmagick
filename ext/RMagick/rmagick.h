@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.31 2003/12/24 23:33:55 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.32 2003/12/25 21:15:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -197,6 +197,7 @@ EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
 EXTERN VALUE Class_NoiseType;
 EXTERN VALUE Class_PaintMethod;
+EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
 EXTERN VALUE Class_ResolutionType;
 EXTERN VALUE Class_StretchType;
@@ -622,6 +623,7 @@ extern VALUE Image_palette_q(VALUE);
 extern VALUE Image_ping(VALUE, VALUE);
 extern VALUE Image_pixel_color(int, VALUE *, VALUE);
 // VALUE Image_plasma(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_preview(VALUE, VALUE);
 extern VALUE Image_profile_bang(VALUE, VALUE, VALUE);
 extern VALUE Image_quantize(int, VALUE *, VALUE);
 extern VALUE Image_quantization_error(VALUE);

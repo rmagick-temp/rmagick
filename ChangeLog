@@ -11,9 +11,9 @@ RMagick 1.4.0
     o Added tint method, each_profile, channel_extrema, channel_compare,
       channel_depth, quantum_depth methods to Image class (IM 5.5.8 only)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
+    o Added border!, preview methods to Image class
     o Added fcmp, intensity to Pixel class
     o Added Version_long constant
-    o Added border! method to Image class
     o The 'fuzz' attribute in the Image and ImageInfo classes now
       accepts a percentage value as well as a numeric value.
     o Added Geometry class and changed all methods that accept a geometry

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.29 2003/12/24 23:33:55 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.30 2003/12/25 21:15:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4515,6 +4515,30 @@ Image_plasma(
     return rm_image_new(new_image);
 }
 #endif
+
+
+/*
+    Method:  preview
+    Purpose: Call PreviewImage
+*/
+VALUE
+Image_preview(VALUE self, VALUE preview)
+{
+    Image *image, *new_image;
+    PreviewType preview_type;
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+
+    VALUE_TO_ENUM(preview, preview_type, PreviewType);
+
+    Data_Get_Struct(self, Image, image);
+    new_image = PreviewImage(image, preview_type, &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+}
+
 
 /*
     Method:     Image#profile!(name, profile)

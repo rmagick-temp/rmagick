@@ -286,15 +286,17 @@
 
                 <li><a href=
                 "#Image.ordered_dither">ordered_dither</a></li>
+
+                <li><a href="#Image.palette_q">palette?</a></li>
               </ul>
             </td>
 
             <td valign="top">
               <ul>
-                <li><a href="#Image.palette_q">palette?</a></li>
-
                 <li><a href=
                 "#Image.pixel_color">pixel_color</a></li>
+
+                <li><a href="#Image.preview">preview</a></li>
 
                 <li><a href="#Image.profile_bang">profile!</a></li>
 
@@ -5297,6 +5299,104 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
 
       <td class="example"><code>old =
       image.pixel_color(20,40,"white")</code></td>
+    </tr>
+
+    <tr class="method">
+      <td class="methodname"><a name=
+      "Image.preview">preview</a></td>
+
+      <td><i>image</i>.preview(<i>aPreviewType</i>) -&gt;
+      <i>anImage</i></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>
+        Creates an image that contains 9 small versions of the
+        receiver image. The center image is the unchanged receiver.
+        The other 8 images are variations created by transforming
+        the receiver according to the specified preview type with
+        varying parameters.
+
+        <p>A preview image is an easy way to "try out" a
+        transformation method.</p>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top">Arguments</td>
+
+      <td>
+        <p>One of the following PreviewType constants:</p>
+
+        <table summary="preview types" border="0">
+          <tr valign="top">
+            <td>RotatePreview<br>
+            ShearPreview<br>
+            RollPreview<br>
+            HuePreview<br>
+            SaturationPreview<br>
+            BrightnessPreview<br>
+            GammaPreview<br>
+            SpiffPreview<br>
+            DullPreview<br>
+            GrayscalePreview<br>
+            QuantizePreview<br>
+            DespecklePreview<br>
+            ReduceNoisePreview<br>
+            AddNoisePreview<br>
+            SharpenPreview</td>
+
+            <td>BlurPreview<br>
+            ThresholdPreview<br>
+            EdgeDetectPreview<br>
+            SpreadPreview<br>
+            SolarizePreview<br>
+            ShadePreview<br>
+            RaisePreview<br>
+            SegmentPreview<br>
+            SwirlPreview<br>
+            ImplodePreview<br>
+            WavePreview<br>
+            OilPaintPreview<br>
+            CharcoalDrawingPreview<br>
+            JPEGPreview</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top">Returns</td>
+
+      <td>A new image</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Example</td>
+
+      <td>
+        <table summary="example" border="0">
+          <tr>
+            <td>This half-size preview demonstrates the
+            SolarizePreview argument.</td>
+          </tr>
+
+          <tr>
+            <td><a href="preview.rb.html" target="_blank"><img src=
+            "ex/preview.jpg" alt="preview example"></a></td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top">&times;Magick API</td>
+
+      <td><a href=
+      "http://www.imagemagick.org/www/api/transform.html#previewimage">
+      PreviewImage</a></td>
     </tr>
 
     <tr class="method">

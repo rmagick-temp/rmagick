@@ -16,4 +16,7 @@ DESCRIPTION
   s.autorequire = %q{RMagick}
   s.rubyforge_project = %q{rmagick}
   s.extensions = %w{configure}
+  s.has_rdoc = false
+  s.required_ruby_version = '>= 1.6.7'
+  s.requirements << 'ImageMagick 6.0.0 or later, or GraphicsMagick 1.0.0 or later'
 end

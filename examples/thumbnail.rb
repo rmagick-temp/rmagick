@@ -4,6 +4,10 @@ include Magick
 puts <<END_INFO
 
 This example demonstrates how to make a thumbnail of an image.
+An image is resized to the target size (retaining its original
+aspect ratio, of course) and then "mounted" on a square background
+with raised edges.
+
 Usage:
 
     ruby thumbnail.rb <filename <size>>
@@ -31,7 +35,9 @@ end
 
 geom = "#{size}x#{size}"
 
-# Read the image and resize it.
+# Read the image and resize it. The `change_geometry' method
+# computes the new image geometry and yields to a block. The
+# return value of the block is the return value of the method.
 
 img = Image.read(image)[0]
 img = img.change_geometry(geom) { |cols, rows| img.thumbnail(cols, rows) }

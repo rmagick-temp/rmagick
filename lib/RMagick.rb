@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.13 2004/01/01 01:32:30 rmagick Exp $
+# $Id: RMagick.rb,v 1.14 2004/01/26 20:15:35 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1095,6 +1095,9 @@ public
 
     # Return the current image
     def cur_image
+        if ! @scene
+            raise IndexError, "no images in this list"
+        end
         self[@scene]
     end
 

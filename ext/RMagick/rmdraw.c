@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.1 2003/09/29 23:56:15 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.2 2003/10/02 12:41:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -23,7 +23,7 @@ Draw_affine_eq(VALUE self, VALUE matrix)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    Struct_to_AffineMatrix(&draw->info->affine, matrix);
+    AffineMatrix_to_AffineMatrix(&draw->info->affine, matrix);
     return self;
 }
 

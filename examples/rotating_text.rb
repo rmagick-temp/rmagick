@@ -1,9 +1,15 @@
+# Demonstrate the Draw#rotation= method by producing
+# an animated MIFF file showing a rotating text string.
+
 
 require 'RMagick'
 include Magick
 
-# Demonstrate the Draw#rotation= method by producing
-# an animated MIFF file showing a rotating text string.
+puts <<END_INFO
+Demonstrate the rotation= attribute in the Draw class
+by producing an animated image. View the output image
+by entering the command: animate rotating_text.miff
+END_INFO
 
 text = Draw.new
 text.pointsize = 28
@@ -37,5 +43,6 @@ animation.delay = 8
 # ignored if ImageMagick not configured with ZLIB
 animation.compression = ZipCompression
 #animation.animate
-animation.write("rotated_text.miff")
+puts "...Writing rotating_text.miff"
+animation.write("rotating_text.miff")
 exit

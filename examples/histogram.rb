@@ -1,5 +1,6 @@
 # This is the prototype for a new HISTOGRAM coder to
-# be added to the next release of GraphicsMagick.
+# be added to the next release of GraphicsMagick. Specify
+# an image filename as an argument.
 
 require 'RMagick'
 
@@ -110,30 +111,36 @@ Colors: #{number_colors}
         # Make the color histogram. Quantize the image to 256 colors if necessary.
         def color_freq(fg, bg)
             img = number_colors > 256 ? quantize(256) : self
-            hist = img.color_histogram
             
-            pixels = hist.keys.sort_by {|pixel| hist[pixel] }
-            
-            scale = HISTOGRAM_ROWS / (hist.values.max*AIR_FACTOR)
             histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
                 self.background_color = bg
                 self.border_color = fg
                 }
             
-            gc = Draw.new
-            gc.affine(1, 0, 0, -scale, 0, HISTOGRAM_ROWS)
-            width = 256.0/img.number_colors
-            gc.stroke_width(width.to_i)
+            begin
+                hist = img.color_histogram
+                pixels = hist.keys.sort_by {|pixel| hist[pixel] }
             
-            start = 256 - img.number_colors
-            pixels.each { |pixel|
-                gc.stroke(pixel.to_color)
-                gc.line(start, 0, start, hist[pixel])
-                start += width
-            }
-            
-            gc.draw(histogram)
-            
+                scale = HISTOGRAM_ROWS / (hist.values.max*AIR_FACTOR)
+                
+                gc = Draw.new
+                gc.affine(1, 0, 0, -scale, 0, HISTOGRAM_ROWS)
+                width = 256.0/img.number_colors
+                gc.stroke_width(width.to_i)
+                
+                start = 256 - img.number_colors
+                pixels.each { |pixel|
+                    gc.stroke(pixel.to_color)
+                    gc.line(start, 0, start, hist[pixel])
+                    start += width
+                }
+                
+                gc.draw(histogram)
+            rescue NotImplementedError
+                $stderr.puts "The color_histogram method is not supported by this version "+
+                             "of ImageMagick/GraphicsMagick"
+            end
+                        
             histogram['Label'] = 'Color Frequency'            
             return histogram            
         end
@@ -217,22 +224,30 @@ Colors: #{number_colors}
     end
 end
 
+puts <<END_INFO
+
+This example shows how to get pixel-level access to an image.
+Usage: histogram.rb <image-filename>
+
+END_INFO
 
 # Get filename from command line.
-if !ARGV[0] || ARGV[0] == '-?' then
-    puts "Usage: histogram.rb <image-file>"
-    exit
+if !ARGV[0] then
+    puts "No filename argument. Defaulting to Hot_Air_Balloons.jpg"
+    filename = '../doc/ex/images/Hot_Air_Balloons.jpg'
+else
+    filename = ARGV[0]
 end
 
 # Only process first frame if multi-frame image
-image = Magick::Image.read(ARGV[0])
+image = Magick::Image.read(filename)
 if image.length > 1
     puts "Charting 1st image"
 end
 image = image.first
 
 # Give the user something to look at while we're working.
-name = File.basename(ARGV[0]).sub(/\..*?$/,'')
+name = File.basename(filename).sub(/\..*?$/,'')
 $defout.sync = true
 printf "Creating #{name}_Histogram.miff"
 

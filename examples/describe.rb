@@ -5,6 +5,18 @@
 
 require 'RMagick'
 
+puts <<END_INFO
+
+This example shows how to extract attributes from an image.
+
+END_INFO
+
+if ARGV.length == 0
+    puts "Specify one or more image filenames as arguments."
+    exit
+end
+
+
 ARGV.each { |file|
     puts file
     img = Magick::Image::read(file).first

@@ -8,6 +8,14 @@
 require 'RMagick'
 include Magick
 
+puts <<END_INFO
+
+This example demonstrates the PATTERN: image format, which is
+new in ImageMagick 5.5.7. Specify the name of any of the
+supported patterns as an argument. For example, try "checkerboard".
+        
+END_INFO
+
 class PatternFill < Magick::TextureFill
     def initialize(name='bricks')
         @pat_img = Magick::Image.read("pattern:#{name}").first
@@ -15,11 +23,16 @@ class PatternFill < Magick::TextureFill
     end
 end
 
-raise(ArgumentError, "No pattern name specified") unless ARGV[0]
+if ARGV[0]
+    pattern = ARGV[0]
+else
+    $stderr.puts "Defaulting to checkerboard pattern."
+    pattern = 'checkerboard'
+end
 
 # Create a sample image that is 100x bigger than the pattern.
-attrs = Image.ping("pattern:#{ARGV[0]}").first
+attrs = Image.ping("pattern:#{pattern}").first
 
-tryit = Image.new(10*attrs.columns, 10*attrs.rows, PatternFill.new(ARGV[0]))
+tryit = Image.new(10*attrs.columns, 10*attrs.rows, PatternFill.new(pattern))
 tryit.display
 exit

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
 
   <title>RMagick: Common Tasks</title>
   <meta http-equiv="Content-Type" content=
@@ -13,9 +13,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <style type="text/css">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
@@ -27,7 +27,7 @@
 
 
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -62,6 +62,8 @@
       <li><a href="#compressing">Compressing image files</a></li>
 
       <li><a href="#shadow">Making a drop shadow</a></li>
+
+      <li><a href="#memory">Relieving memory problems</a></li>
     </ul>
   </div>
 
@@ -226,6 +228,33 @@ img.write("myimage.jpg") { self.quality = 50 }
     "ex/drop_shadow.gif" title="Click to see the example script"
     alt="drop shadow example" /></a>
   </div>
+
+  <h2 id="memory">Relieving memory problems</h2>
+
+  <p>Programs that process many large images may run out of memory.
+  The symptoms of this problem include unusual error messages or
+  halting at unpredictable places. In general, though, a program
+  that handles <code>n</code> images just fine suddenly stops when
+  asked to handle <code>n+1</code>. You may be able to resolve this
+  problem by calling <code>GC.start</code> at intervals during your
+  program's execution.</p>
+
+  <p>Usually Ruby programs can rely on automatic garbage collection
+  to clean up unused objects. The Ruby interpreter typically runs
+  the garbage collector after allocating a fixed (large) amount of
+  memory. However, most of the memory used for images is allocated
+  by &times;Magick, not Ruby, so the Ruby interpreter doesn't
+  "know" that large amounts of memory are being allocated and it
+  doesn't run the garbage collector. Conversely, RMagick doesn't
+  "know" which image objects are unused until the garbage collector
+  identifies them. Therefore RMagick doesn't destroy image objects
+  even when they are no longer needed by your program.</p>
+
+  <p>If your program encounters an out-of-memory condition, you may
+  be able to circumvent this problem by adding calls to
+  <code>GC.start</code> at strategic places in the script. This
+  call forces GC to run and identify unused image objects so
+  RMagick can destroy them.</p>
   <hr />
 
   <p class="spacer"> </p>

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.21 2004/06/15 00:01:50 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.22 2004/08/18 23:22:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -225,7 +225,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     return self;
 
 #else
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 #endif
 }
@@ -374,13 +374,13 @@ Info_tile_eq(VALUE self, VALUE tile)
 VALUE
 Info_extract(VALUE self)
 {
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 }
 VALUE
 Info_extract_eq(VALUE self, VALUE extr)
 {
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 }
 

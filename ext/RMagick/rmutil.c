@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.40 2004/07/15 22:39:58 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.41 2004/08/18 23:22:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2407,7 +2407,7 @@ rm_delete_temp_image(char *tmpnam)
 }
 
 /*
-    External:   not_implemented
+    External:   rm_not_implemented
     Purpose:    raise NotImplementedError
     Notes:      Called when a xMagick API is not available.
                 Replaces Ruby's rb_notimplement function.

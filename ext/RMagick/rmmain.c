@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.64 2004/08/02 22:39:15 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.65 2004/08/18 23:22:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -437,7 +437,7 @@ Magick_set_log_format(VALUE class, VALUE format)
     SetLogFormat(STRING_PTR(format));
     return class;
 #else
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 #endif
 }
@@ -1124,7 +1124,7 @@ Init_RMagick(void)
         ENUMERATOR(ThresholdCompositeOp)
         ENUMERATOR(XorCompositeOp)
 
-#if defined(HAVE_COLORIZECOMPOSITEOP)
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
         ENUMERATOR(ColorDodgeCompositeOp)
         ENUMERATOR(ExclusionCompositeOp)
         ENUMERATOR(HardLightCompositeOp)
@@ -1443,7 +1443,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/08/02 22:39:15 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/08/18 23:22:36 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -270,15 +270,16 @@
       <h5>Attributes</h5>
 
       <p>A geometry string has the general form
-      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object, the
-      <code>width</code> attribute specifies the W value. The
-      <code>height</code> attribute specifies the H value. The
-      <code>x</code> and <code>y</code> attributes specify the x
-      and y values, respectively. If any of these attributes is
-      omitted the default is nil or 0.</p>
-
-      <p>The flag attribute is one of the constants shown here:</p>
-
+      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object,
+      <dl>
+        <dt>width</dt>
+        <dd>specifies the W value</dd>
+        <dt>height</dt>
+        <dd>specifies the H value</dd>
+        <dt>x,  y</dt>
+        <dd>specify the x and y values, respectively</dd>
+        <dt>flag</dt>
+        <dd>one of the constants shown in this table:
       <table summary="geometry flag constants" class=
       "simple_table">
         <caption>
@@ -353,6 +354,10 @@
           the image in pixels.</td>
         </tr>
       </table>
+        </dd>
+      </dl>
+      <p>If any attribute is omitted the default is nil or 0.</p>
+
 
       <h5>Example</h5>
       <pre>

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmimage.c,v 1.2 2003/07/12 18:54:02 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -22,6 +22,8 @@ typedef Image *(magnifier_t)(const Image *, ExceptionInfo *);
 typedef Image *(reader_t)(const Info *, ExceptionInfo *);
 typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned long,
                           ExceptionInfo *);
+typedef unsigned int (thresholder_t)(Image *, const char *);
+
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
@@ -29,6 +31,7 @@ static VALUE rd_image(VALUE, VALUE, reader_t);
 static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
+static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 
 static ImageAttribute *Next_Attribute;
 
@@ -544,63 +547,42 @@ Image_channel(VALUE self, VALUE channel)
     return rm_image_new(new_image);
 }
 
+
+/*
+ *  Method:     Image#black_threshold(red_channel [, green_channel
+ *                                    [, blue_channel [, opacity_channel]]]);
+ *  Purpose:    Call BlackThresholdImage
+*/
+VALUE
+Image_black_threshold(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_BLACKTHRESHOLDIMAGE)
+    return threshold_image(argc, argv, self, BlackThresholdImage);
+#else
+    rb_notimplement();
+#endif
+}
+
+
+
 /*
     Method:     Image#channel_threshold(red_channel, green_channel=MaxRGB,
-                                        blue_channel=MaxRGB, opacity_channel=MaxRGB0
+                                        blue_channel=MaxRGB, opacity_channel=MaxRGB)
     Purpose:    Same as Image#threshold except that you can specify
                 a separate threshold for each channel
 */
 VALUE
 Image_channel_threshold(int argc, VALUE *argv, VALUE self)
 {
-    Image *image, *new_image;
-    double red, green, blue, opacity;
-    char ctarg[200];
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-
-    switch (argc)
-    {
-        case 4:
-            red     = NUM2DBL(argv[0]);
-            green   = NUM2DBL(argv[1]);
-            blue    = NUM2DBL(argv[2]);
-            opacity = NUM2DBL(argv[3]);
-            sprintf(ctarg, "%f,%f,%f,%f", red, green, blue, opacity);
-            break;
-        case 3:
-            red     = NUM2DBL(argv[0]);
-            green   = NUM2DBL(argv[1]);
-            blue    = NUM2DBL(argv[2]);
-            sprintf(ctarg, "%f,%f,%f", red, green, blue);
-            break;
-        case 2:
-            red     = NUM2DBL(argv[0]);
-            green   = NUM2DBL(argv[1]);
-            sprintf(ctarg, "%f,%f", red, green);
-            break;
-        case 1:
-            red     = NUM2DBL(argv[0]);
-            sprintf(ctarg, "%f", red);
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
-    }
-
-    GetExceptionInfo(&exception);
-    new_image = CloneImage(image, 0, 0, True, &exception);
-    HANDLE_ERROR
-
+    return threshold_image(argc, argv, self,
 #if defined(HAVE_THRESHOLDIMAGECHANNEL)
-    (void) ThresholdImageChannel(new_image, ctarg);
+                         ThresholdImageChannel
 #else
-    (void) ChannelThresholdImage(new_image, ctarg);
+                         ChannelThresholdImage
 #endif
-    HANDLE_IMG_ERROR(new_image)
-
-    return rm_image_new(new_image);
+                                              );
 }
+
 
 /*
     Method:     Image#charcoal(radius=0.0, sigma=1.0)
@@ -4979,6 +4961,63 @@ Image_threshold(VALUE self, VALUE threshold)
 
 
 /*
+ *  Static:     threshold_image
+ *  Purpose:    call one of the xxxxThresholdImage methods
+*/
+static
+VALUE threshold_image(
+    int argc,
+    VALUE *argv,
+    VALUE self,
+    thresholder_t thresholder)
+{
+    Image *image, *new_image;
+    double red, green, blue, opacity;
+    char ctarg[200];
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    switch (argc)
+    {
+        case 4:
+            red     = NUM2DBL(argv[0]);
+            green   = NUM2DBL(argv[1]);
+            blue    = NUM2DBL(argv[2]);
+            opacity = NUM2DBL(argv[3]);
+            sprintf(ctarg, "%f,%f,%f,%f", red, green, blue, opacity);
+            break;
+        case 3:
+            red     = NUM2DBL(argv[0]);
+            green   = NUM2DBL(argv[1]);
+            blue    = NUM2DBL(argv[2]);
+            sprintf(ctarg, "%f,%f,%f", red, green, blue);
+            break;
+        case 2:
+            red     = NUM2DBL(argv[0]);
+            green   = NUM2DBL(argv[1]);
+            sprintf(ctarg, "%f,%f", red, green);
+            break;
+        case 1:
+            red     = NUM2DBL(argv[0]);
+            sprintf(ctarg, "%f", red);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    (thresholder)(new_image, ctarg);
+    HANDLE_IMG_ERROR(new_image)
+
+    return rm_image_new(new_image);
+}
+
+
+/*
     Method:     Image#thumbnail(scale) or (cols, rows)
                 Image#thumbnail!(scale) or (cols, rows)
     Purpose:    fast resize for thumbnail images
@@ -5323,6 +5362,23 @@ Image_wave(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     return rm_image_new(new_image);
 }
+
+
+/*
+ *  Method:     Image#white_threshold(red_channel [, green_channel
+ *                                    [, blue_channel [, opacity_channel]]]);
+ *  Purpose:    Call WhiteThresholdImage
+*/
+VALUE
+Image_white_threshold(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_WHITETHRESHOLDIMAGE)
+    return threshold_image(argc, argv, self, WhiteThresholdImage);
+#else
+    rb_notimplement();
+#endif
+}
+
 
 /*
   Method:   Image#write(filename)

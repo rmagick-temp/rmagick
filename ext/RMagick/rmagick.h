@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmagick.h,v 1.2 2003/07/12 18:54:02 tim Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -396,6 +396,7 @@ extern VALUE Image_affine_transform(VALUE, VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);
 extern VALUE Image_properties(VALUE);
+extern VALUE Image_black_threshold(int, VALUE *, VALUE);
 extern VALUE Image_blur_image(int, VALUE *, VALUE);
 extern VALUE Image_border(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_capture(int, VALUE *, VALUE);
@@ -504,6 +505,7 @@ extern VALUE Image_to_color(VALUE, VALUE);
 extern VALUE Image_transparent(int, VALUE *, VALUE);
 extern VALUE Image_unsharp_mask(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_wave(int, VALUE *, VALUE);
+extern VALUE Image_white_threshold(int, VALUE *, VALUE);
 extern VALUE Image_write(VALUE, VALUE);
 
 extern VALUE rm_image_new(Image *);

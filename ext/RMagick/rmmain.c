@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmmain.c,v 1.2 2003/07/12 18:54:02 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1505,6 +1505,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "[]", Image_aref, 1);
     rb_define_method(Class_Image, "[]=", Image_aset, 2);
     rb_define_method(Class_Image, "properties", Image_properties, 0);
+    rb_define_method(Class_Image, "black_threshold", Image_black_threshold, -1);
     rb_define_method(Class_Image, "blur_image", Image_blur_image, -1);
     rb_define_method(Class_Image, "border", Image_border, 3);
     rb_define_method(Class_Image, "changed?", Image_changed_q, 0);
@@ -1607,6 +1608,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "transparent", Image_transparent, -1);
     rb_define_method(Class_Image, "unsharp_mask", Image_unsharp_mask, 4);
     rb_define_method(Class_Image, "wave", Image_wave, -1);
+    rb_define_method(Class_Image, "white_threshold", Image_white_threshold, -1);
     rb_define_method(Class_Image, "write", Image_write, 1);
 
     // class Magick::ImageList methods (in addition to the methods defined in RMagick.rb)

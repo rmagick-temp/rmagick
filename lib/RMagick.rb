@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.8 2003/09/26 00:18:13 rmagick Exp $
+# $Id: RMagick.rb,v 1.6.2.1 2003/09/26 13:06:43 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -101,9 +101,7 @@ class Draw
 
     # Draw a bezier curve.
     def bezier(*points)
-        if points.length == 0
-            raise ArgumentError, "no points specified"
-        elsif points.length % 2 != 0
+        if points.length % 2 != 0
             raise ArgumentError, "odd number of arguments specified"
         end
         primitive "bezier " + points.join(',')
@@ -115,8 +113,8 @@ class Draw
     end
 
     # Invoke a clip-path defined by def_clip_path.
-    def clip_path(name)
-        primitive "clip-path #{name}"
+    def clip_path(path)
+        primitive "clip-path #{path}"
     end
 
     # Define the clipping rule.
@@ -307,20 +305,16 @@ class Draw
 
     # Draw a polygon
     def polygon(*points)
-        if points.length == 0
-            raise ArgumentError, "no points specified"
-        elsif points.length % 2 != 0
-            raise ArgumentError, "odd number of points specified"
+        if points.length % 2 != 0
+            raise ArgumentError, "odd number of arguments specified"
         end
         primitive "polygon " + points.join(',')
     end
 
     # Draw a polyline
     def polyline(*points)
-        if points.length == 0
-            raise ArgumentError, "no points specified"
-        elsif points.length % 2 != 0
-            raise ArgumentError, "odd number of points specified"
+        if points.length % 2 != 0
+            raise ArgumentError, "odd number of arguments specified"
         end
         primitive "polyline " + points.join(',')
     end
@@ -412,7 +406,7 @@ class Draw
     end
 
     # Specify the initial offset in the dash pattern
-    def stroke_dashoffset(value=0)
+    def stroke_dashoffset(value)
         primitive "stroke-dashoffset #{value}"
     end
 
@@ -548,9 +542,9 @@ class Image
     # Make the pixel at (x,y) transparent.
     def matte_point(x, y)
         f = copy
-        f.opacity = OpaqueOpacity unless f.matte
+        f.opacity = Magick::OpaqueOpacity unless f.matte
         pixel = f.pixel_color(x,y)
-        pixel.opacity = TransparentOpacity
+        pixel.opacity = Magick::TransparentOpacity
         f.pixel_color(x, y, pixel)
         return f
     end
@@ -559,7 +553,7 @@ class Image
     # pixel at (x, y).
     def matte_replace(x, y)
         f = copy
-        f.opacity = OpaqueOpacity unless f.matte
+        f.opacity = Magick::OpaqueOpacity unless f.matte
         target = f.pixel_color(x, y)
         f.transparent(target)
     end
@@ -568,18 +562,18 @@ class Image
     # at (x,y) and is a neighbor.
     def matte_floodfill(x, y)
         f = copy
-        f.opacity = OpaqueOpacity unless f.matte
+        f.opacity = Magick::OpaqueOpacity unless f.matte
         target = f.pixel_color(x, y)
-        f.matte_flood_fill(target, TransparentOpacity,
-                           x, y, FloodfillMethod)
+        f.matte_flood_fill(target, Magick::TransparentOpacity,
+                           x, y, Magick::FloodfillMethod)
     end
 
     # Make transparent any neighbor pixel that is not the border color.
     def matte_fill_to_border(x, y)
         f = copy
         f.opacity = Magick::OpaqueOpacity unless f.matte
-        f.matte_flood_fill(border_color, TransparentOpacity,
-                           x, y, FillToBorderMethod)
+        f.matte_flood_fill(border_color, Magick::TransparentOpacity,
+                           x, y, Magick::FillToBorderMethod)
     end
 
     # Make all pixels transparent.
@@ -590,53 +584,12 @@ class Image
     # Replace matching neighboring pixels with texture pixels
     def texture_floodfill(x, y, texture)
         target = pixel_color(x, y)
-        texture_flood_fill(target, texture, x, y, FloodfillMethod)
+        texture_flood_fill(target, texture, x, y, Magick::FloodfillMethod)
     end
 
     # Replace neighboring pixels to border color with texture pixels
     def texture_fill_to_border(x, y, texture)
-        texture_flood_fill(border_color, texture, x, y, FillToBorderMethod)
-    end
-
-    # Retrieve EXIF data by entry or all. If one or more entry names specified,
-    # return the values associated with the entries. If no entries specified,
-    # return all entries and values. The return value is an array of [name,value]
-    # arrays.
-    def get_exif_by_entry(*entry)
-        ary = Array.new
-        if entry.length == 0
-            exif_data = self['EXIF:*']
-            if exif_data
-                exif_data.split("\n").each { |exif| ary.push(exif.split('=')) }
-            end
-        else
-            entry.each do |name|
-                rval = self["EXIF:#{name}"]
-                ary.push([name, rval])
-            end
-        end
-        return ary
-    end
-
-    # Retrieve EXIF data by tag number or all tag/value pairs. The return value is a hash.
-    def get_exif_by_number(*tag)
-        hash = Hash.new
-        if tag.length == 0
-            exif_data = self['EXIF:!']
-            if exif_data
-                exif_data.split("\n").each do |exif|
-                    tag, value = exif.split('=')
-                    tag = tag[1,4].hex
-                    hash[tag] = value
-                end
-            end
-        else
-            tag.each do |num|
-                rval = self["EXIF:#{'#%04X' % num}"]
-                hash[num] = rval
-            end
-        end
-        return hash
+        texture_flood_fill(border_color, texture, x, y, Magick::FillToBorderMethod)
     end
 
 end # class Magick::Image
@@ -695,9 +648,9 @@ public
     # Allow scene to be set to nil
     def scene=(n)
         if (length == 0 && n != nil) || (length > 0 && n == nil)
-            raise IndexError, "scene number out of bounds"
+            raise IndexError, "scene # out of bounds"
         elsif (length == 0) || (Integer(n) < 0) || (Integer(n) > length - 1)
-            raise IndexError, "scene number out of bounds"
+            raise IndexError, "scene # out of bounds"
         end
         @scene = Integer(n)
     end

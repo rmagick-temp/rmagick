@@ -28,7 +28,7 @@ gc.text(43, 45, "{40, 50}")
 gc.text(195, 118, "{0 degrees}")
 
 gc.gravity(Magick::SouthEastGravity)
-gc.text(300-250, 220-185, "{250, 180}")
+gc.text(300-250, 220-195, "{250, 180}")
 
 gc.gravity(Magick::NorthGravity)
 gc.text(0, 67, "{270 degrees}")

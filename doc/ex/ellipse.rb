@@ -34,7 +34,7 @@ gc.stroke('transparent')
 gc.text(187,125, "'180,125'")
 gc.text(253, 118, "'Start 0 degrees'")
 gc.text(187, 50, "'End 270 degrees'")
-gc.text(127, 100, "'Height=75'")
+gc.text(120, 100, "'Height=75'")
 gc.text(85, 140, "'Width=150'")
 gc.draw(imgl)
 

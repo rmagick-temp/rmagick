@@ -2,26 +2,25 @@
 
 require 'RMagick'
 
-# "Read" the ImageMagick built-in rose image.
-rose = Magick::ImageList.new("rose:")
+hat = Magick::Image.read("images/Flower_Hat.jpg").first
+hat.resize!(0.25)
 
-# Construct a pattern using the rose
+# Construct a pattern using the hat image
 gc = Magick::Draw.new
-gc.pattern('rose', 0, 0, rose.columns, rose.rows) {
-    gc.composite(0, 0, 0, 0, rose)
+gc.pattern('hat', 0, 0, hat.columns, hat.rows) {
+    gc.composite(0, 0, 0, 0, hat)
 }
 
-# Set the fill to the rose pattern. Draw an ellipse
-gc.fill('rose')
+# Set the fill to the hat "pattern." Draw an ellipse
+gc.fill('hat')
 gc.ellipse(150, 75, 140, 70, 0, 360)
 
 # Create a canvas to draw on
-imgl = Magick::ImageList.new
-imgl.new_image(300, 150, Magick::HatchFill.new('white','lightcyan2',8))
+img = Magick::Image.new(300, 150, Magick::HatchFill.new('white','lightcyan2',8))
 
-# Draw the ellipse using the rose fill
-gc.draw(imgl)
+# Draw the ellipse using the fill
+gc.draw(img)
 
-imgl.border!(1,1, "lightcyan2")
-imgl.write('pattern2.gif')
+img.border!(1,1, "lightcyan2")
+img.write('pattern2.gif')
 exit

@@ -128,16 +128,18 @@
 
           <li><a href="#spread">spread</a></li>
 
+          <li><a href="#statistics">statistics</a></li>
+
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
-
-          <li><a href="#store_pixels">store_pixels</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#store_pixels">store_pixels</a></li>
+
           <li><a href="#strip_bang">strip!</a></li>
 
           <li><a href="#swirl">swirl</a></li>
@@ -928,16 +930,16 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                                        This img tag displays the original image when the mouse is over.
-                                        Use CSS to add padding around the image to make it occupy the
-                                        same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+                                                This img tag displays the original image when the mouse is over.
+                                                Use CSS to add padding around the image to make it occupy the
+                                                same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
          id="notrotated" onmouseout=
          "this.style.display='none'; rotated.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="rotate example" title=
          "Click to see the example script" /><!--
-                                          This img tag displays the rotated image.
-                                          --><img class="hide" id=
-    "rotated" onmouseover=
+                                                  This img tag displays the rotated image.
+                                                  --><img class=
+    "hide" id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
     "ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" style="left:322px;"
@@ -1369,15 +1371,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                                          This img tag displays the original image when the mouse is over
-                                          --><img style=
+                                                  This img tag displays the original image when the mouse is over
+                                                  --><img style=
     "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                                           This img tag displays the sheared image when the mouse is not over
-                                           -->
+                                                   This img tag displays the sheared image when the mouse is not over
+                                                   -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -1510,6 +1512,81 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SpreadImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="statistics">statistics</h3>
+
+    <p><span class="arg">image</span>.statistics -&gt; <em>see
+    below</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Computes the minimum, maximum, mean, standard deviation, and
+    variance for each channel in the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>The statistics method returns a <code>Statistics</code>
+    class object. This class defines four <em>channel</em>
+    attributes: <code>red</code>, <code>green</code>,
+    <code>blue</code>, and <code>opacity</code>. Each channel
+    attribute is a <code>Statistics::Channel</code> class object.
+    This class defines 5 <em>statistic</em> attributes:
+    <code>min</code>, <code>max</code>, <code>mean</code>
+    <code>stddev</code>, and <code>var</code>. See the example
+    below.</p>
+
+    <h4>Example</h4>
+    <pre>
+require 'pp'
+
+img = Image.read("Flower_Hat.jpg").first
+stats = img.statistics
+
+pp stats &raquo;
+    #&lt;Magick::Statistics
+    red=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.627182352941187,
+      stddev=0.231399683489667,
+      var=0.0535458135191179&gt;,
+    green=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.571999607843132,
+      stddev=0.22246563644744,
+      var=0.0494909593999647&gt;,
+    blue=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.508869725490209,
+      stddev=0.269422111063184,
+      var=0.0725882739297426&gt;,
+    opacity=
+      #&lt;Magick::Statistics::Channel
+      max=0.0,
+      min=0.0,
+      mean=0.0,
+      stddev=0.0,
+      var=0.0&gt;&gt;
+
+p stats.red.stddev &raquo; 0.231399683489667
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#channel_extrema">channel_extrema</a>,
+    <a href="image1.html#channel_mean">channel_mean</a></p>
+
+    <h4>Magick API</h4>GetImageStatistics (available in
+    GraphicsMagick 1.1)
   </div>
 
   <div class="sig">
@@ -1648,7 +1725,9 @@ img.properties &raquo;
     <p>See also <a href="image2.html#get_pixels">get_pixels</a>,
     <a href="#view">view</a></p>
 
-    <h4>Magick API</h4><p>SetImagePixels, SyncImagePixels</p>
+    <h4>Magick API</h4>
+
+    <p>SetImagePixels, SyncImagePixels</p>
   </div>
 
   <div class="sig">
@@ -2213,9 +2292,9 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-                                  This img tag displays the framed image when the mouse is not over
-                                  --><img class="hide" id="waved"
-    onmouseover=
+                                          This img tag displays the framed image when the mouse is not over
+                                          --><img class="hide" id=
+    "waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
     "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.16 2004/11/24 00:08:23 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.17 2004/11/27 01:12:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -647,43 +647,12 @@ Draw_dup(VALUE self)
 
 /*
     Method:     Draw#get_type_metrics([image, ]text)
+                Draw#get_multiline_type_metrics([image, ]text)
     Purpose:    returns measurements for a given font and text string
     Notes:      If the image argument has been omitted, use a dummy
                 image, but make sure the text has none of the special
                 characters that refer to image attributes.
 */
-
-static VALUE get_dummy_tm_img(VALUE klass)
-{
-    volatile VALUE dummy_img = 0;
-    Info *info;
-    Image *image;
-
-    if (rb_cvar_defined(klass, ID__dummy_img_) != Qtrue)
-    {
-
-        info = CloneImageInfo(NULL);
-        if (!info)
-        {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
-        }
-        image = AllocateImage(info);
-        if (!image)
-        {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
-        }
-        DestroyImageInfo(info);
-        dummy_img = rm_image_new(image);
-
-        RUBY18(rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0));
-        RUBY16(rb_cvar_set(klass, ID__dummy_img_, dummy_img));
-    }
-    dummy_img = rb_cvar_get(klass, ID__dummy_img_);
-
-    return dummy_img;
-}
-
-
 VALUE
 Draw_get_type_metrics(
     int argc,
@@ -1229,6 +1198,37 @@ Montage_title_eq(VALUE self, VALUE title)
     Data_Get_Struct(self, Montage, montage);
     magick_clone_string(&montage->info->title, STRING_PTR(title));
     return self;
+}
+
+
+static VALUE get_dummy_tm_img(VALUE klass)
+{
+    volatile VALUE dummy_img = 0;
+    Info *info;
+    Image *image;
+
+    if (rb_cvar_defined(klass, ID__dummy_img_) != Qtrue)
+    {
+
+        info = CloneImageInfo(NULL);
+        if (!info)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        image = AllocateImage(info);
+        if (!image)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        DestroyImageInfo(info);
+        dummy_img = rm_image_new(image);
+
+        RUBY18(rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0));
+        RUBY16(rb_cvar_set(klass, ID__dummy_img_, dummy_img));
+    }
+    dummy_img = rb_cvar_get(klass, ID__dummy_img_);
+
+    return dummy_img;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmfill.c,v 1.2 2003/08/16 15:52:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -17,7 +17,7 @@ typedef struct
 
 typedef struct
 {
-    VALUE texture;
+    Image *texture;
 } TextureFill;
 
 /*
@@ -524,19 +524,6 @@ GradientFill_fill(VALUE self, VALUE image_obj)
     return self;
 }
 
-/*
-    Static:     mark_TextureFill
-    Purpose:    mark the Image *object we're saving as the texture fill
-    Notes:      called from GC
-*/
-static void
-mark_TextureFill(void *fill_obj)
-{
-    TextureFill *fill = (TextureFill *)fill_obj;
-
-    rb_gc_mark(fill->texture);
-}
-
 
 /*
     Static:     free_TextureFill
@@ -547,10 +534,8 @@ static void
 free_TextureFill(void *fill_obj)
 {
     TextureFill *fill = (TextureFill *)fill_obj;
-    Image *texture;
 
-    Data_Get_Struct(fill->texture, Image, texture);
-    DestroyImage(texture);
+    DestroyImage(fill->texture);
     xfree(fill);
 }
 
@@ -569,7 +554,7 @@ TextureFill_new(VALUE class, VALUE texture)
 
     new_fill = Data_Make_Struct(class
                               , TextureFill
-                              , mark_TextureFill
+                              , NULL
                               , free_TextureFill
                               , fill);
     argv[0] = texture;
@@ -583,7 +568,7 @@ TextureFill_alloc(VALUE class)
     TextureFill *fill;
     return Data_Make_Struct(class
                         , TextureFill
-                        , mark_TextureFill
+                        , NULL
                         , free_TextureFill
                         , fill);
 }
@@ -608,7 +593,7 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
     Data_Get_Struct(texture_image, Image, texture);
     ReferenceImage(texture);
 
-    fill->texture = texture_image;
+    fill->texture = texture;
     return self;
 }
 
@@ -621,12 +606,10 @@ TextureFill_fill(VALUE self, VALUE image_obj)
 {
     TextureFill *fill;
     Image *image;
-    Image *texture;
 
     Data_Get_Struct(image_obj, Image, image);
     Data_Get_Struct(self, TextureFill, fill);
-    Data_Get_Struct(fill->texture, Image, texture);
 
-    TextureImage(image, texture);
+    TextureImage(image, fill->texture);
     return self;
 }

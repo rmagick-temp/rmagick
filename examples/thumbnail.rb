@@ -30,7 +30,7 @@ case ARGV.length
         size = DEFAULT_SIZE
     else
         size = DEFAULT_SIZE
-        image = "../doc/ex/images/Blonde_with_dog.jpg"
+        image = "../doc/ex/images/Flower_Hat.jpg"
 end
 
 geom = "#{size}x#{size}"

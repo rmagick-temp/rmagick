@@ -9,10 +9,7 @@ puts <<END_INFO
 
     Vignettes are frequently used in formal portraiture and advertising
     images. This example creates a vignette from a picture of a ballerina.
-    It uses the get_pixels and store_pixels methods to change the
-    transparency levels of individual pixels.
-
-    This example takes a few seconds to run. Be patient.
+    It takes a few seconds to run. Be patient.
 
 END_INFO
 
@@ -22,11 +19,11 @@ ballerina = Image.read("../doc/ex/images/Ballerina3.jpg")[0]
 # vignette you need an image with a uniform, fairly dark background.
 
 # Start by drawing a white oval on a black background. (Although you don't
-# have to use an oval at all! Any shape will work. Try a rounded rectangle.
+# have to use an oval at all! Any shape will work. Try a rounded rectangle.)
 # The black pixels correspond to pixels in the image that will become
 # transparent. The white pixels correspond to pixels in the image that will
 # remain unchanged. Gray pixels, introduced by the blurring below, will
-# become more or less transparent depending on how dark or light the pixel is.)
+# become more or less transparent depending on how dark or light the pixel is.
 
 # The size of the oval is arbitrary - in this case it's 90% of the
 # size of the image.
@@ -54,7 +51,7 @@ oval = oval.blur_image(0, 20)
 # the oval remain opaque. Each gray pixel around the border of the oval has a
 # varying level of transparency depending on how dark or light it is.
 
-ballerina.matte = true  # Ensure the ballerina image's opacity channel is respected.
+ballerina.matte = true  # Ensure the ballerina image's opacity channel is enabled.
 oval.matte = false      # Force the CopyOpacityCompositeOp to use pixel intensity
                         # to determine how much transparency to add to the ballerina
                         # pixels.

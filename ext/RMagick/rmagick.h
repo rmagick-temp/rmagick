@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.11 2003/08/26 13:14:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.12 2003/08/30 23:53:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -20,6 +20,7 @@
 #include "intern.h"
 #include "rubyio.h"
 #include "magick/api.h"
+
 
 
 // Undef ImageMagick's versions of these symbols
@@ -45,6 +46,9 @@
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
+
+#define Q(N) Q2(N)
+#define Q2(N) #N
 
 // Define a pair of macros that make it easier to code
 // 1.6 and 1.8 alternatives. Code enclosed in RUBY18()

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.8 2003/08/26 13:14:59 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.9 2003/08/30 23:53:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1954,8 +1954,6 @@ delete_temp_image(char *tmpnam)
 void
 not_implemented(const char *method)
 {
-#define Q(N) Q2(N)
-#define Q2(N) #N
 
     rb_raise(rb_eNotImpError, "the %s method is not supported by "
                               Q(MAGICKNAME) " " MagickLibVersionText

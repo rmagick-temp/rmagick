@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.4 2003/07/19 01:47:03 tim Exp $ */
+/* $Id: rmutil.c,v 1.5 2003/07/19 12:51:40 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1886,7 +1886,7 @@ Str_to_CompositeOperator(VALUE str)
         }
     }
 
-    rb_raise(rb_eArgError, "Invalid composition operator: %s", oper);
+    rb_raise(rb_eArgError, "invalid composition operator: %s", oper);
     return NULL;
 }
 

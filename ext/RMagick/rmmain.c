@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.4 2003/07/19 01:48:46 tim Exp $ */
+/* $Id: rmmain.c,v 1.5 2003/07/19 12:51:40 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -748,7 +748,8 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     {
         if (TYPE(argv[5]) != T_FIXNUM)
         {
-            rb_raise(rb_eArgError, "unknown composite operator");
+            rb_raise(rb_eTypeError, "composite operator must be a Fixnum (%s given)",
+                                rb_class2name(CLASS_OF(argv[5])));
         }
         cop = FIX2INT(argv[5]);
         switch(cop)
@@ -808,7 +809,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
                 op = "Xor";
                 break;
             default:
-                rb_raise(rb_eArgError, "unknown composite operator (%d given)", cop);
+                rb_raise(rb_eArgError, "unknown composite operator (%d)", cop);
                 break;
         }
     }

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.4 2003/07/19 12:51:15 tim Exp $ */
+/* $Id: rmimage.c,v 1.5 2003/07/20 13:09:26 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1292,6 +1292,8 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 #else
     image = ConstituteImage(width, height, map, stg_type, pixels.v, &exception);
 #endif
+
+    DestroyConstitute();
 
     xfree(pixels.v);
     HANDLE_ERROR

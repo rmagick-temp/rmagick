@@ -10,7 +10,7 @@ $CFLAGS = "-std=c99 -Wall #{`@MAGICKCONFIG@ --cflags`}".chomp;
 $CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} #{`@MAGICKCONFIG@ --cppflags`}".chomp
 
 ldflags = "#{`@MAGICKCONFIG@ --ldflags`}".chomp
-if VERSION == '1.8.0'
+if RUBY_VERSION >= '1.8.0'
     $DLDFLAGS = ldflags
 else
     $LDFLAGS = ldflags

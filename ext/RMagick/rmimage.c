@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.39 2004/02/11 23:03:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.40 2004/02/14 00:04:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1120,11 +1120,16 @@ VALUE
 Image_color_profile(VALUE self)
 {
     Image *image;
+    volatile VALUE profile;
 
 #if defined(HAVE_GETIMAGEPROFILE)
-    StringInfo *str_info;
+    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
+    /* but the implementations are different. IM 6.0.0  */
+    /* uses a StringInfo type. That's our feature test. */
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
     char *str;
-    VALUE profile;
+    StringInfo *str_info;
 
     Data_Get_Struct(self, Image, image);
 
@@ -1140,7 +1145,21 @@ Image_color_profile(VALUE self)
         DestroyString(str);
     }
 
-    return profile;
+#else               /* !defined(HAVE_ACQUIRESTRINGINFO) */
+    const char *str;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = Qnil;     /* Assume no profile defined */
+    length = 0;
+    str = GetImageProfile(image, "icc", &length);
+    if (str)
+    {
+        profile = rb_str_new(str, length);
+    }
+
+#endif
 
 #else
     Data_Get_Struct(self, Image, image);
@@ -1159,11 +1178,13 @@ Image_color_profile(VALUE self)
     }
     if (image->color_profile.length == 0)
     {
-        return Qnil;
+        profile = Qnil;
     }
-    return rb_str_new((const char *)image->color_profile.info
-                    , image->color_profile.length);
+    profile = rb_str_new((const char *)image->color_profile.info
+                       , image->color_profile.length);
 #endif
+
+    return profile;
 }
 
 /*
@@ -1177,6 +1198,13 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     Image *image;
 
 #if defined(HAVE_GETIMAGEPROFILE)
+
+    /* Both IM 6.0.0 and GM 1.1. define SetImageProfile */
+    /* but the implementations are different. IM 6.0.0  */
+    /* uses a StringInfo type. That's our feature test. */
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
+
     StringInfo *str_info;
     unsigned int status = True;
 
@@ -1208,6 +1236,23 @@ Image_color_profile_eq(VALUE self, VALUE profile)
             }
         }
     }
+
+#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
+    unsigned char *prof = NULL;
+    long prof_l = 0;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (profile == Qnil)
+    {
+        (void) SetImageProfile(image, "icc", NULL, 0);
+    }
+    else
+    {
+        prof = STRING_PTR_LEN(profile, prof_l);
+        (void) SetImageProfile(image, "icc", prof, (size_t)prof_l);
+    }
+#endif          /*  defined(HAVE_SETIMAGEPROFILE)   */
 
 #else
 
@@ -2334,7 +2379,7 @@ Image__dump(VALUE self, VALUE depth)
 VALUE
 Image_each_profile(VALUE self)
 {
-#if defined(HAVE_GETIMAGEPROFILE)
+#if defined(HAVE_GETNEXTIMAGEPROFILE)
     Image *image;
     volatile VALUE ary, val;
     char *str, *name;
@@ -2368,7 +2413,7 @@ Image_each_profile(VALUE self)
 
     return val;
 #else
-    not_implemented("export_pixels");
+    not_implemented("each_profile");
     return (VALUE) 0;
 #endif
 }
@@ -3485,27 +3530,43 @@ VALUE
 Image_iptc_profile(VALUE self)
 {
     Image *image;
+    volatile VALUE profile;
 
 #if defined(HAVE_GETIMAGEPROFILE)
+    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
+    /* but the implementations are different. IM 6.0.0  */
+    /* uses a StringInfo type. That's our feature test. */
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
     StringInfo *str_info;
     char *str;
-    VALUE profile;
 
     Data_Get_Struct(self, Image, image);
 
+    profile = Qnil;
+
     str_info = GetImageProfile(image, "iptc");
-    if (!str_info)
-    {
-        profile = Qnil;
-    }
-    else
+    if (str_info)
     {
         str = StringInfoToString(str_info);
         profile = rb_str_new2(str);
         DestroyString(str);
     }
 
-    return profile;
+#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
+    const unsigned char *prof;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = Qnil;         /* Assume no profile defined */
+
+    prof = GetImageProfile(image, "iptc", &length);
+    if (prof)
+    {
+        profile = rb_str_new(prof, (long) length);
+    }
+#endif
 
 #else
 
@@ -3526,11 +3587,13 @@ Image_iptc_profile(VALUE self)
 
     if (image->iptc_profile.length == 0)
     {
-        return Qnil;
+        profile = Qnil;
     }
-    return rb_str_new((const char *)image->iptc_profile.info
-                    , image->iptc_profile.length);
+    profile = rb_str_new((const char *)image->iptc_profile.info
+                       , image->iptc_profile.length);
 #endif
+
+    return profile;
 }
 
 /*
@@ -3544,6 +3607,11 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     Image *image;
 
 #if defined(HAVE_GETIMAGEPROFILE)
+    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
+    /* but the implementations are different. IM 6.0.0  */
+    /* uses a StringInfo type. That's our feature test. */
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
     StringInfo *str_info;
     unsigned int status = True;
 
@@ -3575,6 +3643,22 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
             }
         }
     }
+#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
+    const unsigned char *prof = NULL;
+    long prof_l = 0;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (profile == Qnil)
+    {
+        (void) SetImageProfile(image, "iptc", NULL, 0);
+    }
+    else
+    {
+        prof = STRING_PTR_LEN(profile, prof_l);
+        (void) SetImageProfile(image, "iptc", prof, (size_t)prof_l);
+    }
+#endif
 
 #else
 

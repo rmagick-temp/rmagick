@@ -21,10 +21,10 @@ def rmdir(dir)
   end
   if File.file? dir+'/.rmagick' then
     targets = Dir[dir+'/*']
+    targets += Dir[dir+'/.*'].delete_if { |f| FileTest.directory?(f) }
     if not targets.empty?
         File.safe_unlink(*targets)
     end
-    File.safe_unlink(dir+'/.rmagick')
     Dir.safe_unlink(dir)
   end
 end

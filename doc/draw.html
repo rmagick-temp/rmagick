@@ -569,11 +569,13 @@ primitives = Magick::Draw.new {
         <td>
           <dl>
             <dt>start_x, start_y</dt>
-            <dd>start point</dd>
+            <dd>one corner of the bounding rectangle</dd>
             <dt>end_x, end_y</dt>
-            <dd>end point</dd>
-            <dt>start_degrees, end_degrees</dt>
-            <dd>degree of rotation at start and end</dd>
+            <dd>the opposite corner of the bounding rectangle</dd>
+            <dt>start_degrees</dt>
+            <dd>where to start drawing the arc</dd>
+            <dt>end_degrees</dt>
+            <dd>where the arc ends</dd>
           </dl>
         </td>
       </tr>
@@ -586,21 +588,26 @@ primitives = Magick::Draw.new {
         <td>
           <table>
             <tr>
-              <td><code>draw.arc(130,30, 200,100,
-              45,90)</code></td>
+              <td colspan="2"><code>draw.arc(40, 50, 250, 180, 0,
+              270)</code></td>
             </tr>
             <tr>
               <td><a href="arc.rb.html" target="_blank"><img src=
               "ex/arc.gif" alt="arc example" border="0"></a></td>
+              <td>The <code>arc</code> method is broken in all
+              releases of ImageMagick prior to 5.5.8, and all
+              releases of GraphicsMagick prior to 1.1. If you see a
+              diagonal line here instead of an arc, it's broken.
+              Either upgrade to the newest version or use the SVG
+              <a href="#Draw.path">path</a> method.</td>
             </tr>
           </table>
         </td>
       </tr>
       <tr>
-        <td valign="top">Notes</td>
-        <td>This primitive is deprecated. Use the SVG elliptical
-        arc commands (A and a) instead. See <a href=
-        "#Draw.path">path</a> .</td>
+        <td valign="top">See also</td>
+        <td>See <a href="#Draw.path">the SVG elliptical arc
+        commands (A and a)</a>.</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -2072,13 +2079,12 @@ draw.stroke_opacity('40%')
           or apostrophe, surround the entire text string using a
           character that is not in the text. ImageMagick uses these
           characters to delimit the string but will strip them off
-          before drawing the text. You can use quotes,
-          apostrophes, or braces ("{}"). You can also escape a
-          blank, quote, or apostrophe by preceding it with a
-          backslash ("\"). To include a backslash in the text, use
-          two consecutive backslashes. Here are some examples.
-          The text to the right of &raquo; is the text that will
-          be drawn.</p>
+          before drawing the text. You can use quotes, apostrophes,
+          or braces ("{}"). You can also escape a blank, quote, or
+          apostrophe by preceding it with a backslash ("\"). To
+          include a backslash in the text, use two consecutive
+          backslashes. Here are some examples. The text to the
+          right of &raquo; is the text that will be drawn.</p>
 <pre class="example">
 gc.text(10,10, '"Hello there!"') &raquo; Hello there!
 gc.text(10,10, "'What\'s up?'") &raquo; What's up?
@@ -2315,8 +2321,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%d</td>
-              <td>directory in which the file
-              resides</td>
+              <td>directory in which the file resides</td>
             </tr>
             <tr>
               <td>%e</td>
@@ -2326,7 +2331,10 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
               <td>%f</td>
               <td>original filename</td>
             </tr>
-            <tr><td>%g</td><td>group number</td></tr>
+            <tr>
+              <td>%g</td>
+              <td>group number</td>
+            </tr>
             <tr>
               <td>%h</td>
               <td>height</td>
@@ -2349,8 +2357,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%n</td>
-              <td>number of images in the sequence (for
-              RMagick, this is always 1)</td>
+              <td>number of images in the sequence (for RMagick,
+              this is always 1)</td>
             </tr>
             <tr>
               <td>%o</td>
@@ -2358,8 +2366,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%p</td>
-              <td>page number (for
-              RMagick, this is always 1)</td>
+              <td>page number (for RMagick, this is always 1)</td>
             </tr>
             <tr>
               <td>%q</td>
@@ -2367,11 +2374,10 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%r</td>
-              <td>A string of the form "ClasstypeColorspace,"
-              for example "DirectClassRGB". If the image's
-              <i>matte</i> attribute is <code>true</code>,
-              appends the word "Matte"
-              to the end of the string.</td>
+              <td>A string of the form "ClasstypeColorspace," for
+              example "DirectClassRGB". If the image's <i>matte</i>
+              attribute is <code>true</code>, appends the word
+              "Matte" to the end of the string.</td>
             </tr>
             <tr>
               <td>%s</td>
@@ -2397,7 +2403,10 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
               <td>%y</td>
               <td>y resolution</td>
             </tr>
-            <tr><td>%z</td><td>depth</td></tr>
+            <tr>
+              <td>%z</td>
+              <td>depth</td>
+            </tr>
           </table>
         </td>
       </tr>

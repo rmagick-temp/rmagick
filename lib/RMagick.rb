@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.9 2003/10/02 22:55:22 rmagick Exp $
+# $Id: RMagick.rb,v 1.10 2003/12/05 00:10:58 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -633,7 +633,7 @@ class Image
         else
             tag.each do |num|
                 rval = self["EXIF:#{'#%04X' % num}"]
-                hash[num] = rval
+                hash[num] = rval == 'unknown' ? nil : rval
             end
         end
         return hash

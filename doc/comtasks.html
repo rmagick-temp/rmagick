@@ -190,22 +190,24 @@ thumb.write "thumb.gif"
   <p>Many image formats, including JPEG, PDF, and BMP, support
   compressed image files. The type of compression used depends on
   the format. Specify the compression type by assigning a <a href=
-  "constants.html#CompressionType">CompressionType</a> value the
-  optional <a href="info.html#compression">compression</a> argument
+  "constants.html#CompressionType">CompressionType</a> value to the
+  <a href="info.html#compression">compression</a> optional argument
   to the <a href="image3.html#write">write</a> method.</p>
 
   <p>The JPEGCompression and ZipCompression types support multiple
-  levels of compression. Use the optional <a href=
-  "info.html#quality">quality</a> argument to the
+  levels of compression. Use the <a href=
+  "info.html#quality">quality</a> optional argument to the
   <code>write</code> method. The quality attribute is a number
-  between 0 and 100, with 100 representing the least
-  compression.</p>
+  between 0 and 100, with 100 representing the least compression.
+  When you compress an image using JPEGCompression, more
+  compression usually results in a lower-quality image. When you
+  compress an image using ZipCompression, more compression usually
+  takes longer.</p>
 
   <p>For more information, see the &times;Magick documentation for
   the <code>-quality</code> option to the utility commands.</p>
   <pre class="example">
 img.write("myimage.jpg") { self.quality = 50 }
-    
 </pre>
 
   <h2 id="shadow">Making a drop shadow</h2>

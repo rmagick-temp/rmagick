@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.46 2004/12/05 22:36:11 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.47 2004/12/25 18:59:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2134,7 +2134,7 @@ static VALUE Enum_type_inspect(VALUE self)
     MagickEnum *magick_enum;
 
     Data_Get_Struct(self, MagickEnum, magick_enum);
-    sprintf(str, "%.16s=%d", rb_id2name(magick_enum->id), magick_enum->val);
+    sprintf(str, "%.32s=%d", rb_id2name(magick_enum->id), magick_enum->val);
 
     return rb_str_new2(str);
 }

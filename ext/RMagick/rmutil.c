@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.47 2004/12/25 18:59:03 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.47.2.1 2005/01/11 23:00:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1294,6 +1294,50 @@ ResolutionType_new(ResolutionType type)
 }
 
 /*
+    External:   OrientationType_new
+    Purpose:    Construct an OrientationType enum object for the specified value.
+*/
+#if defined(HAVE_IMAGE_ORIENTATION)
+VALUE
+OrientationType_new(OrientationType type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedOrientation:
+            name = "UndefinedOrientation";
+            break;
+        case TopLeftOrientation:
+            name = "TopLeftOrientation";
+            break;
+        case TopRightOrientation:
+            name = "TopRightOrientation";
+            break;
+        case BottomRightOrientation:
+            name = "BottomRightOrientation";
+            break;
+        case BottomLeftOrientation:
+            name = "BottomLeftOrientation";
+            break;
+        case LeftTopOrientation:
+            name = "LeftTopOrientation";
+            break;
+        case RightTopOrientation:
+            name = "RightTopOrientation";
+            break;
+        case RightBottomOrientation:
+            name = "RightBottomOrientation";
+            break;
+        case LeftBottomOrientation:
+            name = "LeftBottomOrientation";
+            break;
+    }
+    return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+#endif
+/*
     External:   Color_from_ColorInfo
     Purpose:    Convert a ColorInfo structure to a Magick::Color
 */
@@ -2500,7 +2544,7 @@ magick_error_handler(
 {
     char msg[1024];
 
-    if (severity > WarningException)
+    if (severity >= ErrorException)
     {
 #if defined(HAVE_SNPRINTF)
         snprintf(msg, sizeof(msg)-1,

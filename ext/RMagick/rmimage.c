@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.89 2004/12/24 21:29:48 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.89.2.1 2005/01/11 23:00:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5066,6 +5066,24 @@ Image_ordered_dither(VALUE self)
 }
 
 /*
+    Method:     Image#orientation
+    Purpose:    Return the orientation attribute as an OrientationType enum value.
+*/
+VALUE
+Image_orientation(VALUE self)
+{
+#if defined(HAVE_IMAGE_ORIENTATION)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return OrientationType_new(image->orientation);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
     Method:     Image#page
     Purpose:    the page attribute getter
 */
@@ -5605,6 +5623,9 @@ Image_radial_blur(VALUE self, VALUE angle)
     return (VALUE)0;
 #endif
 }
+
+
+DEF_ATTR_READER(Image, quality, ulong)
 
 
 /*

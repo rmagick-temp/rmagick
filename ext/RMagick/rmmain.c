@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.74 2004/12/10 00:00:12 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.74.2.1 2005/01/11 23:00:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -600,7 +600,9 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, number_colors)
     DCL_ATTR_ACCESSOR(Image, offset)
     DCL_ATTR_WRITER(Image, opacity)
+    DCL_ATTR_READER(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
+    DCL_ATTR_READER(Image, quality)
     DCL_ATTR_READER(Image, quantum_depth)
     DCL_ATTR_ACCESSOR(Image, rendering_intent)
     DCL_ATTR_READER(Image, rows)
@@ -1293,6 +1295,21 @@ Init_RMagick(void)
         ENUMERATOR(PoissonNoise)
     END_ENUM
 
+#if defined(HAVE_IMAGE_ORIENTATION)
+    // Orientation constants
+    DEF_ENUM(OrientationType)
+        ENUMERATOR(UndefinedOrientation)
+        ENUMERATOR(TopLeftOrientation)
+        ENUMERATOR(TopRightOrientation)
+        ENUMERATOR(BottomRightOrientation)
+        ENUMERATOR(BottomLeftOrientation)
+        ENUMERATOR(LeftTopOrientation)
+        ENUMERATOR(RightTopOrientation)
+        ENUMERATOR(RightBottomOrientation)
+        ENUMERATOR(LeftBottomOrientation)
+    END_ENUM
+#endif
+
     // Paint method constants
     DEF_ENUM(PaintMethod)
         ENUMERATOR(PointMethod)
@@ -1486,7 +1503,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/12/10 00:00:12 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/01/11 23:00:56 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

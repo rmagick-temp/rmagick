@@ -23,6 +23,7 @@
         </style>
   </head>
   <body>
+    <div class="header">RMagick User's Guide and Reference</div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="index.html">&lt;-
@@ -82,15 +83,16 @@
     <p>Line 1 requires the RMagick.rb file, which defines the
     <b>Magick</b> module. The Magick module contains 3 major
     classes, <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. This
-    section describes the ImageList and Image classes. The Draw
-    class is explained in <i><a href="#drawing">Drawing on and
-    adding text to images</a></i>, below. The statement on line 5
-    creates an imagelist object and initializes it by reading the
-    <code>Cheetah.jpg</code> file<sup><a href="#cwd">1</a></sup>.
+    section - <i>Basic Comcepts</i> - describes the ImageList and Image classes. The Draw
+    class is explained in the <i><a href="#drawing">Drawing on and
+    adding text to images</a></i> section, below.</p>
+    <p>The statement on line 5
+    creates an <i>imagelist</i> object and initializes it by reading the
+    <code>Cheetah.jpg</code> file in the current directory.
     Line 6 sends the <var>display</var> method to <code>cat</code>.
     When you send <var>display</var> to an imagelist, it causes all
     the images in the imagelist to be displayed on the default X
-    Window screen<sup><a href="#0.0">2</a></sup> . In this case,
+    Window screen. In this case,
     the <var>display</var> method makes a picture of a cheetah
     appear on your monitor.</p>
     <p>Type this program in and try running it now. The
@@ -170,8 +172,9 @@
     </div>
     <p>The statement on line 7 writes the image to a file. Notice
     that the filename extension is <code>gif</code>. When writing
-    images, &times;Magick uses the filename extension<sup><a href=
-    "#ext">3</a></sup> to determine what image format to write. In
+    images, &times;Magick uses the filename extension (see <a
+    href="imusage.html#formats">Image formats and
+    filenames</a>) to determine what image format to write. In
     this example, the <code>Small-Cheetah.gif</code> file will be
     in the GIF format. Notice how easy it is to covert an image
     from one format to another?</p>
@@ -183,11 +186,11 @@
     <p><i><b>Note:</b></i> In most cases, an Image method does not
     modify the image to which it is sent. Instead, the method
     returns a new image, suitably modified. For example, the <a
-    href="image.html#Image.resize">resize</a> method returns a new
+    href="image.html#Image.resize"><var>resize</var></a> method returns a new
     image, sized as specified. The receiver image is unaltered.
     (Following the Ruby convention, when a method alters the
     receiver object, the method name ends with "!". For example,
-    the <a href="image.html#Image.resize_bang">resize!</a> method
+    the <a href="image.html#Image.resize_bang"><var>resize!</var></a> method
     resizes the receiver in place.)</p>
     <h2><a name="reading">Reading, writing, and creating
     images</a></h2>
@@ -204,8 +207,7 @@
     image in the imagelist. In the simple case, <var>new</var>
     reads a single image from a file and sets the scene number to
     0.</p>
-    <p>Underneath the covers, <var>new</var><sup><a href=
-    "#image-read">4</a></sup> calls the Image class's <a href=
+    <p>Underneath the covers, <var>new</var> calls the Image class's <a href=
     "image.html#Image.read">read</a> method to read the image file.
     The <var>read</var> method is a class method. Given one or more
     file names, <var>read</var> reads the files and constructs a
@@ -218,7 +220,8 @@
     method takes 2 or 3 arguments. The first argument is the number
     of columns in the new image (its width). The second argument is
     the number of rows (its height). If present, the 3rd argument
-    is a <i>Fill object</i>.<sup><a href="#fill">5</a></sup> To add
+    is a <a href=
+    "fill.html">Fill</a> object. To add
     a "scratch" image to an imagelist, call <a href=
     "ilist.html#ImageList.new_image"><var>ImageList#new_image</var></a>.
     This method calls <var>Image.new</var>, adds the new image to
@@ -229,8 +232,8 @@
     <p>Like many other methods in the Image and ImageList classes,
     <var>Image.new</var> accepts an optional block that can be used
     to set additional optional parameters. If the block is present,
-    <var>Image.new</var> creates a parameter object<sup><a href=
-    "#info">6</a></sup> and yields to the block in the scope of
+    <var>Image.new</var> creates a <a href="info.html">parameter object</a>
+    and yields to the block in the scope of
     that object. You set the parameters by calling attribute setter
     methods defined in the parameter object's class. For example,
     you can set the background color of a new image to red with the
@@ -259,7 +262,7 @@ exit
     passing it on to <var>Image.new</var>.</p>
     <p>You can create an image by capturing it from the XWindow
     screen using <a href=
-    "image.html#Image.capture">Image.capture</a>. This method can
+    "image.html#Image.capture"><var>Image.capture</var></a>. This method can
     capture the root window, a window identified by name or ID
     number, or perform an interactive capture whereby you designate
     the desired window by clicking it or by drawing a rectangle on
@@ -276,11 +279,10 @@ exit
     href=
     "ilist.html#ImageList.write"><var>ImageList#write</var></a> is
     the same as <var>Image#write</var>. However, if the imagelist
-    contains multiple images and the file format (determined<sup><a
-    href="#ext">3</a></sup> by the file name extension, as I
+    contains multiple images and the file format (determined by the file name extension, as I
     mentioned earlier) supports multi-frame images,
     <var>Image#write</var> will automatically create a multi-frame
-    image file.<sup><a href="#anim">7</a></sup></p>
+    image file.</p>
     <p>For example, the following program reads three GIF files and
     then uses <var>ImageList#write</var> to combine all the images
     in those files (remember, each input file can contain multiple
@@ -327,10 +329,10 @@ exit
     and in groups. Remember, unless the ImageList class defines a
     method with the same name, you can send any method defined in
     the Image class to an instance of the ImageList class. The
-    ImageList class<sup><a href="#mmiss">8</a></sup> sends the
+    ImageList class sends the
     method to the current image and returns the result.</p>
     <p>The methods can be classified into the following broad
-    groups.<sup><a href="#imdoc">9</a></sup> ImageList methods are
+    groups.<sup><a href="#imdoc">1</a></sup> ImageList methods are
     shown in <span class="imgmethod">blue</span>.</p>
     <div align="center">
       <table class="methodtbl" border="1" width="80%">
@@ -1017,7 +1019,7 @@ exit
             extends downward. The units are pixels. 0&deg; is at 3
             o'clock and rotation is clockwise. The units of
             rotation are usually degrees.<sup><a href=
-            "#degrees">10</a></sup></p>
+            "#degrees">2</a></sup></p>
             <p>You can change the default coordinate system by
             specifying a <i>scaling</i>, <i>rotation</i>, or
             <i>translation</i> transformation.</p>
@@ -1202,30 +1204,9 @@ exit
     <p>Good luck!</p>
     <hr>
     <h4>Footnotes</h4>
-    <p><sup><a name="cwd">1</a></sup>in the current directory.</p>
-    <p><sup><a name="0.0">2</a></sup>usually your display.</p>
-    <p><sup><a name="ext">3</a></sup>among other things. See <a
-    href="imusage.html#formats">Image formats and
-    filenames</a>.</p>
-    <p><sup><a name="image-read">4</a></sup>well, the
-    <var>Image#initialize</var> method, to be precise</p>
-    <p><sup><a name="fill">5</a></sup>about which no more will be
-    said in this section. See <a href=
-    "image.html#Image.new"><var>Image.new</var></a> and <a href=
-    "fill.html"><var>class Fill</var></a>.</p>
-    <p><sup><a name="info">6</a></sup>An <a href=
-    "info.html">Image::Info</a> class object. The only purpose of
-    this class is to define attribute setters used to collect
-    parameters for other method calls.</p>
-    <p><sup><a name="anim">7</a></sup>So automatic, in fact, that
-    you have to go to some trouble to defeat it. See <a href=
-    "ilist.html#ImageList.write"><var>ImageList#write</var></a> for
-    details.</p>
-    <p><sup><a name="mmiss">8</a></sup>Using
-    <var>method_missing</var></p>
-    <p><sup><a name="imdoc">9</a></sup>Most of the content in this
+    <p><sup><a name="imdoc">1</a></sup>Most of the content in this
     table is taken from the &times;Magick documentation.</p>
-    <p><sup><a name="degrees">10</a></sup>The rotation attributes
+    <p><sup><a name="degrees">2</a></sup>The rotation attributes
     <code>rx</code> and <code>ry</code> in the <a href=
     "struct.html#AffineMatrix"><var>AffineMatrix</var></a> class
     use radians instead of degrees.</p>

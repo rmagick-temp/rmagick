@@ -1,4 +1,20 @@
-.stdtitle {
+div.header {
+    text-align: center;
+    color: #666666;
+    font-size: small;
+    font-weight: bold;
+    letter-spacing: .5em;
+    padding-bottom: .4em
+}
+div.title {
+    text-align: center;
+    font-size: x-large;
+    font-weight: bold;
+    letter-spacing: .5em;
+    padding-bottom: .4em
+}
+
+div.stdtitle {
    background-color: gray;
    font-size: x-large;
    font-weight: bold;
@@ -59,7 +75,9 @@
 
 /* Quoted from ImageMagick documentation */
 blockquote.imquote {
- color: #990000;
+/* color: #990000; */
+ color: #005A9C
+ font-style: italic;
  text-indent: 1em;
 }
 
@@ -75,7 +93,7 @@ blockquote.imquote {
 table.example {
  background-color: transparent;
  width: 80%;
-}  
+}
 
 .imversion {
  font-style: italic;
@@ -91,7 +109,9 @@ table.example {
 }
 
 .imquote {
- color: #990000;
+/* color: #990000; */
+ color: #005A9C;
+ font-style: italic;
 }
 
 dt {
@@ -99,7 +119,7 @@ dt {
 }
 
 .nav {
- font-size: small;
+ font-size: medium;
 }
 
 /* Change so visited links will show up on gray background */

@@ -13,11 +13,12 @@
     <div align="center">
       <img src="ex/images/rmagick.jpg" alt="RMagick">
     </div>
-    <h2>Table of Contents</h2>
+    <div align="center"><h2>User's Guide and Reference</h2></div>
+    <h3>Table of Contents</h3>
     <ul>
       <li><a href="#Introduction">Introduction</a></li>
       <li>
-        <span style="font-style: italic">Usage Guide</span> 
+        <span style="font-style: italic">Usage Guide</span>
         <ul>
           <li><a href="usage.html">How To Use RMagick</a></li>
           <li><a href="imusage.html">ImageMagick/GraphicsMagick
@@ -62,13 +63,13 @@
     <hr>
     <h2><a name="Introduction">Introduction</a></h2>
     <h3>What is RMagick?</h3>
-    RMagick is a interface, or <i>binding</i>, from the Ruby
-    language to the ImageMagick <span style=
+    RMagick is a binding from Ruby
+    to the ImageMagick <span style=
     "font-size: x-small; vertical-align: super">TM</span> and
     GraphicsMagick image manipulation libraries. Here's how the <a
     href=
     "file:///usr/local/share/ImageMagick-5.5.7/index.html">ImageMagick
-    home page</a> describes ImageMagick: 
+    home page</a> describes ImageMagick:
     <div class="imquote">
       <blockquote>
         ImageMagick<span style=
@@ -149,31 +150,34 @@
     Throughout this document, click any example image to see the
     program that created it.</p>
     <h4>Conventions</h4>
-    <p><b>Names&nbsp;&nbsp;</b>I've tried to follow standard Ruby
+    <p><b>Names&nbsp;&nbsp;</b>I've tried to follow the Pickaxe
     conventions in this document. A class is identified by its
     name, which always starts with a capital letter. An object is
     referred to by its class name, starting with a small letter.
-    For example, an generic ImageList object is referred to as an
+    For example, a generic ImageList object is referred to as an
     <i>imagelist</i>. In the Reference section, when a method
     signature identifies the type of an argument or return value,
     the type is shown by preceding the class name by "a" or "an".
-    For example, <i>anImage</i> refers to a Image object, and
-    <i>anImageList</i> refers to an ImageList object.</p>
+    For example, <var>anImage</var> refers to an Image object, and
+    <var>anImageList</var> refers to an ImageList object.
+    Class methods are identified like this: <var>Class.method</var>.
+    Instance methods are identified like this: <var>Class#method</var>.
+    </p>
     <p>RMagick is implemented in the <b>Magick</b> module,
     therefore its constants are in the Magick namespace. However,
     for clarity I've omitted the <code>Magick::</code> prefix in
     most places in this document. You can use the <code>include
     Magick</code> statement to add the constants and methods to the
-    Kernel namespace.</p>
+    Object namespace.</p>
     <p><b>References to ImageMagick and GraphicsMagick</b>&nbsp;
     &nbsp;When describing a feature, API, convention, component, or
     other element that is shared by both ImageMagick and
-    GraphicsMagick, I use the string <i>&times;Magick</i>. For
+    GraphicsMagick, I use the string <b>&times;Magick</b>. For
     example, "&times;Magick supports over 87 major image formats"
     means that both ImageMagick and GraphicsMagick support over 87
     formats.</p>
-    <p><b>&times;Magick documentation&nbsp;&nbsp;</b> Text <span
-    class="imquote">in this color</span> is quoted from the
+    <p><b>&times;Magick documentation&nbsp;&nbsp;</b><span
+    class="imquote">Text that looks like this</span> is quoted from the
     &times;Magick documentation.</p>
     <p><b>ImageMagick versions&nbsp;&nbsp;</b>When a new method is
     introduced in ImageMagick, the ImageMagick version number where
@@ -211,7 +215,7 @@
     constants.</p>
 <pre class="example">
 irb -r RMagick
-p Magick::Version &raquo; "RMagick 1.2.2"
+p Magick::Version &raquo; "RMagick 1.3.0"
 p Magick::Magick_version &raquo; "ImageMagick 5.5.7 05/23/03 Q8 http://www.imagemagick.org"
 p Magick::Magick_version &raquo; GraphicsMagick 1.0 05/05/03 Q8 http://www.GraphicsMagick.org/"
 </pre>
@@ -233,12 +237,12 @@ p Magick::Magick_version &raquo; GraphicsMagick 1.0 05/05/03 Q8 http://www.Graph
     API to help you compose a question to the &times;Magick
     developers.</p>
     <h3>Contributions</h3>
-    If you produce an image using RMagick that you're particularly
+    If you have a script or an image using RMagick that you're particularly
     proud of, let me know. I'd like to collect your contributions,
     along with other users' contributions, and put them in a
     <code>contrib</code> directory to distribute with RMagick. I'm
     particularly interested in getting examples for the RMagick
-    methods that currently have no examples. 
+    methods that currently have no examples.
     <h3><a name="copyrights">Copyright Notices</a></h3>
     <ul>
       <li>RMagick is copyright &copy; 2003 by Timothy P.

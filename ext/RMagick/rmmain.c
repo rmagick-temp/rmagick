@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.61 2004/06/15 20:27:44 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.62 2004/06/19 20:41:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -459,6 +459,32 @@ Init_RMagick(void)
     InitializeMagick("RMagick");
 
     Module_Magick = rb_define_module("Magick");
+
+    /*-----------------------------------------------------------------------*/
+    /* Create IDs for frequently used methods, etc.                          */
+    /*-----------------------------------------------------------------------*/
+
+    ID__dummy_img_      = rb_intern("_dummy_img_");
+    ID_changed          = rb_intern("changed");
+    ID_cur_image        = rb_intern("cur_image");
+    ID_dup              = rb_intern("dup");
+    ID_enumerators      = rb_intern("enumerators");
+    ID_flag             = rb_intern("flag");
+    ID_from_s           = rb_intern("from_s");
+    ID_Geometry         = rb_intern("Geometry");
+    ID_GeometryValue    = rb_intern("GeometryValue");
+    ID_height           = rb_intern("height");
+    ID_initialize_copy  = rb_intern("initialize_copy");
+    ID_length           = rb_intern("length");
+    ID_notify_observers = rb_intern("notify_observers");
+    ID_new              = rb_intern("new");
+    ID_push             = rb_intern("push");
+    ID_spaceship        = rb_intern("<=>");
+    ID_to_s             = rb_intern("to_s");
+    ID_values           = rb_intern("values");
+    ID_width            = rb_intern("width");
+    ID_x                = rb_intern("x");
+    ID_y                = rb_intern("y");
 
     /*-----------------------------------------------------------------------*/
     /* Module Magick methods                                                 */
@@ -951,78 +977,78 @@ Init_RMagick(void)
 
     // AlignType constants
     DEF_ENUM(AlignType)
-        ENUM_VAL(UndefinedAlign)
-        ENUM_VAL(LeftAlign)
-        ENUM_VAL(CenterAlign)
-        ENUM_VAL(RightAlign)
+        ENUMERATOR(UndefinedAlign)
+        ENUMERATOR(LeftAlign)
+        ENUMERATOR(CenterAlign)
+        ENUMERATOR(RightAlign)
     END_ENUM
 
     // AnchorType constants (for Draw#text_anchor - these are not defined by ImageMagick)
     DEF_ENUM(AnchorType)
-        ENUM_VAL(StartAnchor)
-        ENUM_VAL(MiddleAnchor)
-        ENUM_VAL(EndAnchor)
+        ENUMERATOR(StartAnchor)
+        ENUMERATOR(MiddleAnchor)
+        ENUMERATOR(EndAnchor)
     END_ENUM
 
     // ChannelType constants
     DEF_ENUM(ChannelType)
-        ENUM_VAL(UndefinedChannel)
-        ENUM_VAL(RedChannel)
-        ENUM_VAL(CyanChannel)
-        ENUM_VAL(GreenChannel)
-        ENUM_VAL(MagentaChannel)
-        ENUM_VAL(BlueChannel)
-        ENUM_VAL(YellowChannel)
-        ENUM_VAL(OpacityChannel)
-        ENUM_VAL(BlackChannel)
-        ENUM_VAL(MatteChannel)
+        ENUMERATOR(UndefinedChannel)
+        ENUMERATOR(RedChannel)
+        ENUMERATOR(CyanChannel)
+        ENUMERATOR(GreenChannel)
+        ENUMERATOR(MagentaChannel)
+        ENUMERATOR(BlueChannel)
+        ENUMERATOR(YellowChannel)
+        ENUMERATOR(OpacityChannel)
+        ENUMERATOR(BlackChannel)
+        ENUMERATOR(MatteChannel)
 #if defined(HAVE_INDEXCHANNEL)
-        ENUM_VAL(IndexChannel)    // 5.5.8
+        ENUMERATOR(IndexChannel)    // 5.5.8
 #endif
 #if defined(HAVE_ALLCHANNELS)
-        ENUM_VAL(AllChannels)
+        ENUMERATOR(AllChannels)
 #endif
     END_ENUM
 
     // ClassType constants
     DEF_ENUM(ClassType)
-        ENUM_VAL(UndefinedClass)
-        ENUM_VAL(PseudoClass)
-        ENUM_VAL(DirectClass)
+        ENUMERATOR(UndefinedClass)
+        ENUMERATOR(PseudoClass)
+        ENUMERATOR(DirectClass)
     END_ENUM
 
     // ColorspaceType constants
     DEF_ENUM(ColorspaceType)
-        ENUM_VAL(UndefinedColorspace)
-        ENUM_VAL(RGBColorspace)
-        ENUM_VAL(GRAYColorspace)
-        ENUM_VAL(TransparentColorspace)
-        ENUM_VAL(OHTAColorspace)
-        ENUM_VAL(XYZColorspace)
-        ENUM_VAL(YCbCrColorspace)
-        ENUM_VAL(YCCColorspace)
-        ENUM_VAL(YIQColorspace)
-        ENUM_VAL(YPbPrColorspace)
-        ENUM_VAL(YUVColorspace)
-        ENUM_VAL(CMYKColorspace)
+        ENUMERATOR(UndefinedColorspace)
+        ENUMERATOR(RGBColorspace)
+        ENUMERATOR(GRAYColorspace)
+        ENUMERATOR(TransparentColorspace)
+        ENUMERATOR(OHTAColorspace)
+        ENUMERATOR(XYZColorspace)
+        ENUMERATOR(YCbCrColorspace)
+        ENUMERATOR(YCCColorspace)
+        ENUMERATOR(YIQColorspace)
+        ENUMERATOR(YPbPrColorspace)
+        ENUMERATOR(YUVColorspace)
+        ENUMERATOR(CMYKColorspace)
         rb_define_const(Module_Magick, "SRGBColorspace"
                       , rm_enum_new(Class_ColorspaceType
                       , ID2SYM(rb_intern("SRGBColorspace"))
                       , INT2FIX(sRGBColorspace)));
 #if defined(HAVE_HSLCOLORSPACE)
-        ENUM_VAL(HSLColorspace)       // 5.5.7
+        ENUMERATOR(HSLColorspace)       // 5.5.7
 #endif
 #if defined(HAVE_HWBCOLORSPACE)
-        ENUM_VAL(HWBColorspace)       // 5.5.7
+        ENUMERATOR(HWBColorspace)       // 5.5.7
 #endif
 #if defined(HAVE_HSBCOLORSPACE)
-        ENUM_VAL(HSBColorspace)       // 6.0.0
+        ENUMERATOR(HSBColorspace)       // 6.0.0
 #endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
     DEF_ENUM(ComplianceType)
-        ENUM_VAL(UndefinedCompliance)
+        ENUMERATOR(UndefinedCompliance)
 
         // AllCompliance is 0xffff, not too useful for us!
         rb_define_const(Module_Magick, "AllCompliance"
@@ -1031,301 +1057,300 @@ Init_RMagick(void)
                   , INT2FIX(SVGCompliance|X11Compliance|XPMCompliance)));
 
 #if defined(HAVE_NOCOMPLIANCE)
-        ENUM_VAL(NoCompliance)
+        ENUMERATOR(NoCompliance)
 #endif
-        ENUM_VAL(SVGCompliance)
-        ENUM_VAL(X11Compliance)
-        ENUM_VAL(XPMCompliance)
+        ENUMERATOR(SVGCompliance)
+        ENUMERATOR(X11Compliance)
+        ENUMERATOR(XPMCompliance)
     END_ENUM
 
     // CompositeOperator constants
     DEF_ENUM(CompositeOperator)
-        ENUM_VAL(UndefinedCompositeOp)
-        ENUM_VAL(NoCompositeOp)
-        ENUM_VAL(AddCompositeOp)
-        ENUM_VAL(AtopCompositeOp)
-        ENUM_VAL(BumpmapCompositeOp)
-        ENUM_VAL(ClearCompositeOp)
-        ENUM_VAL(ColorizeCompositeOp)
-        ENUM_VAL(CopyBlueCompositeOp)
-        ENUM_VAL(CopyCompositeOp)
-        ENUM_VAL(CopyGreenCompositeOp)
-        ENUM_VAL(CopyOpacityCompositeOp)
-        ENUM_VAL(CopyRedCompositeOp)
+        ENUMERATOR(UndefinedCompositeOp)
+        ENUMERATOR(NoCompositeOp)
+        ENUMERATOR(AddCompositeOp)
+        ENUMERATOR(AtopCompositeOp)
+        ENUMERATOR(BumpmapCompositeOp)
+        ENUMERATOR(ClearCompositeOp)
+        ENUMERATOR(ColorizeCompositeOp)
+        ENUMERATOR(CopyBlueCompositeOp)
+        ENUMERATOR(CopyCompositeOp)
+        ENUMERATOR(CopyGreenCompositeOp)
+        ENUMERATOR(CopyOpacityCompositeOp)
+        ENUMERATOR(CopyRedCompositeOp)
 #if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
-        ENUM_VAL(CopyCyanCompositeOp)
-        ENUM_VAL(CopyMagentaCompositeOp)
-        ENUM_VAL(CopyYellowCompositeOp)
-        ENUM_VAL(CopyBlackCompositeOp)
+        ENUMERATOR(CopyCyanCompositeOp)
+        ENUMERATOR(CopyMagentaCompositeOp)
+        ENUMERATOR(CopyYellowCompositeOp)
+        ENUMERATOR(CopyBlackCompositeOp)
 #endif
-        ENUM_VAL(DarkenCompositeOp)
-        ENUM_VAL(DifferenceCompositeOp)
-        ENUM_VAL(DisplaceCompositeOp)
-        ENUM_VAL(DissolveCompositeOp)
+        ENUMERATOR(DarkenCompositeOp)
+        ENUMERATOR(DifferenceCompositeOp)
+        ENUMERATOR(DisplaceCompositeOp)
+        ENUMERATOR(DissolveCompositeOp)
 #if defined(HAVE_DSTCOMPOSITEOP)
-        ENUM_VAL(DstAtopCompositeOp)    // Added 6.0.2?
-        ENUM_VAL(DstCompositeOp)
-        ENUM_VAL(DstInCompositeOp)
-        ENUM_VAL(DstOutCompositeOp)
-        ENUM_VAL(DstOverCompositeOp)
+        ENUMERATOR(DstAtopCompositeOp)    // Added 6.0.2?
+        ENUMERATOR(DstCompositeOp)
+        ENUMERATOR(DstInCompositeOp)
+        ENUMERATOR(DstOutCompositeOp)
+        ENUMERATOR(DstOverCompositeOp)
 #endif
-        ENUM_VAL(HueCompositeOp)
-        ENUM_VAL(InCompositeOp)
-        ENUM_VAL(LightenCompositeOp)
-        ENUM_VAL(LuminizeCompositeOp)
-        ENUM_VAL(MinusCompositeOp)
-        ENUM_VAL(ModulateCompositeOp)
-        ENUM_VAL(MultiplyCompositeOp)
-        ENUM_VAL(OutCompositeOp)
-        ENUM_VAL(OverCompositeOp)
-        ENUM_VAL(OverlayCompositeOp)
-        ENUM_VAL(PlusCompositeOp)
+        ENUMERATOR(HueCompositeOp)
+        ENUMERATOR(InCompositeOp)
+        ENUMERATOR(LightenCompositeOp)
+        ENUMERATOR(LuminizeCompositeOp)
+        ENUMERATOR(MinusCompositeOp)
+        ENUMERATOR(ModulateCompositeOp)
+        ENUMERATOR(MultiplyCompositeOp)
+        ENUMERATOR(OutCompositeOp)
+        ENUMERATOR(OverCompositeOp)
+        ENUMERATOR(OverlayCompositeOp)
+        ENUMERATOR(PlusCompositeOp)
 #if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
-        ENUM_VAL(ReplaceCompositeOp)    // synonym for CopyCompositeOp
+        ENUMERATOR(ReplaceCompositeOp)    // synonym for CopyCompositeOp
 #endif
-        ENUM_VAL(SaturateCompositeOp)
-        ENUM_VAL(ScreenCompositeOp)
+        ENUMERATOR(SaturateCompositeOp)
+        ENUMERATOR(ScreenCompositeOp)
 #if defined(HAVE_DSTCOMPOSITEOP)
-        ENUM_VAL(SrcAtopCompositeOp)
-        ENUM_VAL(SrcCompositeOp)
-        ENUM_VAL(SrcInCompositeOp)
-        ENUM_VAL(SrcOutCompositeOp)
-        ENUM_VAL(SrcOverCompositeOp)
+        ENUMERATOR(SrcAtopCompositeOp)
+        ENUMERATOR(SrcCompositeOp)
+        ENUMERATOR(SrcInCompositeOp)
+        ENUMERATOR(SrcOutCompositeOp)
+        ENUMERATOR(SrcOverCompositeOp)
 #endif
-        ENUM_VAL(SubtractCompositeOp)
-        ENUM_VAL(ThresholdCompositeOp)
-        ENUM_VAL(XorCompositeOp)
+        ENUMERATOR(SubtractCompositeOp)
+        ENUMERATOR(ThresholdCompositeOp)
+        ENUMERATOR(XorCompositeOp)
 
 #if defined(HAVE_COLORIZECOMPOSITEOP)
-        ENUM_VAL(ColorDodgeCompositeOp)
-        ENUM_VAL(ExclusionCompositeOp)
-        ENUM_VAL(HardLightCompositeOp)
-        ENUM_VAL(SoftLightCompositeOp)
+        ENUMERATOR(ColorDodgeCompositeOp)
+        ENUMERATOR(ExclusionCompositeOp)
+        ENUMERATOR(HardLightCompositeOp)
+        ENUMERATOR(SoftLightCompositeOp)
 #endif
-
     END_ENUM
 
     // CompressionType constants
     DEF_ENUM(CompressionType)
-        ENUM_VAL(UndefinedCompression)
-        ENUM_VAL(NoCompression)
-        ENUM_VAL(BZipCompression)
-        ENUM_VAL(FaxCompression)
-        ENUM_VAL(Group4Compression)
-        ENUM_VAL(JPEGCompression)
-        ENUM_VAL(LosslessJPEGCompression)
-        ENUM_VAL(LZWCompression)
-        ENUM_VAL(RunlengthEncodedCompression)
-        ENUM_VAL(ZipCompression)
+        ENUMERATOR(UndefinedCompression)
+        ENUMERATOR(NoCompression)
+        ENUMERATOR(BZipCompression)
+        ENUMERATOR(FaxCompression)
+        ENUMERATOR(Group4Compression)
+        ENUMERATOR(JPEGCompression)
+        ENUMERATOR(LosslessJPEGCompression)
+        ENUMERATOR(LZWCompression)
+        ENUMERATOR(RunlengthEncodedCompression)
+        ENUMERATOR(ZipCompression)
     END_ENUM
 
     // DecorationType constants
     DEF_ENUM(DecorationType)
-        ENUM_VAL(NoDecoration)
-        ENUM_VAL(UnderlineDecoration)
-        ENUM_VAL(OverlineDecoration)
-        ENUM_VAL(LineThroughDecoration)
+        ENUMERATOR(NoDecoration)
+        ENUMERATOR(UnderlineDecoration)
+        ENUMERATOR(OverlineDecoration)
+        ENUMERATOR(LineThroughDecoration)
     END_ENUM
 
 #if defined(HAVE_DISPOSETYPE)
     // DisposeType constants (5.5.1)
     DEF_ENUM(DisposeType)
-        ENUM_VAL(UndefinedDispose)
-        ENUM_VAL(BackgroundDispose)
-        ENUM_VAL(NoneDispose)
-        ENUM_VAL(PreviousDispose)
+        ENUMERATOR(UndefinedDispose)
+        ENUMERATOR(BackgroundDispose)
+        ENUMERATOR(NoneDispose)
+        ENUMERATOR(PreviousDispose)
     END_ENUM
 #endif
 
     DEF_ENUM(EndianType)
-        ENUM_VAL(UndefinedEndian)
-        ENUM_VAL(LSBEndian)
-        ENUM_VAL(MSBEndian)
+        ENUMERATOR(UndefinedEndian)
+        ENUMERATOR(LSBEndian)
+        ENUMERATOR(MSBEndian)
     END_ENUM
 
     // FilterTypes constants
     DEF_ENUM(FilterTypes)
-        ENUM_VAL(UndefinedFilter)
-        ENUM_VAL(PointFilter)
-        ENUM_VAL(BoxFilter)
-        ENUM_VAL(TriangleFilter)
-        ENUM_VAL(HermiteFilter)
-        ENUM_VAL(HanningFilter)
-        ENUM_VAL(HammingFilter)
-        ENUM_VAL(BlackmanFilter)
-        ENUM_VAL(GaussianFilter)
-        ENUM_VAL(QuadraticFilter)
-        ENUM_VAL(CubicFilter)
-        ENUM_VAL(CatromFilter)
-        ENUM_VAL(MitchellFilter)
-        ENUM_VAL(LanczosFilter)
-        ENUM_VAL(BesselFilter)
-        ENUM_VAL(SincFilter)
+        ENUMERATOR(UndefinedFilter)
+        ENUMERATOR(PointFilter)
+        ENUMERATOR(BoxFilter)
+        ENUMERATOR(TriangleFilter)
+        ENUMERATOR(HermiteFilter)
+        ENUMERATOR(HanningFilter)
+        ENUMERATOR(HammingFilter)
+        ENUMERATOR(BlackmanFilter)
+        ENUMERATOR(GaussianFilter)
+        ENUMERATOR(QuadraticFilter)
+        ENUMERATOR(CubicFilter)
+        ENUMERATOR(CatromFilter)
+        ENUMERATOR(MitchellFilter)
+        ENUMERATOR(LanczosFilter)
+        ENUMERATOR(BesselFilter)
+        ENUMERATOR(SincFilter)
     END_ENUM
 
     // GravityType constants
     DEF_ENUM(GravityType)
-        ENUM_VAL(ForgetGravity)
-        ENUM_VAL(NorthWestGravity)
-        ENUM_VAL(NorthGravity)
-        ENUM_VAL(NorthEastGravity)
-        ENUM_VAL(WestGravity)
-        ENUM_VAL(CenterGravity)
-        ENUM_VAL(EastGravity)
-        ENUM_VAL(SouthWestGravity)
-        ENUM_VAL(SouthGravity)
-        ENUM_VAL(SouthEastGravity)
-        ENUM_VAL(StaticGravity)
+        ENUMERATOR(ForgetGravity)
+        ENUMERATOR(NorthWestGravity)
+        ENUMERATOR(NorthGravity)
+        ENUMERATOR(NorthEastGravity)
+        ENUMERATOR(WestGravity)
+        ENUMERATOR(CenterGravity)
+        ENUMERATOR(EastGravity)
+        ENUMERATOR(SouthWestGravity)
+        ENUMERATOR(SouthGravity)
+        ENUMERATOR(SouthEastGravity)
+        ENUMERATOR(StaticGravity)
     END_ENUM
 
     // ImageType constants
     DEF_ENUM(ImageType)
-        ENUM_VAL(UndefinedType)
-        ENUM_VAL(BilevelType)
-        ENUM_VAL(GrayscaleType)
-        ENUM_VAL(GrayscaleMatteType)
-        ENUM_VAL(PaletteType)
-        ENUM_VAL(PaletteMatteType)
-        ENUM_VAL(TrueColorType)
-        ENUM_VAL(TrueColorMatteType)
-        ENUM_VAL(ColorSeparationType)
-        ENUM_VAL(ColorSeparationMatteType)
-        ENUM_VAL(OptimizeType)
+        ENUMERATOR(UndefinedType)
+        ENUMERATOR(BilevelType)
+        ENUMERATOR(GrayscaleType)
+        ENUMERATOR(GrayscaleMatteType)
+        ENUMERATOR(PaletteType)
+        ENUMERATOR(PaletteMatteType)
+        ENUMERATOR(TrueColorType)
+        ENUMERATOR(TrueColorMatteType)
+        ENUMERATOR(ColorSeparationType)
+        ENUMERATOR(ColorSeparationMatteType)
+        ENUMERATOR(OptimizeType)
     END_ENUM
 
     // InterlaceType constants
     DEF_ENUM(InterlaceType)
-        ENUM_VAL(UndefinedInterlace)
-        ENUM_VAL(NoInterlace)
-        ENUM_VAL(LineInterlace)
-        ENUM_VAL(PlaneInterlace)
-        ENUM_VAL(PartitionInterlace)
+        ENUMERATOR(UndefinedInterlace)
+        ENUMERATOR(NoInterlace)
+        ENUMERATOR(LineInterlace)
+        ENUMERATOR(PlaneInterlace)
+        ENUMERATOR(PartitionInterlace)
     END_ENUM
 
 #if defined(HAVE_COMPAREIMAGECHANNELS)
     DEF_ENUM(MetricType)
-        ENUM_VAL(UndefinedMetric)
-        ENUM_VAL(MeanAbsoluteErrorMetric)
-        ENUM_VAL(MeanSquaredErrorMetric)
-        ENUM_VAL(PeakAbsoluteErrorMetric)
-        ENUM_VAL(PeakSignalToNoiseRatioMetric)
-        ENUM_VAL(RootMeanSquaredErrorMetric)
+        ENUMERATOR(UndefinedMetric)
+        ENUMERATOR(MeanAbsoluteErrorMetric)
+        ENUMERATOR(MeanSquaredErrorMetric)
+        ENUMERATOR(PeakAbsoluteErrorMetric)
+        ENUMERATOR(PeakSignalToNoiseRatioMetric)
+        ENUMERATOR(RootMeanSquaredErrorMetric)
     END_ENUM
 #endif
 
     // NoiseType constants
     DEF_ENUM(NoiseType)
-        ENUM_VAL(UniformNoise)
-        ENUM_VAL(GaussianNoise)
-        ENUM_VAL(MultiplicativeGaussianNoise)
-        ENUM_VAL(ImpulseNoise)
-        ENUM_VAL(LaplacianNoise)
-        ENUM_VAL(PoissonNoise)
+        ENUMERATOR(UniformNoise)
+        ENUMERATOR(GaussianNoise)
+        ENUMERATOR(MultiplicativeGaussianNoise)
+        ENUMERATOR(ImpulseNoise)
+        ENUMERATOR(LaplacianNoise)
+        ENUMERATOR(PoissonNoise)
     END_ENUM
 
     // Paint method constants
     DEF_ENUM(PaintMethod)
-        ENUM_VAL(PointMethod)
-        ENUM_VAL(ReplaceMethod)
-        ENUM_VAL(FloodfillMethod)
-        ENUM_VAL(FillToBorderMethod)
-        ENUM_VAL(ResetMethod)
+        ENUMERATOR(PointMethod)
+        ENUMERATOR(ReplaceMethod)
+        ENUMERATOR(FloodfillMethod)
+        ENUMERATOR(FillToBorderMethod)
+        ENUMERATOR(ResetMethod)
     END_ENUM
 
     // PreviewType
     DEF_ENUM(PreviewType)
-        ENUM_VAL(UndefinedPreview)
-        ENUM_VAL(RotatePreview)
-        ENUM_VAL(ShearPreview)
-        ENUM_VAL(RollPreview)
-        ENUM_VAL(HuePreview)
-        ENUM_VAL(SaturationPreview)
-        ENUM_VAL(BrightnessPreview)
-        ENUM_VAL(GammaPreview)
-        ENUM_VAL(SpiffPreview)
-        ENUM_VAL(DullPreview)
-        ENUM_VAL(GrayscalePreview)
-        ENUM_VAL(QuantizePreview)
-        ENUM_VAL(DespecklePreview)
-        ENUM_VAL(ReduceNoisePreview)
-        ENUM_VAL(AddNoisePreview)
-        ENUM_VAL(SharpenPreview)
-        ENUM_VAL(BlurPreview)
-        ENUM_VAL(ThresholdPreview)
-        ENUM_VAL(EdgeDetectPreview)
-        ENUM_VAL(SpreadPreview)
-        ENUM_VAL(SolarizePreview)
-        ENUM_VAL(ShadePreview)
-        ENUM_VAL(RaisePreview)
-        ENUM_VAL(SegmentPreview)
-        ENUM_VAL(SwirlPreview)
-        ENUM_VAL(ImplodePreview)
-        ENUM_VAL(WavePreview)
-        ENUM_VAL(OilPaintPreview)
-        ENUM_VAL(CharcoalDrawingPreview)
-        ENUM_VAL(JPEGPreview)
+        ENUMERATOR(UndefinedPreview)
+        ENUMERATOR(RotatePreview)
+        ENUMERATOR(ShearPreview)
+        ENUMERATOR(RollPreview)
+        ENUMERATOR(HuePreview)
+        ENUMERATOR(SaturationPreview)
+        ENUMERATOR(BrightnessPreview)
+        ENUMERATOR(GammaPreview)
+        ENUMERATOR(SpiffPreview)
+        ENUMERATOR(DullPreview)
+        ENUMERATOR(GrayscalePreview)
+        ENUMERATOR(QuantizePreview)
+        ENUMERATOR(DespecklePreview)
+        ENUMERATOR(ReduceNoisePreview)
+        ENUMERATOR(AddNoisePreview)
+        ENUMERATOR(SharpenPreview)
+        ENUMERATOR(BlurPreview)
+        ENUMERATOR(ThresholdPreview)
+        ENUMERATOR(EdgeDetectPreview)
+        ENUMERATOR(SpreadPreview)
+        ENUMERATOR(SolarizePreview)
+        ENUMERATOR(ShadePreview)
+        ENUMERATOR(RaisePreview)
+        ENUMERATOR(SegmentPreview)
+        ENUMERATOR(SwirlPreview)
+        ENUMERATOR(ImplodePreview)
+        ENUMERATOR(WavePreview)
+        ENUMERATOR(OilPaintPreview)
+        ENUMERATOR(CharcoalDrawingPreview)
+        ENUMERATOR(JPEGPreview)
     END_ENUM
 
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
     DEF_ENUM(QuantumExpressionOperator)
-        ENUM_VAL(UndefinedQuantumOperator)
-        ENUM_VAL(AddQuantumOperator)
-        ENUM_VAL(AndQuantumOperator)
-        ENUM_VAL(DivideQuantumOperator)
-        ENUM_VAL(LShiftQuantumOperator)
-        ENUM_VAL(MultiplyQuantumOperator)
-        ENUM_VAL(OrQuantumOperator)
-        ENUM_VAL(RShiftQuantumOperator)
-        ENUM_VAL(SubtractQuantumOperator)
-        ENUM_VAL(XorQuantumOperator)
+        ENUMERATOR(UndefinedQuantumOperator)
+        ENUMERATOR(AddQuantumOperator)
+        ENUMERATOR(AndQuantumOperator)
+        ENUMERATOR(DivideQuantumOperator)
+        ENUMERATOR(LShiftQuantumOperator)
+        ENUMERATOR(MultiplyQuantumOperator)
+        ENUMERATOR(OrQuantumOperator)
+        ENUMERATOR(RShiftQuantumOperator)
+        ENUMERATOR(SubtractQuantumOperator)
+        ENUMERATOR(XorQuantumOperator)
     END_ENUM
 #endif
 
     // RenderingIntent
     DEF_ENUM(RenderingIntent)
-        ENUM_VAL(UndefinedIntent)
-        ENUM_VAL(SaturationIntent)
-        ENUM_VAL(PerceptualIntent)
-        ENUM_VAL(AbsoluteIntent)
-        ENUM_VAL(RelativeIntent)
+        ENUMERATOR(UndefinedIntent)
+        ENUMERATOR(SaturationIntent)
+        ENUMERATOR(PerceptualIntent)
+        ENUMERATOR(AbsoluteIntent)
+        ENUMERATOR(RelativeIntent)
     END_ENUM
 
     // ResolutionType constants
     DEF_ENUM(ResolutionType)
-        ENUM_VAL(UndefinedResolution)
-        ENUM_VAL(PixelsPerInchResolution)
-        ENUM_VAL(PixelsPerCentimeterResolution)
+        ENUMERATOR(UndefinedResolution)
+        ENUMERATOR(PixelsPerInchResolution)
+        ENUMERATOR(PixelsPerCentimeterResolution)
     END_ENUM
 
     // StretchType constants
     DEF_ENUM(StretchType)
-        ENUM_VAL(NormalStretch)
-        ENUM_VAL(UltraCondensedStretch)
-        ENUM_VAL(ExtraCondensedStretch)
-        ENUM_VAL(CondensedStretch)
-        ENUM_VAL(SemiCondensedStretch)
-        ENUM_VAL(SemiExpandedStretch)
-        ENUM_VAL(ExpandedStretch)
-        ENUM_VAL(ExtraExpandedStretch)
-        ENUM_VAL(UltraExpandedStretch)
-        ENUM_VAL(AnyStretch)
+        ENUMERATOR(NormalStretch)
+        ENUMERATOR(UltraCondensedStretch)
+        ENUMERATOR(ExtraCondensedStretch)
+        ENUMERATOR(CondensedStretch)
+        ENUMERATOR(SemiCondensedStretch)
+        ENUMERATOR(SemiExpandedStretch)
+        ENUMERATOR(ExpandedStretch)
+        ENUMERATOR(ExtraExpandedStretch)
+        ENUMERATOR(UltraExpandedStretch)
+        ENUMERATOR(AnyStretch)
     END_ENUM
 
     // StyleType constants
     DEF_ENUM(StyleType)
-        ENUM_VAL(NormalStyle)
-        ENUM_VAL(ItalicStyle)
-        ENUM_VAL(ObliqueStyle)
-        ENUM_VAL(AnyStyle)
+        ENUMERATOR(NormalStyle)
+        ENUMERATOR(ItalicStyle)
+        ENUMERATOR(ObliqueStyle)
+        ENUMERATOR(AnyStyle)
     END_ENUM
 
     // WeightType constants
     DEF_ENUM(WeightType)
-        ENUM_VAL(AnyWeight)
-        ENUM_VAL(NormalWeight)
-        ENUM_VAL(BoldWeight)
-        ENUM_VAL(BolderWeight)
-        ENUM_VAL(LighterWeight)
+        ENUMERATOR(AnyWeight)
+        ENUMERATOR(NormalWeight)
+        ENUMERATOR(BoldWeight)
+        ENUMERATOR(BolderWeight)
+        ENUMERATOR(LighterWeight)
     END_ENUM
 
     /*-----------------------------------------------------------------------*/
@@ -1400,29 +1425,6 @@ Init_RMagick(void)
     rb_define_const(Module_Magick, "TypeMetric", Class_TypeMetric);
 
 
-    /*-----------------------------------------------------------------------*/
-    /* Create IDs for frequently used methods, etc.                          */
-    /*-----------------------------------------------------------------------*/
-
-    ID__dummy_img_      = rb_intern("_dummy_img_");
-    ID_changed          = rb_intern("changed");
-    ID_cur_image        = rb_intern("cur_image");
-    ID_dup              = rb_intern("dup");
-    ID_flag             = rb_intern("flag");
-    ID_from_s           = rb_intern("from_s");
-    ID_Geometry         = rb_intern("Geometry");
-    ID_GeometryValue    = rb_intern("GeometryValue");
-    ID_height           = rb_intern("height");
-    ID_initialize_copy  = rb_intern("initialize_copy");
-    ID_length           = rb_intern("length");
-    ID_notify_observers = rb_intern("notify_observers");
-    ID_new              = rb_intern("new");
-    ID_push             = rb_intern("push");
-    ID_to_s             = rb_intern("to_s");
-    ID_values           = rb_intern("values");
-    ID_width            = rb_intern("width");
-    ID_x                = rb_intern("x");
-    ID_y                = rb_intern("y");
 }
 
 /*
@@ -1439,7 +1441,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/06/15 20:27:44 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/06/19 20:41:18 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

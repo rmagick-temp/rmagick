@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.13 2004/06/12 21:52:40 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.14 2004/06/19 20:41:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -552,7 +552,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
 
     // Create a temp copy of the composite image
     Data_Get_Struct(image, Image, comp_img);
-    write_temp_image(comp_img, name);
+    rm_write_temp_image(comp_img, name);
 
     // Add the temp filename to the filename array
     if (!draw->tmpfile_ary)
@@ -896,7 +896,7 @@ destroy_Draw(void *drawptr)
     {
         while ((tmpfile = rb_ary_shift(draw->tmpfile_ary)) != Qnil)
         {
-            delete_temp_image(STRING_PTR(tmpfile));
+            rm_delete_temp_image(STRING_PTR(tmpfile));
         }
     }
 
@@ -1149,7 +1149,7 @@ destroy_Montage(void *obj)
     // If we saved a temporary texture image, delete it now.
     if (montage->info->texture != NULL)
     {
-        delete_temp_image(montage->info->texture);
+        rm_delete_temp_image(montage->info->texture);
     }
     DestroyMontageInfo(montage->info);
     xfree(montage);
@@ -1221,7 +1221,7 @@ Montage_texture_eq(VALUE self, VALUE texture)
     Data_Get_Struct(ImageList_cur_image(texture), Image, texture_image);
 
     // Write a temp copy of the image & save its name.
-    write_temp_image(texture_image, tmpnam);
+    rm_write_temp_image(texture_image, tmpnam);
     magick_clone_string(&montage->info->texture, tmpnam);
 
     return self;

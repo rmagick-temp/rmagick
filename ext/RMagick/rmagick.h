@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.56 2004/06/15 17:27:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.57 2004/06/19 20:41:18 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -258,6 +258,7 @@ EXTERN ID ID_changed;           // "changed"
 EXTERN ID ID_call;              // "call"
 EXTERN ID ID_cur_image;         // "cur_image"
 EXTERN ID ID_dup;               // "dup"
+EXTERN ID ID_enumerators;       // "enumerators"
 EXTERN ID ID_flag;              // "flag"
 EXTERN ID ID_from_s;            // "from_s"
 EXTERN ID ID_Geometry;          // "Geometry"
@@ -268,6 +269,7 @@ EXTERN ID ID_length;            // "length"
 EXTERN ID ID_notify_observers;  // "notify_observers"
 EXTERN ID ID_new;               // "new"
 EXTERN ID ID_push;              // "push"
+EXTERN ID ID_spaceship;         // "<=>
 EXTERN ID ID_to_s;              // "to_s"
 EXTERN ID ID_values;            // "values"
 EXTERN ID ID_width;             // "width"
@@ -301,9 +303,9 @@ EXTERN ID ID_y;                 // "y"
    ExceptionInfo structure (releasing any IM storage) before
    calling rb_raise.
 */
-#define HANDLE_ERROR handle_error(&exception);
+#define HANDLE_ERROR rm_handle_error(&exception);
 // For ExceptionInfo structures in images.
-#define HANDLE_IMG_ERROR(img) handle_error(&((img)->exception));
+#define HANDLE_IMG_ERROR(img) rm_handle_error(&((img)->exception));
 
 /*
     Map the QuantumDepth to a StorageType.
@@ -388,10 +390,11 @@ EXTERN ID ID_y;                 // "y"
  *  Define an instance of the subclass for each member in the enumeration.
  *  Initialize each instance with its name and value.
  */
-#define DEF_ENUM(type) {\
+#define DEF_ENUM(tag) {\
    VALUE _cls, _enum;\
-   _cls =  Class_##type = rb_define_class_under(Module_Magick, #type, Class_Enum);
-#define ENUM_VAL(val)\
+   _cls =  Class_##tag = rm_define_enum_type(#tag);
+
+#define ENUMERATOR(val)\
    _enum = rm_enum_new(_cls, ID2SYM(rb_intern(#val)), INT2FIX(val));\
    rb_define_const(Module_Magick, #val, _enum);
 #define END_ENUM }
@@ -766,41 +769,41 @@ extern VALUE rm_image_new(Image *);
 
 // rmfill.c
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE GradientFill_alloc(VALUE);
+extern VALUE  GradientFill_alloc(VALUE);
 #else
-VALUE GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE  GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 #endif
 
-extern VALUE GradientFill_initialize(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
-extern VALUE GradientFill_fill(VALUE, VALUE);
+extern VALUE  GradientFill_initialize(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE  GradientFill_fill(VALUE, VALUE);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE TextureFill_alloc(VALUE);
+extern VALUE  TextureFill_alloc(VALUE);
 #else
-VALUE TextureFill_new(VALUE, VALUE);
+extern VALUE  TextureFill_new(VALUE, VALUE);
 #endif
 
-extern VALUE TextureFill_initialize(VALUE, VALUE);
-extern VALUE TextureFill_fill(VALUE, VALUE);
+extern VALUE  TextureFill_initialize(VALUE, VALUE);
+extern VALUE  TextureFill_fill(VALUE, VALUE);
 
 
 // rmutil.c
-extern VALUE   AffineMatrix_from_AffineMatrix(AffineMatrix *);
-extern VALUE   ChromaticityInfo_to_s(VALUE);
-extern VALUE   ChromaticityInfo_new(ChromaticityInfo *);
-extern void    Color_to_PixelPacket(PixelPacket *, VALUE);
-extern VALUE   Color_to_s(VALUE);
-extern VALUE   Color_from_ColorInfo(const ColorInfo *);
-extern VALUE   ClassType_new(ClassType);
-extern VALUE   ColorspaceType_new(ColorspaceType);
-extern VALUE   CompressionType_new(CompressionType);
-extern VALUE   EndianType_new(EndianType);
-extern VALUE   FilterTypes_new(FilterTypes);
-extern VALUE   Font_to_s(VALUE);
-extern VALUE   ImageList_cur_image(VALUE);
-extern VALUE   ImageMagickError_initialize(int, VALUE *, VALUE);
-extern VALUE   ImageType_new(ImageType);
-extern VALUE   InterlaceType_new(InterlaceType);
+extern VALUE  AffineMatrix_from_AffineMatrix(AffineMatrix *);
+extern VALUE  ChromaticityInfo_to_s(VALUE);
+extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
+extern void   Color_to_PixelPacket(PixelPacket *, VALUE);
+extern VALUE  Color_to_s(VALUE);
+extern VALUE  Color_from_ColorInfo(const ColorInfo *);
+extern VALUE  ClassType_new(ClassType);
+extern VALUE  ColorspaceType_new(ColorspaceType);
+extern VALUE  CompressionType_new(CompressionType);
+extern VALUE  EndianType_new(EndianType);
+extern VALUE  FilterTypes_new(FilterTypes);
+extern VALUE  Font_to_s(VALUE);
+extern VALUE  ImageList_cur_image(VALUE);
+extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
+extern VALUE  ImageType_new(ImageType);
+extern VALUE  InterlaceType_new(InterlaceType);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE   Pixel_alloc(VALUE);
@@ -811,84 +814,86 @@ ATTR_ACCESSOR(Pixel, red)
 ATTR_ACCESSOR(Pixel, green)
 ATTR_ACCESSOR(Pixel, blue)
 ATTR_ACCESSOR(Pixel, opacity)
-extern VALUE   Pixel_case_eq(VALUE, VALUE);
-extern VALUE   Pixel_clone(VALUE);
-extern VALUE   Pixel_dup(VALUE);
-extern VALUE   Pixel_fcmp(int, VALUE *, VALUE);
-extern VALUE   Pixel_from_color(VALUE, VALUE);
-extern VALUE   Pixel_from_HSL(VALUE, VALUE);
-extern VALUE   Pixel_initialize(int, VALUE *, VALUE);
-extern VALUE   Pixel_init_copy(VALUE, VALUE);
-extern VALUE   Pixel_intensity(VALUE);
-extern VALUE   Pixel_spaceship(VALUE, VALUE);
-extern VALUE   Pixel_to_color(int, VALUE *, VALUE);
-extern VALUE   Pixel_to_HSL(VALUE);
-extern VALUE   Pixel_to_s(VALUE);
-extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
-extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
-extern VALUE   Pixel_from_PixelPacket(PixelPacket *);
+extern VALUE  Pixel_case_eq(VALUE, VALUE);
+extern VALUE  Pixel_clone(VALUE);
+extern VALUE  Pixel_dup(VALUE);
+extern VALUE  Pixel_fcmp(int, VALUE *, VALUE);
+extern VALUE  Pixel_from_color(VALUE, VALUE);
+extern VALUE  Pixel_from_HSL(VALUE, VALUE);
+extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
+extern VALUE  Pixel_init_copy(VALUE, VALUE);
+extern VALUE  Pixel_intensity(VALUE);
+extern VALUE  Pixel_spaceship(VALUE, VALUE);
+extern VALUE  Pixel_to_color(int, VALUE *, VALUE);
+extern VALUE  Pixel_to_HSL(VALUE);
+extern VALUE  Pixel_to_s(VALUE);
+extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
+extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
+extern VALUE  Pixel_from_PixelPacket(PixelPacket *);
 
-extern void    Point_to_PointInfo(PointInfo *, VALUE);
-extern VALUE   PointInfo_to_Point(PointInfo *);
-extern VALUE   PrimaryInfo_to_s(VALUE);
-extern VALUE   PrimaryInfo_from_PrimaryInfo(PrimaryInfo *);
-extern VALUE   RectangleInfo_to_s(VALUE);
-extern VALUE   Rectangle_from_RectangleInfo(RectangleInfo *);
-extern VALUE   RenderingIntent_new(RenderingIntent);
-extern VALUE   ResolutionType_new(ResolutionType);
-extern VALUE   SegmentInfo_to_s(VALUE);
-extern VALUE   Segment_from_SegmentInfo(SegmentInfo *);
-extern void    AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
-extern void    ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
-extern void    Color_to_ColorInfo(ColorInfo *, VALUE);
-extern void    PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
-extern void    Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
-extern void    Segment_to_SegmentInfo(SegmentInfo *, VALUE);
-extern void    Font_to_TypeInfo(TypeInfo *, VALUE);
-extern void    TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
-extern VALUE   Font_from_TypeInfo(TypeInfo *);
-extern VALUE   TypeMetric_to_s(VALUE);
-extern VALUE   TypeMetric_from_TypeMetric(TypeMetric *);
+extern void   Point_to_PointInfo(PointInfo *, VALUE);
+extern VALUE  PointInfo_to_Point(PointInfo *);
+extern VALUE  PrimaryInfo_to_s(VALUE);
+extern VALUE  PrimaryInfo_from_PrimaryInfo(PrimaryInfo *);
+extern VALUE  RectangleInfo_to_s(VALUE);
+extern VALUE  Rectangle_from_RectangleInfo(RectangleInfo *);
+extern VALUE  RenderingIntent_new(RenderingIntent);
+extern VALUE  ResolutionType_new(ResolutionType);
+extern VALUE  SegmentInfo_to_s(VALUE);
+extern VALUE  Segment_from_SegmentInfo(SegmentInfo *);
+extern void   AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
+extern void   ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
+extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
+extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
+extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
+extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);
+extern void   Font_to_TypeInfo(TypeInfo *, VALUE);
+extern void   TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
+extern VALUE  Font_from_TypeInfo(TypeInfo *);
+extern VALUE  TypeMetric_to_s(VALUE);
+extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
 #if defined(HAVE_GETIMAGESTATISTICS)
-extern VALUE   Statistics_new(ImageStatistics *);
+extern VALUE  Statistics_new(ImageStatistics *);
 #endif
-
-extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
-extern VALUE   rm_no_freeze(VALUE);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-extern VALUE Enum_alloc(VALUE);
+extern VALUE  Enum_alloc(VALUE);
 #else
-extern VALUE Enum_new(VALUE, VALUE, VALUE);
+extern VALUE  Enum_new(VALUE, VALUE, VALUE);
 #endif
-extern VALUE   Enum_initialize(VALUE, VALUE, VALUE);
-extern VALUE   Enum_to_s(VALUE);
-extern VALUE   Enum_to_i(VALUE);
-extern VALUE   Enum_spaceship(VALUE, VALUE);
-extern VALUE   Enum_case_eq(VALUE, VALUE);
+extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
+extern VALUE  Enum_to_s(VALUE);
+extern VALUE  Enum_to_i(VALUE);
+extern VALUE  Enum_spaceship(VALUE, VALUE);
+extern VALUE  Enum_case_eq(VALUE, VALUE);
+extern VALUE  Enum_type_initialize(VALUE, VALUE, VALUE);
+extern VALUE  Enum_type_each(VALUE);
 
+
+extern void  *magick_malloc(const size_t);
+extern void   magick_free(void *);
+extern void  *magick_realloc(void *, size_t);
+extern void   magick_clone_string(char **, const char *);
+extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);
+extern VALUE  rm_no_freeze(VALUE);
 #if !defined(StringValuePtr)
-extern char *rm_string_value_ptr(volatile VALUE *);
+extern char  *rm_string_value_ptr(volatile VALUE *);
 #endif
-extern char *rm_string_value_ptr_len(volatile VALUE *, long *);
-void rm_check_ary_len(VALUE, int);
-extern void rm_check_frozen(VALUE);
-extern VALUE rm_obj_to_s(VALUE);
-double rm_fuzz_to_dbl(VALUE fuzz);
-
-extern void *magick_malloc(const size_t);
-extern void magick_free(void *);
-extern void *magick_realloc(void *, size_t);
-extern void magick_clone_string(char **, const char *);
-extern void write_temp_image(Image *, char *);
-extern void delete_temp_image(char *);
-extern void not_implemented(void);
-extern void handle_error(ExceptionInfo *);
-extern void handle_all_errors(Image *);
-extern void attr_write(VALUE, VALUE);
-extern void get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
-extern Image *toseq(VALUE);
-extern void unseq(Image *);
+extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
+extern void   rm_check_ary_len(VALUE, int);
+extern void   rm_check_frozen(VALUE);
+extern VALUE  rm_obj_to_s(VALUE);
+extern double rm_fuzz_to_dbl(VALUE fuzz);
+extern VALUE  rm_define_enum_type(char *);
+extern void   rm_write_temp_image(Image *, char *);
+extern void   rm_delete_temp_image(char *);
+extern void   rm_not_implemented(void);
+extern void   rm_handle_error(ExceptionInfo *);
+extern void   rm_handle_all_errors(Image *);
+extern void   rm_attr_write(VALUE, VALUE);
+extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
+extern Image *rm_toseq(VALUE);
+extern void   rm_unseq(Image *);
 
 #endif
 

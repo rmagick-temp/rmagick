@@ -1,7 +1,9 @@
 RMagick 1.6.0
     o Added posterize, gaussian_blur_channel, convolve_channel methods to Image class
       (ImageMagick 6.0.0)
+    o Added new CompositeOperator constants (ImageMagick 6.0.0)
     o Added trim and trim! methods to Image class
+    o Added each method to Enum subclasses
 
 RMagick 1.5.0
     o Added meaningful implementations of dup and clone to the Image and Draw

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.61 2004/06/15 17:27:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.62 2004/06/19 20:41:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2256,7 +2256,7 @@ Image_convolve_channel(
 VALUE
 Image_copy(VALUE self)
 {
-    return rb_funcall(self, rb_intern("dup"), 0);
+    return rb_funcall(self, ID_dup, 0);
 }
 
 /*
@@ -2374,9 +2374,9 @@ Image_density_eq(VALUE self, VALUE density_arg)
     // Geometry object. Width and height attributes are always positive.
     if (CLASS_OF(density_arg) == Class_Geometry)
     {
-        x_val = rb_funcall(density_arg, rb_intern("width"), 0);
+        x_val = rb_funcall(density_arg, ID_width, 0);
         x_res = NUM2DBL(x_val);
-        y_val = rb_funcall(density_arg, rb_intern("height"), 0);
+        y_val = rb_funcall(density_arg, ID_height, 0);
         y_res = NUM2DBL(y_val);
         if(x_res == 0.0)
         {
@@ -3657,7 +3657,7 @@ Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 
 #else
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 #endif
 
@@ -6484,7 +6484,7 @@ Image_statistics(VALUE self)
 
     return Statistics_new(&stats);
 #else
-    not_implemented();
+    rm_not_implemented();
     return (VALUE)0;
 #endif
 }

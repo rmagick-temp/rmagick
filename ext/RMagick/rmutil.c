@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.36 2004/06/15 17:27:59 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.37 2004/06/19 20:41:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1994,14 +1994,32 @@ TypeMetric_to_s(VALUE self)
     return rb_str_new2(buff);
 }
 
+
+/*
+ *  Extern:     rm_define_enum_type
+ *  Purpose:    set up a subclass of Enum
+*/
+VALUE rm_define_enum_type(char *tag)
+{
+    VALUE class;
+
+    class = rb_define_class_under(Module_Magick, tag, Class_Enum);\
+
+    rb_define_singleton_method(class, "each", Enum_type_each, 0);
+    rb_define_method(class, "initialize", Enum_type_initialize, 2);
+    RUBY16(rb_enable_super(class, "initialize");)
+    return class;
+}
+
+
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:  rm_enum_new (1.8)
-    Purpose: Construct a new Enum instance
+    Purpose: Construct a new Enum subclass instance
 */
 VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
-   return Enum_initialize(Enum_alloc(class), sym, val);
+    return rb_funcall(class, ID_new, 2, sym, val);
 }
 
 /*
@@ -2014,10 +2032,12 @@ VALUE Enum_alloc(VALUE class)
 
    return Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
 }
+
+
 #else
 /*
     Extern:  rm_enum_new (1.6)
-    Purpose: Construct a new Enum instance
+    Purpose: Construct a new Enum subclass instance
 */
 VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
@@ -2042,6 +2062,7 @@ VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
     rb_obj_call_init(new_enum, 2, argv);
     return new_enum;
 }
+
 #endif
 
 /*
@@ -2059,6 +2080,7 @@ VALUE Enum_initialize(VALUE self, VALUE sym, VALUE val)
    return self;
 }
 
+
 /*
     Method:  Enum#to_s
     Purpose: Return the name of an enum
@@ -2070,6 +2092,7 @@ VALUE Enum_to_s(VALUE self)
    Data_Get_Struct(self, MagickEnum, magick_enum);
    return rb_str_new2(rb_id2name(magick_enum->id));
 }
+
 
 /*
     Method:  Enum#to_i
@@ -2083,9 +2106,10 @@ VALUE Enum_to_i(VALUE self)
    return INT2NUM(magick_enum->val);
 }
 
+
 /*
     Method:  Enum#<=>
-    Purpose: Support Enumerable module in Enum
+    Purpose: Support Comparable module in Enum
     Returns: -1, 0, 1, or nil
     Notes:   Enums must be instances of the same class to be equal.
 */
@@ -2107,7 +2131,7 @@ VALUE Enum_spaceship(VALUE self, VALUE other)
 
     // Values are equal, check class.
 
-    return rb_funcall(CLASS_OF(self), rb_intern("<=>"), 1, CLASS_OF(other));
+    return rb_funcall(CLASS_OF(self), ID_spaceship, 1, CLASS_OF(other));
 }
 
 
@@ -2129,6 +2153,52 @@ VALUE Enum_case_eq(VALUE self, VALUE other)
     }
 
     return Qfalse;
+}
+
+
+/*
+ *  Method:     xxx#initialize
+ *  Purpose:    initialize method for all Enum subclasses
+*/
+VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
+{
+    volatile VALUE super_argv[2];
+    volatile VALUE enumerators;
+
+    super_argv[0] = sym;
+    super_argv[1] = val;
+    rb_call_super(2, (VALUE *)super_argv);
+
+    if (rb_cvar_defined(CLASS_OF(self), ID_enumerators) != Qtrue)
+    {
+        RUBY18(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new(), 0));
+        RUBY16(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new()));
+    }
+
+    enumerators = rb_cvar_get(CLASS_OF(self), ID_enumerators);
+    rb_ary_push(enumerators, self);
+
+    return self;
+}
+
+/*
+ *  Method:     xxx.each
+ *  Purpose:    singleton iterator over enumerators list
+ *  Notes:      defined for each Enum subclass
+*/
+VALUE Enum_type_each(VALUE class)
+{
+    volatile VALUE enumerators;
+    int x;
+
+    enumerators = rb_cvar_get(class, ID_enumerators);
+
+    for (x = 0; x < RARRAY(enumerators)->len; x++)
+    {
+        rb_yield(rb_ary_entry(enumerators, x));
+    }
+
+    return class;
 }
 
 
@@ -2298,7 +2368,7 @@ StyleType_Const_Name(StyleType style)
                 of size MaxTextExtent.
 */
 void
-write_temp_image(Image *image, char *tmpnam)
+rm_write_temp_image(Image *image, char *tmpnam)
 {
     long registry_id;
 
@@ -2319,7 +2389,7 @@ write_temp_image(Image *image, char *tmpnam)
 */
 
 void
-delete_temp_image(char *tmpnam)
+rm_delete_temp_image(char *tmpnam)
 {
     long registry_id = -1;
 
@@ -2339,7 +2409,7 @@ delete_temp_image(char *tmpnam)
                 until 5.5.7. Use MAGICKNAME instead.
 */
 void
-not_implemented(void)
+rm_not_implemented(void)
 {
 
     rb_raise(rb_eNotImpError, "the `%s' method is not supported by "
@@ -2406,7 +2476,7 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
  *              them in C variables.
 */
 void
-get_geometry(
+rm_get_geometry(
     VALUE geom,
     long *x,
     long *y,
@@ -2526,7 +2596,7 @@ magick_error_handler(
                 If the exception is an error, DOES NOT RETURN!
 */
 void
-handle_error(ExceptionInfo *ex)
+rm_handle_error(ExceptionInfo *ex)
 {
     ExceptionType sev = ex->severity;
     char reason[251];
@@ -2592,7 +2662,7 @@ handle_error(ExceptionInfo *ex)
                 image has an error, raise an exception. Otherwise
                 if any image has a warning, issue a warning message.
 */
-void handle_all_errors(Image *seq)
+void rm_handle_all_errors(Image *seq)
 {
     Image *badboy = NULL;
     Image *image = seq;
@@ -2619,9 +2689,9 @@ void handle_all_errors(Image *seq)
     {
         if (badboy->exception.severity > WarningException)
         {
-            unseq(seq);
+            rm_unseq(seq);
         }
-        handle_error(&badboy->exception);
+        rm_handle_error(&badboy->exception);
     }
 }
 
@@ -2634,7 +2704,7 @@ void handle_all_errors(Image *seq)
     Returns:    a pointer to the head of the scene sequence list
 */
 Image *
-toseq(VALUE imagelist)
+rm_toseq(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
@@ -2680,7 +2750,7 @@ toseq(VALUE imagelist)
     Notes:      The images remain grouped via the ImageList
 */
 void
-unseq(Image *image)
+rm_unseq(Image *image)
 {
 
     if (!image)

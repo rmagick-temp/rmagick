@@ -2,80 +2,30 @@
 require 'RMagick'
 include Magick
 
-# Draw the braces and labels on the image. Each
-# brace is drawn as a pair of quadratic bezier curves.
+# Add a method for drawing braces. Each brace
+# is drawn as a pair of quadratic bezier curves.
+class Draw
 
-def draw_labels(image, x, y, metrics)
+    # (x,y) - corner of rectangle enclosing brace
+    # (w,h) - width & height of rectangle enclosing brace
+    # The orientation is affected by the current user coordinate system.
+    def brace(x, y, w, h)
+        raise(ArgumentError, "width must be > 0") unless w > 0
+        raise(ArgumentError, "height must be > 0") unless h > 0
+        qx = x + w
+        qy = y
+        x0 = x + w / 2
+        y0 = y + h/4
+        tx = x + w
+        ty = y + h/2
+        path("M#{x},#{y}Q#{qx},#{qy} #{x0},#{y0}T#{tx},#{ty}")
+        qy = y + h
+        y0 = y + 3*h/4
+        path("M#{x},#{y+h}Q#{qx},#{qy} #{x0},#{y0}T#{tx},#{ty}")
+    end
 
-    gc = Draw.new
-    gc.font_family('Times')
-    gc.pointsize(13)
-    gc.fill('none')
-    gc.stroke('black')
-    gc.stroke_width(1)
+end     # class Draw
 
-    # Draw a brace between the origin and descent
-    h = (-metrics.descent) / 2      # half the height of the brace
-    xp = x + metrics.width
-    gc.path("M#{xp+23},#{y} Q#{xp+37},#{y} #{xp+33},#{y+h/2} T#{xp+37},#{y+h}")
-
-    gc.path("M#{xp+23},#{y-metrics.descent} " +
-            "Q#{xp+37},#{y-metrics.descent} " +
-            " #{xp+33},#{y-metrics.descent-h/2} " +
-            "T#{xp+37},#{y-metrics.descent-h}")
-
-    # Draw a brace between the origin and ascent
-    h = metrics.ascent / 2          # half the height of the brace
-    gc.path("M#{xp+23},#{y} " +
-            "Q#{xp+37},#{y} " +
-            " #{xp+33},#{y-h/2} " +
-            "T#{xp+37},#{y-h}")
-
-    gc.path("M#{xp+23},#{y-metrics.ascent} " +
-            "Q#{xp+37},#{y-metrics.ascent} " +
-            " #{xp+33},#{y-metrics.ascent+h/2} " +
-            "T#{xp+37},#{y-metrics.ascent+h}")
-
-    # Draw a brace between the origin and height
-    h = metrics.height / 2
-    gc.path("M#{x-16},#{y} Q#{x-23},#{y} #{x-16},#{y-h/2} T#{x-23},#{y-h}")
-
-    gc.path("M#{x-16},#{y-metrics.height}" +
-            "Q#{x-23},#{y-metrics.height}" +
-            " #{x-16},#{y-metrics.height+h/2}" +
-            "T#{x-23},#{y-metrics.height+h}")
-
-    # Draw a brace between the origin and the width
-    h = metrics.width / 2
-    gc.path("M#{x},27 Q#{x},20 #{x+h/2},23 T#{x+h},20")
-
-    gc.path("M#{x+metrics.width},27 "+
-            "Q#{x+metrics.width},20 "+
-            " #{x+(3*metrics.width)/4},23 " +
-            "T#{x+h},20")
-
-    # Draw a brace between the origin and max_advance
-    h = metrics.max_advance / 2
-    gc.path("M#{x},#{y-metrics.descent+16} " +
-            "Q#{x},#{y-metrics.descent+24} " +
-            " #{x+h/2},#{y-metrics.descent+20} " +
-            "T#{x+h},#{y-metrics.descent+24}")
-
-    gc.path("M#{x+metrics.max_advance},#{y-metrics.descent+16} " +
-            "Q#{x+metrics.max_advance},#{y-metrics.descent+24} " +
-            " #{x+(3*metrics.max_advance)/4},#{y-metrics.descent+20} " +
-            "T#{x+h},#{y-metrics.descent+24}")
-
-    gc.stroke('none')
-    gc.fill('black')
-    gc.text(xp+40, y-(metrics.ascent/2)+4, 'ascent')
-    gc.text(xp+40, y-(metrics.descent/2)+4, 'descent')
-    gc.text(x-60, y-metrics.height/2+4, 'height')
-    gc.text(x+(metrics.width/2)-15, 15, 'width')
-    gc.text(x+(metrics.max_advance)/2-38, 290, "max_advance")
-
-    gc.draw(image)
-end
 
 
 
@@ -137,10 +87,59 @@ gc.line(Origin_x+metrics.width, 30, Origin_x+metrics.width, 270)
 gc.line(Origin_x+metrics.max_advance, Origin_y-metrics.descent-10,
         Origin_x+metrics.max_advance, 270)
 
-# Draw all the braces and labels.
-draw_labels(canvas, Origin_x, Origin_y, metrics)
+gc.draw(canvas)
+
+# The rest of this script is just annotation.
+# Draw all the braces
+gc = Draw.new
+gc.font_family('Times')
+gc.pointsize(13)
+gc.fill('none')
+gc.stroke('black')
+gc.stroke_width(1)
+
+# Draw a brace between the origin and descent
+gc.brace(Origin_x+metrics.width+23, Origin_y, 10, -metrics.descent)
+
+# Draw a brace between the origin and ascent
+gc.brace(Origin_x+metrics.width+23, Origin_y-metrics.ascent, 10, metrics.ascent)
+
+# Draw a brace between the origin and height
+gc.push
+gc.translate(Origin_x-13, Origin_y-metrics.height/2)
+gc.rotate(180)
+gc.translate(-(Origin_x-13), -(Origin_y-metrics.height/2))
+gc.brace(Origin_x-13, Origin_y-metrics.height, 10, metrics.height)
+gc.pop
+
+# Draw a brace between the origin and the width
+gc.push
+gc.translate(Origin_x, 27.0)
+gc.rotate(-90)
+gc.translate(-Origin_x, -27.0)
+gc.brace(Origin_x, 27, 10, metrics.width)
+gc.pop
+
+# Draw a brace between the origin and max_advance
+gc.push
+gc.translate(Origin_x, Origin_y-metrics.descent+13)
+gc.scale(-1, 1)
+gc.rotate(90)
+gc.translate(-Origin_x, -(Origin_y-metrics.descent+13))
+gc.brace(Origin_x, Origin_y-metrics.descent+13, 10, metrics.max_advance)
+gc.pop
+
+# Add the labels
+gc.stroke('none')
+gc.fill('black')
+gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.ascent/2)+4, 'ascent')
+gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.descent/2)+4, 'descent')
+gc.text(Origin_x-60, Origin_y-metrics.height/2+4, 'height')
+gc.text(Origin_x+(metrics.width/2)-15, 15, 'width')
+gc.text(Origin_x+(metrics.max_advance)/2-38, 290, "max_advance")
 
 gc.draw(canvas)
+
 canvas.border!(1,1,'blue')
 
 canvas.write('get_type_metrics.gif')

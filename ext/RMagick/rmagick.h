@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.69 2004/12/04 23:43:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.70 2004/12/05 02:48:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -775,6 +775,7 @@ extern VALUE Image_transparent(int, VALUE *, VALUE);
 extern VALUE Image_trim(VALUE);
 extern VALUE Image_trim_bang(VALUE);
 extern VALUE Image_unsharp_mask(VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_unsharp_mask_channel(int, VALUE *, VALUE);
 extern VALUE Image_wave(int, VALUE *, VALUE);
 extern VALUE Image_white_threshold(int, VALUE *, VALUE);
 extern VALUE Image_write(VALUE, VALUE);

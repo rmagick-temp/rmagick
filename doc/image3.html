@@ -177,6 +177,9 @@
 
           <li><a href="#unsharp_mask">unsharp_mask</a></li>
 
+          <li><a href=
+          "#unsharp_mask_channel">unsharp_mask_channel</a></li>
+
           <li><a href="#view">view</a></li>
 
           <li><a href="#wave">wave</a></li>
@@ -2468,11 +2471,83 @@ img.to_color(pixel)
 
     <h4>See also</h4><a href="image1.html#enhance">enhance</a>,
     <a href="image2.html#median_filter">median_filter</a>, <a href=
-    "image3.html#reduce_noise">reduce_noise</a>
+    "image3.html#reduce_noise">reduce_noise</a>, <a href=
+    "#unsharp_mask_channel">unsharp_mask_channel</a>
 
     <h4>Magick API</h4>
 
     <p>UnsharpMaskImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="unsharp_mask_channel">unsharp_mask_channel</h3>
+
+    <p><span class=
+    "arg">image</span>.unsharp_mask_channel(<span class=
+    "arg">radius</span>, <span class="arg">sigma</span>,
+    <span class="arg">amount</span>, <span class=
+    "arg">threshold</span> [,<span class="arg">channel</span>,
+    <span class="arg">channel</span>...]) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Sharpens an image. We convolve the
+    image with a Gaussian operator of the given <span class=
+    "arg">radius</span> and standard deviation (<span class=
+    "arg">sigma</span>). For reasonable results, <span class=
+    "arg">radius</span> should be larger than <span class=
+    "arg">sigma</span>. Use a radius of 0 and
+    <code>unsharp_mask_channel</code> selects a suitable radius for
+    you.</span> Only the specified channels are sharpened.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>The radius of the Gaussian operator.</dd>
+
+      <dt>sigma</dt>
+
+      <dd>The standard deviation of the Gaussian operator. A good
+      starting value is 1.0.</dd>
+
+      <dt>amount</dt>
+
+      <dd>The percentage of the blurred image to be added to the
+      receiver, specified as a fraction between 0 and 1.0. A good
+      starting value is 1.0.</dd>
+
+      <dt>threshold</dt>
+
+      <dd>The threshold needed to apply the amount, specified as a
+      fraction between 0 and 1.0. A good starting value is
+      0.05.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are sharpened. This
+      is the equivalent of <a href=
+      "#unsharp_mask">unsharp_mask</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4><a href="image1.html#enhance">enhance</a>,
+    <a href="image2.html#median_filter">median_filter</a>, <a href=
+    "image3.html#reduce_noise">reduce_noise</a>, <a href=
+    "#unsharp_mask">unsharp_mask</a>
+
+    <h4>Magick API</h4>
+
+    <p>UnsharpMaskImageChannel (available in ImageMagick 6.1.0)</p>
   </div>
 
   <div class="sig">

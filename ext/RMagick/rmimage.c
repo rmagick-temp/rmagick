@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.77 2004/12/04 23:43:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.78 2004/12/05 02:48:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7550,6 +7550,50 @@ Image_unsharp_mask(
                                , &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#unsharp_mask_channel(radius, sigma, amount,threshold,
+                                           channel=AllChannels)
+    Purpose:    Call UnsharpMaskImageChannel
+*/
+VALUE
+Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_UNSHARPMASKIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channels;
+    double sigma;
+    ExceptionInfo exception;
+
+    channels = extract_channels(&argc, argv);
+    if (argc > 4)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+    else if (argc < 4)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 4)", argc);
+    }
+
+    sigma = NUM2DBL(argv[1]);
+    if (sigma <= 0.0)
+    {
+        rb_raise(rb_eArgError, "sigma must be > 0.0");
+    }
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+    new_image = UnsharpMaskImageChannel(image, channels, NUM2DBL(argv[0])
+                                      , sigma, NUM2DBL(argv[2]), NUM2DBL(argv[3])
+                                      , &exception);
+    HANDLE_ERROR
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

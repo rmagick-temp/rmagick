@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.47 2004/12/25 18:59:03 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.48 2004/12/30 03:11:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -7,6 +7,7 @@
 \============================================================================*/
 
 #include "rmagick.h"
+#include <errno.h>
 
 static const char *Compliance_Const_Name(ComplianceType *);
 static const char *StyleType_Const_Name(StyleType);
@@ -169,21 +170,6 @@ rm_no_freeze(VALUE obj)
 
 
 /*
- *  Extern:     rm_obj_to_s(obj)
- *  Purpose:    try to convert object to string by calling its `to_s' method
- *  Notes:      Usually run via rb_rescue so TypeError or NoMethodError can be
- *              rescued. I use this instead of rb_str_to_str so that objects
- *              that don't have `to_str' but do have `to_s' can be converted.
-*/
-VALUE
-rm_obj_to_s(VALUE obj)
-{
-    return TYPE(obj) == T_STRING ? obj : rb_funcall(obj, ID_to_s, 0);
-}
-
-
-
-/*
  *  Static:     arg_is_number
  *  Purpose:    Try to convert the argument to a double,
  *              raise an exception if fail.
@@ -199,14 +185,72 @@ arg_is_number(VALUE arg)
 
 
 /*
- *  Static:     fuzz_arg_rescue
+ *  Static:     rescue_not_str
  *  Purpose:    called when `rb_str_to_str' raised an exception below
 */
 static VALUE
-fuzz_arg_rescue(VALUE arg)
+rescue_not_str(VALUE arg)
 {
     rb_raise(rb_eArgError, "argument must be a number or a string in the form 'NN%' (%s given)",
             rb_class2name(CLASS_OF(arg)));
+}
+
+/*
+ *  Extern:     rm_percentage(obj)
+ *  Purpose:    Return a double between 0.0 and 1.0, inclusive.
+ *              If the argument is a number convert to a Float object,
+ *              otherwise it's supposed to be a string in the form "NN%".
+ *              Convert to a number and then to a Float.
+*/
+double
+rm_percentage(VALUE arg)
+{
+    double pct;
+    long pct_long;
+    char *pct_str, *end;
+    int not_num;
+
+    // Try to convert the argument to a number. If failure, sets not_num to non-zero.
+    rb_protect(arg_is_number, arg, &not_num);
+
+    if (not_num)
+    {
+        arg = rb_rescue(rb_str_to_str, arg, rescue_not_str, arg);
+        pct_str = STRING_PTR(arg);
+        errno = 0;
+        pct_long = strtol(pct_str, &end, 10);
+        if (errno == ERANGE)
+        {
+            rb_raise(rb_eRangeError, "`%s' out of range", pct_str);
+        }
+        if (*end != '\0' && *end != '%')
+        {
+            rb_raise(rb_eArgError, "expected percentage, got `%s'", pct_str);
+        }
+
+        if (*end == '%' && pct_long != 0)
+        {
+            pct = ((double)pct_long) / 100.0;
+        }
+        else
+        {
+            pct = (double) pct_long;
+        }
+        if (pct < 0.0)
+        {
+            rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", pct_str);
+        }
+    }
+    else
+    {
+        pct = NUM2DBL(arg);
+        if (pct < 0.0)
+        {
+            rb_raise(rb_eArgError, "percentages may not be negative (got `%g')", pct);
+        }
+    }
+
+    return pct;
 }
 
 
@@ -230,12 +274,21 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
     if (not_num)
     {
         // Convert to string, issue error message if failure.
-        fuzz_arg = rb_rescue(rb_str_to_str, fuzz_arg, fuzz_arg_rescue, fuzz_arg);
+        fuzz_arg = rb_rescue(rb_str_to_str, fuzz_arg, rescue_not_str, fuzz_arg);
         fuzz_str = STRING_PTR(fuzz_arg);
+        errno = 0;
         fuzz = strtod(fuzz_str, &end);
+        if (errno == ERANGE)
+        {
+            rb_raise(rb_eRangeError, "`%s' out of range", fuzz_str);
+        }
         if(*end == '%')
         {
-            fuzz = (fuzz * MaxRGB) / 100;
+            if (fuzz < 0.0)
+            {
+                rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_arg);
+            }
+            fuzz = (fuzz * MaxRGB) / 100.0;
         }
         else if(*end != '\0')
         {
@@ -245,6 +298,10 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
     else
     {
         fuzz = NUM2DBL(fuzz_arg);
+        if (fuzz < 0.0)
+        {
+            rb_raise(rb_eArgError, "fuzz may not be negative (got `%g')", fuzz_arg);
+        }
     }
 
     return fuzz;

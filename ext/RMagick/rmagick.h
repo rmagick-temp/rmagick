@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.4 2003/07/19 01:47:03 tim Exp $ */
+/* $Id: rmagick.h,v 1.5 2003/07/20 13:09:04 tim Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -316,6 +316,7 @@ ATTR_ACCESSOR(Info, group)
 ATTR_ACCESSOR(Info, image_type)
 ATTR_ACCESSOR(Info, interlace)
 ATTR_ACCESSOR(Info, matte_color)
+ATTR_ACCESSOR(Info, monochrome)
 ATTR_ACCESSOR(Info, number_scenes)
 ATTR_ACCESSOR(Info, page)
 ATTR_ACCESSOR(Info, pen)

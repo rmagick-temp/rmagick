@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.3 2003/07/19 12:51:15 tim Exp $ */
+/* $Id: rminfo.c,v 1.4 2003/07/20 13:09:04 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -464,6 +464,8 @@ Info_matte_color_eq(VALUE self, VALUE matte_arg)
     Color_to_PixelPacket(&info->matte_color, matte_arg);
     return self;
 }
+
+DEF_ATTR_ACCESSOR(Info, monochrome, bool)
 
 #ifdef HAVE_IMAGEINFO_NUMBER_SCENES
 DEF_ATTR_ACCESSOR(Info, number_scenes, ulong)

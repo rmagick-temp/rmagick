@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.5 2003/07/19 12:51:40 tim Exp $ */
+/* $Id: rmmain.c,v 1.6 2003/07/20 13:09:04 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1712,6 +1712,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, group)
     DCL_ATTR_ACCESSOR(Info, interlace)
     DCL_ATTR_ACCESSOR(Info, matte_color)
+    DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
     DCL_ATTR_ACCESSOR(Info, page)
 //  DCL_ATTR_ACCESSOR(Info, pen) obsolete
@@ -1731,7 +1732,7 @@ Init_RMagick(void)
 
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
-    
+
     RUBY16(rb_define_singleton_method(Class_GradientFill, "new", GradientFill_new, 6);)
     RUBY18(rb_define_alloc_func(Class_GradientFill, GradientFill_alloc));
 

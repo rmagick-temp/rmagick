@@ -1,17 +1,18 @@
 .stdtitle {
    background-color: gray;
-   font-size: xx-large;
+   font-size: x-large;
    font-weight: bold;
    color: white;
    line-height: 1.5;
 }
 
 .classname {
+   text-align: center;
    background-color: gray;
    font-size: x-large;
+   font-weight: bold;
    color: white;
-   padding-top: 1em;
-   padding-bottom: 1em;
+   padding: 1em;
 }
   
 .classname2 {
@@ -47,7 +48,7 @@
 }
 
 .methodname {
-	font-size: x-large;
+	font-size: large;
 	font-weight: bold;
 	vertical-align: top;
 }
@@ -97,4 +98,11 @@ dt {
 	font-style: italic;
 }
 
+.nav {
+ font-size: small;
+}
 
+/* Change so visited links will show up on gray background */
+a:visited {
+    color: #9B9BFF;
+}

@@ -65,10 +65,10 @@
     RMagick is a interface, or <i>binding</i>, from the Ruby
     language to the ImageMagick <span style=
     "font-size: x-small; vertical-align: super">TM</span> and
-    GraphicsMagick image manipulation libraries. Here's
-    how the <a href=
-    "http://www.imagemagick.org/index.html">ImageMagick home
-    page</a> describes ImageMagick: 
+    GraphicsMagick image manipulation libraries. Here's how the <a
+    href=
+    "file:///usr/local/share/ImageMagick-5.5.7/index.html">ImageMagick
+    home page</a> describes ImageMagick: 
     <div class="imquote">
       <blockquote>
         ImageMagick<span style=
@@ -83,10 +83,10 @@
         completed work in the same or differing image format.
       </blockquote>
     </div>
-    <p>GraphicsMagick
-    is a branch from ImageMagick 5.5.2 and provides a nearly
-    identical API. The <a href="http://www.graphicsmagick.org">GraphicsMagick web site</a> says this about
-    GraphicsMagick:</p>
+    <p>GraphicsMagick is a branch from ImageMagick 5.5.2 and
+    provides a nearly identical API. The <a href=
+    "http://www.graphicsmagick.org">GraphicsMagick web site</a>
+    says this about GraphicsMagick:</p>
     <div class="imquote">
       <blockquote>
         <i>GraphicsMagick</i> 1.0.1 is a robust collection of tools
@@ -106,8 +106,7 @@
       </blockquote>
     </div>
     <p>Both libraries offer a full range of image processing tools
-    that provide the capability to:
-    </p>
+    that provide the capability to:</p>
     <div class="imquote">
       <blockquote>
         <ul>
@@ -147,12 +146,13 @@
     program that either creates an image from scratch or modifies
     an input image using one or more RMagick methods. The output
     images are used as illustrations in the HTML documentation.
-    Throughout this document, click any example image to see the program that created it.</p>
+    Throughout this document, click any example image to see the
+    program that created it.</p>
     <h4>Conventions</h4>
     <p><b>Names&nbsp;&nbsp;</b>I've tried to follow standard Ruby
-    conventions in this document. A class is identified by
-    its name, which always starts with a capital letter. An object
-    is referred to by its class name, starting with a small letter.
+    conventions in this document. A class is identified by its
+    name, which always starts with a capital letter. An object is
+    referred to by its class name, starting with a small letter.
     For example, an generic ImageList object is referred to as an
     <i>imagelist</i>. In the Reference section, when a method
     signature identifies the type of an argument or return value,
@@ -168,9 +168,9 @@
     <p><b>References to ImageMagick and GraphicsMagick</b>&nbsp;
     &nbsp;When describing a feature, API, convention, component, or
     other element that is shared by both ImageMagick and
-    GraphicsMagick, I use the string <i>&times;Magick</i>. For example,
-    "&times;Magick supports over 87 major image formats" means that
-    both ImageMagick and GraphicsMagick support over 87
+    GraphicsMagick, I use the string <i>&times;Magick</i>. For
+    example, "&times;Magick supports over 87 major image formats"
+    means that both ImageMagick and GraphicsMagick support over 87
     formats.</p>
     <p><b>&times;Magick documentation&nbsp;&nbsp;</b> Text <span
     class="imquote">in this color</span> is quoted from the
@@ -205,8 +205,8 @@
     <p>For quickest results, include the RMagick and &times;Magick
     version numbers, along with a thorough description of the
     problem.<sup><a href="#truth">1</a></sup> RMagick will tell you
-    both its version number and &times;Magick's version number. Simply
-    bring up irb and print the <code>Magick::Version</code>
+    both its version number and &times;Magick's version number.
+    Simply bring up irb and print the <code>Magick::Version</code>
     constant and the <code>Magick::Magick_version</code>
     constants.</p>
 <pre class="example">
@@ -223,14 +223,14 @@ p Magick::Magick_version &raquo; GraphicsMagick 1.0 05/05/03 Q8 http://www.Graph
     post your questions to <code>comp.lang.ruby</code>. For help
     with ImageMagick or GraphicsMagick, join the ImageMagick or
     GraphicsMagick mailing list. See the instructions at <a href=
-    "http://www.imagemagick.org/www/magick-list.html">http://www.imagemagick.org/www/magick-list.html</a>
-    or <a href=
+    "file:///usr/local/share/ImageMagick-5.5.7/www/magick-list.html">
+    http://www.imagemagick.org/www/magick-list.html</a> or <a href=
     "http://sourceforge.net/mail/?group_id=73485">http://sourceforge.net/mail/?group_id=73485</a>.</p>
     <p>I'm not an image processing guru, either, so I probably
     won't be able to help with questions about specific image
     formats and transformation algorithms. I will be glad, however,
-    to translate between the RMagick API and the &times;Magick C API
-    to help you compose a question to the &times;Magick
+    to translate between the RMagick API and the &times;Magick C
+    API to help you compose a question to the &times;Magick
     developers.</p>
     <h3>Contributions</h3>
     If you produce an image using RMagick that you're particularly
@@ -257,7 +257,7 @@ p Magick::Magick_version &raquo; GraphicsMagick 1.0 05/05/03 Q8 http://www.Graph
     problem. Don't worry if you think you've done something stupid.
     I've got lots of experience at doing stupid things myself.</p>
     <hr>
-    <table width="100%">
+    <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="constants.html">&lt;-
         Prev</a></td>

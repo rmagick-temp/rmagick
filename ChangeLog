@@ -8,6 +8,7 @@ RMagick 1.4.0
       later)
     o Added ReplaceCompositeOp. CopyCompositeOp constants (IM 6.0.0 only)
     o Added color_histogram to Image class. (IM 6.0.0, GM 1.1 only)
+    o Added define to Image::Info class (IM 6.0.0, GM 1.1 only)
     o Added tint, each_profile, channel_extrema, channel_compare,
       channel_depth, channel_mean, quantum_depth, preview, gamma_channel,
       negate_channel, bilevel_channel methods to Image class (IM 6.0.0 only)

@@ -115,6 +115,16 @@ div.nav a:active {
   color: white;
 }
 
+span.superclass {
+  font-size: normal;
+  font-weight: normal;
+}
+
+span.mixin {
+  font-size: smaller;
+  padding-left: 1em;
+  }
+
 /*
  * Method signatures, descriptions
  */

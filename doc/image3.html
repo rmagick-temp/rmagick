@@ -59,7 +59,9 @@
     "draw.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <h1>class Image (instance methods, part 3)</h1>
+  <h1>class Image <span class="superclass">&lt; Object</span>
+  (class and instance methods, part 3)<br />
+  <span class="mixin">mixes in Comparable</span></h1>
 
   <div id="toc">
     <h2>Table of Contents</h2>
@@ -921,15 +923,15 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                                                    This img tag displays the original image when the mouse is over.
-                                                    Use CSS to add padding around the image to make it occupy the
-                                                    same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
+                                                        This img tag displays the original image when the mouse is over.
+                                                        Use CSS to add padding around the image to make it occupy the
+                                                        same space as the rotated image. --><img style="padding-top:34px;padding-bottom:34px; display:none"
          id="notrotated" onmouseout=
          "this.style.display='none'; rotated.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="rotate example" title=
          "Click to see the example script" /><!--
-                                                      This img tag displays the rotated image.
-                                                      --><img class="hide"
+                                                          This img tag displays the rotated image.
+                                                          --><img class="hide"
          id="rotated" onmouseover=
          "this.style.display='none'; notrotated.style.display='';"
          src="ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
@@ -1363,14 +1365,14 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                                                      This img tag displays the original image when the mouse is over
-                                                      --><img style="padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
+                                                          This img tag displays the original image when the mouse is over
+                                                          --><img style="padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
          id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                                                       This img tag displays the sheared image when the mouse is not over
-                                                       -->
+                                                           This img tag displays the sheared image when the mouse is not over
+                                                           -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example" /></a><img src=
@@ -2283,9 +2285,9 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-                                              This img tag displays the framed image when the mouse is not over
-                                              --><img class="hide"
-    id="waved" onmouseover=
+                                                  This img tag displays the framed image when the mouse is not over
+                                                  --><img class=
+    "hide" id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
     "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=

@@ -108,6 +108,12 @@
       <li><a href="#view">Image::View</a></li>
     </ul>
 
+    <h3><a href="#Pixel">The Pixel class</a></h3>
+
+    <ul>
+      <li><a href="#Pixel">Pixel</a></li>
+    </ul>
+
     <h3><a href="#struct">Struct classes</a></h3>
 
     <ul>
@@ -141,7 +147,7 @@
     <h3><a href="#exception">Exception classes</a></h3>
 
     <ul>
-      <li><a href="#MagickError">MagickError</a></li>
+      <li><a href="#MagickError">ImageMagickError</a></li>
     </ul>
   </div>
 
@@ -163,7 +169,8 @@
       back into the image.</p>
     </div>
 
-    <h3>class Image::View</h3>
+    <h3>class Image::View <span class="superclass">&lt;
+    Object</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -457,6 +464,266 @@
     </div>
   </div>
 
+  <div class="class" id="Pixel">
+    <h2 id="Pixelw">The Pixel class</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>A pixel describes the smallest individually addressable
+      part of an image. In the RBG <a href=
+      "constants.html#ColorspaceType">colorspace</a>, a pixel's
+      color is described by its intensity in the red, green, and
+      blue channels. Its opacity is described by its intensity in
+      the opacity (also called alpha, or matte) channel. In the
+      CMYK colorspace a pixel's color is described by its intensity
+      in the cyan, magenta, yellow and black (K) channels.
+      Intensity is a value between 0 and <a href=
+      "constants.html#MaxRGB">MaxRGB</a>.</p>
+
+      <p>Usually, RMagick methods operate on entire images or on
+      groups of pixels that have been selected by their position or
+      color. Some methods, such as <a href=
+      "image2.html#pixel_color">pixel_color</a> and <a href=
+      "image3.html#view">view</a>, operate on individual pixels or
+      even on the RGBA (or CMYK) components thereof.</p>
+    </div>
+
+    <h3>class Pixel <span class="superclass">&lt;
+    Object</span><br />
+    <span class="mixin">mixes in Comparable, Observable</span></h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>Pixel.<span class="arg">new</span>(<span class=
+      "arg">red</span>, <span class="arg">green</span>,
+      <span class="arg">blue</span>, <span class=
+      "arg">opacity</span>) -&gt; <em>aPixel</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Constructs a pixel object from the specified red, green,
+      blue, and opacity intensities. The intensity is a number
+      between 0 and <a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>.</p>
+
+      <h5>Attributes</h5>
+
+      <dl>
+        <dt>red, green, blue</dt>
+
+        <dd>The red, green, and blue intensities of the pixel,
+        respectively. If the colorspace is <a href=
+        "constants.html#ColorspaceType">CMYKColorspace</a>, these
+        attributes are interpreted as the cyan, magenta, and yellow
+        intensities.</dd>
+
+        <dt>opacity</dt>
+
+        <dd>The opacity level. Higher intensities are more
+        transparent. If the colorspace is CMYKColorspace, this
+        attribute is interpreted as the black intensity.</dd>
+      </dl>
+    </div>
+
+    <div class="sig">
+      <h4>from_color</h4>
+
+      <p>Pixel.<span class="arg">from_color</span>(<span class=
+      "arg">color_name</span>) -&gt; <em>aPixel</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Constructs a new Pixel object from the <a href=
+      "imusage.html#color_names">color name</a>. Raises
+      ArgumentError if the name is unknown.</p>
+    </div>
+
+    <div class="sig">
+      <h4>from_HSL</h4>
+
+      <p>Pixel.<span class="arg">from_HSL</span>(<span class=
+      "arg">hue</span>, <span class="arg">saturation</span>,
+      <span class="arg">luminosity</span>) -&gt;
+      <em>aPixel</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Constructs a pixel object from the specified hue,
+      saturation, and luminosity values.</p>
+    </div>
+
+    <div class="sig">
+      <h4 id="spaceship">&lt;=&gt;</h4>
+
+      <p><span class="arg">pixel1</span> &lt;=&gt; <span class=
+      "arg">pixel2</span> -&gt; -1, 0, <em>or</em> 1</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns -1, 0, or 1 depending on if <span class=
+      "arg">pixel1</span> is "less than," equal, or "greater than"
+      the <span class="arg">pixel2</span>.</p>
+
+      <p>Since there is no way to rank order pixels, and thus
+      determine if one pixel is "greater than" or "less than"
+      another, this method uses an arbitrary algorithm that ensures
+      these two conditions:</p>
+
+      <ol>
+        <li>pixels with equal RGBA (or CMYK) values compare equal,
+        and</li>
+
+        <li>comparing the same two unequal pixels always returns
+        the same result.</li>
+      </ol>
+
+      <h5>Returns</h5>
+
+      <p>-1, 0, or 1</p>
+
+      <h5>See also</h5>
+
+      <p><a href="#fcmp">fcmp</a></p>
+    </div>
+
+    <div class="sig">
+      <h4 id="fcmp">fcmp</h4>
+
+      <p><span class="arg">pixel</span>.fcmp(<span class=
+      "arg">aPixel</span>, <span class="arg">fuzz</span>=0.0,
+      <span class="arg">colorspace</span>=RGBColorspace) -&gt;
+      <code>true</code> <em>or</em> <code>false</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns true if the argument is the same color as
+      <span class="arg">pixel</span>.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>pixel</dt>
+
+        <dd>The pixel to which the receiver is compared.</dd>
+
+        <dt>fuzz</dt>
+
+        <dd>The amount of fuzz to allow before the colors are
+        considered to be different.</dd>
+
+        <dt>colorspace</dt>
+
+        <dd>If the pixels are in the CMYK colorspace, specify
+        <a href=
+        "constants.html#ColorspaceType">Magick::CMYKColorspace</a>.</dd>
+      </dl>
+
+      <h5>Returns</h5>
+
+      <p><code>true</code> or <code>false</code></p>
+
+      <h5>See also</h5>
+
+      <p><a href="#spaceship">&lt;=&gt;</a></p>
+    </div>
+
+    <div class="sig">
+      <h4>intensity</h4>
+
+      <p><span class="arg">pixel</span>.intensity() -&gt;
+      anInteger</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns the intensity of the pixel. The intensity is
+      computed as 0.299*R+0.587*G+0.114*B.</p>
+    </div>
+
+    <div class="sig">
+      <h4>to_color</h4>
+
+      <p><span class="arg">pixel</span>.to_color(<span class=
+      "arg">compliance</span>=AllCompliance, <span class=
+      "arg">matte</span>=<code>false</code>, <span class=
+      "arg">depth</span>=<code>QuantumDepth</code>) -&gt;
+      <em>aString</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns the <a href="imusage.html#color_names">color
+      name</a> corresponding the the pixel values. If there is no
+      such named color in the specified color standard, returns a
+      string in the form "#RRGGBBOO" or, if the depth is 16,
+      "#RRRRGGGGBBBBOOOO".</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>compliance</dt>
+
+        <dd>A <a href=
+        "constants.html#ComplianceType">ComplianceType</a>
+        constant. The default value of AllCompliance causes
+        <code>to_color</code> to search for a color name in any of
+        the 3 defined color standards.</dd>
+
+        <dt>matte</dt>
+
+        <dd>If false, the pixel's opacity attribute is
+        ignored.</dd>
+
+        <dt>depth</dt>
+
+        <dd>An image depth. The default is the quantum depth used
+        when &times;Magick was compiled. The values 16 and 32 can
+        be used only when &times;Magick was compiled with the
+        appropriate QuantumDepth.</dd>
+      </dl>
+
+      <h5>See also</h5>
+
+      <p>Compare this method to <a href=
+      "image3.html#to_color">Image#to_color</a>, in which the
+      <span class="arg">matte</span> and <span class=
+      "arg">depth</span> values are taken from an image.</p>
+    </div>
+
+    <div class="sig">
+      <h4>to_HSL</h4>
+
+      <p><span class="arg">pixel</span>.to_HSL -&gt;
+      <em>anArray</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Converts the RGB representation of the pixel to hue,
+      saturation, and luminosity values.</p>
+
+      <h5>Returns</h5>
+
+      <p>An array of the form <code>[hue, saturation,
+      luminosity]</code>.</p>
+    </div>
+  </div>
+
   <div class="class">
     <h2 id="struct">Struct classes</h2>
 
@@ -475,7 +742,8 @@
       define additional constructors and conversion methods.</p>
     </div>
 
-    <h3 id="AffineMatrix">class AffineMatrix</h3>
+    <h3 id="AffineMatrix">class AffineMatrix <span class=
+    "superclass">&lt; Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -518,7 +786,8 @@
       </dl>
     </div>
 
-    <h3 id="Chromaticity">class Chromaticity</h3>
+    <h3 id="Chromaticity">class Chromaticity <span class=
+    "superclass">&lt; Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -566,7 +835,8 @@
       </dl>
     </div>
 
-    <h3 id="Geometry">class Geometry</h3>
+    <h3 id="Geometry">class Geometry <span class="superclass">&lt;
+    Object</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -721,199 +991,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       object..</p>
     </div>
 
-    <h3 id="Pixel">class Pixel</h3>
-
-    <div class="sig">
-      <h4>new</h4>
-
-      <p>Pixel.<span class="arg">new</span>(<span class=
-      "arg">red</span>, <span class="arg">green</span>,
-      <span class="arg">blue</span>, <span class=
-      "arg">opacity</span>) -&gt; <em>aPixel</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Constructs a pixel object from the specified red, green,
-      blue, and opacity intensities. The intensity is a number
-      between 0 and <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a>.</p>
-
-      <h5>Attributes</h5>
-
-      <dl>
-        <dt>red, green, blue</dt>
-
-        <dd>The red, green, and blue intensities of the pixel,
-        respectively. If the colorspace is <a href=
-        "constants.html#ColorspaceType">CMYKColorspace</a>, these
-        attributes are interpreted as the cyan, magenta, and yellow
-        intensities.</dd>
-
-        <dt>opacity</dt>
-
-        <dd>The opacity level. Higher intensities are more
-        transparent. If the colorspace is CMYKColorspace, this
-        attribute is interpreted as the black intensity.</dd>
-      </dl>
-    </div>
-
-    <div class="sig">
-      <h4>from_color</h4>
-
-      <p>Pixel.<span class="arg">from_color</span>(<span class=
-      "arg">color_name</span>) -&gt; <em>aPixel</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Constructs a new Pixel object from the <a href=
-      "imusage.html#color_names">color name</a>. Raises
-      ArgumentError if the name is unknown.</p>
-    </div>
-
-    <div class="sig">
-      <h4>from_HSL</h4>
-
-      <p>Pixel.<span class="arg">from_HSL</span>(<span class=
-      "arg">hue</span>, <span class="arg">saturation</span>,
-      <span class="arg">luminosity</span>) -&gt;
-      <em>aPixel</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Constructs a pixel object from the specified hue,
-      saturation, and luminosity values.</p>
-    </div>
-
-    <div class="sig">
-      <h4>fcmp</h4>
-
-      <p><span class="arg">pixel</span>.fcmp(<span class=
-      "arg">aPixel</span>, <span class="arg">fuzz</span>=0.0,
-      <span class="arg">colorspace</span>=RGBColorspace) -&gt;
-      <code>true</code> <em>or</em> <code>false</code></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Returns true if the argument is the same color as
-      <span class="arg">pixel</span>.</p>
-
-      <h5>Arguments</h5>
-
-      <dl>
-        <dt>pixel</dt>
-
-        <dd>The pixel to which the receiver is compared.</dd>
-
-        <dt>fuzz</dt>
-
-        <dd>The amount of fuzz to allow before the colors are
-        considered to be different.</dd>
-
-        <dt>colorspace</dt>
-
-        <dd>If the pixels are in the CMYK colorspace, specify
-        <a href=
-        "constants.html#ColorspaceType">Magick::CMYKColorspace</a>.</dd>
-      </dl>
-
-      <h5>Returns</h5>
-
-      <p><code>true</code> or <code>false</code></p>
-    </div>
-
-    <div class="sig">
-      <h4>intensity</h4>
-
-      <p><span class="arg">pixel</span>.intensity() -&gt;
-      anInteger</p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Returns the intensity of the pixel. The intensity is
-      computed as 0.299*R+0.587*G+0.114*B.</p>
-    </div>
-
-    <div class="sig">
-      <h4>to_color</h4>
-
-      <p><span class="arg">pixel</span>.to_color(<span class=
-      "arg">compliance</span>=AllCompliance, <span class=
-      "arg">matte</span>=<code>false</code>, <span class=
-      "arg">depth</span>=<code>QuantumDepth</code>) -&gt;
-      <em>aString</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Returns the <a href="imusage.html#color_names">color
-      name</a> corresponding the the pixel values. If there is no
-      such named color in the specified color standard, returns a
-      string in the form "#RRGGBBOO" or, if the depth is 16,
-      "#RRRRGGGGBBBBOOOO".</p>
-
-      <h5>Arguments</h5>
-
-      <dl>
-        <dt>compliance</dt>
-
-        <dd>A <a href=
-        "constants.html#ComplianceType">ComplianceType</a>
-        constant. The default value of AllCompliance causes
-        <code>to_color</code> to search for a color name in any of
-        the 3 defined color standards.</dd>
-
-        <dt>matte</dt>
-
-        <dd>If false, the pixel's opacity attribute is
-        ignored.</dd>
-
-        <dt>depth</dt>
-
-        <dd>An image depth. The default is the quantum depth used
-        when &times;Magick was compiled. The values 16 and 32 can
-        be used only when &times;Magick was compiled with the
-        appropriate QuantumDepth.</dd>
-      </dl>
-
-      <h5>See also</h5>
-
-      <p>Compare this method to <a href=
-      "image3.html#to_color">Image#to_color</a>, in which the
-      <span class="arg">matte</span> and <span class=
-      "arg">depth</span> values are taken from an image.</p>
-    </div>
-
-    <div class="sig">
-      <h4>to_HSL</h4>
-
-      <p><span class="arg">pixel</span>.to_HSL -&gt;
-      <em>anArray</em></p>
-    </div>
-
-    <div class="desc">
-      <h5>Description</h5>
-
-      <p>Converts the RGB representation of the pixel to hue,
-      saturation, and luminosity values.</p>
-
-      <h5>Returns</h5>
-
-      <p>An array of the form <code>[hue, saturation,
-      luminosity]</code>.</p>
-    </div>
-
-    <h3 id="Point">class Point</h3>
+    <h3 id="Point">class Point <span class="superclass">&lt;
+    Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -943,7 +1022,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       </dl>
     </div>
 
-    <h3 id="Primary">class Primary</h3>
+    <h3 id="Primary">class Primary <span class="superclass">&lt;
+    Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -975,7 +1055,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       </dl>
     </div>
 
-    <h3 id="Rectangle">class Rectangle</h3>
+    <h3 id="Rectangle">class Rectangle <span class=
+    "superclass">&lt; Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -1006,7 +1087,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
         <dt>x</dt>
 
-        <dd>ffset from the left edge of the image</dd>
+        <dd>Offset from the left edge of the image</dd>
 
         <dt>y</dt>
 
@@ -1014,7 +1095,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       </dl>
     </div>
 
-    <h3 id="Segment">class Segment</h3>
+    <h3 id="Segment">class Segment <span class="superclass">&lt;
+    Struct</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -1069,7 +1151,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       is written in pure Ruby. You can read it in RMagick.rb.</p>
     </div>
 
-    <h3 id="GradientFill">class GradientFill</h3>
+    <h3 id="GradientFill">class GradientFill <span class=
+    "superclass">&lt; Object</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -1131,7 +1214,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       "Click to see the example script" /></a></p>
     </div>
 
-    <h3 id="HatchFill">class HatchFill</h3>
+    <h3 id="HatchFill">class HatchFill <span class=
+    "superclass">&lt; Object</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -1169,7 +1253,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       "Click to see the example script" /></a></p>
     </div>
 
-    <h3 id="TextureFill">class TextureFill</h3>
+    <h3 id="TextureFill">class TextureFill <span class=
+    "superclass">&lt; Object</span></h3>
 
     <div class="sig">
       <h4>new</h4>
@@ -1202,7 +1287,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
   <div class="class">
     <h2 id="exception">Exception classes</h2>
 
-    <h3 id="MagickError">class ImageMagickError</h3>
+    <h3 id="MagickError">class ImageMagickError <span class=
+    "superclass">&lt; StandardError</span></h3>
 
     <div class="desc">
       <h4>Description</h4>

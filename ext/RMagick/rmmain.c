@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.3 2003/07/16 22:42:20 tim Exp $ */
+/* $Id: rmmain.c,v 1.4 2003/07/19 01:48:46 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1462,7 +1462,7 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, filename)
     DCL_ATTR_READER(Image, filesize)
     DCL_ATTR_ACCESSOR(Image, filter)
-    DCL_ATTR_READER(Image, format)
+    DCL_ATTR_ACCESSOR(Image, format)
     DCL_ATTR_ACCESSOR(Image, fuzz)
     DCL_ATTR_ACCESSOR(Image, gamma)
     DCL_ATTR_ACCESSOR(Image, geometry)

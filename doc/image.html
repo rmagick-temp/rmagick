@@ -101,7 +101,11 @@
 
                 <li><a href="#Image.changed_q">changed?</a></li>
 
-                <li><a href="#Image.chanel">channel</a></li>
+                <li><a href="#Image.channel">channel</a></li>
+
+                <li><a href=
+                "#Image.channel_compare">channel_compare</a>
+                <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href=
                 "#Image.channel_depth">channel_depth</a>
@@ -138,9 +142,6 @@
 
                 <li><a href=
                 "#Image.color_reset_bang">color_reset!</a></li>
-
-                <li><a href="#Image.compare">compare</a>
-                <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href="#Image.composite">composite</a></li>
 
@@ -1564,6 +1565,76 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <tr class="method">
       <td class="methodname"><a name=
+      "Image.channel_compare">channel_compare</a><span class=
+      "imversion">&nbsp;(5.5.8)</span></td>
+
+      <td><i>image</i>.channel_compare(<i>img</i>, <i>metric</i> [,
+      <i>channel...</i>]) -&gt; [<i>anImage</i>,
+      <i>aFloat</i>]</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>Compares <code>image</code> with the receiver.</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Arguments</td>
+
+      <td>
+        <dl>
+          <dt>image</dt>
+
+          <dd>Either an imagelist or an image. If an imagelist,
+          uses the current image.</dd>
+
+          <dt>metric</dt>
+
+          <dd>
+            The desired distortion metric. One of the following
+            constants:
+
+            <ul>
+              <li>MeanAbsoluteSquaredMetric</li>
+
+              <li>MeanSquaredErrorMetric</li>
+
+              <li>PeakAbsoluteErrorMetric</li>
+
+              <li>PeakSignalToNoiseRatioMetric</li>
+
+              <li>RootMeanSquaredErrorMetric</li>
+            </ul>
+          </dd>
+
+          <dt>[channel [, channel...]]</dt>
+
+          <dd>Zero or more <a href=
+          "constants.html##ChannelType">ChannelType</a> values. All
+          the specified channels contribute to the comparison and
+          the distortion value. If no channels are specified,
+          compares all channels.</dd>
+        </dl>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top">Returns</td>
+
+      <td>An array. The first element is a difference image, the
+      second is a the value of the computed distortion represented
+      as a Float.</td>
+    </tr>
+
+    <tr>
+      <td valign="top">ImageMagick API</td>
+
+      <td>ImageCompareChannels</td>
+    </tr>
+
+    <tr class="method">
+      <td class="methodname"><a name=
       "Image.channel_depth">channel_depth</a> <span class=
       "imversion">5.5.8</span></td>
 
@@ -2299,76 +2370,6 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">See also</td>
 
       <td><a href="#Image.erase_bang">erase!</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name=
-      "Image.compare">compare</a><span class=
-      "imversion">&nbsp;(5.5.8)</span></td>
-
-      <td><i>image</i>.compare(<i>img</i>, <i>metric</i> [,
-      <i>channel...</i>]) -&gt; [<i>anImage</i>,
-      <i>aFloat</i>]</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Compares <code>img</code> with the receiver.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>img</dt>
-
-          <dd>Either an imagelist or an image. If an imagelist,
-          uses the current image.</dd>
-
-          <dt>metric</dt>
-
-          <dd>
-            The desired distortion metric. One of the following
-            constants:
-
-            <ul>
-              <li>MeanAbsoluteSquaredMetric</li>
-
-              <li>MeanSquaredErrorMetric</li>
-
-              <li>PeakAbsoluteErrorMetric</li>
-
-              <li>PeakSignalToNoiseRatioMetric</li>
-
-              <li>RootMeanSquaredErrorMetric</li>
-            </ul>
-          </dd>
-
-          <dt>channel...</dt>
-
-          <dd>Zero or more <a href=
-          "constants.html##ChannelType">ChannelType</a> values. All
-          the specified channels contribute to the comparison and
-          the distortion value. If no channels are specified,
-          compares all channels.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>An array. The first element is a difference image, the
-      second is a the value of the computed distortion represented
-      as a Float.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">ImageMagick API</td>
-
-      <td>ImageCompareChannels</td>
     </tr>
 
     <tr class="method">

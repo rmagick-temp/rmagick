@@ -8,7 +8,7 @@ RMagick 1.4.0
       later)
       AnnotateCompositeOp. CopyCompositeOp constants (IM 5.5.8 only)
     o Added color_histogram to Image class. (IM 5.5.8, GM 1.1 only)
-    o Added tint method, each_profile, channel_extrema, compare,
+    o Added tint method, each_profile, channel_extrema, channel_compare,
       channel_depth, quantum_depth methods to Image class (IM 5.5.8 only)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added fcmp, intensity to Pixel class

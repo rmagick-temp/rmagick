@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.36 2003/12/23 02:54:00 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.37 2003/12/24 23:33:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -441,6 +441,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "change_geometry!", Image_change_geometry, 1);
     rb_define_method(Class_Image, "changed?", Image_changed_q, 0);
     rb_define_method(Class_Image, "channel", Image_channel, 1);
+    rb_define_method(Class_Image, "channel_compare", Image_channel_compare, -1);
     rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
     rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
@@ -450,7 +451,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
     rb_define_method(Class_Image, "colormap", Image_colormap, -1);
-    rb_define_method(Class_Image, "compare", Image_compare, -1);
     rb_define_method(Class_Image, "composite", Image_composite, -1);
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
@@ -1128,7 +1128,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/23 02:54:00 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/24 23:33:55 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

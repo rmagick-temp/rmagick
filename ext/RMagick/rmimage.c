@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.28 2003/12/23 02:54:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.29 2003/12/24 23:33:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -645,6 +645,76 @@ Image_channel(VALUE self, VALUE channel)
     (void) ChannelImage(new_image, channel_type);
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#channel_compare(ref_image, metric [, channel...])
+    Purpose:    compares one or more channels in two images and returns
+                the specified distortion metric and a comparison image.
+    Notes:      If no channels are specified, the default is AllChannels.
+                That case is the equivalent of the CompareImages method in
+                ImageMagick.
+*/
+VALUE Image_channel_compare(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+#if defined(HAVE_COMPAREIMAGECHANNELS)
+
+    Image *image, *r_image, *difference_image;
+    double distortion;
+    VALUE ary;
+    MetricType metric_type;
+    ChannelType channel_type;
+    ExceptionInfo exception;
+    int x;
+
+    if (argc < 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
+    }
+
+    Data_Get_Struct(self, Image, image);
+    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
+    VALUE_TO_ENUM(argv[1], metric_type, MetricType);
+
+    if (argc < 3)
+    {
+        channel_type = AllChannels;
+    }
+    else
+    {
+        ChannelType type;
+
+        channel_type = 0;
+        for(x = 2; x < argc; x++)
+        {
+            VALUE_TO_ENUM(argv[x], type, ChannelType);
+            channel_type |= type;
+        }
+    }
+
+
+    GetExceptionInfo(&exception);
+    difference_image = CompareImageChannels(image
+                                    , r_image
+                                    , channel_type
+                                    , metric_type
+                                    , &distortion
+                                    , &exception);
+    HANDLE_ERROR
+
+    ary = rb_ary_new2(2);
+    rb_ary_store(ary, 0, rm_image_new(difference_image));
+    rb_ary_store(ary, 1, rb_float_new(distortion));
+
+    return ary;
+#else
+    not_implemented("compare");
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1327,77 +1397,6 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
 }
 
 DEF_ATTR_READER(Image, columns, int)
-
-
-/*
-    Method:     Image#compare(ref_image, metric [, channel...])
-    Purpose:    compares one or more channels in two images and returns
-                the specified distortion metric and a comparison image.
-    Notes:      If no channels are specified, the default is AllChannels.
-                That case is the equivalent of the CompareImages method in
-                ImageMagick.
-*/
-VALUE Image_compare(
-    int argc,
-    VALUE *argv,
-    VALUE self)
-{
-#if defined(HAVE_COMPAREIMAGECHANNELS)
-
-    Image *image, *r_image, *difference_image;
-    double distortion;
-    VALUE ary;
-    MetricType metric_type;
-    ChannelType channel_type;
-    ExceptionInfo exception;
-    int x;
-
-    if (argc < 2)
-    {
-        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
-    }
-
-    Data_Get_Struct(self, Image, image);
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
-    VALUE_TO_ENUM(argv[1], metric_type, MetricType);
-
-    if (argc < 3)
-    {
-        channel_type = AllChannels;
-    }
-    else
-    {
-        ChannelType type;
-
-        channel_type = 0;
-        for(x = 2; x < argc; x++)
-        {
-            VALUE_TO_ENUM(argv[x], type, ChannelType);
-            channel_type |= type;
-        }
-    }
-
-
-    GetExceptionInfo(&exception);
-    difference_image = CompareImageChannels(image
-                                    , r_image
-                                    , channel_type
-                                    , metric_type
-                                    , &distortion
-                                    , &exception);
-    HANDLE_ERROR
-
-    ary = rb_ary_new2(2);
-    rb_ary_store(ary, 0, rm_image_new(difference_image));
-    rb_ary_store(ary, 1, rb_float_new(distortion));
-
-    return ary;
-#else
-    not_implemented("compare");
-    return (VALUE)0;
-#endif
-}
-
 DEF_ATTR_READER(Image, compose, int)
 
 /*

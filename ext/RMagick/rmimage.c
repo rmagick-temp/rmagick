@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.42 2004/02/23 00:31:21 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.43 2004/02/26 21:52:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4946,6 +4946,32 @@ Image_quantum_depth(VALUE self)
     return ULONG2NUM(quantum_depth);
 #else
     not_implemented("quantum_depth");
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Image#radial_blur(angle)
+    Purpose:    Call RadialBlurImage
+    Notes:      Angle is in degrees
+*/
+VALUE
+Image_radial_blur(VALUE self, VALUE angle)
+{
+#if defined(HAVE_RADIALBLURIMAGE)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = RadialBlurImage(image, NUM2DBL(angle), &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+#else
+    not_implemented("radial_blur");
     return (VALUE)0;
 #endif
 }

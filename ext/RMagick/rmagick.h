@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.39 2004/02/23 00:31:21 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.40 2004/02/26 21:52:14 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -655,6 +655,7 @@ extern VALUE Image_preview(VALUE, VALUE);
 extern VALUE Image_profile_bang(VALUE, VALUE, VALUE);
 extern VALUE Image_quantize(int, VALUE *, VALUE);
 extern VALUE Image_quantization_error(VALUE);
+extern VALUE Image_radial_blur(VALUE, VALUE);
 extern VALUE Image_raise(int, VALUE *, VALUE);
 extern VALUE Image_random_channel_threshold(VALUE, VALUE, VALUE);
 extern VALUE Image_read(VALUE, VALUE);

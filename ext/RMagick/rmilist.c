@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.17 2004/12/02 23:19:01 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.18 2004/12/04 00:19:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -401,6 +401,7 @@ rm_imagelist_from_images(Image *images)
 VALUE
 rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
 {
+     rm_check_frozen(imagelist);
      rb_iv_set(imagelist, "@scene", scene);
      return scene;
 }

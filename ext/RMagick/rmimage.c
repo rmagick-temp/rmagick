@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.86 2004/12/17 00:28:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.87 2004/12/17 23:54:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7415,13 +7415,10 @@ trimmer(int bang, VALUE self)
 
     Data_Get_Struct(self, Image, image);
 
-    SetGeometry(image,&geometry);
-    geometry.width = 0;
-    geometry.height = 0;
-    geometry.x = 0;
-    geometry.y = 0;
-
     GetExceptionInfo(&exception);
+
+    geometry = GetImageBoundingBox(image, &exception);
+    HANDLE_ERROR
 
     new_image = CropImage(image, &geometry, &exception);
     HANDLE_ERROR

@@ -3,14 +3,20 @@
 require 'ftools'
 require 'find'
 
-$docdir = nil
+if defined?(ToplevelInstaller) && self.class == ToplevelInstaller
+    $docdir = nil
 
-# Where to install the documentation
-def docdir
-    return $docdir if $docdir
-    dir = get_config('doc-dir')+File::SEPARATOR
-    dir.sub!(/\A$prefix/, get_config('prefix'))
-    $docdir = dir
+    # Where to install the documentation
+    def docdir
+        return $docdir if $docdir
+        dir = get_config('doc-dir')+'/'
+        dir.sub!(/\A$prefix/, get_config('prefix'))
+        $docdir = dir
+    end
+else
+    def docdir
+        return ARGV[0]
+    end
 end
 
 puts "\npost-install.rb: installing documentation..."

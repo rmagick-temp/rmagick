@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.4 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.1.1.1.2.1 2003/09/26 13:00:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -46,7 +46,7 @@ GradientFill_new(
     VALUE stop_color)
 {
     GradientFill *fill;
-    volatile VALUE new_fill;
+    VALUE new_fill;
     VALUE argv[6];
 
     argv[0] = x1;
@@ -62,7 +62,7 @@ GradientFill_new(
                               , free_Fill
                               , fill);
 
-    rb_obj_call_init((VALUE)new_fill, 6, argv);
+    rb_obj_call_init(new_fill, 6, argv);
     return new_fill;
 }
 #else
@@ -70,7 +70,7 @@ VALUE
 GradientFill_alloc(VALUE class)
 {
     GradientFill *fill;
-
+    
     return Data_Make_Struct(class, GradientFill, NULL, free_Fill, fill);
 }
 #endif
@@ -550,7 +550,7 @@ TextureFill_new(VALUE class, VALUE texture)
 {
     TextureFill *fill;
     VALUE argv[1];
-    volatile VALUE new_fill;
+    VALUE new_fill;
 
     new_fill = Data_Make_Struct(class
                               , TextureFill
@@ -558,7 +558,7 @@ TextureFill_new(VALUE class, VALUE texture)
                               , free_TextureFill
                               , fill);
     argv[0] = texture;
-    rb_obj_call_init((VALUE)new_fill, 1, argv);
+    rb_obj_call_init(new_fill, 1, argv);
     return new_fill;
 }
 #else
@@ -583,7 +583,7 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
 {
     TextureFill *fill;
     Image *texture;
-    volatile VALUE texture_image;
+    VALUE texture_image;
 
     Data_Get_Struct(self, TextureFill, fill);
 

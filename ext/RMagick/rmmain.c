@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.66 2004/08/20 20:22:32 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.65.2.1 2004/11/16 22:48:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -74,7 +74,19 @@ Magick_colors(VALUE class)
     unsigned long number_colors, x;
     volatile VALUE ary;
 
+#if defined(HAVE_OLD_GETCOLORINFOLIST)
     color_info_list = GetColorInfoList("*", &number_colors);
+
+#else
+    // IM 6.1.3 added an exception parm to GetColorInfoList
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+
+    color_info_list = GetColorInfoList("*", &number_colors, &exception);
+    HANDLE_ERROR
+#endif
+
 
     if (rb_block_given_p())
     {
@@ -151,7 +163,17 @@ Magick_fonts(VALUE class)
     unsigned long number_types, x;
     volatile VALUE ary;
 
+#if defined(HAVE_OLD_GETTYPEINFOLIST)
     type_info = GetTypeInfoList("*", &number_types);
+
+#else
+    // IM 6.1.3 added an exception argument to GetTypeInfoList
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+    type_info = GetTypeInfoList("*", &number_types, &exception);
+    HANDLE_ERROR
+#endif
 
     if (rb_block_given_p())
     {
@@ -269,11 +291,22 @@ Magick_init_formats(VALUE class)
     const MagickInfo **magick_info;
     unsigned long number_formats, x;
     volatile VALUE formats;
+#if !defined(HAVE_OLD_GETMAGICKINFOLIST)
+    ExceptionInfo exception;
+#endif
 
     class = class;      // defeat "never referenced" message from icc
     formats = rb_hash_new();
 
+#if defined(HAVE_OLD_GETMAGICKINFOLIST)
     magick_info = GetMagickInfoList("*", &number_formats);
+
+#else
+    // IM 6.1.3 added an exception argument to GetMagickInfoList
+    GetExceptionInfo(&exception);
+    magick_info = GetMagickInfoList("*", &number_formats, &exception);
+    HANDLE_ERROR
+#endif
 
     for(x = 0; x < number_formats; x++)
     {
@@ -697,7 +730,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "signature", Image_signature, 0);
     rb_define_method(Class_Image, "solarize", Image_solarize, -1);
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
-    rb_define_method(Class_Image, "splice", Image_splice, -1);
     rb_define_method(Class_Image, "spread", Image_spread, -1);
     rb_define_method(Class_Image, "statistics", Image_statistics, 0);
     rb_define_method(Class_Image, "stegano", Image_stegano, 2);
@@ -1444,7 +1476,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/08/20 20:22:32 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/11/16 22:48:07 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

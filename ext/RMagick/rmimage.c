@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.44 2004/02/27 00:17:09 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.45 2004/03/04 00:43:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -692,7 +692,11 @@ Image_channel(VALUE self, VALUE channel)
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
+#if defined(HAVE_SEPARATEIMAGECHANNEL)
+    (void) SeparateImageChannel(new_image, channel_type);
+#else
     (void) ChannelImage(new_image, channel_type);
+#endif
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 }

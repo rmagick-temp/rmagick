@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.4 2003/07/20 13:09:04 tim Exp $ */
+/* $Id: rminfo.c,v 1.5 2003/08/26 13:14:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -237,13 +237,13 @@ Info_tile_eq(VALUE self, VALUE tile)
 VALUE
 Info_extract(VALUE self)
 {
-    rb_notimplement();
+    not_implemented("extract");
     return (VALUE)0;
 }
 VALUE
 Info_extract_eq(VALUE self, VALUE extr)
 {
-    rb_notimplement();
+    not_implemented("extract=");
     return (VALUE)0;
 }
 

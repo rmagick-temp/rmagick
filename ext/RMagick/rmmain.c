@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.12 2003/08/26 12:25:14 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.13 2003/08/26 13:14:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -311,10 +311,11 @@ Magick_set_log_format(VALUE class, VALUE format)
 {
 #ifdef HAVE_SETLOGFORMAT
     SetLogFormat(STRING_PTR(format));
-#else
-    rb_notimplement();
-#endif
     return class;
+#else
+    not_implemented("set_log_format");
+    return (VALUE) 0;
+#endif
 }
 
 

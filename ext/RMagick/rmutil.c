@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.7 2003/08/18 00:19:15 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.8 2003/08/26 13:14:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1943,6 +1943,24 @@ delete_temp_image(char *tmpnam)
     }
 }
 
+/*
+    External:   not_implemented
+    Purpose:    raise NotImplementedError
+    Notes:      Called when a xMagick API is not available. 
+                Replaces Ruby's rb_notimplement function.
+    Notes:      The MagickPackageName macro is not available
+                until 5.5.7. Use MAGICKNAME instead.
+*/
+void
+not_implemented(const char *method)
+{
+#define Q(N) Q2(N)
+#define Q2(N) #N
+
+    rb_raise(rb_eNotImpError, "the %s method is not supported by "
+                              Q(MAGICKNAME) " " MagickLibVersionText
+                              , method);
+}
 
 /*
     Static:     raise_error(msg, loc)

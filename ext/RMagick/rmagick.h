@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.10 2003/08/26 12:25:14 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.11 2003/08/26 13:14:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -594,6 +594,7 @@ extern void *magick_realloc(void *, size_t);
 extern void magick_clone_string(char **, const char *);
 extern void write_temp_image(Image *, char *);
 extern void delete_temp_image(char *);
+extern void not_implemented(const char *);
 extern void handle_error(ExceptionInfo *);
 extern void handle_all_errors(Image *);
 extern void attr_write(VALUE, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.10 2003/08/26 12:25:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.11 2003/08/26 13:14:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -72,7 +72,7 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     return rm_image_new(new_image);
 #else
-    rb_notimplement();
+    not_implemented("adaptive_threshold");
     return (VALUE) 0;
 #endif
 }
@@ -502,7 +502,7 @@ Image_capture(
 
     return rm_image_new(image);
 #else
-    rb_notimplement();
+    not_implemented("capture");
     return (VALUE) 0;
 #endif
 }
@@ -566,7 +566,7 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     return rb_yield(ary);
         
 #else
-    rb_notimplement();
+    not_implemented("change_geometry");
     return (VALUE) 0;
 #endif
 }
@@ -622,7 +622,8 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_BLACKTHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, BlackThresholdImage);
 #else
-    rb_notimplement();
+    not_implemented("black_threshold");
+    return (VALUE) 0;
 #endif
 }
 
@@ -2036,7 +2037,7 @@ Image_export_pixels(
     return ary;
 
 #else
-    rb_notimplement();
+    not_implemented("export_pixels");
     return (VALUE) 0;
 #endif
 }
@@ -2054,7 +2055,7 @@ Image_extract_info(VALUE self)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     return RectangleInfo_to_Struct(&image->extract_info);
 #else
-    rb_notimplement();
+    not_implemented("extract_info");
     return (VALUE) 0;
 #endif
 }
@@ -2069,7 +2070,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
     Struct_to_RectangleInfo(&image->extract_info, rect);
     return self;
 #else
-    rb_notimplement();
+    not_implemented("extract_info=");
     return (VALUE) 0;
 #endif
 }
@@ -2683,7 +2684,7 @@ Image_import_pixels(
     return self;
 
 #else
-    rb_notimplement();
+    not_implemented("import_pixels");
     return (VALUE) 0;
 #endif
 }
@@ -2984,7 +2985,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 #else
-    rb_notimplement();
+    not_implemented("level_channel");
     return (VALUE) 0;
 #endif
 }
@@ -4088,7 +4089,7 @@ Image_random_channel_threshold(
 
     return rm_image_new(new_image);
 #else
-    rb_notimplement();
+    not_implemented("random_channel_threshold");
     return (VALUE) 0;
 #endif
 }
@@ -4965,7 +4966,7 @@ Image_strip_bang(VALUE self)
     (void) StripImage(image);
     return self;
 #else
-    rb_notimplement();
+    not_implemented("strip!");
     return (VALUE) 0;
 #endif
 }
@@ -5197,7 +5198,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
     
     return rm_image_new(new_image);
 #else
-    rb_notimplement();
+    not_implemented(bang ? "thumbnail!" : "thumbnail");
     return (VALUE) 0;
 #endif
 }
@@ -5322,7 +5323,8 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     
     return rm_image_new(new_image);
 #else
-    rb_notimplement();
+    not_implemented("tint");
+    return (VALUE) 0;
 #endif
 }
 
@@ -5585,7 +5587,8 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_WHITETHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, WhiteThresholdImage);
 #else
-    rb_notimplement();
+    not_implemented("white_threshold");
+    return (VALUE) 0;
 #endif
 }
 

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.26 2004/03/19 01:32:22 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.27 2004/04/02 23:56:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -81,6 +81,8 @@ void magick_clone_string(char **new_str, const char *str)
     }
 }
 
+
+
 /*
     Extern:     rm_string_value_ptr(VALUE*)
     Purpose:    emulate Ruby 1.8's rb_string_value_ptr
@@ -132,13 +134,27 @@ char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
 
 
 /*
+    Extern:     rm_check_frozen
+    Purpose:    backport rb_check_frozen for 1.6.x releases
+*/
+void
+rm_check_frozen(VALUE obj)
+{
+    if (OBJ_FROZEN(obj))
+    {
+        rb_error_frozen(rb_class2name(CLASS_OF(obj)));
+    }
+}
+
+
+/*
     Extern:     rm_no_freeze(obj)
     Purpose:    overrides freeze in classes that can't be frozen.
 */
 VALUE
 rm_no_freeze(VALUE obj)
 {
-    rb_raise(rb_eTypeError, "can't freeze %s", rb_obj_classname(obj));
+    rb_raise(rb_eTypeError, "can't freeze %s", rb_class2name(CLASS_OF(obj)));
 }
 
 /*
@@ -199,12 +215,12 @@ ChromaticityInfo_to_s(VALUE self)
 VALUE
 Pixel_to_s(VALUE self)
 {
-    PixelPacket pp;
+    Pixel *pixel;
     char buff[100];
 
-    Pixel_to_PixelPacket(&pp, self);
+    Data_Get_Struct(self, Pixel, pixel);
     sprintf(buff, "red=%d, green=%d, blue=%d, opacity=%d"
-          , pp.red, pp.green, pp.blue, pp.opacity);
+          , pixel->red, pixel->green, pixel->blue, pixel->opacity);
     return rb_str_new2(buff);
 }
 
@@ -250,7 +266,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
 {
     Info *info;
     Image *image;
-    PixelPacket pp;
+    Pixel *pixel;
     char name[MaxTextExtent];
     ExceptionInfo exception;
     ComplianceType compliance = AllCompliance;
@@ -287,7 +303,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
     }
 
-    Pixel_to_PixelPacket(&pp, self);
+    Data_Get_Struct(self, Pixel, pixel);
 
     info = CloneImageInfo(NULL);
     image = AllocateImage(info);
@@ -295,7 +311,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     image->matte = matte;
     DestroyImageInfo(info);
     GetExceptionInfo(&exception);
-    (void) QueryColorname(image, &pp, compliance, name, &exception);
+    (void) QueryColorname(image, pixel, compliance, name, &exception);
     DestroyImage(image);
     HANDLE_ERROR
 
@@ -311,12 +327,12 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
 VALUE
 Pixel_to_HSL(VALUE self)
 {
-    PixelPacket rgb;
+    Pixel *pixel;
     double hue, saturation, luminosity;
     volatile VALUE hsl;
 
-    Pixel_to_PixelPacket(&rgb, self);
-    TransformHSL(rgb.red, rgb.green, rgb.blue,
+    Data_Get_Struct(self, Pixel, pixel);
+    TransformHSL(pixel->red, pixel->green, pixel->blue,
                  &hue, &saturation, &luminosity);
 
     hsl = rb_ary_new3(3, rb_float_new(hue), rb_float_new(saturation),
@@ -363,7 +379,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     Info *info;
 #endif
 
-    PixelPacket this, that;
+    Pixel *this, *that;
     ColorspaceType colorspace = RGBColorspace;
     double fuzz = 0.0;
     unsigned int equal;
@@ -382,8 +398,8 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    Pixel_to_PixelPacket(&this, self);
-    Pixel_to_PixelPacket(&that, argv[0]);
+    Data_Get_Struct(self, Pixel, this);
+    Data_Get_Struct(argv[0], Pixel, that);
 
 #if defined(HAVE_FUZZYCOLORCOMPARE)
     // The FuzzyColorCompare function expects to get the
@@ -405,11 +421,11 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     image->colorspace = colorspace;
     image->fuzz = fuzz;
 
-    equal = FuzzyColorCompare(image, &this, &that);
+    equal = FuzzyColorCompare(image, this, that);
     DestroyImage(image);
 
 #else
-    equal = FuzzyColorMatch(&this, &that, fuzz);
+    equal = FuzzyColorMatch(this, that, fuzz);
 #endif
 
     return equal ? Qtrue : Qfalse;
@@ -422,14 +438,228 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 VALUE
 Pixel_intensity(VALUE self)
 {
-    PixelPacket pixel;
+    Pixel *pixel;
     unsigned long intensity;
 
-    Pixel_to_PixelPacket(&pixel, self);
+    Data_Get_Struct(self, Pixel, pixel);
+
     intensity = (unsigned long)
-                (0.299*pixel.red) + (0.587*pixel.green) + (0.114*pixel.blue);
+                (0.299*pixel->red) + (0.587*pixel->green) + (0.114*pixel->blue);
+
     return ULONG2NUM(intensity);
 }
+
+
+/*
+    Methods:    Pixel RGBA attribute accessors
+    Purpose:    Get/set Pixel attributes
+    Note:       Pixel is Observable. Setters call changed, notify_observers
+    Note:       Setters return their argument values for backward compatibility
+                to when Pixel was a Struct class.
+*/
+
+DEF_ATTR_READER(Pixel, red, int)
+
+extern VALUE
+Pixel_red_eq(VALUE self, VALUE v)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    pixel->red = (Quantum) NUM2UINT(v);
+    rb_funcall(self, ID_changed, 0);
+    rb_funcall(self, ID_notify_observers, 1, self);
+    return INT2NUM(pixel->red);
+}
+
+DEF_ATTR_READER(Pixel, green, int)
+
+extern VALUE
+Pixel_green_eq(VALUE self, VALUE v)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    pixel->green = (Quantum) NUM2UINT(v);
+    rb_funcall(self, ID_changed, 0);
+    rb_funcall(self, ID_notify_observers, 1, self);
+    return INT2NUM(pixel->green);
+}
+
+DEF_ATTR_READER(Pixel, blue, int)
+
+extern VALUE
+Pixel_blue_eq(VALUE self, VALUE v)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    pixel->blue = (Quantum) NUM2UINT(v);
+    rb_funcall(self, ID_changed, 0);
+    rb_funcall(self, ID_notify_observers, 1, self);
+    return INT2NUM(pixel->blue);
+}
+
+DEF_ATTR_READER(Pixel, opacity, int)
+
+extern VALUE
+Pixel_opacity_eq(VALUE self, VALUE v)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    pixel->opacity = (Quantum) NUM2UINT(v);
+    rb_funcall(self, ID_changed, 0);
+    rb_funcall(self, ID_notify_observers, 1, self);
+    return  INT2NUM(pixel->opacity);
+}
+
+
+
+/*
+    Static:     destroy_Pixel
+    Purpose:    Free the storage associated with a Pixel object
+*/
+static void
+destroy_Pixel(Pixel *pixel)
+{
+    xfree(pixel);
+}
+
+
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+/*
+    Extern:     Pixel_alloc
+    Purpose:    Allocate a Pixel object
+*/
+VALUE
+Pixel_alloc(VALUE class)
+{
+    Pixel *pixel;
+
+    pixel = ALLOC(Pixel);
+    memset(pixel, '\0', sizeof(Pixel));
+    return Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
+}
+
+#else
+
+/*
+    Method:     Pixel.new
+    Purpose:    Construct a new Pixel object
+*/
+VALUE
+Pixel_new(int argc, VALUE *argv, VALUE class)
+{
+    Pixel *pixel;
+    volatile VALUE pixel_obj;
+
+    pixel = ALLOC(Pixel);
+    memset(pixel, '\0', sizeof(Pixel));
+    pixel_obj = Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
+
+    rb_obj_call_init(pixel_obj, argc, argv);
+    return pixel_obj;
+}
+#endif
+
+
+/*
+    Method:     Pixel#initialize(red=0,green=0,blue=0,opacity=0)
+    Notes:      For backward compatibility, arguments may be nil.
+*/
+VALUE
+Pixel_initialize(int argc, VALUE *argv, VALUE self)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+
+    switch(argc)
+    {
+        case 4:
+            if (argv[3] != Qnil)
+            {
+                pixel->opacity = (Quantum) NUM2UINT(argv[3]);
+            }
+        case 3:
+            if (argv[2] != Qnil)
+            {
+                pixel->blue = (Quantum) NUM2UINT(argv[2]);
+            }
+        case 2:
+            if (argv[1] != Qnil)
+            {
+                pixel->green = (Quantum) NUM2UINT(argv[1]);
+            }
+        case 1:
+            if (argv[0] != Qnil)
+            {
+                pixel->red = (Quantum) NUM2UINT(argv[0]);
+            }
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 4)", argc);
+    }
+
+    return self;
+}
+
+
+VALUE
+Pixel_dup(VALUE self)
+{
+    Pixel *pixel;
+    volatile VALUE dup;
+
+    pixel = ALLOC(Pixel);
+    memset(pixel, '\0', sizeof(Pixel));
+    dup = Data_Wrap_Struct(CLASS_OF(self), NULL, destroy_Pixel, pixel);
+    if (rb_obj_tainted(self))
+    {
+        rb_obj_taint(dup);
+    }
+    return rb_funcall(dup, ID_initialize_copy, 1, self);
+}
+
+
+/*
+    Method:     Pixel#clone
+    Notes:      see dup, init_copy
+*/
+VALUE
+Pixel_clone(VALUE self)
+{
+    volatile VALUE clone;
+
+    clone = Pixel_dup(self);
+    if (OBJ_FROZEN(self))
+    {
+        rb_obj_freeze(clone);
+    }
+
+    return clone;
+}
+
+
+/*
+    Method:     Pixel#initialize_copy
+    Purpose:    initialize clone, dup methods
+*/
+VALUE Pixel_init_copy(VALUE self, VALUE orig)
+{
+    Pixel *copy, *original;
+
+    Data_Get_Struct(orig, Pixel, original);
+    Data_Get_Struct(self, Pixel, copy);
+
+    *copy = *original;
+
+    return self;
+}
+
+
 
 /*
     Method:     Magick::Rectangle#to_s
@@ -1001,6 +1231,7 @@ Color_from_ColorInfo(const ColorInfo *ci)
 void
 Color_to_ColorInfo(ColorInfo *ci, VALUE st)
 {
+    Pixel *pixel;
     volatile VALUE members, m;
 
     if (CLASS_OF(st) != Class_Color)
@@ -1026,7 +1257,8 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     m = rb_ary_entry(members, 2);
     if (m != Qnil)
     {
-        Pixel_to_PixelPacket(&(ci->color), m);
+        Data_Get_Struct(m, Pixel, pixel);
+        ci->color = *pixel;
     }
 }
 
@@ -1065,42 +1297,18 @@ Color_to_s(VALUE self)
 /*
     Extern:     Pixel_from_PixelPacket
     Purpose:    Create a Magick::Pixel object from a PixelPacket structure.
+    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
 */
 VALUE
 Pixel_from_PixelPacket(PixelPacket *pp)
 {
-    return rb_funcall(Class_Pixel, ID_new, 4
-                    , INT2FIX(pp->red), INT2FIX(pp->green)
-                    , INT2FIX(pp->blue), INT2FIX(pp->opacity));
+    Pixel *pixel;
+
+    pixel = ALLOC(Pixel);
+    *pixel = *pp;
+    return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
 
-/*
-    Extern:     Pixel_to_PixelPacket
-    Purpose:    Convert a Magick::Pixel object to a PixelPacket structure.
-    Notes:      The Pixel object could have uninitialized values, default to 0.
-*/
-void
-Pixel_to_PixelPacket(PixelPacket *pp, VALUE st)
-{
-    volatile VALUE values;
-    volatile VALUE c;
-
-    if (CLASS_OF(st) != Class_Pixel)
-    {
-        rb_raise(rb_eTypeError, "type mismatch: %s given",
-                 rb_class2name(CLASS_OF(st)));
-    }
-
-    values = rb_funcall(st, ID_values, 0);
-    c = rb_ary_entry(values, 0);
-    pp->red = c != Qnil ? NUM2INT(c) : 0;
-    c = rb_ary_entry(values, 1);
-    pp->green = c != Qnil ? NUM2INT(c) : 0;
-    c = rb_ary_entry(values, 2);
-    pp->blue = c != Qnil ? NUM2INT(c) : 0;
-    c = rb_ary_entry(values, 3);
-    pp->opacity = c != Qnil ? NUM2INT(c) : 0;
-}
 
 /*
     Extern:     Color_to_PixelPacket
@@ -1117,7 +1325,7 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
     }
     else if (CLASS_OF(color) == Class_Pixel)
     {
-        Pixel_to_PixelPacket(pp, color);
+        Data_Get_Struct(color, Pixel, pp);
     }
     else
     {
@@ -1461,6 +1669,7 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
     if (m != Qnil)
         CloneString((char **)&(ti->format), STRING_PTR(m));
 }
+
 
 /*
     Static:     destroy_TypeInfo
@@ -1949,13 +2158,28 @@ raise_error(const char *msg, const char *loc)
                 the "loc" string in the @magick_location instance variable
 */
 VALUE
-ImageMagickError_initialize(VALUE self, VALUE mesg, VALUE extra)
+ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 {
-    volatile VALUE argv[1];
+    volatile VALUE super_argv[1] = {(VALUE)0};
+    int super_argc = 0;
+    volatile VALUE extra = Qnil;
 
-    argv[0] = mesg;
-    rb_call_super(1, (VALUE *)argv);
+    switch(argc)
+    {
+        case 2:
+            extra = argv[1];
+        case 1:
+            super_argv[0] = argv[0];
+            super_argc = 1;
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
+    }
+
+    rb_call_super(super_argc, (VALUE *)super_argv);
     rb_iv_set(self, "@"MAGICK_LOC, extra);
+
 
     return self;
 }

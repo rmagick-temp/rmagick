@@ -1,7 +1,7 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-require 'pixels.rb'
+load 'pixels-array'
 
 puts 'This may take a few seconds...'
 image = Magick::Image.constitute(Width, Height, "RGB", Pixels)

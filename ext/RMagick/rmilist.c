@@ -1,6 +1,6 @@
-/* $Id: rmilist.c,v 1.8 2003/12/17 23:47:02 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.9 2004/01/01 01:32:29 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2003 by Timothy P. Hunter
+|                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
 | Author:   Tim Hunter
 | Purpose:  ImageList class method definitions for RMagick

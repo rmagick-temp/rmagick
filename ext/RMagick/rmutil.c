@@ -1,6 +1,6 @@
-/* $Id: rmutil.c,v 1.21 2003/12/17 23:49:25 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.22 2004/01/01 01:32:29 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2003 by Timothy P. Hunter
+|                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
 | Author:   Tim Hunter
 | Purpose:  Utility functions for RMagick

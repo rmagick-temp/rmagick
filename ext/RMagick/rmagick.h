@@ -1,6 +1,6 @@
-/* $Id: rmagick.h,v 1.33 2003/12/26 16:50:21 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.34 2004/01/01 01:32:29 rmagick Exp $ */
 /*=============================================================================
-|               Copyright (C) 2003 by Timothy P. Hunter
+|               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
 | Purpose:  RMagick declarations and definitions
 | Author:   Tim Hunter
@@ -43,7 +43,7 @@
 #define RUBY16(d) d
 #endif
 
-#if RUBY_VERSION < 0x168
+#if !defined(ULONG2NUM)
 #define ULONG2NUM(v) UINT2NUM(v)
 #endif
 
@@ -152,6 +152,10 @@ typedef size_t magick_uint64_t;
 #endif
 #endif
 
+// This implements the "omitted storage class model" for external variables.
+// (Ref: Harbison & Steele.) The rmmain.c file defines MAIN, which causes
+// the single defining declarations to be generated. No other source files
+// define MAIN and therefore generate referencing declarations.
 #undef EXTERN
 #if defined(MAIN)
 #define EXTERN
@@ -346,6 +350,8 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 //  Define a Magick module constant
 #define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
 
+
+// Convert a Ruby enum constant back to a C enum member.
 #define VALUE_TO_ENUM(value, e, type) \
    do {\
    MagickEnum *magick_enum;\
@@ -357,9 +363,13 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
    } while(0)
 
 
-/*
-*   Method, external function declarations
-*/
+
+// Method, external function declarations. These declarations are
+// grouped by the source file in which the methods are defined.
+
+// We don't need any "extern/no extern" stuff here. An external function
+// declaration can refer to a function defined in another source file or
+// the same source file.
 
 // rmdraw.c
 ATTR_WRITER(Draw, affine)
@@ -418,10 +428,9 @@ extern VALUE Montage_new(VALUE);
 extern VALUE rm_montage_new(void);
 
 
-
-
 // rmmain.c
 extern VALUE rm_montage_new(void);
+
 
  // rmilist.c
 extern VALUE ImageList_animate(int, VALUE *, VALUE);
@@ -443,8 +452,8 @@ extern VALUE rm_imagelist_new(void);
 extern int rm_imagelist_length(VALUE);
 extern VALUE rm_imagelist_push(VALUE, VALUE);
 
-// rminfo.c
 
+// rminfo.c
 ATTR_ACCESSOR(Info, antialias)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)
@@ -487,6 +496,7 @@ extern VALUE Info_new(VALUE);
 
 extern VALUE Info_initialize(VALUE);
 extern VALUE rm_info_new(void);
+
 
 // rmimage.c
 ATTR_ACCESSOR(Image, background_color)
@@ -681,8 +691,8 @@ extern VALUE Image_write(VALUE, VALUE);
 
 extern VALUE rm_image_new(Image *);
 
-// rmfill.c
 
+// rmfill.c
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE GradientFill_alloc(VALUE);
 #else
@@ -700,6 +710,7 @@ VALUE TextureFill_new(VALUE, VALUE);
 
 extern VALUE TextureFill_initialize(VALUE, VALUE);
 extern VALUE TextureFill_fill(VALUE, VALUE);
+
 
 // rmutil.c
 extern VALUE   AffineMatrix_from_AffineMatrix(AffineMatrix *);

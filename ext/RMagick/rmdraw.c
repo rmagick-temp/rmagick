@@ -1,6 +1,6 @@
-/* $Id: rmdraw.c,v 1.6 2003/12/17 23:45:08 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.7 2004/01/01 01:32:29 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2003 by Timothy P. Hunter
+|                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
 | Author:   Tim Hunter
 | Purpose:  Contains Draw class methods.
@@ -177,7 +177,10 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
     {
         w = (WeightType) FIX2INT(weight);
         if (w < 100 || w > 900)
+        {
             rb_raise(rb_eArgError, "invalid font weight (%d given)", w);
+        }
+        draw->info->weight = w;
     }
     else
     {

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
 
   <title>RMagick: class Image (class and instance methods, part
   1)</title>
@@ -14,9 +14,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <script type="text/javascript">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
   //<![CDATA[
     <!-- Pre-load this image so that the browser knows how big it is. -->
     flower_hat = new Image();
@@ -34,8 +34,8 @@
       }
     }
   //]]>
-  </script>
-  <style type="text/css">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
     .noise_example_wrapper img {
       float: left;
@@ -45,7 +45,7 @@
       float: left;
     }
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -720,8 +720,8 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     <div class="noise_example_wrapper">
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
-      "add_noise_example" title=
-      "Click to see the example script" /></a>
+      "add_noise_example" title="Click to see the example script"
+      name="add_noise_example" /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -791,12 +791,11 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
 
     <p class="rollover"><a href=
     "javascript:popup('affine_transform.rb.html')"><img onmouseover="this.src='ex/images/Flower_Hat.jpg'"
-         onmouseout="this.src='ex/affine_transform.jpg'" src=
-         "ex/affine_transform.jpg" alt="affine_transform example"
-         title="Click to see the example script" /></a> <img src=
-         "ex/images/spin.gif" alt="" class="spin" style=
-         "left:237px;" title=
-         "Mouse over the example to see the original image" /></p>
+    onmouseout="this.src='ex/affine_transform.jpg'" src=
+    "ex/affine_transform.jpg" alt="affine_transform example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left:237px;"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="image3.html#rotate">rotate</a>,
     <a href="#shear">shear</a>
@@ -1015,12 +1014,13 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     "padding:10px; display:none" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id="bordered"
-    onmouseover=
+    "Click to see the example script" name="borderless" /> <img id=
+    "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
-    "ex/border.jpg" alt="border example" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left: 224px;"
-    title="Mouse over the example to see the original image" /></p>
+    "ex/border.jpg" alt="border example" name="bordered" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" style=
+    "left: 224px;" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="#border_bang">border!</a>, <a href=
     "image2.html#frame">frame</a>
@@ -1375,13 +1375,12 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <p class="rollover"><a href=
     "javascript:popup('channel_threshold.rb.html')"><img onmouseover="this.src='ex/channel_threshold_before.jpg'"
-         onmouseout="this.src='ex/channel_threshold_after.jpg'" src=
-         "ex/channel_threshold_after.jpg" alt=
-         "channel_threshold example" title=
-         "Click the image to see the example script" /></a>
-         <img src="ex/images/spin.gif" alt="" class="spin" style=
-         "left: 446px" title=
-         "Mouse over the example to see the original image" /></p>
+    onmouseout="this.src='ex/channel_threshold_after.jpg'" src=
+    "ex/channel_threshold_after.jpg" alt=
+    "channel_threshold example" title=
+    "Click the image to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left: 446px"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href=
     "#adaptive_threshold">adaptive_threshold</a>, <a href=
@@ -1573,13 +1572,13 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <p class="rollover"><a href=
     "javascript:popup('color_fill_to_border.rb.html')"><img onmouseover="this.src='ex/color_fill_to_border_before.gif'"
-         onmouseout="this.src='ex/color_fill_to_border_after.gif'"
-         src="ex/color_fill_to_border_after.gif" alt=
-         "color_fill_to_border example" title=
-         "Click the image to see the example script" /></a><img src=
-         "ex/images/spin.gif" alt="" class="spin" style=
-         "margin-bottom: 182px; margin-left: 4px;" title=
-         "Mouse over the example to see the original image" /></p>
+    onmouseout="this.src='ex/color_fill_to_border_after.gif'" src=
+    "ex/color_fill_to_border_after.gif" alt=
+    "color_fill_to_border example" title=
+    "Click the image to see the example script" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" style=
+    "margin-bottom: 182px; margin-left: 4px;" title=
+    "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="#color_floodfill">color_floodfill</a>
 

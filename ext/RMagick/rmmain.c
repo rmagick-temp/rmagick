@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.33 2003/12/16 00:45:44 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.34 2003/12/17 23:48:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -111,7 +111,7 @@ Magick_fonts(VALUE class)
     // If block, iterate over fonts
     if (rb_block_given_p())
     {
-        for (type = (TypeInfo *)type_list; type; type = type->next)
+        for (type = (TypeInfo *)type_list; type; type = next)
         {
             next = type->next;  // Protect against recursive calls to GetTypeInfo
             if (! type->stealth)
@@ -156,6 +156,8 @@ Magick_init_formats(VALUE class)
     ExceptionInfo exception;
     char mode[5] = {0};
 
+    class = class;      // defeat "never referenced" message from icc
+
     formats = rb_hash_new();
 
     GetExceptionInfo(&exception);
@@ -195,6 +197,8 @@ monitor_handler(
 {
     volatile VALUE monitor;
     volatile VALUE args[3];
+
+    exception = exception;  // defeat "never referenced" message from icc
 
     if (rb_cvar_defined(Module_Magick, Magick_Monitor))
     {
@@ -1112,7 +1116,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/16 00:45:44 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/17 23:48:44 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

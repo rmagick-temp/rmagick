@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.25 2003/12/16 00:12:48 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.26 2003/12/17 23:48:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -143,7 +143,7 @@ Image_aref(VALUE self, VALUE key_arg)
     {
         case T_NIL:
             return Qnil;
-            break;
+
         case T_SYMBOL:
             key = rb_id2name(SYM2ID(key_arg));
             break;
@@ -195,7 +195,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     {
         case T_NIL:
             return self;
-            break;
+
         case T_SYMBOL:
             key = rb_id2name(SYM2ID(key_arg));
             break;
@@ -503,6 +503,8 @@ Image_capture(
     ImageInfo *image_info;
     volatile VALUE info_obj;
     XImportInfo ximage_info;
+
+    self = self;  // Suppress "never referenced" message from icc
 
     XGetImportInfo(&ximage_info);
     switch (argc)
@@ -945,7 +947,8 @@ Image_color_profile(VALUE self)
     {
         return Qnil;
     }
-    return rb_str_new(image->color_profile.info, image->color_profile.length);
+    return rb_str_new((const char *)image->color_profile.info
+                    , image->color_profile.length);
 #endif
 }
 
@@ -1078,7 +1081,7 @@ Image_color_flood_fill(
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     draw_info->fill = fill;
-    (void) ColorFloodfillImage(new_image, draw_info, target, x, y, fill_method);
+    (void) ColorFloodfillImage(new_image, draw_info, target, x, y, (PaintMethod)fill_method);
     HANDLE_IMG_ERROR(new_image)
     DestroyDrawInfo(draw_info);
     return rm_image_new(new_image);
@@ -1511,6 +1514,8 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     unsigned int okay;
 #endif
 
+    class = class;  // Suppress "never referenced" message from icc
+
     Check_Type(pixels_arg, T_ARRAY);
 
     width = NUM2INT(width_arg);
@@ -1563,7 +1568,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         }
         if (type == T_FLOAT)
         {
-            pixels.f[x] = NUM2DBL(pixel);
+            pixels.f[x] = (float) NUM2DBL(pixel);
             if (pixels.f[x] < 0.0 || pixels.f[x] > 1.0)
             {
                 rb_raise(rb_eArgError, "element %d is out of range [0..1]: %f", x, pixels.f[x]);
@@ -1571,7 +1576,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         }
         else
         {
-            pixels.i[x] = (Quantum) FIX2ULONG(pixel);
+            pixels.i[x] = ScaleLongToQuantum(FIX2LONG(pixel));
         }
     }
 
@@ -2045,6 +2050,8 @@ Image__dump(VALUE self, VALUE depth)
     DumpedImage mi;
     volatile VALUE str;
     ExceptionInfo exception;
+
+    depth = depth;  // Suppress "never referenced" message from icc
 
     Data_Get_Struct(self, Image, image);
 
@@ -2740,7 +2747,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
 
             // Can't have all 4 gamma values == 1.0. Also, very small values
             // cause ImageMagick to segv.
-            if (red_gamma == 1.0 || abs(red_gamma) < 0.003)
+            if (red_gamma == 1.0 || fabs(red_gamma) < 0.003)
             {
                 rb_raise(rb_eArgError, "invalid gamma value (%f)", red_gamma);
             }
@@ -3248,7 +3255,8 @@ Image_iptc_profile(VALUE self)
     {
         return Qnil;
     }
-    return rb_str_new(image->iptc_profile.info, image->iptc_profile.length);
+    return rb_str_new((const char *)image->iptc_profile.info
+                    , image->iptc_profile.length);
 #endif
 }
 
@@ -3446,6 +3454,8 @@ Image__load(VALUE class, VALUE str)
     ExceptionInfo exception;
     char *blob;
     long length;
+
+    class = class;  // Suppress "never referenced" message from icc
 
     info = CloneImageInfo(NULL);
 
@@ -4438,7 +4448,8 @@ Image_profile_bang(
     {
         prof = STRING_PTR_LEN(profile, prof_l);
     }
-    (void) ProfileImage(image, STRING_PTR(name), prof, (size_t)prof_l, True);
+    (void) ProfileImage(image, STRING_PTR(name), (const unsigned char *)prof
+                      , (size_t)prof_l, True);
     HANDLE_IMG_ERROR(image)
     return self;
 }
@@ -4606,7 +4617,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     Info *info;
     volatile VALUE info_obj;
     volatile VALUE image_obj, image_ary;
-    Image *image, *images, *next;
+    Image *image, *images, *next = NULL;
     ExceptionInfo exception;
 
     // Create a new Info structure for this read/ping
@@ -4644,7 +4655,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
 
     image_ary = rb_ary_new();
 #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
-    next = NULL;        // Satisfy compiler!
+    next = next;        // defeat "never referenced" message from icc
     while (images)
     {
         image = RemoveFirstImageFromList(&images);
@@ -5222,7 +5233,7 @@ Image_spread(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 1:
-            radius = NUM2UINT(radius);
+            radius = NUM2UINT(argv[0]);
         case 0:
             break;
         default:

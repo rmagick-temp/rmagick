@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.20 2003/12/01 00:00:41 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.21 2003/12/17 23:49:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -213,6 +213,8 @@ Pixel_from_color(VALUE class, VALUE name)
     ExceptionInfo exception;
     boolean okay;
 
+    class = class;      // defeat "never referenced" message from icc
+
     GetExceptionInfo(&exception);
     okay = QueryColorDatabase(STRING_PTR(name), &pp, &exception);
     HANDLE_ERROR
@@ -313,15 +315,17 @@ Pixel_to_HSL(VALUE self)
 }
 
 /*
-    Method:     Pixel#from_HSL
+    Method:     Pixel.from_HSL
     Purpose:    Constructs an RGB pixel from the array
                 [hue, saturation, luminosity].
 */
 VALUE
-Pixel_from_HSL(VALUE self, VALUE hsl)
+Pixel_from_HSL(VALUE class, VALUE hsl)
 {
     PixelPacket rgb = {0};
     double hue, saturation, luminosity;
+
+    class = class;      // defeat "never referenced" message from icc
 
     Check_Type(hsl, T_ARRAY);
 
@@ -1433,7 +1437,7 @@ Font_to_s(VALUE self)
             strcpy(weight, "BoldWeight");
             break;
         default:
-            sprintf(weight, "%ld", ti.weight);
+            sprintf(weight, "%lu", ti.weight);
             break;
     }
 

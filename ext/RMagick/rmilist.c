@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.7 2003/10/06 00:00:57 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.8 2003/12/17 23:47:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -21,7 +21,6 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     Image *images;
     Info *info;
     volatile VALUE info_obj;
-    unsigned int ok;
 
     // Convert the images array to an images sequence.
     images = toseq(self);
@@ -47,7 +46,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    ok = AnimateImages(info, images);
+    (void) AnimateImages(info, images);
     handle_all_errors(images);
     unseq(images);
 

@@ -20,13 +20,14 @@
          background-color: #f0f0f0;
          vertical-align: top;
       }
-                            </style>
+                                        </style>
   </head>
   <body>
     <div class="header">
       RMagick User's Guide and Reference
     </div>
-    <table align="right" class="nav" cellpadding="3">
+    <table summary="navigation" align="right" class="nav"
+    cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="index.html">&lt;-
         Prev</a></td>
@@ -39,7 +40,8 @@
     <div class="stdtitle">
       How to use RMagick
     </div>
-    <table width="100%" cellspacing="0" cellpadding="5">
+    <table summary="table of contents" width="100%" cellspacing="0"
+    cellpadding="5">
       <tr bgcolor="#C3C3C3">
         <td>
           <h3>Table Of Contents</h3>
@@ -67,7 +69,7 @@
     program reads an image file named "Cheetah.jpg" and displays it
     on your monitor.</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 1" class="example">
         <tr>
           <td>
 <pre>
@@ -92,39 +94,40 @@
     <p>The statement on line 5 creates an <i>imagelist</i> object
     and initializes it by reading the <code>Cheetah.jpg</code> file
     in the current directory. Line 6 sends the <var>display</var>
-    method to <code>cat</code>. When you send <var>display</var> to
-    an imagelist, it causes all the images in the imagelist to be
+    method to the object. When you send <var>display</var> to an
+    imagelist, it causes all the images in the imagelist to be
     displayed on the default X Window screen. In this case, the
     <var>display</var> method makes a picture of a cheetah appear
     on your monitor.</p>
     <p>Type this program in and try running it now. The
     <code>Cheetah.jpg</code> file is in the <code>ex/images</code>
     subdirectory where you installed the RMagick documentation.</p>
-    <p>Let's talk about RMagick's Image and ImageList classes. An
+    <p>The Image and ImageList classes are closely related. An
     <i>Image</i> object describes one image or one frame in an
     image with multiple frames. (An animated GIF or a Photoshop
     image with multiple layers are examples of images with multiple
     frames.) You can create a image object from an image file such
-    as a GIF, PNG, or JPEG. You can create a image from scratch.
-    You can write an image to disk, display it on a screen, change
-    its size or orientation, convert it to another format, or
-    otherwise modify it using one of over 100 Image methods.</p>
+    as a GIF, PNG, or JPEG. You can create a image from scratch by
+    specifying its dimensions. You can write an image to disk,
+    display it on a screen, change its size or orientation, convert
+    it to another format, or otherwise modify it using one of over
+    100 methods.</p>
     <p>An <i>ImageList</i> object is a <i>list</i> of images. It
     contains zero or more images and a <i>scene number</i>. The
-    scene number indicates the <i>current image</i>. ImageList
-    methods operate on all the images in the list. Also, with a
-    very few exceptions, any method defined in the Image class can
-    be used as well. Since Image methods always operate on a single
-    image, when an Image method is sent to an imagelist, the
-    ImageList class sends the method to the current image, that is,
-    the image specified by the scene number.</p>
+    scene number indicates the <i>current image</i>. The ImageList
+    class includes methods that operate on all the images in the
+    list. Also, with a very few exceptions, any method defined in
+    the Image class can be used as well. Since Image methods always
+    operate on a single image, when an Image method is sent to an
+    imagelist, the ImageList class sends the method to the current
+    image, that is, the image specified by the scene number.</p>
     <p>The ImageList class is a subclass of the Array class, so you
     can use most Array methods to change the images in the
     imagelist. For example, you can use the <code>&lt;&lt;</code>
-    method to add images to the list.</p>
+    method to add an image to the list.</p>
     <p>Going back to the example, let's make one modification.</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 2" class="example">
         <tr>
           <td>
 <pre>
@@ -141,21 +144,20 @@
       </table>
     </div>
     <p>The difference is the statement on line 5. This statement
-    sends the <var>minify</var> method to <code>cat</code>. The
+    sends the <var>minify</var> method to the imagelist. The
     <var>minify</var> method is an Image method that reduces the
     size of an image to half its original size. Remember, since
     <var>minify</var> is an Image method, the ImageList class sends
     <var>minify</var> to the current (and only) image. The return
     value is a new image, half the size of the original.</p>
-    <p>The Image class has its own <var>display</var> method, which
-    displays the single image on the X Window screen. Like
-    <var>ImageList#display</var>, <var>Image#display</var> makes a
-    picture of a (in this case, small) cheetah appear on your
-    monitor.</p>
+    <p>Line 6 demonstrates the Image class's <var>display</var>
+    method, which displays a single image on the X Window screen.
+    <var>Image#display</var> makes a picture of a (in this case,
+    small) cheetah appear on your monitor.</p>
     <p>Here's how to write the small cheetah to a file in GIF
     format.</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 3" class="example">
         <tr>
           <td>
 <pre>
@@ -174,12 +176,12 @@
     </div>
     <p>The statement on line 7 writes the image to a file. Notice
     that the filename extension is <code>gif</code>. When writing
-    images, &times;Magick uses the filename extension (see <a href=
-    "imusage.html#formats">Image formats and filenames</a>) to
-    determine what image format to write. In this example, the
+    images, &times;Magick uses the filename extension to determine
+    what image format to write. In this example, the
     <code>Small-Cheetah.gif</code> file will be in the GIF format.
     Notice how easy it is to covert an image from one format to
-    another?</p>
+    another? (For more details, see <a href=
+    "imusage.html#formats">Image formats and filenames</a>.)</p>
     <p>So why, in the previous example, did I create
     <code>cat</code> as an ImageList object containing just one
     image, instead of creating an Image object? No reason, really.
@@ -241,7 +243,7 @@
     set the background color of a new image to red with the
     <var>background_color=</var> method, as shown here:</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 4" class="example">
         <tr>
           <td>
 <pre>
@@ -290,7 +292,7 @@ exit
     in those files (remember, each input file can contain multiple
     images) into one animated GIF file.</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 5" class="example">
         <tr>
           <td>
 <pre>
@@ -337,7 +339,8 @@ exit
     groups.<sup><a href="#imdoc">1</a></sup> ImageList methods are
     shown in <span class="imgmethod">blue</span>.</p>
     <div align="center">
-      <table class="methodtbl" border="1" width="80%">
+      <table summary="summary of image and imageclass methods"
+      class="methodtbl" border="1" width="80%">
         <tr class="grpname">
           <td colspan="2">Utility methods</td>
         </tr>
@@ -1022,16 +1025,14 @@ exit
       <li>Images in lossy formats, such as JPEG, will have a
       different signature after being reconstituted and therefore
       will not compare equal (using <a href=
-      "image.html#Image.spaceship">Image#&lt;=&gt;</a>) to the
-      original image.</li>
+      "image.html#Image.spaceship">&lt;=&gt;</a>) to the original
+      image.</li>
     </ol>
     <h2><a name="drawing">Drawing on and adding text to
     images</a></h2>
     <p>The <b>Draw</b> class is the third major class in the Magick
-    module. This class defines two kinds of methods. The first kind
-    are methods that support 2D vector and raster <i>drawing</i> on
-    images. The second kind are methods that support writing text
-    on an image, known as <i>annotation</i>.</p>
+    module. This class defines two kinds of methods, <i>drawing</i>
+    methods and <i>annotation</i> methods.</p>
     <h3>Drawing</h3>
     <p>&times;Magick supports a set of 2D drawing commands that are
     very similar to the commands and elements defined by the W3C's
@@ -1060,7 +1061,8 @@ exit
     or <var>Image.new</var>. (If you pass an imagelist object to
     <var>draw</var>, it draws on the current image.)</p>
     <div align="center">
-      <table width="70%" border="0" cellpadding="5">
+      <table summary="default drawing coordinate system" width=
+      "70%" border="0" cellpadding="5">
         <tr>
           <td valign="top">
             <p>Here's an illustration of the default drawing
@@ -1094,7 +1096,7 @@ exit
     <p>As an example, here's the section of the Ruby program that
     created the circle in the center of the above image.</p>
     <div align="center">
-      <table class="example">
+      <table summary="example 6" class="example">
         <tr>
           <td>
 <pre>
@@ -1126,13 +1128,14 @@ exit
     lines 8-15 construct a list of primitives that are "executed"
     by the <var>draw</var> method call on line 16.</p>
     <p>The <var>stroke</var> method sets the stroke color, as seen
-    on line 8. Normally, shapes are filled, but the call to
-    <var>fill_opacity</var> on line 9 sets the opacity to 0, so the
-    background will show through the circle. The tomato-colored
-    stroke line itself is set slightly transparent by the call to
-    <var>stroke_opacity</var> on line 10. The method calls on lines
-    11 through 13 set the stroke width and specify the appearance
-    of the line ends and corners.</p>
+    on line 8. Normally, shapes are filled (opacity = 1.0), but the
+    call to <var>fill_opacity</var> on line 9 sets the opacity to
+    0, so the background will show through the circle. Similarly,
+    the stroke lines are normally opaque, but the tomato-colored
+    stroke line in this example is made slightly transparent by the
+    call to <var>stroke_opacity</var> on line 10. The method calls
+    on lines 11 through 13 set the stroke width and specify the
+    appearance of the line ends and corners.</p>
     <p>The <var>ellipse</var> method call on line 14 describes an
     circle in the center of the canvas with a radius of 80 pixels.
     The ellipse occupies 315&deg; of a circle, starting at 0&deg;
@@ -1164,7 +1167,7 @@ exit
       "ex/rubyname.gif" alt="ex/rubyname.rb"></a>
     </div>
     <div align="center">
-      <table class="example">
+      <table summary="example 7" class="example">
         <tr>
           <td>
 <pre>
@@ -1261,7 +1264,8 @@ exit
     "struct.html#AffineMatrix"><var>AffineMatrix</var></a> class
     use radians instead of degrees.</p>
     <hr>
-    <table align="right" class="nav" cellpadding="3">
+    <table summary="navigation" align="right" class="nav"
+    cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="index.html">&lt;-
         Prev</a></td>

@@ -1,5 +1,5 @@
 
-unit tests
+need unit tests
 	to_blob, read_blob
 	Magick::Pixel#to_color, from_color
 	Magick::Pixel#to_HSL, from_HSL
@@ -15,9 +15,6 @@ Watch "deprecated.c"
 
 Magick++
 	continue reading sources
-
-Next release
-  GM's "IMAGE" coder?
 
 Immediate (!) forms
     transparent

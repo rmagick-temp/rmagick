@@ -204,7 +204,7 @@ puts "post-setup.rb: setting up documentation..."
 
 
 # We're in the source directory. Process the doc in-place. The post-install.rb
-# script moves the generated documentation tpost-setup.rbo the ultimate installation directories.
+# script moves the generated documentation to the ultimate installation directories.
 
 
 cwd = Dir.getwd()
@@ -224,9 +224,7 @@ begin
   Dir.chdir('ex')
   files = Dir['*.rb']
   files.each do |file|
-    filter(file) do |line|
-      line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ')
-    end
+    filter(file) { |line| line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ') }
 
     # Step 2B: Make a copy of the example as HTML in the doc directory
     filetoHTML(file, "../#{file}.html")

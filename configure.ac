@@ -130,7 +130,7 @@ if test "$rm_have_getmagickinfolist" = yes; then
 fi
 
 AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
-AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage])
+AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
 AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 
 # What typedefs?

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.70 2004/11/29 00:59:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.71 2004/12/02 00:30:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6434,6 +6434,53 @@ VALUE
 Image_sharpen(int argc, VALUE *argv, VALUE self)
 {
     return effect_image(self, argc, argv, SharpenImage);
+}
+
+
+/*
+ *  Method:     Image#sharpen_channel(radius=0, sigma=1, channel=AllChannels)
+ *  Returns:    a new image
+*/
+VALUE
+Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SHARPENIMAGECHANNEL)
+     Image *image, *new_image;
+     ChannelType channel_type = AllChannels, type;
+     ExceptionInfo exception;
+     double radius = 0.0, sigma = 1.0;
+     int x;
+
+     switch(argc)
+     {
+          default:
+               for(x = 2; x < argc; x++)
+               {
+                    VALUE_TO_ENUM(argv[x], type, ChannelType);
+                    channel_type |= type;
+               }
+          case 2:
+               sigma = NUM2DBL(argv[1]);
+          case 1:
+               radius = NUM2DBL(argv[0]);
+          case 0:
+               break;
+     }
+
+     GetExceptionInfo(&exception);
+
+     Data_Get_Struct(self, Image, image);
+     new_image = CloneImage(image, 0, 0, True, &exception);
+     HANDLE_ERROR
+
+     new_image = SharpenImageChannel(new_image, channel_type, radius, sigma, &exception);
+     HANDLE_ERROR
+
+     return rm_image_new(new_image);
+#else
+     rm_not_implemented();
+     return (VALUE)0;
+#endif
 }
 
 /*

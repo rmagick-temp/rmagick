@@ -103,13 +103,13 @@
           <li><a href="#sample">sample</a></li>
 
           <li><a href="#sample_bang">sample!</a></li>
+
+          <li><a href="#scale">scale</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#scale">scale</a></li>
-
           <li><a href="#scale_bang">scale!</a></li>
 
           <li><a href="#segment">segment</a></li>
@@ -120,6 +120,8 @@
           <li><a href="#shade">shade</a></li>
 
           <li><a href="#sharpen">sharpen</a></li>
+
+          <li><a href="#sharpen_channel">sharpen_channel</a></li>
 
           <li><a href="#shave">shave</a></li>
 
@@ -1310,6 +1312,54 @@ random_threshold_channel(geom, RedChannel)
     <h4>Magick API</h4>
 
     <p>SharpenImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sharpen_channel">sharpen_channel</h3>
+
+    <p><span class="arg">image</span>.sharpen_channel( <span class=
+    "arg">radius</span>, <span class="arg">sigma</span>
+    [,<span class="arg">channel</span>, <span class=
+    "arg">channel</span>...] ) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Sharpens one or more image channels. We
+    convolve the image with a Gaussian operator of the given radius
+    and standard deviation (<span class="arg">sigma</span>) . For
+    reasonable results, <span class="arg">radius</span> should be
+    larger than <span class="arg">sigma</span>. Use a radius of 0
+    and <code>sharpen_channel</code> selects a suitable radius for
+    you.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius, sigma</dt>
+
+      <dd>The radius and standard deviation of the Gaussian
+      operator.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are sharpened.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#sharpen">sharpen</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SharpenImageChannel (available in ImageMagick 6.0.1)</p>
   </div>
 
   <div class="sig">

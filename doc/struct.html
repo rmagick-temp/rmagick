@@ -47,6 +47,7 @@
     padding-left: 5px;
     font-size: 110%;
   }
+
   .sig p {
     padding-right: 5px;
     padding-bottom: 1em;
@@ -56,7 +57,7 @@
     position: relative;
     left: -215px;
     padding-left: 5px;
-    background-image: url(graydient210x6.gif);
+    background-image: url(ex/images/graydient210x6.gif);
     background-repeat: repeat-y;
     color: black;
     font-weight: normal;
@@ -74,7 +75,7 @@
   .intro h3 {
     padding-left: 5px;
     background-color: white;
-    background-image: url(graydient210x6.gif);
+    background-image: url(ex/images/graydient210x6.gif);
     background-repeat: repeat-y;
     color: black;
     font-weight: normal;
@@ -100,6 +101,12 @@
 
   <div id="toc">
     <h2>Table of Contents</h2>
+
+    <h3><a href="#view">The Image::View class</a></h3>
+
+    <ul>
+      <li><a href="#view">Image::View</a></li>
+    </ul>
 
     <h3><a href="#struct">Struct classes</a></h3>
 
@@ -139,21 +146,333 @@
   </div>
 
   <div class="class">
-  <h2 id="struct">Struct classes</h2>
+    <h2 id="view">The Image::View class</h2>
 
-  <div class="intro">
-    <h3>Introduction</h3>
+    <div class="intro">
+      <h3>Introduction</h3>
 
-    <p>These classes are created by the Struct class and are used
-    to create objects used as attribute and argument values in
-    other RMagick classes. Like all the classes created by Struct,
-    these classes define both getter and setter methods for their
-    attributes. That is, for an attribute <em>x</em> both the
-    <code>x</code> and <code>x=</code> methods are defined.</p>
+      <p><code>Image::View</code> objects are created by the
+      <a href="image3.html#view">Image#view</a> method. This class
+      supports the reference of individual image pixels by their
+      [i][j] coordinates within the view. Pixel values thus
+      referenced may be accessed and modified individually or in
+      the aggregate.</p>
+    </div>
 
-    <p>The <code>Pixel</code> and <code>Geometry</code> classes
-    define additional constructors and conversion methods.</p>
+    <h3>class Image::View</h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>Image::View.new(<span class="arg">img</span>, <span class=
+      "arg">x</span>, <span class="arg">y</span>, <span class=
+      "arg">width</span>, <span class="arg">height</span>) -&gt;
+      aView</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>A view is a rectangle in an image. Within
+      the view pixels can be addressed by specifying their
+      <code>[i][j]</code> coordinates. The <span class=
+      "arg">i</span>, <span class="arg">j</span> index values can
+      identify a single pixel or multiple pixels. Pixels can be
+      accessed or modified individually or collectively. Pixel
+      <em>channels</em> (that is, the red, green, blue, and opacity
+      components) can be accessed or modified individually or
+      collectively. The <a href="#view_sync">sync</a> method stores
+      modified pixels back into the image.
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>img</dt>
+
+        <dd>The image from which the view is taken.</dd>
+
+        <dt>x, y</dt>
+
+        <dd>The x- and y-offsets of the view relative to the
+        top-left corner of the image. Within the view, pixel
+        addresses are relative to the top-left corner of the
+        view.</dd>
+
+        <dt>width, height</dt>
+
+        <dd>The number of columns and the number of rows in the
+        view. It is an error to specify a view that exceeds the
+        boundaries of the image. Within the view, it is an error to
+        refer to a pixel that is outside the boundaries of the
+        view.</dd>
+      </dl>
+    </div>
+
+    <div class="sig">
+      <h4>[][]</h4>
+
+      <p><span class="arg">view</span>[<span class=
+      "arg">i</span>][<span class="arg">j</span>] -&gt;
+      <em>aPixel</em> or <em>anArray</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Return one or more pixels in the view. If i and j are each
+      a single integer value, returns a single pixel. For any other
+      indexes, returns an array of one or more pixels. If any index
+      exceeds the boundaries of the view, raises
+      <code>IndexError</code>.</p>
+
+      <h5>Arguments</h5>
+
+      <p>The <span class="arg">i</span> index identifies a set of
+      rows in the view. The <span class="arg">j</span> index
+      identifies a set of columns in the view. The pixels that are
+      returned are the intersection of these two sets. The indexes
+      can be:</p>
+
+      <dl>
+        <dt>omitted</dt>
+
+        <dd>If <span class="arg">i</span> is omitted, all the rows
+        are used. If <code>j</code> is omitted, all the columns are
+        used.</dd>
+
+        <dt>an integer</dt>
+
+        <dd>or an object that can be converted to an integer. A
+        single integer identifies a single row or column. Identify
+        a single pixel by specifying integers for both indexes. If
+        the index is negative, counts from the bottom row or right
+        column of the view.</dd>
+
+        <dt>start, length</dt>
+
+        <dd>Identifies the set of <code>length</code> rows or
+        columns starting with <code>start</code>. If
+        <code>start</code> is negative, starts at the bottom row or
+        right column of the view.</dd>
+
+        <dt>an object that responds to <code>each</code></dt>
+
+        <dd>The index may be any object that responds to
+        <code>each</code> by returning a sequence of objects that
+        can be converted to integers. An array with integer values
+        or a range of integers are two examples.</dd>
+      </dl>
+
+      <h5>Examples</h5>
+      <pre>
+  # Get the 2nd pixel in the 4th row of the view.
+  pixel = view[3][1]  # returns a pixel
+  # Returns an array with only one value
+  pixels = view[[3]][[1]]
+  # Get all the pixels in the 4th row
+  pixels = view[3][]
+  # Use arrays to specify a non-contiguous set of rows and columns
+  pixels = view[[1,3,5]][[2,4,6]]
+  # Use ranges to specify a contigous set of rows and columns
+  pixels = view[1..5][2..6]
+</pre>
+    </div>
+
+    <div class="sig">
+      <h4>[][].red<br />
+      [][].green<br />
+      [][].blue<br />
+      [][].opacity</h4>
+
+      <p>[<span class="arg">i</span>][<span class=
+      "arg">j</span>].red -&gt; <em>anInteger</em> or
+      <em>anArray</em><br />
+      [<span class="arg">i</span>][<span class=
+      "arg">j</span>].green -&gt; <em>anInteger</em> or
+      <em>anArray</em><br />
+      [<span class="arg">i</span>][<span class="arg">j</span>].blue
+      -&gt; <em>anInteger</em> or <em>anArray</em><br />
+      [<span class="arg">i</span>][<span class=
+      "arg">j</span>].opacity -&gt; <em>anInteger</em> or
+      <em>anArray</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If the indexes identify a single pixel, these methods
+      return the value of the red, green, blue, or opacity channel
+      of that pixel. If the indexes identify more than one pixel,
+      these methods return an array of values. See
+      <code>[][]</code> for a description of possible index
+      arguments.</p>
+
+      <h5>Examples</h5>
+      <pre>
+  # Get the value of the green channel of
+  # the top-left pixel in the view.
+  view[0][0] = Pixel(0,128,255)
+  g = view[0][0].green  # returns 128
+
+  # Get the maximum value of the red channel
+  # for all the pixels in the top row of the view.
+  m = view[0][].red.max
+</pre>
+    </div>
+
+    <div class="sig">
+      <h4>[][]=</h4>
+
+      <p><span class="arg">view</span>[<span class=
+      "arg">i</span>][<span class="arg">j</span>] = <em>rvalue</em>
+      -&gt; <code>nil</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Replaces each pixel identified by the indexes with a
+      duplicate of <span class="arg">rvalue</span>. The rvalue is
+      either a <a href="#Pixel">Pixel</a> object or a <a href=
+      "imusage.html#color_name">color name</a>. If
+      <code>rvalue</code> is a color name, calls
+      <code>Pixel.from_color</code> to create a pixel.</p>
+
+      <h5>Arguments</h5>
+
+      <p>The indexes are the same as <code>[][]</code>, above.</p>
+
+      <dl>
+        <dt>rvalue</dt>
+
+        <dd>Either a pixel or a color name.</dd>
+      </dl>
+    </div>
+
+    <div class="sig">
+      <h4>[][].red=<br />
+      [][].green=<br />
+      [][].blue=<br />
+      [][].opacity=</h4>
+
+      <p>[<span class="arg">i</span>][<span class=
+      "arg">j</span>].red = <em>anInteger</em> -&gt;
+      <code>nil</code><br />
+      [<span class="arg">i</span>][<span class=
+      "arg">j</span>].green = <em>anInteger</em> -&gt;
+      <code>nil</code><br />
+      [<span class="arg">i</span>][<span class="arg">j</span>].blue
+      = <em>anInteger</em> -&gt; <code>nil</code><br />
+      [<span class="arg">i</span>][<span class=
+      "arg">j</span>].opacity = <em>anInteger</em> -&gt;
+      <code>nil</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Assigns <em>anInteger</em> to the red, green, blue, or
+      opacity channel of the pixel or pixels identified by the
+      indexes.</p>
+
+      <h5>Examples</h5>
+      <pre>
+  # Set the red channel of all the pixels in the 2nd
+  # row of the view to MaxRGB
+  view[1][].red = MaxRGB
+  # Set the green channel of the pixel at [20][30] to
+  # half that of its left-hand neighbor.
+  view[20][30].green = view[20][29].green * 0.5
+</pre>
+    </div>
+
+    <div id="view_sync" class="sig">
+      <h4>sync</h4>
+
+      <p><span class="arg">view</span>.sync(<span class=
+      "arg">force</span>=<code>false</code>) -&gt;
+      <code>true</code> or <code>false</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>If any of the pixels in the view have been modified, this
+      method stores them in the image. If no pixels have been
+      modified, this method has no effect.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>force</dt>
+
+        <dd>If <code>true</code>, forces the view pixels to be
+        stored in the image even if none have been modified.</dd>
+      </dl>
+
+      <h5>Returns</h5>Returns <code>true</code> if the pixels were
+      stored in the image either because the <code>dirty</code>
+      flag was <code>true</code> or <code>force</code> was
+      <code>true</code>, <code>false</code> otherwise.
+    </div>
+
+    <div class="sig">
+      <h4>dirty<br />
+      dirty=</h4>
+
+      <p>view.dirty -&gt; <code>true</code> or
+      <code>false</code><br />
+      view.dirty = <code>true</code> or <code>false</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The <code>dirty</code> attribute returns true if any of
+      the pixels in the view have been modified, or false
+      otherwise. Set <code>dirty=true</code> to force
+      <code>sync</code> to store the pixels in the image, or set
+      <code>dirty=false</code> to keep <code>sync</code> from
+      storing the pixels.</p>
+    </div>
+
+    <div class="sig">
+      <h4>x<br />
+      y<br />
+      width<br />
+      height</h4>
+
+      <p>x -&gt; anInteger<br />
+      y -&gt; anInteger<br />
+      width -&gt; anInteger<br />
+      height -&gt; anInteger</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The <span class="arg">x</span>, <span class=
+      "arg">y</span>, <span class="arg">width</span>, and
+      <span class="arg">height</span> arguments specified when the
+      view was created.</p>
+    </div>
   </div>
+
+  <div class="class">
+    <h2 id="struct">Struct classes</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>These classes are created by the Struct class and are used
+      to create objects used as attribute and argument values in
+      other RMagick classes. Like all the classes created by
+      Struct, these classes define both getter and setter methods
+      for their attributes. That is, for an attribute <em>x</em>
+      both the <code>x</code> and <code>x=</code> methods are
+      defined.</p>
+
+      <p>The <code>Pixel</code> and <code>Geometry</code> classes
+      define additional constructors and conversion methods.</p>
+    </div>
 
     <h3 id="AffineMatrix">class AffineMatrix</h3>
 
@@ -270,94 +589,104 @@
       <h5>Attributes</h5>
 
       <p>A geometry string has the general form
-      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object,
+      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object,</p>
+
       <dl>
         <dt>width</dt>
+
         <dd>specifies the W value</dd>
+
         <dt>height</dt>
+
         <dd>specifies the H value</dd>
-        <dt>x,  y</dt>
+
+        <dt>x, y</dt>
+
         <dd>specify the x and y values, respectively</dd>
+
         <dt>flag</dt>
-        <dd>one of the constants shown in this table:
-      <table summary="geometry flag constants" class=
-      "simple_table">
-        <caption>
-          <strong>Geometry flag constants</strong>
-        </caption>
 
-        <tr>
-          <td align="center"><strong>Constant<br />
-          name</strong></td>
+        <dd>
+          one of the constants shown in this table:
 
-          <td align="center"><strong>Geometry<br />
-          string flag</strong></td>
+          <table summary="geometry flag constants" class=
+          "simple_table">
+            <caption>
+              <strong>Geometry flag constants</strong>
+            </caption>
 
-          <td align="center"><strong>Explanation</strong></td>
-        </tr>
+            <tr>
+              <td align="center"><strong>Constant<br />
+              name</strong></td>
 
-        <tr>
-          <td>PercentGeometry</td>
+              <td align="center"><strong>Geometry<br />
+              string flag</strong></td>
 
-          <td align="center">%</td>
+              <td align="center"><strong>Explanation</strong></td>
+            </tr>
 
-          <td>Normally the attributes are treated as pixels. Use
-          this flag when the <code>width</code> and
-          <code>height</code> attributes represent
-          <em>percentages</em>. For example, 125x75 means 125% of
-          the height and 75% of the width. The <code>x</code> and
-          <code>y</code> attributes are not affected by this
-          flag.</td>
-        </tr>
+            <tr>
+              <td>PercentGeometry</td>
 
-        <tr>
-          <td>AspectGeometry</td>
+              <td align="center">%</td>
 
-          <td align="center">!</td>
+              <td>Normally the attributes are treated as pixels.
+              Use this flag when the <code>width</code> and
+              <code>height</code> attributes represent
+              <em>percentages</em>. For example, 125x75 means 125%
+              of the height and 75% of the width. The
+              <code>x</code> and <code>y</code> attributes are not
+              affected by this flag.</td>
+            </tr>
 
-          <td>Use this flag when you want to force the new image to
-          have exactly the size specified by the the
-          <code>width</code> and <code>height</code>
-          attributes.</td>
-        </tr>
+            <tr>
+              <td>AspectGeometry</td>
 
-        <tr>
-          <td>LessGeometry</td>
+              <td align="center">!</td>
 
-          <td align="center">&lt;</td>
+              <td>Use this flag when you want to force the new
+              image to have exactly the size specified by the the
+              <code>width</code> and <code>height</code>
+              attributes.</td>
+            </tr>
 
-          <td>Use this flag when you want to change the size of the
-          image only if both its width and height are smaller the
-          values specified by those attributes. The image size is
-          changed proportionally.</td>
-        </tr>
+            <tr>
+              <td>LessGeometry</td>
 
-        <tr>
-          <td>GreaterGeometry</td>
+              <td align="center">&lt;</td>
 
-          <td align="center">&gt;</td>
+              <td>Use this flag when you want to change the size of
+              the image only if both its width and height are
+              smaller the values specified by those attributes. The
+              image size is changed proportionally.</td>
+            </tr>
 
-          <td>Use this flag when you want to change the size of the
-          image if either its width and height exceed the values
-          specified by those attributes. The image size is changed
-          proportionally.</td>
-        </tr>
+            <tr>
+              <td>GreaterGeometry</td>
 
-        <tr>
-          <td>AreaGeometry</td>
+              <td align="center">&gt;</td>
 
-          <td align="center">@</td>
+              <td>Use this flag when you want to change the size of
+              the image if either its width and height exceed the
+              values specified by those attributes. The image size
+              is changed proportionally.</td>
+            </tr>
 
-          <td>This flag is useful only with a single
-          <code>width</code> attribute. When present, it means the
-          <code>width</code> attribute represents the total area of
-          the image in pixels.</td>
-        </tr>
-      </table>
+            <tr>
+              <td>AreaGeometry</td>
+
+              <td align="center">@</td>
+
+              <td>This flag is useful only with a single
+              <code>width</code> attribute. When present, it means
+              the <code>width</code> attribute represents the total
+              area of the image in pixels.</td>
+            </tr>
+          </table>
         </dd>
       </dl>
-      <p>If any attribute is omitted the default is nil or 0.</p>
 
+      <p>If any attribute is omitted the default is nil or 0.</p>
 
       <h5>Example</h5>
       <pre>
@@ -710,7 +1039,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
   </div>
 
   <div class="class">
-  <h2 id="fill">Fill classes</h2>
+    <h2 id="fill">Fill classes</h2>
 
     <div class="intro">
       <h3>Introduction</h3>
@@ -872,7 +1201,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
   </div>
 
   <div class="class">
-  <h2 id="exception">Exception classes</h2>
+    <h2 id="exception">Exception classes</h2>
 
     <h3 id="MagickError">class ImageMagickError</h3>
 

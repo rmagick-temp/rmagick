@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,346 +10,294 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
+  <style type="text/css">
+  /*<![CDATA[*/
+
+  /* Styles local to this page. */
+  /*]]>*/
+  </style>
 </head>
 
 <body>
-  <div class="header">
-    RMagick User's Guide and Reference
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="comtasks.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "ilist.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="comtasks.html">&lt;-
-      Prev</a></td>
+  <h1>module Magick</h1>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div id="toc">
+    <h2>Table of Contents</h2>
 
-      <td style="text-align: right"><a href="ilist.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <h3>module methods</h3>
 
-  <div class="stdtitle">
-    module Magick
+    <ul>
+      <li><a href="#colors">colors</a></li>
+
+      <li><a href="#fonts">fonts</a></li>
+
+      <li><a href="#formats">formats</a></li>
+
+      <li><a href=
+      "#set_cache_threshold">set_cache_threshold</a></li>
+
+      <li><a href="#set_monitor">set_monitor</a></li>
+    </ul>
   </div>
 
-  <table summary="table of contents" width="100%" cellspacing="0"
-  cellpadding="5">
-    <tr bgcolor="#C3C3C3">
-      <td colspan="2">
-        <h3>Table Of Contents</h3>
-      </td>
-    </tr>
-
-    <tr class="toc">
-      <td colspan="2">
-        <ul>
-          <li><a href="#Magick.colors">colors</a></li>
-
-          <li><a href="#Magick.fonts">fonts</a></li>
-
-          <li><a href="#Magick.formats">formats</a></li>
-
-          <li><a href=
-          "#Magick.set_cache_threshold">set_cache_threshold</a></li>
-
-          <li><a href="#Magick.set_monitor">set_monitor</a></li>
-        </ul>
-      </td>
-    </tr>
-
-    <tr class="methodsection">
-      <td colspan="2">
-        <h2>module methods</h2>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Magick.colors" id=
-      "Magick.colors">colors</a></td>
-
-      <td>Magick.colors <i>{ |color| block }</i> -&gt;
-      <i>Magick</i><br />
-      Magick.colors -&gt; <i>anArray</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        Lists the <a href="imusage.html#color_names">named
-        colors</a>. If the optional block is present, calls the
-        block once for each color, passing a Magick::Color object.
-        Otherwise, returns an array of Magick::Color objects, one
-        for each color.
-
-        <p>The Magick::Color class is a Struct class with the
-        following attributes:</p>
-
-        <table summary="Color class attributes" border="1" bgcolor=
-        "#F0F0F0">
-          <tr>
-            <th>Attribute</th>
-
-            <th>Value</th>
-          </tr>
-
-          <tr>
-            <td>name</td>
-
-            <td>The color name. For example, "red".</td>
-          </tr>
-
-          <tr>
-            <td>compliance</td>
-
-            <td>A <a href=
-            "constants.html#ComplianceType">ComplianceType</a>
-            value such as X11Compliance.</td>
-          </tr>
-
-          <tr>
-            <td>color</td>
-
-            <td>A <a href="struct.html#Pixel">Pixel</a> object
-            containing the RGB values.</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>None</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>If no block is associated with the call, returns an array
-      of Magick::Color objects.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="colors.miff example">
-          <tr>
-            <td>This is a small sample of <code>colors.miff</code>,
-            the complete image created by the example program.
-            .</td>
-          </tr>
+  <h2 class="methods">module methods</h2>
 
-          <tr>
-            <td><a href="colors.rb.html" target="_blank"><img src=
-            "ex/colors.gif" border="0" alt=
-            "Magick::colors example" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">&times;Magick API</td>
+  <div class="sig">
+    <h3 id="colors">colors</h3>
 
-      <td>GetColorInfo</td>
-    </tr>
+    <p>Magick.colors <span class="arg">{ |color| block }</span>
+    -&gt; <em>Magick</em><br />
+    Magick.colors -&gt; <em>anArray</em></p>
+  </div>
 
-    <tr class="method">
-      <td class="methodname"><a name="Magick.fonts" id=
-      "Magick.fonts">fonts</a></td>
+  <div class="desc">
+    <h4>Description</h4>
 
-      <td>Magick.fonts <i>{ |font| block }</i> -&gt;
-      <i>Magick</i><br />
-      Magick.fonts -&gt; <i>anArray</i></td>
-    </tr>
+    <p>Lists the <a href="imusage.html#color_names">named
+    colors</a>. If the optional block is present, calls the block
+    once for each color, passing a Magick::Color object. Otherwise,
+    returns an array of Magick::Color objects, one for each
+    color.</p>
 
-    <tr>
-      <td valign="top">Description</td>
+    <p>The Magick::Color class is a Struct class with the following
+    attributes:</p>
 
-      <td>
-        Lists the fonts that &times;Magick knows about. If the
-        optional block is present, calls the block once for each
-        font, passing a Magick::Font object. Otherwise, returns an
-        array of Magick::Font objects, one for each font.
+    <table class="simple_table" summary="magic color attributes">
+      <caption>
+        Magick::Color attributes
+      </caption>
 
-        <p>The Magick::Font class is a Struct class with the
-        following attributes:</p>
+      <tr>
+        <th>Attribute</th>
 
-        <table summary="font class attributes" border="1" bgcolor=
-        "#F0F0F0">
-          <tr>
-            <th>Attribute</th>
+        <th>Value</th>
+      </tr>
 
-            <th>Value</th>
-          </tr>
+      <tr>
+        <td>name</td>
 
-          <tr>
-            <td>name</td>
+        <td>The color name. For example, "red".</td>
+      </tr>
 
-            <td>The font name. For example, "Palatino-Roman".</td>
-          </tr>
+      <tr>
+        <td>compliance</td>
 
-          <tr>
-            <td>description</td>
+        <td>A <a href=
+        "constants.html#ComplianceType">ComplianceType</a> value
+        such as X11Compliance.</td>
+      </tr>
 
-            <td>The font description. For example, "Palatino
-            Roman".</td>
-          </tr>
+      <tr>
+        <td>color</td>
 
-          <tr>
-            <td>family</td>
+        <td>A <a href="struct.html#Pixel">Pixel</a> object
+        containing the RGB values.</td>
+      </tr>
+    </table>
 
-            <td>The font family. For example, "Palatino",
-            "Helvetica", or "Courier".</td>
-          </tr>
+    <h4>Returns</h4>
 
-          <tr>
-            <td>style</td>
+    <p>If no block is associated with the call, returns an array of
+    Magick::Color objects.</p>
 
-            <td>A <a href="constants.html#StyleType">StyleType</a>
-            value such as <code>NormalStyle</code>.</td>
-          </tr>
+    <h4>Example</h4>
 
-          <tr>
-            <td>stretch</td>
+    <p>This is a small sample of <code>colors.miff</code>, the
+    complete image created by the example program.</p>
 
-            <td>A <a href=
-            "constants.html#StretchType">StretchType</a> value such
-            as <code>NormalStretch</code>.</td>
-          </tr>
+    <p><a href="javascript:popup('colors.rb.html')"><img src=
+    "ex/colors.gif" title="Click to see the example script" alt=
+    "Magick::colors example" /></a></p>
 
-          <tr>
-            <td>weight</td>
+    <h4>Magick API</h4>
 
-            <td>The font weight, one of 100, 200, 300, 400, 500,
-            600, 700, 800, or 900.</td>
-          </tr>
+    <p>GetColorInfo</p>
+  </div>
 
-          <tr>
-            <td>encoding</td>
+  <div class="sig">
+    <h3 id="fonts">fonts</h3>
 
-            <td>The font encoding, such as "AppleRoman". May be
-            <code>nil</code>.</td>
-          </tr>
+    <p>Magick.fonts <span class="arg">{ |font| block }</span> -&gt;
+    <em>Magick</em><br />
+    Magick.fonts -&gt; <em>anArray</em></p>
+  </div>
 
-          <tr>
-            <td>foundry</td>
+  <div class="desc">
+    <h4>Description</h4>
 
-            <td>The font foundry. "URW", for example. May be
-            <code>nil</code>.</td>
-          </tr>
+    <p>Lists the fonts that &times;Magick knows about. If the
+    optional block is present, calls the block once for each font,
+    passing a Magick::Font object. Otherwise, returns an array of
+    Magick::Font objects, one for each font.</p>
 
-          <tr>
-            <td>format</td>
+    <p>The Magick::Font class is a Struct class with the following
+    attributes:</p>
 
-            <td>If the font is a Type1 font, has the value "type1",
-            otherwise <code>nil</code>.</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <table summary="font class attributes" class="simple_table">
+      <caption>
+        Magick::Font attributes
+      </caption>
 
-    <tr>
-      <td valign="top">Arguments</td>
+      <tr>
+        <th>Attribute</th>
 
-      <td>None</td>
-    </tr>
+        <th>Value</th>
+      </tr>
 
-    <tr>
-      <td valign="top">Returns</td>
+      <tr>
+        <td>name</td>
 
-      <td>If no block is associated with the call, returns an array
-      of Magick::Font objects.</td>
-    </tr>
+        <td>The font name. For example, "Palatino-Roman".</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Example</td>
+      <tr>
+        <td>description</td>
 
-      <td><a href="fonts.rb.html">fonts.rb</a></td>
-    </tr>
+        <td>The font description. For example, "Palatino
+        Roman".</td>
+      </tr>
 
-    <tr>
-      <td valign="top">&times;Magick API</td>
+      <tr>
+        <td>family</td>
 
-      <td>GetFontInfo</td>
-    </tr>
+        <td>The font family. For example, "Palatino", "Helvetica",
+        or "Courier".</td>
+      </tr>
 
-    <tr class="method">
-      <td class="methodname"><a name="Magick.formats" id=
-      "Magick.formats">formats</a></td>
+      <tr>
+        <td>style</td>
 
-      <td>Magick.formats <i>{ |f,v| block }</i> -&gt;
-      <i>Magick</i><br />
-      Magick.formats -&gt; <i>aHash</i></td>
-    </tr>
+        <td>A <a href="constants.html#StyleType">StyleType</a>
+        value such as <code>NormalStyle</code>.</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>stretch</td>
 
-      <td>Describes the image formats supported by &times;Magick.
-      If the optional block is present, calls the block once for
-      each image format. The first argument, <i>f</i>, is the
-      format name. The second argument, <i>v</i>, is the properties
-      string described below.</td>
-    </tr>
+        <td>A <a href="constants.html#StretchType">StretchType</a>
+        value such as <code>NormalStretch</code>.</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Arguments</td>
+      <tr>
+        <td>weight</td>
 
-      <td>None</td>
-    </tr>
+        <td>The font weight, one of 100, 200, 300, 400, 500, 600,
+        700, 800, or 900.</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Returns</td>
+      <tr>
+        <td>encoding</td>
 
-      <td>
-        A hash of image formats and their properties. Each key in
-        the returned hash is the name of a supported image format.
-        Each value is a string in the form "BRWA", where
+        <td>The font encoding, such as "AppleRoman". May be
+        <code>nil</code>.</td>
+      </tr>
 
-        <table summary="format string symbols">
-          <tr>
-            <td>B</td>
+      <tr>
+        <td>foundry</td>
 
-            <td>is "*" if the format has native blob support, and
-            "-" otherwise.</td>
-          </tr>
+        <td>The font foundry. "URW", for example. May be
+        <code>nil</code>.</td>
+      </tr>
 
-          <tr>
-            <td>R</td>
+      <tr>
+        <td>format</td>
 
-            <td>is "r" if &times;Magick can read the format, and
-            "-" otherwise.</td>
-          </tr>
+        <td>If the font is a Type1 font, has the value "type1",
+        otherwise <code>nil</code>.</td>
+      </tr>
+    </table>
 
-          <tr>
-            <td>W</td>
+    <h4>Returns</h4>
 
-            <td>is "w" if &times;Magick can write the format, and
-            "-" otherwise.</td>
-          </tr>
+    <p>If no block is associated with the call, returns an array of
+    Magick::Font objects.</p>
 
-          <tr>
-            <td>A</td>
+    <h4>Example</h4>
 
-            <td>is "+" if the format supports multi-image files,
-            and "-" otherwise.</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <p><a href="javscript:popup('fonts.rb.html')" title=
+    "The example script">fonts.rb</a></p>
 
-    <tr>
-      <td valign="top">Example</td>
+    <h4>Magick API</h4>
 
-      <td>
-        <pre>
+    <p>GetFontInfo</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="formats">formats</h3>
+
+    <p>Magick.formats <span class="arg">{ |f,v| block }</span>
+    -&gt; <em>Magick</em><br />
+    Magick.formats -&gt; <em>aHash</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Describes the image formats supported by &times;Magick. If
+    the optional block is present, calls the block once for each
+    image format. The first argument, <em>f</em>, is the format
+    name. The second argument, <em>v</em>, is the properties string
+    described below.</p>
+
+    <h4>Returns</h4>A hash of image formats and their properties.
+    Each key in the returned hash is the name of a supported image
+    format. Each value is a string in the form "BRWA". The details
+    are in this table:
+
+    <table summary="format string symbols" class="simple_table">
+      <caption>
+        Format property codes
+      </caption>
+
+      <tr>
+        <th>Code</th>
+
+        <th>Definition</th>
+      </tr>
+
+      <tr>
+        <td>B</td>
+
+        <td>is "*" if the format has native blob support, and "-"
+        otherwise.</td>
+      </tr>
+
+      <tr>
+        <td>R</td>
+
+        <td>is "r" if &times;Magick can read the format, and "-"
+        otherwise.</td>
+      </tr>
+
+      <tr>
+        <td>W</td>
+
+        <td>is "w" if &times;Magick can write the format, and "-"
+        otherwise.</td>
+      </tr>
+
+      <tr>
+        <td>A</td>
+
+        <td>is "+" if the format supports multi-image files, and
+        "-" otherwise.</td>
+      </tr>
+    </table>
+
+    <h4>Example</h4>
+    <pre>
 p Magick.formats &raquo;
    {"TIF"=&gt;"*rw+",
    "H"=&gt;"*rw-",
@@ -360,190 +308,132 @@ p Magick.formats &raquo;
    "GIF"=&gt;"*rw+",
    "PDB"=&gt;"*rw+"}
 </pre>
-      </td>
-    </tr>
 
-    <tr>
-      <td valign="top">&times;Magick notes</td>
+    <h4>Magick API</h4>
 
-      <td><a href=
-      "http://www.imagemagick.org/www/formats.html">http://www.imagemagick.org/www/formats.html</a></td>
-    </tr>
+    <p>GetMagickInfo</p>
 
-    <tr>
-      <td valign="top">Advanced</td>
+    <h4>Note</h4>
 
-      <td>&times;Magick depends on external programs for some
-      formats. Depending on how &times;Magick was installed on your
-      system, some formats may not be available. If you have
-      questions, ask your system administrator.</td>
-    </tr>
+    <p>&times;Magick depends on external programs for some formats.
+    Depending on how &times;Magick was installed on your system,
+    some formats may not be available. If you have questions, ask
+    your system administrator.</p>
+  </div>
 
-    <tr class="method">
-      <td class="methodname"><a name="Magick.set_cache_threshold"
-      id="Magick.set_cache_threshold">set_cache_threshold</a></td>
+  <div class="sig">
+    <h3 id="set_cache_threshold">set_cache_threshold</h3>
 
-      <td>Magick.set_cache_threshold(<i>n</i>)</td>
-    </tr>
+    <p>Magick.set_cache_threshold(<span class="arg">n</span>)</p>
+  </div>
 
-    <tr>
-      <td valign="top">Description</td>
+  <div class="desc">
+    <h4>Description</h4>
 
-      <td>Sets the amount of free memory allocated for the pixel
-      cache.</td>
-    </tr>
+    <p>Sets the amount of free memory allocated for the pixel
+    cache. <span class="imquote">Once this threshold is exceeded,
+    all subsequent pixels cache operations are to/from
+    disk.</span></p>
 
-    <tr>
-      <td valign="top">Arguments</td>
+    <h4>Arguments</h4>
 
-      <td>An integer number of megabytes.</td>
-    </tr>
+    <p>An integer number of megabytes.</p>
 
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <pre>
+    <h4>Example</h4>
+    <pre>
 # set the cache threshold to 10Mb
 Magick.set_cache_threshold(10)
 </pre>
-      </td>
-    </tr>
+  </div>
 
-    <tr>
-      <td valign="top">&times;Magick notes</td>
+  <div class="sig">
+    <h3 id="set_monitor">set_monitor</h3>
 
-      <td><span class="imquote">Once this threshold is exceeded,
-      all subsequent pixels cache operations are to/from
-      disk.</span></td>
-    </tr>
+    <p>Magick.set_monitor(<span class="arg">aProc</span>)</p>
+  </div>
 
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+  <div class="desc">
+    <h4>Description</h4>
 
-    <tr class="method">
-      <td class="methodname"><a name="Magick.set_monitor" id=
-      "Magick.set_monitor">set_monitor</a></td>
+    <p>Establish a monitor exit block. Some (see <a href=
+    "#monitor_notes">below</a>) RMagick methods will call the
+    monitor event block, passing parameters that describe how much
+    work there is to be done and how much of that work has already
+    been accomplished.</p>
 
-      <td>Magick.set_monitor(<i>aProc</i>)</td>
-    </tr>
+    <p>There can be at most one monitor block defined at a time. To
+    turn off monitoring, call
+    <code>Magick.set_monitor(nil)</code>.</p>
 
-    <tr>
-      <td valign="top">Description</td>
+    <h4>Arguments</h4>
 
-      <td>
-        <p>Establish a monitor exit block. Some (see <a href=
-        "#monitor_notes">below</a>) RMagick methods will call the
-        monitor event block, passing parameters that describe how
-        much work there is to be done and how much of that work has
-        already been accomplished.</p>
+    <p>The argument is a <code>Proc</code> object. The Proc should
+    accept 3 arguments:</p>
 
-        <p>There can be at most one monitor block defined at a
-        time. To turn off monitoring, call
-        <var>Magick.set_monitor(nil)</var>.</p>
+    <dl>
+      <dt>text</dt>
 
-        <p>The argument is a block. The block should accept 3
-        arguments:</p>
+      <dd>a String that describes the operation being
+      monitored.</dd>
 
-        <dl>
-          <dt>text</dt>
+      <dt>quantum</dt>
 
-          <dd>a String that describes the operation being
-          monitored.</dd>
+      <dd>a value between 0 and <code>span</code> that represents
+      the number of events that have been performed, images that
+      have been processed, etc.</dd>
 
-          <dt>quantum</dt>
+      <dt>span</dt>
 
-          <dd>a value between 0 and <var>span</var> that represents
-          the number of events that have been performed, images
-          that have been processed, etc.</dd>
+      <dd>The total number of events to be performed, images to be
+      processed, etc.</dd>
+    </dl>
 
-          <dt>span</dt>
-
-          <dd>The total number of events to be performed, images to
-          be processed, etc.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A <var>Proc</var> object.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <div class="example">
-          <pre>
-#! /usr/local/bin/ruby -w
-require 'RMagick'
-img = Magick::Image.read("images/Cheetah.jpg").first
+    <h4>Example</h4>
+    <pre>
 monitor = Proc.new { |text, quantum, span|
     printf("%s %3.0f%% complete\n", text, ((quantum/span.to_f)*100.0))
     }
 Magick.set_monitor(monitor)
-img.resize!(0.50)
-exit
 </pre>
-        </div>
 
-        <p>produces:</p>
-        <pre>
-  Resize image...     0% complete
-  Resize image...    29% complete
-  Resize image...    57% complete
-  Resize image...    86% complete
-  Resize image...   100% complete
-</pre><br />
-        <br />
-      </td>
-    </tr>
+    <h4>Magick API</h4>
 
-    <tr>
-      <td valign="top"><a name="monitor_notes" id=
-      "monitor_notes">&times;Magick notes</a></td>
+    <p>SetMonitorHandler</p>
 
-      <td>The list of methods which call the monitor block is
-      difficult to determine. The only sure way to find out is to
-      read the source code. In the Image class the list includes
-      <var>add_noise</var>, <var>blur_image</var>,
-      <var>channel</var>, <var>chop</var>, <var>colorize</var>,
-      <var>crop</var>, <var>colors</var>, <var>despeckle</var>,
-      <var>enhance</var>, <var>equalize</var>, <var>flip</var>,
-      <var>flop</var>, <var>frame</var>, <var>gamma_correct</var>,
-      <var>implode</var>, <var>level</var>, <var>magnify</var>,
-      <var>median_filter</var>, <var>minify</var>,
-      <var>modulate</var>, <var>morph</var>, <var>negate</var>,
-      <var>normalize</var>, <var>oil_paint</var>,
-      <var>opaque</var>, <var>raise</var>, <var>reduce_noise</var>,
-      <var>resize</var>, <var>roll</var>, <var>rotate</var>,
-      <var>sample</var>, <var>scale</var>, <var>segment</var>,
-      <var>shade</var>, <var>sharpen</var>, <var>shear</var>,
-      <var>solarize</var>, <var>spread</var>, <var>stegano</var>,
-      <var>stereo</var>, <var>swirl</var>, <var>texture</var>
-      <var>threshold</var>, <var>transparent</var>, and
-      <var>wave</var>. In the ImageList class, the list includes
-      <var>append</var>, <var>average</var>, and
-      <var>montage</var>.</td>
-    </tr>
-  </table>
-  <hr />
+    <h4 id="monitor_notes">Note</h4>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="magick.html">&lt;-
-      Prev</a></td>
+    <p>The list of methods which call the monitor block is
+    difficult to determine. The only sure way to find out is to
+    read the source code. In the Image class the list includes
+    <code>add_noise</code>, <code>blur_image</code>,
+    <code>channel</code>, <code>chop</code>, <code>colorize</code>,
+    <code>crop</code>, <code>colors</code>, <code>despeckle</code>,
+    <code>enhance</code>, <code>equalize</code>, <code>flip</code>,
+    <code>flop</code>, <code>frame</code>,
+    <code>gamma_correct</code>, <code>implode</code>,
+    <code>level</code>, <code>magnify</code>,
+    <code>median_filter</code>, <code>minify</code>,
+    <code>modulate</code>, <code>morph</code>, <code>negate</code>,
+    <code>normalize</code>, <code>oil_paint</code>,
+    <code>opaque</code>, <code>raise</code>,
+    <code>reduce_noise</code>, <code>resize</code>,
+    <code>roll</code>, <code>rotate</code>, <code>sample</code>,
+    <code>scale</code>, <code>segment</code>, <code>shade</code>,
+    <code>sharpen</code>, <code>shear</code>,
+    <code>solarize</code>, <code>spread</code>,
+    <code>stegano</code>, <code>stereo</code>, <code>swirl</code>,
+    <code>texture</code> <code>threshold</code>,
+    <code>transparent</code>, and <code>wave</code>. In the
+    ImageList class, the list includes <code>append</code>,
+    <code>average</code>, and <code>montage</code>.</p>
+  </div>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <p class="spacer">&nbsp;</p>
 
-      <td style="text-align: right"><a href="ilist.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+  <div class="nav">
+    &laquo;&nbsp;<a href="comtasks.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "ilist.html">Next</a>&nbsp;&raquo;
+  </div>
 </body>
 </html>

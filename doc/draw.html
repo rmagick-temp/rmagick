@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,3493 +10,757 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
+  <style type="text/css">
+  /*<![CDATA[*/
+
+  /* Styles local to this page. */
+
+  /*]]>*/
+  </style>
 </head>
 
 <body>
-  <div class="header">
-    RMagick User's Guide and Reference
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="image3.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "struct.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="image.html">&lt;-
-      Prev</a></td>
+  <h1>class Draw</h1>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div id="toc">
+    <h2>Table of Contents</h2>
 
-      <td style="text-align: right"><a href="struct.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <h3>class methods</h3>
 
-  <div class="stdtitle">
-    class Draw
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+
+    <h3>instance methods</h3>
+
+    <ul>
+      <li><a href="#annotate">annotate</a></li>
+
+      <li><a href="#draw">draw</a></li>
+
+      <li><a href="#dup">dup</a></li>
+
+      <li><a href="#get_type_metrics">get_type_metrics</a></li>
+
+      <li><a href="#inspect">inspect</a></li>
+    </ul>
+
+    <h3>drawing primitive methods</h3>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#affine">affine</a></li>
+
+        <li><a href="#arc">arc</a></li>
+
+        <li><a href="#bezier">bezier</a></li>
+
+        <li><a href="#circle">circle</a></li>
+
+        <li><a href="#clip_path">clip_path</a></li>
+
+        <li><a href="#clip_rule">clip_rule</a></li>
+
+        <li><a href="#clip_units">clip_units</a></li>
+
+        <li><a href="#color">color</a></li>
+
+        <li><a href="#composite">composite</a></li>
+
+        <li><a href="#decorate">decorate</a></li>
+
+        <li><a href="#define_clip_path">define_clip_path</a></li>
+
+        <li><a href="#ellipse">ellipse</a></li>
+
+        <li><a href="#encoding">encoding</a></li>
+
+        <li><a href="#fill">fill</a></li>
+
+        <li><a href="#fill_opacity">fill_opacity</a></li>
+
+        <li><a href="#fill_rule">fill_rule</a></li>
+
+        <li><a href="#font">font</a></li>
+
+        <li><a href="#font_family">font_family</a></li>
+      </ul>
+    </div>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#font_stretch">font_stretch</a></li>
+
+        <li><a href="#font_style">font_style</a></li>
+
+        <li><a href="#font_weight">font_weight</a></li>
+
+        <li><a href="#gravity">gravity</a></li>
+
+        <li><a href="#line">line</a></li>
+
+        <li><a href="#matte">matte</a></li>
+
+        <li><a href="#opacity">opacity</a></li>
+
+        <li><a href="#path">path</a></li>
+
+        <li><a href="#pattern">pattern</a></li>
+
+        <li><a href="#point">point</a></li>
+
+        <li><a href="#pointsize">pointsize</a></li>
+
+        <li><a href="#polygon">polygon</a></li>
+
+        <li><a href="#polyline">polyline</a></li>
+
+        <li><a href="#pop">pop</a></li>
+
+        <li><a href="#push">push</a></li>
+
+        <li><a href="#rectangle">rectangle</a></li>
+
+        <li><a href="#rotate">rotate</a></li>
+
+        <li><a href="#roundrectangle">roundrectangle</a></li>
+      </ul>
+    </div>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#scale">scale</a></li>
+
+        <li><a href="#skewx">skewx</a></li>
+
+        <li><a href="#skewy">skewy</a></li>
+
+        <li><a href="#stroke">stroke</a></li>
+
+        <li><a href="#stroke_antialias">stroke_antialias</a></li>
+
+        <li><a href="#stroke_dasharray">stroke_dasharray</a></li>
+
+        <li><a href="#stroke_dashoffset">stroke_dashoffset</a></li>
+
+        <li><a href="#stroke_linecap">stroke_linecap</a></li>
+
+        <li><a href="#stroke_linejoin">stroke_linejoin</a></li>
+
+        <li><a href="#stroke_miterlimit">stroke_miterlimit</a></li>
+
+        <li><a href="#stroke_opacity">stroke_opacity</a></li>
+
+        <li><a href="#stroke_width">stroke_width</a></li>
+
+        <li><a href="#text">text</a></li>
+
+        <li><a href="#text_align">text_align</a></li>
+
+        <li><a href="#text_anchor">text_anchor</a></li>
+
+        <li><a href="#text_antialias">text_antialias</a></li>
+
+        <li><a href="#text_undercolor">text_undercolor</a></li>
+
+        <li><a href="#translate">translate</a></li>
+      </ul>
+    </div>
+
+    <h3>annotate attributes</h3>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#affine_eq">affine</a></li>
+
+        <li><a href="#align_eq">align</a></li>
+
+        <li><a href="#decorate_eq">decorate</a></li>
+
+        <li><a href="#density_eq">density</a></li>
+
+        <li><a href="#encoding_eq">encoding</a></li>
+
+        <li><a href="#fill_eq">fill</a></li>
+      </ul>
+    </div>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#font_eq">font</a></li>
+
+        <li><a href="#font_family_eq">font_family</a></li>
+
+        <li><a href="#font_stretch_eq">font_stretch</a></li>
+
+        <li><a href="#font_style_eq">font_style</a></li>
+
+        <li><a href="#font_weight_eq">font_weight</a></li>
+
+        <li><a href="#gravity_eq">gravity</a></li>
+      </ul>
+    </div>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#pointsize_eq">pointsize</a></li>
+
+        <li><a href="#rotation_eq">rotation</a></li>
+
+        <li><a href="#stroke_eq">stroke</a></li>
+
+        <li><a href="#text_antialias_eq">text_antialias</a></li>
+
+        <li><a href="#undercolor_eq">undercolor</a></li>
+      </ul>
+    </div>
   </div>
 
-  <table summary="table of contents" width="100%" cellspacing="0"
-  cellpadding="5">
-    <tr bgcolor="#C3C3C3">
-      <td colspan="2">
-        <h3>Table Of Contents</h3>
-      </td>
-    </tr>
+  <h2 class="methods">class methods</h2>
 
-    <tr>
-      <td colspan="2">
-        <h3>class methods</h3>
+  <div class="sig">
+    <h3 id="new">new</h3>
 
-        <ul>
-          <li><a href="#Draw.new">new</a></li>
-        </ul>
+    <p>Magick::Draw.new <span class="arg">[&nbsp;{ optional
+    parameters }&nbsp;]</span> -&gt; <em>draw</em></p>
+  </div>
 
-        <h3><a href="#attribute_writers">attribute writers</a></h3>
+  <div class="desc">
+    <h4>Description</h4>
 
-        <ul>
-          <li><a href="#Draw.affine_eq">affine=</a></li>
+    <p>Creates a new Draw object.</p>
 
-          <li><a href="#Draw.align_eq">align=</a></li>
+    <h4>Arguments</h4>
 
-          <li><a href="#Draw.decorate_eq">decorate=</a></li>
+    <p>If you plan to use the <code>annotate</code> method with
+    this object you can initialize the <a href=
+    "#attributes">attributes</a> in the associated block.</p>
 
-          <li><a href="#Draw.density_eq">density=</a></li>
+    <h4>Returns</h4>A new <code>Draw</code> object.
 
-          <li><a href="#Draw.encoding_eq">encoding=</a></li>
-
-          <li><a href="#Draw.fill_eq">fill=</a></li>
-
-          <li><a href="#Draw.font_eq">font=</a></li>
-
-          <li><a href="#Draw.font_family_eq">font_family=</a></li>
-
-          <li><a href=
-          "#Draw.font_stretch_eq">font_stretch=</a></li>
-
-          <li><a href="#Draw.font_style_eq">font_style=</a></li>
-
-          <li><a href="#Draw.font_weight_eq">font_weight=</a></li>
-
-          <li><a href="#Draw.gravity_eq">gravity=</a></li>
-
-          <li><a href="#Draw.pointsize_eq">pointsize=</a></li>
-
-          <li><a href="#Draw.rotation_eq">rotation=</a></li>
-
-          <li><a href="#Draw.stroke_eq">stroke=</a></li>
-
-          <li><a href=
-          "#Draw.text_antialias_eq">text_antialias=</a></li>
-
-          <li><a href="#Draw.undercolor_eq">undercolor=</a></li>
-        </ul>
-
-        <h3>drawing primitive methods</h3>
-
-        <table summary=
-        "drawing primitive methods table of contents" width="100%">
-          <tr>
-            <td>
-              <ul>
-                <li><a href="#Draw.affine">affine</a></li>
-
-                <li><a href="#Draw.arc">arc</a></li>
-
-                <li><a href="#Draw.bezier">bezier</a></li>
-
-                <li><a href="#Draw.circle">circle</a></li>
-
-                <li><a href="#Draw.clip_path">clip_path</a></li>
-
-                <li><a href="#Draw.clip_rule">clip_rule</a></li>
-
-                <li><a href="#Draw.clip_units">clip_units</a></li>
-
-                <li><a href="#Draw.color">color</a></li>
-
-                <li><a href="#Draw.composite">composite</a></li>
-
-                <li><a href="#Draw.decorate">decorate</a></li>
-
-                <li><a href=
-                "#Draw.define_clip_path">define_clip_path</a></li>
-
-                <li><a href="#Draw.ellipse">ellipse</a></li>
-
-                <li><a href="#Draw.encoding">encoding</a></li>
-
-                <li><a href="#Draw.fill">fill</a></li>
-
-                <li><a href=
-                "#Draw.fill_opacity">fill_opacity</a></li>
-
-                <li><a href="#Draw.fill_rule">fill_rule</a></li>
-
-                <li><a href="#Draw.font">font</a></li>
-
-                <li><a href=
-                "#Draw.font_family">font_family</a></li>
-              </ul>
-            </td>
-
-            <td>
-              <ul>
-                <li><a href=
-                "#Draw.font_stretch">font_stretch</a></li>
-
-                <li><a href="#Draw.font_style">font_style</a></li>
-
-                <li><a href=
-                "#Draw.font_weight">font_weight</a></li>
-
-                <li><a href="#Draw.gravity">gravity</a></li>
-
-                <li><a href="#Draw.line">line</a></li>
-
-                <li><a href="#Draw.matte">matte</a></li>
-
-                <li><a href="#Draw.opacity">opacity</a></li>
-
-                <li><a href="#Draw.path">path</a></li>
-
-                <li><a href="#Draw.pattern">pattern</a></li>
-
-                <li><a href="#Draw.point">point</a></li>
-
-                <li><a href="#Draw.pointsize">pointsize</a></li>
-
-                <li><a href="#Draw.polygon">polygon</a></li>
-
-                <li><a href="#Draw.polyline">polyline</a></li>
-
-                <li><a href="#Draw.pop">pop</a></li>
-
-                <li><a href="#Draw.push">push</a></li>
-
-                <li><a href="#Draw.rectangle">rectangle</a></li>
-
-                <li><a href="#Draw.rotate">rotate</a></li>
-
-                <li><a href=
-                "#Draw.roundrectangle">roundrectangle</a></li>
-              </ul>
-            </td>
-
-            <td>
-              <ul>
-                <li><a href="#Draw.scale">scale</a></li>
-
-                <li><a href="#Draw.skewx">skewx</a></li>
-
-                <li><a href="#Draw.skewy">skewy</a></li>
-
-                <li><a href="#Draw.stroke">stroke</a></li>
-
-                <li><a href=
-                "#Draw.stroke_antialias">stroke_antialias</a></li>
-
-                <li><a href=
-                "#Draw.stroke_dasharray">stroke_dasharray</a></li>
-
-                <li><a href=
-                "#Draw.stroke_dashoffset">stroke_dashoffset</a></li>
-
-                <li><a href=
-                "#Draw.stroke_linecap">stroke_linecap</a></li>
-
-                <li><a href=
-                "#Draw.stroke_linejoin">stroke_linejoin</a></li>
-
-                <li><a href=
-                "#Draw.stroke_miterlimit">stroke_miterlimit</a></li>
-
-                <li><a href=
-                "#Draw.stroke_opacity">stroke_opacity</a></li>
-
-                <li><a href=
-                "#Draw.stroke_width">stroke_width</a></li>
-
-                <li><a href="#Draw.text">text</a></li>
-
-                <li><a href="#Draw.text_align">text_align</a></li>
-
-                <li><a href=
-                "#Draw.text_anchor">text_anchor</a></li>
-
-                <li><a href=
-                "#Draw.text_antialias">text_antialias</a></li>
-
-                <li><a href=
-                "#Draw.text_undercolor">text_undercolor</a></li>
-
-                <li><a href="#Draw.translate">translate</a></li>
-              </ul>
-            </td>
-
-            <td></td>
-          </tr>
-        </table>
-
-        <h3>other instance methods</h3>
-
-        <ul>
-          <li><a href="#Draw.annotate">annotate</a></li>
-
-          <li><a href="#Draw.draw">draw</a></li>
-
-          <li><a href=
-          "#Draw.get_type_metrics">get_type_metrics</a></li>
-
-          <li><a href="#Draw.inspect">inspect</a></li>
-        </ul>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-
-    <tr class="methodsection">
-      <td colspan="2">
-        <h2>class methods</h2>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.new" id=
-      "Draw.new">new</a></td>
-
-      <td>Magick::Draw.new <i>[&nbsp;{ additional parameters
-      }&nbsp;]</i> -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        Creates a new Draw object. You can assign some initial
-        values by setting attributes in the associated block.
-        However, you will usually find it more useful to use one of
-        the Draw instance methods to set these values while the
-        primitives are being executed. When the values are
-        initialized by <code>new</code>, they will be overridden by
-        the corresponding instance method.
-
-        <p>The attributes you can set are shown in the following
-        table.</p>
-
-        <table summary="antialias method" bgcolor="#F0F0F0" width=
-        "100%" border="1" cellpadding="5">
-          <tr>
-            <th>Method</th>
-
-            <th>Description</th>
-          </tr>
-
-          <tr>
-            <td>antialias=<code>true</code> or
-            <code>false</code></td>
-
-            <td>Initializes both <a href=
-            "#Draw.stroke_antialias">stroke_antialias</a> and
-            <a href="#Draw.text_antialias">text_antialias</a></td>
-          </tr>
-
-          <tr>
-            <td>font=<i>font_name</i></td>
-
-            <td>See <a href="#Draw.font">font</a></td>
-          </tr>
-
-          <tr>
-            <td>density=<i>"XxY"</i></td>
-
-            <td>Font density</td>
-          </tr>
-
-          <tr>
-            <td>pointsize=<i>size</i></td>
-
-            <td>See <a href="#Draw.pointsize">pointsize</a> and
-            <a href="#Draw.pointsize_eq">pointsize=</a></td>
-          </tr>
-
-          <tr>
-            <td>border_color=<i>"color_name"</i></td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>server_name=<i>"name"</i></td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>debug=<code>true</code> or <code>false</code></td>
-
-            <td>See <a href="#Draw.draw">draw</a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <pre>
-primitives = Magick::Draw.new {
-   self.font = "Courier"      # override default font
-   }
+    <h4>Example</h4>
+    <pre>
+gc = Draw.new
 </pre>
-      </td>
-    </tr>
+  </div>
 
-    <tr>
-      <td valign="top">&times;Magick API</td>
+  <h2 class="methods">instance methods</h2>
 
-      <td><a href=
-      "http://www.imagemagick.org/www/api/render.html#clonedrawinfo">
-      CloneDrawInfo</a></td>
-    </tr>
+  <div class="sig">
+    <h3 id="annotate">annotate</h3>
 
-    <tr class="methodsection">
-      <td colspan="2">
-        <h2><a name="attribute_writers" id=
-        "attribute_writers">attribute writers</a></h2>
-      </td>
-    </tr>
+    <p><span class="arg">draw.</span>annotate(<span class=
+    "arg">img, width, height, x, y, text</span>) <span class=
+    "arg">[&nbsp;{ additional parameters }&nbsp;]</span> -&gt;
+    <em>draw</em></p>
+  </div>
 
-    <tr>
-      <td colspan="2">
-        <p>These methods are usually used to set attribute values
-        for the <a href="#Draw.annotate">annotate</a> method. They
-        may be set prior to calling <code>annotate</code> or in a
-        block associated with the call. To set a value to be used
-        when drawing with the <a href="#Draw.draw">draw</a> method,
-        use one of the drawing methods listed in the <b>drawing
-        primitive methods</b> section, below.</p>
-      </td>
-    </tr>
+  <div class="desc">
+    <h4>Description</h4>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.affine_eq" id=
-      "Draw.affine_eq">affine=</a></td>
+    <p>Annotates a image with text. The text is positioned
+    according to the <code>gravity</code> attribute around the
+    rectangle described by the x, y, width, and height arguments.
+    If either of the width or height arguments are omitted, uses
+    the image width - x and the image height - y to compute the
+    rectangle width and height. The attributes described in
+    <a href="#attributes">annotate attributes</a>, below, influence
+    the appearance and position of the text. These attributes may
+    be set in the Draw object before calling <code>annotate</code>,
+    or within <code>annotate</code>'s optional <span class=
+    "arg">additional parameters</span> block.</p>
 
-      <td><i>draw.</i>affine = <i>anAffineMatrix</i></td>
-    </tr>
+    <p><em>Note</em>: all of the <code>annotate</code> attributes
+    are set-only.</p>
 
-    <tr>
-      <td valign="top">&nbsp;</td>
+    <h4>Arguments</h4>
 
-      <td>The transformation matrix. See <a href=
-      "struct.html#AffineMatrix">AffineMatrix</a>. The default is
-      the null transformation. Also see <a href=
-      "#Draw.affine">affine</a>.</td>
-    </tr>
+    <dl>
+      <dt>img</dt>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.align_eq" id=
-      "Draw.align_eq">align=</a></td>
+      <dd>the image or imagelist to be annotated</dd>
 
-      <td><i>draw.</i>align = <i>anAlignType</i></td>
-    </tr>
+      <dt>width</dt>
 
-    <tr>
-      <td valign="top">&nbsp;</td>
+      <dd>width of the rectangle within which the text is
+      positioned</dd>
 
-      <td>The text <a href=
-      "constants.html#AlignType">alignment</a>, left, center, or
-      right. The default is LeftAlign. See also <a href=
-      "#Draw.text_align">text_align</a>.</td>
-    </tr>
+      <dt>height</dt>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.decorate_eq" id=
-      "Draw.decorate_eq">decorate=</a></td>
+      <dd>height of the rectangle within which the text is
+      positioned</dd>
 
-      <td><i>draw.</i>decorate = <i>aDecorationType</i></td>
-    </tr>
+      <dt>x</dt>
 
-    <tr>
-      <td valign="top">&nbsp;</td>
+      <dd>x offset of the rectangle</dd>
 
-      <td>The text decoration. See <a href=
-      "constants.html#DecorationType">DecorationType</a>. The
-      default is NoDecorationType.</td>
-    </tr>
+      <dt>y</dt>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.density_eq" id=
-      "Draw.density_eq">density=</a></td>
+      <dd>y offset of the rectangle</dd>
 
-      <td><i>draw.</i>density = <i>aString</i></td>
-    </tr>
+      <dt>text</dt>
 
-    <tr>
-      <td valign="top">&nbsp;</td>
+      <dd>the text</dd>
+    </dl>
 
-      <td>The text density in the x and y directions. The default
-      is "72x72".</td>
-    </tr>
+    <h4>Returns</h4>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.encoding_eq" id=
-      "Draw.encoding_eq">encoding=</a></td>
+    <p>self</p>
 
-      <td><i>draw.</i>encoding = <i>aString</i></td>
-    </tr>
+    <h4>Example</h4>
 
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The text encoding. One of the following strings:
-      "AdobeCustom", "AdobeExpert", "AdobeStandard", "AppleRoman",
-      "BIG5", "GB2312", "Latin 2", "None", "SJISCode", "Symbol",
-      "Unicode", "Wansung".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.fill_eq" id=
-      "Draw.fill_eq">fill=</a></td>
-
-      <td><i>draw.</i>fill = <i>aString</i><br />
-      <i>draw.</i>fill = <i>aPixel</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The <a href="imusage.html#color_names">name</a> of the
-      fill color. May also be a <a href=
-      "struct.html#Pixel">Pixel</a> object. The default is
-      "black".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_eq" id=
-      "Draw.font_eq">font=</a></td>
-
-      <td><i>draw.</i>font = <i>aString</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The font name. The default is "Helvetica". See also
-      <a href="#Draw.font">font</a>.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_family_eq" id=
-      "Draw.font_family_eq">font_family=</a></td>
-
-      <td><i>draw.</i>font_family = <i>aString</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The font family name. For example, "arial" or
-      "helvetica".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_stretch_eq" id=
-      "Draw.font_stretch_eq">font_stretch=</a></td>
-
-      <td><i>draw.</i>font_stretch = <i>aStretchType</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>A <a href="constants.html#StretchType">StretchType</a>
-      constant.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_style_eq" id=
-      "Draw.font_style_eq">font_style=</a></td>
-
-      <td><i>draw.</i>font_style = <i>aStyleType</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>A <a href="constants.html#StyleType">StyleType</a>
-      constant.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_weight_eq" id=
-      "Draw.font_weight_eq">font_weight=</a></td>
-
-      <td><i>draw.</i>font_weight = <i>aWeightType</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>A <a href="constants.html#StretchType">WeightType</a>
-      constant or one of the numbers 100, 200, 300, 400, 500, 600,
-      700, 800, or 900.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.gravity_eq" id=
-      "Draw.gravity_eq">gravity=</a></td>
-
-      <td><i>draw.</i>gravity = <i>aGravityType</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The text <a href=
-      "constants.html#GravityType">gravity</a>. The default is
-      NorthWestGravity.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.pointsize_eq" id=
-      "Draw.pointsize_eq">pointsize=</a></td>
-
-      <td><i>draw.</i>pointsize = <i>anInteger</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The font size. The default is 12.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.rotation_eq" id=
-      "Draw.rotation_eq">rotation=</a></td>
-
-      <td><i>draw.</i>rotation = <i>aNumber</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>Rotate the text. Specify the amount of rotation in
-      degrees.</td>
-    </tr>
-
-    <tr>
-      <td>&nbsp;</td>
-
-      <td>See <a href=
-      "rotated_text.rb.html">rotated_text.rb</a>.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_eq" id=
-      "Draw.stroke_eq">stroke=</a></td>
-
-      <td><i>draw.</i>stroke = <i>aString</i><br />
-      <i>draw.</i>stroke = <i>aPixel</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>The stroke <a href="imusage.html#color_names">color</a>.
-      This is the color used to outline the text. May also be a
-      <a href="struct.html#Pixel">Pixel</a> object. The default is
-      "black".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text_antialias_eq" id=
-      "Draw.text_antialias_eq">text_antialias=</a></td>
-
-      <td><i>draw.</i>text_antialias = <i><code>true</code> or
-      <code>false</code></i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>Whether the text is antialiased or not. The default is
-      <code>true</code>.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.undercolor_eq" id=
-      "Draw.undercolor_eq">undercolor=</a></td>
-
-      <td><i>draw.</i>undercolor = <i>aString</i><br />
-      <i>draw.</i>undercolor = <i>aPixel</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&nbsp;</td>
-
-      <td>If set, causes the text to be drawn over a box of the
-      specified color. May be a color name or a <a href=
-      "struct.html#Pixel">Pixel</a> object. See also <a href=
-      "#Draw.text_undercolor">text_undercolor</a>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top" bgcolor="#F0F0F0" class="methodname">
-      Example</td>
-
-      <td bgcolor="#F0F0F0">
-        <table summary="example 1">
-          <tr>
-            <td>
-              This example displays the effect of the following
-              attribute values:
-              <pre>
-      font = "Helvetica"
-      decorate = Magick::OverlineDecoration
-      fill = "red"
-      gravity = Magick::CenterGravity
-      pointsize = 48
-      stroke = "black"
-      undercolor = "cyan"
-</pre>
-            </td>
-          </tr>
-
-          <tr>
-            <td><a href="drawattrs.rb.html" target=
-            "_blank"><img src="ex/drawattrs.gif" alt=
-            "draw attribute methods example" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td bgcolor="#F0F0F0" colspan="2">Notice that, along
-            with the text, the surrounding cyan box is outlined
-            with black, the stroke color. For more examples, see
-            <a href="#Draw.annotate">annotate</a>.</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-
-    <tr class="methodsection">
-      <td colspan="2">
-        <h2>drawing primitive methods</h2>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.affine" id=
-      "Draw.affine">affine</a></td>
-
-      <td><i>draw</i>.affine(<i>sx, rx, ry, sy, tx, ty</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Transforms the coordinate system by a 3x3 transformation
-      matrix. See <a href=
-      "http://www.w3.org/TR/SVG/coords.html#EstablishingANewUserSpace">
-      Coordinate system transformations</a> in the <cite>Scalable
-      Vector Graphics (SVG) 1.0 Specification</cite>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>sx, sy</dt>
-
-          <dd>The amount of scaling in the <i>x</i> and <i>y</i>
-          directions</dd>
-
-          <dt>rx, ry</dt>
-
-          <dd>The rotation in the <i>x</i> and <i>y</i> directions,
-          in radians.</dd>
-
-          <dt>tx, ty</dt>
-
-          <dd>The translation distances in the <i>x</i> and
-          <i>y</i> directions</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 2">
-          <tr>
-            <td><a href="affine.rb.html" target="_blank"><img src=
-            "ex/affine.gif" alt="affine example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.affine(1, 0, 0, -1, 0,
-            max_y)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.rotate">rotate</a>, <a href=
-      "#Draw.scale">scale</a>, <a href="#Draw.skewx">skewx</a>,
-      <a href="#Draw.skewy">skewy</a>, <a href=
-      "#Draw.translate">translate</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.arc" id=
-      "Draw.arc">arc</a></td>
-
-      <td><i>draw</i>.arc(<i>start_x, start_y, end_x, end_y,
-      start_degrees, end_degrees</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draws an arc within a rectangle.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>start_x, start_y</dt>
-
-          <dd>one corner of the bounding rectangle</dd>
-
-          <dt>end_x, end_y</dt>
-
-          <dd>the opposite corner of the bounding rectangle</dd>
-
-          <dt>start_degrees</dt>
-
-          <dd>where to start drawing the arc</dd>
-
-          <dt>end_degrees</dt>
-
-          <dd>where the arc ends</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>self</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 3">
-          <tr>
-            <td><a href="arc.rb.html" target="_blank"><img src=
-            "ex/arc.gif" alt="arc example" border="0" /></a></td>
-
-            <td colspan="2" valign="top">
-              <p><code>draw.arc(40, 50, 250, 180, 0,
-              270)</code></p>
-
-              <p>The <code>arc</code> method is broken in all
-              releases of ImageMagick prior to 5.5.8, and all
-              releases of GraphicsMagick prior to 1.1. If you see a
-              diagonal line here instead of an arc, it's broken.
-              Either upgrade to the newest version or use the SVG
-              <a href="#Draw.path">path</a> method.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td>See <a href="#Draw.path">the SVG elliptical arc commands
-      (A and a)</a>.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.bezier" id=
-      "Draw.bezier">bezier</a></td>
-
-      <td><i>draw</i>.bezier(<i>x1,y1, cx1,cy1, cx2,cy2, x2,
-      y2...</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a cubic Bezier curve</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The arguments are pairs of points. At least 4 pairs must
-      be specified. Each point <i>xn, yn</i> on the curve is
-      associated with a control point <i>cxn, cyn</i>. The first
-      point, <i>x1, y1</i>, is the starting point. The last point,
-      <i>xn, yn</i>, is the ending point. Other point/control point
-      pairs specify intermediate points on a polybezier curve.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 4">
-          <tr>
-            <td>The following examples are taken from the <a href=
-            "http://www.w3.org/TR/SVG/paths.html">Paths</a> section
-            of the <cite>Scalable Vector Graphics (SVG) 1.0
-            Specification</cite>.</td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 100,100, 400, 100,
-            400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier1.rb.html" target=
-            "_blank"><img src="ex/cbezier1.gif" alt=
-            "bezier example 1" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 175,100, 475,100,
-            400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier2.rb.html" target=
-            "_blank"><img src="ex/cbezier2.gif" alt=
-            "bezier example 2" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 25,100, 475, 100,
-            400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier3.rb.html" target=
-            "_blank"><img src="ex/cbezier3.gif" alt=
-            "bezier example 3" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 100,50, 400, 350,
-            400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier4.rb.html" target=
-            "_blank"><img src="ex/cbezier4.gif" alt=
-            "bezier example 4" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 175,100, 325, 100,
-            400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier5.rb.html" target=
-            "_blank"><img src="ex/cbezier5.gif" alt=
-            "bezier example 5" border="0" /></a></td>
-          </tr>
-
-          <tr>
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td><code>draw.bezier(100,200, 100,100, 250,100,
-            250,200, 250,300, 400,300, 400,200)</code></td>
-          </tr>
-
-          <tr>
-            <td><a href="cbezier6.rb.html" target=
-            "_blank"><img src="ex/cbezier6.gif" alt=
-            "bezier example 6" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.circle" id=
-      "Draw.circle">circle</a></td>
-
-      <td><i>draw</i>.circle(<i>origin_x, origin_y, perim_x,
-      perim_y</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a circle centered on the point <i>origin_x,
-      origin_y</i> and the point <i>perim_x, perim_y</i> on the
-      perimeter.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 5">
-          <tr>
-            <td><a href="circle.rb.html" target="_blank"><img src=
-            "ex/circle.gif" alt="circle example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.circle(125,125,
-            25,125)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.clip_path" id=
-      "Draw.clip_path">clip_path</a></td>
-
-      <td><i>draw</i>.clip_path(<i>pathname</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        <span class="imquote">Draws the clip path on the image
-        mask. The clip path defines a clipping area, where only the
-        contained area will be drawn upon. Areas outside of the
-        clipping area are masked.</span>
-
-        <p>Before using a clip-path, you must create it using the
-        <a href="#Draw.define_clip_path">define_clip_path</a>
-        method.</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The name of the clip path.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 6">
-          <tr>
-            <td><a href="clip_path.rb.html" name="clip_path_ex"
-            target="_blank" id="clip_path_ex"><img src=
-            "ex/clip_path.gif" alt="clip_path example" border=
-            "0" /></a></td>
-
-            <td valign="top">
-            <code>draw.clip_path('example')</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href=
-      "#Draw.define_clip_path">define_clip_path</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.clip_rule" id=
-      "Draw.clip_rule">clip_rule</a></td>
-
-      <td><i>draw</i>.clip_rule(<code>"evenodd"</code> <i>or</i>
-      <code>"nonzero"</code>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify how to determine if a point on the image is
-      inside clipping region. See <a href=
-      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
-      the <b>'fill-rule'</b> property</code></a> in the
-      <cite>Scalable Vector Graphics (SVG) 1.0 Specification</cite>
-      for a complete description and examples.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>Either "evenodd" or "nonzero".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.clip_units" id=
-      "Draw.clip_units">clip_units</a></td>
-
-      <td><i>draw</i>.clip_units(<code>"userSpace"</code> <i>or</i>
-      <code>"userSpaceOnUse"</code> <i>or</i>
-      <code>"objectSpace"</code>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Defines the coordinate space within the clipping region.
-      See <a href=
-      "http://www.w3.org/TR/SVG/masking.html#ClipPathUnitsAttribute">
-      the <code>clipPathUnits</code> property</a> in the
-      <cite>Scalable Vector Graphics (SVG) 1.0 Specification</cite>
-      for a complete description and examples.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>Either "userSpace", "userSpaceOnUse", or
-      "objectSpace".</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.color" id=
-      "Draw.color">color</a></td>
-
-      <td><i>draw</i>.color(<i>x</i>, <i>y</i>,
-      <i>aPaintMethod</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Set color in image according to the specified PaintMethod
-      constant.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>See the <a href=
-      "constants.html#PaintMethod">PaintMethod</a> constants.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.color(x, y, Magick::ReplaceMethod)</code></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.composite" id=
-      "Draw.composite">composite</a></td>
-
-      <td><i>draw</i>.composite(<i>x, y, width, height,
-      composite_image,
-      op=</i><code>Magick::OverCompositeOp</code><i>)</i> -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Composite <code>composite_image</code> with the
-      background image.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>x, y</dt>
-
-          <dd>The offset of <code>composite_image</code> relative
-          to the background image.</dd>
-
-          <dt>width, height</dt>
-
-          <dd>Scale the <code>composite_image</code> to this size.
-          If either value is 0, <code>composite_image</code> is not
-          scaled.</dd>
-
-          <dt>composite_image</dt>
-
-          <dd>Either an imagelist or a image. If an imagelist, uses
-          the current image.</dd>
-
-          <dt>op</dt>
-
-          <dd>A <a href=
-          "constants.html#CompositeOperator">CompositeOperator</a>
-          constant.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Examples</td>
-
-      <td>
-        <table summary="example 6" border="1">
-          <tr>
-            <td><a href="drawcomp.rb.html" target=
-            "_blank"><img src="ex/drawcomp1.gif" alt=
-            "composite example 1" border="0" /></a></td>
-
-            <td><a href="drawcomp.rb.html" target=
-            "_blank"><img src="ex/drawcomp2.gif" alt=
-            "composite example 2" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href=
-      "image.html#Image.composite">Image#composite</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.decorate" id=
-      "Draw.decorate">decorate</a></td>
-
-      <td><i>draw</i>.decorate(<i>aDecorationType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify text decoration.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>See the <a href=
-      "constants.html#DecorationType">DecorationType</a>
-      constants.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-      <code>draw.decorate(Magick::LineThroughDecoration)</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.decorate_eq">decorate=</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.define_clip_path" id=
-      "Draw.define_clip_path">define_clip_path</a></td>
-
-      <td><i>draw</i>.define_clip_path(<i>aString</i>) {
-      <i>block</i> } -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Define a clip-path. Within <i>block</i>, call other
-      drawing primitive methods (<code>rectangle</code>,
-      <code>polygon</code>, <code>text</code>, etc.) to define the
-      clip-path. The union of all the primitives (excluding the
-      effects of rendering methods such as
-      <code>stroke_width</code>, etc.) is the clip-path. After the
-      clip-path is invoked by the <a href=
-      "#Draw.clip_path">clip-path</a> method, anything drawn on the
-      image inside the clip-path will appear. Anything drawn
-      outside the clip-path will be hidden. (See <a href=
-      "#Draw.clip_rule">clip_rule</a> for a definition of how
-      &times;Magick decides what is "inside" and what is "outside"
-      of the clip-path.)</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The name of the clip-path.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>See the <a href="#clip_path_ex">example for
-      clip_path</a>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.clip_path">clip_path</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.ellipse" id=
-      "Draw.ellipse">ellipse</a></td>
-
-      <td>draw.ellipse(<i>origin_x, origin_y, width, height,
-      arc_start, arc_end</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw an ellipse.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>origin_x, origin_y</dt>
-
-          <dd>The center of the ellipse</dd>
-
-          <dt>width, height</dt>
-
-          <dd>The horizontal and vertical radii</dd>
-
-          <dt>arc_start</dt>
-
-          <dd>Where to start the ellipse, in degrees. 0 degrees is
-          at 3 o'clock.</dd>
-
-          <dt>arc_end</dt>
-
-          <dd>Where to end the ellipse, in degrees</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 7">
-          <tr>
-            <td><a href="ellipse.rb.html" target="_blank"><img src=
-            "ex/ellipse.gif" alt="ellipse example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.ellipse(180,125, 150,75, 0,
-            270)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.encoding" id=
-      "Draw.encoding">encoding</a></td>
-
-      <td><i>draw</i>.encoding(<code>"UTF-8"</code>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the font encoding as "UTF-8".</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>"UTF-8". (Note: This looks like a placeholder in
-      &times;Magick. All other arguments are ignored.)</td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.encoding_eq">encoding=</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.fill" id=
-      "Draw.fill">fill</a></td>
-
-      <td><i>draw</i>.fill(<i>aString</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the color or pattern with which graphical
-      elements are filled.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A <a href="imusage.html#color_names">color name</a> or
-      <a href="#Draw.pattern">pattern</a> name.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.fill('red')</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Aliases</td>
-
-      <td>fill_color, fill_pattern</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.fill_opacity" id=
-      "Draw.fill_opacity">fill_opacity</a></td>
-
-      <td><i>draw</i>.fill_opacity(<i>aFloat</i>) -&gt;
-      <i>draw</i><br />
-      <i>draw</i>.fill_opacity(<i>aString</i> -&gt;
-      <i>draw</i>)</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the fill opacity.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A number between 0 and 1, inclusive, or a percentage
-      represented as a string, i.e. '30%'. The argument .3 is the
-      same as '30%'.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <pre>
-draw.fill_opacity(0.4)
-draw.fill_opacity('40%')
+    <p>This example is an excerpt of <a href=
+    "javascript:popup('colors.rb.html')" title=
+    "Click to see the example script">colors.rb</a>. Many other
+    examples also use <code>annotate</code>.</p>
+    <pre>
+title.annotate(montage, 0,0,0,40, 'Named Colors') {
+    self.font_family = 'Helvetica'
+    self.fill = 'white'
+    self.stroke = 'transparent'
+    self.pointsize = 32
+    self.font_weight = BoldWeight
+    self.gravity = NorthGravity
+}
 </pre>
 
-        <p>See the example for <a href=
-        "#Draw.opacity">opacity</a>.</p>
-      </td>
-    </tr>
+    <h4>Special characters</h4>
 
-    <tr>
-      <td valign="top">See also</td>
+    <p>Escape a blank, quote, or apostrophe by preceding it with a
+    backslash ("\"). To include a backslash in the text, use two
+    consecutive backslashes. To include a '%' in the text, use
+    '%%'. You can include information about the image by including
+    one or more of the special character sequences shown in this
+    table.</p>
 
-      <td><a href="#Draw.opacity">opacity</a><br />
-      <a href="#Draw.stroke_opacity">stroke_opacity</a></td>
-    </tr>
+    <table id="spec_chars_table" summary=
+    "annotate special characters" class="simple_table">
+      <caption>
+        Special characters
+      </caption>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.fill_rule" id=
-      "Draw.fill_rule">fill_rule</a></td>
+      <tr>
+        <th>Format</th>
 
-      <td><i>draw</i>.fill_rule(<code>"evenodd"</code> <i>or</i>
-      <code>"nonzero"</code>) -&gt; <i>draw</i></td>
-    </tr>
+        <th>Replaced by</th>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>%b</td>
 
-      <td>Specify how to determine if a point on the image is
-      inside a shape. See <a href=
-      "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
-      the <b>'fill-rule'</b> property</code></a> in the
-      <cite>Scalable Vector Graphics (SVG) 1.0 Specification</cite>
-      for a complete description and examples.</td>
-    </tr>
+        <td>file size in bytes</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Arguments</td>
+      <tr>
+        <td>%c</td>
 
-      <td>Either "evenodd" or "nonzero".</td>
-    </tr>
+        <td>"comment" property string</td>
+      </tr>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font" id=
-      "Draw.font">font</a></td>
+      <tr>
+        <td>%d</td>
 
-      <td><i>draw</i>.font(<i>aString</i>) -&gt; <i>draw</i></td>
-    </tr>
+        <td>directory in which the file resides</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>%e</td>
 
-      <td>Specify the font to draw text with.</td>
-    </tr>
+        <td>filename extension</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Arguments</td>
+      <tr>
+        <td>%f</td>
 
-      <td>
-        The font name or filename. <span class="imquote">You can
-        tag a font to specify whether it is a Postscript, Truetype,
-        or OPTION1 font. For example, Arial.ttf is a Truetype font,
-        ps:helvetica is Postscript, and x:fixed is OPTION1.</span>
+        <td>original filename</td>
+      </tr>
 
-        <p>The font name can be a complete filename such as
-        <code>"/mnt/windows/windows/fonts/Arial.ttf"</code>. The
-        font name can also be a fully qualified X font name such as
-        <code>"-urw-times-medium-i-normal--0-0-0-0-p-0-iso8859-13"</code>.</p>
-      </td>
-    </tr>
+      <tr>
+        <td>%g</td>
 
-    <tr>
-      <td valign="top">Example</td>
+        <td>group number</td>
+      </tr>
 
-      <td><code>draw.font('Helvetica')</code></td>
-    </tr>
+      <tr>
+        <td>%h</td>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_family" id=
-      "Draw.font_family">font_family</a></td>
+        <td>height</td>
+      </tr>
 
-      <td><i>draw</i>.font_family(<i>aString</i>) -&gt; draw</td>
-    </tr>
+      <tr>
+        <td>%i</td>
 
-    <tr>
-      <td valign="top">Description</td>
+        <td>current filename</td>
+      </tr>
 
-      <td>Specify the font family.</td>
-    </tr>
+      <tr>
+        <td>%k</td>
 
-    <tr>
-      <td valign="top">Arguments</td>
+        <td>number of unique colors</td>
+      </tr>
 
-      <td>A font family name such as "arial" or "helvetica".</td>
-    </tr>
+      <tr>
+        <td>%l</td>
 
-    <tr>
-      <td valign="top">Example</td>
+        <td>"label" property string</td>
+      </tr>
 
-      <td>See the example for <a href="#Draw.text">text</a>.</td>
-    </tr>
+      <tr>
+        <td>%m</td>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_stretch" id=
-      "Draw.font_stretch">font_stretch</a></td>
+        <td>file format</td>
+      </tr>
 
-      <td><i>draw</i>.font_stretch(<i>aStretchType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
+      <tr>
+        <td>%n</td>
 
-    <tr>
-      <td valign="top">Description</td>
+        <td>number of images in the sequence (for RMagick, this is
+        always 1)</td>
+      </tr>
 
-      <td>Specify the spacing between text characters.</td>
-    </tr>
+      <tr>
+        <td>%o</td>
 
-    <tr>
-      <td valign="top">Arguments</td>
+        <td>output filename</td>
+      </tr>
 
-      <td>A <a href="constants.html#StretchType">StretchType</a>
-      constant.</td>
-    </tr>
+      <tr>
+        <td>%p</td>
 
-    <tr>
-      <td valign="top">Example</td>
+        <td>page number (for RMagick, this is always 1)</td>
+      </tr>
 
-      <td>
-      <code>draw.font_stretch(Magick::UltraCondensedStretch)</code></td>
-    </tr>
+      <tr>
+        <td>%q</td>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_style" id=
-      "Draw.font_style">font_style</a></td>
+        <td>depth</td>
+      </tr>
 
-      <td><i>draw</i>.font_style(<i>aStyleType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
+      <tr>
+        <td>%r</td>
 
-    <tr>
-      <td valign="top">Description</td>
+        <td>A string of the form "ClasstypeColorspace," for example
+        "DirectClassRGB". If the image's <em>matte</em> attribute
+        is <code>true</code>, appends the word "Matte" to the end
+        of the string.</td>
+      </tr>
 
-      <td>Specify the font style, i.e. italic, oblique, or
-      normal.</td>
-    </tr>
+      <tr>
+        <td>%s</td>
 
-    <tr>
-      <td valign="top">Arguments</td>
+        <td>scene number (always 1)</td>
+      </tr>
 
-      <td>A <a href="constants.html#StyleType">StyleType</a>
-      constant.</td>
-    </tr>
+      <tr>
+        <td>%t</td>
 
-    <tr>
-      <td valign="top">Example</td>
+        <td>filename without extension</td>
+      </tr>
 
-      <td>See the example for <a href="#Draw.text">text</a>.</td>
-    </tr>
+      <tr>
+        <td>%u</td>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.font_weight" id=
-      "Draw.font_weight">font_weight</a></td>
+        <td>unique temporary filename</td>
+      </tr>
 
-      <td><i>draw</i>.font_weight(<i>aWeightType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
+      <tr>
+        <td>%w</td>
 
-    <tr>
-      <td valign="top">Description</td>
+        <td>width</td>
+      </tr>
 
-      <td>Specify the font weight. For example, "bold" or
-      "normal".</td>
-    </tr>
+      <tr>
+        <td>%x</td>
 
-    <tr>
-      <td valign="top">Arguments</td>
+        <td>x resolution</td>
+      </tr>
 
-      <td>A <a href="constants.html#WeightType">WeightType</a>
-      constant, or one of the numbers 100, 200, 300, 400, 500, 600,
-      700, 800, or 900.</td>
-    </tr>
+      <tr>
+        <td>%y</td>
 
-    <tr>
-      <td valign="top">Example</td>
+        <td>y resolution</td>
+      </tr>
 
-      <td>See the example for <a href="#Draw.text">text</a>.</td>
-    </tr>
+      <tr>
+        <td>%z</td>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.gravity" id=
-      "Draw.gravity">gravity</a></td>
+        <td>depth</td>
+      </tr>
+    </table>
 
-      <td><i>draw</i>.gravity(<i>aGravityType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
+    <h4>See also</h4>
 
-    <tr>
-      <td valign="top">Description</td>
+    <p>This method is also defined in the <a href=
+    "image1.html#annotate">Image</a> class.</p>
 
-      <td>Specify how the text is positioned. The default is
-      <code>Magick::NorthWestGravity</code>.</td>
-    </tr>
+    <h4>Magick API</h4>
 
-    <tr>
-      <td valign="top">Arguments</td>
+    <p>AnnotateImage</p>
+  </div>
 
-      <td>A <a href="constants.html#GravityType">GravityType</a>
-      constant.</td>
-    </tr>
+  <div class="sig">
+    <h3 id="draw">draw</h3>
 
-    <tr>
-      <td valign="top">Example</td>
+    <p><span class="arg">draw</span>.draw(<span class=
+    "arg">img</span>) -&gt; <em>draw</em></p>
+  </div>
 
-      <td><a href="grav.rb.html" target="_blank"><img src=
-      "ex/grav.gif" alt="gravity example" border="0" /></a></td>
-    </tr>
+  <div class="desc">
+    <h4>Description</h4>
 
-    <tr>
-      <td valign="top">See also</td>
+    <p>Draws the list of graphic primitives on the specified image.
+    Calling <code>draw</code> does not affect the list of
+    primitives. Each time you call <code>draw</code> the primitives
+    will be re-executed from the beginning.</p>
 
-      <td><a href="#Draw.text">text</a></td>
-    </tr>
+    <h4>Arguments</h4>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.line" id=
-      "Draw.line">line</a></td>
+    <p>Either an imagelist or a image. If an imagelist, draws on
+    the current image.</p>
 
-      <td><i>draw</i>.line(<i>here_x</i>, <i>here_y</i>,
-      <i>there_x</i>, <i>there_y</i>) -&gt; <i>draw</i></td>
-    </tr>
+    <h4>Returns</h4>
 
-    <tr>
-      <td valign="top">Description</td>
+    <p>self</p>
 
-      <td>Draw a line from <i>here</i> to <i>there</i>.</td>
-    </tr>
+    <h4>Example</h4>
 
-    <tr>
-      <td valign="top">Arguments</td>
+    <p>See the other examples on this page.</p>
 
-      <td>
-        <dl>
-          <dt>here_x, here_y</dt>
+    <h4>Magick API</h4>
 
-          <dd>The starting point.</dd>
+    <p>DrawImage</p>
+  </div>
 
-          <dt>there_x, there_y</dt>
+  <div class="sig">
+    <h3 id="dup">dup</h3>
 
-          <dd>The ending point.</dd>
-        </dl>
-      </td>
-    </tr>
+    <p><span class="arg">draw</span>.dup -&gt; <em>aDraw</em></p>
+  </div>
 
-    <tr>
-      <td valign="top">Example</td>
+  <div class="desc">
+    <h4>Description</h4>
 
-      <td>
-        <table summary="example 8">
-          <tr>
-            <td><a href="line.rb.html" target="_blank"><img src=
-            "ex/line.gif" alt="line example" border="0" /></a></td>
+    <p>Duplicate a <code>Draw</code> object.</p>
 
-            <td valign="top"><code>draw.line(50,50, 50,200)<br />
-            draw.line(50,200, 200,200)<br />
-            draw.line(200,200, 50,50)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+    <h4>Returns</h4>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.matte" id=
-      "Draw.matte">matte</a></td>
+    <p>An exact copy of the receiver, including the list of drawing
+    primitives.</p>
 
-      <td><i>draw</i>.matte(<i>x</i>,<i>y</i>, <i>aPaintMethod</i>)
-      -&gt; <i>draw</i></td>
-    </tr>
+    <h4>Note</h4>Also called <code>clone</code>.
+  </div>
 
-    <tr>
-      <td valign="top">Description</td>
+  <div class="sig">
+    <h3 id="get_type_metrics">get_type_metrics</h3>
 
-      <td>Make the image transparent according to the specified
-      <a href="constants.html#PaintMethod">PaintMethod</a>
-      constant.</td>
-    </tr>
+    <p><span class="arg">draw</span>.get_type_metrics([<span class=
+    "arg">anImage</span>,] <span class="arg">aString</span>) -&gt;
+    <em>aTypeMetric</em></p>
+  </div>
 
-    <tr>
-      <td valign="top">Arguments</td>
+  <div class="desc">
+    <h4>Description</h4>
 
-      <td>
-        <dl>
-          <dt>x, y</dt>
+    <p>Returns information for a specific string if rendered on a
+    image.</p>
 
-          <dd>Point in image to use, along with the PaintMethod
-          constant, to set transparent pixels in the image.</dd>
+    <p>The Magick++ documentation for its TypeMetric class provides
+    this useful additional information. (I've changed it a bit to
+    use RMagick names.)</p>
 
-          <dt>aPaintMethod</dt>
+    <blockquote>
+      <p class="imquote">The TypeMetric class provides the means to
+      pass data from the Draw class's get_type_metric method to the
+      user. It provides information regarding font metrics such as
+      ascent, descent, text width, text height, and maximum
+      horizontal advance. The units of these font metrics are in
+      pixels...(T)he metrics are dependent on the current Image
+      font (default Ghostscript's "Helvetica"), pointsize (default
+      12 points), and x/y resolution (default 72 DPI) settings.</p>
 
-          <dd>
-            One of the following PaintMethod constants:
+      <p class="imquote">The pixel units may be converted to points
+      (the standard resolution-independent measure used by the
+      typesetting industry) via the following equation:</p>
 
-            <dl>
-              <dt>PointMethod</dt>
+      <p><code>size_points = (size_pixels *
+      72)/resolution</code></p>
 
-              <dd>Make the pixel at <i>(x,y)</i> transparent.</dd>
+      <p class="imquote">where resolution is in dots-per-inch
+      (DPI). This means that at the default image resolution, there
+      is one pixel per point.</p>
 
-              <dt>ReplaceMethod</dt>
+      <p class="imquote">Note that a font's pointsize is only a
+      first-order approximation of the font height (ascender +
+      descender) in points. The relationship between the specified
+      pointsize and the rendered font height is determined by the
+      font designer.</p>
 
-              <dd>Make all pixels that are the same color as the
-              pixel at <i>(x,y)</i> transparent.</dd>
+      <p class="imquote">See <a href=
+      "http://freetype.sourceforge.net/freetype2/docs/glyphs/index.html">
+      FreeType Glyph Conventions</a> for a detailed description of
+      font metrics related issues.</p>
+    </blockquote>
 
-              <dt>FloodfillMethod</dt>
+    <h4>Arguments</h4>
 
-              <dd>Make all the pixels surrounding the pixel at
-              <i>(x,y)</i> transparent, until encountering pixels
-              that fail to match color at <i>(x,y)</i>.</dd>
+    <dl>
+      <dt>image <em>(optional)</em></dt>
 
-              <dt>FillToBorderMethod</dt>
+      <dd>The image on which the string will be rendered.
+      &times;Magick uses the attributes of the image (font name,
+      pointsize, etc.) to compute the metrics. If this argument is
+      omitted, <code>get_type_metrics</code> substitutes a dummy
+      image with default attributes. The <span class=
+      "arg">string</span> argument may not contain any of the
+      special characters shown in <a href=
+      "#spec_chars_table">this</a> table.</dd>
 
-              <dd>Make all the pixels surrounding the pixel at
-              <i>(x,y)</i> transparent, until encountering pixels
-              that match the border color.</dd>
+      <dt>string</dt>
 
-              <dt>ResetMethod</dt>
+      <dd>The string to be rendered. If <span class=
+      "arg">image</span> is specified, the string may contain
+      special characters that refer to the image attributes. See
+      <a href="#spec_chars_table">this</a> table.</dd>
+    </dl>
 
-              <dd>Make the entire image transparent.</dd>
-            </dl>
-          </dd>
-        </dl>
-      </td>
-    </tr>
+    <h4>Returns</h4>
 
-    <tr>
-      <td valign="top">See also</td>
+    <p>A Magick::TypeMetric struct. This structure has the
+    following attributes. (The descriptions are taken from the
+    <a href=
+    "http://www.imagemagick.org/www/Magick++/TypeMetric.html">Magick++</a>
+    documentation and source code.)</p>
 
-      <td><a href=
-      "image.html#Image.matte_point">Image#matte_point</a>,
-      <a href="image.html#Image.matte_replace">Image#matte_replace</a>,
-      <a href=
-      "image.html#Image.matte_floodfill">Image#matte_floodfill</a>,
-      <a href=
-      "image.html#Image.matte_fill_to_border">Image#matte_fill_to_border</a>,
-      <a href="image.html#Image.opaque">Image#opaque</a>, <a href=
-      "image.html#Image.transparent">Image#transparent</a></td>
-    </tr>
+    <table summary="type metric attributes" class="simple_table">
+      <caption>
+        Magick::TypeMetric attributes
+      </caption>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.opacity" id=
-      "Draw.opacity">opacity</a></td>
+      <tr>
+        <th>Accessor</th>
 
-      <td><i>draw</i>.opacity(<i>opacity</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
+        <th>Description</th>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>pixels_per_em.x</td>
 
-      <td>Specify the fill and stroke opacities.</td>
-    </tr>
+        <td>Character width. (See <a href=
+        "struct.html#Point">Point</a>.)</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Argument</td>
+      <tr>
+        <td>pixels_per_em.y</td>
 
-      <td>Either a number between 0 and 1, or a percentage
-      represented as a string, i.e. "25%". The string argument
-      "25%" is the same as the numeric argument 0.25. Both the fill
-      and stroke opacities are set to the specified value.</td>
-    </tr>
+        <td>Character height</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Example</td>
+      <tr>
+        <td>ascent</td>
 
-      <td><a href="opacity.rb.html" target="_blank"><img src=
-      "ex/opacity.gif" alt="opacity example" border="0" /></a></td>
-    </tr>
+        <td>Distance in pixels from the text baseline to the
+        highest/upper grid coordinate used to place an outline
+        point. Always a positive value.</td>
+      </tr>
 
-    <tr>
-      <td valign="top">See also</td>
+      <tr>
+        <td>descent</td>
 
-      <td><a href="#Draw.fill_opacity">fill_opacity</a><br />
-      <a href="#Draw.stroke_opacity">stroke_opacity</a></td>
-    </tr>
+        <td>Distance in pixels from the baseline to the lowest grid
+        coordinate used to place an outline point. Always a
+        negative value.</td>
+      </tr>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.path" id=
-      "Draw.path">path</a></td>
+      <tr>
+        <td>width</td>
 
-      <td><i>draw</i>.path(<i>aString</i>)</td>
-    </tr>
+        <td>Text width in pixels</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>height</td>
 
-      <td>Draw using SVG-compatible path drawing commands. See
-      "<a href="http://www.w3.org/TR/SVG/paths.html">Paths</a>" in
-      the <cite>Scalable Vector Graphics (SVG) 1.0
-      Specification</cite>.</td>
-    </tr>
+        <td>Text height in pixels</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Arguments</td>
+      <tr>
+        <td>max_advance</td>
 
-      <td>A string containing SVG <i>moveto</i>, <i>line</i>,
-      <i>curve</i>, <i>arc</i>, or <i>closepath</i> instructions.
-      The string is equivalent to the <b>d</b> attribute in an SVG
-      <b>'path'</b> element.</td>
-    </tr>
+        <td>Maximum horizontal advance (advance from the beginning
+        of a character to the beginning of the next character) in
+        pixels.</td>
+      </tr>
 
-    <tr>
-      <td valign="top">Example</td>
+      <tr>
+        <td>bounds.x1</td>
 
-      <td>
-        These examples are all taken from the <a href=
-        "http://www.w3.org/TR/SVG/paths.html">SVG path</a>
-        examples.
+        <td><em>?</em></td>
+      </tr>
 
-        <table summary="example 8">
-          <tr>
-            <td><i><b>Example arcs01</b></i></td>
-          </tr>
+      <tr>
+        <td>bounds.x2</td>
 
-          <tr>
-            <td><a href="arcpath.rb.html" target="_blank"><img src=
-            "ex/arcpath.gif" alt="path example 1" border=
-            "0" /></a></td>
-          </tr>
+        <td><em>?</em></td>
+      </tr>
 
-          <tr>
-            <td><i><b>Example quad01</b></i></td>
-          </tr>
+      <tr>
+        <td>bounds.y1</td>
 
-          <tr>
-            <td><a href="qbezierpath.rb.html" target=
-            "_blank"><img src="ex/qbezierpath.gif" alt=
-            "path example 2" border="0" /></a></td>
-          </tr>
+        <td><em>?</em></td>
+      </tr>
 
-          <tr>
-            <td><i><b>Example cubic01</b></i></td>
-          </tr>
+      <tr>
+        <td>bounds.y1</td>
 
-          <tr>
-            <td align="center"><a href="path.rb.html" target=
-            "_blank"><img src="ex/path.gif" alt="path example 3"
-            border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+        <td><em>?</em></td>
+      </tr>
 
-    <tr class="method">
-      <td class="methodname"><a name="Draw.pattern" id=
-      "Draw.pattern">pattern</a></td>
+      <tr>
+        <td>underline_position</td>
 
-      <td><i>draw</i>.pattern(<i>name</i>, <i>x</i>, <i>y</i>,
-      <i>width</i>, <i>height</i>) { pattern primitives } -&gt;
-      <i>draw</i></td>
-    </tr>
+        <td><em>?</em></td>
+      </tr>
 
-    <tr>
-      <td valign="top">Description</td>
+      <tr>
+        <td>underline_thickness</td>
 
-      <td>Define a pattern that can be used as the <a href=
-      "#Draw.fill">fill</a> or <a href="#Draw.stroke">stroke</a>
-      pattern.</td>
-    </tr>
+        <td><em>?</em></td>
+      </tr>
+    </table>
 
-    <tr>
-      <td valign="top">Arguments</td>
+    <h4>Magick API</h4>
 
-      <td>
-        <dl>
-          <dt>name</dt>
+    <p>GetTypeMetrics</p>
+  </div>
 
-          <dd>The name of the pattern. The pattern is used in a
-          <a href="#Draw.fill">fill</a> or <a href=
-          "#Draw.stroke">stroke</a> method by specifying its
-          name.</dd>
+  <div class="sig">
+    <h3 id="inspect">inspect</h3>
 
-          <dt>x, y, width, height</dt>
+    <p><span class="arg">draw</span>.inspect -&gt;
+    <em>draw</em></p>
+  </div>
 
-          <dd>Define how the pattern is tiled. The pattern
-          rectangles start at (<i>x</i> + m*<i>width</i>,
-          <i>y</i>+n*<i>height</i>) for the values of <i>n</i> and
-          <i>m</i> as necessary to fill the space.</dd>
+  <div class="desc">
+    <h4>Description</h4>
 
-          <dt>pattern primitives</dt>
+    <p>Displays the list of primitives that have been added to the
+    <code>draw</code> object. This is very handy for debugging.</p>
 
-          <dd>The method calls that draw the pattern.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 9" border="1">
-          <tr>
-            <td><a href="pattern1.rb.html" target=
-            "_blank"><img src="ex/pattern1.gif" alt=
-            "pattern example 1" border="0" /></a></td>
-
-            <td><a href="pattern2.rb.html" target=
-            "_blank"><img src="ex/pattern2.gif" alt=
-            "pattern example 2" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.fill">fill</a>, <a href=
-      "#Draw.stroke">stroke</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.point" id=
-      "Draw.point">point</a></td>
-
-      <td><i>draw</i>.point(<i>x</i>, <i>y</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Set the pixel at <i>x</i>,<i>y</i> to the <a href=
-      "#Draw.fill">fill</a> color.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>x, y</dt>
-
-          <dd>The pixel location</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.point(30, 40)</code></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.pointsize" id=
-      "Draw.pointsize">pointsize</a></td>
-
-      <td><i>draw</i>.pointsize(<i>anInteger</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Set the font size in points. The default is 12.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>See the example for <a href="#Draw.text">text</a>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Alias</td>
-
-      <td>font_size</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.polygon" id=
-      "Draw.polygon">polygon</a></td>
-
-      <td><i>draw</i>.polygon(<i>x1</i>, <i>y1</i>,...,<i>xN</i>,
-      <i>yN</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a polygon.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The arguments are a sequence of 2 or more points. If the
-      last point is not the same as the first, the polygon is
-      closed by drawing a line from the last point to the
-      first.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 10">
-          <tr>
-            <td>This example is taken from the <a href=
-            "http://www.w3.org/TR/SVG/shapes.html#PolygonElement">The
-            'polygon' element</a> in the <cite>Scalable Vector
-            Graphics (SVG) 1.0 Specification</cite></td>
-          </tr>
-
-          <tr>
-            <td><a href="polygon.rb.html" target="_blank"><img src=
-            "ex/polygon.gif" alt="polygon example" border=
-            "0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.polyline" id=
-      "Draw.polyline">polyline</a></td>
-
-      <td>draw.polyline(x1, y1,...,xN, yN) -&gt; draw</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a polyline. Unlike a polygon, a polyline is not
-      automatically closed.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A sequence of 2 or more points.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 11">
-          <tr>
-            <td>This example is taken from the <a href=
-            "http://www.w3.org/TR/SVG/shapes.html#PolylineElement">The
-            'polyline' element</a> in the <cite>Scalable Vector
-            Graphics (SVG) 1.0 Specification</cite></td>
-          </tr>
-
-          <tr>
-            <td><a href="polyline.rb.html" target=
-            "_blank"><img src="ex/polyline.gif" alt=
-            "polyline example" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.pop" id=
-      "Draw.pop">pop</a></td>
-
-      <td><i>draw</i>.pop -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Restore the graphics context to its previous state.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.pop</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.push">push</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.push" id=
-      "Draw.push">push</a></td>
-
-      <td><i>draw</i>.push -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        Save the current state of the graphics context, including
-        the attribute settings and the current set of primitives.
-        Use the <code>pop</code> primitive to restore the state.
-
-        <p><i>Note:</i> The push and pop primitives are probably
-        not as useful in RMagick as they are in C language
-        &times;Magick programs, since it is easy to create separate
-        draw objects, each with its own set of properties and
-        primitives.</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.push</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.pop">pop</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.rectangle" id=
-      "Draw.rectangle">rectangle</a></td>
-
-      <td><i>draw</i>.rectangle(<i>x1</i>, <i>y1</i>, <i>x2</i>,
-      <i>y2</i>) -&gt; draw</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a rectangle.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>x1, y1</dt>
-
-          <dd>The upper left hand corner of the rectangle</dd>
-
-          <dt>x2, y2</dt>
-
-          <dd>The lower right hand corner of the rectangle</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 12">
-          <tr>
-            <td><a href="rectangle.rb.html" target=
-            "_blank"><img src="ex/rectangle.gif" alt=
-            "rectangle example" border="0" /></a></td>
-
-            <td valign="top"><code>draw.rectangle(20,20,
-            280,180)</code></td>
-          </tr>
-        </table>
-      </td>
-
-      <td></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.rotate" id=
-      "Draw.rotate">rotate</a></td>
-
-      <td><i>draw</i>.rotate(<i>degrees</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify a rotation transformation to the coordinate
-      space. The default is 0.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The amount of rotation, in degrees. The angle of rotation
-      is clockwise, so 90&deg; is south.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 13">
-          <tr>
-            <td><a href="rotate.rb.html" target="_blank"><img src=
-            "ex/rotate.gif" alt="rotate example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.rotate(45)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.affine">affine</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.roundrectangle" id=
-      "Draw.roundrectangle">roundrectangle</a></td>
-
-      <td><i>draw</i>.roundrectangle(<i>x1</i>, <i>y1</i>,
-      <i>x2</i>, <i>y2</i>, <i>cw</i>, <i>ch</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draw a rectangle with rounded corners.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>x1, y1</dt>
-
-          <dd>The upper left hand corner of the rectangle</dd>
-
-          <dt>x2, y2</dt>
-
-          <dd>The lower right hand corner of the rectangle</dd>
-
-          <dt>cw, ch</dt>
-
-          <dd>The corner width and height</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 14">
-          <tr>
-            <td><a href="roundrect.rb.html" target=
-            "_blank"><img src="ex/roundrect.gif" alt=
-            "roundrectangle example" border="0" /></a></td>
-
-            <td valign="top"><code>draw.roundrectangle(20,20,
-            280,180, 8, 8)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.scale" id=
-      "Draw.scale">scale</a></td>
-
-      <td><i>draw</i>.scale(<i>sx</i>, <i>sy</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Define a scale transformation to the coordinate space.
-      The default scale is (1.0, 1,0).</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>sx, sy</dt>
-
-          <dd>The amount of scaling in the x and y dimensions.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 15">
-          <tr>
-            <td><a href="scale.rb.html" target="_blank"><img src=
-            "ex/scale.gif" alt="scale example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.scale(1.5,
-            1.25)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.affine">affine</a><br />
-      <a href="#Draw.skewx">skewx</a><br />
-      <a href="#Draw.skewy">skewy</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.skewx" id=
-      "Draw.skewx">skewx</a></td>
-
-      <td><i>draw</i>.skewx(<i>aFloat</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Define a skew tranformation along the x-axis.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The amount of skew, in degrees.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 16">
-          <tr>
-            <td><a href="skewx.rb.html" target="_blank"><img src=
-            "ex/skewx.gif" alt="skewx example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.skewx(30)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.skewy">skewy</a>, <a href=
-      "#Draw.rotate">rotate</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.skewy" id=
-      "Draw.skewy">skewy</a></td>
-
-      <td><i>draw</i>.skewy(<i>aFloat</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Define a skew tranformation along the y-axis.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The amount of skew, in degrees.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 17">
-          <tr>
-            <td><a href="skewy.rb.html" target="_blank"><img src=
-            "ex/skewy.gif" alt="skewy example" border=
-            "0" /></a></td>
-
-            <td valign="top"><code>draw.skewy(30)</code></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.skewx">skewx</a>, <a href=
-      "#Draw.rotate">rotate</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke" id=
-      "Draw.stroke">stroke</a></td>
-
-      <td><i>draw</i>.stroke(<i>aString</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the stroke color or pattern.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A <a href="imusage.html#color_names">color name</a> or
-      <a href="#Draw.pattern">pattern</a> name.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.stroke('red')</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Aliases</td>
-
-      <td>stroke_color, stroke_pattern</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_antialias" id=
-      "Draw.stroke_antialias">stroke_antialias</a></td>
-
-      <td><i>draw</i>.stroke_antialias(<code>true</code> or
-      <code>false</code>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify if stroke should be antialiased. The default is
-      <code>true</code>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.stroke_antialias(false)</code></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_dasharray" id=
-      "Draw.stroke_dasharray">stroke_dasharray</a></td>
-
-      <td><i>draw</i>.stroke_dasharray(<i>x1</i>,...,<i>xn</i>)
-      -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Describe a pattern of dashes to be used when stroking
-      paths. The arguments are a list of pixel widths of
-      alternating dashes and gaps.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        The first argument is the width of the first dash. The
-        second is the width of the gap following the first dash.
-        The third argument is another dash width, followed by
-        another gap width, etc. If you specify an odd number of
-        arguments, the arguments are repeated to produce an even
-        number. All arguments must be &gt; 0.
-
-        <p>To produce a solid stroke, specify no arguments, i.e.
-        <code>stroke_dasharray()</code></p>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="stroke_dasharray.rb.html" target=
-      "_blank"><img src="ex/stroke_dasharray.gif" alt=
-      "stroke_dasharray example" border="0" /></a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href=
-      "#Draw.stroke_dashoffset">stroke_dashoffset</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_dashoffset" id=
-      "Draw.stroke_dashoffset">stroke_dashoffset</a></td>
-
-      <td><i>draw</i>.stroke_dashoffset(<i>anInteger</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the initial distance into the dash pattern.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>The initial distance into the dash pattern. The units are
-      pixels.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>See <a href=
-      "#Draw.stroke_dasharray">stroke_dasharray</a>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href=
-      "#Draw.stroke_dasharray">stroke_dasharray</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_linecap" id=
-      "Draw.stroke_linecap">stroke_linecap</a></td>
-
-      <td><i>draw</i>.stroke_linecap(<i>aString</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify how the line ends should be drawn.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>One of "butt", "round", or "square".</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 18">
-          <tr>
-            <td>The following example is from the <a href=
-            "http://www.w3.org/TR/SVG/painting.html#StrokeProperties">
-            Stroke Properties</a> section of the <cite>Scalable
-            Vector Graphics (SVG) 1.0 Specification</cite>.</td>
-          </tr>
-
-          <tr>
-            <td><a href="stroke_linecap.rb.html" target=
-            "_blank"><img src="ex/stroke_linecap.gif" alt=
-            "stroke_linecap example" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_linejoin" id=
-      "Draw.stroke_linejoin">stroke_linejoin</a></td>
-
-      <td><i>draw</i>.stroke_linejoin(<i>aString</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify how corners are drawn.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>One of "miter", "round", or "bevel".</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 19">
-          <tr>
-            <td>The following example is from the <a href=
-            "http://www.w3.org/TR/SVG/painting.html#StrokeProperties">
-            Stroke Properties</a> section of the <cite>Scalable
-            Vector Graphics (SVG) 1.0 Specification</cite>.</td>
-          </tr>
-
-          <tr>
-            <td><a href="stroke_linejoin.rb.html" target=
-            "_blank"><img src="ex/stroke_linejoin.gif" alt=
-            "stroke_linejoin example" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_miterlimit" id=
-      "Draw.stroke_miterlimit">stroke_miterlimit</a></td>
-
-      <td><i>draw</i>.stroke_miterlimit(<i>aFloat</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify a constraint on the length of the "miter" formed
-      by two lines meeting at an angle. If the angle if very sharp,
-      the miter could be very long relative to the line thickness.
-      The miter limit is a limit on the ratio of the miter length
-      to the line width.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A number &gt;= 1. The limit on the ratio of the miter
-      length to the line width.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><code>draw.stroke_miterlimit(2.0)</code></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_opacity" id=
-      "Draw.stroke_opacity">stroke_opacity</a></td>
-
-      <td><i>draw</i>.stroke_opacity(<i>aFloat</i>) -&gt;
-      <i>draw</i><br />
-      <i>draw</i>.stroke_opacity(<i>aString</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the stroke opacity.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A number between 0 and 1, inclusive, or a percentage
-      represented as a string, i.e. '30%'. The argument .3 is the
-      same as '30%'.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <pre>
-draw.stroke_opacity(0.4)
-draw.stroke_opacity('40%')
-</pre>
-
-        <p>See the example for <a href=
-        "#Draw.opacity">opacity</a>.</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.opacity">opacity</a><br />
-      <a href="#Draw.fill_opacity">fill_opacity</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.stroke_width" id=
-      "Draw.stroke_width">stroke_width</a></td>
-
-      <td><i>draw</i>.stroke_width(<i>anInteger</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify the stroke width in pixels.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="stroke_width.rb.html" target="_blank"><img src=
-      "ex/stroke_width.gif" alt="stroke_width example" border=
-      "0" /></a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text" id=
-      "Draw.text">text</a></td>
-
-      <td><i>draw</i>.text(<i>x</i>,<i>y</i>, <i>text</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        <p>Draw text at the location specified by (x,y). Use
-        <a href="#Draw.gravity">gravity</a> to position the text
-        relative to (x, y). Specify the text appearance with the
-        <a href="#Draw.font">font</a>, <a href=
-        "#Draw.font_family">font_family</a>, <a href=
-        "#Draw.font_stretch">font_stretch</a>, <a href=
-        "#Draw.font_style">font_style</a>, and <a href=
-        "#Draw.font_weight">font_weight</a> methods. Use the
-        <a href="#Draw.text_antialias">text_antialias</a> method to
-        set antialiasing on or off.</p>
-
-        <p>If the text string contains an embedded blank, quote, or
-        apostrophe, surround the entire text string using a
-        character that is not in the text. ImageMagick uses these
-        characters to delimit the string but will strip them off
-        before drawing the text. You can use quotes, apostrophes,
-        or braces ("{}"). You can also escape a blank, quote, or
-        apostrophe by preceding it with a backslash ("\"). To
-        include a backslash in the text, use two consecutive
-        backslashes. Here are some examples. The text to the right
-        of &raquo; is the text that will be drawn.</p>
-        <pre class="example">
-gc.text(10,10, '"Hello there!"') &raquo; Hello there!
-gc.text(10,10, "'What\'s up?'") &raquo; What's up?
-gc.text(10,10, %q/"What's up?"/) &raquo; What's up?
-gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
-</pre>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>x, y</dt>
-
-          <dd>The text position.</dd>
-
-          <dt>text</dt>
-
-          <dd>The text.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="text.rb.html" target="_blank"><img src=
-      "ex/text.gif" alt="text example" border="0" /></a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.annotate">annotate</a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text_align" id=
-      "Draw.text_align">text_align</a></td>
-
-      <td><i>draw</i>.text_align(<i>anAlignType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Align text relative to the starting point.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>An <a href="constants.html#AlignType">AlignType</a>
-      constant.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="text_align.rb.html" target="_blank"><img src=
-      "ex/text_align.gif" alt="text_align example" border=
-      "0" /></a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text_anchor" id=
-      "Draw.text_anchor">text_anchor</a></td>
-
-      <td><i>draw</i>.text_anchor(<i>anAnchorType</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Align text relative to the starting point. This is the
-      SVG 1.1 equivalent to <a href=
-      "#Draw.text_align">text_align</a>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>One of the constants <code>Magick::AnchorStart</code>,
-      <code>Magick::AnchorMiddle</code>, or
-      <code>Magick::AnchorEnd</code>.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text_antialias" id=
-      "Draw.text_antialias">text_antialias</a></td>
-
-      <td><i>draw</i>.antialias(<code>true</code> or
-      <code>false</code>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify if the text is to be antialiased.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>Either <code>true</code> or <code>false</code>. The
-      default is <code>true</code>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <table summary="example 20">
-          <tr>
-            <td>The character on the left is not antialiased. The
-            character on the right is antialiased.</td>
-          </tr>
-
-          <tr>
-            <td><a href="text_antialias.rb.html" target=
-            "_blank"><img src="ex/text_antialias.jpg" alt=
-            "text_antialias example" border="0" /></a></td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.text_undercolor" id=
-      "Draw.text_undercolor">text_undercolor</a></td>
-
-      <td><i>draw</i>.undercolor(<i>aString</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>The color to draw underneath text. The default is
-      transparent.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>A color name.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="text_undercolor.rb.html" target=
-      "_blank"><img src="ex/text_undercolor.gif" alt=
-      "text_undercolor example" border="0" /></a></td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.translate" id=
-      "Draw.translate">translate</a></td>
-
-      <td><i>draw</i>.translate(<i>tx</i>, <i>ty</i>) -&gt;
-      <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Specify a translation operation on the coordinate
-      space.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>tx, ty</dt>
-
-          <dd>The amount of translation in the x and y
-          directions.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td><a href="translate.rb.html" target="_blank"><img src=
-      "ex/translate.gif" alt="translate example" border=
-      "0" /></a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Draw.affine">affine</a></td>
-    </tr>
-
-    <tr class="methodsection">
-      <td colspan="2">
-        <h2>other instance methods</h2>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.annotate" id=
-      "Draw.annotate">annotate</a></td>
-
-      <td><em>draw.</em>annotate(<i>img, width, height, x, y,
-      text</i>) <i>[&nbsp;{ additional parameters }&nbsp;]</i>
-      -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>
-        <p>Annotates a image with text. The text is positioned
-        according to the <code>gravity</code> attribute around the
-        rectangle described by the x, y, width, and height
-        arguments. If either of the width or height arguments are
-        omitted, uses the image width - x and the image height - y
-        to compute the rectangle width and height. The attributes
-        described in <a href="#attribute_writers">attribute
-        writers</a>, above, influence the appearance and position
-        of the text. These attributes may be set within the
-        optional <i>additional parameters</i> block.</p>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>img</dt>
-
-          <dd>the image or imagelist to be annotated</dd>
-
-          <dt>width</dt>
-
-          <dd>width of the rectangle within which the text is
-          positioned</dd>
-
-          <dt>height</dt>
-
-          <dd>height of the rectangle within which the text is
-          positioned</dd>
-
-          <dt>x</dt>
-
-          <dd>x offset of the rectangle</dd>
-
-          <dt>y</dt>
-
-          <dd>y offset of the rectangle</dd>
-
-          <dt>text</dt>
-
-          <dd>the text</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>self</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>See <a href="#attribute_writers">attribute writers</a>,
-      also <a href="gravity.rb.html" target=
-      "_blank">gravity.rb</a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">&times;Magick API</td>
-
-      <td><a href=
-      "http://www.imagemagick.org/www/api/annotate.html#annotateimage">
-      AnnotateImage</a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Advanced</td>
-
-      <td>
-        Specify a single '%' as '%%'. Specify a single '\'
-        (backslash) as '\\'. You can include information about the
-        image by including one or more of the special characters
-        shown in this table.
-
-        <table summary="annotate special characters" border="1"
-        bgcolor="#F0F0F0">
-          <caption>
-            <b><a name="Draw.spec_chars_table" id=
-            "Draw.spec_chars_table">Special characters</a></b>
-          </caption>
-
-          <tr>
-            <td>%b</td>
-
-            <td>file size in bytes</td>
-          </tr>
-
-          <tr>
-            <td>%c</td>
-
-            <td>"comment" property string</td>
-          </tr>
-
-          <tr>
-            <td>%d</td>
-
-            <td>directory in which the file resides</td>
-          </tr>
-
-          <tr>
-            <td>%e</td>
-
-            <td>filename extension</td>
-          </tr>
-
-          <tr>
-            <td>%f</td>
-
-            <td>original filename</td>
-          </tr>
-
-          <tr>
-            <td>%g</td>
-
-            <td>group number</td>
-          </tr>
-
-          <tr>
-            <td>%h</td>
-
-            <td>height</td>
-          </tr>
-
-          <tr>
-            <td>%i</td>
-
-            <td>current filename</td>
-          </tr>
-
-          <tr>
-            <td>%k</td>
-
-            <td>number of unique colors</td>
-          </tr>
-
-          <tr>
-            <td>%l</td>
-
-            <td>"label" property string</td>
-          </tr>
-
-          <tr>
-            <td>%m</td>
-
-            <td>file format</td>
-          </tr>
-
-          <tr>
-            <td>%n</td>
-
-            <td>number of images in the sequence (for RMagick, this
-            is always 1)</td>
-          </tr>
-
-          <tr>
-            <td>%o</td>
-
-            <td>output filename</td>
-          </tr>
-
-          <tr>
-            <td>%p</td>
-
-            <td>page number (for RMagick, this is always 1)</td>
-          </tr>
-
-          <tr>
-            <td>%q</td>
-
-            <td>depth</td>
-          </tr>
-
-          <tr>
-            <td>%r</td>
-
-            <td>A string of the form "ClasstypeColorspace," for
-            example "DirectClassRGB". If the image's <i>matte</i>
-            attribute is <code>true</code>, appends the word
-            "Matte" to the end of the string.</td>
-          </tr>
-
-          <tr>
-            <td>%s</td>
-
-            <td>scene number (always 1)</td>
-          </tr>
-
-          <tr>
-            <td>%t</td>
-
-            <td>filename without extension</td>
-          </tr>
-
-          <tr>
-            <td>%u</td>
-
-            <td>unique temporary filename</td>
-          </tr>
-
-          <tr>
-            <td>%w</td>
-
-            <td>width</td>
-          </tr>
-
-          <tr>
-            <td>%x</td>
-
-            <td>x resolution</td>
-          </tr>
-
-          <tr>
-            <td>%y</td>
-
-            <td>y resolution</td>
-          </tr>
-
-          <tr>
-            <td>%z</td>
-
-            <td>depth</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.draw" id=
-      "Draw.draw">draw</a></td>
-
-      <td><i>draw</i>.draw(<i>img</i>) -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Draws the list of graphic primitives on the specified
-      image.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>Either an imagelist or a image. If an imagelist, draws on
-      the current image.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>See the other examples for the Draw class.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">&times;Magick API</td>
-
-      <td><a href=
-      "http://www.imagemagick.org/www/api/render.html#drawimage">DrawImage</a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Notes</td>
-
-      <td>Calling <code>draw</code> does not affect the list of
-      primitives. Each time you call <code>draw</code> the
-      primitives will be re-executed from the beginning. However,
-      if you establish the initial value of some draw object
-      attributes using the optional parameters to <code>new</code>,
-      or by setting one or more <a href=
-      "#attribute_writers">attributes</a>, keep in mind that the
-      initial state will not be restored after <code>draw</code>
-      completes. If you want to use the draw object again, you must
-      reset the attributes yourself.</td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.get_type_metrics" id=
-      "Draw.get_type_metrics">get_type_metrics</a></td>
-
-      <td><i>draw</i>.get_type_metrics([<i>anImage</i>,]
-      <i>aString</i>) -&gt; <i>aTypeMetric</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Returns information for a specific string if rendered on
-      a image.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>image <i>(optional)</i></dt>
-
-          <dd>The image on which the string will be rendered.
-          &times;Magick uses the attributes of the image (font
-          name, pointsize, etc.) to compute the metrics. If this
-          argument is omitted, <code>get_type_metrics</code>
-          substitutes a dummy image with default attributes. The
-          <i>string</i> argument may not contain any of the special
-          characters shown in the table <a href=
-          "#Draw.spec_chars_table">above</a>.</dd>
-
-          <dt>string</dt>
-
-          <dd>The string to be rendered. If <i>image</i> is
-          specified, the string may contain special characters that
-          refer to the image attributes. See the table <a href=
-          "#Draw.spec_chars_table">above</a>.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>
-        A Magick::TypeMetric struct. This structure has the
-        following attributes. (The descriptions are taken from the
-        <a href=
-        "http://www.imagemagick.org/www/Magick++/TypeMetric.html">Magick++</a>
-        documentation and source code.)
-
-        <table summary="type metric attributes" border="1" width=
-        "100%" bgcolor="#F0F0F0">
-          <tr>
-            <th>Accessor</th>
-
-            <th>Description</th>
-          </tr>
-
-          <tr>
-            <td>pixels_per_em.x</td>
-
-            <td>Character width. (See <a href=
-            "struct.html#Point">Point</a>.)</td>
-          </tr>
-
-          <tr>
-            <td>pixels_per_em.y</td>
-
-            <td>Character height</td>
-          </tr>
-
-          <tr>
-            <td>ascent</td>
-
-            <td>Distance in pixels from the text baseline to the
-            highest/upper grid coordinate used to place an outline
-            point. Always a positive value.</td>
-          </tr>
-
-          <tr>
-            <td>descent</td>
-
-            <td>Distance in pixels from the baseline to the lowest
-            grid coordinate used to place an outline point. Always
-            a negative value.</td>
-          </tr>
-
-          <tr>
-            <td>width</td>
-
-            <td>Text width in pixels</td>
-          </tr>
-
-          <tr>
-            <td>height</td>
-
-            <td>Text height in pixels</td>
-          </tr>
-
-          <tr>
-            <td>max_advance</td>
-
-            <td>Maximum horizontal advance (advance from the
-            beginning of a character to the beginning of the next
-            character) in pixels.</td>
-          </tr>
-
-          <tr>
-            <td>bounds.x1</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>bounds.x2</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>bounds.y1</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>bounds.y1</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>underline_position</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>underline_thickness</td>
-
-            <td>&nbsp;</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td valign="top">&times;Magick API</td>
-
-      <td><a href=
-      "http://www.imagemagick.org/www/api/annotate.html#gettypemetrics">
-      GetTypeMetrics</a></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Advanced</td>
-
-      <td>
-        The Magick++ documentation for its TypeMetric class
-        provides this useful additional information. (I've changed
-        it a bit to use RMagick names.)
-
-        <div class="imquote">
-          <p>The TypeMetric class provides the means to pass data
-          from the Draw class's get_type_metric method to the user.
-          It provides information regarding font metrics such as
-          ascent, descent, text width, text height, and maximum
-          horizontal advance. The units of these font metrics are
-          in pixels...(T)he metrics are dependent on the current
-          Image font (default Ghostscript's "Helvetica"), pointsize
-          (default 12 points), and x/y resolution (default 72 DPI)
-          settings.</p>
-
-          <p>The pixel units may be converted to points (the
-          standard resolution-independent measure used by the
-          typesetting industry) via the following equation:</p>
-
-          <blockquote>
-            size_points = (size_pixels * 72)/resolution
-          </blockquote>
-
-          <p>where resolution is in dots-per-inch (DPI). This means
-          that at the default image resolution, there is one pixel
-          per point.</p>
-
-          <p>Note that a font's pointsize is only a first-order
-          approximation of the font height (ascender + descender)
-          in points. The relationship between the specified
-          pointsize and the rendered font height is determined by
-          the font designer.</p>
-
-          <p>See <a href=
-          "http://freetype.sourceforge.net/freetype2/docs/glyphs/index.html">
-          FreeType Glyph Conventions</a> for a detailed description
-          of font metrics related issues.</p>
-        </div>
-      </td>
-    </tr>
-
-    <tr class="method">
-      <td class="methodname"><a name="Draw.inspect" id=
-      "Draw.inspect">inspect</a></td>
-
-      <td><i>draw</i>.inspect -&gt; <i>draw</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Displays the list of primitives that have been added to
-      the <code>draw</code> object.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Example</td>
-
-      <td>
-        <pre>
+    <h4>Example</h4>
+    <pre>
 draw.inspect &raquo;
    "stroke red
     fill transparent
@@ -3506,23 +770,2314 @@ draw.inspect &raquo;
     stroke transparent
     fill black"
 </pre>
-      </td>
-    </tr>
-  </table>
-  <hr />
+  </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="image.html">&lt;-
-      Prev</a></td>
+  <h2 class="methods">drawing primitive methods</h2>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div class="sig">
+    <h3 id="affine">affine</h3>
 
-      <td style="text-align: right"><a href="struct.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <p><span class="arg">draw</span>.affine(<span class="arg">sx,
+    rx, ry, sy, tx, ty</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Transforms the coordinate system by a 3x3 transformation
+    matrix. See <a href=
+    "http://www.w3.org/TR/SVG/coords.html#EstablishingANewUserSpace">
+    Coordinate system transformations</a> in the <cite>Scalable
+    Vector Graphics (SVG) 1.1 Specification</cite>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>sx, sy</dt>
+
+      <dd>The amount of scaling in the <em>x</em> and <em>y</em>
+      directions</dd>
+
+      <dt>rx, ry</dt>
+
+      <dd>The rotation in the <em>x</em> and <em>y</em> directions,
+      in radians</dd>
+
+      <dt>tx, ty</dt>
+
+      <dd>The translation distances in the <em>x</em> and
+      <em>y</em> directions, in pixels</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>This example changes the default coordinate system to the
+    standard Cartesian coordinate system: the x-axis points
+    rightward and the y-axis points up.</p>
+
+    <p><code>gc.affine(1, 0, 0, -1, 0, max_y)</code></p>
+
+    <p><a href="javascript:popup('affine.rb.html')" title=
+    "Click to see the example script"><img src="ex/affine.gif" alt=
+    "affine example" /></a></p>
+
+    <h4>See also</h4><a href="#rotate">rotate</a>, <a href=
+    "#scale">scale</a>, <a href="#translate">translate</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="arc">arc</h3>
+
+    <p><span class="arg">draw</span>.arc(<span class="arg">start_x,
+    start_y, end_x, end_y, start_degrees, end_degrees</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draws an arc within a rectangle.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>start_x, start_y</dt>
+
+      <dd>one corner of the bounding rectangle</dd>
+
+      <dt>end_x, end_y</dt>
+
+      <dd>the opposite corner of the bounding rectangle</dd>
+
+      <dt>start_degrees</dt>
+
+      <dd>where to start drawing the arc</dd>
+
+      <dt>end_degrees</dt>
+
+      <dd>where the arc ends</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.arc(40, 50, 250, 180, 0, 270)</code></p>
+
+    <p><a href="javascript:popup('arc.rb.html')" title=
+    "Click to see the example script"><img src="ex/arc.gif" alt=
+    "arc example" /></a></p>
+
+    <h4>See also</h4><a href="#ellipse">ellipse</a>, <a href=
+    "#path">the SVG elliptical arc commands (A and a)</a>
+
+    <h4>Note</h4>
+
+    <p>The <code>arc</code> method is broken in all releases of
+    ImageMagick prior to 5.5.8, and all releases of GraphicsMagick
+    prior to 1.1. If you see a diagonal line here instead of an
+    arc, it's broken. Either upgrade to the newest version or use
+    one of the other methods listed above.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="bezier">bezier</h3>
+
+    <p><span class="arg">draw</span>.bezier(<span class=
+    "arg">x1</span>, <span class="arg">y1</span>, <span class=
+    "arg">cx1</span>, <span class="arg">cy1</span>, <span class=
+    "arg">cx2</span>, <span class="arg">cy2</span>, <span class=
+    "arg">x2</span>, <span class="arg">y2</span>...) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a cubic Bezier curve.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The arguments are pairs of points. At least 4 pairs must be
+    specified. Each point <span class="arg">xn</span>, <span class=
+    "arg">yn</span> on the curve is associated with a control point
+    <span class="arg">cxn</span>, <span class="arg">cyn</span>. The
+    first point, <span class="arg">x1</span>, <span class=
+    "arg">y1</span>, is the starting point. The last point,
+    <span class="arg">xn</span>, <span class="arg">yn</span>, is
+    the ending point. Other point/control point pairs specify
+    intermediate points on a polybezier curve.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Examples</h4>
+
+    <p>The following examples are taken from the <a href=
+    "http://www.w3.org/TR/SVG/paths.html">Paths</a> section of the
+    <cite>Scalable Vector Graphics (SVG) 1.1
+    Specification</cite>.</p>
+
+    <h4>Example 1</h4>
+
+    <p><code>gc.bezier(20,120, 20,20, 320,20, 320,120)</code></p>
+
+    <p><a href="javascript:popup('cbezier1.rb.html')"><img src=
+    "ex/cbezier1.gif" alt="bezier example 1" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 2</h4>
+
+    <p><code>gc.bezier(25,125, 100,25, 400,25, 325,125)</code></p>
+
+    <p><a href="javascript:popup('cbezier2.rb.html')"><img src=
+    "ex/cbezier2.gif" alt="bezier example 2" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 3</h4>
+
+    <p><code>gc.bezier(100,150, 25,50, 475,50, 400,150)</code></p>
+
+    <p><a href="javascript:popup('cbezier3.rb.html')"><img src=
+    "ex/cbezier3.gif" alt="bezier example 3" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 4</h4>
+
+    <p><code>gc.bezier(20,180, 20,30, 320,330, 320,180)</code></p>
+
+    <p><a href="javascript:popup('cbezier4.rb.html')"><img src=
+    "ex/cbezier4.gif" alt="bezier example 4" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 5</h4>
+
+    <p><code>gc.bezier(20,120, 95,20, 245,20, 320,120)</code></p>
+
+    <p><a href="javascript:popup('cbezier5.rb.html')"><img src=
+    "ex/cbezier5.gif" alt="bezier example 5" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 6</h4>
+
+    <p><code>gc.bezier(50,150, 50,50, 200,50, 200,150, 200,250,
+    350,250, 350,150)</code></p>
+
+    <p><a href="javascript:popup('cbezier6.rb.html')"><img src=
+    "ex/cbezier6.gif" alt="bezier example 6" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="circle">circle</h3>
+
+    <p><span class="arg">draw</span>.circle(<span class=
+    "arg">origin_x, origin_y, perim_x, perim_y</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <p>self</p>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a circle.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>origin_x, origin_y</dt>
+
+      <dd>The center of the circle.</dd>
+
+      <dt>perim_x, perim_y</dt>
+
+      <dd>A point on the perimeter of the circle.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.circle(125,125, 25,125)</code></p>
+
+    <p><a href="javascript:popup('circle.rb.html')"><img src=
+    "ex/circle.gif" alt="circle example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="clip_path">clip_path</h3>
+
+    <p><span class="arg">draw</span>.clip_path(<span class=
+    "arg">pathname</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Draws the clip path on the image mask. The
+    clip path defines a clipping area, where only the contained
+    area will be drawn upon. Areas outside of the clipping area are
+    masked.</p>
+
+    <p>Before using a clip-path, you must create it using the
+    <a href="#define_clip_path">define_clip_path</a> method.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The name of the clip path.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>In this example, the picture of the girl is drawn onto the
+    shadow using a star-shaped clipping path.</p>
+
+    <p><a href="javascript:popup('clip_path.rb.html')" id=
+    "clip_path_ex"><img src="ex/clip_path.gif" alt=
+    "clip_path example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href=
+    "#define_clip_path">define_clip_path</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="clip_rule">clip_rule</h3>
+
+    <p><span class=
+    "arg">draw</span>.clip_rule(<code>"evenodd"</code> or
+    <code>"nonzero"</code>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how to determine if a point on the image is inside
+    clipping region. See <a href=
+    "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
+    the <b>'fill-rule'</b> property</code></a> in the
+    <cite>Scalable Vector Graphics (SVG) 1.1 Specification</cite>
+    for a complete description and examples.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Either "evenodd" or "nonzero".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="clip_units">clip_units</h3>
+
+    <p><span class=
+    "arg">draw</span>.clip_units(<code>"userSpace"</code>
+    <span class="arg">or</span> <code>"userSpaceOnUse"</code> or
+    <code>"objectSpace"</code>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Defines the coordinate space within the clipping region. See
+    <a href=
+    "http://www.w3.org/TR/SVG/masking.html#EstablishingANewClippingPath">
+    Establishing a New Clipping Path</a> in the <cite>Scalable
+    Vector Graphics (SVG) 1.1 Specification</cite> for a complete
+    description and examples.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Either "userSpace", "userSpaceOnUse", or "objectSpace".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="color">color</h3>
+
+    <p><span class="arg">draw</span>.color(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">aPaintMethod</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set color in image according to the specified <a href=
+    "constants.html#PaintMethod">PaintMethod</a> constant.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#PaintMethod">PaintMethod</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+  draw.color(x, y, Magick::ReplaceMethod)
+</pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="composite">composite</h3>
+
+    <p><span class="arg">draw</span>.composite(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class="arg">composite_image</span>, <span class=
+    "arg">op</span>=<code>Magick::OverCompositeOp</code>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Composite <span class="arg">composite_image</span> with the
+    receiver image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The offset of <span class="arg">composite_image</span>
+      relative to the receiver image.</dd>
+
+      <dt>width, height</dt>
+
+      <dd>Scale the <span class="arg">composite_image</span> to
+      this size. If either value is 0, <span class=
+      "arg">composite_image</span> is not scaled.</dd>
+
+      <dt>composite_image</dt>
+
+      <dd>Either an imagelist or a image. If an imagelist, uses the
+      current image.</dd>
+
+      <dt>op</dt>
+
+      <dd>A <a href=
+      "constants.html#CompositeOperator">CompositeOperator</a>
+      constant.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example 1</h4>
+
+    <p><a href="javascript:popup('drawcomp.rb.html')"><img src=
+    "ex/drawcomp1.gif" alt="composite example 1" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 2</h4>
+
+    <p><a href="javascript:popup('drawcomp.rb.html')"><img src=
+    "ex/drawcomp2.gif" alt="composite example 2" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image.html#composite">composite</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="decorate">decorate</h3>
+
+    <p><span class="arg">draw</span>.decorate(<span class=
+    "arg">aDecorationType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify text decoration.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#DecorationType">DecorationType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+draw.decorate(Magick::LineThroughDecoration)
+</pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="define_clip_path">define_clip_path</h3>
+
+    <p><span class="arg">draw</span>.define_clip_path(<span class=
+    "arg">aString</span>) { <span class="arg">block</span> } -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a clip-path. Within <span class="arg">block</span>,
+    call other drawing primitive methods (<code>rectangle</code>,
+    <code>polygon</code>, <code>text</code>, etc.) to define the
+    clip-path. The union of all the primitives (excluding the
+    effects of rendering methods such as <code>stroke_width</code>,
+    etc.) is the clip-path. After the clip-path is invoked by the
+    <a href="#clip_path">clip-path</a> method, anything drawn on
+    the image inside the clip-path will appear. Anything drawn
+    outside the clip-path will be hidden. (See <a href=
+    "#clip_rule">clip_rule</a> for a definition of how
+    &times;Magick decides what is "inside" and what is "outside" of
+    the clip-path.)</p>
+
+    <h4>Arguments</h4>
+
+    <p>The name of the clip-path. This is the name that is
+    specified in the <code>clip_path</code> method.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>See <a href="#clip_path">clip_path</a>.
+  </div>
+
+  <div class="sig">
+    <h3 id="ellipse">ellipse</h3>
+
+    <p>draw.ellipse(<span class="arg">origin_x</span>, <span class=
+    "arg">origin_y</span>, <span class="arg">width</span>,
+    <span class="arg">height</span>, <span class=
+    "arg">arc_start</span>, <span class="arg">arc_end</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw an ellipse.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>origin_x, origin_y</dt>
+
+      <dd>The center of the ellipse</dd>
+
+      <dt>width, height</dt>
+
+      <dd>The horizontal and vertical radii</dd>
+
+      <dt>arc_start</dt>
+
+      <dd>Where to start the ellipse, in degrees. 0 degrees is at 3
+      o'clock.</dd>
+
+      <dt>arc_end</dt>
+
+      <dd>Where to end the ellipse, in degrees</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>draw.ellipse(180,125, 150,75, 0, 270)</code></p>
+
+    <p><a href="javascript:popup('ellipse.rb.html')"><img src=
+    "ex/ellipse.gif" alt="ellipse example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href="#arc">arc</a>, <a href=
+    "#circle">circle</a>, <a href="#path">path</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="encoding">encoding</h3>
+
+    <p><span class="arg">draw</span>.encoding(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the font encoding.</p>
+
+    <h4>Arguments</h4>
+
+    <p>See the &times;Magick documentation for the
+    <code>-encoding</code> option to the <code>mogrify</code>
+    command</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="fill">fill</h3>
+
+    <p><span class="arg">draw</span>.fill(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the color or pattern with which graphical elements
+    are filled.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#color_names">color name</a> or
+    <a href="#pattern">pattern</a> name.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+  draw.fill('red')
+</pre>
+
+    <h4>Aliases</h4>
+
+    <p><code>fill_color</code>, <code>fill_pattern</code></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="fill_opacity">fill_opacity</h3>
+
+    <p><span class="arg">draw</span>.fill_opacity(<span class=
+    "arg">aFloat</span> or <em>aString</em>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the fill opacity.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A number between 0 and 1, inclusive, or a percentage
+    represented as a string, i.e. '30%'. The argument 0.3 is the
+    same as '30%'.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>See the example for <a href="#opacity">opacity</a>.</p>
+
+    <h4>See also</h4><a href="#opacity">opacity</a>, <a href=
+    "#stroke_opacity">stroke_opacity</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="fill_rule">fill_rule</h3>
+
+    <p><span class=
+    "arg">draw</span>.fill_rule(<code>"evenodd"</code> or
+    <code>"nonzero"</code>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how to determine if a point on the image is inside a
+    shape. See <a href=
+    "http://www.w3.org/TR/SVG/painting.html#FillRuleProperty"><code>
+    the <b>'fill-rule'</b> property</code></a> in the
+    <cite>Scalable Vector Graphics (SVG) 1.1 Specification</cite>
+    for a complete description and examples.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Either "evenodd" or "nonzero".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font">font</h3>
+
+    <p><span class=
+    "arg"><em>draw</em>.font(<em>aString</em>)</span> -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the font to draw text with.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The font name or filename. <span class="imquote">You can tag
+    a font to specify whether it is a Postscript, Truetype, or
+    OPTION1 font. For example, Arial.ttf is a Truetype font,
+    ps:helvetica is Postscript, and x:fixed is OPTION1.</span></p>
+
+    <p>The font name can be a complete filename such as
+    <code>"/mnt/windows/windows/fonts/Arial.ttf"</code>. The font
+    name can also be a fully qualified X font name such as
+    <code>"-urw-times-medium-i-normal--0-0-0-0-p-0-iso8859-13"</code>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href="#font_family">font_family</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_family">font_family</h3>
+
+    <p><span class="arg">draw</span>.font_family(<span class=
+    "arg">aString</span>) -&gt; draw</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the font family.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A font family name such as "arial" or "helvetica".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>See the example for <a href="#text">text</a>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_stretch">font_stretch</h3>
+
+    <p><span class="arg">draw</span>.font_stretch(<span class=
+    "arg">aStretchType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the spacing between text characters.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#StretchType">StretchType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_style">font_style</h3>
+
+    <p><span class="arg">draw</span>.font_style(<span class=
+    "arg">aStyleType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the font style, i.e. italic, oblique, or normal.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#StyleType">StyleType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_weight">font_weight</h3>
+
+    <p><span class="arg">draw</span>.font_weight(<span class=
+    "arg">aWeightType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the font weight. For example, "bold" or
+    "normal".</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#WeightType">WeightType</a>
+    constant, or one of the numbers 100, 200, 300, 400, 500, 600,
+    700, 800, or 900.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gravity">gravity</h3>
+
+    <p><span class="arg">draw</span>.gravity(<span class=
+    "arg">aGravityType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how the text is positioned. The default is
+    <code>Magick::NorthWestGravity</code>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#GravityType">GravityType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('grav.rb.html')"><img src=
+    "ex/grav.gif" alt="gravity example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#text_align">text_align</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="line">line</h3>
+
+    <p><span class="arg">draw</span>.line(<span class=
+    "arg">here_x</span>, <span class="arg">here_y</span>,
+    <span class="arg">there_x</span>, <span class=
+    "arg">there_y</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a line from <em>here</em> to <em>there</em>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>here_x, here_y</dt>
+
+      <dd>The starting point.</dd>
+
+      <dt>there_x, there_y</dt>
+
+      <dd>The ending point.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.line(50,50, 50,200)<br />
+    gc.line(50,200, 200,200)<br />
+    gc.line(200,200, 50,50)</code></p>
+
+    <p><a href="javascript:popup('line.rb.html')"><img src=
+    "ex/line.gif" alt="line example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="matte">matte</h3>
+
+    <p><span class="arg">draw</span>.matte(<span class=
+    "arg">x</span>,<span class="arg">y</span>, <span class=
+    "arg">aPaintMethod</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Make the image transparent according to the specified
+    PaintMethod constant.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>Point in image to use, along with the PaintMethod
+      constant, to set transparent pixels in the image.</dd>
+
+      <dt>aPaintMethod</dt>
+
+      <dd>
+        One of the following <a href=
+        "constants.html#PaintMethod">PaintMethod</a> constants:
+
+        <dl>
+          <dt>PointMethod</dt>
+
+          <dd>Make the pixel at <em>(x,y)</em> transparent.</dd>
+
+          <dt>ReplaceMethod</dt>
+
+          <dd>Make all pixels that are the same color as the pixel
+          at <em>(x,y)</em> transparent.</dd>
+
+          <dt>FloodfillMethod</dt>
+
+          <dd>Make all the pixels surrounding the pixel at
+          <em>(x,y)</em> transparent, until encountering pixels
+          that fail to match color at <em>(x,y)</em>.</dd>
+
+          <dt>FillToBorderMethod</dt>
+
+          <dd>Make all the pixels surrounding the pixel at
+          <em>(x,y)</em> transparent, until encountering pixels
+          that match the border color.</dd>
+
+          <dt>ResetMethod</dt>
+
+          <dd>Make the entire image transparent.</dd>
+        </dl>
+      </dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href=
+    "image2.html#matte_point">matte_point</a>, <a href=
+    "image2.html#matte_replace">matte_replace</a>, <a href=
+    "image2.html#matte_floodfill">matte_floodfill</a>, <a href=
+    "image2.html#matte_fill_to_border">matte_fill_to_border</a>,
+    <a href="image3.html#opaque">opaque</a>, <a href=
+    "image3.html#transparent">transparent</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="opacity">opacity</h3>
+
+    <p><span class="arg">draw</span>.opacity(<span class=
+    "arg">opacity</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the fill and stroke opacities.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Either a number between 0 and 1, or a percentage represented
+    as a string, i.e. "25%". The string argument "25%" is the same
+    as the numeric argument 0.25. Both the fill and stroke
+    opacities are set to the specified value.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>This example demonstrates 4 levels of opacity.</p>
+
+    <p><a href="javascript:popup('opacity.rb.html')"><img src=
+    "ex/opacity.gif" alt="opacity example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#fill_opacity">fill_opacity</a>, <a href=
+    "#stroke_opacity">stroke_opacity</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="path">path</h3>
+
+    <p><span class="arg">draw</span>.path(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw using SVG-compatible path drawing commands. See
+    "<a href="http://www.w3.org/TR/SVG/paths.html">Paths</a>" in
+    the <cite>Scalable Vector Graphics (SVG) 1.1
+    Specification</cite>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A string containing SVG <em>moveto</em>, <em>line</em>,
+    <em>curve</em>, <em>arc</em>, or <em>closepath</em>
+    instructions. The string is equivalent to the
+    <strong>d</strong> attribute in an SVG <strong>'path'</strong>
+    element.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>These examples are all taken from the <a href=
+    "http://www.w3.org/TR/SVG/paths.html">SVG path</a>
+    examples.</p>
+
+    <h4>Example 1 - Arcs</h4>
+
+    <p><code>gc.path('M110,100 h-75 a75,75 0 1,0 75,-75 z')<br />
+    gc.path('M97.5,87.5 v-75 a75,75 0 0,0 -75,75 z')</code></p>
+
+    <p><a href="javascript:popup('arcpath.rb.html')"><img src=
+    "ex/arcpath.gif" alt="path example 1" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 2 - Quadratic bezier</h4>
+
+    <p><code>gc.path("M20,120 C20,20 170,20 170,120 S320,220
+    320,120")</code></p>
+
+    <p><a href="javascript:popup('qbezierpath.rb.html')"><img src=
+    "ex/qbezierpath.gif" alt="path example 2" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 3 - Cubic bezier</h4>
+
+    <p><code>gc.path("M20,120 C20,20 170,20 170,120 S320,220
+    320,120")</code></p>
+
+    <p><a href="javascript:popup('path.rb.html')"><img src=
+    "ex/path.gif" alt="path example 3" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pattern">pattern</h3>
+
+    <p><span class="arg">draw</span>.pattern(<span class=
+    "arg">name</span>, <span class="arg">x</span>, <span class=
+    "arg">y</span>, <span class="arg">width</span>, <span class=
+    "arg">height</span>) { pattern primitives } -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a pattern that can be used as the <a href=
+    "#fill">fill</a> or <a href="#stroke">stroke</a> pattern.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>name</dt>
+
+      <dd>The name of the pattern. The pattern is used in a
+      <a href="#fill">fill</a> or <a href="#stroke">stroke</a>
+      method by specifying its name.</dd>
+
+      <dt>x, y, width, height</dt>
+
+      <dd>Define how the pattern is tiled. The pattern rectangles
+      start at (<span class="arg">x</span> +
+      <em>m</em>*<span class="arg">width</span>, <span class=
+      "arg">y</span>+<em>n</em>*<span class="arg">height</span>)
+      for the values of <em>n</em> and <em>m</em> as necessary to
+      fill the space.</dd>
+
+      <dt>pattern primitives</dt>
+
+      <dd>The method calls that draw the pattern.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example 1</h4>
+
+    <p><a href="javascript:popup('pattern1.rb.html')"><img src=
+    "ex/pattern1.gif" alt="pattern example 1" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>Example 2</h4>
+
+    <p><a href="javascript:popup('pattern2.rb.html')"><img src=
+    "ex/pattern2.gif" alt="pattern example 2" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#fill">fill</a>, <a href="#stroke">stroke</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="point">point</h3>
+
+    <p><span class="arg">draw</span>.point(<span class=
+    "arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set the pixel at <span class="arg">x</span>,<span class=
+    "arg">y</span> to the <a href="#fill">fill</a> color.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The pixel location</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pointsize">pointsize</h3>
+
+    <p><span class="arg">draw</span>.pointsize(<span class=
+    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set the font size in points. The default is 12.</p>
+
+    <h4>Arguments</h4>
+
+    <p>See the example for <a href="#text">text</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Alias</h4>
+
+    <p>font_size</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="polygon">polygon</h3>
+
+    <p><span class="arg">draw</span>.polygon(<span class=
+    "arg">x1</span>, <span class="arg">y1</span>,...,<span class=
+    "arg">xN</span>, <span class="arg">yN</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a polygon.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The arguments are a sequence of 2 or more points. If the
+    last point is not the same as the first, the polygon is closed
+    by drawing a line from the last point to the first.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>This example is taken from the <a href=
+    "http://www.w3.org/TR/SVG/shapes.html#PolygonElement">The
+    'polygon' element</a> in the <cite>Scalable Vector Graphics
+    (SVG) 1.1 Specification</cite></p><a href=
+    "javascript:popup('polygon.rb.html')"><img src="ex/polygon.gif"
+    alt="polygon example" title=
+    "Click to see the example script" /></a>
+
+    <h4>See also</h4><a href="#path">path</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="polyline">polyline</h3>
+
+    <p><span class="arg">draw</span>.polyline(<span class=
+    "arg">x1</span>, <span class="arg">y1</span>,...,<span class=
+    "arg">xN</span>, <span class="arg">yN</span>) -&gt; draw</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a polyline. Unlike a polygon, a polyline is not
+    automatically closed.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A sequence of 2 or more points.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>This example is taken from the <a href=
+    "http://www.w3.org/TR/SVG/shapes.html#PolylineElement">The
+    'polyline' element</a> in the <cite>Scalable Vector Graphics
+    (SVG) 1.1 Specification</cite></p>
+
+    <p><a href="javascript:popup('polyline.rb.html')"><img src=
+    "ex/polyline.gif" alt="polyline example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pop">pop</h3>
+
+    <p><span class="arg">draw</span>.pop -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Restore the graphics context to the state it was in when
+    <a href="#push">push</a> was called last.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href="#push">push</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="push">push</h3>
+
+    <p><span class="arg">draw</span>.push -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Save the current state of the graphics context, including
+    the attribute settings and the current set of primitives. Use
+    the <a href="#pop">pop</a> primitive to restore the state.</p>
+
+    <p><em>Note:</em> The <code>push</code> and <code>pop</code>
+    methods are probably not as useful in RMagick as they are in C
+    language &times;Magick programs, since it is easy to create
+    separate draw objects, each with its own set of properties and
+    primitives.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href="#pop">pop</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="rectangle">rectangle</h3>
+
+    <p><span class="arg">draw</span>.rectangle(<span class=
+    "arg">x1</span>, <span class="arg">y1</span>, <span class=
+    "arg">x2</span>, <span class="arg">y2</span>) -&gt; draw</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a rectangle.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x1, y1</dt>
+
+      <dd>The upper left hand corner of the rectangle</dd>
+
+      <dt>x2, y2</dt>
+
+      <dd>The lower right hand corner of the rectangle</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.rectangle(20,20, 280,180)</code></p><a href=
+    "javascript:popup('rectangle.rb.html')"><img src=
+    "ex/rectangle.gif" alt="rectangle example" title=
+    "Click to see the example script" /></a>
+  </div>
+
+  <div class="sig">
+    <h3 id="rotate">rotate</h3>
+
+    <p><span class="arg">draw</span>.rotate(<span class=
+    "arg">degrees</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify a rotation transformation to the coordinate space.
+    The default is 0.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The amount of rotation, in degrees. The angle of rotation is
+    clockwise, so 90&deg; is South.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.rotate(45)</code></p>
+
+    <p><a href="javascript:popup('rotate.rb.html')"><img src=
+    "ex/rotate.gif" alt="rotate example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href="#affine">affine</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="roundrectangle">roundrectangle</h3>
+
+    <p><span class="arg">draw</span>.roundrectangle(<span class=
+    "arg">x1</span>, <span class="arg">y1</span>, <span class=
+    "arg">x2</span>, <span class="arg">y2</span>, <span class=
+    "arg">cw</span>, <span class="arg">ch</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw a rectangle with rounded corners.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x1, y1</dt>
+
+      <dd>The upper left hand corner of the rectangle</dd>
+
+      <dt>x2, y2</dt>
+
+      <dd>The lower right hand corner of the rectangle</dd>
+
+      <dt>cw, ch</dt>
+
+      <dd>The corner width and height</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.roundrectangle(20,20, 280,180, 8, 8)</code></p>
+
+    <p><a href="javascript:popup('roundrect.rb.html')"><img src=
+    "ex/roundrect.gif" alt="roundrectangle example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="scale">scale</h3>
+
+    <p><span class="arg">draw</span>.scale(<span class=
+    "arg">sx</span>, <span class="arg">sy</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a scale transformation to the coordinate space. The
+    default scale is (1.0, 1.0).</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>sx, sy</dt>
+
+      <dd>The amount of scaling in the x and y dimensions.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4><a href="#affine">affine</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="skewx">skewx</h3>
+
+    <p><span class="arg">draw</span>.skewx(<span class=
+    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a skew tranformation along the x-axis.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The amount of skew, in degrees.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.skewx(30)</code></p>
+
+    <p><a href="javascript:popup('skewx.rb.html')"><img src=
+    "ex/skewx.gif" alt="skewx example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href="skewy">skewy</a>, <a href=
+    "#affine">affine</a>, <a href="#rotate">rotate</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="skewy">skewy</h3>
+
+    <p><span class="arg">draw</span>.skewy(<span class=
+    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a skew tranformation along the y-axis.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The amount of skew, in degrees.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.skewy(30)</code></p>
+
+    <p><a href="javascript:popup('skewy.rb.html')"><img src=
+    "ex/skewy.gif" alt="skewy example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href="#affine">affine</a>, <a href=
+    "#skewx">skewx</a>, <a href="#rotate">rotate</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke">stroke</h3>
+
+    <p><span class="arg">draw</span>.stroke(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the stroke color or pattern.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#color_names">color name</a> or
+    <a href="#pattern">pattern</a> name.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Aliases</h4><code>stroke_color</code>,
+    <code>stroke_pattern</code>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_antialias">stroke_antialias</h3>
+
+    <p><span class=
+    "arg">draw</span>.stroke_antialias(<code>true</code> or
+    <code>false</code>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify if the stroke should be antialiased. The default is
+    <code>true</code>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_dasharray">stroke_dasharray</h3>
+
+    <p><span class="arg">draw</span>.stroke_dasharray(<span class=
+    "arg">x1</span>,...,<span class="arg">xn</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Describe a pattern of dashes to be used when stroking paths.
+    The arguments are a list of pixel widths of alternating dashes
+    and gaps.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The first argument is the width of the first dash. The
+    second is the width of the gap following the first dash. The
+    third argument is another dash width, followed by another gap
+    width, etc. If you specify an odd number of arguments, the
+    arguments are repeated to produce an even number. All arguments
+    must be &gt; 0.</p>
+
+    <p>To produce a solid stroke, specify no arguments, i.e.
+    <code>stroke_dasharray()</code></p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><a href=
+    "javascript:popup('stroke_dasharray.rb.html'"><img src=
+    "ex/stroke_dasharray.gif" alt="stroke_dasharray example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#stroke_dashoffset">stroke_dashoffset</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_dashoffset">stroke_dashoffset</h3>
+
+    <p><span class="arg">draw</span>.stroke_dashoffset(<span class=
+    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the initial distance into the dash pattern.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The initial distance into the dash pattern. The units are
+    pixels.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>See <a href=
+    "#stroke_dasharray">stroke_dasharray</a>.
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_linecap">stroke_linecap</h3>
+
+    <p><span class="arg">draw</span>.stroke_linecap(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how the line ends should be drawn.</p>
+
+    <h4>Arguments</h4>
+
+    <p>One of "butt", "round", or "square".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>The following example is from the <a href=
+    "http://www.w3.org/TR/SVG/painting.html#StrokeProperties">Stroke
+    Properties</a> section of the <cite>Scalable Vector Graphics
+    (SVG) 1.1 Specification</cite>.</p>
+
+    <p><a href=
+    "javascript:popup('stroke_linecap.rb.html')"><img src=
+    "ex/stroke_linecap.gif" alt="stroke_linecap example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_linejoin">stroke_linejoin</h3>
+
+    <p><span class="arg">draw</span>.stroke_linejoin(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how corners are drawn.</p>
+
+    <h4>Arguments</h4>
+
+    <p>One of "miter", "round", or "bevel".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>The following example is from the <a href=
+    "http://www.w3.org/TR/SVG/painting.html#StrokeProperties">Stroke
+    Properties</a> section of the <cite>Scalable Vector Graphics
+    (SVG) 1.0 Specification</cite>.</p>
+
+    <p><a href=
+    "javascript:popup('stroke_linejoin.rb.html')"><img src=
+    "ex/stroke_linejoin.gif" alt="stroke_linejoin example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href=
+    "#stroke_miterlimit">stroke_miterlimit</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_miterlimit">stroke_miterlimit</h3>
+
+    <p><span class="arg">draw</span>.stroke_miterlimit(<span class=
+    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify a constraint on the length of the "miter" formed by
+    two lines meeting at an angle. If the angle if very sharp, the
+    miter could be very long relative to the line thickness. The
+    miter limit is a limit on the ratio of the miter length to the
+    line width.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A number &gt;= 1. The limit on the ratio of the miter length
+    to the line width.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_opacity">stroke_opacity</h3>
+
+    <p><span class="arg">draw</span>.stroke_opacity(<span class=
+    "arg">aFloat</span> or <span class="arg">aString</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the stroke opacity.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A number between 0 and 1, inclusive, or a percentage
+    represented as a string, i.e. '30%'. The argument 0.3 is the
+    same as '30%'.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+draw.stroke_opacity(0.4)
+draw.stroke_opacity('40%')
+</pre>
+
+    <h4>See also</h4><a href="#fill_opacity">fill_opacity</a>,
+    <a href="#opacity">opacity</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_width">stroke_width</h3>
+
+    <p><span class="arg">draw</span>.stroke_width(<span class=
+    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the stroke width in pixels.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('stroke_width.rb.html')"><img src=
+    "ex/stroke_width.gif" alt="stroke_width example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="text">text</h3>
+
+    <p><span class="arg">draw</span>.text(<span class=
+    "arg">x</span>,<span class="arg">y</span>, <span class=
+    "arg">text</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Draw text at the location specified by (<span class=
+    "arg">x</span>,<span class="arg">y</span>). Use <a href=
+    "#gravity">gravity</a> to position <span class=
+    "arg">text</span> relative to (<span class="arg">x</span>,
+    <span class="arg">y</span>). Specify the font appearance with
+    the <a href="#font">font</a>, <a href=
+    "#font_family">font_family</a>, <a href=
+    "#font_stretch">font_stretch</a>, <a href=
+    "#font_style">font_style</a>, and <a href=
+    "#font_weight">font_weight</a> methods. Specify the text
+    attributes with the <a href="#text_align">text_align</a>,
+    <a href="#text_anchor">text_anchor</a>, <a href=
+    "text_antialias">text_antialias</a>, and <a href=
+    "text_undercolor">text_undercolor</a> methods.</p>
+
+    <p>You can embed information about the image by including
+    <a href="#spec_chars_table">special character sequences</a> in
+    the text string.</p>
+
+    <p>If the text string contains an embedded blank, quote, or
+    apostrophe, surround the entire text string using a character
+    that is not in the text. &times;Magick uses these characters to
+    delimit the string but will strip them off before drawing the
+    text. You can use quotes, apostrophes, or braces ("{}"). You
+    can also escape a blank, quote, or apostrophe by preceding it
+    with a backslash ("\"). To include a backslash in the text, use
+    two consecutive backslashes. To include a '%' in the text, use
+    '%%'. See the examples below.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The text position, influenced by <a href=
+      "#gravity">gravity</a>.</dd>
+
+      <dt>text</dt>
+
+      <dd>The text.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Quoting examples</h4>
+
+    <p>The text to the right of &raquo; is the text that will be
+    drawn.</p>
+    <pre>
+gc.text(10,10, '"Hello there!"') &raquo; Hello there!
+gc.text(10,10, "'What\'s up?'") &raquo; What's up?
+gc.text(10,10, %q/"What's up?"/) &raquo; What's up?
+gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
+</pre>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('text.rb.html')"><img src=
+    "ex/text.gif" alt="text example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href="#annotate">annotate</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="text_align">text_align</h3>
+
+    <p><span class="arg">draw</span>.text_align(<span class=
+    "arg">anAlignType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Align text relative to the starting point.</p>
+
+    <h4>Arguments</h4>
+
+    <p>An <a href="constants.html#AlignType">AlignType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('text_align.rb.html')"><img src=
+    "ex/text_align.gif" alt="text_align example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="text_anchor">text_anchor</h3>
+
+    <p><span class="arg">draw</span>.text_anchor(<span class=
+    "arg">anAnchorType</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Align text relative to the starting point. This is the SVG
+    1.1 equivalent to <a href="#text_align">text_align</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>One of the constants <code>AnchorStart</code>,
+    <code>AnchorMiddle</code>, or <code>AnchorEnd</code>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="text_antialias">text_antialias</h3>
+
+    <p><span class="arg">draw</span>.antialias(<code>true</code> or
+    <code>false</code>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify if the text is to be antialiased.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Either <code>true</code> or <code>false</code>. The default
+    is <code>true</code>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>The character on the left is not antialiased. The character
+    on the right is antialiased.</p><a href=
+    "javascript:popup('text_antialias.rb.html')"><img src=
+    "ex/text_antialias.gif" alt="text_antialias example" title=
+    "Click to see the example script" /></a>
+
+    <h4>See also</h4><a href=
+    "#stroke_antialias">stroke_antialias</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="text_undercolor">text_undercolor</h3>
+
+    <p><span class="arg">draw</span>.undercolor(<span class=
+    "arg">aString</span>) -&gt; <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The color to draw underneath text. The default is
+    transparent.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A color name.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript('text_undercolor.rb.html')"><img src=
+    "ex/text_undercolor.gif" alt="text_undercolor example" title=
+    "Click to see the example script" /></a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="translate">translate</h3>
+
+    <p><span class="arg">draw</span>.translate(<span class=
+    "arg">tx</span>, <span class="arg">ty</span>) -&gt;
+    <em>draw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify a translation operation on the coordinate space.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>tx, ty</dt>
+
+      <dd>The amount of translation in the x and y directions.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p><code>gc.translate(125, 125)</code></p>
+
+    <p><a href="javascript:popup('translate.rb.html')"><img src=
+    "ex/translate.gif" alt="translate example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#affine">affine</a></p>
+  </div>
+
+  <h2 class="methods" id="attributes">annotate attributes</h2>
+
+  <div class="sig">
+    <h3 id="affine_eq">affine=</h3>
+
+    <p><span class="arg">draw.</span>.affine =
+    <em>anAffineMatrix</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The transformation matrix. The default is the null
+    transformation.</p>
+
+    <h4>Argument</h4>
+
+    <p>An <a href="struct.html#AffineMatrix">AffineMatrix</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="align_eq">align=</h3>
+
+    <p><span class="arg">draw.</span>.align =
+    <em>anAlignType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The text alignment. The default is
+    <code>LeftAlign</code>.</p>
+
+    <h4>Argument</h4>
+
+    <p>A <a href="constants.html#AlignType">AlignType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="decorate_eq">decorate=</h3>
+
+    <p><span class="arg">draw</span>.decorate =
+    <em>aDecorationType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The text decoration. The default is
+    <code>NoDecorationType</code>.</p>
+
+    <h4>Argument</h4>
+
+    <p>A <a href="constants.html#DecorationType">DecorationType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="density_eq">density=</h3>
+
+    <p><span class="arg">draw</span>.density = <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The text density in the x and y directions. The default is
+    "72x72".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="encoding_eq">encoding=</h3>
+
+    <p><span class="arg">draw</span>.encoding =
+    <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The text encoding.</p>
+
+    <h4>Argument</h4>
+
+    <p>See the &times;Magick documentation for the
+    <code>-encoding</code> option to the <code>mogrify</code>
+    command.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="fill_eq">fill=</h3>
+
+    <p><span class="arg">draw</span>.fill = <em>aString</em> or
+    <em>aPixel</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>The fill color. The default is "black".
+
+    <h4>Argument</h4>
+
+    <p>May be a <a href="imusage.html#color_names">color name</a>
+    or a <a href="struct.html#Pixel">Pixel</a> object.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_eq">font=</h3>
+
+    <p><span class="arg">draw</span>.font = <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The font name. The default is "Helvetica". See <a href=
+    "#font">font</a> for more information about font names.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_family_eq">font_family=</h3>
+
+    <p><span class="arg">draw</span>.font_family =
+    <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The font family name. For example, "arial" or
+    "helvetica".</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_stretch_eq">font_stretch=</h3>
+
+    <p><span class="arg">draw</span>.font_stretch =
+    <em>aStretchType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A the font stretch.</p>
+
+    <h4>Argument</h4>A <a href=
+    "constants.html#StretchType">StretchType</a> constant.
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_style_eq">font_style=</h3>
+
+    <p><span class="arg">draw</span>.font_style =
+    <em>aStyleType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The font style.</p>
+
+    <h4>Argument</h4>
+
+    <p>A <a href="constants.html#StyleType">StyleType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="font_weight_eq">font_weight=</h3>
+
+    <p><span class="arg">draw</span>.font_weight =
+    <em>aWeightType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The font weight.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#WeightType">WeightType</a>
+    constant or one of the numbers 100, 200, 300, 400, 500, 600,
+    700, 800, or 900.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gravity_eq">gravity=</h3>
+
+    <p><span class="arg">draw</span>.gravity =
+    <em>aGravityType</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specifies how to orient text with respect to the text's
+    origin.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#GravityType">GravityType</a>
+    constant.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pointsize_eq">pointsize=</h3>
+
+    <p><span class="arg">draw</span>.pointsize =
+    <em>anNumeric</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The font size in points. The default is 12.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+  </div>
+
+  <div class="sig">
+    <h3 id="rotation_eq">rotation=</h3>
+
+    <p><span class="arg">draw</span>.rotation =
+    <em>aNumeric</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Apply rotation to text. The default is no rotation.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The amount of rotation in degrees.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke_eq">stroke=</h3>
+
+    <p><span class="arg">draw</span>.stroke = <em>aString</em> or
+    <em>aPixel</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The stroke color . This is the color used to outline the
+    text. The default is "black".</p>
+
+    <h4>Arguments</h4>A <a href="imusage.html#color_names">color
+    name</a> or <a href="struct.html#Pixel">Pixel</a> object.
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="text_antialias_eq">text_antialias=</h3>
+
+    <p><span class="arg">draw</span>.text_antialias =
+    <em><code>true</code> or <code>false</code></em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Whether the text is antialiased or not. The default is
+    <code>true</code>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="undercolor_eq">undercolor=</h3>
+
+    <p><span class="arg">draw</span>.undercolor = <em>aString</em>
+    or <em>aPixel</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>If set, causes the text to be drawn over a box of the
+    specified color.</p>
+
+    <h4>Arguments</h4>A <a href="imusage.html#color_names">color
+    name</a> or a <a href="struct.html#Pixel">Pixel</a> object.
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="image3.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "struct.html">Next</a>&nbsp;&raquo;
+  </div>
 </body>
 </html>

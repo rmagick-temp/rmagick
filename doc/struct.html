@@ -1,903 +1,903 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
-  <title>RMagick: Struct classes</title>
+  <title>RMagick: Miscellaneous classes</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
+  <style type="text/css">
+  /*<![CDATA[*/
+
+  /* Styles local to this page. */
+  .class h2 {         /* Same as h2.methods but different background-color */
+    margin-top: 2em;
+    margin-bottom: .5em;
+    padding: .5em 5px .5em 5px;
+    background-color: #545454;
+    color: white;
+    clear: both;
+  }
+  .class h3 {          /* Same as h2.methods */
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: .5em 5px .5em 5px;
+    background-color: #663;
+    color: white;
+  }
+
+  .sig h4, .sig p {
+    background-color: #c0c0c0;
+    color: #000;
+    margin-top: 0;
+  }
+
+  .sig h4 {   /* method name: total width 210px */
+    width: 205px;
+    float: left;
+    padding-left: 5px;
+    font-size: 110%;
+  }
+  .sig p {
+    padding-right: 5px;
+    padding-bottom: 1em;
+  }
+
+  .desc h5 {
+    position: relative;
+    left: -215px;
+    padding-left: 5px;
+    background-image: url(graydient210x6.gif);
+    background-repeat: repeat-y;
+    color: black;
+    font-weight: normal;
+    font-size: small;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+
+  .intro p {
+    padding-bottom: 1em;
+    margin-left: 215px;
+  }
+
+  .intro h3 {
+    padding-left: 5px;
+    background-color: white;
+    background-image: url(graydient210x6.gif);
+    background-repeat: repeat-y;
+    color: black;
+    font-weight: normal;
+    font-size: small;
+    padding-bottom: 0;
+    margin: 0 0;
+  }
+
+  /*]]>*/
+  </style>
 </head>
 
 <body>
-  <div class="header">
-    RMagick User's Guide and Reference
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="draw.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "info.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="draw.html">&lt;-
-      Prev</a></td>
+  <h1>Miscellaneous classes</h1>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div id="toc">
+    <h2>Table of Contents</h2>
 
-      <td style="text-align: right"><a href="fill.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <h3><a href="#struct">Struct classes</a></h3>
 
-  <div class="stdtitle">
-    Struct classes
+    <ul>
+      <li><a href="#AffineMatrix">AffineMatrix</a></li>
+
+      <li><a href="#Chromaticity">Chromaticity</a></li>
+
+      <li><a href="#Geometry">Geometry</a></li>
+
+      <li><a href="#Pixel">Pixel</a></li>
+
+      <li><a href="#Point">Point</a></li>
+
+      <li><a href="#Primary">Primary</a></li>
+
+      <li><a href="#Rectangle">Rectangle</a></li>
+
+      <li><a href="#Segment">Segment</a></li>
+    </ul>
+
+    <h3><a href="#fill">Fill classes</a></h3>
+
+    <ul>
+      <li><a href="#GradientFill">GradientFill</a></li>
+
+      <li><a href="#HatchFill">HatchFill</a></li>
+
+      <li><a href="#TextureFill">TextureFill</a></li>
+    </ul>
+
+    <h3><a href="#exception">Exception classes</a></h3>
+
+    <ul>
+      <li><a href="#MagickError">MagickError</a></li>
+    </ul>
   </div>
 
-  <table summary="table of contents" width="100%" cellspacing="0"
-  cellpadding="5">
-    <tr bgcolor="#C3C3C3">
-      <td colspan="2">
-        <h3>Table Of Contents</h3>
-      </td>
-    </tr>
+  <div class="class">
+  <h2 id="struct">Struct classes</h2>
 
-    <tr>
-      <td colspan="2">
-        <ul>
-          <li><a href="#AffineMatrix">AffineMatrix</a></li>
+  <div class="intro">
+    <h3>Introduction</h3>
 
-          <li><a href="#Chromaticity">Chromaticity</a></li>
+    <p>These classes are created by the Struct class and are used
+    to create objects used as attribute and argument values in
+    other RMagick classes. Like all the classes created by Struct,
+    these classes define both getter and setter methods for their
+    attributes. That is, for an attribute <em>x</em> both the
+    <code>x</code> and <code>x=</code> methods are defined.</p>
 
-          <li><a href="#Geometry">Geometry</a></li>
+    <p>The <code>Pixel</code> and <code>Geometry</code> classes
+    define additional constructors and conversion methods.</p>
+  </div>
 
-          <li><a href="#Pixel">Pixel</a></li>
+    <h3 id="AffineMatrix">class AffineMatrix</h3>
 
-          <li><a href="#Point">Point</a></li>
+    <div class="sig">
+      <h4>new</h4>
 
-          <li><a href="#Primary">Primary</a></li>
+      <p>AffineMatrix.<span class="arg">new</span>(<span class=
+      "arg">sx</span>, <span class="arg">rx</span>, <span class=
+      "arg">ry</span>, <span class="arg">sy</span>, <span class=
+      "arg">tx</span>, <span class="arg">ty</span>) -&gt;
+      <em>anAffineMatrix</em></p>
+    </div>
 
-          <li><a href="#Rectangle">Rectangle</a></li>
+    <div class="desc">
+      <h5>Description</h5>
 
-          <li><a href="#Segment">Segment</a></li>
-        </ul>
-      </td>
-    </tr>
-
-    <tr>
-      <td colspan="2">
-        <h3>Miscellaneous structures</h3>
-
-        <p>These structure classes are used to create objects used
-        as attribute and argument values in other RMagick classes.
-        Generally the classes define only attributes and their
-        accessor methods. The <code>Pixel</code> and
-        <code>Geometry</code> classes, however, define additional
-        constructors and conversion methods.</p>
-      </td>
-    </tr>
-
-    <tr class="classname2">
-      <td colspan="2"><a name="AffineMatrix" id=
-      "AffineMatrix">class AffineMatrix</a></td>
-    </tr>
-
-    <tr class="methodname2">
-      <td colspan="2" class="methodsection2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="AffineMatrix.new" id=
-      "AffineMatrix.new">new</a></td>
-
-      <td>Magick::AffineMatrix.<i>new</i>(<i>sx</i>, <i>rx</i>,
-      <i>ry</i>, <i>sy</i>, <i>tx</i>, <i>ty</i>) -&gt;
-      <i>anAffineMatrix</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>An AffineMatrix object describes a coordinate
+      <p>An AffineMatrix object describes a coordinate
       transformation. This object is used as an argument to the
       <a href=
-      "image.html#Image.affine_transform">Frame#affine_transform</a>,
+      "image1.html#affine_transform">Image#affine_transform</a>,
       <a href=
-      "image.html#Image.composite_affine">Frame#composite_affine</a>,
-      and <a href="draw.html#Draw.affine_eq">Draw#affine=</a>
-      methods.</td>
-    </tr>
+      "image1.html#composite_affine">Image#composite_affine</a>,
+      and <a href="draw.html#affine_eq">Draw#affine</a>
+      methods.</p>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+      <h5>Attributes</h5>
 
-    <tr>
-      <td>sx</td>
+      <dl>
+        <dt>sx, sy</dt>
 
-      <td>The amount of scaling on the x-axis.</td>
-    </tr>
+        <dd>The amount of scaling on the x- and y- axes.</dd>
 
-    <tr>
-      <td>rx</td>
+        <dt>rx, ry</dt>
 
-      <td>The amount of rotation on the x-axis, in radians.</td>
-    </tr>
+        <dd>The amount of rotation on the x- and y-axes, in
+        radians.</dd>
 
-    <tr>
-      <td>ry</td>
+        <dt>tx, ty</dt>
 
-      <td>The amount of rotation on the x-axis, in radians.</td>
-    </tr>
+        <dd>The amount of translation on the x- and y-axes, in
+        pixels.</dd>
+      </dl>
+    </div>
 
-    <tr>
-      <td>sy</td>
+    <h3 id="Chromaticity">class Chromaticity</h3>
 
-      <td>The amount of scaling on the y-axis.</td>
-    </tr>
+    <div class="sig">
+      <h4>new</h4>
 
-    <tr>
-      <td>tx</td>
+      <p>Chromaticity.<span class="arg">new</span>(<span class=
+      "arg">red_primary</span>, <span class=
+      "arg">green_primary</span>, <span class=
+      "arg">blue_primary</span>, <span class=
+      "arg">white_point</span>) -&gt; <em>aChromaticity</em></p>
+    </div>
 
-      <td>The amount of translation on the x-axis, in pixels.</td>
-    </tr>
+    <div class="desc">
+      <h5>Description</h5>
 
-    <tr>
-      <td>ty</td>
-
-      <td>The amount of translation on the y-axis, in pixels.</td>
-    </tr>
-
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-
-    <tr class="classname2">
-      <td colspan="2"><a name="Chromaticity" id=
-      "Chromaticity">class Chromaticity</a></td>
-    </tr>
-
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Chromaticity.new" id=
-      "Chromaticity.new">new</a></td>
-
-      <td>Magick::Chromaticity.<i>new</i>(<i>red_primary</i>,
-      <i>green_primary</i>, <i>blue_primary</i>,
-      <i>white_point</i>) -&gt; <i>anChromaticity</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>A Chromaticity object represents chromaticity values for
+      <p>A Chromaticity object represents chromaticity values for
       the <a href=
-      "imageattrs.html#Image.chromaticity">Frame#chromaticity</a>
-      attribute.</td>
-    </tr>
+      "imageattrs.html#chromaticity">Image#chromaticity</a>
+      attribute.</p>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+      <h5>Attributes</h5>
 
-    <tr>
-      <td colspan="2"><i>The attribute values are <a href=
-      "#Primary">Primary</a> objects.</i></td>
-    </tr>
+      <p>The attribute values are <a href="#Primary">Primary</a>
+      objects.</p>
 
-    <tr>
-      <td>red_primary</td>
+      <dl>
+        <dt>red_primary</dt>
 
-      <td valign="top">Red primary point (e.g. red_primary.x=0.64,
-      red_primary.y=0.33)</td>
-    </tr>
+        <dd>Red primary point (e.g. red_primary.x=0.64,
+        red_primary.y=0.33)</dd>
 
-    <tr>
-      <td>green_primary</td>
+        <dt>green_primary</dt>
 
-      <td valign="top">Green primary point (e.g.
-      green_primary.x=0.3, green_primary.y=0.6)</td>
-    </tr>
+        <dd>Green primary point (e.g. green_primary.x=0.3,
+        green_primary.y=0.6)</dd>
 
-    <tr>
-      <td>blue_primary</td>
+        <dt>blue_primary</dt>
 
-      <td valign="top">Blue primary point (e.g.
-      blue_primary.x=0.15, blue_primary.y=0.06)</td>
-    </tr>
+        <dd>Blue primary point (e.g. blue_primary.x=0.15,
+        blue_primary.y=0.06)</dd>
 
-    <tr>
-      <td>white_point</td>
+        <dt>white_point</dt>
 
-      <td valign="top">White point (e.g. white_point.x=0.3127,
-      white_point.y=0.329)</td>
-    </tr>
+        <dd>White point (e.g. white_point.x=0.3127,
+        white_point.y=0.329)</dd>
+      </dl>
+    </div>
 
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+    <h3 id="Geometry">class Geometry</h3>
 
-    <tr class="classname2">
-      <td colspan="2"><a name="Geometry" id="Geometry">class
-      Geometry</a></td>
-    </tr>
+    <div class="sig">
+      <h4>new</h4>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+      <p>Geometry.<span class="arg">new</span>(<span class=
+      "arg">width</span>=nil, <span class="arg">height</span>=nil,
+      <span class="arg">x</span>=nil, <span class=
+      "arg">y</span>=nil, <span class="arg">flag</span>=nil) -&gt;
+      <em>aGeometry</em></p>
+    </div>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Geometry.new" id=
-      "Geometry.new">new</a></td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td>Magick::Geometry.<i>new</i>(<i>width</i>=nil,
-      <i>height</i>=nil, <i>x</i>=nil, <i>y</i>=nil,
-      <i>flag</i>=nil) -&gt; <i>aGeometry</i></td>
-    </tr>
+      <p>Constructs a new <code>Geometry</code> object. A
+      <code>Geometry</code> object is the equivalent of a <a href=
+      "imusage.html#geometry">geometry string</a>. A
+      <code>Geometry</code> object can be used almost anywhere a
+      geometry string can be used.</p>
 
-    <tr>
-      <td valign="top">Description</td>
+      <h5>Attributes</h5>
 
-      <td>
-        <p>A Geometry object is the equivalent of a <a href=
-        "imusage.html#geometry">geometry string</a>. A Geometry
-        object can be used anywhere a geometry string can be
-        used.</p>
+      <p>A geometry string has the general form
+      "WxH+x+y[!@%&lt;&gt;]. In a <code>Geometry</code> object, the
+      <code>width</code> attribute specifies the W value. The
+      <code>height</code> attribute specifies the H value. The
+      <code>x</code> and <code>y</code> attributes specify the x
+      and y values, respectively. If any of these attributes is
+      omitted the default is nil or 0.</p>
 
-        <p>A geometry string has the general form
-        "WxH+x+y[!@%&lt;&gt;]. In a Geometry object, the
-        <code>width</code> attribute specifies the W value. The
-        <code>height</code> attribute specifies the H value. The
-        <code>x</code> and <code>y</code> attributes specify the x
-        and y values, respectively. If any of these attributes is
-        omitted the default is nil or 0.</p>
+      <p>The flag attribute is one of the constants shown here:</p>
 
-        <p>The flag attribute is one of the constants shown
-        <a name="geometry_constants" id=
-        "geometry_constants">here</a>:</p>
+      <table summary="geometry flag constants" class=
+      "simple_table">
+        <caption>
+          <strong>Geometry flag constants</strong>
+        </caption>
 
-        <table border="1" align="center" summary=
-        "geometry flag constants" bgcolor="#F0F0F0">
-          <caption>
-            <strong>Geometry flag constants</strong>
-          </caption>
+        <tr>
+          <td align="center"><strong>Constant<br />
+          name</strong></td>
 
-          <tr>
-            <td align="center"><strong>Constant<br />
-            name</strong></td>
+          <td align="center"><strong>Geometry<br />
+          string flag</strong></td>
 
-            <td align="center"><strong>Geometry<br />
-            string flag</strong></td>
+          <td align="center"><strong>Explanation</strong></td>
+        </tr>
 
-            <td align="center"><strong>Explanation</strong></td>
-          </tr>
+        <tr>
+          <td>PercentGeometry</td>
 
-          <tr>
-            <td>PercentGeometry</td>
+          <td align="center">%</td>
 
-            <td align="center">%</td>
+          <td>Normally the attributes are treated as pixels. Use
+          this flag when the <code>width</code> and
+          <code>height</code> attributes represent
+          <em>percentages</em>. For example, 125x75 means 125% of
+          the height and 75% of the width. The <code>x</code> and
+          <code>y</code> attributes are not affected by this
+          flag.</td>
+        </tr>
 
-            <td>Normally the attributes are treated as pixels. Use
-            this flag when the <code>width</code> and
-            <code>height</code> attributes represent
-            <em>percentages</em>. For example, 125x75 means 125% of
-            the height and 75% of the width. The <code>x</code> and
-            <code>y</code> attributes are not affected by this
-            flag.</td>
-          </tr>
+        <tr>
+          <td>AspectGeometry</td>
 
-          <tr>
-            <td>AspectGeometry</td>
+          <td align="center">!</td>
 
-            <td align="center">!</td>
+          <td>Use this flag when you want to force the new image to
+          have exactly the size specified by the the
+          <code>width</code> and <code>height</code>
+          attributes.</td>
+        </tr>
 
-            <td>Use this flag when you want to force the new image
-            to have exactly the size specified by the the
-            <code>width</code> and <code>height</code>
-            attributes.</td>
-          </tr>
+        <tr>
+          <td>LessGeometry</td>
 
-          <tr>
-            <td>LessGeometry</td>
+          <td align="center">&lt;</td>
 
-            <td align="center">&lt;</td>
+          <td>Use this flag when you want to change the size of the
+          image only if both its width and height are smaller the
+          values specified by those attributes. The image size is
+          changed proportionally.</td>
+        </tr>
 
-            <td>Use this flag when you want to change the size of
-            the image only if both its width and height are smaller
-            the values specified by those attributes. The image
-            size is changed proportionally.</td>
-          </tr>
+        <tr>
+          <td>GreaterGeometry</td>
 
-          <tr>
-            <td>GreaterGeometry</td>
+          <td align="center">&gt;</td>
 
-            <td align="center">&gt;</td>
+          <td>Use this flag when you want to change the size of the
+          image if either its width and height exceed the values
+          specified by those attributes. The image size is changed
+          proportionally.</td>
+        </tr>
 
-            <td>Use this flag when you want to change the size of
-            the image if either its width and height exceed the
-            values specified by those attributes. The image size is
-            changed proportionally.</td>
-          </tr>
+        <tr>
+          <td>AreaGeometry</td>
 
-          <tr>
-            <td>AreaGeometry</td>
+          <td align="center">@</td>
 
-            <td align="center">@</td>
+          <td>This flag is useful only with a single
+          <code>width</code> attribute. When present, it means the
+          <code>width</code> attribute represents the total area of
+          the image in pixels.</td>
+        </tr>
+      </table>
 
-            <td>This flag is useful only with a single
-            <code>width</code> attribute. When present, it means
-            the <code>width</code> attribute represents the total
-            area of the image in pixels.</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <tr>
-      <td>Example</td>
-
-      <td>
-        <pre>
+      <h5>Example</h5>
+      <pre>
 g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 </pre>
-      </td>
-    </tr>
+    </div>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Geometry.from_s" id=
-      "Geometry.from_s">from_s</a></td>
+    <div class="sig">
+      <h4>from_s</h4>
 
-      <td>Magick::Geometry.<em>from_s</em>(<i>string</i>) -&gt;
-      <i>aGeometry</i></td>
-    </tr>
+      <p>Geometry.<span class="arg">from_s</span>(<span class=
+      "arg">string</span>) -&gt; <em>aGeometry</em></p>
+    </div>
 
-    <tr>
-      <td valign="top">Description</td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td>Creates a Geometry object from a <a href=
-      "imusage.html#geometry">geometry string</a>.</td>
-    </tr>
+      <p>Constructs a new <code>Geometry</code> object from a
+      <a href="imusage.html#geometry">geometry string</a>.</p>
+    </div>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>instance methods</h3>
-      </td>
-    </tr>
+    <div class="sig">
+      <h4>to_s</h4>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Geometry.to_s" id=
-      "Geometry.to_s">to_s</a></td>
+      <p><span class="arg">geometry.</span>to_s() -&gt;
+      <em>aString</em></p>
+    </div>
 
-      <td><em>geometry.</em>to_s() -&gt; <i>aString</i></td>
-    </tr>
+    <div class="desc">
+      <h5>Description</h5>
 
-    <tr>
-      <td valign="top">Description</td>
+      <p>Returns the string equivalent of the <code>Geometry</code>
+      object..</p>
+    </div>
 
-      <td>Returns the string equivalent of the receiver.</td>
-    </tr>
+    <h3 id="Pixel">class Pixel</h3>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+    <div class="sig">
+      <h4>new</h4>
 
-    <tr>
-      <td>width</td>
+      <p>Pixel.<span class="arg">new</span>(<span class=
+      "arg">red</span>, <span class="arg">green</span>,
+      <span class="arg">blue</span>, <span class=
+      "arg">opacity</span>) -&gt; <em>aPixel</em></p>
+    </div>
 
-      <td valign="top">a positive Numeric value</td>
-    </tr>
+    <div class="desc">
+      <h5>Description</h5>
 
-    <tr>
-      <td>height</td>
-
-      <td valign="top">a positive Numeric value</td>
-    </tr>
-
-    <tr>
-      <td>x</td>
-
-      <td valign="top">an integer</td>
-    </tr>
+      <p>Constructs a pixel object from the specified red, green,
+      blue, and opacity intensities. The intensity is a number
+      between 0 and <a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>.</p>
 
-    <tr>
-      <td>y</td>
+      <h5>Attributes</h5>
 
-      <td valign="top">an integer</td>
-    </tr>
+      <dl>
+        <dt>red, green, blue</dt>
 
-    <tr>
-      <td>flag</td>
+        <dd>The red, green, and blue intensities of the pixel,
+        respectively. If the colorspace is <a href=
+        "constants.html#ColorspaceType">CMYKColorspace</a>, these
+        attributes are interpreted as the cyan, magenta, and yellow
+        intensities.</dd>
 
-      <td valign="top">one of the constants listed <a href=
-      "#geometry_constants">above</a>.</td>
-    </tr>
+        <dt>opacity</dt>
 
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+        <dd>The opacity level. Higher intensities are more
+        transparent. If the colorspace is CMYKColorspace, this
+        attribute is interpreted as the black intensity.</dd>
+      </dl>
+    </div>
 
-    <tr class="classname2">
-      <td colspan="2"><a name="Pixel" id="Pixel">class
-      Pixel</a></td>
-    </tr>
+    <div class="sig">
+      <h4>from_color</h4>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+      <p>Pixel.<span class="arg">from_color</span>(<span class=
+      "arg">color_name</span>) -&gt; <em>aPixel</em></p>
+    </div>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.new" id=
-      "Pixel.new">new</a></td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td>Magick::Pixel.<i>new</i>(<i>red</i>, <i>green</i>,
-      <i>blue</i>, <i>opacity</i>) -&gt; <i>aPixel</i></td>
-    </tr>
+      <p>Constructs a new Pixel object from the <a href=
+      "imusage.html#color_names">color name</a>. Raises
+      ArgumentError if the name is unknown.</p>
+    </div>
 
-    <tr>
-      <td valign="top">Description</td>
+    <div class="sig">
+      <h4>from_HSL</h4>
 
-      <td>Constructs a pixel object from the specified red, green,
-      blue, and opacity intensities.</td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.from_color" id=
-      "Pixel.from_color">from_color</a></td>
-
-      <td>Magick::Pixel.<i>from_color</i>(<i>color_name</i>) -&gt;
-      <i>aPixel</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Constructs a pixel object corresponding to the specified
-      <a href="imusage.html#color_names">color name</a>. Raises
-      ArgumentError if the name is unknown. See <a href=
-      "#Pixel.to_color">Pixel#to_color</a>, below.</td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.from_HSL" id=
-      "Pixel.from_HSL">from_HSL</a></td>
-
-      <td>Magick::Pixel.<i>from_HSL</i>(<i>hue</i>,
-      <i>saturation</i>, <i>luminosity</i>) -&gt;
-      <i>aPixel</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
+      <p>Pixel.<span class="arg">from_HSL</span>(<span class=
+      "arg">hue</span>, <span class="arg">saturation</span>,
+      <span class="arg">luminosity</span>) -&gt;
+      <em>aPixel</em></p>
+    </div>
 
-      <td>Constructs a pixel object from the specified hue,
-      saturation, and luminosity values. See <a href=
-      "#Pixel.to_HSL">Pixel#to_HSL</a>, below.</td>
-    </tr>
-
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+    <div class="desc">
+      <h5>Description</h5>
 
-    <tr>
-      <td colspan="2"><i>The attribute values are numbers between 0
-      and MaxRGB. If the image is in the CMYKColorspace, the red,
-      green, blue, and opacity attributes are interpreted as cyan,
-      magenta, yellow, and black intensities,
-      respectively.</i></td>
-    </tr>
-
-    <tr>
-      <td>red</td>
-
-      <td>The red intensity</td>
-    </tr>
-
-    <tr>
-      <td>green</td>
-
-      <td>The green intensity</td>
-    </tr>
-
-    <tr>
-      <td>blue</td>
-
-      <td>The blue intensity</td>
-    </tr>
-
-    <tr>
-      <td>opacity</td>
-
-      <td>The opacity level. You can use the TransparentOpacity or
-      OpaqueOpacity constants for this attribute as well as a
-      number.</td>
-    </tr>
-
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>instance methods</h3>
-      </td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.fcmp" id=
-      "Pixel.fcmp">fcmp</a></td>
-
-      <td><i>pixel</i>.fcmp(<i>aPixel</i>, <i>fuzz</i>=0.0,
-      <i>colorspace</i>=RGBColorspace) -&gt; <code>true</code>
-      <i>or</i> <code>false</code></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Returns true if the argument is the same color as
-      <i>pixel</i>.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>fuzz</dt>
-
-          <dd>The amount of fuzz to allow before the colors are
-          considered to be different.</dd>
-
-          <dt>colorspace</dt>
-
-          <dd>If the pixels are in the CMYK colorspace, specify
-          <a href=
-          "constants.html#ColorspaceType">Magick::CMYKColorspace</a>.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr>
-      <td>Returns</td>
-
-      <td><code>true</code> or <code>false</code></td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.intensity" id=
-      "Pixel.intensity">intensity</a></td>
-
-      <td><i>pixel</i>.intensity() -&gt; anInteger</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Returns the <i>intensity</i> of the pixel. The intensity
-      is computed as 0.299*R+0.587*G+0.114*B.</td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.to_color" id=
-      "Pixel.to_color">to_color</a></td>
-
-      <td><i>pixel</i>.to_color(<i>compliance</i>=AllCompliance,
-      <i>matte</i>=<code>false</code>,
-      <i>depth</i>=<code>QuantumDepth</code>) -&gt;
-      <i>aString</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Returns the <a href="imusage.html#color_names">color
+      <p>Constructs a pixel object from the specified hue,
+      saturation, and luminosity values.</p>
+    </div>
+
+    <div class="sig">
+      <h4>fcmp</h4>
+
+      <p><span class="arg">pixel</span>.fcmp(<span class=
+      "arg">aPixel</span>, <span class="arg">fuzz</span>=0.0,
+      <span class="arg">colorspace</span>=RGBColorspace) -&gt;
+      <code>true</code> <em>or</em> <code>false</code></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns true if the argument is the same color as
+      <span class="arg">pixel</span>.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>pixel</dt>
+
+        <dd>The pixel to which the receiver is compared.</dd>
+
+        <dt>fuzz</dt>
+
+        <dd>The amount of fuzz to allow before the colors are
+        considered to be different.</dd>
+
+        <dt>colorspace</dt>
+
+        <dd>If the pixels are in the CMYK colorspace, specify
+        <a href=
+        "constants.html#ColorspaceType">Magick::CMYKColorspace</a>.</dd>
+      </dl>
+
+      <h5>Returns</h5>
+
+      <p><code>true</code> or <code>false</code></p>
+    </div>
+
+    <div class="sig">
+      <h4>intensity</h4>
+
+      <p><span class="arg">pixel</span>.intensity() -&gt;
+      anInteger</p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns the intensity of the pixel. The intensity is
+      computed as 0.299*R+0.587*G+0.114*B.</p>
+    </div>
+
+    <div class="sig">
+      <h4>to_color</h4>
+
+      <p><span class="arg">pixel</span>.to_color(<span class=
+      "arg">compliance</span>=AllCompliance, <span class=
+      "arg">matte</span>=<code>false</code>, <span class=
+      "arg">depth</span>=<code>QuantumDepth</code>) -&gt;
+      <em>aString</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Returns the <a href="imusage.html#color_names">color
       name</a> corresponding the the pixel values. If there is no
       such named color in the specified color standard, returns a
       string in the form "#RRGGBBOO" or, if the depth is 16,
-      "#RRRRGGGGBBBBOOOO".</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Arguments</td>
-
-      <td>
-        <dl>
-          <dt>compliance</dt>
-
-          <dd>A <a href=
-          "constants.html#ComplianceType">ComplianceType</a>
-          constant. The default value of AllCompliance causes
-          <var>to_color</var> to search for a color name in any of
-          the 3 defined color standards.</dd>
-
-          <dt>matte</dt>
-
-          <dd>If false, the pixel's opacity attribute is
-          ignored.</dd>
-
-          <dt>depth</dt>
-
-          <dd>An image depth. The default is the quantum depth used
-          when &times;Magick was compiled. The values 16 and 32 can
-          be used only when &times;Magick was compiled with the
-          appropriate QuantumDepth.</dd>
-        </dl>
-      </td>
-    </tr>
-
-    <tr class="method2">
-      <td class="methodname2"><a name="Pixel.to_HSL" id=
-      "Pixel.to_HSL">to_HSL</a></td>
-
-      <td><i>pixel</i>.to_HSL -&gt; <i>anArray</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
+      "#RRRRGGGGBBBBOOOO".</p>
 
-      <td>Returns the array <i>[hue, saturation, luminosity]</i>
-      corresponding the the pixel RGB values.</td>
-    </tr>
+      <h5>Arguments</h5>
 
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+      <dl>
+        <dt>compliance</dt>
 
-    <tr class="classname2">
-      <td colspan="2"><a name="Point" id="Point">class
-      Point</a></td>
-    </tr>
+        <dd>A <a href=
+        "constants.html#ComplianceType">ComplianceType</a>
+        constant. The default value of AllCompliance causes
+        <code>to_color</code> to search for a color name in any of
+        the 3 defined color standards.</dd>
 
-    <tr class="methodname2">
-      <td colspan="2" class="methodsection2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+        <dt>matte</dt>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Point.new" id=
-      "Point.new">new</a></td>
-
-      <td>Magick::Point.new(<i>x</i>, <i>y</i>) -&gt;
-      <i>aPoint</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>An object of this Struct class is used as the value of
-      the <var>pixels_per_em</var> attribute in the TypeMetric
-      struct returned by <a href=
-      "draw.html#Draw.get_type_metrics">Draw#get_type_metrics</a>.</td>
-    </tr>
+        <dd>If false, the pixel's opacity attribute is
+        ignored.</dd>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
-
-    <tr>
-      <td>x</td>
-
-      <td valign="top">Character width.</td>
-    </tr>
-
-    <tr>
-      <td>y</td>
-
-      <td valign="top">Character height.</td>
-    </tr>
-
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
-
-    <tr class="classname2">
-      <td colspan="2"><a name="Primary" id="Primary">class
-      Primary</a></td>
-    </tr>
+        <dt>depth</dt>
 
-    <tr class="methodname2">
-      <td colspan="2" class="methodsection2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+        <dd>An image depth. The default is the quantum depth used
+        when &times;Magick was compiled. The values 16 and 32 can
+        be used only when &times;Magick was compiled with the
+        appropriate QuantumDepth.</dd>
+      </dl>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Primary.new" id=
-      "Primary.new">new</a></td>
+      <h5>See also</h5>
 
-      <td>Magick::Primary.new(<i>x</i>, <i>y</i>, <i>z</i>) -&gt;
-      <i>aPrimary</i></td>
-    </tr>
+      <p>Compare this method to <a href=
+      "image3.html#to_color">Image#to_color</a>, in which the
+      <span class="arg">matte</span> and <span class=
+      "arg">depth</span> values are taken from an image.</p>
+    </div>
 
-    <tr>
-      <td valign="top">Description</td>
+    <div class="sig">
+      <h4>to_HSL</h4>
 
-      <td>See <a href="#Chromaticity">class Chromaticity</a>.</td>
-    </tr>
+      <p><span class="arg">pixel</span>.to_HSL -&gt;
+      <em>anArray</em></p>
+    </div>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
-
-    <tr>
-      <td>x</td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td valign="top">X ordinate.</td>
-    </tr>
+      <p>Converts the RGB representation of the pixel to hue,
+      saturation, and luminosity values.</p>
 
-    <tr>
-      <td>y</td>
+      <h5>Returns</h5>
 
-      <td valign="top">Y ordinate.</td>
-    </tr>
-
-    <tr>
-      <td>z</td>
+      <p>An array of the form <code>[hue, saturation,
+      luminosity]</code>.</p>
+    </div>
 
-      <td valign="top">Z ordinate. This attribute is always
-      ignored.</td>
-    </tr>
-
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+    <h3 id="Point">class Point</h3>
 
-    <tr class="classname2">
-      <td colspan="2"><a name="Rectangle" id="Rectangle">class
-      Rectangle</a></td>
-    </tr>
-
-    <tr class="methodname2">
-      <td colspan="2" class="methodsection2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+    <div class="sig">
+      <h4>new</h4>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Rectangle.new" id=
-      "Rectangle.new">new</a></td>
+      <p>Point.new(<span class="arg">x</span>, <span class=
+      "arg">y</span>) -&gt; <em>aPoint</em></p>
+    </div>
 
-      <td>Magick::Rectangle.new(<i>width</i>, <i>height</i>,
-      <i>x</i>, <i>y</i>) -&gt; <i>aRectangle</i></td>
-    </tr>
+    <div class="desc">
+      <h5>Description</h5>
 
-    <tr>
-      <td valign="top">Description</td>
+      <p>The value of the <code>pixels_per_em</code> attribute in
+      the TypeMetric struct returned by <a href=
+      "draw.html#get_type_metrics">Draw#get_type_metrics</a> is a
+      <code>Point</code> object..</p>
 
-      <td>The value of the <a href=
-      "imageattrs.html#Image.tile_info">Image#tile_info</a> and
-      <a href=
-      "imageattrs.html#Image.bounding_box">Image#bounding_box</a>
-      attributes.</td>
-    </tr>
+      <h5>Attributes</h5>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+      <dl>
+        <dt>x</dt>
 
-    <tr>
-      <td>width</td>
+        <dd>Character width</dd>
 
-      <td valign="top">Rectangle width.</td>
-    </tr>
+        <dt>y</dt>
 
-    <tr>
-      <td>height</td>
+        <dd>Character height</dd>
+      </dl>
+    </div>
 
-      <td valign="top">Rectangle height.</td>
-    </tr>
+    <h3 id="Primary">class Primary</h3>
 
-    <tr>
-      <td>x</td>
+    <div class="sig">
+      <h4>new</h4>
 
-      <td valign="top">Offset from the left edge of the image.</td>
-    </tr>
+      <p>Primary.new(<span class="arg">x</span>, <span class=
+      "arg">y</span>, <span class="arg">z</span>) -&gt;
+      <em>aPrimary</em></p>
+    </div>
 
-    <tr>
-      <td>y</td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td valign="top">Offset from the top edge of the image.</td>
-    </tr>
+      <p>See <a href="#Chromaticity">class Chromaticity</a>.</p>
 
-    <tr>
-      <td>&nbsp;</td>
-    </tr>
+      <h5>Attributes</h5>
 
-    <tr class="classname2">
-      <td colspan="2"><a name="Segment" id="Segment">class
-      Segment</a></td>
-    </tr>
+      <dl>
+        <dt>x</dt>
 
-    <tr class="methodname2">
-      <td colspan="2" class="methodsection2">
-        <h3>class methods</h3>
-      </td>
-    </tr>
+        <dd>X ordinate</dd>
 
-    <tr class="method2">
-      <td class="methodname2"><a name="Segment.new" id=
-      "Segment.new">new</a></td>
+        <dt>y</dt>
 
-      <td>Magick::Segment.new(<i>x1</i>, <i>y1</i>, <i>x2</i>,
-      <i>y2</i>) -&gt; <i>aSegment</i></td>
-    </tr>
+        <dd>Y ordinate</dd>
 
-    <tr>
-      <td valign="top">Description</td>
+        <dt>z</dt>
 
-      <td>The value of the <var>bounds</var> attribute in the
-      <a href="draw.html#Draw.get_type_metrics">TypeMetric</a>
-      class.</td>
-    </tr>
+        <dd>Z ordinate. This attribute is always ignored.</dd>
+      </dl>
+    </div>
 
-    <tr class="methodsection2">
-      <td colspan="2">
-        <h3>attributes</h3>
-      </td>
-    </tr>
+    <h3 id="Rectangle">class Rectangle</h3>
 
-    <tr>
-      <td>x1</td>
+    <div class="sig">
+      <h4>new</h4>
 
-      <td>&nbsp;</td>
-    </tr>
+      <p>Rectangle.new(<span class="arg">width</span>, <span class=
+      "arg">height</span>, <span class="arg">x</span>, <span class=
+      "arg">y</span>) -&gt; <em>aRectangle</em></p>
+    </div>
 
-    <tr>
-      <td>y1</td>
+    <div class="desc">
+      <h5>Description</h5>
 
-      <td>&nbsp;</td>
-    </tr>
+      <p>The value of the <a href=
+      "imageattrs.html#tile_info">Image#tile_info</a> and <a href=
+      "imageattrs.html#bounding_box">Image#bounding_box</a>
+      attributes.</p>
 
-    <tr>
-      <td>x2</td>
+      <h5>Attributes</h5>
 
-      <td>&nbsp;</td>
-    </tr>
+      <dl>
+        <dt>width</dt>
 
-    <tr>
-      <td>y2</td>
+        <dd>Rectangle width</dd>
 
-      <td>&nbsp;</td>
-    </tr>
-  </table>
-  <hr />
+        <dt>height</dt>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="draw.html">&lt;-
-      Prev</a></td>
+        <dd>Rectangle height</dd>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+        <dt>x</dt>
 
-      <td style="text-align: right"><a href="fill.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+        <dd>ffset from the left edge of the image</dd>
+
+        <dt>y</dt>
+
+        <dd>Offset from the top edge of the image</dd>
+      </dl>
+    </div>
+
+    <h3 id="Segment">class Segment</h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>Segment.new(<span class="arg">x1</span>, <span class=
+      "arg">y1</span>, <span class="arg">x2</span>, <span class=
+      "arg">y2</span>) -&gt; <em>aSegment</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>The value of the <code>bounds</code> attribute in the
+      <a href="draw.html#get_type_metrics">TypeMetric</a>
+      class.</p>
+
+      <h5>Attributes</h5>
+
+      <p><em>x1</em>, <em>y1</em>, <em>x2</em>, <em>y2</em></p>
+    </div>
+  </div>
+
+  <div class="class">
+  <h2 id="fill">Fill classes</h2>
+
+    <div class="intro">
+      <h3>Introduction</h3>
+
+      <p>The <a href="image.html#new">Image#new</a> and <a href=
+      "ilist.html#new_image">ImageList#new_image</a> methods accept
+      a <code>Fill</code> object as an optional third argument. A
+      <code>Fill</code> object is an instance of a <em>Fill
+      class</em>. Fill classes are designed to support custom
+      background fills. Each <code>Fill</code> class defines only
+      two methods, <code>initialize</code> and <code>fill</code>.
+      The <code>initialize</code> method is called from the
+      application to create an instance of the fill class. It
+      accepts any arguments and does whatever is necessary to
+      create the fill. The <code>fill</code> method is called from
+      the initialize method of the new image object, after the
+      image is completely initialized. The <code>fill</code> method
+      gets the image as its only argument and sends whatever
+      methods are necessary to the image to fill the image's
+      background.</p>
+
+      <p>RMagick supplies three Fill classes,
+      <code><strong>HatchFill</strong></code>,
+      <code><strong>GradientFill</strong></code>, and
+      <code><strong>TextureFill</strong></code>. These classes are
+      explained below. The <code>HatchFill</code> class is intended
+      as an example of how to write a <code>Fill</code> class and
+      is written in pure Ruby. You can read it in RMagick.rb.</p>
+    </div>
+
+    <h3 id="GradientFill">class GradientFill</h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p><span class="arg">GradientFill.new(<em>x1</em>,
+      <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>start_color</em>,
+      <em>end_color</em>) -&gt;</span> <em>aGradientFill</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Creates a gradient fill. The <span class="arg">x1</span>,
+      <span class="arg">y1</span>, and <span class="arg">x2</span>,
+      <span class="arg">y2</span> arguments describe either a line
+      or a point. If <span class="arg">x1</span> != <span class=
+      "arg">x2</span> or <span class="arg">y1</span> !=
+      <span class="arg">y2</span>, then the arguments describe the
+      starting line for the gradient. The gradient will start with
+      <span class="arg">start_color</span> at the starting line and
+      gradually transform to <span class="arg">end_color</span> as
+      the distance increases from the starting line.</p>
+
+      <p>If <span class="arg">x1</span> == <span class=
+      "arg">x2</span> and <span class="arg">y1</span> ==
+      <span class="arg">y2</span>, the gradient radiates from the
+      specified point, gradually transforming from <span class=
+      "arg">start_color</span> to <span class=
+      "arg">end_color</span>.</p>
+
+      <p>The line or point does not have to lie within the image
+      bounds.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>x1, y1</dt>
+
+        <dd>One of the starting line end-points.</dd>
+
+        <dt>x2, y2</dt>
+
+        <dd>The other end-point on the starting line.</dd>
+
+        <dt>start_color</dt>
+
+        <dd>The color at the starting line.</dd>
+
+        <dt>end_color</dt>
+
+        <dd>The color to which the gradient transforms.</dd>
+      </dl>
+
+      <h5>Example</h5>
+
+      <p><a href=
+      "javascript:popup('gradientfill.rb.html')"><img src=
+      "ex/gradientfill.gif" alt="GradientFill example" title=
+      "Click to see the example script" /></a></p>
+    </div>
+
+    <h3 id="HatchFill">class HatchFill</h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>HatchFill.new(<span class="arg">background_color</span>,
+      <span class="arg">hatch_color</span>='white', <span class=
+      "arg">dist</span>=10) -&gt; <em>aHatchFill</em></p>
+    </div>
+
+    <div class="desc">
+      <h4>Description</h4>
+
+      <p>Creates a cross-hatched fill.</p>
+
+      <h4>Arguments</h4>
+
+      <dl>
+        <dt>background_color</dt>
+
+        <dd>The image background color.</dd>
+
+        <dt>hatch_color</dt>
+
+        <dd>The color of the cross-hatch lines.</dd>
+
+        <dt>dist</dt>
+
+        <dd>The distance between cross-hatch lines, in pixels.</dd>
+      </dl>
+
+      <h4>Example</h4>
+
+      <p><a href="javascript:popup('hatchfill.rb.html')"><img src=
+      "ex/hatchfill.gif" alt="HatchFill example" title=
+      "Click to see the example script" /></a></p>
+    </div>
+
+    <h3 id="TextureFill">class TextureFill</h3>
+
+    <div class="sig">
+      <h4>new</h4>
+
+      <p>TextureFill.new(<span class="arg">texture_image</span>)
+      -&gt; <em>aTextureFill</em></p>
+    </div>
+
+    <div class="desc">
+      <h5>Description</h5>
+
+      <p>Creates a texture fill by tiling the <span class=
+      "arg">texture_image</span> to fill the image.</p>
+
+      <h5>Arguments</h5>
+
+      <p>The texture to be used as the background. May be an image
+      or imagelist. If <span class="arg">texture_image</span> is an
+      imagelist, uses the current image.</p>
+
+      <h5>Example</h5>
+
+      <p><a href=
+      "javascript:popup('texturefill.rb.html')"><img src="ex/texturefill.gif"
+           alt="TextureFill example" title=
+           "Click to see the example script" /></a></p>
+    </div>
+  </div>
+
+  <div class="class">
+  <h2 id="exception">Exception classes</h2>
+
+    <h3 id="MagickError">class ImageMagickError</h3>
+
+    <div class="desc">
+      <h4>Description</h4>
+
+      <p>When an &times;Magick function returns an error condition,
+      RMagick raises an <code>ImageMagickError</code>
+      exception.</p>
+
+      <h4>Attributes</h4>
+
+      <dl>
+        <dt>magick_location</dt>
+
+        <dd>With GraphicsMagick 1.1, this attribute contains a
+        string that indicates the source file (module), function
+        and line number in which GraphicsMagick raised the error.
+        The string is in the form <tt>&lt;function&gt; at
+        &lt;module&gt;:&lt;line&gt;</tt>. (Get-only.)</dd>
+      </dl>
+    </div>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="draw.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "info.html">Next</a>&nbsp;&raquo;
+  </div>
 </body>
 </html>

@@ -1,0 +1,1819 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+
+  <title>RMagick: class Image (instance methods, part 2)</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
+  <script type="text/javascript">
+  //<![CDATA[
+    <!-- Pre-load this image so that the browser knows how big it is. -->
+    <!-- Begin
+    flower_hat = new Image();
+    flower_hat.src = "ex/images/Flower_Hat.jpg";
+    // End -->
+  //]]>
+  </script>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="image1.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "image3.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>class Image (instance methods, part 2)</h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>instance methods</h3>
+
+    <div>
+      <div class="toccol">
+        <ul>
+          <li><a href="#enhance">enhance</a></li>
+
+          <li><a href="#equalize">equalize</a></li>
+
+          <li><a href="#erase_bang">erase!</a></li>
+
+          <li><a href="#export_pixels">export_pixels</a></li>
+
+          <li><a href="#flip">flip</a></li>
+
+          <li><a href="#flip_bang">flip!</a></li>
+
+          <li><a href="#flop">flop</a></li>
+
+          <li><a href="#flop_bang">flop!</a></li>
+
+          <li><a href="#frame">frame</a></li>
+
+          <li><a href="#gamma_correct">gamma_correct</a></li>
+
+          <li><a href="#gaussian_blur">gaussian_blur</a></li>
+
+          <li><a href=
+          "#get_exif_by_entry">get_exif_by_entry</a></li>
+
+          <li><a href=
+          "#get_exif_by_number">get_exif_by_number</a></li>
+
+          <li><a href="#get_pixels">get_pixels</a></li>
+        </ul>
+      </div>
+
+      <div class="toccol">
+        <ul>
+          <li><a href="#gray_q">gray?</a></li>
+
+          <li><a href="#grey_q">grey?</a></li>
+
+          <li><a href="#implode">implode</a></li>
+
+          <li><a href="#import_pixels">import_pixels</a></li>
+
+          <li><a href="#inspect">inspect</a></li>
+
+          <li><a href="#level">level</a></li>
+
+          <li><a href="#level_channel">level_channel</a></li>
+
+          <li><a href="#magnify">magnify</a></li>
+
+          <li><a href="#magnify_bang">magnify!</a></li>
+
+          <li><a href="#map">map</a></li>
+
+          <li><a href=
+          "#matte_fill_to_border">matte_fill_to_border</a></li>
+
+          <li><a href="#matte_floodfill">matte_floodfill</a></li>
+
+          <li><a href="#matte_point">matte_point</a></li>
+
+          <li><a href="#matte_replace">matte_replace</a></li>
+        </ul>
+      </div>
+
+      <div class="toccol">
+        <ul>
+          <li><a href="#matte_reset_bang">matte_reset!</a></li>
+
+          <li><a href="#median_filter">median_filter</a></li>
+
+          <li><a href="#minify">minify</a></li>
+
+          <li><a href="#minify_bang">minify!</a></li>
+
+          <li><a href="#modulate">modulate</a></li>
+
+          <li><a href="#monochrome_q">monochrome?</a></li>
+
+          <li><a href="#motion_blur">motion_blur</a></li>
+
+          <li><a href="#negate">negate</a></li>
+
+          <li><a href="#normalize">normalize</a></li>
+
+          <li><a href="#oil_paint">oil_paint</a></li>
+
+          <li><a href="#opaque">opaque</a></li>
+
+          <li><a href="#opaque_q">opaque?</a></li>
+
+          <li><a href="#ordered_dither">ordered_dither</a></li>
+
+          <li><a href="#palette_q">palette?</a></li>
+
+          <li><a href="#pixel_color">pixel_color</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="methods">instance methods</h2>
+
+  <div class="sig">
+    <h3 id="enhance">enhance</h3>
+
+    <p><span class="arg">image</span>.enhance -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Applies a digital filter that improves the
+    quality of a noisy image.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>The left-hand side has had noise added by <code><a href=
+    "#add_noise">add_noise</a></code>. The right-hand side is the
+    result after using <code>enhance</code>.</p>
+
+    <p><a href="javascript:popup('enhance.rb.html')"><img src=
+    "ex/enhance.jpg" alt="enhance example" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4><a href=
+    "image2.html#median_filter">median_filter</a>, <a href=
+    "image2.html#reduce_noise">reduce_noise</a>, <a href=
+    "image3.html#unsharp_mask">unsharp_mask</a>
+
+    <h4>Magick API</h4>
+
+    <p>EnhanceImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="equalize">equalize</h3>
+
+    <p><span class="arg">image</span>.equalize -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Applies a histogram equalization to the
+    image.</p>
+
+    <h4>Returns</h4>A new image
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('equalize.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/equalize.jpg'" src="ex/equalize.jpg" alt=
+    "equalize example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>EqualizeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="erase_bang">erase!</h3>
+
+    <p><span class="arg">image</span>.erase! -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Sets the entire image to the <a href=
+    "imageattrs.html#background_color">background color</a>.</p>
+
+    <h4>Returns</h4>self
+
+    <h4>See also</h4><a href=
+    "image1.html#color_reset_bang">color_reset!</a>
+
+    <h4>Magick API</h4>
+
+    <p>SetImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="export_pixels">export_pixels</h3>
+
+    <p><span class="arg">image</span>.export_pixels(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">columns</span>, <span class="arg">rows</span>,
+    <span class="arg">map</span>) -&gt; <em>anArray</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Extracts the pixel data from the specified rectangle and
+    returns it as an array of <code>Integer</code> values.</p>
+
+    <p>The array returned by <code>export_pixels</code> is suitable
+    for use as an argument to <code>import_pixels</code>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The offset of the rectangle from the upper-left corner of
+      the image.</dd>
+
+      <dt>columns, rows</dt>
+
+      <dd>The width and height of the rectangle.</dd>
+
+      <dt>map</dt>
+
+      <dd>A <code>String</code> reflecting the order of the pixel
+      data. <span class="imquote">It can be any combination or
+      order of R = red, G = green, B = blue, A = alpha, C = cyan, Y
+      = yellow, M = magenta, K = black, or I = intensity (for
+      grayscale).</span></dd>
+    </dl>
+
+    <h4>Returns</h4>An array
+
+    <h4>Example</h4>
+    <pre>
+# Export the r'th scanline from an image in red-green-blue order
+scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
+</pre>
+
+    <h4>See also</h4><a href="image1.html#dispatch">dispatch</a>,
+    <a href="#import_pixels">import_pixels</a>, <a href=
+    "#get_pixels">get_pixels</a>
+
+    <h4>Magick API</h4>
+
+    <p>ExportImagePixels (available in ImageMagick 5.5.7 and
+    GraphicsMagick 1.1)</p>
+
+    <h4>Note</h4>
+
+    <p>This method replaces the <code>dispatch</code> method.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="flip">flip</h3>
+
+    <p><span class="arg">image</span>.flip -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Create a vertical mirror image of the receiver.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('flip.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/flip.jpg'" src="ex/flip.jpg" alt="flip example"
+    title="Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#flip_bang">flip!</a>, <a href="#flop">flop</a>,
+    <a href="image1.html#affine_transform">affine_transform</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>FlipImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="flip_bang">flip!</h3>
+
+    <p><span class="arg">image</span>.flip! -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="image1.html#flip">flip</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="flop">flop</h3>
+
+    <p><span class="arg">image</span>.flop -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Create a horizontal mirror image of the receiver.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('flop.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/flop.jpg'" src="ex/flop.jpg" alt="flop example"
+    title="Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#flop_bang">flop!</a>, <a href="#flip">flip</a>,
+    <a href="image1.html#affine_transform">affine_transform</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>FlopImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="flop_bang">flop!</h3>
+
+    <p><span class="arg">image</span>.flop! -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="image1.html#flop">flop</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="frame">frame</h3>
+
+    <p><span class="arg">image</span>.frame(<span class=
+    "arg">width</span>=25, <span class="arg">height</span>=25,
+    <span class="arg">x</span>=25, <span class="arg">y</span>=25,
+    <span class="arg">inner_bevel</span>=6, <span class=
+    "arg">outer_bevel</span>=6, <span class=
+    "arg">color</span>=<code><a href=
+    "imageattrs.html#matte_color">matte_color</a></code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Adds a simulated 3D border.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>width</dt>
+
+      <dd>The width of the left and right sides.</dd>
+
+      <dt>height</dt>
+
+      <dd>The height of the top and bottom sides.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The image does not have to be centered in the border.
+      These two arguments specify the offset of the image from the
+      upper-left outside corner of the border.</dd>
+
+      <dt>inner_bevel, outer_bevel</dt>
+
+      <dd>The width of the inner and outer shadows of the border.
+      These values should be much smaller than the width and height
+      and cannot be greater than 1/2 the lesser of the width or
+      height.</dd>
+
+      <dt>color</dt>
+
+      <dd>The border color. By default the color is the <a href=
+      "imageattrs.html#matte_color">matte color</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('frame.rb.html')">
+    <!-- This img tag displays the original image when the mouse is over -->
+     <img style="padding:25px; display:none" id="frameless"
+     onmouseout=
+    "this.style.display='none';framed.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="frame example" title=
+    "Click to see the example script" /><!--
+                  This img tag displays the framed image when the mouse is not over
+                  --><img class="hide" id="framed" onmouseover=
+    "this.style.display='none';frameless.style.display='';"
+    src="ex/frame.jpg" alt=
+    "frame example" /></a> <img src="ex/images/spin.gif" alt=""
+    style="margin-bottom: 280px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href="image1.html#border">border</a>
+
+    <h4>Magick API</h4>
+
+    <p>FrameImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gamma_correct">gamma_correct</h3>
+
+    <p><span class="arg">image</span>.gamma_correct(<span class=
+    "arg">red_gamma</span>[,<span class="arg">green_gamma</span>[,
+    <span class="arg">blue_gamma</span>[, <span class=
+    "arg">opacity_gamma</span>]]]) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Gamma-correct an image. The same image viewed on different
+    devices will have perceptual differences in the way the image's
+    intensities are represented on the screen.</p>
+
+    <h4>Arguments</h4>
+
+    <p>You must specify at least <code>red_gamma</code>. Omitted
+    arguments take on the value of the last specified argument.
+    <span class="imquote">Values typically range from 0.8 to
+    2.3.</span></p>
+
+    <h4>Returns</h4>A new image
+
+    <h4>Magick API</h4>
+
+    <p>GammaImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gaussian_blur">gaussian_blur</h3>
+
+    <p><span class="arg">image</span>.gaussian_blur(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Blurs an image. We convolve the image with a
+    Gaussian operator of the given radius and standard deviation
+    (sigma).</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>A <code>Float</code> value representing <span class=
+      "imquote">the radius of the Gaussian, in pixels, not counting
+      the center pixel.</span></dd>
+
+      <dt>sigma</dt>
+
+      <dd>A <code>Float</code> value representing the standard
+      deviation of the Gaussian operator, in pixels. This argument
+      must be &gt; 0.0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p><code>gaussian_blur(0.0, 3.0)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('gaussian_blur.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/gaussian_blur.jpg'" src="ex/gaussian_blur.jpg"
+    alt="gaussian_blur example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href=
+    "image1.html#blur_image">blur_image</a>, <a href=
+    "#motion_blur">motion_blur</a>
+
+    <h4>Magick API</h4>
+
+    <p>GaussianBlurImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="get_exif_by_entry">get_exif_by_entry</h3>
+
+    <p><span class=
+    "arg">image</span>.get_exif_by_entry(<span class="arg">[name]*</span>)
+    -&gt; <em>anArray</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the value associated with the specified EXIF entry
+    name or names. If no names are specified, returns all the
+    entries. The return value is an array containing one or more
+    [name, value] elements.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Zero or more EXIF entry names.</p>
+
+    <h4>Returns</h4>
+
+    <p>The elements in the returned array are 2-element arrays in
+    the form [name, value]. If &times;Magick does not know the name
+    for an entry it uses "unknown." There may be more than one
+    entry for "unknown" in the returned array. If there is no entry
+    with the specified name the value is set to
+    <code>nil</code>.</p>
+
+    <h4>Example</h4>
+    <pre>
+image.get_exif_by_entry('Make') &raquo; [["Make", "Canon"]]
+image.get_exif_by_entry("ShutterSpeedValue") &raquo;
+    [["ShutterSpeedValue", "189/32"]]
+image.get_exif_by_entry() &raquo;
+    [["Make", "Canon"], ["ShutterSpeedValue", "189/32"] ...]
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="#get_exif_by_number">get_exif_by_number</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="get_exif_by_number">get_exif_by_number</h3>
+
+    <p><span class=
+    "arg">image</span>.get_exif_by_number(<span class=
+    "arg">[tag]*</span>) -&gt; <em>aHash</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the value associated with the specified EXIF tag
+    number or numbers. If no numbers are specified, returns all the
+    tags. The return value is a hash. The hash keys are EXIF tag
+    numbers. The values are the values associated with the
+    tags.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Zero or more EXIF tag numbers.</p>
+
+    <h4>Returns</h4>
+
+    <p>A hash. If there is no tag with the specified number the
+    value is set to <code>nil</code>.</p>
+
+    <h4>Example</h4>
+    <pre>
+image.get_exif_by_number(271) &raquo; {271=&gt;"Canon"}
+image.get_exif_by_number(37377) &raquo; {37377=&gt;"189/32"}
+image.get_exif_by_number() &raquo;
+    {271=&gt;"Canon", 37377=&gt;"189/32" ...}
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="#get_exif_by_entry">get_exif_by_entry</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="get_pixels">get_pixels</h3>
+
+    <p><span class="arg">image</span>.get_pixels(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">columns</span>, <span class="arg">rows</span>) -&gt;
+    <em>anArray</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Gets the pixels from the specified rectangle within the
+    image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The x- and y-offset of the rectangle within the
+      image.</dd>
+
+      <dt>columns, rows</dt>
+
+      <dd>The width and height of the rectangle.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>An array of <a href="struct.html#Pixel">pixels</a>. There
+    will be <code>columns*rows</code> elements in the array.</p>
+
+    <h4>Example</h4>
+
+    <p>This example <a href="image1.html#composite">composites</a>
+    a black-and-white version of an image over the same image in
+    its original colors. It uses <code>get_pixels</code> and
+    <a href="image3.html#store_pixels">store_pixels</a> to make
+    each column of pixels in the black-and-white image slightly
+    more opaque than the column on its left, so that the resulting
+    composite changes smoothly from color on the left to
+    black-and-white on the right.</p><!--
+                        Reduce the size of the original image by specifying
+                        the size of the example image.
+                        -->
+
+    <p class="rollover"><a href=
+    "javascript:popup('get_pixels.rb.html')"><img width="384"
+    height="249" onmouseover="this.src='ex/images/Red_Rocks.jpg'"
+    onmouseout="this.src='ex/get_pixels.jpg'" src=
+    "ex/get_pixels.jpg" title="Click to see the example script"
+    alt="get_pixels example" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" style="left:388px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image3.html#store_pixels">store_pixels</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AcquireImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gray_q">gray?</h3>
+
+    <p><span class="arg">image</span>.gray? -&gt; <code>true</code>
+    or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns <code>true</code> if all the pixels in the image
+    have the same red, green, and blue intensities.</p>
+
+    <h4>Returns</h4>
+
+    <p><code>true</code> or <code>false</code></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#monochrome_q">monochrome?</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>IsGrayImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="grey_q">grey?</h3>
+
+    <p><span class="arg">image</span>.qrey? -&gt; <code>true</code>
+    or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Synonym for <a href="#gray_q">gray?</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="implode">implode</h3>
+
+    <p><span class="arg">image</span>.implode(<span class=
+    "arg">amount</span>=0.50) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A funhouse mirror effect. See the example below.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <code>Float</code> value. Increasing the absolute value of
+    the argument increases the effect. The value may be positive
+    for implosion, or negative for explosion. The default is
+    0.50.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>This example is an animated image. Mouse over the image to
+    start the animation.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('implode.rb.html')"><img onmouseover=
+    "this.src='ex/implode.gif'" onmouseout=
+    "this.src='ex/images/Flower_Hat.jpg'" src=
+    "ex/images/Flower_Hat.jpg" alt="implode example" title=
+    "Click the image to see the example script" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the animation" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>ImplodeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="import_pixels">import_pixels</h3>
+
+    <p><span class="arg">image</span>.import_pixels(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">columns</span>, <span class="arg">rows</span>,
+    <span class="arg">map</span>, <span class="arg">pixels</span>)
+    -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Replaces the pixels in the specified rectangle with pixel
+    data from the supplied array. This method is the reverse of
+    <code>export_pixels</code>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The offset of the rectangle from the upper-left corner of
+      the image</dd>
+
+      <dt>columns, rows</dt>
+
+      <dd>The width and height of the rectangle</dd>
+
+      <dt>map</dt>
+
+      <dd>A string describing <span class="imquote">the expected
+      ordering of the pixel array. It can be any combination or
+      order of R = red, G = green, B = blue, A = alpha, C = cyan, Y
+      = yellow, M = magenta, K = black, or I = intensity (for
+      grayscale).</span></dd>
+
+      <dt>pixels</dt>
+
+      <dd>The pixel data. The pixel data in the array must be
+      stored in scanline order, left-to-right and top-to-bottom.
+      The elements in the array must be <code>Numeric</code> values
+      in the range [0..MaxRGB]. The easiest way to obtain such an
+      array is by using the <code>export_pixels</code> method.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>The image as transformed by the pixel data.</p>
+
+    <h4>Example</h4>
+    <pre>
+# Replace the r'th scanline of the image using
+# pixel data stored in red-green-blue order.
+img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#constitute">constitute</a>, <a href=
+    "image2.html#export_pixels">export_pixels</a>, <a href=
+    "image3.html#store_pixels">store_pixels</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>ImportImagePixels (available in ImageMagick 5.5.7 and
+    GraphicsMagick 1.1)</p>
+
+    <h4>Note</h4>
+
+    <p>This method replaces the <code>constitute</code> method.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="inspect">inspect</h3>
+
+    <p><span class="arg">image</span>.inspect -&gt;
+    <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Constructs a description of the image as a string.</p>
+
+    <h4>Example</h4>
+    <pre>
+f = Magick::Image.read('implode.jpg').first
+f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
+</pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="level">level</h3>
+
+    <p><span class="arg">image</span>.level(<span class=
+    "arg">black_point</span>=<code>0.0</code>, <span class=
+    "arg">mid_point</span>=<code>1.0</code>, <span class=
+    "arg">white_point</span>=<code>MaxRGB</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Adjusts the levels of an image by scaling
+    the colors falling between specified white and black points to
+    the full available quantum range. The parameters provided
+    represent the black, mid, and white points. The black point
+    specifies the darkest color in the image. Colors darker than
+    the black point are set to zero. Mid point specifies a gamma
+    correction to apply to the image. White point specifies the
+    lightest color in the image. Colors brighter than the white
+    point are set to the maximum quantum value.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>black_point</dt>
+
+      <dd>The black point level. The default is 0.0.</dd>
+
+      <dt>mid_point</dt>
+
+      <dd>The mid-point level. The default is 1.0.</dd>
+
+      <dt>white_point</dt>
+
+      <dd>The white point level. The default is <a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p><code>level(0,1.50)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('level.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/level.jpg'" src="ex/level.jpg" title=
+    "Click to see the example script" alt="level example" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4><a href="#level_channel">level_channel</a>
+
+    <h4>Magick API</h4>
+
+    <p>LevelImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="level_channel">level_channel</h3>
+
+    <p><span class="arg">image</span>.level_channel(<span class=
+    "arg">channel</span>, <span class=
+    "arg">black_point</span>=<code>0.0</code>, <span class=
+    "arg">mid_point</span>=<code>1.0</code>, <span class=
+    "arg">white_point</span>=<code>MaxRGB</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Same as <code>level</code> but operates
+    only on the specified channel.
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel</dt>
+
+      <dd>A <a href="constants.html#ChannelType">ChannelType</a>
+      value.</dd>
+
+      <dt>black_point</dt>
+
+      <dd>The black point level. The default is 0.0.</dd>
+
+      <dt>mid_point</dt>
+
+      <dd>The mid-point level. The default is 1.0.</dd>
+
+      <dt>white_point</dt>
+
+      <dd>The white point level. The default is <a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('level_channel.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/level_channel.jpg'" src="ex/level_channel.jpg"
+    title="Click to see the example script" alt=
+    "level_channel example" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href="#level">level</a>
+
+    <h4>Magick API</h4>
+
+    <p>LevelImageChannel (available in ImageMagick 5.5.3)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="magnify">magnify</h3>
+
+    <p><span class="arg">image</span>.magnify -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A convenience method that scales the receiver to twice its
+    size.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#magnify_bang">magnify!</a>, <a href=
+    "#minify">minify</a>, <a href="image3.html#resize">resize</a>,
+    <a href="image3.html#scale">scale</a>, <a href=
+    "image3.html#sample">sample</a>, <a href=
+    "image3.html#thumbnail">thumbnail</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>MagnifyImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="magnify_bang">magnify!</h3>
+
+    <p><span class="arg">image</span>.magnify! -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#magnify">magnify</a></p>
+
+    <h4>Returns</h4>self
+  </div>
+
+  <div class="sig">
+    <h3 id="map">map</h3>
+
+    <p><span class="arg">image</span>.map(<span class=
+    "arg">img</span>, <span class=
+    "arg">dither</span>=<code>false</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Replaces the colors of an image with the
+    closest color from a reference image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>img</dt>
+
+      <dd>The reference image. May be either another image or an
+      <code>Image</code> object.</dd>
+
+      <dt>dither</dt>
+
+      <dd>If <code>true</code>, dithers the mapped image.</dd>
+    </dl>
+
+    <h4>Returns</h4>A new image
+
+    <h4>Example</h4>
+
+    <p>This image has been mapped to the Netscape 216-color
+    cube.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('map_f.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/map_f.jpg'" src="ex/map_f.jpg" alt=
+    "map_f example" title="Click to see the example script" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="ilist.html#map">ImageList#map</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>MapImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="matte_fill_to_border">matte_fill_to_border</h3>
+
+    <p><span class=
+    "arg">image</span>.matte_fill_to_border(<span class=
+    "arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Makes transparent all the pixels that are neighbors of the
+    pixel at <span class="arg">x</span>,<span class="arg">y</span>
+    and are not the border color.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The x- and y- coordinates of the target pixel.</p>
+
+    <h4>Returns</h4>A new image
+
+    <h4>Example</h4>
+
+    <p>In this example the border color is black. The fill starts
+    in the center and makes all the pixels transparent until it
+    reaches a black pixel. The resulting image has been composited
+    over a plasma background, which shows through the transparent
+    pixels.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('matte_fill_to_border.rb.html')"><img src=
+    "ex/matte_fill_to_border_after.gif" onmouseover=
+    "this.src='ex/matte_fill_to_border_before.gif'" onmouseout=
+    "this.src='ex/matte_fill_to_border_after.gif'" alt=
+    "matte_fill_to_border example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#matte_floodfill">matte_floodfill</a>, <a href=
+    "draw.html#matte">Draw#matte</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>MatteFloodfillImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="matte_floodfill">matte_floodfill</h3>
+
+    <p><span class="arg">image</span>.matte_floodfill(<span class=
+    "arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Makes transparent all the pixels that are the same color as
+    the pixel at <span class="arg">x</span>, <span class=
+    "arg">y</span>, and are neighbors.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The x- and y-coordinates of the target pixel.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>In this example the fill starts at the center pixel and
+    replaces all the yellow pixels - the color of the center pixel.
+    The resulting image has been composited over a plasma
+    background, which shows through the transparent pixels.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('matte_floodfill.rb.html')"><img src=
+    "ex/matte_floodfill_after.gif" onmouseover=
+    "this.src='ex/matte_floodfill_before.gif'" onmouseout=
+    "this.src='ex/matte_floodfill_after.gif'" alt=
+    "matte_floodfill example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#matte_replace">matte_replace</a>, <a href=
+    "draw.html#matte">Draw#matte</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>MatteFloodfilImage</p>
+
+    <h4>Note</h4>
+  </div>
+
+  <div class="sig">
+    <h3 id="matte_point">matte_point</h3>
+
+    <p><span class="arg">image</span>.matte_point(<span class=
+    "arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Makes the pixel at <span class="arg">x</span>, <span class=
+    "arg">y</span> transparent. This method makes a copy of the
+    image, just to make one pixel transparent. I recommend using
+    the <code>Draw#matte</code> method instead.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The x- and y-coordinates of the target pixel.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4><a href="draw.html#Draw.matte">Draw#matte</a>
+    "rollover"
+  </div>
+
+  <div class="sig">
+    <h3 id="matte_replace">matte_replace</h3>
+
+    <p><span class="arg">image</span>.matte_replace(<span class=
+    "arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Makes transparent all the pixels that are the same color as
+    the pixel at <span class="arg">x</span>, <span class=
+    "arg">y</span>.</p>
+
+    <h4>Arguments</h4>The x- and y-coordinates of the target pixel.
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>In this example the target pixel is a black pixel in the
+    center of the uppermost circle. The <code>matte_replace</code>
+    method makes all the black pixels in the image transparent. The
+    resulting image has been composited over a plasma background,
+    which shows through the transparent pixels.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('matte_replace.rb.html')"><img onmouseover=
+    "this.src='ex/matte_replace_before.gif'" onmouseout=
+    "this.src='ex/matte_replace_after.gif'" src=
+    "ex/matte_replace_after.gif" alt="matte_replace example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4><a href=
+    "image3.html#transparent">transparent</a>, <a href=
+    "draw.html#matte">Draw#matte</a>
+
+    <h4>Magick API</h4>
+
+    <p>TransparentImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="matte_reset_bang">matte_reset!</h3>
+
+    <p><span class="arg">image</span>.matte_reset! -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Makes all the pixels in the image transparent.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="imageattrs.html#opacity_eq">opacity=</a></p>
+
+    <h4>Magick API</h4>SetImageOpacity
+  </div>
+
+  <div class="sig">
+    <h3 id="median_filter">median_filter</h3>
+
+    <p><span class="arg">image</span>.median_filter(<span class=
+    "arg">radius</span>=1.0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Applies a digital filter that improves the
+    quality of a noisy image. Each pixel is replaced by the median
+    in a set of neighboring pixels as defined by radius.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The filter radius. The larger the value, the longer it takes
+    to render. Values larger than 8 or 9 may take longer than you
+    want to wait, and will not have significantly better results
+    than much smaller values.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>The left side of the image has been modified by <a href=
+    "image1.html#add_noise"><code>add_noise</code></a>. The right
+    side has been filtered by
+    <code>median_filter(0.05).</code></p><a href=
+    "javascript:popup('median_filter.rb.html')"><img src=
+    "ex/median_filter.jpg" alt="median_filter example" /></a>
+
+    <h4>See also</h4><a href="#enhance">enhance</a>, <a href=
+    "image3.html#reduce_noise">reduce_noise</a>, <a href=
+    "image3.html#unsharp_mask">unsharp_mask</a>
+
+    <h4>Magick API</h4>
+
+    <p>MedianFilterImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="minify">minify</h3>
+
+    <p><span class="arg">image</span>.minify -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A convenience method that scales the receiver to half its
+    size.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4><a href="#minify_bang">minify!</a> <a href=
+    "#magnify">magnify</a>, <a href=
+    "image3.html#resize">resize</a>, <a href=
+    "image3.html#sample">sample</a>, <a href=
+    "image3.html#scale">scale</a>, <a href=
+    "image3.html#thumbnail">thumbnail</a>
+
+    <h4>Magick API</h4>
+
+    <p>MinifyImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="minify_bang">minify!</h3>
+
+    <p><span class="arg">image</span>.minify! -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#Image.minify">minify</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="modulate">modulate</h3>
+
+    <p><span class="arg">image</span>.modulate(<span class=
+    "arg">brightness</span>=1.0, <span class=
+    "arg">saturation</span>=1.0, <span class="arg">hue</span>=1.0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Changes the brightness, saturation, and hue.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The percent change in the brightness, saturation, and hue,
+    represented as <code>Float</code> numbers. For example, 0.25
+    means "25%". All three arguments may be omitted. The default
+    value of each argument is 1.0, that is, 100%.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p><code>modulate(0.85)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('modulate.rb.html')"><img src=
+    "ex/modulate.jpg" alt="modulate example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/modulate.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>ModulateImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="monochrome_q">monochrome?</h3>
+
+    <p><span class="arg">image</span>.monochrome? -&gt;
+    <code>true</code> or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns <code>true</code> if all the pixels have the same
+    red, green, and blue values and the values are either 0 or
+    MaxRGB. That is, the image is black-and-white.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#gray_q">gray?</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>IsMonochromeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="motion_blur">motion_blur</h3>
+
+    <p><span class="arg">image</span>.motion_blur(<span class=
+    "arg">radius</span>, <span class="arg">sigma</span>,
+    <span class="arg">angle</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Simulates motion blur. We convolve the image
+    with a Gaussian operator of the given <span class=
+    "arg">radius</span> and standard deviation (<span class=
+    "arg">sigma</span>). Use a radius of 0 and
+    <code>motion_blur</code> selects a suitable radius for you.
+    <span class="arg">Angle</span> gives the angle of the blurring
+    motion.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>The radius of the Gaussian operator.</dd>
+
+      <dt>sigma</dt>
+
+      <dd>The standard deviation of the Gaussian operator. Must be
+      greater than 0.</dd>
+
+      <dt>angle</dt>
+
+      <dd>The angle (in degrees) of the blurring motion.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('motion_blur.rb.html')"><img src=
+    "ex/motion_blur.jpg" alt="motion_blur example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/motion_blur.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#blur_image">blur_image</a>, <a href=
+    "#gaussian_blur">gaussian_blur</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>MotionBlurImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="negate">negate</h3>
+
+    <p><span class="arg">image</span>.negate(<span class=
+    "arg">grayscale</span>=<code>false</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Negates the colors in the receiver.</p>
+
+    <h4>Arguments</h4>If the <span class="arg">grayscale</span>
+    argument is true, only the grayscale values are negated.
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('negate.rb.html')"><img src="ex/negate.jpg"
+    alt="negate example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/negate.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>NegateImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="normalize">normalize</h3>
+
+    <p><span class="arg">image</span>.normalize -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Enhances the contrast of a color image by
+    adjusting the pixel color to span the entire range of colors
+    available.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('normalize.rb.html')"><img src=
+    "ex/normalize.jpg" alt="normalize example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Hot_Air_Balloons.jpg'" onmouseout=
+    "this.src='ex/normalize.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left: 191px;"
+    title="Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>NormalizeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="oil_paint">oil_paint</h3>
+
+    <p><span class="arg">image</span>.oil_paint(<span class=
+    "arg">radius</span>=3.0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Applies a special effect filter that
+    simulates an oil painting. Each pixel is replaced by the most
+    frequent color occurring in a circular region defined by
+    <span class="arg">radius</span>.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:('oil_paint.rb.html')"><img src="ex/oil_paint.jpg"
+    title="Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/oil_paint.jpg'" alt="oil_paint example" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>OilPaintImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="opaque">opaque</h3>
+
+    <p><span class="arg">image</span>.opaque(<span class=
+    "arg">target</span>, <span class="arg">fill</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Changes all pixels having the target color to the fill
+    color.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>target</dt>
+
+      <dd>The color to be replaced. May be a color name or a
+      <code><a href="struct.html#Pixel">Pixel</a></code></dd>
+
+      <dt>fill</dt>
+
+      <dd>The replacement color. May be a color name or a
+      <code><a href="struct.html#Pixel">Pixel</a></code></dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>This example replaces white pixels with red pixels. Set the
+    <code>fuzz</code> attribute to specify how closely the target
+    pixels must match.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('opaque.rb.html')"><img src="ex/opaque.jpg"
+    alt="opaque example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/opaque.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="#color_floodfill">color_floodfill</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>OpaqueImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="opaque_q">opaque?</h3>
+
+    <p><span class="arg">image</span>.opaque? -&gt;
+    <code>true</code> or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns <code>true</code> if all of the pixels in the
+    receiver have an opacity value of <a href=
+    "constants.html#Opacity">OpaqueOpacity</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p><code>true</code> or <code>false</code></p>
+
+    <h4>Magick API</h4>
+
+    <p>IsOpaqueImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="ordered_dither">ordered_dither</h3>
+
+    <p><span class="arg">image</span>.ordered_dither -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Uses the ordered dithering technique of
+    reducing color images to monochrome using positional
+    information to retain as much information as possible.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('ordered_dither.rb.html')"><img src=
+    "ex/ordered_dither.jpg" alt="ordered_dither example"
+    onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/ordered_dither.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href="image3.html#quantize">quantize</a>
+
+    <h4>Magick API</h4>
+
+    <p>OrderedDitherImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="palette_q">palette?</h3>
+
+    <p><span class="arg">image</span>.palette? -&gt;
+    <code>true</code> or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Returns true if the image is <a href=
+    "constants.html#ClassType"><code>PseudoClass</code></a> and has
+    256 unique colors or less.</p>
+
+    <h4>Returns</h4>
+
+    <p><code>true</code> or <code>false</code></p>
+
+    <h4>Magick API</h4>
+
+    <p>IsPaletteImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pixel_color">pixel_color</h3>
+
+    <p><span class="arg">image</span>.pixel_color(<span class=
+    "arg">x</span>, <span class="arg">y</span>[, <span class=
+    "arg">new_color</span>]) -&gt; <em>aPixel</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the color of the pixel at <span class=
+    "arg">x</span>, <span class="arg">y</span>. Optionally, changes
+    the color of the pixel to a new color.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The x- and y-coordinates of the pixel.</dd>
+
+      <dt>new_color</dt>
+
+      <dd>If specified, the pixel is set to this color. May be
+      either a color name or a <a href=
+      "struct.html#Pixel">Pixel</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>A <a href="struct.html#Pixel">Pixel</a> having
+    the RGB values of the specified pixel.
+
+    <h4>Example</h4>
+    <pre>
+old = image.pixel_color(20,40,"white")
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>AcquireImagePixels</p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="image1.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "image3.html">Next</a>&nbsp;&raquo;
+  </div>
+</body>
+</html>

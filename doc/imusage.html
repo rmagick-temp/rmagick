@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,62 +10,92 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
+  <style type="text/css">
+  /*<![CDATA[*/
+
+  /* Styles local to this page. */
+  /*
+   *  Modify the example style for the scripts on this page.
+   */
+  .example {
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 1em;
+  }
+  #rgbfmts {
+    border-collapse: separate;
+    border-spacing: 0;
+    border: thin solid black;
+    background-color: #f0f0f0;
+    margin: 1em auto 1em auto;
+    width: 70%;
+  }
+  #rgbfmts td {
+    padding: 3px 1em 3px 1em;
+    border-width: 0;
+  }
+  #rgbfmts caption {
+    font-weight: bold;
+  }
+  .evenrow {
+    background-color: #f0f0f0;
+  }
+  .oddrow {
+    background-color: white;
+  }
+  #geostr {
+    width:100%;
+    font-weight: bold;
+    text-align: center;
+  }
+  #bi_format_list {
+    margin-left: 100px;
+  }
+  #bi_format_list h4 {
+    padding-left: 5px;
+    position: relative;
+    left: -100px;
+    background-image: url(graydient210x6.gif);
+    background-repeat: repeat-y;
+  }
+
+  /*]]>*/
+  </style>
 </head>
 
 <body>
-  <div class="header">
-    RMagick User's Guide and Reference
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="usage.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "comtasks.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="usage.html">&lt;-
-      Prev</a></td>
+  <h1>RMagick: ImageMagick/GraphicsMagick Conventions</h1>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div id="toc">
+    <h2>Table of Contents</h2>
 
-      <td style="text-align: right"><a href="comtasks.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <ul style="margin-left: 15px; padding-top: 1em">
+      <li><a href="#formats">Image formats and filenames</a></li>
 
-  <div class="stdtitle">
-    ImageMagick/GraphicsMagick Conventions
+      <li><a href="#color_names">Color names</a></li>
+
+      <li><a href="#geometry">The geometry string</a></li>
+
+      <li><a href="#classtype">DirectClass and PseudoClass</a></li>
+
+      <li><a href="#builtin_formats">Built-in image
+      formats</a></li>
+    </ul>
   </div>
 
-  <table summary="table of contents" width="100%" cellspacing="0"
-  cellpadding="5">
-    <tr bgcolor="#C3C3C3">
-      <td>
-        <h3>Table Of Contents</h3>
-      </td>
-    </tr>
-
-    <tr class="toc">
-      <td>
-        <ul>
-          <li><a href="#formats">Image formats and
-          filenames</a></li>
-
-          <li><a href="#color_names">Color names</a></li>
-
-          <li><a href="#geometry">The geometry string</a></li>
-
-          <li><a href="#classtype">DirectClass and
-          PseudoClass</a></li>
-
-          <li><a href="#builtin_formats">Built-in image
-          formats</a></li>
-        </ul>
-      </td>
-    </tr>
-  </table>
-
-  <h3><a name="formats" id="formats">Image formats and
-  filenames</a></h3>
+  <h2 id="formats">Image formats and filenames</h2>
 
   <p>&times;Magick supports over 89 major <a href=
   "http://www.imagemagick.org/www/formats.html">image
@@ -85,10 +115,10 @@
   Simply write the image file using a name that has either a prefix
   or a suffix corresponding to the format you want.</p>
 
-  <p><i>Note:</i> Keep in mind that files in some formats may only
-  be read by &times;Magick, not written.</p>
+  <p><em>Note:</em> Keep in mind that files in some formats may
+  only be read by &times;Magick, not written.</p>
 
-  <h3><a name="color_names" id="color_names">Color names</a></h3>
+  <h2 id="color_names">Color names</h2>
 
   <p>Many RMagick methods expect color name arguments or return
   color names. A color name can be</p>
@@ -102,146 +132,144 @@
     "http://www.w3.org/TR/SVG/types.html#ColorKeywords">SVG color
     name</a> (similar to the X color names), or</li>
 
-    <li>a hex digit string in one of the following forms:
-
-      <table summary="color name formats">
-        <tbody>
-          <tr>
-            <td>#RGB</td>
-
-            <td>4 bits each</td>
-          </tr>
-
-          <tr>
-            <td>#RRGGBB</td>
-
-            <td>8 bits each</td>
-          </tr>
-
-          <tr>
-            <td>#RRRGGGBBB</td>
-
-            <td>12 bits each</td>
-          </tr>
-
-          <tr>
-            <td>#RRRRGGGGBBBB</td>
-
-            <td>16 bits each</td>
-          </tr>
-
-          <tr>
-            <td>#RGBA</td>
-
-            <td>4 bits each, plus alpha channel</td>
-          </tr>
-
-          <tr>
-            <td>#RRGGBBAA</td>
-
-            <td>8 bits each, plus alpha channel</td>
-          </tr>
-
-          <tr>
-            <td>#RRRGGGBBBAAA</td>
-
-            <td>12 bits each, plus alpha channel</td>
-          </tr>
-
-          <tr>
-            <td>#RRRRGGGGBBBBAAAA</td>
-
-            <td>16 bits each, plus alpha channel</td>
-          </tr>
-
-          <tr>
-            <td>rgb(r,g,b)</td>
-
-            <td>&nbsp;</td>
-          </tr>
-
-          <tr>
-            <td>rgba(r,g,b,a)</td>
-
-            <td>&nbsp;</td>
-          </tr>
-        </tbody>
-      </table>The alpha channel is the opacity of the image, which
-      can range from 0 (Magick::OpaqueOpacity) to MaxRGB
-      (Magick::TransparentOpacity).
-    </li>
+    <li>a hex digit string in one of the formats shown in the
+    following table.</li>
   </ol>
 
-  <p>A <var>Pixel</var> object contains the numeric representation
-  of a color. The <a href=
+  <table id="rgbfmts" summary="RGB formats">
+    <caption>
+      RGB color name formats
+    </caption>
+
+    <tr class="oddrow">
+      <td>#RGB</td>
+
+      <td>4 bits for each channel</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>#RRGGBB</td>
+
+      <td>8 bits for each channel</td>
+    </tr>
+
+    <tr class="oddrow">
+      <td>#RRRGGGBBB</td>
+
+      <td>12 bits for each channel</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>#RRRRGGGGBBBB</td>
+
+      <td>16 bits for each channel</td>
+    </tr>
+
+    <tr class="oddrow">
+      <td>#RGBA</td>
+
+      <td>4 bits for each channel, plus the alpha channel</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>#RRGGBBAA</td>
+
+      <td>8 bits for each channel, plus the alpha channel</td>
+    </tr>
+
+    <tr class="oddrow">
+      <td>#RRRGGGBBBAAA</td>
+
+      <td>12 bits for each channel, plus the alpha channel</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>#RRRRGGGGBBBBAAAA</td>
+
+      <td>16 bits for each channel, plus the alpha channel</td>
+    </tr>
+
+    <tr class="oddrow">
+      <td>rgb(r,g,b)</td>
+
+      <td>SVG functional notation. r, g, and b are either three
+      integers 0-255 or 3 percentanges 0%-100%.</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>rgb(r,g,b,a)</td>
+
+      <td>SVG functional notation plus the alpha channel.</td>
+    </tr>
+  </table>
+
+  <p>The alpha channel is the opacity of the image, which can range
+  from 0 (Magick::OpaqueOpacity) to MaxRGB
+  (Magick::TransparentOpacity).</p>
+
+  <p>A <code>Pixel</code> object contains the numeric
+  representation of a color. The <a href=
   "struct.html#Pixel.from_color">Pixel.from_color</a> method
   converts a color name to a pixel. There are two methods to
   convert a pixel to a color name. The <a href=
   "struct.html#Pixel.to_color">Pixel#to_color</a> method requires
   that you specify whether the alpha (opacity) channel is used, the
   depth (8 or 16) and the color standard to use. The <a href=
-  "image.html#Image.to_color">Image#to_color</a> method uses the
-  image's depth and <a href="imageattrs.html#Image.matte">matte</a>
-  attributes. If <var>matte</var> is false the opacity value is
-  ignored.</p>
+  "image3.html#to_color">Image#to_color</a> method uses the image's
+  depth and <a href="imageattrs.html#matte">matte</a> attributes.
+  If <code>matte</code> is false the opacity value is ignored.</p>
 
-  <p><i>Hint:</i> The name of the transparent color is
+  <p><em>Hint:</em> The name of the transparent color is
   "transparent", or "#000000ff".</p>
 
   <p><a href="http://www.imagemagick.org/www/color.html">This</a>
   is &times;Magick's page about color names.</p>
 
-  <h3><a name="geometry" id="geometry">The geometry string</a></h3>
+  <h2 id="geometry">The geometry string</h2>
 
-  <p>RMagick methods frequently require a <var>geometry</var>
+  <p>RMagick methods frequently require a <code>geometry</code>
   string argument. This string generally specifies width and height
   values as well as x and y offset values. The values are usually
   specified in pixels (but see the % flag, below).</p>
 
-  <p>The format of the geometry string is
-  <var>&lt;width&gt;x&lt;height&gt;+-&lt;x&gt;+-&lt;y&gt;{%@!&lt;&gt;}</var>
-  Any of the values may be omitted, depending on the context.</p>
+  <p>This is the format of the geometry string. Any of the values
+  may be omitted, depending on the context:</p>
+  <pre id="geostr">
+&lt;width&gt;x&lt;height&gt;+-&lt;x&gt;+-&lt;y&gt;{%@!&lt;&gt;}
+</pre>
 
   <p><a href=
   "http://www.imagemagick.org/www/utilities.html">This</a> is the
   &times;Magick description of the geometry string:</p>
 
   <div class="imquote">
-    <blockquote>
-      By default, the width and height are maximum values. That is,
-      the image is expanded or contracted to fit the width and
-      height value while maintaining the aspect ratio of the image.
-      Append an exclamation point to the geometry to force the
-      image size to exactly the size you specify. For example, if
-      you specify 640x480! the image width is set to 640 pixels and
-      height to 480.
-    </blockquote>
+    <p>By default, the width and height are maximum values. That
+    is, the image is expanded or contracted to fit the width and
+    height value while maintaining the aspect ratio of the image.
+    Append an exclamation point to the geometry to force the image
+    size to exactly the size you specify. For example, if you
+    specify 640x480! the image width is set to 640 pixels and
+    height to 480.</p>
 
-    <blockquote>
-      If only the width is specified, the width assumes the value
-      and the height is chosen to maintain the aspect ratio of the
-      image. Similarly, if only the height is specified (e.g.,
-      "x256"), the width is chosen to maintain the aspect ratio. To
-      specify a percentage width or height instead, append %. The
-      image size is multiplied by the width and height percentages
-      to obtain the final image dimensions. To increase the size of
-      an image, use a value greater than 100 (e.g. 125%). To
-      decrease an image's size, use a percentage less than 100.
-    </blockquote>
+    <p>If only the width is specified, the width assumes the value
+    and the height is chosen to maintain the aspect ratio of the
+    image. Similarly, if only the height is specified (e.g.,
+    "x256"), the width is chosen to maintain the aspect ratio. To
+    specify a percentage width or height instead, append %. The
+    image size is multiplied by the width and height percentages to
+    obtain the final image dimensions. To increase the size of an
+    image, use a value greater than 100 (e.g. 125%). To decrease an
+    image's size, use a percentage less than 100.</p>
 
-    <blockquote>
-      Use @ to specify the maximum area in pixels of an image.
-    </blockquote>
+    <p>Use @ to specify the maximum area in pixels of an image.</p>
 
-    <blockquote>
-      Use &gt; to change the dimensions of the image only if its
-      width or height exceeds the geometry specification. &lt;
-      resizes the image only if both of its dimensions are less
-      than the geometry specification. For example, if you specify
-      '640x480&gt;' and the image size is 256x256, the image size
-      does not change. However, if the image is 512x512 or
-      1024x1024, it is resized to 480x480.
-    </blockquote>
+    <p>Use &gt; to change the dimensions of the image only if its
+    width or height exceeds the geometry specification. &lt;
+    resizes the image only if both of its dimensions are less than
+    the geometry specification. For example, if you specify
+    '640x480&gt;' and the image size is 256x256, the image size
+    does not change. However, if the image is 512x512 or 1024x1024,
+    it is resized to 480x480.</p>
   </div>
 
   <p>The x and y offsets, if present, can be preceeded with either
@@ -249,42 +277,40 @@
   or top edges, respectively. Conversely, - measures from the right
   or bottom edges. Offsets are always measured in pixels.</p>
 
+  <p>Any method that accepts a geometry string will also accept a
+  <a href="struct.html#geometry"><code>Geometry</code></a>
+  object.</p>
+
   <p>Some RMagick methods interpret the geometry string values
   differently. Where this is the case the documentation for the
   method will explain the differences.</p>
 
-  <h3><a name="classtype" id="classtype">DirectClass and
-  PseudoClass</a></h3>
+  <h2 id="classtype">DirectClass and PseudoClass</h2>
 
-  <p>&times;Magick classifies all images into two <i>classes</i>,
-  <b>PseudoClass</b> and <b>DirectClass</b>.</p>
+  <p>&times;Magick classifies all images into two <em>classes</em>,
+  PseudoClass and DirectClass.</p>
 
   <div class="imquote">
-    <blockquote>
-      DirectClass images are continuous-tone images stored as RGB
-      (red, green, blue), RGBA (red, green, blue, alpha), or CMYK
-      (cyan, yellow, magenta, black) intensity values as defined by
-      the <var>colorspace</var> [attribute].
-    </blockquote>
+    <p>DirectClass images are continuous-tone images stored as RGB
+    (red, green, blue), RGBA (red, green, blue, alpha), or CMYK
+    (cyan, yellow, magenta, black) intensity values as defined by
+    the <code>colorspace</code> [attribute].</p>
 
-    <blockquote>
-      PseudoClass images are colormapped RGB images. The colormap
-      is stored as a series of red, green, and blue pixel values,
-      each value being a byte in size. If the image depth is 16,
-      each colormap entry consumes two bytes with the most
-      significant byte being first. The number of colormap entries
-      is defined by the <var>colors</var> [attribute].
-    </blockquote>
+    <p>PseudoClass images are colormapped RGB images. The colormap
+    is stored as a series of red, green, and blue pixel values,
+    each value being a byte in size. If the image depth is 16, each
+    colormap entry consumes two bytes with the most significant
+    byte being first. The number of colormap entries is defined by
+    the <code>colors</code> [attribute].</p>
   </div>
 
   <p>GIF format images are PseudoClass. JPEG format images are
   DirectClass. You can change the class of a image with the
-  <var><a href=
-  "imageattrs.html#Image.class_type_eq">Image#class_type=</a></var>
+  <code><a href=
+  "imageattrs.html#class_type_eq">class_type=</a></code>
   method.</p>
 
-  <h3><a name="builtin_formats" id="builtin_formats">Built-in image
-  formats</a></h3>
+  <h2 id="builtin_formats">Built-in image formats</h2>
 
   <p>Some of the image formats that &times;Magick supports are
   special-purpose formats that are built-in to &times;Magick
@@ -295,87 +321,82 @@
   (There are more but I've never used them.) When the format is
   marked with an <sup>*</sup>, you must supply the desired size of
   the image in order to "read" it. Specify the size by assigning a
-  string in the form "WxH" to the <var>size</var> attribute in the
-  <var>read</var> method's additional parms block. For example, to
-  create a image in the gradient format that is 100 pixels wide and
-  200 pixels high, use:</p>
+  string in the form "WxH" to the <code>size</code> attribute in
+  the <code>read</code> method's additional parms block. For
+  example, to create a image in the gradient format that is 100
+  pixels wide and 200 pixels high, use:</p>
   <pre class="example">
 i = Image.read("gradient:red-blue") { self.size = "100x200" }
 </pre>
 
-  <p>See <a href="demo.rb.html" target="_blank">demo.rb</a> for
+  <p>See <a href="javascript:popup('demo.rb.html')">demo.rb</a> for
   more examples of reading built-in formats.</p>
 
-  <dl>
-    <dt>gradient<sup>*</sup></dt>
+  <div id="bi_format_list">
+    <h4>gradient<sup>*</sup></h4>
 
-    <dd>
-      Gradient filenames have the form
-      <code>"gradient:color1-color2"</code>. These images are
-      created by gradually changing from <var>color1</var> at the
-      top edge to <var>color2</var> at the bottom.
+    <p>Gradient filenames have the form
+    <code>"gradient:color1-color2"</code>. These images are created
+    by gradually changing from <code>color1</code> at the top edge
+    to <code>color2</code> at the bottom. Don't confuse this image
+    format with the <a href=
+    "struct.html#GradientFill">GradientFill</a> class, which is part
+    of RMagick.</p>
 
-      <p>Don't confuse this image format with the <a href=
-      "fill.html#GradientFill">GradientFill</a> class, which is
-      part of RMagick.</p>
-    </dd>
+    <h4>granite</h4>
 
-    <dt>granite</dt>
+    <p>A mottled gray image suitable for use as a tiled background
+    texture. Ex: <code>"granite:"</code>.</p>
 
-    <dd>A mottled gray image suitable for use as a tiled background
-    texture. Ex: <code>"granite:"</code>.</dd>
+    <h4>logo</h4>
 
-    <dt>logo</dt>
+    <p>The &times;Magick logo. Ex: <code>"logo:"</code>.</p>
 
-    <dd>The &times;Magick logo. Ex: <code>"logo:"</code>.</dd>
+    <h4>netscape</h4>
 
-    <dt>netscape</dt>
+    <p>The 216-color "Web safe" cube. Ex:
+    <code>"netscape:"</code>.</p>
 
-    <dd>The 216-color "Web safe" cube. Ex:
-    <code>"netscape:"</code>.</dd>
+    <h4>null<sup>*</sup></h4>
 
-    <dt>null<sup>*</sup></dt>
+    <p>An empty image. Ex: <code>"null:"</code>.</p>
 
-    <dd>An empty image. Ex: <code>"null:"</code>.</dd>
+    <h4>pattern</h4>
 
-    <dt>pattern <span class="imversion">(5.5.7)</span></dt>
-
-    <dd>ImageMagick 5.5.7-3 introduced the <var>pattern:</var>
+    <p>ImageMagick 5.5.7-3 introduced the <code>pattern:</code>
     format. This format supplies a number of built-in patterns that
     may be referenced by specifying the pattern name. For example,
-    <code>pattern:checkerboard</code></dd>
+    <code>pattern:checkerboard</code>. For a list of acceptable
+    patterns, see <a href=
+    "http://www.imagemagick.org/www/formats.html">this
+    page.</a></p>
 
-    <dt>plasma<sup>*</sup></dt>
+    <h4>plasma<sup>*</sup></h4>
 
-    <dd>Creates a swirly, psychedelic image. Specify a pair of
-    colors in the filename (<code>"plasma:red-blue"</code>)or
+    <p>Creates a swirly, psychedelic image. Specify a pair of
+    colors in the filename (<code>"plasma:red-blue"</code>) or
     specify the filename <code>"plasma:fractal"</code> for best
-    results.</dd>
+    results.</p>
 
-    <dt>rose</dt>
+    <h4>rose</h4>
 
-    <dd>A small picture of a rose. Ex: <code>"rose:"</code>.</dd>
+    <p>A small picture of a rose. Ex: <code>"rose:"</code>.</p>
 
-    <dt>xc<sup>*</sup></dt>
+    <h4>xc<sup>*</sup></h4>
 
-    <dd>Specify a color name after the xc: prefix. For example,
-    <code>"xc:red"</code>. This format is simply an image of the
-    specified color.</dd>
-  </dl>
-  <hr />
+    <p>Specify a <a href="#color_names">color name</a> after the
+    xc: prefix. For example, <code>"xc:red"</code>. This format is
+    simply an image of the specified color. You can get exactly the
+    same results by specifying the background color when creating
+    an image.</p>
+  </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="usage.html">&lt;-
-      Prev</a></td>
+  <p class="spacer"> </p>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
-
-      <td style="text-align: right"><a href="comtasks.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+  <div class="nav">
+    &laquo; <a href="usage.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="comtasks.html">Next</a>
+    &raquo;
+  </div>
 </body>
 </html>

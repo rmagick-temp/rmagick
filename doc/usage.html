@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,141 +10,172 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <link type="text/css" rel="stylesheet" href="rubymgen.css" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+  <script type="text/javascript" src="scripts/doc.js">
+  </script>
   <style type="text/css">
   /*<![CDATA[*/
-      .grpname {
-         background-color: #C3C3C3;
-         font-weight: bold;
-      }
-      .imgmethod {
-         background-color: #ccFFFF;
-      }
-      .methodtbl {
-         background-color: #f0f0f0;
-         vertical-align: top;
-      }
+
+  /* Styles local to this page. */
+
+  #index {
+    margin-left: 100px;
+    margin-right: 100px;
+  }
+  #index h4 {
+    position: relative;
+    left: -100px;
+    padding-left: 5px;
+    background-image: url(graydient210x6.gif);
+    background-repeat: repeat-y;
+    color: black;
+  }
+
+  /*
+   *  The "ilist" class identifies ImageList methods in the index.
+   *  Basically
+   */
+  .ilist {
+    font-weight: bold;
+  }
+  .ilist a:link {
+    font-weight: bold;
+    text-decoration: none;
+  }
+  .ilist a:visited {
+    font-weight: bold;
+    color: #7f7fff;
+  }
+  .ilist a:hover {
+    text-decoration: underline;
+  }
+  .ilist a:active {
+    background-color: blue;
+    color: white;
+    text-decoration: underline;
+  }
+
+  #axes {
+    margin-left:100px;
+    margin-right:100px;
+    margin-bottom: 1em;
+    position:relative;
+  }
+  #axes div {
+    position:absolute;
+    top:0;
+    left: 260px;
+  }
+  #rubyname {
+    margin-left: auto;
+    margin-right:auto;
+    width:300px;
+    margin-bottom:1em;
+  }
+  #degrees {
+    border-top: thin solid black;
+    padding-top: 1em;????
+  }
+  #degrees h5 {
+    display: none;
+  }
+
   /*]]>*/
   </style>
 </head>
 
 <body>
-  <div class="header">
-    RMagick User's Guide and Reference
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="index.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "imusage.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="index.html">&lt;-
-      Prev</a></td>
+  <h1>How to use RMagick</h1>
 
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
+  <div id="toc">
+    <h2>Table of Contents</h2>
 
-      <td style="text-align: right"><a href="imusage.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+    <ul style="margin-left: 15px; padding-top: 1em">
+      <li><a href="#basics">Basic concepts</a></li>
 
-  <div class="stdtitle">
-    How to use RMagick
+      <li><a href="#reading">Reading, writing, and creating
+      images</a></li>
+
+      <li><a href="#displaying">Displaying images</a></li>
+
+      <li><a href="#modifying">Examining and modifying
+      images</a></li>
+
+      <li><a href="#marshaling">Marshaling images</a></li>
+
+      <li><a href="#drawing_on">Drawing on and adding text to
+      images</a></li>
+
+      <li><a href="#more">Where to go from here</a></li>
+    </ul>
   </div>
 
-  <table summary="table of contents" width="100%" cellspacing="0"
-  cellpadding="5">
-    <tr bgcolor="#C3C3C3">
-      <td>
-        <h3>Table Of Contents</h3>
-      </td>
-    </tr>
-
-    <tr class="toc">
-      <td>
-        <ul>
-          <li><a href="#basics">Basic concepts</a></li>
-
-          <li><a href="#reading">Reading, writing, and creating
-          images</a></li>
-
-          <li><a href="#displaying">Displaying images</a></li>
-
-          <li><a href="#modifying">Examining and modifying
-          images</a></li>
-
-          <li><a href="#marshaling">Marshaling images</a></li>
-
-          <li><a href="#drawing">Drawing on and adding text to
-          images</a></li>
-
-          <li><a href="#more">Where to go from here</a></li>
-        </ul>
-      </td>
-    </tr>
-  </table>
-
-  <h2><a name="basics" id="basics">Basic concepts</a></h2>
+  <h2 id="basics">Basic concepts</h2>
 
   <p>Let's look at the RMagick equivalent of "Hello, world". This
   program reads an image file named "Cheetah.jpg" and displays it
   on your monitor.</p>
-
-  <div align="center">
-    <table summary="example 1" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
 1. require 'RMagick'
 2. include Magick
 3.
 4. cat = ImageList.new("Cheetah.jpg")
 5. cat.display
 6. exit
+
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <p>Line 1 requires the RMagick.rb file, which defines the
   <b>Magick</b> module. The Magick module contains 3 major classes,
   <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. This section -
-  <i>Basic Comcepts</i> - describes the ImageList and Image
-  classes. The Draw class is explained in the <i><a href=
-  "#drawing">Drawing on and adding text to images</a></i> section,
+  <em>Basic Comcepts</em> - describes the ImageList and Image
+  classes. The Draw class is explained in the <em><a href=
+  "#drawing">Drawing on and adding text to images</a></em> section,
   below.</p>
 
-  <p>The statement on line 5 creates an <i>imagelist</i> object and
-  initializes it by reading the <code>Cheetah.jpg</code> file in
-  the current directory. Line 6 sends the <var>display</var> method
-  to the object. When you send <var>display</var> to an imagelist,
-  it causes all the images in the imagelist to be displayed on the
-  default X Window screen. In this case, the <var>display</var>
-  method makes a picture of a cheetah appear on your monitor.</p>
+  <p>The statement on line 5 creates an <em>imagelist</em> object
+  and initializes it by reading the <code>Cheetah.jpg</code> file
+  in the current directory. Line 6 sends the <code>display</code>
+  method to the object. When you send <code>display</code> to an
+  imagelist, it causes all the images in the imagelist to be
+  displayed on the default X Window screen. In this case, the
+  <code>display</code> method makes a picture of a cheetah appear
+  on your monitor.</p>
 
   <p>Type this program in and try running it now. The
   <code>Cheetah.jpg</code> file is in the <code>ex/images</code>
   subdirectory where you installed the RMagick documentation.</p>
 
   <p>The Image and ImageList classes are closely related. An
-  <i>Image</i> object describes one image or one frame in an image
-  with multiple frames. (An animated GIF or a Photoshop image with
-  multiple layers are examples of images with multiple frames.) You
-  can create a image object from an image file such as a GIF, PNG,
-  or JPEG. You can create a image from scratch by specifying its
-  dimensions. You can write an image to disk, display it on a
-  screen, change its size or orientation, convert it to another
-  format, or otherwise modify it using one of over 100 methods.</p>
+  <em>Image</em> object describes one image or one frame in an
+  image with multiple frames. (An animated GIF or a Photoshop image
+  with multiple layers are examples of images with multiple
+  frames.) You can create a image object from an image file such as
+  a GIF, PNG, or JPEG. You can create a image from scratch by
+  specifying its dimensions. You can write an image to disk,
+  display it on a screen, change its size or orientation, convert
+  it to another format, or otherwise modify it using one of over
+  100 methods.</p>
 
-  <p>An <i>ImageList</i> object is a <i>list</i> of images. It
-  contains zero or more images and a <i>scene number</i>. The scene
-  number indicates the <i>current image</i>. The ImageList class
-  includes methods that operate on all the images in the list.
-  Also, with a very few exceptions, any method defined in the Image
-  class can be used as well. Since Image methods always operate on
-  a single image, when an Image method is sent to an imagelist, the
-  ImageList class sends the method to the current image, that is,
-  the image specified by the scene number.</p>
+  <p>An <em>ImageList</em> object is a <em>list</em> of images. It
+  contains zero or more images and a <em>scene number</em>. The
+  scene number indicates the <em>current image</em>. The ImageList
+  class includes methods that operate on all the images in the
+  list. Also, with a very few exceptions, any method defined in the
+  Image class can be used as well. Since Image methods always
+  operate on a single image, when an Image method is sent to an
+  imagelist, the ImageList class sends the method to the current
+  image, that is, the image specified by the scene number.</p>
 
   <p>The ImageList class is a subclass of the Array class, so you
   can use most Array methods to change the images in the imagelist.
@@ -152,12 +183,7 @@
   an image to the list.</p>
 
   <p>Going back to the example, let's make one modification.</p>
-
-  <div align="center">
-    <table summary="example 2" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
 1. require 'RMagick'
 2. include Magick
 3.
@@ -166,32 +192,23 @@
 6. smallcat.display
 7. exit
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <p>The difference is the statement on line 5. This statement
-  sends the <var>minify</var> method to the imagelist. The
-  <var>minify</var> method is an Image method that reduces the size
-  of an image to half its original size. Remember, since
-  <var>minify</var> is an Image method, the ImageList class sends
-  <var>minify</var> to the current (and only) image. The return
+  sends the <code>minify</code> method to the imagelist. The
+  <code>minify</code> method is an Image method that reduces the
+  size of an image to half its original size. Remember, since
+  <code>minify</code> is an Image method, the ImageList class sends
+  <code>minify</code> to the current (and only) image. The return
   value is a new image, half the size of the original.</p>
 
-  <p>Line 6 demonstrates the Image class's <var>display</var>
+  <p>Line 6 demonstrates the Image class's <code>display</code>
   method, which displays a single image on the X Window screen.
-  <var>Image#display</var> makes a picture of a (in this case,
+  <code>Image#display</code> makes a picture of a (in this case,
   small) cheetah appear on your monitor.</p>
 
   <p>Here's how to write the small cheetah to a file in GIF
   format.</p>
-
-  <div align="center">
-    <table summary="example 3" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
 1. require 'RMagick'
 2. include Magick
 3.
@@ -201,10 +218,6 @@
 7. smallcat.write("Small-Cheetah.gif")
 8. exit
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <p>The statement on line 7 writes the image to a file. Notice
   that the filename extension is <code>gif</code>. When writing
@@ -221,69 +234,64 @@
   one image to deal with, imagelists and images are pretty much
   interchangeable.</p>
 
-  <p><i><b>Note:</b></i> In most cases, an Image method does not
+  <p><em><b>Note:</b></em> In most cases, an Image method does not
   modify the image to which it is sent. Instead, the method returns
   a new image, suitably modified. For example, the <a href=
-  "image.html#Image.resize"><var>resize</var></a> method returns a
-  new image, sized as specified. The receiver image is unaltered.
+  "image3.html#resize"><code>resize</code></a> method returns a new
+  image, sized as specified. The receiver image is unaltered.
   (Following the Ruby convention, when a method alters the receiver
   object, the method name ends with "!". For example, the <a href=
-  "image.html#Image.resize_bang"><var>resize!</var></a> method
-  resizes the receiver in place.)</p>
+  "image3.html#resize_bang"><code>resize!</code></a> method resizes
+  the receiver in place.)</p>
 
-  <h2><a name="reading" id="reading">Reading, writing, and creating
-  images</a></h2>
+  <h2 id="reading">Reading, writing, and creating images</h2>
 
   <p>You've already seen that you can create an imagelist and
   initialize it by specifying the name of an image file as the
   argument to <a href=
-  "ilist.html#ImageList.new"><var>ImageList.new</var></a>. In fact,
-  <var>new</var> can take any number of file name arguments. If the
-  file contains a single image, <var>new</var> reads the file,
-  creates an image, and adds it to the imagelist. If the file is a
-  multi-frame image file, <var>new</var> adds an image for each
-  frame or layer in the file. Lastly, <var>new</var> changes the
-  scene number to point to the last image in the imagelist. In the
-  simple case, <var>new</var> reads a single image from a file and
-  sets the scene number to 0.</p>
+  "ilist.html#new"><code>ImageList.new</code></a>. In fact,
+  <code>new</code> can take any number of file name arguments. If
+  the file contains a single image, <code>new</code> reads the
+  file, creates an image, and adds it to the imagelist. If the file
+  is a multi-frame image file, <code>new</code> adds an image for
+  each frame or layer in the file. Lastly, <code>new</code> changes
+  the scene number to point to the last image in the imagelist. In
+  the simple case, <code>new</code> reads a single image from a
+  file and sets the scene number to 0.</p>
 
-  <p>Underneath the covers, <var>new</var> calls the Image class's
-  <a href="image.html#Image.read">read</a> method to read the image
-  file. The <var>read</var> method is a class method. Given one or
-  more file names, <var>read</var> reads the files and constructs a
-  Image object for each image in the files. The return value is an
-  <i>array</i> of one or more images. Upon return, <var>new</var>
-  simply appends the new images to the imagelist.</p>
+  <p>Underneath the covers, <code>new</code> calls the Image
+  class's <a href="image3.html#read">read</a> method to read the
+  image file. The <code>read</code> method is a class method. Given
+  one or more file names, <code>read</code> reads the files and
+  constructs a Image object for each image in the files. The return
+  value is an <em>array</em> of one or more images. Upon return,
+  <code>new</code> simply appends the new images to the
+  imagelist.</p>
 
-  <p>You can also create an Image from scratch by calling <a href=
-  "image.html#Image.new"><var>Image.new</var></a>. This method
-  takes 2 or 3 arguments. The first argument is the number of
-  columns in the new image (its width). The second argument is the
-  number of rows (its height). If present, the 3rd argument is a
-  <a href="fill.html">Fill</a> object. To add a "scratch" image to
-  an imagelist, call <a href=
-  "ilist.html#ImageList.new_image"><var>ImageList#new_image</var></a>.
-  This method calls <var>Image.new</var>, adds the new image to the
+  <p>You can also create an image from scratch by calling <a href=
+  "image1.html#new"><code>Image.new</code></a>. This method takes 2
+  or 3 arguments. The first argument is the number of columns in
+  the new image (its width). The second argument is the number of
+  rows (its height). If present, the 3rd argument is a <a href=
+  "struct.html#fill"><code>Fill</code></a> object. To add a
+  "scratch" image to an imagelist, call <a href=
+  "ilist.html#new_image"><code>ImageList#new_image</code></a>. This
+  method calls <code>Image.new</code>, adds the new image to the
   imagelist, and sets the scene number to point to the new image.
   Scratch images are good for <a href="#drawing">drawing</a> on or
   creating images by <a href=
-  "image.html#Image.composite">compositing</a>.</p>
+  "image1.html#composite">compositing</a>.</p>
 
   <p>Like many other methods in the Image and ImageList classes,
-  <var>Image.new</var> accepts an optional block that can be used
+  <code>Image.new</code> accepts an optional block that can be used
   to set additional optional parameters. If the block is present,
-  <var>Image.new</var> creates a <a href="info.html">parameter
+  <code>Image.new</code> creates a <a href="info.html">parameter
   object</a> and yields to the block in the scope of that object.
   You set the parameters by calling attribute setter methods
   defined in the parameter object's class. For example, you can set
   the background color of a new image to red with the
-  <var>background_color=</var> method, as shown here:</p>
-
-  <div align="center">
-    <table summary="example 4" class="example">
-      <tr>
-        <td>
-          <pre>
+  <code>background_color=</code> method, as shown here:</p>
+  <pre class="example">
 require 'RMagick'
 include Magick
 # Create a 100x100 red image.
@@ -291,90 +299,75 @@ f = Image.new(100,100) { self.background_color = "red" }
 f.display
 exit
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <p>Within the parameter block you must use <code>self</code> so
   that Ruby can knows that this statement is a method call, not an
   assignment to a variable.</p>
 
-  <p>Similar to <var>Image.new</var>,
-  <var>ImageList#new_image</var> also accepts an optional block,
-  passing it on to <var>Image.new</var>.</p>
+  <p>Similar to <code>Image.new</code>,
+  <code>ImageList#new_image</code> also accepts an optional block,
+  passing it on to <code>Image.new</code>.</p>
 
   <p>You can create an image by capturing it from the XWindow
   screen using <a href=
-  "image.html#Image.capture"><var>Image.capture</var></a>. This
-  method can capture the root window, a window identified by name
-  or ID number, or perform an interactive capture whereby you
-  designate the desired window by clicking it or by drawing a
-  rectangle on the screen with your mouse.</p>
+  "image1.html#capture"><code>Image.capture</code></a>. This method
+  can capture the root window, a window identified by name or ID
+  number, or perform an interactive capture whereby you designate
+  the desired window by clicking it or by drawing a rectangle on
+  the screen with your mouse.</p>
 
   <p>Both the Image class and the ImageList class have
-  <var>write</var> methods. Both accept a single argument, the name
-  of the file to be written. <a href=
-  "image.html#Image.write"><var>Image#write</var></a> simply writes
-  the image to a file. Like the <var>Image#read</var> method,
-  <var>write</var> yields to an optional block that you can use to
-  set parameters that control how the image is written.</p>
+  <code>write</code> methods. Both accept a single argument, the
+  name of the file to be written. <a href=
+  "image3.html#write"><code>Image#write</code></a> simply writes
+  the image to a file. Like the <code>Image#read</code> method,
+  <code>write</code> yields to an optional block that you can use
+  to set parameters that control how the image is written.</p>
 
   <p>If an ImageList object contains only one image, then <a href=
-  "ilist.html#ImageList.write"><var>ImageList#write</var></a> is
-  the same as <var>Image#write</var>. However, if the imagelist
-  contains multiple images and the file format (determined by the
-  file name extension, as I mentioned earlier) supports multi-frame
-  images, <var>Image#write</var> will automatically create a
-  multi-frame image file.</p>
+  "ilist.html#write"><code>ImageList#write</code></a> is the same
+  as <code>Image#write</code>. However, if the imagelist contains
+  multiple images and the file format (determined by the file name
+  extension, as I mentioned earlier) supports multi-frame images,
+  <code>Image#write</code> will automatically create a multi-frame
+  image file.</p>
 
   <p>For example, the following program reads three GIF files and
-  then uses <var>ImageList#write</var> to combine all the images in
-  those files (remember, each input file can contain multiple
+  then uses <code>ImageList#write</code> to combine all the images
+  in those files (remember, each input file can contain multiple
   images) into one animated GIF file.</p>
-
-  <div align="center">
-    <table summary="example 5" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 anim = ImageList.new("start.gif", "middle.gif", "finish.gif")
 anim.write("animated.gif")
 exit
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
-  <h2><a name="displaying" id="displaying">Displaying
-  images</a></h2>
+  <h2 id="displaying">Displaying images</h2>
 
   <p>RMagick defines 3 methods for displaying images and
   imagelists. Both the Image class and the ImageList class have a
-  <var>display</var> method. The <a href=
-  "image.html#Image.display"><var>Image#display</var></a> method
+  <code>display</code> method. The <a href=
+  "image1.html#display"><code>Image#display</code></a> method
   displays the image on the default X Window screen. For imagelists
   with just one image, <a href=
-  "ilist.html#ImageList.display"><var>ImageList#display</var></a>
-  is identical to <var>Image#display</var>. However, if the
-  imagelist contains multiple images, <var>ImageList#display</var>
-  displays each of the images in turn. With both methods,
-  right-clicking the display window will produce a menu of other
-  options.</p>
+  "ilist.html#display"><code>ImageList#display</code></a> is
+  identical to <code>Image#display</code>. However, if the
+  imagelist contains multiple images,
+  <code>ImageList#display</code> displays each of the images in
+  turn. With both methods, right-clicking the display window will
+  produce a menu of other options.</p>
 
   <p>The <a href=
-  "ilist.html#ImageList.animate"><var>ImageList#animate</var></a>
-  method repeatedly cycles through all the images in an imagelist,
+  "ilist.html#animate"><code>ImageList#animate</code></a> method
+  repeatedly cycles through all the images in an imagelist,
   displaying each one in turn. You can control the speed of the
   animation with the <a href=
-  "ilist.html#ImageList.delay_eq"><var>ImageList#delay=</var></a>
+  "ilist.html#delay_eq"><code>ImageList#delay=</code></a>
   method.</p>
 
-  <h2><a name="modifying" id="modifying">Examining and modifying
-  images</a></h2>
+  <h2 id="modifying">Examining and modifying images</h2>
 
   <p>Once you've created an image or imagelist, what can you do
   with it? The Image and ImageList classes define over 100 methods
@@ -384,933 +377,632 @@ exit
   class to an instance of the ImageList class. The ImageList class
   sends the method to the current image and returns the result.</p>
 
-  <p>The methods can be classified into the following broad
-  groups.<sup><a href="#imdoc">1</a></sup> ImageList methods are
-  shown in <span class="imgmethod">blue</span>.</p>
+  <p>The methods can be classified into the following broad groups.
+  ImageList method descriptions look like <span class=
+  "ilist">this</span>. Some of the listed methods are not available
+  in some releases of &times;Magick. See the method documentation
+  for details.</p>
 
-  <div align="center">
-    <table summary="summary of image and imageclass methods" class=
-    "methodtbl" border="1" width="80%">
-      <tr class="grpname">
-        <td colspan="2">Utility methods</td>
-      </tr>
+  <div id="index">
+    <h4>Utility methods</h4>
 
-      <tr>
-        <td><a href="image.html#Image.spaceship">&lt;=&gt;</a></td>
+    <dl>
+      <dt><a href="image1.html#spaceship">&lt;=&gt;</a></dt>
 
-        <td>Compare images</td>
-      </tr>
+      <dd>Compare 2 images</dd>
 
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.spaceship">&lt;=&gt;</a></td>
+      <dt class="ilist"><a href=
+      "ilist.html#spaceship">&lt;=&gt;</a></dt>
 
-        <td>Compare imagelists</td>
-      </tr>
+      <dd class="ilist">Compare 2 imagelists</dd>
 
-      <tr>
-        <td><a href="image.html#Image.aref">[]</a></td>
+      <dt><a href="image1.html#aref">[ ]</a></dt>
 
-        <td>Reference an image property</td>
-      </tr>
+      <dd>Reference an image property</dd>
 
-      <tr>
-        <td><a href="image.html#Image.aset">[]=</a></td>
+      <dt><a href="image1.html#aset">[ ]=</a></dt>
 
-        <td>Set an image property</td>
-      </tr>
+      <dd>Set an image property</dd>
 
-      <tr>
-        <td><a href="image.html#Image.changed_q">changed?</a></td>
+      <dt><a href="image1.html#changed_q">changed?</a></dt>
 
-        <td>Has the image been changed?</td>
-      </tr>
+      <dd>Has the image been changed?</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.channel_compare">channel_compare</a>
-        <span class="imversion">(5.5.8)</span></td>
+      <dt><a href="image1.html#channel">channel</a></dt>
 
-        <td>Compare one or more channels in two images and compute
-        a distortion metric.</td>
-      </tr>
+      <dd>Extract a color channel from the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.channel_extrema">channel_extrema</a>
-        <span class="imversion">(5.5.8)</span></td>
+      <dt><a href=
+      "image1.html#channel_compare">channel_compare</a></dt>
 
-        <td>Return the minimum and maximum intensity values for one
-        or more channels</td>
-      </tr>
+      <dd>Compare one or more channels between two images</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.color_histogram">color_histogram</a>
-        <span class="imversion">(5.5.8)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dt><a href=
+      "image1.html#channel_extrema">channel_extrema</a></dt>
 
-        <td>Count the unique colors in the image</td>
-      </tr>
+      <dd>Return the maximum and minimum intensity values for one
+      or more channels in the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.copy">copy</a></td>
+      <dt><a href=
+      "image1.html#color_histogram">color_histogram</a></dt>
 
-        <td>Deep copy the image</td>
-      </tr>
+      <dd>Count the number of times each unique color appears in
+      the image</dd>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.copy">copy</a></td>
+      <dt><a href="image1.html#copy">copy</a></dt>
 
-        <td>Deep copy the imagelist</td>
-      </tr>
+      <dd>Return a deep copy of the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.difference">difference</a></td>
+      <dt class="ilist"><a href="ilist.html#copy">copy</a></dt>
 
-        <td>Compute the difference between two images</td>
-      </tr>
+      <dd class="ilist">Return a deep copy of the imagelist</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.each_profile">each_profile</a>
-        <span class="imversion">(5.5.8)</span></td>
+      <dt><a href="image1.html#difference">difference</a></dt>
 
-        <td>Iterate over all the profiles associated with an
-        image.</td>
-      </tr>
+      <dd>Compute the difference between two images</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.export_pixels">export_pixels</a>
-        <span class="imversion">(5.5.7)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dt><a href="image1.html#each_profile">each_profile</a></dt>
 
-        <td>Extract pixel data into an array</td>
-      </tr>
+      <dd>Iterate over all the profiles associated with the
+      image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.get_exif_by_entry">get_exif_by_entry</a></td>
+      <dt><a href=
+      "image2.html#export_pixels">export_pixels</a></dt>
 
-        <td>Get an EXIF value or all EXIF values.</td>
-      </tr>
+      <dd>Extract pixel data from the image into an array</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.get_exif_by_number">get_exif_by_number</a></td>
+      <dt><a href=
+      "image2.html#get_exif_by_entry">get_exif_by_entry</a>,
+      <a href=
+      "image2.html#get_exif_by_number">get_exif_by_number</a></dt>
 
-        <td>Get an EXIF value or all EXIF values.</td>
-      </tr>
+      <dd>Get one or more EXIF property values for the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.get_pixels">get_pixels</a></td>
+      <dt><a href="image2.html#get_pixels">get_pixels</a></dt>
 
-        <td>Copy a region of pixels from the image</td>
-      </tr>
+      <dd>Copy a region of pixels from the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.gray_q">gray?</a></td>
+      <dt><a href="image2.html#gray_q">gray?</a></dt>
 
-        <td>Are all pixels gray?</td>
-      </tr>
+      <dd>Are all the pixels in the image gray?</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.monochrome_q">monochrome?</a></td>
+      <dt><a href=
+      "image2.html#import_pixels">import_pixels</a></dt>
 
-        <td>Are all pixels black or white?</td>
-      </tr>
+      <dd>Replace pixels in the image with pixel data from an
+      array</dd>
 
-      <tr>
-        <td><a href="image.html#Image.opaque_q">opaque?</a></td>
+      <dt><a href="image2.html#monochrome_q">monochrome?</a></dt>
 
-        <td>Are all pixels opaque?</td>
-      </tr>
+      <dd>Are all the pixels in the image either black or
+      white?</dd>
 
-      <tr>
-        <td><a href="image.html#Image.palette_q">palette?</a></td>
+      <dt><a href="image2.html#opaque_q">opaque?</a></dt>
 
-        <td>Is the image PseudoClass type and does it have 256
-        colors or less?</td>
-      </tr>
+      <dd>Are all the pixels in the image opaque?</dd>
 
-      <tr>
-        <td><a href="image.html#Image.preview">preview</a>
-        <span class="imversion">(5.5.8)</span></td>
+      <dt><a href="image2.html#palette_q">palette?</a></dt>
 
-        <td>Show the effect of a transformation method</td>
-      </tr>
+      <dd>Is the image a PseudoClass type image with 256 colors or
+      less?</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.profile_bang">profile!</a></td>
+      <dt><a href="image3.html#preview">preview</a></dt>
 
-        <td>Add or remove a ICM, IPTC, or generic profile from a
-        image</td>
-      </tr>
+      <dd>Show the effect of a transformation method on the
+      image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.properties">properties</a></td>
+      <dt><a href="image3.html#profile_bang">profile!</a></dt>
 
-        <td>Return all image properties</td>
-      </tr>
+      <dd>Add or remove an ICM, IPTC, or generic profile from the
+      image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.signature">signature</a></td>
+      <dt><a href="image3.html#properties">properties</a></dt>
 
-        <td>Compute the image's 64-byte message digest</td>
-      </tr>
+      <dd>Iterate over all the properties associated with the
+      image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.strip_bang">strip!</a>
-        <span class="imversion">(5.5.8)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dt><a href="image3.html#signature">signature</a></dt>
 
-        <td>Strips an image of all comments and profiles</td>
-      </tr>
+      <dd>Compute the 64-byte message signature for the image</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to reduce the number of colors in
-        an image or group of images</td>
-      </tr>
+      <dt><a href="image3.html#store_pixels">store_pixels</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.compress_colormap_bang">compress_colormap!</a></td>
+      <dd>Replace a region of pixels in the image</dd>
 
-        <td>Remove duplicate or unused entries in the colormap</td>
-      </tr>
+      <dt><a href="image3.html#strip_bang">strip!</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.map">map</a></td>
+      <dd>Strip the image of all comments and profiles</dd>
+    </dl>
 
-        <td>Replace the colors of an image with the closest color
-        from a reference image</td>
-      </tr>
+    <h4>Reduce the number of colors</h4>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.map">map</a></td>
+    <dl>
+      <dt><a href=
+      "image1.html#compress_colormap_bang">compress_colormap!</a></dt>
 
-        <td>Replace the colors of all the images in an imagelist
-        with the closest color from a reference image</td>
-      </tr>
+      <dd>Remove duplicate or unused entries in the image's
+      colormap</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.ordered_dither">ordered_dither</a></td>
+      <dt><a href="image2.html#map">map</a></dt>
 
-        <td>Reduce color images to monochrome using the ordered
-        dithering technique</td>
-      </tr>
+      <dd>Replace the colors of the image with the nearest colors
+      from a reference image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.quantize">quantize</a></td>
+      <dt class="ilist"><a href="ilist.html#map">map</a></dt>
 
-        <td>Analyze the colors within an image and choose a fixed
-        number of colors to represent the image</td>
-      </tr>
+      <dd class="ilist">Replace the colors of all the images in the
+      imagelist with the nearest colors from a reference image</dd>
 
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.quantize">quantize</a></td>
+      <dt><a href=
+      "image2.html#ordered_dither">ordered_dither</a></dt>
 
-        <td>Analyze the colors within all the images in an
-        imagelist and choose a fixed number of colors to represent
-        the images</td>
-      </tr>
+      <dd>Reduce the image to monochrome using the ordered dither
+      technique</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to resize an image</td>
-      </tr>
+      <dt><a href="image3.html#quantize">quantize</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.change_geometry">change_geometry</a></td>
+      <dd>Choose a fixed number of colors to represent the
+      image</dd>
 
-        <td>Change image geometry as specified by a geometry
-        string</td>
-      </tr>
+      <dt class="ilist"><a href=
+      "ilist.html#quantize">quantize</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.magnify">magnify</a></td>
+      <dd class="ilist">Choose a fixed number of colors to
+      represent all the images in the imagelist</dd>
+    </dl>
 
-        <td>Increase the size of an image by 2</td>
-      </tr>
+    <h4>Resize</h4>
 
-      <tr>
-        <td><a href="image.html#Image.minify">minify</a></td>
+    <dl>
+      <dt><a href=
+      "image1.html#change_geometry">change_geometry</a></dt>
 
-        <td>Decrease the size of an image by 2</td>
-      </tr>
+      <dd>Compute a new constrained size for the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.resize">resize</a></td>
+      <dt><a href="image2.html#magnify">magnify</a></dt>
 
-        <td>Change the size of an image using the specified
-        filter</td>
-      </tr>
+      <dd>Double the size of the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.sample">sample</a></td>
+      <dt><a href="image2.html#minify">minify</a></dt>
 
-        <td>Change the size of an image with pixel sampling</td>
-      </tr>
+      <dd>Halve the size of the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.scale">scale</a></td>
+      <dt><a href="image3.html#resize">resize</a></dt>
 
-        <td>Change the size of an image</td>
-      </tr>
+      <dd>Resize the image using a filter</dd>
 
-      <tr>
-        <td><a href="image.html#Image.thumbnail">thumbnail</a>
-        <span class="imversion">(5.5.2)</span></td>
+      <dt><a href="image3.html#sample">sample</a></dt>
 
-        <td>Fast resize for thumbnail images</td>
-      </tr>
+      <dd>Resize the image using pixel sampling</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to transform an image or group of
-        images</td>
-      </tr>
+      <dt><a href="image3.html#scale">scale</a></dt>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.append">append</a></td>
+      <dd>Resize the image</dd>
 
-        <td>Append all the images in the imagelist vertically or
-        horizontally</td>
-      </tr>
+      <dt><a href="image3.html#thumbnail">thumbnail</a></dt>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.average">average</a></td>
+      <dd>Quickly create a thumbnail of the image</dd>
+    </dl>
 
-        <td>Average all the images in the imagelist into a single
-        image</td>
-      </tr>
+    <h4>Change colors or opacity</h4>
 
-      <tr>
-        <td><a href="image.html#Image.chop">chop</a></td>
+    <dl>
+      <dt><a href=
+      "image1.html#color_fill_to_border">color_fill_to_border</a></dt>
 
-        <td>Remove a region of an image and collapses the image to
-        occupy the removed portion</td>
-      </tr>
+      <dd>Change the color of neighboring pixels. Stop at the
+      image's border color.</dd>
 
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.coalesce">coalesce</a></td>
+      <dt><a href=
+      "image1.html#color_floodfill">color_floodfill</a></dt>
 
-        <td>Composite the images in the imagelist</td>
-      </tr>
+      <dd>Change the color of neighboring pixels that are the same
+      color</dd>
 
-      <tr>
-        <td><a href="image.html#Image.composite">composite</a></td>
+      <dt><a href="image1.html#colormap">colormap</a></dt>
 
-        <td>Composite an image onto another image</td>
-      </tr>
+      <dd>Get or set a color in the image's colormap</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.composite_affine">composite_affine</a></td>
+      <dt><a href="image1.htlm#color_point">color_point</a></dt>
 
-        <td>Composite an image onto another image as dictated by
-        the affine transform</td>
-      </tr>
+      <dd>Change the color of a single pixel in the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.crop">crop</a></td>
+      <dt><a href=
+      "image1.html#color_reset_bang">color_reset!</a></dt>
 
-        <td>Extract a region of the image</td>
-      </tr>
+      <dd>Set the entire image to a single color</dd>
 
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.deconstruct">deconstruct</a></td>
+      <dt><a href=
+      "image1.html#cycle_colormap">cycle_colormap</a></dt>
 
-        <td>Compare each image with the next and returns the
-        maximum bounding region of any pixel differences it
-        discovers</td>
-      </tr>
+      <dd>Displace the image's colormap</dd>
 
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.flatten_images">flatten_images</a></td>
+      <dt><a href="image1.html#erase_bang">erase!</a></dt>
 
-        <td>Merge the images in the imagelist</td>
-      </tr>
+      <dd>Set the entire image to a single color</dd>
 
-      <tr>
-        <td><a href="image.html#Image.flip">flip</a></td>
+      <dt><a href=
+      "image2.html#matte_fill_to_border">matte_fill_to_border</a></dt>
 
-        <td>Create a vertical mirror image of the image</td>
-      </tr>
+      <dd>Make transparent neighboring pixels. Stop at the image's
+      border color.</dd>
 
-      <tr>
-        <td><a href="image.html#Image.flop">flop</a></td>
+      <dt><a href=
+      "image2.html#matte_floodfill">matte_floodfill</a></dt>
 
-        <td>Create a horizontal mirror image of the image</td>
-      </tr>
+      <dd>Make transparent neighboring pixels that are the same
+      color</dd>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.mosaic">mosaic</a></td>
+      <dt><a href="image2.html#matte_point">matte_point</a></dt>
 
-        <td>Inlay the images in the imagelist into a single
-        image</td>
-      </tr>
+      <dd>Make a single pixel transparent</dd>
 
-      <tr>
-        <td><a href="image.html#Image.roll">roll</a></td>
+      <dt><a href=
+      "image2.html#matte_reset_bang">matte_reset!</a></dt>
 
-        <td>Offset an image</td>
-      </tr>
+      <dd>Make the entire image transparent</dd>
 
-      <tr>
-        <td><a href="image.html#Image.shave">shave</a></td>
+      <dt><a href="image2.html#opaque">opaque</a></dt>
 
-        <td>Shave regions from the edges of the image</td>
-      </tr>
+      <dd>Change all pixels from the specified color to a new
+      color</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to shear or rotate an image by an
-        arbitrary angle</td>
-      </tr>
+      <dt><a href="image2.html#pixel_color">pixel_color</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.affine_transform">affine_transform</a></td>
+      <dd>Get or set the color of a single pixel</dd>
 
-        <td>Transform an image as dictated by an affine matrix</td>
-      </tr>
+      <dt><a href=
+      "image3.html#texture_fill_to_border">texture_fill_to_border</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.rotate">rotate</a></td>
+      <dd>Replace neighbor pixels with pixels from a texture image.
+      Stop at the image's border color.</dd>
 
-        <td>Rotate an image by the specified angle</td>
-      </tr>
+      <dt><a href=
+      "image3.html#texture_floodfill">texture_floodfill</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.shear">shear</a></td>
+      <dd>Replace neighboring pixels that are the same color with
+      pixels from a texture image</dd>
 
-        <td>Shear an image along the X or Y axis, creating a
-        parallelogram</td>
-      </tr>
+      <dt><a href="image3.html#transparent">transparent</a></dt>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to enhance an image</td>
-      </tr>
+      <dd>Change the opacity value of pixels having the specified
+      color</dd>
+    </dl>
 
-      <tr>
-        <td><a href="image.html#Image.contrast">contrast</a></td>
+    <h4>Rotate or shear</h4>
 
-        <td>Enhance the intensity differences between the lighter
-        and darker elements of the image</td>
-      </tr>
+    <dl>
+      <dt><a href=
+      "image1.html#affine_transform">affine_transform</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.equalize">equalize</a></td>
+      <dd>Transform the image as dictated by an affine matrix</dd>
 
-        <td>Apply a histogram equalization to the image</td>
-      </tr>
+      <dt><a href="image3.html#rotate">rotate</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.gamma_correct">gamma_correct</a></td>
+      <dd>Rotate the image by the specified angle</dd>
 
-        <td>Gamma-correct an image</td>
-      </tr>
+      <dt><a href="image3.html#shear">shear</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.level">level</a></td>
+      <dd>Shear the image along the X or Y axis, creating a
+      parallelogram</dd>
+    </dl>
 
-        <td>Adjust the levels of an image</td>
-      </tr>
+    <h4>Transform</h4>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.level_channel">level_channel</a> &nbsp;
-        <span class="imversion">(5.5.3)</span></td>
+    <dl>
+      <dt class="ilist"><a href="ilist.html#append">append</a></dt>
 
-        <td>Adjust the levels of an image</td>
-      </tr>
+      <dd class="ilist">Append all the images in the imagelist into
+      a single image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.modulate">modulate</a></td>
+      <dt class="ilist"><a href=
+      "ilist.html#average">average</a></dt>
 
-        <td>Change the brightness, saturation, and hue of a
-        image</td>
-      </tr>
+      <dd class="ilist">Average all the images in the imagelist
+      into a single image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.negate">negate</a></td>
+      <dt><a href="image1.html#chop">chop</a></dt>
 
-        <td>Negate the colors in the image</td>
-      </tr>
+      <dd>Chop a region from the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.normalize">normalize</a></td>
+      <dt class="ilist"><a href=
+      "ilist.html#coalesce">coalesce</a></dt>
 
-        <td>Enhance the contrast of a color image by adjusting the
-        pixels' color to span the entire range of colors
-        available</td>
-      </tr>
+      <dd class="ilist">Merge successive images in the imagelist
+      into a new imagelist</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to add effects to an image</td>
-      </tr>
+      <dt><a href="image1.html#composite">composite</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.adaptive_threshold">adaptive_threshold</a>
-        <span class="imversion">(5.5.2)</span></td>
+      <dd>Composite the image onto another image</dd>
 
-        <td>Threshold an image whose global intensity histogram
-        doesn't contain distinctive peaks</td>
-      </tr>
+      <dt><a href=
+      "image1.html#composite_affine">composite_affine</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.add_noise">add_noise</a></td>
+      <dd>Composite the image onto another image as dictated by an
+      affine matrix</dd>
 
-        <td>Add random noise</td>
-      </tr>
+      <dt><a href="image1.html#crop">crop</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.black_threshold">black_threshold</a>
-        <span class="imversion">(5.5.7)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dd>Extract a region from the image</dd>
 
-        <td>Force all pixels below the threshold into black.</td>
-      </tr>
+      <dt class="ilist"><a href=
+      "ilist.html#deconstruct">deconstruct</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.blur_image">blur_image</a></td>
+      <dd class="ilist">Return the bounding region of the
+      differences between the images in the imagelist</dd>
 
-        <td>Blur the image</td>
-      </tr>
+      <dt class="ilist"><a href=
+      "ilist.html#flatten_images">flatten_images</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.charcoal">charcoal</a></td>
+      <dd class="ilist">Merge all the images in the imagelist into
+      a single image</dd>
 
-        <td>Add a charcoal effect</td>
-      </tr>
+      <dt><a href="image2.html#flip">flip</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.channel_threshold">channel_threshold</a></td>
+      <dd>Create a vertical mirror image</dd>
 
-        <td>Change the value of individual pixels based on the
-        intensity of each pixel channel</td>
-      </tr>
+      <dt><a href="image2.html#flop">flop</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.colorize">colorize</a></td>
+      <dd>Create a horizontal mirror image</dd>
 
-        <td>Blend the fill color with each pixel in the image</td>
-      </tr>
+      <dt class="ilist"><a href="ilist.html#mosaic">mosaic</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.convolve">convolve</a></td>
+      <dd class="ilist">Inlay all the images in the imagelist into
+      a single image</dd>
 
-        <td>Apply a custom convolution kernel to the image</td>
-      </tr>
+      <dt><a href="image3.html#roll">roll</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.despeckle">despeckle</a></td>
+      <dd>Offset the image</dd>
 
-        <td>Reduce the speckle noise in the image</td>
-      </tr>
+      <dt><a href="image3.html#shave">shave</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.edge">edge</a></td>
+      <dd>Shave regions from the edges of the image</dd>
+    </dl>
 
-        <td>Find edges in the image</td>
-      </tr>
+    <h4>Enhance</h4>
 
-      <tr>
-        <td><a href="image.html#Image.emboss">emboss</a></td>
+    <dl>
+      <dt><a href="image1.html#contrast">contrast</a></dt>
 
-        <td>Return a grayscale image with a three-dimensional
-        effect</td>
-      </tr>
+      <dd>Enhance the intensity differences between the lighter and
+      darker elements in the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.enhance">enhance</a></td>
+      <dt><a href="image1.html#despeckle">despeckle</a></dt>
 
-        <td>Apply a digital filter that improves the quality of a
-        noisy image</td>
-      </tr>
+      <dd>Reduce the speckle noise in the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.gaussian_blur">gaussian_blur</a></td>
+      <dt><a href="image2.html#enhance">enhance</a></dt>
 
-        <td>Blur the image</td>
-      </tr>
+      <dd>Apply a digital filter that improves the quality of a
+      noisy image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.implode">implode</a></td>
+      <dt><a href="image2.html#equalize">equalize</a></dt>
 
-        <td>Implode the pixels in the image</td>
-      </tr>
+      <dd>Apply a histogram equalization to the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.median_filter">median_filter</a></td>
+      <dt><a href=
+      "image2.html#gamma_correct">gamma_correct</a></dt>
 
-        <td>Applie a digital filter that improves the quality of a
-        noisy image</td>
-      </tr>
+      <dd>Gamma correct the image</dd>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.morph">morph</a></td>
+      <dt><a href="image2.html#level">level</a></dt>
 
-        <td>Transform each image in the imagelist to the next in
-        sequence by creating intermediate images</td>
-      </tr>
+      <dd>Adjust the levels of the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.motion_blur">motion_blur</a></td>
+      <dt><a href=
+      "image2.html#level_channel">level_channel</a></dt>
 
-        <td>Simulate a motion blur</td>
-      </tr>
+      <dd>Adjust the levels of one or more channels in the
+      image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.oil_paint">oil_paint</a></td>
+      <dt><a href=
+      "image2.html#median_filter">median_filter</a></dt>
 
-        <td>Add an oil paint effect</td>
-      </tr>
+      <dd>Apply a digital filter that improves the quality of a
+      noisy image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.random_channel_threshold">random_channel_threshold</a>
-        <span class="imversion">(5.5.7)</span><span class=
-        "gmversion">(1.0.2)</span></td>
+      <dt><a href="image2.html#modulate">modulate</a></dt>
 
-        <td>Change the value of individual pixels based on the
-        intensity of each pixel compared to a random
-        threshold.</td>
-      </tr>
+      <dd>Change the brightness, saturation, or hue of the
+      image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.reduce_noise">reduce_noise</a></td>
+      <dt><a href="image2.html#negate">negate</a></dt>
 
-        <td>Smooth the contours of an image while still preserving
-        edge information</td>
-      </tr>
+      <dd>Negate the colors of the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.shade">shade</a></td>
+      <dt><a href="image2.html#normalize">normalize</a></dt>
 
-        <td>Shine a distant light on an image to create a
-        three-dimensional effect</td>
-      </tr>
+      <dd>Enhance the contrast of the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.sharpen">sharpen</a></td>
+      <dt><a href=
+      "image3.html#random_channel_threshold">random_channel_threshold</a></dt>
 
-        <td>Sharpen the image</td>
-      </tr>
+      <dd>Change the value of individual pixels based on the
+      intensity of each pixel compared to a random threshold.</dd>
 
-      <tr>
-        <td><a href="image.html#Image.solarize">solarize</a></td>
+      <dt><a href="image3.html#reduce_noise">reduce_noise</a></dt>
 
-        <td>Apply a special effect to the image, similar to the
-        effect achieved in a photo darkroom by selectively exposing
-        areas of photo sensitive paper to light</td>
-      </tr>
+      <dd>Smooth the contours of an image while still preserving
+      edge information</dd>
 
-      <tr>
-        <td><a href="image.html#Image.spread">spread</a></td>
+      <dt><a href="image3.html#sharpen">sharpen</a>, <a href=
+      "image3.html#unsharp_mask">unsharp_mask</a></dt>
 
-        <td>Randomly displace each pixel in a block</td>
-      </tr>
+      <dd>Sharpen the image</dd>
+    </dl>
 
-      <tr>
-        <td><a href="image.html#Image.stegano">stegano</a></td>
+    <h4>Add effects</h4>
 
-        <td>Hide a digital watermark within the image</td>
-      </tr>
+    <dl>
+      <dt><a href=
+      "image1.html#adaptive_threshold">adaptive_threshold</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.stereo">stereo</a></td>
+      <dd>Threshold an image whose global intensity histogram
+      doesn't contain distinctive peaks</dd>
 
-        <td>Combine two images and produces a single image that is
-        the composite of a left and right image of a stereo
-        pair</td>
-      </tr>
+      <dt><a href="image1.html#add_noise">add_noise</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.swirl">swirl</a></td>
+      <dd>Add random noise</dd>
 
-        <td>Swirl the pixels about the center of the image</td>
-      </tr>
+      <dt><a href=
+      "image1.html#black_threshold">black_threshold</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.threshold">threshold</a></td>
+      <dd>Force all pixels below the threshold into black</dd>
 
-        <td>Change the value of individual pixels based on the
-        intensity of each pixel compared to threshold.</td>
-      </tr>
+      <dt><a href="image1.html#blur_image">blur_image</a>, <a href=
+      "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
+      "image3.html#motion_blur">motion_blur</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.unsharp_mask">unsharp_mask</a></td>
+      <dd>Blur the image</dd>
 
-        <td>Sharpen the image</td>
-      </tr>
+      <dt><a href=
+      "image1.html#channel_threshold">channel_threshold</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.wave">wave</a></td>
+      <dd>Change the value of individual pixels based on the
+      intensity of each pixel channel</dd>
 
-        <td>Add a "ripple" effect</td>
-      </tr>
+      <dt><a href="image1.html#colorize">colorize</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.white_threshold">white_threshold</a>
-        <span class="imversion">(5.5.7)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dd>Blend the fill color with each pixel in the image</dd>
 
-        <td>Force all pixels above the threshold into white.</td>
-      </tr>
+      <dt><a href="image1.html#convolve">convolve</a></dt>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to decorate an image</td>
-      </tr>
+      <dd>Apply a custom convolution kernel to the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.border">border</a></td>
+      <dt><a href="image3.html#segment">segment</a></dt>
 
-        <td>Surround the image with a border</td>
-      </tr>
+      <dd>Segment an image by analyzing the histograms of the color
+      components and identifying units that are homogeneous with
+      the fuzzy c-means technique</dd>
 
-      <tr>
-        <td><a href="image.html#Image.frame">frame</a></td>
+      <dt><a href="image3.html#threshold">threshold</a></dt>
 
-        <td>Add a simulated three-dimensional border around the
-        image</td>
-      </tr>
+      <dd>Change the value of individual pixels based on the
+      intensity of each pixel compared to threshold</dd>
 
-      <tr>
-        <td><a href="image.html#Image.raise">raise</a></td>
+      <dt><a href=
+      "image3.html#white_threshold">white_threshold</a></dt>
 
-        <td>Create a simulated three-dimensional button-like effect
-        by lightening and darkening the edges of the image</td>
-      </tr>
+      <dd>Force all pixels above the threshold into white</dd>
+    </dl>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to change the colors or opacity of
-        an image</td>
-      </tr>
+    <h4>Add special effects</h4>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.color_fill_to_border">color_fill_to_border</a></td>
+    <dl>
+      <dt><a href="image1.html#charcoal">charcoal</a></dt>
 
-        <td>Change the color value of any neighbor pixel that is
-        not the border color.</td>
-      </tr>
+      <dd>Add a charcoal effect</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.color_floodfill">color_floodfill</a></td>
+      <dt><a href="image1.html#edge">edge</a></dt>
 
-        <td>Change the color value of any neighbor pixel that
-        matches the color of the target pixel</td>
-      </tr>
+      <dd>Find edges in the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.colormap">colormap</a></td>
+      <dt><a href="image1.html#emboss">emboss</a></dt>
 
-        <td>Get or set the color in the colormap at the specified
-        index</td>
-      </tr>
+      <dd>Add a three-dimensional effect</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.color_point">color_point</a></td>
+      <dt><a href="image2.html#implode">implode</a></dt>
 
-        <td>Set the color of a single pixel.</td>
-      </tr>
+      <dd>Implode or explode the center pixels in the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.color_reset_bang">color_reset!</a></td>
+      <dt class="ilist"><a href="ilist.html#morph">morph</a></dt>
 
-        <td>Set all the pixels in the image to the specified
-        color.</td>
-      </tr>
+      <dd class="ilist">Transform each image in the imagelist to
+      the next in sequence by creating intermediate images</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.cycle_colormap">cycle_colormap</a></td>
+      <dt><a href="image2.html#oil_paint">oil_paint</a></dt>
 
-        <td>Displace an image's colormap by a given number of
-        positions</td>
-      </tr>
+      <dd>Add an oil paint effect</dd>
 
-      <tr>
-        <td><a href="image.html#Image.erase_bang">erase!</a></td>
+      <dt><a href="image3.html#shade">shade</a></dt>
 
-        <td>Set all the pixels in the image to the background
-        color</td>
-      </tr>
+      <dd>Shine a distant light on an image to create a
+      three-dimensional effect</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.matte_fill_to_border">matte_fill_to_border</a></td>
+      <dt><a href="image3.html#solarize">solarize</a></dt>
 
-        <td>Make all neighbor pixels that are not the border color
-        transparent</td>
-      </tr>
+      <dd>Apply a special effect to the image, similar to the
+      effect achieved in a photo darkroom by selectively exposing
+      areas of photo sensitive paper to light</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.matte_floodfill">matte_floodfill</a></td>
+      <dt><a href="image3.html#spread">spread</a></dt>
 
-        <td>Make all the neighbor pixels that are the same color as
-        the target pixel transparent</td>
-      </tr>
+      <dd>Randomly displace each pixel in a block</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.import_pixels">import_pixels</a>
-        <span class="imversion">(5.5.7)</span><span class=
-        "gmversion">(1.1)</span></td>
+      <dt><a href="image3.html#stegano">stegano</a></dt>
 
-        <td>Replace pixels in an image with pixel data from an
-        array.</td>
-      </tr>
+      <dd>Hide a digital watermark within the image</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.matte_point">matte_point</a></td>
+      <dt><a href="image3.html#stereo">stereo</a></dt>
 
-        <td>Make the target pixel transparent</td>
-      </tr>
+      <dd>Combine two images into a single image that is the
+      composite of a left and right image of a stereo pair</dd>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.matte_reset_bang">matte_reset!</a></td>
+      <dt><a href="image3.html#swirl">swirl</a></dt>
 
-        <td>Make all pixels transparent</td>
-      </tr>
+      <dd>Swirl the pixels about the center of the image</dd>
 
-      <tr>
-        <td><a href="image.html#Image.opaque">opaque</a></td>
+      <dt><a href="image3.html#wave">wave</a></dt>
 
-        <td>Change all pixels having the target color to the
-        replacement color</td>
-      </tr>
+      <dd>Add a ripple effect to the image</dd>
+    </dl>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.pixel_color">pixel_color</a></td>
+    <h4>Decorate</h4>
 
-        <td>Get or set the color of a single pixel</td>
-      </tr>
+    <dl>
+      <dt><a href="image1.html#border">border</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.store_pixels">store_pixels</a></td>
+      <dd>Surround the image with a solid-colored border</dd>
 
-        <td>Replace a region of the image with an arbitrary set of
-        pixels</td>
-      </tr>
+      <dt><a href="image2.html#frame">frame</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.texture_fill_to_border">texture_fill_to_border</a></td>
+      <dd>Add a simulated three-dimensional border around the
+      image</dd>
 
-        <td>Replace the neighbor pixels that are not the border
-        color with a texture</td>
-      </tr>
+      <dt><a href="image3.html#raise">raise</a></dt>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.texture_floodfill">texture_floodfill</a></td>
+      <dd>Create a simulated three-dimensional button-like effect
+      by lightening and darkening the edges of the image</dd>
+    </dl>
 
-        <td>Replace the neighbor pixels having the specified color
-        with a texture</td>
-      </tr>
+    <h4>Create thumbnail montages</h4>
 
-      <tr>
-        <td><a href=
-        "image.html#Image.transparent">transparent</a></td>
+    <dl>
+      <dt class="ilist"><a href=
+      "ilist.html#montage">montage</a></dt>
 
-        <td>Change the opacity value of the pixels having the
-        specified color</td>
-      </tr>
+      <dd class="ilist">Tile image thumbnails across a canvas</dd>
+    </dl>
 
-      <tr class="grpname">
-        <td colspan="2">Methods that don't really fit into any of
-        the other categories</td>
-      </tr>
+    <h4>Create image blobs</h4>
 
-      <tr>
-        <td><a href="image.html#Image.channel">channel</a></td>
+    <dl>
+      <dt><a href="image1.html#from_blob">from_blob</a></dt>
 
-        <td>Extract a color channel</td>
-      </tr>
+      <dd>Create an image from a BLOB</dd>
 
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.montage">montage</a></td>
+      <dt class="ilist"><a href=
+      "ilist.html#from_blob">from_blob</a></dt>
 
-        <td>Tile image thumbnails across a canvas</td>
-      </tr>
+      <dd class="ilist">Create an imagelist from one or more
+      BLOBs</dd>
 
-      <tr>
-        <td><a href="image.html#Image.segment">segment</a></td>
+      <dt><a href="image3.html#to_blob">to_blob</a></dt>
 
-        <td>Segment an image by analyzing the histograms of the
-        color components and identifying units that are homogeneous
-        with the fuzzy c-means technique</td>
-      </tr>
+      <dd>Construct a BLOB from an image</dd>
 
-      <tr class="grpname">
-        <td colspan="2">Methods to convert an image to/from a
-        Binary Large OBject</td>
-      </tr>
+      <dt class="ilist"><a href=
+      "ilist.html#to_blob">to_blob</a></dt>
 
-      <tr>
-        <td><a href="image.html#Image.to_blob">to_blob</a></td>
-
-        <td>Construct a BLOB from an image</td>
-      </tr>
-
-      <tr class="imgmethod">
-        <td><a href="ilist.html#ImageList.to_blob">to_blob</a></td>
-
-        <td>Construct a BLOB from all the images in an
-        imagelist</td>
-      </tr>
-
-      <tr>
-        <td><a href="image.html#Image.from_blob">from_blob</a></td>
-
-        <td>Create an image from a BLOB</td>
-      </tr>
-
-      <tr class="imgmethod">
-        <td><a href=
-        "ilist.html#ImageList.from_blob">from_blob</a></td>
-
-        <td>Create an imagelist from one or more BLOBs</td>
-      </tr>
-    </table>
+      <dd class="ilist">Construct a BLOB from all the images in the
+      imagelist</dd>
+    </dl>
   </div>
 
-  <h2><a name="marshaling" id="marshaling">Marshaling
-  images</a></h2>
+  <h2 id="marshaling">Marshaling images</h2>
 
   <p>Image and ImageList objects can be serialized using Ruby's
-  <b>Marshal</b> module. Marshaling is supported via
+  <code>Marshal</code> module. Marshaling is supported via
   &times;Magick's Binary Large OBject functions
   <code>ImageToBlob</code> (for dumping) and
   <code>BlobToImage</code> (for loading).</p>
@@ -1324,74 +1016,70 @@ exit
     <li>Images in lossy formats, such as JPEG, will have a
     different signature after being reconstituted and therefore
     will not compare equal (using <a href=
-    "image.html#Image.spaceship">&lt;=&gt;</a>) to the original
+    "image1.html#spaceship">&lt;=&gt;</a>) to the original
     image.</li>
   </ol>
 
-  <h2><a name="drawing" id="drawing">Drawing on and adding text to
-  images</a></h2>
+  <h2 id="drawing_on">Drawing on and adding text to images</h2>
 
-  <p>The <b>Draw</b> class is the third major class in the Magick
-  module. This class defines two kinds of methods, <i>drawing</i>
-  methods and <i>annotation</i> methods.</p>
+  <p>The <strong>Draw</strong> class is the third major class in
+  the Magick module. This class defines two kinds of methods,
+  <a href="#drawing">drawing</a> methods and <a href=
+  "#annotation">annotation</a> methods.</p>
 
-  <h3>Drawing</h3>
+  <h3 id="drawing">Drawing</h3>
 
   <p>&times;Magick supports a set of 2D drawing commands that are
   very similar to the commands and elements defined by the W3C's
   <a href="http://www.w3.org/TR/SVG/index.html#minitoc">Scalable
-  Vector Graphics (SVG) 1.0 Specification</a>. In RMagick, each
-  command (called a <i>primitive</i>) is implemented as a method in
-  the Draw class. To draw on an image, simply</p>
+  Vector Graphics (SVG) 1.1 Specification</a>. In RMagick, each
+  command (called a <em>primitive</em>) is implemented as a method
+  in the <code>Draw</code> class. To draw on an image, simply</p>
 
   <ol>
-    <li>Create an instance of the Draw class.</li>
+    <li>Create an instance of the <code>Draw</code> class.</li>
 
     <li>Call one or more primitive methods with the appropriate
     arguments.</li>
 
-    <li>Invoke the <a href=
-    "draw.html#Draw.draw"><var>draw</var></a> method, specifying an
-    image to draw on.</li>
+    <li>Call the <a href="draw.html#draw"><code>draw</code></a>
+    method.</li>
   </ol>
 
-  <p>The primitive methods do <i>not</i> draw anything directly.
+  <p>The primitive methods do <em>not</em> draw anything directly.
   When you call a primitive method, you are simply adding the
   primitive and its arguments to a list of primitives stored in the
-  <i>draw</i> object. To "execute" the primitive list, call
-  <var>draw</var>. Drawing the primitives does not destroy them.
-  You can draw on another image by calling <var>draw</var> again,
+  <code>Draw</code> object. To "execute" the primitive list, call
+  <code>draw</code>. Drawing the primitives does not destroy them.
+  You can draw on another image by calling <code>draw</code> again,
   specifying a different image as the "canvas." Of course you can
-  also draw on an image with multiple <i>draw</i> objects, too. The
-  canvas can be any image or imagelist, created by reading an image
-  file or from scratch using <var>ImageList#new_image</var> or
-  <var>Image.new</var>. (If you pass an imagelist object to
-  <var>draw</var>, it draws on the current image.)</p>
+  also draw on an image with multiple <code>Draw</code> objects,
+  too. The canvas can be any image or imagelist, created by reading
+  an image file or from scratch using
+  <code>ImageList#new_image</code> or <code>Image.new</code>. (If
+  you pass an imagelist object to <code>draw</code>, it draws on
+  the current image.)</p>
 
-  <div align="center">
-    <table summary="default drawing coordinate system" width="70%"
-    border="0" cellpadding="5">
-      <tr>
-        <td valign="top">
-          <p>Here's an illustration of the default drawing
-          coordinate system. The origin is in the top left corner.
-          The x axis extends to the right. The y axis extends
-          downward. The units are pixels. 0&deg; is at 3 o'clock
-          and rotation is clockwise. The units of rotation are
-          usually degrees.<sup><a href="#degrees">2</a></sup></p>
+  <div id="axes">
+    <a href="javascript:popup('axes.rb.html')"><img src=
+    "ex/axes.gif" alt="Drawing coordinate system" title=
+    "Click to see the example script" /></a>
 
-          <p>You can change the default coordinate system by
-          specifying a <i>scaling</i>, <i>rotation</i>, or
-          <i>translation</i> transformation.</p>
+    <div>
+      <p>Here's an illustration of the default drawing coordinate
+      system. The origin is in the top left corner. The x axis
+      extends to the right. The y axis extends downward. The units
+      are pixels. 0&deg; is at 3 o'clock and rotation is clockwise.
+      The units of rotation are usually degrees.<sup><a href=
+      "#degrees">1</a></sup></p>
 
-          <p><i>(Click the image to see the Ruby program that
-          created it.)</i></p>
-        </td>
+      <p>You can change the default coordinate system by specifying
+      a <em>scaling</em>, <em>rotation</em>, or
+      <em>translation</em> transformation.</p>
 
-        <td><a href="axes.rb.html" target="_blank"><img src=
-        "ex/axes.gif" alt="ex/axes.gif" border="0" /></a></td>
-      </tr>
-    </table>
+      <p><em>(Click the image to see the Ruby program that created
+      it.)</em></p>
+    </div>
   </div>
 
   <p>RMagick's primitive methods include methods for drawing
@@ -1402,16 +1090,11 @@ exit
   color unless the stroke opacity is 0. Text is considered a shape
   and is stroked and filled. Other rendering properties you can set
   include the stroke width, antialiasing, stroke patterns, and fill
-  patterns. (Yes, you can even fill text with a pattern!)</p>
+  patterns.</p>
 
   <p>As an example, here's the section of the Ruby program that
   created the circle in the center of the above image.</p>
-
-  <div align="center">
-    <table summary="example 6" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
  1. !# /usr/local/bin/ruby -w
  2. require 'RMagick'
  3.
@@ -1429,46 +1112,41 @@ exit
 15. circle.polyline(180,70, 173,78, 190,78, 191,62)
 16. circle.draw(canvas)
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
   <p>The statements on lines 4 and 5 create the drawing canvas with
-  a single 250x250 image. The <var>HatchFill</var> object fills the
-  image with light-gray lines 10 pixels apart. The statement on
+  a single 250x250 image. The <code>HatchFill</code> object fills
+  the image with light-gray lines 10 pixels apart. The statement on
   line 7 creates a Draw object. The method calls on lines 8-15
   construct a list of primitives that are "executed" by the
-  <var>draw</var> method call on line 16.</p>
+  <code>draw</code> method call on line 16.</p>
 
-  <p>The <var>stroke</var> method sets the stroke color, as seen on
-  line 8. Normally, shapes are filled (opacity = 1.0), but the call
-  to <var>fill_opacity</var> on line 9 sets the opacity to 0, so
-  the background will show through the circle. Similarly, the
+  <p>The <code>stroke</code> method sets the stroke color, as seen
+  on line 8. Normally, shapes are filled (opacity = 1.0), but the
+  call to <code>fill_opacity</code> on line 9 sets the opacity to
+  0, so the background will show through the circle. Similarly, the
   stroke lines are normally opaque, but the tomato-colored stroke
   line in this example is made slightly transparent by the call to
-  <var>stroke_opacity</var> on line 10. The method calls on lines
+  <code>stroke_opacity</code> on line 10. The method calls on lines
   11 through 13 set the stroke width and specify the appearance of
   the line ends and corners.</p>
 
-  <p>The <var>ellipse</var> method call on line 14 describes an
+  <p>The <code>ellipse</code> method call on line 14 describes an
   circle in the center of the canvas with a radius of 80 pixels.
   The ellipse occupies 315&deg; of a circle, starting at 0&deg;
-  (that is, 3 o'clock). The <var>polyline</var> call on line 15
+  (that is, 3 o'clock). The <code>polyline</code> call on line 15
   adds the arrowhead to the circle. The arguments (always an even
   number) are the x- and y-coordinates of the points the line
   passes through.</p>
 
-  <p>Finally, the <var>draw</var> method on line 16 identifies the
-  canvas to be drawn on and executes the stored primitives.</p>
+  <p>Finally, the <code>draw</code> method on line 16 identifies
+  the canvas to be drawn on and executes the stored primitives.</p>
 
-  <h3>Annotation</h3>
+  <h3 id="annotation">Annotation</h3>
 
-  <p>The <a href=
-  "draw.html#Draw.annotate"><var>Draw#annotate</var></a> method
-  draws text on an image. In its simplest form, <var>annotate</var>
-  requires only arguments that describe where to draw the text and
-  the text string.</p>
+  <p>The <a href="draw.html#annotate"><code>annotate</code></a>
+  method draws text on an image. In its simplest form,
+  <code>annotate</code> requires only arguments that describe where
+  to draw the text and the text string.</p>
 
   <p>Most of the time, you'll want to specify text properties such
   as the font, its size, font styles such as italic, font weights
@@ -1476,22 +1154,18 @@ exit
   defines <a href="draw.html#attribute_writers">attribute
   writers</a> for this purpose. You can set the desired text
   properties by calling the attribute writers before calling
-  <var>annotate</var>, or you can call them in an image block
-  associated with the <var>annotate</var> call.</p>
+  <code>annotate</code>, or you can call them in an image block
+  associated with the <code>annotate</code> call.</p>
 
-  <p>The following example shows how to use <var>annotate</var> to
-  produce this image.</p>
+  <p>The following example shows how to use <code>annotate</code>
+  to produce this image.</p>
 
-  <div style="padding: 1em;" align="center">
-    <a href="rubyname.rb.html" target="_blank"><img src=
-    "ex/rubyname.gif" alt="ex/rubyname.rb" border="0" /></a>
+  <div id="rubyname">
+    <a href="javascript:popup('rubyname.rb.html')"><img src=
+    "ex/rubyname.gif" alt="annotate example" title=
+    "Click to see the example script" /></a>
   </div>
-
-  <div align="center">
-    <table summary="example 7" class="example">
-      <tr>
-        <td>
-          <pre>
+  <pre class="example">
  1.   #! /usr/local/bin/ruby -w
  2.   require 'RMagick'
  3.
@@ -1523,89 +1197,75 @@ exit
 29.   canvas.write('rubyname.gif')
 30.   exit
 </pre>
-        </td>
-      </tr>
-    </table>
-  </div>
 
-  <p>This program uses three calls to <var>annotate</var> to
+  <p>This program uses three calls to <code>annotate</code> to
   produce the "etched" appearance. All three calls have some
   parameters in common but the fill color and location are
   different.</p>
 
   <p>First, the statements in lines 8-10 create the background. See
-  <a href="fill.html"><var>class Fill</var></a> for information
-  about the <var>TextureFill</var> class. The "granite:" image
-  format is one of &times;Magick's built-in image formats. See
-  <a href="imusage.html#builtin_formats">"Built-in image
-  formats"</a> for more information. The statement on line 12
+  <a href="struct.html#fill"><code>Fill classes</code></a> for
+  information about the <code>TextureFill</code> class. The
+  "granite:" image format is one of &times;Magick's built-in image
+  formats. See <a href="imusage.html#builtin_formats">"Built-in
+  image formats"</a> for more information. The statement on line 12
   creates the Draw object that does the annotation. The next 3
   lines set the values of the attributes that are common to all 3
-  <var>annotate</var> calls.</p>
+  <code>annotate</code> calls.</p>
 
-  <p>The first <var>annotate</var> argument is the image on which
+  <p>The first <code>annotate</code> argument is the image on which
   the text will be drawn. Arguments 2-5, <code>width</code>,
   <code>height</code>, <code>x</code>, and <code>y</code>, describe
   a rectangle about which the text is drawn. This rectangle,
-  combined with the value of <var>gravity</var>, define the
-  position of the text. When the <var>gravity</var> value is
+  combined with the value of <code>gravity</code>, define the
+  position of the text. When the <code>gravity</code> value is
   <a href=
   "constants.html#GravityType"><code>CenterGravity</code></a> the
   values of <code>width</code> and <code>height</code> are
   unused.</p>
 
-  <p>The first call to <var>annotate</var>, on lines 17-19, draws
+  <p>The first call to <code>annotate</code>, on lines 17-19, draws
   the text 2 pixels to the right and down from the center. The
   <code>self.fill = 'gray83'</code> statement sets the text color
-  to light gray. The second call to <var>annotate</var>, on lines
+  to light gray. The second call to <code>annotate</code>, on lines
   21-22, draws dark gray text 1.5 pixels to the left and up from
   the center. The last call, on lines 25-27, draws the text a third
   time, in dark red, exactly in the center of the image.</p>
 
-  <h2><a name="more" id="more">Where to go from here</a></h2>
+  <h2 id="more">Where to go from here</h2>
 
   <p>The next section, <a href=
   "imusage.html">"ImageMagick/GraphicsMagick Conventions,"</a>
   describes some conventions that you need to know, such as how
   &times;Magick determines the graphic format of an image file,
-  etc. The &times;Magick (www.imagemagick.org) and GraphicsMagick
+  etc. The ImageMagick (www.imagemagick.org) and GraphicsMagick
   (www.graphicsmagick.org) web sites (from which much of the
   information in these pages has been taken) offers a lot of detail
-  about &times;Magick. While the &times;Magick web site doesn't
-  describe RMagick, you can often use the documentation to learn
-  more about a RMagick method by reading about the &times;Magick
-  functions the method calls. (In the Reference section of this
-  document, most of the method descriptions include the name of the
-  &times;Magick function that the method calls.) Check out the
-  example programs. Almost every one of the RMagick methods is
-  demonstrated in one of the examples.</p>
+  about &times;Magick. While these web sites don't describe
+  RMagick, you can often use the documentation to learn more about
+  a RMagick method by reading about the Magick API the method
+  calls. (In the Reference section of this document, most of the
+  method descriptions include the name of the Magick API that the
+  method calls.) Check out the example programs. Almost every one
+  of the methods is demonstrated in one of the examples.</p>
 
   <p>Good luck!</p>
-  <hr />
 
-  <h4>Footnotes</h4>
+  <div id="degrees">
+    <h5>Footnotes</h5>
 
-  <p><sup><a name="imdoc" id="imdoc">1</a></sup>Most of the content
-  in this table is taken from the &times;Magick documentation.</p>
+    <p><sup>1</sup>The rotation attributes <code>rx</code> and
+    <code>ry</code> in the <a href=
+    "struct.html#AffineMatrix"><code>AffineMatrix</code></a> class
+    use radians instead of degrees.</p>
+  </div>
 
-  <p><sup><a name="degrees" id="degrees">2</a></sup>The rotation
-  attributes <code>rx</code> and <code>ry</code> in the <a href=
-  "struct.html#AffineMatrix"><var>AffineMatrix</var></a> class use
-  radians instead of degrees.</p>
-  <hr />
+  <p class="spacer"> </p>
 
-  <table summary="navigation" align="right" class="nav"
-  cellpadding="3">
-    <tr>
-      <td style="text-align: left"><a href="index.html">&lt;-
-      Prev</a></td>
-
-      <td style="text-align: center"><a href=
-      "index.html">Contents</a></td>
-
-      <td style="text-align: right"><a href="imusage.html">Next
-      -&gt;</a></td>
-    </tr>
-  </table>
+  <div class="nav">
+    &laquo; <a href="index.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="imusage.html">Next</a>
+    &raquo;
+  </div>
 </body>
 </html>

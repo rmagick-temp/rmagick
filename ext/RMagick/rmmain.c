@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.10 2003/08/03 21:49:08 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.11 2003/08/18 00:19:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1791,7 +1791,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
-//  DCL_ATTR_ACCESSOR(Info, verbose)
+//  DCL_ATTR_ACCESSOR(Info, verbose) obsolete
 
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
@@ -1855,11 +1855,18 @@ Init_RMagick(void)
     DEF_CONST(YIQColorspace);       DEF_CONST(YPbPrColorspace);
     DEF_CONST(YUVColorspace);       DEF_CONST(CMYKColorspace);
     rb_define_const(Module_Magick, "SRGBColorspace", INT2FIX(sRGBColorspace));
+#if defined(HAVE_HSLCOLORSPACE)
+    DEF_CONST(HSLColorspace);       // 5.5.7   
+#endif
+#if defined(HAVE_HWBCOLORSPACE)
+    DEF_CONST(HWBColorspace);       // 5.5.7
+#endif
 
     // ComplianceType constants
+    DEF_CONST(UndefinedCompliance);
     // AllCompliance is 0xffff, not too useful for us!
     rb_define_const(Module_Magick, "AllCompliance", INT2FIX(SVGCompliance|X11Compliance|XPMCompliance));
-#if HAVE_NOCOMPLIANCE
+#if defined(HAVE_NOCOMPLIANCE)
     DEF_CONST(NoCompliance);
 #endif
     DEF_CONST(SVGCompliance);
@@ -1883,6 +1890,11 @@ Init_RMagick(void)
     DEF_CONST(HueCompositeOp);          DEF_CONST(SaturateCompositeOp);
     DEF_CONST(ColorizeCompositeOp);     DEF_CONST(LuminizeCompositeOp);
     DEF_CONST(ScreenCompositeOp);       DEF_CONST(OverlayCompositeOp);
+#if defined(HAVE_COPYCYANCOMPOSITEOP)
+                                        // CYMK added 5.5.7
+    DEF_CONST(CopyCyanCompositeOp);     DEF_CONST(CopyMagentaCompositeOp);
+    DEF_CONST(CopyYellowCompositeOp);   DEF_CONST(CopyBlackCompositeOp);
+#endif
 
     // CompressionType constants
     DEF_CONST(UndefinedCompression);        DEF_CONST(NoCompression);
@@ -1895,7 +1907,7 @@ Init_RMagick(void)
     DEF_CONST(NoDecoration);        DEF_CONST(UnderlineDecoration);
     DEF_CONST(OverlineDecoration);  DEF_CONST(LineThroughDecoration);
 
-#if HAVE_DISPOSETYPE
+#if defined(HAVE_DISPOSETYPE)
     // DisposeType constants (5.5.1)
     DEF_CONST(UndefinedDispose);    DEF_CONST(BackgroundDispose);
     DEF_CONST(NoneDispose);         DEF_CONST(PreviousDispose);

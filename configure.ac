@@ -140,6 +140,51 @@ if test "$rm_cv_enum_nocompliance" = yes; then
   AC_DEFINE(HAVE_NOCOMPLIANCE)
 fi
 
+AC_CACHE_CHECK(for HSLColorspace enum value, rm_cv_enum_hslcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = HSLColorspace],
+     rm_cv_enum_hslcolorspace='yes',
+     rm_cv_enum_hslcolorspace='no')])
+
+if test "$rm_cv_enum_hslcolorspace" = yes; then
+  AC_DEFINE(HAVE_HSLCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for HWBColorspace enum value, rm_cv_enum_hwbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = HWBColorspace],
+     rm_cv_enum_hwbcolorspace='yes',
+     rm_cv_enum_hwbcolorspace='no')])
+
+if test "$rm_cv_enum_hwbcolorspace" = yes; then
+  AC_DEFINE(HAVE_HWBCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = CopyCyanCompositeOp],
+     rm_cv_enum_copycyancompositeop='yes',
+     rm_cv_enum_copycyancompositeop='no')])
+
+if test "$rm_cv_enum_copycyancompositeop" = yes; then
+  AC_DEFINE(HAVE_COPYCYANCOMPOSITEOP)
+fi
+
 # Determine documentation base URI
 
 # Where is ****Magick installed?

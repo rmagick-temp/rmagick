@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.6 2003/07/22 13:14:51 tim Exp $ */
+/* $Id: rmutil.c,v 1.7 2003/08/18 00:19:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1307,7 +1307,13 @@ Num_to_CompositeOperator(VALUE type)
         ColorizeCompositeOp,
         LuminizeCompositeOp,
         ScreenCompositeOp,
-        OverlayCompositeOp
+        OverlayCompositeOp,
+#if defined(HAVE_COPYCYANCOMPOSITEOP)
+        CopyCyanCompositeOp,
+        CopyMagentaCompositeOp,
+        CopyYellowCompositeOp,
+        CopyBlackCompositeOp,
+#endif
     };
 #define COMPOSITE_N (sizeof(cm)/sizeof(cm[0]))
     int x;
@@ -1587,7 +1593,13 @@ Num_to_ColorspaceType(VALUE type)
     static ColorspaceType cs[] = {
         UndefinedColorspace, RGBColorspace, GRAYColorspace, TransparentColorspace,
         OHTAColorspace, XYZColorspace, YCbCrColorspace, YCCColorspace, YIQColorspace,
-        YPbPrColorspace, YUVColorspace, CMYKColorspace, sRGBColorspace
+        YPbPrColorspace, YUVColorspace, CMYKColorspace, sRGBColorspace,
+#if defined(HAVE_HSLCOLORSPACE)
+        HSLColorspace,
+#endif
+#if defined(HAVE_HWBCOLORSPACE)
+        HWBColorspace,
+#endif
         };
 #define COLORSPACE_N (sizeof(cs)/sizeof(cs[0]))
     int x;

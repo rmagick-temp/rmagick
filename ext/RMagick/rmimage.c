@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.8 2003/08/03 22:28:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.9 2003/08/18 00:19:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1022,24 +1022,36 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     ColorspaceType new_cs = Num_to_ColorspaceType(colorspace);
 
     Data_Get_Struct(self, Image, image);
-
-    if (image->colorspace != new_cs)
+    
+    if (new_cs == image->colorspace)
     {
-        if (image->colorspace == RGBColorspace
-        || image->colorspace == TransparentColorspace
-        || image->colorspace == GRAYColorspace)
-        {
-            (void) RGBTransformImage(image, new_cs);
-            HANDLE_IMG_ERROR(image)
-        }
-        else if (new_cs == RGBColorspace
-            || new_cs == TransparentColorspace
-            || new_cs == GRAYColorspace)
-        {
-            (void) TransformRGBImage(image, new_cs);
-            HANDLE_IMG_ERROR(image)
-        }
+        return self;
     }
+
+    if (new_cs != RGBColorspace &&
+        new_cs != TransparentColorspace &&
+        new_cs != GRAYColorspace)
+    {
+        if (image->colorspace != RGBColorspace &&
+            image->colorspace != TransparentColorspace &&
+            image->colorspace != GRAYColorspace)
+        {
+           TransformRGBImage(image, image->colorspace);
+           HANDLE_IMG_ERROR(image)
+        }
+        RGBTransformImage(image, new_cs);
+        HANDLE_IMG_ERROR(image);
+        return self;
+    }
+    
+    if (new_cs == RGBColorspace ||
+        new_cs == TransparentColorspace ||
+        new_cs == GRAYColorspace)
+    {
+        TransformRGBImage(image, image->colorspace);
+        HANDLE_IMG_ERROR(image);
+    }
+    
     return self;
 }
 
@@ -1556,6 +1568,9 @@ Image_density_eq(VALUE self, VALUE density_arg)
 /*
     Method:     Image#depth
     Purpose:    Return the image depth (8 or 16).
+    Note:       If all pixels have lower-order bytes equal to higher-order
+                bytes, the depth will be reported as 8 even if the depth
+                field in the Image structure says 16.
 */
 VALUE
 Image_depth(VALUE self)

@@ -9,6 +9,9 @@ RMagick 1.7.0
     o Renamed channel_compare to compare_channel, retained old name as an alias
       for backward compatibility.
     o Added default values for unsharp_mask arguments
+    o Fixed bug #1193
+    o Fixed segfault in destroy_Draw when Ruby gc'd the temp file name
+      array before calling destroy_Draw
 
 RMagick 1.6.2
     o Fixed ImageList#deconstruct to return an imagelist

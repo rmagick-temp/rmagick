@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.2 2003/07/12 18:54:02 tim Exp $ */
+/* $Id: rmimage.c,v 1.3 2003/07/19 01:47:37 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -150,7 +150,7 @@ Image_aref(VALUE self, VALUE key_arg)
             }
             break;
         default:
-            rb_raise(rb_eArgError, "key must be String or Symbol (%s given)",
+            rb_raise(rb_eTypeError, "key must be String or Symbol (%s given)",
                 rb_class2name(CLASS_OF(key_arg)));
             break;
     }
@@ -202,7 +202,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
             }
             break;
         default:
-            rb_raise(rb_eArgError, "key must be a String or a symbol (%s given)"
+            rb_raise(rb_eTypeError, "key must be a String or a symbol (%s given)"
                    , rb_class2name(CLASS_OF(key_arg)));
             break;
     }
@@ -2087,6 +2087,7 @@ Image_flop_bang(VALUE self)
     return flipflop(True, self, FlopImage);
 }
 
+
 /*
     Method:     Image#format
     Purpose:    Return the image encoding format
@@ -2111,6 +2112,29 @@ Image_format(VALUE self)
 
     return Qnil;
 }
+
+
+/*
+    Method:     Image#format=
+    Purpose:    Set the image encoding format
+*/
+VALUE
+Image_format_eq(VALUE self, VALUE magick)
+{
+    Image *image;
+    const MagickInfo *m;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+    m = GetMagickInfo(STRING_PTR(magick), &exception);
+    HANDLE_ERROR
+
+    strncpy(image->magick, m->name, MaxTextExtent-1);
+    return self;
+}
+
 
 /*
     Method:     Image#frame(<width<, height<, x<, y<, inner_bevel<, outer_bevel<, color>>>>>>>)
@@ -4062,6 +4086,19 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
         info->filename[filenameL] = '\0';
         info->file = NULL;      // Reset FILE *, if any
     }
+    else if (TYPE(file_arg) == T_FILE)
+    {
+        OpenFile *fptr;
+
+        // Ensure file is open - raise error if not
+        GetOpenFile(file_arg, fptr);
+        info->file = GetReadFile(fptr);
+    }
+    else
+    {
+        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
+                rb_class2name(CLASS_OF(file_arg)));
+    }
 
     GetExceptionInfo(&exception);
 
@@ -5386,7 +5423,7 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
   Returns:  self
 */
 VALUE
-Image_write(VALUE self, VALUE filename_arg)
+Image_write(VALUE self, VALUE file)
 {
     Image *image;
     Info *info;
@@ -5400,22 +5437,39 @@ Image_write(VALUE self, VALUE filename_arg)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    // Copy the filename to the Info and to the Image, then call
-    // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
-    Check_Type(filename_arg, T_STRING);
-    filename = STRING_PTR_LEN(filename_arg, filenameL);
-    filenameL = min(filenameL, MaxTextExtent-1);
-
-    memcpy(info->filename, filename, (size_t)filenameL);
-    info->filename[filenameL] = '\0';
-    strcpy(image->filename, info->filename);
-
-    GetExceptionInfo(&exception);
-    (void) SetImageInfo(info, True, &exception);
-    HANDLE_ERROR
-    if (*info->magick == '\0')
+    if (TYPE(file) == T_STRING)
     {
-        return Qnil;
+        // Copy the filename to the Info and to the Image, then call
+        // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
+        Check_Type(file, T_STRING);
+        filename = STRING_PTR_LEN(file, filenameL);
+        filenameL = min(filenameL, MaxTextExtent-1);
+
+        memcpy(info->filename, filename, (size_t)filenameL);
+        info->filename[filenameL] = '\0';
+        strcpy(image->filename, info->filename);
+
+        GetExceptionInfo(&exception);
+        (void) SetImageInfo(info, True, &exception);
+        HANDLE_ERROR
+        if (*info->magick == '\0')
+        {
+            return Qnil;
+        }
+        info->file = NULL;
+    }
+    else if (TYPE(file) == T_FILE)
+    {
+        OpenFile *fptr;
+
+        // Ensure file is open - raise error if not
+        GetOpenFile(file, fptr);
+        info->file = GetWriteFile(fptr);
+    }
+    else
+    {
+        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
+                rb_class2name(CLASS_OF(file)));
     }
 
     info->adjoin = False;
@@ -5518,6 +5572,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
 
     return xform_image(bang, self, x, y, width, height, CropImage);
 }
+
 
 
 /*

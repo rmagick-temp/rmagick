@@ -1,6 +1,6 @@
-/* $Id: rmimage.c,v 1.31 2003/12/30 00:53:56 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.32 2004/01/01 01:33:28 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2003 by Timothy P. Hunter
+|                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
 | Author:   Tim Hunter
 | Purpose:  Image class method definitions for RMagick
@@ -1417,10 +1417,13 @@ VALUE Image_compose_eq(
 /*
     Method:     Image#composite(image, x_off, y_off, composite_op)
                 Image#composite(image, gravity, composite_op)
+                Image#composite(image, gravity, x_off, y_off, composite_op)
     Purpose:    Call CompositeImage
     Notes:      the other image can be either an Image or an Image.
                 The use of the GravityType to position the composited
-                image is based on Magick++.
+                image is based on Magick++. The `gravity' argument has
+                the same effect as the -gravity option does in the
+                `composite' utility.
     Returns:    new composited image, or nil
 */
 VALUE Image_composite(
@@ -1432,6 +1435,7 @@ VALUE Image_composite(
     Image *comp_image;
     CompositeOperator operator;
     GravityType gravity;
+    MagickEnum *magick_enum;
     ExceptionInfo exception;
     long x_offset;
     long y_offset;
@@ -1488,18 +1492,45 @@ VALUE Image_composite(
                     y_offset = image->rows - comp_image->rows;
                 break;
             }
-        break;
+            break;
 
         case 4:                 // argv[1], argv[2] is x_off, y_off,
                                 // argv[3] is composite_op
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
             VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
-        break;
+            break;
+
+        case 5:
+            VALUE_TO_ENUM(argv[1], gravity, GravityType);
+            x_offset = NUM2LONG(argv[2]);
+            y_offset = NUM2LONG(argv[3]);
+            VALUE_TO_ENUM(argv[4], operator, CompositeOperator);
+
+            switch(gravity)
+            {
+                case NorthEastGravity:
+                case EastGravity:
+                    x_offset = image->columns - comp_image->columns - x_offset;
+                    break;
+                case SouthWestGravity:
+                case SouthGravity:
+                    y_offset = image->rows - comp_image->rows - y_offset;
+                    break;
+                case SouthEastGravity:
+                    x_offset = image->columns - comp_image->columns - x_offset;
+                    y_offset = image->rows - comp_image->rows - y_offset;
+                    break;
+                default:
+                    Data_Get_Struct(argv[1], MagickEnum, magick_enum);
+                    rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+                    break;
+            }
+            break;
 
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3 or 4)", argc);
-        break;
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
+            break;
     }
 
     // CompositeImage doesn't react well to negative offsets!
@@ -6286,7 +6317,10 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
                     x, y, width, height
                 or
                     gravity, width, height
-                If the 2nd, compute the x, y values.
+                or
+                    gravity, x, y, width, height
+                If the 2nd or 3rd, compute new x, y values.
+
                 Call xform_image to do the cropping.
 */
 static VALUE
@@ -6296,10 +6330,49 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     unsigned long nx = 0, ny = 0;
     unsigned long columns, rows;
     GravityType gravity;
+    MagickEnum *magick_enum;
     Image *image;
 
     switch (argc)
     {
+        case 5:
+            Data_Get_Struct(self, Image, image);
+
+            VALUE_TO_ENUM(argv[0], gravity, GravityType);
+
+            x      = argv[1];
+            y      = argv[2];
+            width  = argv[3];
+            height = argv[4];
+
+            nx      = NUM2ULONG(x);
+            ny      = NUM2ULONG(y);
+            columns = NUM2ULONG(width);
+            rows    = NUM2ULONG(height);
+
+            switch(gravity)
+            {
+                case NorthEastGravity:
+                case EastGravity:
+                    nx = image->columns - columns - nx;
+                    break;
+                case SouthWestGravity:
+                case SouthGravity:
+                    ny = image->rows - rows - ny;
+                    break;
+                case SouthEastGravity:
+                    nx = image->columns - columns - nx;
+                    ny = image->rows - rows - ny;
+                    break;
+                default:
+                    Data_Get_Struct(argv[0], MagickEnum, magick_enum);
+                    rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+                    break;
+            }
+
+            x = ULONG2NUM(nx);
+            y = ULONG2NUM(ny);
+            break;
         case 4:
             x      = argv[0];
             y      = argv[1];
@@ -6365,7 +6438,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             y = ULONG2NUM(ny);
             break;
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3 or 4)", argc);
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
             break;
     }
 

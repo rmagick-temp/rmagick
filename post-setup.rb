@@ -143,6 +143,11 @@ END_EXFAIL
     end
 end
 
+if File.exists? 'CVS/Entries'
+  puts "\nSkipping post-setup.rb - in CVS sandbox"
+  exit
+end
+
 puts "\npost-setup.rb: setting up documentation..."
 
 # No use doing this if base URI is the default.

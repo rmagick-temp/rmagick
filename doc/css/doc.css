@@ -149,7 +149,7 @@ div.sig {
 .sig h3 {   /* method name: total width 210px */
   background-color: #c0c0c0;
   color: #000;
-  width: 205px;
+  width: 225px;
   float: left;
   padding-left: 5px;
   margin-top: 0;
@@ -159,7 +159,7 @@ div.sig {
   background-color: #c0c0c0;
   color: #000;
   padding-right: 5px;
-  padding-left: 210px;
+  padding-left: 230px;
   padding-bottom: 1em;
   margin-top: 0;
 }
@@ -169,15 +169,15 @@ div.sig {
  */
 
 .desc {
-  margin-left: 215px;
+  margin-left: 235px;
   margin-bottom: 2em;
 }
 
 .desc h4 {
   position: relative;
-  left: -215px;
+  left: -235px;
   padding-left: 5px;
-  background-image: url(../ex/images/graydient210x6.gif);
+  background-image: url(../ex/images/graydient230x6.gif);
   background-repeat: repeat-y;
   color: black;
   font-weight: normal;

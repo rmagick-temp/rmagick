@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.9 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.10 2003/10/02 12:45:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -68,7 +68,18 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
     return self;
 }
 
-DEF_ATTR_READER(Info, colorspace, int)
+/*
+    Method:     Info#colorspace
+    Purpose:    Get the colorspace type
+*/
+VALUE
+Info_colorspace(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return ColorspaceType_new(info->colorspace);
+}
 
 /*
     Method:     Info#colorspace=
@@ -85,7 +96,19 @@ Info_colorspace_eq(VALUE self, VALUE colorspace)
     return self;
 }
 
-DEF_ATTR_READER(Info, compression, int)
+/*
+    Method:  Info#compression
+    Purpose: Get the compression type
+    Notes:
+*/
+VALUE
+Info_compression(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return CompressionType_new(info->compression);
+}
 
 /*
     Method:     Info#compression=
@@ -406,12 +429,23 @@ DEF_ATTR_ACCESSOR(Info, group, long)
 
 /*
     Method:     Info#image_type
-                Info#image_type=
+    Purpose:    Get the classification type
+    Raises:     ArgumentError
+*/
+VALUE
+Info_image_type(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return ImageType_new(info->type);
+}
+
+/*
+    Method:     Info#image_type=
     Purpose:    Set the classification type
     Raises:     ArgumentError
 */
-DEF_ATTR_READERF(Info, image_type, type, int)
-
 VALUE
 Info_image_type_eq(VALUE self, VALUE type)
 {
@@ -422,7 +456,19 @@ Info_image_type_eq(VALUE self, VALUE type)
     return self;
 }
 
-DEF_ATTR_READER(Info, interlace, int)
+/*
+    Method:  Info#interlace
+    Purpose: Get the interlace type
+    Notes:
+*/
+VALUE
+Info_interlace(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return InterlaceType_new(info->interlace);
+}
 
 /*
     Method:     Info#interlace=
@@ -657,7 +703,18 @@ Info_size_eq(VALUE self, VALUE size_arg)
     return self;
 }
 
-DEF_ATTR_READER(Info, units, int)
+/*
+    Method:  Info#units
+    Purpose: Get the resolution type
+*/
+VALUE
+Info_units(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return ResolutionType_new(info->units);
+}
 
 /*
     Method:     Info#units=
@@ -700,9 +757,6 @@ Info_view_eq(VALUE self, VALUE view_arg)
     }
     return self;
 }
-
-//DEF_ATTR_ACCESSOR(Info, verbose, bool)
-
 
 /*
     Method:     Info.new

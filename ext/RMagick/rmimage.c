@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.16 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.17 2003/10/02 12:45:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -113,7 +113,7 @@ Image_affine_transform(VALUE self, VALUE affine)
     Data_Get_Struct(self, Image, image);
 
     // Convert Magick::AffineMatrix to AffineMatrix structure.
-    Struct_to_AffineMatrix(&matrix, affine);
+    AffineMatrix_to_AffineMatrix(&matrix, affine);
 
     GetExceptionInfo(&exception);
     new_image = AffineTransformImage(image, &matrix, &exception);
@@ -447,7 +447,7 @@ VALUE Image_bounding_box(VALUE self)
     GetExceptionInfo(&exception);
     box = GetImageBoundingBox(image, &exception);
     HANDLE_ERROR
-    return RectangleInfo_to_Struct(&box);
+    return Rectangle_from_RectangleInfo(&box);
 }
 
 /*
@@ -688,7 +688,7 @@ Image_chromaticity(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    return ChromaticityInfo_to_Struct(&image->chromaticity);
+    return ChromaticityInfo_new(&image->chromaticity);
 }
 
 /*
@@ -702,7 +702,7 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    Struct_to_ChromaticityInfo(&image->chromaticity, chroma);
+    ChromaticityInfo_to_ChromaticityInfo(&image->chromaticity, chroma);
     return self;
 }
 
@@ -763,7 +763,7 @@ Image_color_histogram(VALUE self)
     hash = rb_hash_new();
     for (x = 0; x < colors; x++)
     {
-        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
+        pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
         rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
     }
 
@@ -792,7 +792,7 @@ Image_color_histogram(VALUE self)
     hash = rb_hash_new();
     for (x = 0; x < colors; x++)
     {
-        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
+        pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
         rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
     }
 
@@ -1274,7 +1274,7 @@ Image_composite_affine(
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
-    Struct_to_AffineMatrix(&affine, affine_matrix);
+    AffineMatrix_to_AffineMatrix(&affine, affine_matrix);
     (void) DrawAffineImage(new_image, composite, &affine);
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
@@ -1285,7 +1285,14 @@ Image_composite_affine(
                 Image#compression=
     Purpose:    Get/set the compresion attribute
 */
-DEF_ATTR_READER(Image, compression, int)
+VALUE
+Image_compression(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return CompressionType_new(image->compression);
+}
 
 VALUE
 Image_compression_eq(VALUE self, VALUE compression)
@@ -2126,7 +2133,7 @@ Image_extract_info(VALUE self)
 
     Data_Get_Struct(self, Image, image);
 #ifdef HAVE_IMAGE_EXTRACT_INFO
-    return RectangleInfo_to_Struct(&image->extract_info);
+    return Rectangle_from_RectangleInfo(&image->extract_info);
 #else
     not_implemented("extract_info");
     return (VALUE) 0;
@@ -2140,7 +2147,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 
     Data_Get_Struct(self, Image, image);
 #ifdef HAVE_IMAGE_EXTRACT_INFO
-    Struct_to_RectangleInfo(&image->extract_info, rect);
+    Rectangle_to_RectangleInfo(&image->extract_info, rect);
     return self;
 #else
     not_implemented("extract_info=");
@@ -2166,7 +2173,14 @@ VALUE Image_filesize(VALUE self)
     Method:     Image#filter, filter=
     Purpose:    Get/set filter type
 */
-DEF_ATTR_READER(Image, filter, int)
+VALUE
+Image_filter(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return FilterTypes_new(image->filter);
+}
 
 VALUE
 Image_filter_eq(VALUE self, VALUE filter)
@@ -2587,7 +2601,7 @@ Image_get_pixels(
     // Convert the PixelPackets to Magick::Pixel objects
     for (n = 0; n < size; n++)
     {
-        rb_ary_store(pixel_ary, n, PixelPacket_to_Struct(&pixels[n]));
+        rb_ary_store(pixel_ary, n, Pixel_from_PixelPacket(&pixels[n]));
     }
 
     return pixel_ary;
@@ -2613,7 +2627,7 @@ Image_get_one_pixel(VALUE self, VALUE x, VALUE y)
     GetExceptionInfo(&exception);
     pixel = AcquireOnePixel(image, NUM2LONG(x), NUM2LONG(y), &exception);
     HANDLE_ERROR
-    return PixelPacket_to_Struct(&pixel);
+    return Pixel_from_PixelPacket(&pixel);
 }
 #endif
 
@@ -2875,7 +2889,19 @@ Image_inspect(VALUE self)
     return rb_str_new2(buffer);
 }
 
-DEF_ATTR_READER(Image, interlace, int)
+/*
+    Method:     Image#interlace
+    Purpose:    get the interlace attribute
+*/
+VALUE
+Image_interlace(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+
+    return InterlaceType_new(image->interlace);
+}
 
 /*
     Method:     Image#interlace=
@@ -3861,7 +3887,7 @@ Image_page(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    return RectangleInfo_to_Struct(&image->page);
+    return Rectangle_from_RectangleInfo(&image->page);
 }
 
 
@@ -3875,7 +3901,7 @@ Image_page_eq(VALUE self, VALUE rect)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    Struct_to_RectangleInfo(&image->page, rect);
+    Rectangle_to_RectangleInfo(&image->page, rect);
     return self;
 }
 
@@ -3969,7 +3995,7 @@ Image_pixel_color(
         {
             old_color.opacity = OpaqueOpacity;
         }
-        return PixelPacket_to_Struct(&old_color);
+        return Pixel_from_PixelPacket(&old_color);
     }
 
     // Set the color of a pixel. Return previous color.
@@ -3998,7 +4024,7 @@ Image_pixel_color(
         rb_raise(Class_ImageMagickError, "image pixels could not be synced");
     }
 
-    return PixelPacket_to_Struct(&old_color);
+    return Pixel_from_PixelPacket(&old_color);
 }
 
 #if 0
@@ -4319,7 +4345,18 @@ Image_reduce_noise(VALUE self, VALUE radius)
     return rm_image_new(new_image);
 }
 
-DEF_ATTR_READER(Image, rendering_intent, int)
+/*
+    Method:     Image#rendering_intent=
+    Purpose:    set rendering_intent
+*/
+VALUE
+Image_rendering_intent(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return RenderingIntent_new(image->rendering_intent);
+}
 
 /*
     Method:     Image#rendering_intent=
@@ -5014,7 +5051,7 @@ Image_store_pixels(
         size = cols * rows;
         for (n = 0; n < size; n++)
         {
-            Struct_to_PixelPacket(&pixels[n], rb_ary_entry(new_pixels, n));
+            Pixel_to_PixelPacket(&pixels[n], rb_ary_entry(new_pixels, n));
         }
 
         okay = SyncImagePixels(image);
@@ -5304,9 +5341,9 @@ Image_tile_info(VALUE self)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info is deprecated in this release of ImageMagick. Use extract_info instead.");
-    return RectangleInfo_to_Struct(&image->extract_info);
+    return Rectangle_from_RectangleInfo(&image->extract_info);
 #else
-    return RectangleInfo_to_Struct(&image->tile_info);
+    return Rectangle_from_RectangleInfo(&image->tile_info);
 #endif
 }
 
@@ -5319,9 +5356,9 @@ Image_tile_info_eq(VALUE self, VALUE rect)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info= is deprecated in this release of ImageMagick. Use extract_info= instead.");
-    Struct_to_RectangleInfo(&image->extract_info, rect);
+    Rectangle_to_RectangleInfo(&image->extract_info, rect);
 #else
-    Struct_to_RectangleInfo(&image->tile_info, rect);
+    Rectangle_to_RectangleInfo(&image->tile_info, rect);
 #endif
     return self;
 }
@@ -5385,7 +5422,7 @@ Image_tint(int argc, VALUE *argv, VALUE self)
                      "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
                    , blue_pct_opaque*100.0, alpha_pct_opaque*100.0);
 
-    Struct_to_PixelPacket(&tint, argv[0]);
+    Pixel_to_PixelPacket(&tint, argv[0]);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -5473,7 +5510,7 @@ Image_to_color(VALUE self, VALUE pixel)
     ExceptionInfo exception;
     char name[MaxTextExtent];
 
-    Struct_to_PixelPacket(&pp, pixel);
+    Pixel_to_PixelPacket(&pp, pixel);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -5567,11 +5604,24 @@ VALUE Image_image_type(VALUE self)
     return INT2NUM(type);
 }
 
+
 /*
-    Method:     Image#units, units=
-    Purpose:    Get/set resolution type field
+    Method:     Image#units=
+    Purpose:    Get the resolution type field
 */
-DEF_ATTR_READER(Image, units, int)
+VALUE
+Image_units(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return ResolutionType_new(image->units);
+}
+
+/*
+    Method:     Image#units=
+    Purpose:    Set the resolution type field
+*/
 VALUE
 Image_units_eq(
     VALUE self,

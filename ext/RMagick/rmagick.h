@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.20 2003/09/29 23:58:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.21 2003/10/02 12:45:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -147,7 +147,7 @@ typedef struct
 */
 #if !defined(HAVE_MAGICK_INT64_T)
 #if defined(HAVE_MAGICKOFFSETTYPE)
-typedef MagickSignedType magick_int64_t;
+typedef MagickOffsetType magick_int64_t;
 #elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
 typedef ExtendedSignedIntegralType magick_int64_t;
 #else
@@ -157,7 +157,7 @@ typedef off_t magick_int64_t;
 
 #if !defined(HAVE_MAGICK_UINT64_T)
 #if defined(HAVE_MAGICKSIZETYPE)
-typedef MagickUnsignedType magick_uint64_t;
+typedef MagickSizeType magick_uint64_t;
 #elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
 typedef ExtendedUnsignedIntegralType magick_uint64_t;
 #else
@@ -661,15 +661,20 @@ extern VALUE TextureFill_initialize(VALUE, VALUE);
 extern VALUE TextureFill_fill(VALUE, VALUE);
 
 // rmutil.c
-extern VALUE   AffineMatrix_to_Struct(AffineMatrix *);
+extern VALUE   AffineMatrix_from_AffineMatrix(AffineMatrix *);
 extern VALUE   ChromaticityInfo_to_s(VALUE);
-extern VALUE   ChromaticityInfo_to_Struct(ChromaticityInfo *);
+extern VALUE   ChromaticityInfo_new(ChromaticityInfo *);
 extern void    Color_to_PixelPacket(PixelPacket *, VALUE);
 extern VALUE   Color_to_s(VALUE);
-extern VALUE   ColorInfo_to_Struct(const ColorInfo *);
+extern VALUE   Color_from_ColorInfo(const ColorInfo *);
+extern VALUE   ColorspaceType_new(ColorspaceType);
+extern VALUE   CompressionType_new(CompressionType);
+extern VALUE   FilterTypes_new(FilterTypes);
 extern VALUE   Font_to_s(VALUE);
 extern VALUE   ImageList_cur_image(VALUE);
 extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
+extern VALUE   ImageType_new(ImageType);
+extern VALUE   InterlaceType_new(InterlaceType);
 extern VALUE   Pixel_fcmp(int, VALUE *, VALUE);
 extern VALUE   Pixel_from_color(VALUE, VALUE);
 extern VALUE   Pixel_from_HSL(VALUE, VALUE);
@@ -679,23 +684,25 @@ extern VALUE   Pixel_to_HSL(VALUE);
 extern VALUE   Pixel_to_s(VALUE);
 extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
-extern VALUE   PixelPacket_to_Struct(PixelPacket *);
+extern VALUE   Pixel_from_PixelPacket(PixelPacket *);
 extern VALUE   PrimaryInfo_to_s(VALUE);
-extern VALUE   PrimaryInfo_to_Struct(PrimaryInfo *);
+extern VALUE   PrimaryInfo_from_PrimaryInfo(PrimaryInfo *);
 extern VALUE   RectangleInfo_to_s(VALUE);
-extern VALUE   RectangleInfo_to_Struct(RectangleInfo *);
+extern VALUE   Rectangle_from_RectangleInfo(RectangleInfo *);
+extern VALUE   RenderingIntent_new(RenderingIntent);
+extern VALUE   ResolutionType_new(ResolutionType);
 extern VALUE   SegmentInfo_to_s(VALUE);
-extern VALUE   SegmentInfo_to_Struct(SegmentInfo *);
-extern void    Struct_to_AffineMatrix(AffineMatrix *, VALUE);
-extern void    Struct_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
-extern void    Struct_to_ColorInfo(ColorInfo *, VALUE);
-extern void    Struct_to_PixelPacket(PixelPacket *, VALUE);
-extern void    Struct_to_PrimaryInfo(PrimaryInfo *, VALUE);
-extern void    Struct_to_RectangleInfo(RectangleInfo *, VALUE);
-extern void    Struct_to_SegmentInfo(SegmentInfo *, VALUE);
-extern void    Struct_to_TypeInfo(TypeInfo *, VALUE);
-extern void    Struct_to_TypeMetric(TypeMetric *, VALUE);
-extern VALUE   TypeInfo_to_Struct(TypeInfo *);
+extern VALUE   Segment_from_SegmentInfo(SegmentInfo *);
+extern void    AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
+extern void    ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
+extern void    Color_to_ColorInfo(ColorInfo *, VALUE);
+extern void    Pixel_to_PixelPacket(PixelPacket *, VALUE);
+extern void    PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
+extern void    Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
+extern void    Segment_to_SegmentInfo(SegmentInfo *, VALUE);
+extern void    Font_to_TypeInfo(TypeInfo *, VALUE);
+extern void    TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
+extern VALUE   Font_from_TypeInfo(TypeInfo *);
 extern VALUE   TypeMetric_to_s(VALUE);
 extern VALUE   TypeMetric_to_Struct(TypeMetric *);
 

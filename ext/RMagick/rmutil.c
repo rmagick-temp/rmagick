@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.16 2003/09/26 00:15:24 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.17 2003/10/02 12:45:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -154,7 +154,7 @@ PrimaryInfo_to_s(VALUE self)
     PrimaryInfo pi;
     char buff[100];
 
-    Struct_to_PrimaryInfo(&pi, self);
+    PrimaryInfo_to_PrimaryInfo(&pi, self);
     sprintf(buff, "x=%g, y=%g, z=%g", pi.x, pi.y, pi.z);
     return rb_str_new2(buff);
 }
@@ -169,7 +169,7 @@ ChromaticityInfo_to_s(VALUE self)
     ChromaticityInfo ci;
     char buff[200];
 
-    Struct_to_ChromaticityInfo(&ci, self);
+    ChromaticityInfo_to_ChromaticityInfo(&ci, self);
     sprintf(buff, "red_primary=(x=%g,y=%g) "
                   "green_primary=(x=%g,y=%g) "
                   "blue_primary=(x=%g,y=%g) "
@@ -191,7 +191,7 @@ Pixel_to_s(VALUE self)
     PixelPacket pp;
     char buff[100];
 
-    Struct_to_PixelPacket(&pp, self);
+    Pixel_to_PixelPacket(&pp, self);
     sprintf(buff, "red=%d, green=%d, blue=%d, opacity=%d"
           , pp.red, pp.green, pp.blue, pp.opacity);
     return rb_str_new2(buff);
@@ -221,7 +221,7 @@ Pixel_from_color(VALUE class, VALUE name)
         rb_raise(rb_eArgError, "invalid color name: %s", STRING_PTR(name));
     }
 
-    return PixelPacket_to_Struct(&pp);
+    return Pixel_from_PixelPacket(&pp);
 }
 
 /*
@@ -274,7 +274,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
     }
 
-    Struct_to_PixelPacket(&pp, self);
+    Pixel_to_PixelPacket(&pp, self);
 
     info = CloneImageInfo(NULL);
     image = AllocateImage(info);
@@ -302,7 +302,7 @@ Pixel_to_HSL(VALUE self)
     double hue, saturation, luminosity;
     volatile VALUE hsl;
 
-    Struct_to_PixelPacket(&rgb, self);
+    Pixel_to_PixelPacket(&rgb, self);
     TransformHSL(rgb.red, rgb.green, rgb.blue,
                  &hue, &saturation, &luminosity);
 
@@ -331,7 +331,7 @@ Pixel_from_HSL(VALUE self, VALUE hsl)
 
     HSLTransform(hue, saturation, luminosity,
                  &rgb.red, &rgb.green, &rgb.blue);
-    return PixelPacket_to_Struct(&rgb);
+    return Pixel_from_PixelPacket(&rgb);
 }
 
 /*
@@ -367,8 +367,8 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    Struct_to_PixelPacket(&this, self);
-    Struct_to_PixelPacket(&that, argv[0]);
+    Pixel_to_PixelPacket(&this, self);
+    Pixel_to_PixelPacket(&that, argv[0]);
 
 #if defined(HAVE_FUZZYCOLORCOMPARE)
     // The FuzzyColorCompare function expects to get the
@@ -410,7 +410,7 @@ Pixel_intensity(VALUE self)
     PixelPacket pixel;
     unsigned long intensity;
 
-    Struct_to_PixelPacket(&pixel, self);
+    Pixel_to_PixelPacket(&pixel, self);
     intensity = (unsigned long)
                 (0.299*pixel.red) + (0.587*pixel.green) + (0.114*pixel.blue);
     return ULONG2NUM(intensity);
@@ -426,7 +426,7 @@ RectangleInfo_to_s(VALUE self)
     RectangleInfo rect;
     char buff[100];
 
-    Struct_to_RectangleInfo(&rect, self);
+    Rectangle_to_RectangleInfo(&rect, self);
     sprintf(buff, "width=%lu, height=%lu, x=%ld, y=%ld"
           , rect.width, rect.height, rect.x, rect.y);
     return rb_str_new2(buff);
@@ -442,7 +442,7 @@ SegmentInfo_to_s(VALUE self)
     SegmentInfo segment;
     char buff[100];
 
-    Struct_to_SegmentInfo(&segment, self);
+    Segment_to_SegmentInfo(&segment, self);
     sprintf(buff, "x1=%g, y1=%g, x2=%g, y2=%g"
           , segment.x1, segment.y1, segment.x2, segment.y2);
     return rb_str_new2(buff);
@@ -525,11 +525,11 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 }
 
 /*
-    Extern:     AffineMatrix_to_Struct
+    Extern:     AffineMatrix_from_AffineMatrix
     Purpose:    Create a Magick::AffineMatrix object from an AffineMatrix structure.
 */
 VALUE
-AffineMatrix_to_Struct(AffineMatrix *am)
+AffineMatrix_from_AffineMatrix(AffineMatrix *am)
 {
     return rb_funcall(Class_AffineMatrix, new_ID, 6
                     , rb_float_new(am->sx), rb_float_new(am->rx), rb_float_new(am->ry)
@@ -537,12 +537,12 @@ AffineMatrix_to_Struct(AffineMatrix *am)
 }
 
 /*
-    Extern:     Struct_to_AffineMatrix
+    Extern:     AffineMatrix_to_AffineMatrix
     Purpose:    Convert a Magick::AffineMatrix object to a AffineMatrix structure.
     Notes:      If not initialized, the defaults are [sx,rx,ry,sy,tx,ty] = [1,0,0,1,0,0]
 */
 void
-Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
+AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
 {
     volatile VALUE values, v;
 
@@ -566,13 +566,79 @@ Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
     am->ty = v == Qnil ? 0.0 : NUM2DBL(v);
 }
 
+/*
+ *  Static:     ColorspaceType_new
+    Purpose:    construct a ColorspaceType enum object for the specified value
+*/
+VALUE
+ColorspaceType_new(ColorspaceType cs)
+{
+    const char *name;
+
+    switch(cs)
+    {
+        default:
+        case UndefinedColorspace:
+            name = "UndefinedColorspace";
+            break;
+        case RGBColorspace:
+            name = "RGBColorspace";
+            break;
+        case GRAYColorspace:
+            name = "GRAYColorspace";
+            break;
+        case TransparentColorspace:
+            name = "TransparentColorspace";
+            break;
+        case OHTAColorspace:
+            name = "OHTAColorspace";
+            break;
+        case XYZColorspace:
+            name = "XYZColorspace";
+            break;
+        case YCbCrColorspace:
+            name = "YCbCrColorspace";
+            break;
+        case YCCColorspace:
+            name = "YCCColorspace";
+            break;
+        case YIQColorspace:
+            name = "YIQColorspace";
+            break;
+        case YPbPrColorspace:
+            name = "YPbPrColorspace";
+            break;
+        case YUVColorspace:
+            name = "YUVColorspace";
+            break;
+        case CMYKColorspace:
+            name = "CMYKColorspace";
+            break;
+        case sRGBColorspace:
+            name = "sRGBColorspace";
+            break;
+#if defined(HAVE_HSLCOLORSPACE)
+        case HSLColorspace:
+            name = "HSLColorspace";
+            break;
+#endif
+#if defined(HAVE_HWBCOLORSPACE)
+        case HWBColorspace:
+            name = "HWBColorspace";
+            break;
+#endif
+    }
+
+    return rm_enum_new(Class_ColorspaceType, ID2SYM(rb_intern(name)), INT2FIX(cs));
+
+}
 
 /*
- *  Static:     ComplianceType_To_Enum
+ *  Static:     ComplianceType_new
     Purpose:    construct a ComplianceType enum object for the specified value
 */
 static VALUE
-ComplianceType_To_Enum(ComplianceType compliance)
+ComplianceType_new(ComplianceType compliance)
 {
     const char *name;
 
@@ -583,11 +649,262 @@ ComplianceType_To_Enum(ComplianceType compliance)
 }
 
 /*
-    External:   ColorInfo_to_Struct
+ * External:    CompressionType_new
+   Purpose:     Construct a CompressionTYpe enum object for the specified value
+*/
+VALUE
+CompressionType_new(CompressionType ct)
+{
+    const char *name;
+
+    switch (ct)
+    {
+        default:
+        case UndefinedCompression:
+            name = "UndefinedCompression";
+            break;
+        case NoCompression:
+            name = "NoCompression";
+            break;
+        case BZipCompression:
+            name = "BZipCompression";
+            break;
+        case FaxCompression:
+            name = "FaxCompression";
+            break;
+        case Group4Compression:
+            name = "Group4Compression";
+            break;
+        case JPEGCompression:
+            name = "JPEGCompression";
+            break;
+        case LosslessJPEGCompression:
+            name = "LosslessJPEGCompression";
+            break;
+        case LZWCompression:
+            name = "LZWCompression";
+            break;
+        case RLECompression:
+            name = "RLECompression";
+            break;
+        case ZipCompression:
+            name = "ZipCompression";
+            break;
+    }
+
+    return rm_enum_new(Class_CompressionType, ID2SYM(rb_intern(name)), INT2FIX(ct));
+}
+
+/*
+    External:  FilterTypes#new
+    Purpose: Construct an FilterTypes enum object for the specified value
+*/
+VALUE
+FilterTypes_new(FilterTypes type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedFilter:
+            name = "UndefinedFilter";
+            break;
+        case PointFilter:
+            name = "PointFilter";
+            break;
+        case BoxFilter:
+            name = "BoxFilter";
+            break;
+        case TriangleFilter:
+            name = "TriangleFilter";
+            break;
+        case HermiteFilter:
+            name = "HermiteFilter";
+            break;
+        case HanningFilter:
+            name = "HanningFilter";
+            break;
+        case HammingFilter:
+            name = "HammingFilter";
+            break;
+        case BlackmanFilter:
+            name = "BlackmanFilter";
+            break;
+        case GaussianFilter:
+            name = "GaussianFilter";
+            break;
+        case QuadraticFilter:
+            name = "QuadraticFilter";
+            break;
+        case CubicFilter:
+            name = "CubicFilter";
+            break;
+        case CatromFilter:
+            name = "CatromFilter";
+            break;
+        case MitchellFilter:
+            name = "MitchellFilter";
+            break;
+        case LanczosFilter:
+            name = "LanczosFilter";
+            break;
+        case BesselFilter:
+            name = "BesselFilter";
+            break;
+        case SincFilter:
+            name = "SincFilter";
+            break;
+
+    }
+    return rm_enum_new(Class_FilterTypes, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+/*
+    External:  ImageType#new
+    Purpose: Construct an ImageType enum object for the specified value
+*/
+VALUE
+ImageType_new(ImageType type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedType:
+            name = "UndefinedType";
+            break;
+        case BilevelType:
+            name = "BilevelType";
+            break;
+        case GrayscaleType:
+            name = "GrayscaleType";
+            break;
+        case GrayscaleMatteType:
+            name = "GrayscaleMatteType";
+            break;
+        case PaletteType:
+            name = "PaletteType";
+            break;
+        case PaletteMatteType:
+            name = "PaletteMatteType";
+            break;
+        case TrueColorType:
+            name = "TrueColorType";
+            break;
+        case TrueColorMatteType:
+            name = "TrueColorMatteType";
+            break;
+        case ColorSeparationType:
+            name = "ColorSeparationType";
+            break;
+        case ColorSeparationMatteType:
+            name = "ColorSeparationMatteType";
+            break;
+        case OptimizeType:
+            name = "OptimizeType";
+            break;
+    }
+
+    return rm_enum_new(Class_ImageType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+/*
+    External:   InterlaceType_new
+    Purpose:    Construct an InterlaceType enum object for the specified value.
+*/
+VALUE
+InterlaceType_new(InterlaceType interlace)
+{
+    const char *name;
+
+    switch(interlace)
+    {
+        default:
+        case UndefinedInterlace:
+            name = "UndefinedInterlace";
+            break;
+        case NoInterlace:
+            name = "NoInterlace";
+            break;
+        case LineInterlace:
+            name = "LineInterlace";
+            break;
+        case PlaneInterlace:
+            name = "PlaneInterlace";
+            break;
+        case PartitionInterlace:
+            name = "PartitionInterlace";
+            break;
+    }
+
+    return rm_enum_new(Class_InterlaceType, ID2SYM(rb_intern(name)), INT2FIX(interlace));
+}
+
+/*
+    External:   RenderingIntent_new
+    Purpose:    Construct an RenderingIntent enum object for the specified value.
+*/
+VALUE
+RenderingIntent_new(RenderingIntent intent)
+{
+    const char *name;
+
+    switch(intent)
+    {
+        default:
+        case UndefinedIntent:
+            name = "UndefinedIntent";
+            break;
+        case SaturationIntent:
+            name = "SaturationIntent";
+            break;
+        case PerceptualIntent:
+            name = "PerceptualIntent";
+            break;
+        case AbsoluteIntent:
+            name = "AbsoluteIntent";
+            break;
+        case RelativeIntent:
+            name = "RelativeIntent";
+            break;
+    }
+
+    return rm_enum_new(Class_RenderingIntent, ID2SYM(rb_intern(name)), INT2FIX(intent));
+}
+
+/*
+    External:   ResolutionType_new
+    Purpose:    Construct an ResolutionType enum object for the specified value.
+*/
+VALUE
+ResolutionType_new(ResolutionType type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedResolution:
+            name = "UndefinedResolution";
+            break;
+        case PixelsPerInchResolution:
+            name = "PixelsPerInchResolution";
+            break;
+        case PixelsPerCentimeterResolution:
+            name = "PixelsPerCentimeterResolution";
+            break;
+    }
+    return rm_enum_new(Class_ResolutionType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+/*
+    External:   Color_from_ColorInfo
     Purpose:    Convert a ColorInfo structure to a Magick::Color
 */
 VALUE
-ColorInfo_to_Struct(const ColorInfo *ci)
+Color_from_ColorInfo(const ColorInfo *ci)
 {
     ComplianceType compliance_type;
     volatile VALUE name;
@@ -597,8 +914,8 @@ ColorInfo_to_Struct(const ColorInfo *ci)
     name       = rb_str_new2(ci->name);
 
     compliance_type = ci->compliance;
-    compliance = ComplianceType_To_Enum(compliance_type);
-    color      = PixelPacket_to_Struct((PixelPacket *)(&(ci->color)));
+    compliance = ComplianceType_new(compliance_type);
+    color      = Pixel_from_PixelPacket((PixelPacket *)(&(ci->color)));
 
     return rb_funcall(Class_Color, new_ID, 3
                     , name, compliance, color);
@@ -606,11 +923,11 @@ ColorInfo_to_Struct(const ColorInfo *ci)
 
 
 /*
-    External:   Struct_to_ColorInfo
+    External:   Color_to_ColorInfo
     Purpose:    Convert a Magick::Color to a ColorInfo structure
 */
 void
-Struct_to_ColorInfo(ColorInfo *ci, VALUE st)
+Color_to_ColorInfo(ColorInfo *ci, VALUE st)
 {
     volatile VALUE members, m;
 
@@ -637,13 +954,13 @@ Struct_to_ColorInfo(ColorInfo *ci, VALUE st)
     m = rb_ary_entry(members, 2);
     if (m != Qnil)
     {
-        Struct_to_PixelPacket(&(ci->color), m);
+        Pixel_to_PixelPacket(&(ci->color), m);
     }
 }
 
 /*
     Static:     destroy_ColorInfo
-    Purpose:    free the storage allocated by Struct_to_ColorInfo, above.
+    Purpose:    free the storage allocated by Color_to_ColorInfo, above.
 */
 static void
 destroy_ColorInfo(ColorInfo *ci)
@@ -662,7 +979,7 @@ Color_to_s(VALUE self)
     ColorInfo ci;
     char buff[1024];
 
-    Struct_to_ColorInfo(&ci, self);
+    Color_to_ColorInfo(&ci, self);
     sprintf(buff, "name=%s, compliance=%s, "
                   "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
                   ci.name,
@@ -674,11 +991,11 @@ Color_to_s(VALUE self)
 }
 
 /*
-    Extern:     PixelPacket_to_Struct
+    Extern:     Pixel_from_PixelPacket
     Purpose:    Create a Magick::Pixel object from a PixelPacket structure.
 */
 VALUE
-PixelPacket_to_Struct(PixelPacket *pp)
+Pixel_from_PixelPacket(PixelPacket *pp)
 {
     return rb_funcall(Class_Pixel, new_ID, 4
                     , INT2FIX(pp->red), INT2FIX(pp->green)
@@ -686,12 +1003,12 @@ PixelPacket_to_Struct(PixelPacket *pp)
 }
 
 /*
-    Extern:     Struct_to_PixelPacket
+    Extern:     Pixel_to_PixelPacket
     Purpose:    Convert a Magick::Pixel object to a PixelPacket structure.
     Notes:      The Pixel object could have uninitialized values, default to 0.
 */
 void
-Struct_to_PixelPacket(PixelPacket *pp, VALUE st)
+Pixel_to_PixelPacket(PixelPacket *pp, VALUE st)
 {
     volatile VALUE values;
     volatile VALUE c;
@@ -728,7 +1045,7 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
     }
     else if (CLASS_OF(color) == Class_Pixel)
     {
-        Struct_to_PixelPacket(pp, color);
+        Pixel_to_PixelPacket(pp, color);
     }
     else
     {
@@ -739,22 +1056,22 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
 }
 
 /*
-    Extern:     PrimaryInfo_to_Struct(pp)
+    Extern:     PrimaryInfo_from_PrimaryInfo(pp)
     Purpose:    Create a Magick::PrimaryInfo object from a PrimaryInfo structure.
 */
 VALUE
-PrimaryInfo_to_Struct(PrimaryInfo *p)
+PrimaryInfo_from_PrimaryInfo(PrimaryInfo *p)
 {
     return rb_funcall(Class_Primary, new_ID, 3
                     , INT2FIX(p->x), INT2FIX(p->y), INT2FIX(p->z));
 }
 
 /*
-    Extern:     Struct_to_PrimaryInfo
+    Extern:     PrimaryInfo_to_PrimaryInfo
     Purpose:    Convert a Magick::PrimaryInfo object to a PrimaryInfo structure
 */
 void
-Struct_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
+PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 {
     volatile VALUE members, m;
 
@@ -773,22 +1090,22 @@ Struct_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 }
 
 /*
-    Extern:     PointInfo_to_Struct(pp)
+    Extern:     PointInfo_to_Point(pp)
     Purpose:    Create a Magick::Point object from a PointInfo structure.
 */
 VALUE
-PointInfo_to_Struct(PointInfo *p)
+PointInfo_to_Point(PointInfo *p)
 {
     return rb_funcall(Class_Point, new_ID, 2
                     , INT2FIX(p->x), INT2FIX(p->y));
 }
 
 /*
-    Extern:     Struct_to_PointInfo
+    Extern:     Point_to_PointInfo
     Purpose:    Convert a Magick::Point object to a PointInfo structure
 */
 void
-Struct_to_PointInfo(PointInfo *pi, VALUE sp)
+Point_to_PointInfo(PointInfo *pi, VALUE sp)
 {
     volatile VALUE members, m;
 
@@ -805,34 +1122,34 @@ Struct_to_PointInfo(PointInfo *pi, VALUE sp)
 }
 
 /*
-    Extern:     ChromaticityInfo_to_Struct(pp)
+    Extern:     ChromaticityInfo_new(pp)
     Purpose:    Create a Magick::ChromaticityInfo object from a
                 ChromaticityInfo structure.
 */
 VALUE
-ChromaticityInfo_to_Struct(ChromaticityInfo *ci)
+ChromaticityInfo_new(ChromaticityInfo *ci)
 {
     volatile VALUE red_primary;
     volatile VALUE green_primary;
     volatile VALUE blue_primary;
     volatile VALUE white_point;
 
-    red_primary   = PrimaryInfo_to_Struct(&ci->red_primary);
-    green_primary = PrimaryInfo_to_Struct(&ci->green_primary);
-    blue_primary  = PrimaryInfo_to_Struct(&ci->blue_primary);
-    white_point = PrimaryInfo_to_Struct(&ci->white_point);
+    red_primary   = PrimaryInfo_from_PrimaryInfo(&ci->red_primary);
+    green_primary = PrimaryInfo_from_PrimaryInfo(&ci->green_primary);
+    blue_primary  = PrimaryInfo_from_PrimaryInfo(&ci->blue_primary);
+    white_point   = PrimaryInfo_from_PrimaryInfo(&ci->white_point);
 
     return rb_funcall(Class_Chromaticity, new_ID, 4
                     , red_primary, green_primary, blue_primary, white_point);
 }
 
 /*
-    Extern:     Struct_to_ChromaticityInfo
+    Extern:     ChromaticityInfo_to_ChromaticityInfo
     Purpose:    Extract the elements from a Magick::ChromaticityInfo
                 and store in a ChromaticityInfo structure.
 */
 void
-Struct_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
+ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 {
     volatile VALUE chrom_members;
     volatile VALUE red_primary, green_primary, blue_primary, white_point;
@@ -887,11 +1204,11 @@ Struct_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 }
 
 /*
-    External:   RectangleInfo_to_Struct
+    External:   Rectangle_from_RectangleInfo
     Purpose:    Convert a RectangleInfo structure to a Magick::Rectangle
 */
 VALUE
-RectangleInfo_to_Struct(RectangleInfo *rect)
+Rectangle_from_RectangleInfo(RectangleInfo *rect)
 {
     volatile VALUE width;
     volatile VALUE height;
@@ -906,11 +1223,11 @@ RectangleInfo_to_Struct(RectangleInfo *rect)
 }
 
 /*
-    External:   Struct_to_RectangleInfo
+    External:   Rectangle_to_RectangleInfo
     Purpose:    Convert a Magick::Rectangle to a RectangleInfo structure.
 */
 void
-Struct_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
+Rectangle_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
 {
     volatile VALUE members, m;
 
@@ -931,11 +1248,11 @@ Struct_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
 }
 
 /*
-    External:   SegmentInfo_to_Struct
+    External:   Segment_from_SegmentInfo
     Purpose:    Convert a SegmentInfo structure to a Magick::Segment
 */
 VALUE
-SegmentInfo_to_Struct(SegmentInfo *segment)
+Segment_from_SegmentInfo(SegmentInfo *segment)
 {
     volatile VALUE x1, y1, x2, y2;
 
@@ -947,11 +1264,11 @@ SegmentInfo_to_Struct(SegmentInfo *segment)
 }
 
 /*
-    External:   Struct_to_SegmentInfo
+    External:   Segment_to_SegmentInfo
     Purpose:    Convert a Magick::Segment to a SegmentInfo structure.
 */
 void
-Struct_to_SegmentInfo(SegmentInfo *segment, VALUE s)
+Segment_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 {
     volatile VALUE members, m;
 
@@ -973,11 +1290,11 @@ Struct_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 }
 
 /*
-    Static:     StretchType_To_Enum
+    Static:     StretchType_new
     Purpose:    Construct a StretchType enum for a specified StretchType value
 */
 static VALUE
-StretchType_To_Enum(StretchType stretch)
+StretchType_new(StretchType stretch)
 {
     const char *name;
 
@@ -987,11 +1304,11 @@ StretchType_To_Enum(StretchType stretch)
 
 
 /*
-    Static:     StyleType_To_Enum
+    Static:     StyleType_new
     Purpose:    Construct a StyleType enum for a specified StyleType value
 */
 static VALUE
-StyleType_To_Enum(StyleType style)
+StyleType_new(StyleType style)
 {
     const char *name;
 
@@ -1000,11 +1317,11 @@ StyleType_To_Enum(StyleType style)
 }
 
 /*
-    External:   TypeInfo_to_Struct
+    External:   Font_from_TypeInfo
     Purpose:    Convert a TypeInfo structure to a Magick::Font
 */
 VALUE
-TypeInfo_to_Struct(TypeInfo *ti)
+Font_from_TypeInfo(TypeInfo *ti)
 {
     volatile VALUE name, description, family;
     volatile VALUE style, stretch, weight;
@@ -1013,8 +1330,8 @@ TypeInfo_to_Struct(TypeInfo *ti)
     name        = rb_str_new2(ti->name);
     description = rb_str_new2(ti->description);
     family      = rb_str_new2(ti->family);
-    style       = StyleType_To_Enum(ti->style);
-    stretch     = StretchType_To_Enum(ti->stretch);
+    style       = StyleType_new(ti->style);
+    stretch     = StretchType_new(ti->stretch);
     weight      = INT2NUM(ti->weight);
     encoding    = ti->encoding ? rb_str_new2(ti->encoding) : Qnil;
     foundry     = ti->foundry  ? rb_str_new2(ti->foundry)  : Qnil;
@@ -1026,11 +1343,11 @@ TypeInfo_to_Struct(TypeInfo *ti)
 }
 
 /*
-    External:   Struct_to_TypeInfo
+    External:   Font_to_TypeInfo
     Purpose:    Convert a Magick::Font to a TypeInfo structure
 */
 void
-Struct_to_TypeInfo(TypeInfo *ti, VALUE st)
+Font_to_TypeInfo(TypeInfo *ti, VALUE st)
 {
     volatile VALUE members, m;
 
@@ -1075,7 +1392,7 @@ Struct_to_TypeInfo(TypeInfo *ti, VALUE st)
 
 /*
     Static:     destroy_TypeInfo
-    Purpose:    free the storage allocated by Struct_to_TypeInfo, above.
+    Purpose:    free the storage allocated by Font_to_TypeInfo, above.
 */
 static void
 destroy_TypeInfo(TypeInfo *ti)
@@ -1105,7 +1422,7 @@ Font_to_s(VALUE self)
     char weight[20];
     char buff[1024];
 
-    Struct_to_TypeInfo(&ti, self);
+    Font_to_TypeInfo(&ti, self);
 
     switch (ti.weight)
     {
@@ -1139,24 +1456,24 @@ Font_to_s(VALUE self)
 }
 
 /*
-    External:   TypeMetric_to_Struct
+    External:   TypeMetric_from_TypeMetric
     Purpose:    Convert a TypeMetric structure to a Magick::TypeMetric
 */
 VALUE
-TypeMetric_to_Struct(TypeMetric *tm)
+TypeMetric_from_TypeMetric(TypeMetric *tm)
 {
     volatile VALUE pixels_per_em;
     volatile VALUE ascent, descent;
     volatile VALUE width, height, max_advance;
     volatile VALUE bounds, underline_position, underline_thickness;
 
-    pixels_per_em       = PointInfo_to_Struct(&tm->pixels_per_em);
+    pixels_per_em       = PointInfo_to_Point(&tm->pixels_per_em);
     ascent              = rb_float_new(tm->ascent);
     descent             = rb_float_new(tm->descent);
     width               = rb_float_new(tm->width);
     height              = rb_float_new(tm->height);
     max_advance         = rb_float_new(tm->max_advance);
-    bounds              = SegmentInfo_to_Struct(&tm->bounds);
+    bounds              = Segment_from_SegmentInfo(&tm->bounds);
     underline_position  = rb_float_new(tm->underline_position);
     underline_thickness = rb_float_new(tm->underline_position);
 
@@ -1167,11 +1484,11 @@ TypeMetric_to_Struct(TypeMetric *tm)
 }
 
 /*
-    External:   Struct_to_TypeMetric
+    External:   TypeMetric_to_TypeMetric
     Purpose:    Convert a Magick::TypeMetric to a TypeMetric structure.
 */
 void
-Struct_to_TypeMetric(TypeMetric *tm, VALUE st)
+TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
 {
     volatile VALUE members, m;
     volatile VALUE pixels_per_em;
@@ -1184,7 +1501,7 @@ Struct_to_TypeMetric(TypeMetric *tm, VALUE st)
     members = rb_funcall(st, values_ID, 0);
 
     pixels_per_em   = rb_ary_entry(members, 0);
-    Struct_to_PointInfo(&tm->pixels_per_em, pixels_per_em);
+    Point_to_PointInfo(&tm->pixels_per_em, pixels_per_em);
 
     m = rb_ary_entry(members, 1);
     tm->ascent      = m == Qnil ? 0.0 : NUM2DBL(m);
@@ -1198,7 +1515,7 @@ Struct_to_TypeMetric(TypeMetric *tm, VALUE st)
     tm->max_advance = m == Qnil ? 0.0 : NUM2DBL(m);
 
     m = rb_ary_entry(members, 6);
-    Struct_to_SegmentInfo(&tm->bounds, m);
+    Segment_to_SegmentInfo(&tm->bounds, m);
 
     m = rb_ary_entry(members, 7);
     tm->underline_position  = m == Qnil ? 0.0 : NUM2DBL(m);
@@ -1216,7 +1533,7 @@ TypeMetric_to_s(VALUE self)
     TypeMetric tm;
     char buff[200];
 
-    Struct_to_TypeMetric(&tm, self);
+    TypeMetric_to_TypeMetric(&tm, self);
     sprintf(buff, "pixels_per_em=(x=%g,y=%g) "
                   "ascent=%g descent=%g width=%g height=%g max_advance=%g "
                   "bounds.x1=%g bounds.y1=%g bounds.x2=%g bounds.y2=%g "

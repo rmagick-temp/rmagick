@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.4 2003/07/19 01:46:10 tim Exp $
+# $Id: RMagick.rb,v 1.5 2003/07/22 23:52:36 tim Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1028,6 +1028,17 @@ public
         rescue Exception
             $@.delete_if { |s| /:in `send'$/.match(s) || /:in `method_missing'$/.match(s) }
             raise
+        end
+    end
+
+    # Ensure respond_to? answers correctly when we are delegating to Image
+    alias_method :__respond_to__?, :respond_to?
+    def respond_to?(methID, priv=false)
+        return true if __respond_to__?(methID, priv)
+        if @scene
+            self[@scene].respond_to?(methID, priv)
+        else
+            super
         end
     end
 

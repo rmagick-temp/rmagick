@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.15 2004/01/04 22:52:33 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.16 2004/01/31 17:56:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -593,24 +593,31 @@ Info_number_scenes_eq(VALUE self, VALUE nscenes)
 DEF_ATTR_READER(Info, page, str)
 
 /*
-    Method:     Info#page=<aString>
+    Method:     Info#page=<aString> or <aGeometry>
     Purpose:    store the Postscript page geometry
 */
 VALUE
 Info_page_eq(VALUE self, VALUE page_arg)
 {
     Info *info;
+    volatile VALUE geom_str;
     char *geometry;
 
     Data_Get_Struct(self, Info, info);
-    if (NIL_P(page_arg) || STRING_PTR(page_arg) == NULL)
+    if (NIL_P(page_arg))
     {
         magick_free(info->page);
         info->page = NULL;
         return self;
     }
-
-    geometry=PostscriptGeometry(STRING_PTR(page_arg));
+    geom_str = rb_funcall(page_arg, to_s_ID, 0);
+    geometry=PostscriptGeometry(STRING_PTR(geom_str));
+    if (*geometry == '\0')
+    {
+        magick_free(info->page);
+        info->page = NULL;
+        return self;
+    }
     magick_clone_string(&info->page, geometry);
 
     return self;

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.42 2004/11/28 22:26:19 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.43 2004/12/05 21:28:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2696,59 +2696,12 @@ void rm_handle_all_errors(Image *seq)
     {
         if (badboy->exception.severity > WarningException)
         {
-            rm_unseq(seq);
+            rm_split(seq);
         }
         rm_handle_error(&badboy->exception);
     }
 }
 
-
-
-/*
-    Extern:     toseq
-    Purpose:    Convert an array of Image *s to an ImageMagick scene
-                sequence (i.e. a doubly-linked list of Images)
-    Returns:    a pointer to the head of the scene sequence list
-*/
-Image *
-rm_toseq(VALUE imagelist)
-{
-    long x, len;
-    Image *head = NULL;
-#if !defined(HAVE_APPENDIMAGETOLIST)
-    Image *tail = NULL;
-#endif
-
-    Check_Type(imagelist, T_ARRAY);
-    len = rm_imagelist_length(imagelist);
-    if (len == 0)
-    {
-        rb_raise(rb_eArgError, "no images in this image list");
-    }
-
-    for (x = 0; x < len; x++)
-    {
-        Image *image;
-
-        Data_Get_Struct(rb_ary_entry(imagelist, x), Image, image);
-#if defined(HAVE_APPENDIMAGETOLIST)
-        AppendImageToList(&head, image);
-#else
-        if (!head)
-        {
-            head = image;
-        }
-        else
-        {
-            image->previous = tail;
-            tail->next = image;
-        }
-        tail = image;
-#endif
-    }
-
-    return head;
-}
 
 /*
     Extern:     unseq
@@ -2757,7 +2710,7 @@ rm_toseq(VALUE imagelist)
     Notes:      The images remain grouped via the ImageList
 */
 void
-rm_unseq(Image *image)
+rm_split(Image *image)
 {
 
     if (!image)

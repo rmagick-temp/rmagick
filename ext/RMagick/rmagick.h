@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.70 2004/12/05 02:48:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.71 2004/12/05 21:28:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -512,6 +512,7 @@ extern VALUE ImageList_write(VALUE, VALUE);
 
 extern VALUE rm_imagelist_new(void);
 extern VALUE rm_imagelist_from_images(Image *);
+extern Image *rm_images_from_imagelist(VALUE);
 extern VALUE rm_imagelist_scene_eq(VALUE, VALUE);
 extern int rm_imagelist_length(VALUE);
 extern void rm_imagelist_push(VALUE, VALUE);
@@ -907,8 +908,7 @@ extern void   rm_handle_error(ExceptionInfo *);
 extern void   rm_handle_all_errors(Image *);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
-extern Image *rm_toseq(VALUE);
-extern void   rm_unseq(Image *);
+extern void   rm_split(Image *);
 
 #endif
 

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.18 2004/12/04 00:19:00 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.19 2004/12/05 21:28:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -24,7 +24,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     volatile VALUE info_obj;
 
     // Convert the images array to an images sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     if (argc > 1)
     {
@@ -49,7 +49,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
 
     (void) AnimateImages(info, images);
     rm_handle_all_errors(images);
-    rm_unseq(images);
+    rm_split(images);
 
     return self;
 }
@@ -67,7 +67,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     // If stack == true, stack rectangular images top-to-bottom,
     // otherwise left-to-right.
@@ -76,7 +76,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_image_new(result);
 }
@@ -93,12 +93,12 @@ ImageList_average(VALUE self)
     ExceptionInfo exception;
 
     // Convert the images array to an images sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     result = AverageImages(images, &exception);
     rm_handle_all_errors(images);
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_image_new(result);
 }
@@ -118,12 +118,12 @@ ImageList_coalesce(VALUE self)
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_imagelist_from_images(results);
 }
@@ -142,11 +142,11 @@ ImageList_deconstruct(VALUE self)
     Image *new_images, *images;
     ExceptionInfo exception;
 
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = DeconstructImages(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_imagelist_from_images(new_images);
 }
@@ -164,7 +164,7 @@ ImageList_display(VALUE self)
     unsigned int ok;
 
     // Convert the images array to an images sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     // Create a new Info object to use with this call
     info_obj = rm_info_new();
@@ -175,7 +175,7 @@ ImageList_display(VALUE self)
     {
         rm_handle_all_errors(images);
     }
-    rm_unseq(images);
+    rm_split(images);
 
     return self;
 }
@@ -192,11 +192,11 @@ ImageList_flatten_images(VALUE self)
     Image *images, *new_image;
     ExceptionInfo exception;
 
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_image_new(new_image);
 }
@@ -225,11 +225,11 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     }
 
     // Convert image array to image sequence, clone image sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     clone_images = CloneImageList(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
@@ -269,7 +269,7 @@ ImageList_montage(VALUE self)
 
     Data_Get_Struct(montage_obj, Montage, montage);
 
-    image_list = rm_toseq(self);
+    image_list = rm_images_from_imagelist(self);
 
     // If app specified a non-default composition operator, use it for all images.
     if (montage->compose != UndefinedCompositeOp)
@@ -286,7 +286,7 @@ ImageList_montage(VALUE self)
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
     HANDLE_ERROR
-    rm_unseq(image_list);
+    rm_split(image_list);
 
     return rm_imagelist_from_images(montage_seq);
 }
@@ -316,7 +316,7 @@ ImageList_morph(VALUE self, VALUE nimages)
         rb_raise(rb_eArgError, "number of intervening images must be > 0");
     }
 
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, number_images, &exception);
     HANDLE_ERROR
@@ -335,11 +335,11 @@ ImageList_mosaic(VALUE self)
     Image *images, *new_image;
     ExceptionInfo exception;
 
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return rm_image_new(new_image);
 }
@@ -391,6 +391,53 @@ rm_imagelist_from_images(Image *images)
 
      rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
      return new_imagelist;
+}
+
+
+/*
+    Extern:     rm_images_from_imagelist
+    Purpose:    Convert an array of Image *s to an ImageMagick scene
+                sequence (i.e. a doubly-linked list of Images)
+    Returns:    a pointer to the head of the scene sequence list
+*/
+Image *
+rm_images_from_imagelist(VALUE imagelist)
+{
+    long x, len;
+    Image *head = NULL;
+#if !defined(HAVE_APPENDIMAGETOLIST)
+    Image *tail = NULL;
+#endif
+
+    Check_Type(imagelist, T_ARRAY);
+    len = rm_imagelist_length(imagelist);
+    if (len == 0)
+    {
+        rb_raise(rb_eArgError, "no images in this image list");
+    }
+
+    for (x = 0; x < len; x++)
+    {
+        Image *image;
+
+        Data_Get_Struct(rb_ary_entry(imagelist, x), Image, image);
+#if defined(HAVE_APPENDIMAGETOLIST)
+        AppendImageToList(&head, image);
+#else
+        if (!head)
+        {
+            head = image;
+        }
+        else
+        {
+            image->previous = tail;
+            tail->next = image;
+        }
+        tail = image;
+#endif
+    }
+
+    return head;
 }
 
 
@@ -474,10 +521,10 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
 
     // Convert image array to image sequence, clone image sequence.
     GetExceptionInfo(&exception);
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
     new_images = CloneImageList(images, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     QuantizeImages(&quantize_info, new_images);
 
@@ -516,7 +563,7 @@ ImageList_to_blob(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     // Convert the images array to an images sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     (void) SetImageInfo(info, True, &exception);
@@ -537,7 +584,7 @@ ImageList_to_blob(VALUE self)
     GetExceptionInfo(&exception);
     blob = ImageToBlob(info, images, &length, &exception);
     HANDLE_ERROR
-    rm_unseq(images);
+    rm_split(images);
 
     return (blob && length) ? rb_str_new(blob, length) : Qnil;
 }
@@ -579,7 +626,7 @@ ImageList_write(VALUE self, VALUE file)
 
 
     // Convert the images array to an images sequence.
-    images = rm_toseq(self);
+    images = rm_images_from_imagelist(self);
 
     if (TYPE(file) == T_FILE)
     {
@@ -633,6 +680,6 @@ ImageList_write(VALUE self, VALUE file)
         }
     }
 
-    rm_unseq(images);
+    rm_split(images);
     return self;
 }

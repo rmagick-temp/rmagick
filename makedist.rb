@@ -17,14 +17,12 @@ def echosys(cmd)
     end
 end
 
-def cvsexport(file, from=nil, to=nil)
-    to ||= from || '.'
-    file = "#{from}/#{file}" if from && from != '.'
-    echosys "cvs export -r #{TAG} -d #{to} RubyMagick/#{file}"
+def cvsexport(file)
+    echosys "cvs export -r #{TAG} -d . RMagick/#{file}"
 end
 
 def cvsexportmodule(mod)
-    echosys "cvs export -r #{TAG} -d #{mod} RubyMagick/#{mod}"
+    echosys "cvs export -r #{TAG} -d #{mod} RMagick/#{mod}"
 end
 
 def configure_ac()
@@ -101,38 +99,14 @@ begin
     cvsexport "README.html"
     cvsexport "ChangeLog"
 
-    cvsexport "comtasks.html", "doc"
-    cvsexport "constants.html", "doc"
-    cvsexport "draw.html", "doc"
-    cvsexport "fill.html", "doc"
-    cvsexport "ilist.html", "doc"
-    cvsexport "imageattrs.html", "doc"
-    cvsexport "image.html", "doc"
-    cvsexport "imusage.html", "doc"
-    cvsexport "index.html", "doc"
-    cvsexport "info.html", "doc"
-    cvsexport "magick.html", "doc"
-    cvsexport "rubymgen.css", "doc"
-    cvsexport "struct.html", "doc"
-    cvsexport "usage.html", "doc"
-
-    echosys("chmod 0644 doc/*.html")
-
-    cvsexport "extconf.rb.in", '.',"ext/RMagick"
-    cvsexport "rmfill.c", '.',"ext/RMagick"
-    cvsexport "rmilist.c", '.',"ext/RMagick"
-    cvsexport "rmimage.c", '.',"ext/RMagick"
-    cvsexport "rminfo.c", '.',"ext/RMagick"
-    cvsexport "rmmain.c", '.',"ext/RMagick"
-    cvsexport "rmutil.c", '.',"ext/RMagick"
-    cvsexport "rmagick.h", '.',"ext/RMagick"
-    cvsexport "rmagick_config.h.in", '.', "ext/RMagick"
-
-    cvsexport "RMagick.rb", '.', "lib"
+    cvsexportmodule "ext/RMagick"
+    cvsexportmodule "lib"
 
     cvsexportmodule "examples"
     echosys("chmod 0644 examples/*")
 
+    cvsexportmodule "doc"
+    echosys("chmod 0644 doc/*.html")
     cvsexportmodule "doc/ex"
     echosys("chmod 0644 doc/ex/*.rb")
     cvsexportmodule "doc/ex/images"
@@ -143,7 +117,6 @@ begin
     readme('README.txt')
 
     echosys("autoconf")
-#    File.delete("configure.ac")
     echosys('rm -rf autom4te.cache')
 
     now = Time.new
@@ -162,5 +135,8 @@ ensure
     Dir.chdir(cwd)
 end
 
+exit if ARGV.length >= 2 && ARGV[1] == '--notar'
+
 echosys("tar cvfz #{$distdir}.tar.gz #{$distdir}")
+
 exit

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.14 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.15 2004/01/04 22:52:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -299,8 +299,9 @@ Info_tile_eq(VALUE self, VALUE tile_arg)
     Data_Get_Struct(self, Info, info);
 
     if (NIL_P(tile_arg))
-        magick_free(info->tile_arg);
-        info->tile_arg = NULL;
+    {
+        magick_free(info->tile);
+        info->tile = NULL;
         return self;
     }
 

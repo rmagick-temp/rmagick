@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.23 2003/11/30 21:40:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.24 2003/12/01 00:00:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -27,6 +27,9 @@ typedef unsigned int (thresholder_t)(Image *, const char *);
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+static VALUE extrema(Image *, ChannelType);
+#endif
 static VALUE rd_image(VALUE, VALUE, reader_t);
 static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
@@ -642,6 +645,57 @@ Image_channel(VALUE self, VALUE channel)
     HANDLE_IMG_ERROR(new_image)
     return rm_image_new(new_image);
 }
+
+/*
+    Method:     Image#channel_extrema
+    Purpose:    Returns an array [min, max] where 'min' and 'max'
+                are the minimum and maximum values of the specified
+                channel.
+*/
+VALUE
+Image_channel_extrema(VALUE self, VALUE channel_arg)
+{
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+    Image *image;
+    ChannelType channel;
+
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(channel_arg, channel, ChannelType);
+
+    return extrema(image, channel);
+#else
+    not_implemented("channel_extrema");
+    return (VALUE) 0;
+#endif
+}
+
+
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+static VALUE
+extrema(Image *image, ChannelType channel)
+{
+    ExceptionInfo exception;
+    unsigned long min, max;
+    unsigned int okay;
+    volatile VALUE ary;
+
+    GetExceptionInfo(&exception);
+
+    okay = GetImageChannelExtrema(image, channel, &min, &max, &exception);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "GetImageChannelExtrema failed.");
+    }
+    HANDLE_ERROR
+
+    ary = rb_ary_new2(2);
+    rb_ary_store(ary, 0, ULONG2NUM(min));
+    rb_ary_store(ary, 1, ULONG2NUM(max));
+
+    return ary;
+
+}
+#endif
 
 
 /*
@@ -2297,6 +2351,28 @@ Image_extract_info_eq(VALUE self, VALUE rect)
     return (VALUE) 0;
 #endif
 }
+
+
+/*
+    Method:     Image#extrema
+    Purpose:    Returns an array [min, max] where 'min' and 'max'
+                are the minimum and maximum values of all channels.
+*/
+VALUE
+Image_extrema(VALUE self)
+{
+#if defined(HAVE_GETIMAGECHANNELEXTREMA)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+
+    return extrema(image, AllChannels);
+#else
+    not_implemented("extrema");
+    return (VALUE) 0;
+#endif
+}
+
 
 DEF_ATTR_READER(Image, filename, str)
 

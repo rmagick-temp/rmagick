@@ -80,7 +80,7 @@ AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
-AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile])
+AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetImageChannelExtrema])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
@@ -207,6 +207,21 @@ AC_CACHE_CHECK(for AnnotateCompositeOp enum value, rm_cv_enum_annotatecompositeo
 
 if test "$rm_cv_enum_annotatecompositeop" = yes; then
   AC_DEFINE(HAVE_ANNOTATECOMPOSITEOP)
+fi
+
+AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = IndexChannel],
+     rm_cv_enum_indexchannel='yes',
+     rm_cv_enum_indexchannel='no')])
+
+if test "$rm_cv_enum_indexchannel" = yes; then
+  AC_DEFINE(HAVE_INDEXCHANNEL)
 fi
 
 # Determine documentation base URI

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.19 2003/10/06 12:18:24 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.20 2003/12/01 00:00:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1567,7 +1567,7 @@ VALUE Enum_alloc(VALUE class)
 }
 #else
 /*
-    Extern:  rm_enum_new (1.8)
+    Extern:  rm_enum_new (1.6)
     Purpose: Construct a new Enum instance
 */
 VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)

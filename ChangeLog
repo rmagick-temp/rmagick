@@ -1,16 +1,17 @@
 RMagick 1.4.0
     o Implemented xMagick enumeration values as instances of an Enum
       class. Based on a description by Paul Brannon in ruby-talk 79041.
-    o Added color_histogram to Image class. (IM 5.5.8, GM 1.1)
-    o Added each_profile to Image class. (IM 5.5.8)
     o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
       CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
       AnnotateCompositeOp constant (IM 5.5.8)
+    o Added color_histogram to Image class. (IM 5.5.8, GM 1.1)
+    o Added tint method to Image class (IM 5.5.8)
+    o Added each_profile to Image class. (IM 5.5.8)
+    o Added channel_extrema and extrema methods to Image class (IM 5.5.8)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added fcmp, intensity to Pixel class
     o Added Version_long constant
-    o Added tint method to Image class (IM 5.5.8)
     o Added border! method to Image class
     o The 'fuzz' attribute in the Image and ImageInfo classes now
       accepts a percentage value as well as a numeric value.

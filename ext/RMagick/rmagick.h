@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.25 2003/10/31 13:10:32 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.26 2003/12/01 00:00:41 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -546,6 +546,7 @@ extern VALUE Image_capture(int, VALUE *, VALUE);
 extern VALUE Image_change_geometry(VALUE, VALUE);
 extern VALUE Image_changed_q(VALUE);
 extern VALUE Image_channel(VALUE, VALUE);
+extern VALUE Image_channel_extrema(VALUE, VALUE);
 extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -575,6 +576,7 @@ extern VALUE Image_enhance(VALUE);
 extern VALUE Image_equalize(VALUE);
 extern VALUE Image_erase_bang(VALUE);
 extern VALUE Image_export_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_extrema(VALUE);
 extern VALUE Image_flip(VALUE);
 extern VALUE Image_flip_bang(VALUE);
 extern VALUE Image_flop(VALUE);

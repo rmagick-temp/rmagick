@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.34 2003/12/17 23:48:44 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.35 2003/12/21 17:31:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -448,6 +448,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
     rb_define_method(Class_Image, "colormap", Image_colormap, -1);
+    rb_define_method(Class_Image, "compare", Image_compare, -1);
     rb_define_method(Class_Image, "composite", Image_composite, -1);
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
@@ -959,6 +960,16 @@ Init_RMagick(void)
     ENUM_VAL(InterlaceType, PlaneInterlace);
     ENUM_VAL(InterlaceType, PartitionInterlace);
 
+#if defined(HAVE_COMPAREIMAGECHANNELS)
+    DEF_ENUM(MetricType);
+    ENUM_VAL(MetricType, UndefinedMetric);
+    ENUM_VAL(MetricType, MeanAbsoluteErrorMetric);
+    ENUM_VAL(MetricType, MeanSquaredErrorMetric);
+    ENUM_VAL(MetricType, PeakAbsoluteErrorMetric);
+    ENUM_VAL(MetricType, PeakSignalToNoiseRatioMetric);
+    ENUM_VAL(MetricType, RootMeanSquaredErrorMetric);
+#endif
+
     // NoiseType constants
     DEF_ENUM(NoiseType);
     ENUM_VAL(NoiseType, UniformNoise);
@@ -1116,7 +1127,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/17 23:48:44 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/21 17:31:11 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

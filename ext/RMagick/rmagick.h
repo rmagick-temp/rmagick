@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.28 2003/12/17 23:42:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.29 2003/12/21 17:31:11 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -175,6 +175,9 @@ EXTERN VALUE Class_Primary;
 EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
+#if defined(HAVE_COMPAREIMAGECHANNELS)
+EXTERN VALUE Class_MetricType;
+#endif
 
 // Enum classes
 EXTERN VALUE Class_Enum;
@@ -558,6 +561,7 @@ extern VALUE Image_color_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_color_histogram(VALUE);
 extern VALUE Image_colorize(int, VALUE *, VALUE);
 extern VALUE Image_colormap(int, VALUE *, VALUE);
+extern VALUE Image_compare(int, VALUE *, VALUE);
 extern VALUE Image_composite(int, VALUE *, VALUE);
 extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
 extern VALUE Image_compress_colormap_bang(VALUE);

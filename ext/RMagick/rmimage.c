@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.74 2004/12/04 15:57:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.75 2004/12/04 16:51:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -736,14 +736,21 @@ Image_channel(VALUE self, VALUE channel_arg)
 
 
 /*
-    Method:     Image#channel_compare(ref_image, metric [, channel...])
+    Method:     Image#compare_channel(ref_image, metric [, channel...])
     Purpose:    compares one or more channels in two images and returns
                 the specified distortion metric and a comparison image.
     Notes:      If no channels are specified, the default is AllChannels.
                 That case is the equivalent of the CompareImages method in
                 ImageMagick.
+
+                Originally this method was called channel_compare, but
+                that doesn't match the general naming convention that
+                methods which accept multiple optional ChannelType
+                arguments have names that end in _channel.  So I renamed
+                the method to compare_channel but kept channel_compare as
+                an alias.
 */
-VALUE Image_channel_compare(
+VALUE Image_compare_channel(
     int argc,
     VALUE *argv,
     VALUE self)

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.70 2004/12/02 00:30:07 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.71 2004/12/04 16:51:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -629,7 +629,9 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "change_geometry!", Image_change_geometry, 1);
     rb_define_method(Class_Image, "changed?", Image_changed_q, 0);
     rb_define_method(Class_Image, "channel", Image_channel, 1);
-    rb_define_method(Class_Image, "channel_compare", Image_channel_compare, -1);
+    // An alias for compare_channel
+    rb_define_method(Class_Image, "channel_compare", Image_compare_channel, -1);
+    rb_define_method(Class_Image, "compare_channel", Image_compare_channel, -1);
     rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
     rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
     rb_define_method(Class_Image, "channel_mean", Image_channel_mean, -1);
@@ -1482,7 +1484,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/12/02 00:30:07 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/12/04 16:51:32 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

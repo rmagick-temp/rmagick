@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.67 2004/12/02 23:19:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.68 2004/12/04 16:51:32 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -644,7 +644,7 @@ extern VALUE Image_capture(int, VALUE *, VALUE);
 extern VALUE Image_change_geometry(VALUE, VALUE);
 extern VALUE Image_changed_q(VALUE);
 extern VALUE Image_channel(VALUE, VALUE);
-extern VALUE Image_channel_compare(int, VALUE *, VALUE);
+extern VALUE Image_compare_channel(int, VALUE *, VALUE);
 extern VALUE Image_channel_depth(int, VALUE *, VALUE);
 extern VALUE Image_channel_extrema(int, VALUE *, VALUE);
 extern VALUE Image_channel_mean(int, VALUE *, VALUE);

@@ -119,8 +119,6 @@
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
-
-          <li><a href="#channel_compare">channel_compare</a></li>
         </ul>
       </div>
 
@@ -155,6 +153,8 @@
           <li><a href="#color_point">color_point</a></li>
 
           <li><a href="#color_reset_bang">color_reset!</a></li>
+
+          <li><a href="#compare_channel">compare_channel</a></li>
 
           <li><a href="#composite">composite</a></li>
 
@@ -691,7 +691,7 @@ img = Magick::Image.read_inline(content)
 
     <p><a href="image3.html#signature">signature</a>, <a href=
     "#difference">difference</a>, <a href=
-    "#channel_compare">channel_compare</a></p>
+    "#compare_channel">compare_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1275,70 +1275,6 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Magick API</h4>
 
     <p>ChannelImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="channel_compare">channel_compare</h3>
-
-    <p><span class="arg">image</span>.channel_compare(<span class=
-    "arg">img</span>, <span class="arg">metric</span> [,
-    <span class="arg">channel...</span>]) -&gt; [<em>anImage</em>,
-    <em>aFloat</em>]</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Compares <span class="arg">img</span> with the receiver.</p>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>image</dt>
-
-      <dd>Either an imagelist or an image. If an imagelist, uses
-      the current image.</dd>
-
-      <dt>metric</dt>
-
-      <dd>
-        The desired distortion metric. One of the following
-        constants:
-
-        <ul style="list-style: none">
-          <li>MeanAbsoluteErrorMetric</li>
-
-          <li>MeanSquaredErrorMetric</li>
-
-          <li>PeakAbsoluteErrorMetric</li>
-
-          <li>PeakSignalToNoiseRatioMetric</li>
-
-          <li>RootMeanSquaredErrorMetric</li>
-        </ul>
-      </dd>
-
-      <dt>[channel [, channel...]]</dt>
-
-      <dd>Zero or more <a href=
-      "constants.html##ChannelType">ChannelType</a> values. All the
-      specified channels contribute to the comparison and the
-      distortion value. If no channels are specified, compares all
-      channels.</dd>
-    </dl>
-
-    <h4>Returns</h4>
-
-    <p>An array. The first element is a difference image, the
-    second is a the value of the computed distortion represented as
-    a <code>Float</code>.</p>
-
-    <h4>See also</h4><a href="#difference">difference</a>, <a href=
-    "#spaceship">&lt;=&gt;</a>
-
-    <h4>Magick API</h4>
-
-    <p>ImageCompareChannels (available in ImageMagick 6.0.0)</p>
   </div>
 
   <div class="sig">
@@ -1980,6 +1916,76 @@ f.color_reset!(red)
     <h4>See also</h4><a href="image2.html#erase_bang">erase!</a>
 
     <h4>Magick API</h4>SetImage
+  </div>
+
+  <div class="sig">
+    <h3 id="compare_channel">compare_channel</h3>
+
+    <p><span class="arg">image</span>.compare_channel(<span class=
+    "arg">img</span>, <span class="arg">metric</span> [,
+    <span class="arg">channel...</span>]) -&gt; [<em>anImage</em>,
+    <em>aFloat</em>]</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Compares <span class="arg">img</span> with the receiver.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>image</dt>
+
+      <dd>Either an imagelist or an image. If an imagelist, uses
+      the current image.</dd>
+
+      <dt>metric</dt>
+
+      <dd>
+        The desired distortion metric. One of the following
+        constants:
+
+        <ul style="list-style: none">
+          <li>MeanAbsoluteErrorMetric</li>
+
+          <li>MeanSquaredErrorMetric</li>
+
+          <li>PeakAbsoluteErrorMetric</li>
+
+          <li>PeakSignalToNoiseRatioMetric</li>
+
+          <li>RootMeanSquaredErrorMetric</li>
+        </ul>
+      </dd>
+
+      <dt>[channel [, channel...]]</dt>
+
+      <dd>Zero or more <a href=
+      "constants.html##ChannelType">ChannelType</a> values. All the
+      specified channels contribute to the comparison and the
+      distortion value. If no channels are specified, compares all
+      channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>An array. The first element is a difference image, the
+    second is a the value of the computed distortion represented as
+    a <code>Float</code>.</p>
+
+    <h4>See also</h4><a href="#difference">difference</a>, <a href=
+    "#spaceship">&lt;=&gt;</a>
+
+    <h4>Magick API</h4>
+
+    <p>ImageCompareChannels (available in ImageMagick 6.0.0)</p>
+
+    <h4>Notes</h4>
+
+    <p>This method was named <code>channel_compare</code> in
+    earlier releases of RMagick. That name remains an alias for
+    <code>compare_channel</code>.</p>
   </div>
 
   <div class="sig">

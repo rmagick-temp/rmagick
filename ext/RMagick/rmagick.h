@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.66 2004/12/02 00:30:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.67 2004/12/02 23:19:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -511,8 +511,10 @@ extern VALUE ImageList_to_blob(VALUE);
 extern VALUE ImageList_write(VALUE, VALUE);
 
 extern VALUE rm_imagelist_new(void);
+extern VALUE rm_imagelist_from_images(Image *);
+extern VALUE rm_imagelist_scene_eq(VALUE, VALUE);
 extern int rm_imagelist_length(VALUE);
-extern VALUE rm_imagelist_push(VALUE, VALUE);
+extern void rm_imagelist_push(VALUE, VALUE);
 
 
 // rminfo.c

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.16 2004/12/01 23:17:04 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.17 2004/12/02 23:19:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -7,6 +7,7 @@
 \============================================================================*/
 
 #include "rmagick.h"
+
 
 /*
     Method:     ImageList#animate(<delay>)
@@ -113,8 +114,7 @@ ImageList_average(VALUE self)
 VALUE
 ImageList_coalesce(VALUE self)
 {
-    Image *images, *results, *result, *next;
-    volatile VALUE new_imagelist;
+    Image *images, *results;
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
@@ -125,31 +125,9 @@ ImageList_coalesce(VALUE self)
     HANDLE_ERROR
     rm_unseq(images);
 
-    new_imagelist = rm_imagelist_new();
-
-    // CoalesceImages returns an image sequence. Create a
-    // new ImageList and store the images in the array.
-#if HAVE_REMOVEFIRSTIMAGEFROMLIST
-    result = results;
-    while (result)
-    {
-        next = RemoveFirstImageFromList(&result);
-        rm_imagelist_push(new_imagelist, rm_image_new(next));
-    }
-#else
-    for (result = results; result; result = next)
-    {
-        next = GET_NEXT_IMAGE(result);
-        result->previous = result->next = NULL;
-        rm_imagelist_push(new_imagelist, rm_image_new(result));
-    }
-#endif
-
-    // Set new_imagelist.scene = 0
-    rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
-
-    return new_imagelist;
+    return rm_imagelist_from_images(results);
 }
+
 
 /*
     Method:     ImageList#deconstruct
@@ -161,9 +139,8 @@ ImageList_coalesce(VALUE self)
 VALUE
 ImageList_deconstruct(VALUE self)
 {
-    Image *new_images, *images, *image, *next;
+    Image *new_images, *images;
     ExceptionInfo exception;
-    volatile VALUE new_imagelist;
 
     images = rm_toseq(self);
     GetExceptionInfo(&exception);
@@ -171,30 +148,7 @@ ImageList_deconstruct(VALUE self)
     HANDLE_ERROR
     rm_unseq(images);
 
-    new_imagelist = rm_imagelist_new();
-
-    // DeconstructImages returns an image sequence. Create a
-    // new ImageList and store the images in the array.
-#if HAVE_REMOVEFIRSTIMAGEFROMLIST
-    image = new_images;
-    while (image)
-    {
-        next = RemoveFirstImageFromList(&image);
-        rm_imagelist_push(new_imagelist, rm_image_new(next));
-    }
-#else
-    for (image = new_images; image; image = next)
-    {
-        next = GET_NEXT_IMAGE(image);
-        image->previous = image->next = NULL;
-        rm_imagelist_push(new_imagelist, rm_image_new(image));
-    }
-#endif
-
-    // Set new_imagelist.scene = 0
-    rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
-
-    return new_imagelist;
+    return rm_imagelist_from_images(new_images);
 }
 
 /*
@@ -251,16 +205,15 @@ ImageList_flatten_images(VALUE self)
 /*
     Method:     ImageList#map
     Purpose:    Call MapImages
-    Returns:    a new Image with mapped images. @scene is set to self.scene
+    Returns:    a new ImageList with mapped images. @scene is set to self.scene
 */
 VALUE
 ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
 {
-    Image *images, *new_images = NULL;
-    Image *new_image;
+    Image *images, *clone_images = NULL;
     Image *map;
     unsigned int dither;
-    volatile VALUE image, image_obj, scene;
+    volatile VALUE image, scene, new_imagelist;
     ExceptionInfo exception;
 
     image = ImageList_cur_image(map_image);
@@ -274,29 +227,21 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     // Convert image array to image sequence, clone image sequence.
     images = rm_toseq(self);
     GetExceptionInfo(&exception);
-    new_images = CloneImageList(images, &exception);
+    clone_images = CloneImageList(images, &exception);
     HANDLE_ERROR
     rm_unseq(images);
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
-    (void) MapImages(new_images, map, dither);
-    HANDLE_IMG_ERROR(new_images)
-
-    // Create new ImageList object, convert mapped image sequence to images, append
-    // to imagelist.
-    image_obj = rm_imagelist_new();
-    while ((new_image = ShiftImageList(&new_images)))
-    {
-        rm_imagelist_push(image_obj, rm_image_new(new_image));
-    }
-
+    (void) MapImages(clone_images, map, dither);
+    HANDLE_IMG_ERROR(clone_images)
 
     // Set @scene in new ImageList object to same value as in self.
+    new_imagelist = rm_imagelist_from_images(clone_images);
     scene = rb_iv_get(self, "@scene");
-    rb_iv_set(image_obj, "@scene", scene);
+    (void) rm_imagelist_scene_eq(new_imagelist, scene);
 
-    return image_obj;
+    return new_imagelist;
 }
 
 /*
@@ -310,8 +255,7 @@ ImageList_montage(VALUE self)
 {
     volatile VALUE montage_obj;
     Montage *montage;
-    Image *montage_seq, *next, *image, *image_list;
-    volatile VALUE new_imagelist;
+    Image *montage_seq, *image_list;
     ExceptionInfo exception;
 
     // Create a new instance of the Magick::Montage class
@@ -344,19 +288,7 @@ ImageList_montage(VALUE self)
     HANDLE_ERROR
     rm_unseq(image_list);
 
-    // Construct a new image and store the image(s) in its images array.
-    new_imagelist = rm_imagelist_new();
-    for (image = montage_seq; image; image = next)
-    {
-        next = GET_NEXT_IMAGE(image);
-        image->previous = image->next = NULL;
-        rm_imagelist_push(new_imagelist, rm_image_new(image));
-    }
-
-    // img.scene = 0
-    rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
-
-    return new_imagelist;
+    return rm_imagelist_from_images(montage_seq);
 }
 
 /*
@@ -370,9 +302,8 @@ ImageList_montage(VALUE self)
 VALUE
 ImageList_morph(VALUE self, VALUE nimages)
 {
-    Image *images, *new_images, *next, *new;
+    Image *images, *new_images;
     ExceptionInfo exception;
-    volatile VALUE new_imagelist;
     unsigned long number_images;
 
     if (rm_imagelist_length(self) < 1)
@@ -390,18 +321,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     new_images = MorphImages(images, number_images, &exception);
     HANDLE_ERROR
 
-    new_imagelist = rm_imagelist_new();
-    for (new = new_images; new; new = next)
-    {
-        next = GET_NEXT_IMAGE(new);
-        new->previous = new->next = NULL;
-        rm_imagelist_push(new_imagelist, rm_image_new(new));
-    }
-
-    // new_imagelist.scene = 0
-    rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
-
-    return new_imagelist;
+    return rm_imagelist_from_images(new_images);
 }
 
 /*
@@ -426,12 +346,63 @@ ImageList_mosaic(VALUE self)
 
 /*
     External:   rm_imagelist_new
-    Purpose:    create a new ImageList object
+    Purpose:    create a new ImageList object with no images
+    Notes:      this simply calls ImageList.new() in RMagick.rb
 */
 VALUE
 rm_imagelist_new()
 {
     return rb_funcall(Class_ImageList, ID_new, 0);
+}
+
+
+
+/*
+     Extern:   rm_imagelist_from_images
+     Purpose:  Construct a new imagelist object from a list of images
+     Notes:    Sets @scene to 0.
+*/
+VALUE
+rm_imagelist_from_images(Image *images)
+{
+     volatile VALUE new_imagelist;
+#if defined(HAVE_REMOVEFIRSTIMAGEFROMLIST)
+     Image *image;
+
+     new_imagelist = rm_imagelist_new();
+
+     while (images)
+     {
+          image = RemoveFirstImageFromList(&images);
+          rm_imagelist_push(new_imagelist, rm_image_new(image));
+     }
+#else
+     Image *image, *next;
+
+     new_imagelist = rm_imagelist_new();
+
+     for (image = images; image; image = next)
+     {
+          next = GET_NEXT_IMAGE(image);
+          image->previous = image->next = NULL;
+          rm_imagelist_push(new_imagelist, rm_image_new(image));
+     }
+#endif
+
+     rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
+     return new_imagelist;
+}
+
+
+/*
+ *   Extern:   rm_imagelist_scene_eq(imagelist, scene)
+ *   Purpose:  @scene attribute writer
+*/
+VALUE
+rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
+{
+     rb_iv_set(imagelist, "@scene", scene);
+     return scene;
 }
 
 /*
@@ -451,11 +422,11 @@ rm_imagelist_length(VALUE imagelist)
     External:   rm_imagelist_push
     Purpose:    push an image onto the end of the imagelist
 */
-VALUE
+void
 rm_imagelist_push(VALUE imagelist, VALUE image)
 {
     rm_check_frozen(imagelist);
-    return rb_funcall(imagelist, ID_push, 1, image);
+    (void) rb_funcall(imagelist, ID_push, 1, image);
 }
 
 /*

@@ -1,4 +1,4 @@
-f<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -957,12 +957,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="notrotated" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example"  /></a>
+    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1337,9 +1337,8 @@ random_threshold_channel(geom, RedChannel)
 
       <dd>The percent opacity of the shadow. May be either a number
       between 0.1 and 1.0, or a string in the form "NN%" between
-      "1%" and "100%". If the percentage is greater than 100 it is reduced to
-      100.</dd>
-
+      "1%" and "100%". If the percentage is greater than 100 it is
+      reduced to 100.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1351,16 +1350,17 @@ random_threshold_channel(geom, RedChannel)
     <p class="rollover"><a href=
     "javascript:popup('shadow.rb.html')">
     <!-- This img tag displays the original image when the mouse is over -->
-     <img style="padding:8px; display:none" id="shadowless" onmouseout=
+     <img style="padding:8px; display:none" id="shadowless"
+    onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="shadowless" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
-    "ex/shadow_after.gif" alt="shadow example"
-     /></a> <img src="ex/images/spin.gif" alt="" style=
+    "ex/shadow_after.gif" alt="shadow example" name=
+    "shadowed" /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1369,6 +1369,10 @@ random_threshold_channel(geom, RedChannel)
     <p>ShadowImage (available in ImageMagick 6.1.7)</p>
 
     <h4>Notes</h4>
+
+    <p>The shadow image is 2&times;<span class="arg">sigma</span>
+    pixels larger on a side than the original image, as can be seen
+    in the example above.</p>
   </div>
 
   <div class="sig">
@@ -1563,13 +1567,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script"  /> <!--
+    "Click to see the example script" name="noshear" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example" name=
+    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1675,12 +1679,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="nosplice" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example"  /></a>
+    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2798,13 +2802,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

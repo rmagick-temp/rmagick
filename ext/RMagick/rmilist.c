@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rmilist.c,v 1.2 2003/07/19 01:49:03 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -545,7 +545,7 @@ ImageList_to_blob(VALUE self)
 }
 
 /*
-  Method:   ImageList#write(filename)
+  Method:   ImageList#write(file)
   Purpose:  Write all the images to the specified file. If the file format
             supports multi-image files, and the @images array contains more
             than one image, then the images will be written as a single
@@ -553,7 +553,7 @@ ImageList_to_blob(VALUE self)
             separate file. Returns self.
 */
 VALUE
-ImageList_write(VALUE self, VALUE filename_arg)
+ImageList_write(VALUE self, VALUE file)
 {
     Image *images, *img;
     Info *info;
@@ -573,11 +573,27 @@ ImageList_write(VALUE self, VALUE filename_arg)
 
     // Copy the filename to the Info and to the Image, then call
     // SetImageInfo. (Ref: ImageMagick's magick/convert.c.)
-    Check_Type(filename_arg, T_STRING);
-    filename = STRING_PTR_LEN(filename_arg, filenameL);
-    filenameL = min(filenameL, MaxTextExtent-1);
-    memcpy(info->filename, filename, (size_t)filenameL);
-    info->filename[filenameL] = '\0';
+    if (TYPE(file) == T_STRING)
+    {
+        filename = STRING_PTR_LEN(file, filenameL);
+        filenameL = min(filenameL, MaxTextExtent-1);
+        memcpy(info->filename, filename, (size_t)filenameL);
+        info->filename[filenameL] = '\0';
+        info->file = NULL;
+    }
+    else if (TYPE(file) == T_FILE)
+    {
+        OpenFile *fptr;
+
+        // Ensure file is open - raise error if not
+        GetOpenFile(file, fptr);
+        info->file = GetReadFile(fptr);
+    }
+    else
+    {
+        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
+                rb_class2name(CLASS_OF(file)));
+    }
 
     // Copy the filename into each images. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c

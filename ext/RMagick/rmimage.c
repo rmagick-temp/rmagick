@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.78 2004/12/05 02:48:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.79 2004/12/05 21:26:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -20,10 +20,8 @@ typedef Image *(effector_t)(const Image *, const double, const double, Exception
 typedef Image *(flipper_t)(const Image *, ExceptionInfo *);
 typedef Image *(magnifier_t)(const Image *, ExceptionInfo *);
 typedef Image *(reader_t)(const Info *, ExceptionInfo *);
-typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned long,
-                          ExceptionInfo *);
+typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned long, ExceptionInfo *);
 typedef unsigned int (thresholder_t)(Image *, const char *);
-
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);

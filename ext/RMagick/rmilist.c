@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.9 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.10 2004/01/26 20:19:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -74,7 +74,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
 
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     return rm_image_new(result);
@@ -122,7 +122,7 @@ ImageList_coalesce(VALUE self)
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     new_imagelist = rm_imagelist_new();
@@ -167,7 +167,7 @@ ImageList_deconstruct(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = DeconstructImages(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     return rm_image_new(new_image);
@@ -217,7 +217,7 @@ ImageList_flatten_images(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     return rm_image_new(new_image);
@@ -251,7 +251,7 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_images = CloneImageList(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     // Call ImageMagick
@@ -317,7 +317,7 @@ ImageList_montage(VALUE self)
 
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
-    handle_all_errors(image_list);
+    HANDLE_ERROR
     unseq(image_list);
 
     // Construct a new image and store the image(s) in its images array.
@@ -364,7 +364,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, number_images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
 
     new_imagelist = rm_imagelist_new();
     for (new = new_images; new; new = next)
@@ -394,7 +394,7 @@ ImageList_mosaic(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     return rm_image_new(new_image);
@@ -479,7 +479,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     images = toseq(self);
     new_images = CloneImageList(images, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     QuantizeImages(&quantize_info, new_images);
@@ -539,7 +539,7 @@ ImageList_to_blob(VALUE self)
     info->adjoin = True;
     GetExceptionInfo(&exception);
     blob = ImageToBlob(info, images, &length, &exception);
-    handle_all_errors(images);
+    HANDLE_ERROR
     unseq(images);
 
     return (blob && length) ? rb_str_new(blob, length) : Qnil;

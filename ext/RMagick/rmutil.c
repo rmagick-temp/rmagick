@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.37 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.38 2004/06/20 23:54:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -12,8 +12,8 @@ static const char *Compliance_Const_Name(ComplianceType *);
 static const char *StyleType_Const_Name(StyleType);
 static const char *StretchType_Const_Name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
-
-
+static VALUE Enum_type_values(VALUE);
+static VALUE Enum_type_inspect(VALUE);
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
@@ -2005,9 +2005,10 @@ VALUE rm_define_enum_type(char *tag)
 
     class = rb_define_class_under(Module_Magick, tag, Class_Enum);\
 
-    rb_define_singleton_method(class, "each", Enum_type_each, 0);
+    rb_define_singleton_method(class, "values", Enum_type_values, 0);
     rb_define_method(class, "initialize", Enum_type_initialize, 2);
     RUBY16(rb_enable_super(class, "initialize");)
+    rb_define_method(class, "inspect", Enum_type_inspect, 0);
     return class;
 }
 
@@ -2181,12 +2182,29 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
     return self;
 }
 
+
+/*
+ *  Method:     xxx#inspect
+ *  Purpose:    Enum subclass #inspect
+*/
+static VALUE Enum_type_inspect(VALUE self)
+{
+    char str[100];
+    MagickEnum *magick_enum;
+
+    Data_Get_Struct(self, MagickEnum, magick_enum);
+    sprintf(str, "%.16s=%d", rb_id2name(magick_enum->id), magick_enum->val);
+
+    return rb_str_new2(str);
+}
+
+
 /*
  *  Method:     xxx.each
  *  Purpose:    singleton iterator over enumerators list
  *  Notes:      defined for each Enum subclass
 */
-VALUE Enum_type_each(VALUE class)
+static VALUE Enum_type_values(VALUE class)
 {
     volatile VALUE enumerators;
     int x;

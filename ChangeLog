@@ -1,3 +1,6 @@
+RMagick 1.4.1
+    o Added grayscale_pseudo_class to Image class (GraphicsMagick 1.1)
+
 RMagick 1.4.0
     o Revised and updated documentation
     o Implemented enumeration values as instances of an Enum

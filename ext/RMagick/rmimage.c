@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.40 2004/02/14 00:04:02 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.41 2004/02/18 00:34:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3253,6 +3253,45 @@ Image_gray_q(VALUE self)
     r = IsGrayImage(image, &exception);
     HANDLE_ERROR
     return r ? Qtrue : Qfalse;
+}
+
+/*
+    Method:     Image#grayscale_pseudo_class
+    Purpose:    Call GrayscalePseudoClassImage
+*/
+VALUE
+Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GRAYSCALEPSEUDOCLASSIMAGE)
+    Image *image, *new_image;
+    unsigned int optimize = True;
+    ExceptionInfo exception;
+
+    switch(argc)
+    {
+        case 1:
+           optimize = RTEST(argv[0]);
+        case 0:
+           break;
+        default:
+           rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    GrayscalePseudoClassImage(new_image, optimize);
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("grayscale_pseudoclass");
+    return (VALUE)0;
+#endif
+
 }
 
 /*

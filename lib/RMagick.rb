@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.11 2003/12/16 00:12:58 rmagick Exp $
+# $Id: RMagick.rb,v 1.12 2003/12/16 22:23:20 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -21,10 +21,6 @@ def Magick.formats(&block)
     else
         @@formats
     end
-end
-
-unless Object.methods.include? "object_id"
-    alias object_id id
 end
 
 
@@ -761,7 +757,7 @@ protected
             return
         elsif cfid != nil
             each_with_index do |f,i|
-                if f.object_id == cfid
+                if f.__id__ == cfid
                     @scene = i
                     return
                 end
@@ -813,7 +809,7 @@ public
 
     def &(other)
         is_a_image_array other
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -823,14 +819,14 @@ public
         unless n.kind_of? Integer
             raise ArgumentError, "Integer required (#{n.class} given)"
         end
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def +(other)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -838,7 +834,7 @@ public
 
     def -(other)
         is_a_image_array other
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -853,7 +849,7 @@ public
 
     def |(other)
         is_a_image_array other
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -865,7 +861,7 @@ public
     end
 
     def collect(&block)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -878,14 +874,14 @@ public
     end
 
     def compact
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def compact!
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super          # returns nil if no changes were made
         set_cf cfid
         return a
@@ -900,21 +896,21 @@ public
 
     def delete(obj, &block)
         is_a_image obj
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
     end
 
     def delete_at(ndx)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
     end
 
     def delete_if(&block)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -922,7 +918,7 @@ public
 
     def fill(obj, *args)
         is_a_image obj
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -936,7 +932,7 @@ public
 
     if Array.instance_methods(false).include? 'insert' then
         def insert(*args)
-            cfid = self[@scene].object_id rescue nil
+            cfid = self[@scene].__id__ rescue nil
             a = self.class.new.replace super
             a.set_cf cfid
             return a
@@ -947,7 +943,7 @@ public
     # so it doesn't conflict with our own map method.
     if Array.instance_methods(false).include? '__map__' then
         def __map__(&block)
-            cfid = self[@scene].object_id rescue nil
+            cfid = self[@scene].__id__ rescue nil
             a = self.class.new.replace super
             a.set_cf cfid
             return a
@@ -961,7 +957,7 @@ public
     end
 
     def pop
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -976,7 +972,7 @@ public
 
     if Array.instance_methods(false).include? 'reject' then
         def reject(&block)
-            cfid = self[@scene].object_id rescue nil
+            cfid = self[@scene].__id__ rescue nil
             a = super
             set_cf cfid
             return a
@@ -984,7 +980,7 @@ public
     end
 
     def reject!(&block)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -996,7 +992,7 @@ public
         # test for it instead of letting rescue catch it.
         cfid = nil
         if @scene then
-            cfid = self[@scene].object_id rescue nil
+            cfid = self[@scene].__id__ rescue nil
         end
         super
         set_cf cfid
@@ -1004,14 +1000,14 @@ public
     end
 
     def reverse
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def reverse!
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -1019,7 +1015,7 @@ public
 
     if Array.instance_methods(false).include? 'select' then
         def select(*args,&block)
-            cfid = self[@scene].object_id rescue nil
+            cfid = self[@scene].__id__ rescue nil
             a = super
             a.set_cf cfid
             return a
@@ -1027,7 +1023,7 @@ public
     end
 
     def shift
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a
@@ -1038,7 +1034,7 @@ public
     end
 
     def slice!(*args)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         if args.length > 1 || args[0].kind_of?(Range)
             a = self.class.new.replace super
         else
@@ -1049,14 +1045,14 @@ public
     end
 
     def uniq
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def uniq!(*args)
-        cfid = self[@scene].object_id rescue nil
+        cfid = self[@scene].__id__ rescue nil
         a = super
         set_cf cfid
         return a

@@ -1,7 +1,7 @@
 
 # RMagick configure.ac
 
-AC_INIT(RMagick, x.y.z, rmagick@rubyforge.org, RMagick-x.y.z.tar.gz)
+AC_INIT(RMagick, 1.3.1, cyclists@nc.rr.com, RMagick-1.3.1.tar.gz)
 echo "Configuring ${PACKAGE_STRING}"
 
 AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h])
@@ -68,6 +68,9 @@ AC_CHECK_HEADER(magick/api.h, [],
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
 
+# Append **Magick's list of libraries to the user's lists (if any)
+LIBS="${LIBS} `${MAGICKCONFIG} --libs`"
+
 # What ImageMagick/GraphicsMagick functions?
 AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
 AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
@@ -75,17 +78,12 @@ AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
-AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
-AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare])
+AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,
-                magick_int64_t,
-                magick_uint64_t,
                 ExtendedSignedIntegralType,
-                ExtendedUnsignedIntegralType,
-                MagickOffsetType,
-                MagickSizeType],
+                ExtendedUnsignedIntegralType],
                 [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
@@ -143,51 +141,6 @@ AC_CACHE_CHECK(for NoCompliance enum value, rm_cv_enum_nocompliance,
 
 if test "$rm_cv_enum_nocompliance" = yes; then
   AC_DEFINE(HAVE_NOCOMPLIANCE)
-fi
-
-AC_CACHE_CHECK(for HSLColorspace enum value, rm_cv_enum_hslcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HSLColorspace],
-     rm_cv_enum_hslcolorspace='yes',
-     rm_cv_enum_hslcolorspace='no')])
-
-if test "$rm_cv_enum_hslcolorspace" = yes; then
-  AC_DEFINE(HAVE_HSLCOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for HWBColorspace enum value, rm_cv_enum_hwbcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HWBColorspace],
-     rm_cv_enum_hwbcolorspace='yes',
-     rm_cv_enum_hwbcolorspace='no')])
-
-if test "$rm_cv_enum_hwbcolorspace" = yes; then
-  AC_DEFINE(HAVE_HWBCOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = CopyCyanCompositeOp],
-     rm_cv_enum_copycyancompositeop='yes',
-     rm_cv_enum_copycyancompositeop='no')])
-
-if test "$rm_cv_enum_copycyancompositeop" = yes; then
-  AC_DEFINE(HAVE_COPYCYANCOMPOSITEOP)
 fi
 
 # Determine documentation base URI
@@ -307,10 +260,4 @@ AC_SUBST(RUBY)
 AC_SUBST(RUBY_CONFIG_OPTS)
 
 AC_OUTPUT(Makefile ext/RMagick/extconf.rb metaconfig)
-
-echo ""
-echo ""
-echo "This installation of $PACKAGE_STRING is configured for"
-echo "`$RUBY --version` and $MAGICKNAME `$MAGICKCONFIG --version`."
-
 

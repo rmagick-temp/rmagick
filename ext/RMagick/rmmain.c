@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.77 2005/02/27 16:36:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.78 2005/02/27 16:41:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1442,7 +1442,7 @@ Init_RMagick(void)
 
 
     // Magick::Primary
-    Class_Primary = rb_struct_define(NULL, "x", "y", "z", 0);
+    Class_Primary = rb_struct_define(NULL, "x", "y", "z", NULL);
     rb_define_method(Class_Primary, "to_s", PrimaryInfo_to_s, 0);
     rb_define_const(Module_Magick, "Primary", Class_Primary);
 
@@ -1506,7 +1506,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/02/27 16:36:23 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/02/27 16:41:51 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

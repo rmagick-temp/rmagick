@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.8 2004/01/31 18:34:05 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.9 2004/03/10 01:11:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -22,6 +22,7 @@ Draw_affine_eq(VALUE self, VALUE matrix)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     AffineMatrix_to_AffineMatrix(&draw->info->affine, matrix);
     return self;
@@ -36,6 +37,7 @@ Draw_align_eq(VALUE self, VALUE align)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(align, draw->info->align, AlignType);
     return self;
@@ -50,6 +52,7 @@ Draw_decorate_eq(VALUE self, VALUE decorate)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(decorate, draw->info->decorate, DecorationType);
     return self;
@@ -64,6 +67,7 @@ Draw_density_eq(VALUE self, VALUE density)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->density, STRING_PTR(density));
 
@@ -79,6 +83,7 @@ Draw_encoding_eq(VALUE self, VALUE encoding)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->encoding, STRING_PTR(encoding));
 
@@ -94,6 +99,7 @@ Draw_fill_eq(VALUE self, VALUE fill)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->fill, fill);
     return self;
@@ -108,6 +114,7 @@ Draw_font_eq(VALUE self, VALUE font)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->font, STRING_PTR(font));
 
@@ -123,6 +130,7 @@ Draw_font_family_eq(VALUE self, VALUE family)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->family, STRING_PTR(family));
 
@@ -138,6 +146,7 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(stretch, draw->info->stretch, StretchType);
     return self;
@@ -152,6 +161,7 @@ Draw_font_style_eq(VALUE self, VALUE style)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(style, draw->info->style, StyleType);
     return self;
@@ -171,6 +181,7 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
     Draw *draw;
     WeightType w;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     if (FIXNUM_P(weight))
@@ -233,6 +244,7 @@ Draw_gravity_eq(VALUE self, VALUE grav)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(grav, draw->info->gravity, GravityType);
 
@@ -248,6 +260,7 @@ Draw_pointsize_eq(VALUE self, VALUE pointsize)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     draw->info->pointsize = NUM2DBL(pointsize);
     return self;
@@ -266,6 +279,7 @@ Draw_rotation_eq(VALUE self, VALUE deg)
     double degrees;
     AffineMatrix affine, current;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     degrees = NUM2DBL(deg);
@@ -303,6 +317,7 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->stroke, stroke);
     return self;
@@ -317,6 +332,7 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     draw->info->text_antialias = RTEST(text_antialias);
     return self;
@@ -331,6 +347,7 @@ Draw_undercolor_eq(VALUE self, VALUE undercolor)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->undercolor, undercolor);
     return self;
@@ -372,6 +389,7 @@ VALUE Draw_annotate(
         rb_obj_instance_eval(0, NULL, self);
     }
 
+    rb_check_frozen(ImageList_cur_image(image_arg));
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Copy text to Draw structure
@@ -410,6 +428,26 @@ VALUE Draw_annotate(
 
     return self;
 }
+
+
+/*
+    Method:     Draw#clone
+    Notes:      see dup, init_copy
+*/
+VALUE
+Draw_clone(VALUE self)
+{
+    volatile VALUE clone;
+
+    clone = Draw_dup(self);
+    if (OBJ_FROZEN(self))
+    {
+        rb_obj_freeze(clone);
+    }
+
+    return clone;
+}
+
 
 /*
     Method:     Draw#composite(x,y,width,height,img,operator=OverCompositeOp)
@@ -554,6 +592,7 @@ Draw_draw(VALUE self, VALUE image_arg)
         rb_raise(rb_eArgError, "nothing to draw");
     }
 
+    rb_check_frozen(ImageList_cur_image(image_arg));
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Point the DrawInfo structure at the current set of primitives.
@@ -568,36 +607,28 @@ Draw_draw(VALUE self, VALUE image_arg)
     return self;
 }
 
+
 /*
- *  Method:     Draw#dup
- *  Purpose:    Copy a Draw object
- *  Notes:      a.k.a clone
+    Methods:    Draw#dup
+    Purpose:    Copy a Draw object
+    Notes:      Constructs a new Draw object, then calls initialize_copy
 */
 VALUE
 Draw_dup(VALUE self)
 {
-    Draw *draw, *draw2;
+    Draw *draw;
     volatile VALUE dup;
 
-    draw2 = ALLOC(Draw);
-    memset(draw2, '\0', sizeof(Draw));
-
-    Data_Get_Struct(self, Draw, draw);
-
-    draw2->info = CloneDrawInfo(NULL, draw->info);
-    if (!draw2->info)
+    draw = ALLOC(Draw);
+    memset(draw, '\0', sizeof(Draw));
+    dup = Data_Wrap_Struct(CLASS_OF(self), mark_Draw, destroy_Draw, draw);
+    if (rb_obj_tainted(self))
     {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
+        rb_obj_taint(dup);
     }
-
-    if (draw->primitives)
-    {
-        draw2->primitives = rb_str_dup(draw->primitives);
-    }
-    dup = Data_Wrap_Struct(CLASS_OF(self), mark_Draw, destroy_Draw, draw2);
-
-    return dup;
+    return rb_funcall(dup, initialize_copy_ID, 1, self);
 }
+
 
 /*
     Method:     Draw#get_type_metrics([image, ]text)
@@ -704,6 +735,31 @@ Draw_get_type_metrics(
 }
 
 /*
+    Method:     Draw#initialize_copy
+    Purpose:    initialize clone, dup methods
+*/
+VALUE Draw_init_copy(VALUE self, VALUE orig)
+{
+    Draw *copy, *original;
+
+    Data_Get_Struct(orig, Draw, original);
+    Data_Get_Struct(self, Draw, copy);
+
+    copy->info = CloneDrawInfo(NULL, original->info);
+    if (!copy->info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    if (original->primitives)
+    {
+        copy->primitives = rb_str_dup(original->primitives);
+    }
+
+    return self;
+}
+
+/*
     Method:     Draw#initialize <{ info initializers }>
     Purpose:    Initialize Draw object
     Notes:      Here are the DrawInfo fields that are copied from Info.
@@ -792,6 +848,7 @@ Draw_primitive(VALUE self, VALUE primitive)
 {
     Draw *draw;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     if (!draw->primitives)

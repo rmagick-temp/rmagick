@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.42 2004/03/07 15:05:56 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.43 2004/03/10 01:11:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -219,14 +219,16 @@ EXTERN VALUE Class_WeightType;
 /*
 *   Commonly-used IDs
 */
-EXTERN ID new_ID;          // "new"
-EXTERN ID push_ID;         // "push"
-EXTERN ID length_ID;       // "length"
-EXTERN ID values_ID;       // "values"
-EXTERN ID cur_image_ID;    // "cur_image"
-EXTERN ID call_ID;         // "call"
-EXTERN ID to_s_ID;         // "to_s"
-EXTERN ID _dummy_img__ID;  // "_dummy_img_"
+EXTERN ID new_ID;               // "new"
+EXTERN ID push_ID;              // "push"
+EXTERN ID length_ID;            // "length"
+EXTERN ID values_ID;            // "values"
+EXTERN ID cur_image_ID;         // "cur_image"
+EXTERN ID call_ID;              // "call"
+EXTERN ID to_s_ID;              // "to_s"
+EXTERN ID _dummy_img__ID;       // "_dummy_img_"
+EXTERN ID initialize_copy_ID;   // "initialize_copy"
+EXTERN ID dup_ID;               // "dup"
 
 
 #if defined(HAVE_GETNEXTIMAGEINLIST)
@@ -316,6 +318,7 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
     VALUE class##_##attr##_eq(VALUE self, VALUE val)\
     {\
         class *ptr;\
+        rb_check_frozen(self);\
         Data_Get_Struct(self, class, ptr);\
         ptr->attr = R_##type##_to_C_##type(val);\
         return self;\
@@ -391,10 +394,12 @@ ATTR_WRITER(Draw, stroke)
 ATTR_WRITER(Draw, text_antialias)
 ATTR_WRITER(Draw, undercolor)
 extern VALUE Draw_annotate(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Draw_clone(VALUE);
 extern VALUE Draw_composite(int, VALUE *, VALUE);
 extern VALUE Draw_draw(VALUE, VALUE);
 extern VALUE Draw_dup(VALUE);
 extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
+extern VALUE Draw_init_copy(VALUE, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
@@ -588,6 +593,7 @@ extern VALUE Image_channel_mean(int, VALUE *, VALUE);
 extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_clone(VALUE);
 extern VALUE Image_color_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_color_histogram(VALUE);
 extern VALUE Image_colorize(int, VALUE *, VALUE);
@@ -607,6 +613,7 @@ extern VALUE Image_difference(VALUE, VALUE);
 extern VALUE Image_dispatch(int, VALUE *, VALUE);
 extern VALUE Image_display(VALUE);
 extern VALUE Image__dump(VALUE, VALUE);
+extern VALUE Image_dup(VALUE);
 extern VALUE Image_each_profile(VALUE);
 extern VALUE Image_edge(int, VALUE *, VALUE);
 extern VALUE Image_emboss(int, VALUE *, VALUE);
@@ -628,6 +635,7 @@ extern VALUE Image_gray_q(VALUE);
 extern VALUE Image_grayscale_pseudo_class(int, VALUE *, VALUE);
 extern VALUE Image_implode(int, VALUE *, VALUE);
 extern VALUE Image_import_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_init_copy(VALUE, VALUE);
 extern VALUE Image_inspect(VALUE);
 extern VALUE Image_level(int, VALUE *, VALUE);
 extern VALUE Image_level_channel(int, VALUE *, VALUE);
@@ -774,6 +782,8 @@ extern VALUE   TypeMetric_to_s(VALUE);
 extern VALUE   TypeMetric_from_TypeMetric(TypeMetric *);
 
 extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
+extern VALUE   rm_no_freeze(VALUE);
+
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Enum_alloc(VALUE);
 #else

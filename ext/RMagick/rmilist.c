@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.10 2004/01/26 20:19:58 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.11 2004/03/10 01:11:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -430,6 +430,7 @@ rm_imagelist_length(VALUE imagelist)
 VALUE
 rm_imagelist_push(VALUE imagelist, VALUE image)
 {
+    rb_check_frozen(imagelist);
     return rb_funcall(imagelist, push_ID, 1, image);
 }
 

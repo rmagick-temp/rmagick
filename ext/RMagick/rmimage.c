@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.46 2004/03/07 15:05:56 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.47 2004/03/10 01:11:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -186,6 +186,8 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     const ImageAttribute *attribute;
     unsigned int okay;
 
+    rb_check_frozen(self);
+
     attr = attr_arg == Qnil ? NULL : STRING_PTR(attr_arg);
 
     switch (TYPE(key_arg))
@@ -311,6 +313,7 @@ Image_background_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->background_color, color);
     return self;
@@ -430,6 +433,7 @@ Image_border_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->border_color, color);
     return self;
@@ -498,6 +502,7 @@ Image_border_bang(
     VALUE height,
     VALUE color)
 {
+    rb_check_frozen(self);
     return border(True, self, width, height, color);
 }
 
@@ -530,7 +535,7 @@ VALUE Image_bounding_box(VALUE self)
 }
 
 /*
-    Method:     Image#capture(silent=false,
+    Method:     Image.capture(silent=false,
                               frame=false,
                               descend=false,
                               screen=false,
@@ -1008,6 +1013,7 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     ChromaticityInfo_to_ChromaticityInfo(&image->chromaticity, chroma);
     return self;
@@ -1026,6 +1032,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
     Image *clip_mask;
     ExceptionInfo exception;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (mask != Qnil)
@@ -1043,6 +1050,24 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
     }
 
     return self;
+}
+
+/*
+    Method:     Image#clone
+    Purpose:    Copy an image, along with its frozen and tainted state.
+*/
+VALUE
+Image_clone(VALUE self)
+{
+    volatile VALUE clone;
+
+    clone = Image_dup(self);
+    if (OBJ_FROZEN(self))
+    {
+        rb_obj_freeze(clone);
+    }
+
+    return clone;
 }
 
 /*
@@ -1212,6 +1237,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     StringInfo *str_info;
     unsigned int status = True;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile == Qnil)
@@ -1245,6 +1271,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     unsigned char *prof = NULL;
     long prof_l = 0;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile == Qnil)
@@ -1263,6 +1290,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     char *prof = NULL;
     long prof_l = 0;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile != Qnil)
@@ -1448,6 +1476,8 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
 
     // This is a "set" operation. Things are different.
 
+    rb_check_frozen(self);
+
     // Replace with new color? The arg can be either a color name or
     // a Magick::Pixel.
     Color_to_PixelPacket(&new_color, argv[1]);
@@ -1512,6 +1542,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     Image *image;
     ColorspaceType new_cs;
 
+    rb_check_frozen(self);
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
@@ -1560,6 +1591,7 @@ VALUE Image_compose_eq(
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
     return self;
@@ -1748,6 +1780,7 @@ Image_compression_eq(VALUE self, VALUE compression)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(compression, image->compression, CompressionType);
     return self;
@@ -1763,6 +1796,7 @@ Image_compress_colormap_bang(VALUE self)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) CompressImageColormap(image);
     HANDLE_IMG_ERROR(image)
@@ -1980,20 +2014,32 @@ Image_convolve(
 
 /*
     Method:     Image#copy
-    Purpose:    Return a copy of the image
+    Purpose:    Alias for dup
 */
 VALUE
 Image_copy(VALUE self)
 {
-    Image *image, *copy;
+    return rb_funcall(self, rb_intern("dup"), 0);
+}
+
+/*
+    Method:     Image#initialize_copy
+    Purpose:    initialize copy, clone, dup
+*/
+VALUE
+Image_init_copy(VALUE copy, VALUE orig)
+{
+    Image *image, *clone;
     ExceptionInfo exception;
 
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
+    Data_Get_Struct(orig, Image, image);
 
-    copy = CloneImage(image, 0, 0, True, &exception);
+    GetExceptionInfo(&exception);
+    clone = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
-    return rm_image_new(copy);
+    DATA_PTR(copy) = clone;
+
+    return copy;
 }
 
 /*
@@ -2012,6 +2058,7 @@ Image_crop(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_crop_bang(int argc, VALUE *argv, VALUE self)
 {
+    rb_check_frozen(self);
     return cropper(True, argc, argv, self);
 }
 
@@ -2077,6 +2124,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
     int count;
     double x_res, y_res;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (TYPE(density_arg) == T_STRING)
@@ -2134,7 +2182,9 @@ Image_depth(VALUE self)
     return INT2FIX(depth);
 }
 
+
 DEF_ATTR_ACCESSOR(Image, delay, ulong)
+
 
 /*
     Method:     Image#despeckle
@@ -2327,6 +2377,7 @@ VALUE Image_display(VALUE self)
 
 DEF_ATTR_ACCESSOR(Image, dispose, ulong)
 
+
 /*
     Method:     Image#_dump(aDepth)
     Purpose:    implement marshalling
@@ -2373,6 +2424,23 @@ Image__dump(VALUE self, VALUE depth)
     // Concatenate the blob onto the header & return the result
     str = rb_str_new((char *)&mi, mi.len+offsetof(DumpedImage,magick));
     return rb_str_cat(str, (char *)blob, length);
+}
+
+/*
+    Method:     Image#dup
+    Purpose:    Construct a new image object and call initialize_copy
+*/
+VALUE
+Image_dup(VALUE self)
+{
+    volatile VALUE dup;
+
+    dup = Data_Wrap_Struct(CLASS_OF(self), NULL, DestroyImage, NULL);
+    if (rb_obj_tainted(self))
+    {
+        rb_obj_taint(dup);
+    }
+    return rb_funcall(dup, initialize_copy_ID, 1, self);
 }
 
 /*
@@ -2530,6 +2598,7 @@ Image_endian_eq(VALUE self, VALUE type)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(type, image->endian, EndianType);
     return self;
@@ -2586,6 +2655,7 @@ Image_erase_bang(VALUE self)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     SetImage(image, OpaqueOpacity);
 
@@ -2690,6 +2760,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
@@ -2733,6 +2804,7 @@ Image_filter_eq(VALUE self, VALUE filter)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(filter, image->filter, FilterTypes);
     return self;
@@ -2778,6 +2850,7 @@ Image_flip(VALUE self)
 VALUE
 Image_flip_bang(VALUE self)
 {
+    rb_check_frozen(self);
     return flipflop(True, self, FlipImage);
 }
 
@@ -2798,6 +2871,7 @@ Image_flop(VALUE self)
 VALUE
 Image_flop_bang(VALUE self)
 {
+    rb_check_frozen(self);
     return flipflop(True, self, FlopImage);
 }
 
@@ -2840,6 +2914,7 @@ Image_format_eq(VALUE self, VALUE magick)
     char *mgk;
     ExceptionInfo exception;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
@@ -2996,6 +3071,8 @@ VALUE Image_fuzz_eq(VALUE self, VALUE fuzz_arg)
     Image *image;
     char *fuzz_str, *end;
     double fuzz;
+
+    rb_check_frozen(self);
 
     // If the fuzz argument is a string, convert it to a double.
     // If the argument ends in '%', treat it as a percentage.
@@ -3163,6 +3240,7 @@ Image_geometry_eq(
     volatile VALUE geom_str;
     char *geom;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     if (geometry == Qnil)
     {
@@ -3384,6 +3462,7 @@ Image_import_pixels(
     unsigned int okay;
     ExceptionInfo exception;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     map   = STRING_PTR(map_arg);
@@ -3589,6 +3668,7 @@ Image_interlace_eq(VALUE self, VALUE interlace)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
     return self;
@@ -3688,6 +3768,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     StringInfo *str_info;
     unsigned int status = True;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile == Qnil)
@@ -3720,6 +3801,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     const unsigned char *prof = NULL;
     long prof_l = 0;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile == Qnil)
@@ -3738,6 +3820,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     char *prof = NULL;
     long prof_l = 0;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (profile != Qnil)
@@ -3979,6 +4062,7 @@ Image_magnify(VALUE self)
 VALUE
 Image_magnify_bang(VALUE self)
 {
+    rb_check_frozen(self);
     return magnify(True, self, MagnifyImage);
 }
 
@@ -4044,6 +4128,7 @@ Image_matte_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->matte_color, color);
     return self;
@@ -4178,6 +4263,7 @@ Image_minify(VALUE self)
 VALUE
 Image_minify_bang(VALUE self)
 {
+    rb_check_frozen(self);
     return magnify(True, self, MinifyImage);
 }
 
@@ -4261,14 +4347,16 @@ Image_montage_eq(
 {
     Image *image;
 
+    rb_warning("montage= is deprecated. It has no purpose.");
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
+
     if (montage == Qnil)
     {
         magick_free(image->montage);
         image->montage = NULL;
         return self;
     }
-    rb_warning("montage= is deprecated. It has no purpose.");
     magick_clone_string(&image->montage, STRING_PTR(montage));
     return self;
 }
@@ -4733,6 +4821,7 @@ Image_page_eq(VALUE self, VALUE rect)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Rectangle_to_RectangleInfo(&image->page, rect);
     return self;
@@ -4796,6 +4885,7 @@ Image_pixel_color(
     switch (argc)
     {
         case 3:
+            rb_check_frozen(self);
             set = True;
             // Replace with new color? The arg can be either a color name or
             // a Magick::Pixel.
@@ -4949,6 +5039,7 @@ Image_profile_bang(
     char *prof = NULL;
     long prof_l = 0;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     // ProfileImage issues a warning if something goes wrong.
@@ -5315,7 +5406,7 @@ Image_reduce_noise(VALUE self, VALUE radius)
 
 /*
     Method:     Image#rendering_intent=
-    Purpose:    set rendering_intent
+    Purpose:    get rendering_intent
 */
 VALUE
 Image_rendering_intent(VALUE self)
@@ -5335,6 +5426,7 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
     return self;
@@ -5410,6 +5502,7 @@ Image_resize(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_resize_bang(int argc, VALUE *argv, VALUE self)
 {
+    rb_check_frozen(self);
     return resize(True, argc, argv, self);
 }
 
@@ -5468,6 +5561,7 @@ Image_rotate(VALUE self, VALUE degrees)
 VALUE
 Image_rotate_bang(VALUE self, VALUE degrees)
 {
+    rb_check_frozen(self);
     return rotate(True, self, degrees);
 }
 
@@ -5489,6 +5583,7 @@ Image_sample(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
+    rb_check_frozen(self);
     return scale_image(True, argc, argv, self, SampleImage);
 }
 
@@ -5508,6 +5603,7 @@ Image_scale(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
+    rb_check_frozen(self);
     return scale_image(True, argc, argv, self, ScaleImage);
 }
 
@@ -5622,6 +5718,7 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
     Image *image;
     unsigned int opacity;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     opacity = NUM2UINT(opacity_arg);
     if (opacity > MaxRGB)
@@ -5695,6 +5792,7 @@ Image_shave_bang(
     VALUE width,
     VALUE height)
 {
+    rb_check_frozen(self);
     return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
 }
 
@@ -5954,6 +6052,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     ClassType class_type;
     QuantizeInfo qinfo;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(new_class_type, class_type, ClassType);
 
@@ -6043,6 +6142,7 @@ Image_strip_bang(VALUE self)
 #if defined(HAVE_STRIPIMAGE)
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) StripImage(image);
     return self;
@@ -6293,6 +6393,7 @@ Image_thumbnail(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 {
+    rb_check_frozen(self);
     return thumbnail(True, argc, argv, self);
 }
 
@@ -6324,8 +6425,10 @@ Image_tile_info_eq(VALUE self, VALUE rect)
 #ifdef HAVE_IMAGE_EXTRACT_INFO
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info= is deprecated in this release of ImageMagick. Use extract_info= instead.");
+    rb_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
 #else
+    rb_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->tile_info, rect);
 #endif
     return self;
@@ -6548,6 +6651,7 @@ VALUE Image_image_type_eq(VALUE self, VALUE type)
     Image *image;
     ImageType it;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(type, it, ImageType);
     SetImageType(image, it);
@@ -6574,7 +6678,7 @@ VALUE Image_image_type(VALUE self)
 
 
 /*
-    Method:     Image#units=
+    Method:     Image#units
     Purpose:    Get the resolution type field
 */
 VALUE
@@ -6597,6 +6701,7 @@ Image_units_eq(
 {
     Image *image;
 
+    rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(restype, image->units, ResolutionType);
     return self;

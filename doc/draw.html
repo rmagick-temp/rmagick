@@ -49,6 +49,8 @@
     <ul>
       <li><a href="#annotate">annotate</a></li>
 
+      <li><a href="#clone">clone</a></li>
+
       <li><a href="#draw">draw</a></li>
 
       <li><a href="#dup">dup</a></li>
@@ -512,6 +514,23 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
   </div>
 
   <div class="sig">
+    <h3 id="clone">clone</h3>
+
+    <p><span class="arg">draw</span>.clone -&gt; <em>aDraw</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Same as <a href="#dup">dup</a> except the frozen state of
+    the original is propogated to the copy.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new Draw object.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="draw">draw</h3>
 
     <p><span class="arg">draw</span>.draw(<span class=
@@ -560,7 +579,9 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
     <p>An exact copy of the receiver, including the list of drawing
     primitives.</p>
 
-    <h4>Note</h4>Also called <code>clone</code>.
+    <h4>See also</h4>
+
+    <p><a href="#clone">clone</a></p>
   </div>
 
   <div class="sig">

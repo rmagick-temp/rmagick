@@ -133,6 +133,8 @@
 
           <li><a href="#chop">chop</a></li>
 
+          <li><a href="#clone">clone</a></li>
+
           <li><a href=
           "#color_fill_to_border">color_fill_to_border</a></li>
 
@@ -178,6 +180,8 @@
           <li><a href="#dispatch">dispatch</a></li>
 
           <li><a href="#display">display</a></li>
+
+          <li><a href="#dup">dup</a></li>
 
           <li><a href="#each_profile">each_profile</a></li>
 
@@ -1521,6 +1525,28 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   </div>
 
   <div class="sig">
+    <h3 id="clone">clone</h3>
+
+    <p><span class="arg">image</span>.clone -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Same as <a href="#dup">dup</a> except the frozen state of
+    the original is propogated to the new copy.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#dup">dup</a></p>
+  </div>
+
+  <div class="sig">
     <h3 id="color_floodfill">color_floodfill</h3>
 
     <p><span class="arg">image</span>.color_floodfill(<span class=
@@ -2133,7 +2159,8 @@ f.colors &raquo; 108
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Returns a deep copy of the image.
+    <h4>Description</h4>Returns a copy of the image. The tainted
+    state of the original is propogated to the copy.
 
     <h4>Example</h4>
     <pre>
@@ -2142,14 +2169,12 @@ f2 = f.copy
 
     <h4>See also</h4>
 
-    <p><a href="ilist.html#copy">ImageList#copy</a></p>
+    <p><a href="#clone">clone</a>, <a href="#dup">dup</a>, <a href=
+    "ilist.html#copy">ImageList#copy</a></p>
 
     <h4>Magick API</h4>
 
     <p>CloneImage</p>
-
-    <h4>Note</h4>Also known as <code>dup</code> and
-    <code>clone</code>.
   </div>
 
   <div class="sig">
@@ -2580,6 +2605,27 @@ exit
     <h4>Magick API</h4>
 
     <p>DisplayImages</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="dup">dup</h3>
+
+    <p><span class="arg">image</span>.dup -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Same as <a href="#copy">copy</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#clone">clone</a></p>
   </div>
 
   <div class="sig">

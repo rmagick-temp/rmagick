@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.47 2004/03/07 15:05:56 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.48 2004/03/10 01:11:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -450,7 +450,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
-    rb_define_method(Class_Image, "clone", Image_copy, 0);
+    rb_define_method(Class_Image, "clone", Image_clone, 0);
     rb_define_method(Class_Image, "color_flood_fill", Image_color_flood_fill, 5);
     rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
@@ -469,7 +469,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
     rb_define_method(Class_Image, "_dump", Image__dump, 1);
-    rb_define_method(Class_Image, "dup", Image_copy, 0);
+    rb_define_method(Class_Image, "dup", Image_dup, 0);
     rb_define_method(Class_Image, "each_profile", Image_each_profile, 0);
     rb_define_method(Class_Image, "edge", Image_edge, -1);
     rb_define_method(Class_Image, "emboss", Image_emboss, -1);
@@ -491,6 +491,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "grayscale_pseudo_class", Image_grayscale_pseudo_class, -1);
     rb_define_method(Class_Image, "implode", Image_implode, -1);
     rb_define_method(Class_Image, "import_pixels", Image_import_pixels, 6);
+    rb_define_method(Class_Image, "initialize_copy", Image_init_copy, 1);
     rb_define_method(Class_Image, "inspect", Image_inspect, 0);
     rb_define_method(Class_Image, "level", Image_level, -1);
     rb_define_method(Class_Image, "level_channel", Image_level_channel, -1);
@@ -616,12 +617,13 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Draw, undercolor)
 
     rb_define_method(Class_Draw, "annotate", Draw_annotate, 6);
-    rb_define_method(Class_Draw, "clone", Draw_dup, 0);
+    rb_define_method(Class_Draw, "clone", Draw_clone, 0);
     rb_define_method(Class_Draw, "composite", Draw_composite, -1);
     rb_define_method(Class_Draw, "draw", Draw_draw, 1);
     rb_define_method(Class_Draw, "dup", Draw_dup, 0);
     rb_define_method(Class_Draw, "get_type_metrics", Draw_get_type_metrics, -1);
     rb_define_method(Class_Draw, "initialize", Draw_initialize, 0);
+    rb_define_method(Class_Draw, "initialize_copy", Draw_init_copy, 1);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
 
@@ -638,6 +640,7 @@ Init_RMagick(void)
 #endif
 
     rb_define_method(Class_Montage, "initialize", Montage_initialize, 0);
+    rb_define_method(Class_Montage, "freeze", rm_no_freeze, 0);
 
     // These accessors supply optional arguments for Magick::ImageList::Montage.new
     DCL_ATTR_WRITER(Montage, background_color)
@@ -671,6 +674,7 @@ Init_RMagick(void)
 #endif
 
     rb_define_method(Class_Info, "initialize", Info_initialize, 0);
+    rb_define_method(Class_Info, "freeze", rm_no_freeze, 0);
     rb_define_method(Class_Info, "define", Info_define, -1);
 
     DCL_ATTR_ACCESSOR(Info, antialias)
@@ -1191,6 +1195,8 @@ Init_RMagick(void)
     values_ID = rb_intern("values");
     to_s_ID = rb_intern("to_s");
     _dummy_img__ID = rb_intern("_dummy_img_");
+    initialize_copy_ID = rb_intern("initialize_copy");
+    dup_ID = rb_intern("dup");
 }
 
 /*
@@ -1207,7 +1213,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/03/07 15:05:56 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/03/10 01:11:36 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -78,6 +79,8 @@
         <li><a href="#append">append</a></li>
 
         <li><a href="#average">average</a></li>
+
+        <li><a href="#clone">clone</a></li>
 
         <li><a href="#coalesce">coalesce</a></li>
 
@@ -511,8 +514,8 @@ imagelist.animate { self.server_name = "other:0.0" }
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
          title="Click to see the example script" src=
          "ex/average_before.gif" alt="average example" /><!--
-                      This img tag displays the averaged image when the mouse is not over
-                      --><img style="display:" id="averaged"
+                          This img tag displays the averaged image when the mouse is not over
+                          --><img style="display:" id="averaged"
     onmouseover=
     "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
          src="ex/average_after.gif" alt="average example" /></a>
@@ -523,6 +526,28 @@ imagelist.animate { self.server_name = "other:0.0" }
     <h4>Magick API</h4>
 
     <p>AverageImages</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="clone">clone</h3>
+
+    <p><span class="arg">imagelist</span>.clone -&gt;
+    <em>anImageList</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Same as <a href="#dup">dup</a>, but the frozen state of the
+    original is propogated to the copy.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new imagelist</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#copy">copy</a></p>
   </div>
 
   <div class="sig">
@@ -595,7 +620,8 @@ imagelist.animate { self.server_name = "other:0.0" }
 imagelist2 = imagelist1.copy
 </pre>
 
-    <h4>See also</h4><a href="image1.html#copy">Image#copy</a>
+    <h4>See also</h4><a href="image1.html#copy">Image#copy</a>,
+    <a href="#clone">clone</a>, <a href="#dup">dup</a>
   </div>
 
   <div class="sig">
@@ -661,9 +687,9 @@ imagelist2 = imagelist1.copy
     elements in the new imagelist are references to the image
     elements in the original imagelist, not copies.</p>
 
-    <h4>See also</h4><a href="#copy">copy</a>
+    <h4>See also</h4>
 
-    <h4>Note</h4>Also known as <code>clone</code>.
+    <p><a href="#copy">copy</a>, <a href="#clone">clone</a></p>
   </div>
 
   <div class="sig">

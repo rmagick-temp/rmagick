@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.24 2004/03/07 15:05:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.25 2004/03/10 01:11:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -128,6 +128,17 @@ char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
     *ptr = v;
     *len = RSTRING(v)->len;
     return str;
+}
+
+
+/*
+    Extern:     rm_no_freeze(obj)
+    Purpose:    overrides freeze in classes that can't be frozen.
+*/
+VALUE
+rm_no_freeze(VALUE obj)
+{
+    rb_raise(rb_eTypeError, "can't freeze %s", rb_obj_classname(obj));
 }
 
 /*

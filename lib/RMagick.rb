@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.16 2004/03/07 15:09:09 rmagick Exp $
+# $Id: RMagick.rb,v 1.17 2004/03/10 01:11:36 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -603,8 +603,11 @@ class Image
     # Accepts either String or Pixel arguments
     def color_reset!(fill)
         save = background_color
+        # Change the background color _outside_ the begin block
+        # so that if this object is frozen the exeception will be
+        # raised before we have to handle it explicitly.
+        self.background_color = fill
         begin
-            self.background_color = fill
             erase!
         ensure
             self.background_color = save
@@ -1085,22 +1088,14 @@ public
         return self.length <=> other.length
     end
 
-    # Make a deep copy (see also dup)
+    # Make a deep copy
     def copy
-        copy_img = ImageList.new
-        each { |f| copy_img << f.copy }
-        copy_img.scene = @scene
-        copy_img
+        ditto = self.class.new
+        each { |f| ditto << f.copy }
+        ditto.scene = @scene
+        ditto.taint if tainted?
+        return ditto
     end
-
-    # Make a shallow copy (aka clone, see also copy)
-    def dup
-        copy_img = ImageList.new
-        each { |f| copy_img << f }
-        copy_img.scene = @scene
-        copy_img
-    end
-    alias clone dup
 
     # Return the current image
     def cur_image

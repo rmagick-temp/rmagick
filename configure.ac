@@ -74,7 +74,7 @@ AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
 AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
-AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray])
+AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.36 2004/02/08 00:07:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.37 2004/02/08 19:40:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -728,7 +728,7 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GETIMAGECHANNELDEPTH)
     Image *image;
-    ChannelType channel_type, type;
+    ChannelType channel_type = UndefinedChannel, type;
     unsigned long channel_depth;
     ExceptionInfo exception;
 
@@ -770,7 +770,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_GETIMAGECHANNELEXTREMA)
     Image *image;
-    ChannelType channel_type, type;
+    ChannelType channel_type = UndefinedChannel, type;
     ExceptionInfo exception;
     unsigned long min, max;
     unsigned int okay;

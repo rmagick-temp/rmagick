@@ -1,48 +1,42 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
+include Magick
 
-i = Magick::ImageList.new
-i.new_image(200, 200) { self.background_color = "#ffffcc" }
+img = Image.new(200,200) { self.background_color = "#ffffcc" }
 
 # Draw a blue circle.
-primitives = Magick::Draw.new
-primitives.stroke_width 5
-primitives.stroke "blue"
-primitives.fill_opacity 0
-primitives.circle 100,100, 100,150
-primitives.draw i
+gc = Draw.new
+gc.stroke_width(5)
+gc.stroke("blue")
+gc.fill_opacity(0)
+gc.circle(100,100, 100,150)
+gc.draw(img)
 
 # Get the bounding box. Use the values to draw
 # a gray square surrounding the circle. Highlight
 # the corners with tiny red circles.
 
-bb = i.bounding_box
-primitives = Magick::Draw.new
-primitives.stroke "gray50"
-primitives.fill_opacity 0
-primitives.rectangle bb.x, bb.y, bb.x+bb.width, bb.y+bb.height
-primitives.stroke "red"
-primitives.circle bb.x, bb.y, bb.x+2, bb.y+2
-primitives.circle bb.x+bb.width, bb.y, bb.x+bb.width+2, bb.y+2
-primitives.circle bb.x, bb.y+bb.height, bb.x+2, bb.y+bb.height+2
-primitives.circle bb.x+bb.width, bb.y+bb.height, bb.x+bb.width+2, bb.y+bb.height+2
+bb = img.bounding_box
+gc = Draw.new
+gc.stroke("gray50")
+gc.fill_opacity(0)
+gc.rectangle(bb.x, bb.y, bb.x+bb.width, bb.y+bb.height)
+gc.stroke("red")
+gc.circle(bb.x, bb.y, bb.x+2, bb.y+2)
+gc.circle(bb.x+bb.width, bb.y, bb.x+bb.width+2, bb.y+2)
+gc.circle(bb.x, bb.y+bb.height, bb.x+2, bb.y+bb.height+2)
+gc.circle(bb.x+bb.width, bb.y+bb.height, bb.x+bb.width+2, bb.y+bb.height+2)
 
 
-primitives.pointsize 10
-primitives.fill "black"
-primitives.stroke "transparent"
-primitives.gravity Magick::NorthWestGravity
-primitives.text bb.x-15, bb.y-5, "\'#{bb.x},#{bb.y}\'"
-primitives.gravity Magick::NorthEastGravity
-primitives.text bb.x-15, bb.y-5, "\'#{bb.x+bb.width},#{bb.y}\'"
-primitives.gravity Magick::SouthWestGravity
-primitives.text bb.x-15, bb.y-12, "\'#{bb.x},#{bb.y+bb.height}\'"
-primitives.gravity Magick::SouthEastGravity
-primitives.text bb.x-15, bb.y-12, "\'#{bb.x+bb.width},#{bb.y+bb.height}\'"
+gc.fill("black")
+gc.stroke("transparent")
+gc.text(bb.x-15, bb.y-5, "\'#{bb.x},#{bb.y}\'")
+gc.text(bb.x+bb.width-15, bb.y-5, "\'#{bb.x+bb.width},#{bb.y}\'")
+gc.text(bb.x-15, bb.y+bb.height+15, "\'#{bb.x},#{bb.y+bb.height}\'")
+gc.text(bb.x+bb.width-15, bb.y+bb.height+15, "\'#{bb.x+bb.width},#{bb.y+bb.height}\'")
 
 
-primitives.draw i
+gc.draw(img)
 
-#i.display
-i.write "bounding_box.gif"
+img.write("bounding_box.gif")
 exit

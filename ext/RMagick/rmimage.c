@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.30 2003/12/25 21:15:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.31 2003/12/30 00:53:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1611,7 +1611,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     ExceptionInfo exception;
     volatile VALUE pixel, pixel0;
     unsigned long width, height;
-    unsigned long x, npixels;
+    long x, npixels;
     char *map;
     long mapL;
     union
@@ -2413,7 +2413,7 @@ Image_export_pixels(
 
     if (   x_off < 0 || x_off > image->columns
         || y_off < 0 || y_off > image->rows
-        || cols <= 0 || rows <= 0)
+        || cols == 0 || rows == 0)
     {
         rb_raise(rb_eArgError, "invalid extract geometry");
     }
@@ -2429,7 +2429,7 @@ Image_export_pixels(
 
     GetExceptionInfo(&exception);
 
-    okay = ExportImagePixels(image, x_off, y_off,cols, rows, map, IntegerPixel, pixels, &exception);
+    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, IntegerPixel, pixels, &exception);
     if (!okay)
     {
         xfree(pixels);
@@ -4524,6 +4524,7 @@ Image_plasma(
 VALUE
 Image_preview(VALUE self, VALUE preview)
 {
+#if defined(HAVE_PREVIEWIMAGE)
     Image *image, *new_image;
     PreviewType preview_type;
     ExceptionInfo exception;
@@ -4537,6 +4538,10 @@ Image_preview(VALUE self, VALUE preview)
     HANDLE_ERROR
 
     return rm_image_new(new_image);
+#else
+    not_implemented("preview");
+    return (VALUE)0;
+#endif
 }
 
 
@@ -4765,7 +4770,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     if (TYPE(file_arg) == T_STRING)
     {
         filename = STRING_PTR_LEN(file_arg, filename_l);
-        filename_l = min(filename_l, sizeof(info->filename));
+        filename_l = min(filename_l, (long)sizeof(info->filename));
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
         info->file = NULL;      // Reset FILE *, if any

@@ -9,6 +9,7 @@ def draw_labels(image, x, y, metrics)
 
     gc = Draw.new
     gc.font_family('Times')
+    gc.pointsize(13)
     gc.fill('none')
     gc.stroke('black')
     gc.stroke_width(1)
@@ -55,23 +56,23 @@ def draw_labels(image, x, y, metrics)
 
     # Draw a brace between the origin and max_advance
     h = metrics.max_advance / 2
-    gc.path("M#{x},#{y-metrics.descent+19} " +
-            "Q#{x},#{y-metrics.descent+26} " +
-            " #{x+h/2},#{y-metrics.descent+22} " +
-            "T#{x+h},#{y-metrics.descent+26}")
+    gc.path("M#{x},#{y-metrics.descent+16} " +
+            "Q#{x},#{y-metrics.descent+24} " +
+            " #{x+h/2},#{y-metrics.descent+20} " +
+            "T#{x+h},#{y-metrics.descent+24}")
 
-    gc.path("M#{x+metrics.max_advance},#{y-metrics.descent+19} " +
-            "Q#{x+metrics.max_advance},#{y-metrics.descent+26} " +
-            " #{x+(3*metrics.max_advance)/4},#{y-metrics.descent+22} " +
-            "T#{x+h},#{y-metrics.descent+26}")
+    gc.path("M#{x+metrics.max_advance},#{y-metrics.descent+16} " +
+            "Q#{x+metrics.max_advance},#{y-metrics.descent+24} " +
+            " #{x+(3*metrics.max_advance)/4},#{y-metrics.descent+20} " +
+            "T#{x+h},#{y-metrics.descent+24}")
 
     gc.stroke('none')
     gc.fill('black')
-    gc.text(214, 240, 'descent')
-    gc.text(214, 165, 'ascent')
-    gc.text(53, 135, 'height')
-    gc.text(127, 15, 'width')
-    gc.text(x+(metrics.max_advance)/2-35, 293, "max_advance")
+    gc.text(xp+40, y-(metrics.ascent/2)+4, 'ascent')
+    gc.text(xp+40, y-(metrics.descent/2)+4, 'descent')
+    gc.text(x-60, y-metrics.height/2+4, 'height')
+    gc.text(x+(metrics.width/2)-15, 15, 'width')
+    gc.text(x+(metrics.max_advance)/2-38, 290, "max_advance")
 
     gc.draw(image)
 end
@@ -82,7 +83,7 @@ Origin_x = 110
 Origin_y = 220
 Glyph = 'g'
 
-canvas = Image.new(300,300,HatchFill.new('white', 'lightcyan2'))
+canvas = Image.new(350,300,HatchFill.new('white', 'lightcyan2'))
 
 # Draw a big lowercase 'g' on the canvas.
 # Leave room on all sides for the labels.

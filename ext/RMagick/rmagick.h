@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.71 2004/12/05 21:28:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.72 2004/12/05 22:08:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -389,6 +389,24 @@ EXTERN ID ID_y;                 // "y"
 #define ATTR_ACCESSOR(class, attr) \
     ATTR_READER(class, attr)\
     ATTR_WRITER(class, attr)
+
+/*
+ *  Declare Pixel channel attribute writers
+*/
+#define DEF_PIXEL_CHANNEL_WRITER(_channel_) \
+extern VALUE \
+Pixel_##_channel_##_eq(VALUE self, VALUE v) \
+{ \
+    Pixel *pixel; \
+ \
+    rm_check_frozen(self); \
+    Data_Get_Struct(self, Pixel, pixel); \
+    pixel->_channel_ = (Quantum) NUM2UINT(v); \
+    rb_funcall(self, ID_changed, 0); \
+    rb_funcall(self, ID_notify_observers, 1, self); \
+    return INT2NUM(pixel->_channel_); \
+}
+
 
 /*
  *  Enum constants - define a subclass of Enum for the specified enumeration.

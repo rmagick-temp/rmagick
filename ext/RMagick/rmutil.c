@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.44 2004/12/05 21:32:03 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.45 2004/12/05 22:08:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -553,64 +553,13 @@ Pixel_intensity(VALUE self)
 */
 
 DEF_ATTR_READER(Pixel, red, int)
-
-extern VALUE
-Pixel_red_eq(VALUE self, VALUE v)
-{
-    Pixel *pixel;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Pixel, pixel);
-    pixel->red = (Quantum) NUM2UINT(v);
-    rb_funcall(self, ID_changed, 0);
-    rb_funcall(self, ID_notify_observers, 1, self);
-    return INT2NUM(pixel->red);
-}
-
 DEF_ATTR_READER(Pixel, green, int)
-
-extern VALUE
-Pixel_green_eq(VALUE self, VALUE v)
-{
-    Pixel *pixel;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Pixel, pixel);
-    pixel->green = (Quantum) NUM2UINT(v);
-    rb_funcall(self, ID_changed, 0);
-    rb_funcall(self, ID_notify_observers, 1, self);
-    return INT2NUM(pixel->green);
-}
-
 DEF_ATTR_READER(Pixel, blue, int)
-
-extern VALUE
-Pixel_blue_eq(VALUE self, VALUE v)
-{
-    Pixel *pixel;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Pixel, pixel);
-    pixel->blue = (Quantum) NUM2UINT(v);
-    rb_funcall(self, ID_changed, 0);
-    rb_funcall(self, ID_notify_observers, 1, self);
-    return INT2NUM(pixel->blue);
-}
-
 DEF_ATTR_READER(Pixel, opacity, int)
-
-extern VALUE
-Pixel_opacity_eq(VALUE self, VALUE v)
-{
-    Pixel *pixel;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Pixel, pixel);
-    pixel->opacity = (Quantum) NUM2UINT(v);
-    rb_funcall(self, ID_changed, 0);
-    rb_funcall(self, ID_notify_observers, 1, self);
-    return  INT2NUM(pixel->opacity);
-}
+DEF_PIXEL_CHANNEL_WRITER(red)
+DEF_PIXEL_CHANNEL_WRITER(green)
+DEF_PIXEL_CHANNEL_WRITER(blue)
+DEF_PIXEL_CHANNEL_WRITER(opacity)
 
 
 /*

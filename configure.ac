@@ -57,6 +57,7 @@ AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
     [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB}])],
     [`${MAGICKCONFIG} --libs`])
 
+
 AC_SUBST(MAGICKLIB)
 AC_SUBST(MAGICKNAME)
 AC_SUBST(MAGICKCONFIG)
@@ -67,6 +68,9 @@ AC_CHECK_HEADER(magick/api.h, [],
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
+
+# Append ***Magick's lists of libs to the user's list (if any)
+LIBS="${LIBS} `${MAGICKCONFIG} --libs`"
 
 # What ImageMagick/GraphicsMagick functions?
 AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])

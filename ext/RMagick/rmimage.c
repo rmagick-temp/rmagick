@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.35 2004/02/07 16:38:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.36 2004/02/08 00:07:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1096,7 +1096,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
         {
             if (str_info->length > 0)
             {
-                status = PutImageProfile(image, "icc", str_info);
+                status = SetImageProfile(image, "icc", str_info);
             }
 
             DestroyStringInfo(str_info);
@@ -3416,7 +3416,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
         {
             if (str_info->length > 0)
             {
-                status = PutImageProfile(image, "iptc", str_info);
+                status = SetImageProfile(image, "iptc", str_info);
             }
 
             DestroyStringInfo(str_info);

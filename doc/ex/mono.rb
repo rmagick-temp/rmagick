@@ -19,8 +19,5 @@ mono_bottom = mono_cheetah.crop 0, mono_cheetah.rows/2, mono_cheetah.columns, mo
 # the original color cheetah.
 before_after = cheetah.composite mono_bottom, 0, cheetah.rows/2, Magick::OverCompositeOp
 
-# Uncomment this line to display the result immediately.
-#before_after.display
-
 before_after.write "mono.jpg"
 exit

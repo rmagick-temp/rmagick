@@ -11,7 +11,6 @@ require 'RMagick'
 include Magick
 
 shorts = Image.read('images/Shorts.jpg').first
-shorts.resize!(250.0/shorts.rows)
 
 regwidth = shorts.columns/2
 regheight = shorts.rows/2

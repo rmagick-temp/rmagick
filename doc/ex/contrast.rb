@@ -3,33 +3,35 @@ require 'RMagick'
 
 # Demonstrate the Image#contrast method
 
-dog = Magick::ImageList.new('images/Dog2.jpg')
-dog[0] = dog.scale(250.0/dog.rows)
+img = Magick::ImageList.new('images/Flower_Hat.jpg')
+img.resize!(0.5)
 
 # Prepare to label each image with a number from 1 to 4
 legend = Magick::Draw.new
 legend.font_family = 'Helvetica'
 legend.stroke = 'transparent'
-legend.gravity = Magick::SouthWestGravity
+legend.pointsize = 12
+legend.gravity = Magick::SouthGravity
 
 # Add 3 images, each one having slightly less contrast
 f = 1
 3.times {
-    dog << dog.contrast
+    img << img.contrast
 
     # Annotate the previous image
-    legend.annotate(dog[f-1], 0,0,10,20, f.to_s)
+    legend.annotate(img[f-1], 0,0,10,20, f.to_s)
     f += 1
     }
 
 # Annotate the last image
-legend.annotate(dog, 0,0,10,20, f.to_s)
+legend.annotate(img, 0,0,10,20, f.to_s)
 
 # Montage into a single image
-dogs = dog.montage {
-    self.geometry = "#{dog.columns}x250+0+0"
+imgs = img.montage {
+    self.geometry = Magick::Geometry.new(img.columns, img.rows)
     self.tile = "2x2"
     }
-dogs.write('contrast.jpg')
-#dogs.display
+
+imgs.write('contrast.jpg')
+#imgs.display
 exit

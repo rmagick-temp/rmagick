@@ -1,43 +1,35 @@
 #! /usr/local/bin/ruby -w
+
 require 'RMagick'
+include Magick
 
-# Demonstrate the Image#matte_floodfill method.
-# Same as the matte_replace example, but only
-# one letter will become transparent.
+img = Image.new(200,200)
+img.compression = LZWCompression
 
-Rows = 100
-Cols = 425
+bg = Image.read('plasma:fractal') {
+    self.size = '200x200'
+    }
 
-# Create a background layer with a gradient fill
-fill = Magick::GradientFill.new(0, Rows, Cols, Rows, 'MediumOrchid', 'MistyRose')
-bg = Magick::Image.new(Cols, Rows, fill)
+gc = Draw.new
+gc.stroke_width(2)
+gc.stroke('black')
+gc.fill('white')
+gc.roundrectangle(0, 0, 199, 199, 8, 8)
 
-# Create a black foreground layer
-foreground = Magick::Image.new(Cols, Rows) { self.background_color = 'black' }
+gc.fill('yellow')
+gc.stroke('red')
+gc.circle(100, 100, 100,  25)
+gc.draw(img)
 
-# Make a "mask" by annotating the foreground using medium-gray text.
-# It doesn't matter what color the text is, as long as it's not black.
-# Make it plenty big so it fills most of the foreground.
-text = Magick::Draw.new
-text.annotate(foreground, 0,0,0,0, 'RMagick') {
-    self.gravity = Magick::CenterGravity
-    self.pointsize = 70
-    self.font_weight = Magick::BoldWeight
-    self.fill = 'gray50'
-    self.stroke = 'gray50'
-}
+img.write('matte_floodfill_before.gif')
 
-# The point 130,35 is within the "M" in "RMagick".
-# The matte_replace method identifies the color (gray50) and
-# makes all the same-colored pixels transparent. The result
-# is that our mask is now transparent.
-foreground = foreground.matte_floodfill(130,35)
+img.fuzz = 100
+img = img.matte_floodfill(100, 100)
 
-# Composite the foreground over the background.
-composite = bg.composite(foreground, Magick::CenterGravity, Magick::OverCompositeOp)
-#composite.display
-composite.write('matte_floodfill.gif')
+# Composite the image over a nice bright background
+# so that the transparent pixels will be obvious.
+img = bg[0].composite(img, CenterGravity, OverCompositeOp)
 
+img.write('matte_floodfill_after.gif')
 exit
-
 

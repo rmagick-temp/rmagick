@@ -3,11 +3,9 @@ require 'RMagick'
 
 # Demonstrate the Image#negate method
 
-jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-jj.scale!(250.0/jj.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-jj = jj.negate
+img = img.negate
 
-#jj.display
-jj.write('negate.jpg')
+img.write('negate.jpg')
 exit

@@ -1,42 +1,42 @@
 #! /usr/local/bin/ruby -w
+
 require 'RMagick'
+include Magick
 
-# Demonstrate the Image#matte_fill_to_border method.
-# Same as the matte_replace example, but relies on
-# the border color to deliniate the opaque parts.
+img = Image.new(200,200)
+img.compression = LZWCompression
 
-Rows = 100
-Cols = 425
+bg = Image.read('plasma:fractal') {
+    self.size = '200x200'
+    }
 
-# Create a background layer with a gradient fill
-fill = Magick::GradientFill.new(0, Rows, Cols, Rows, 'MediumOrchid', 'MistyRose')
-bg = Magick::Image.new(Cols, Rows, fill)
+gc = Draw.new
+gc.stroke_width(2)
+gc.stroke('black')
+gc.fill('white')
+gc.roundrectangle(0, 0, 199, 199, 8, 8)
 
-# Create a black foreground layer
-foreground = Magick::Image.new(Cols, Rows) { self.background_color = 'black' }
+gc.fill('black')
+gc.circle(100,  45, 100,  25)
+gc.circle( 45, 100,  25, 100)
+gc.circle(100, 155, 100, 175)
+gc.circle(155, 100, 175, 100)
 
-# Make a "mask" by annotating the foreground using medium-gray text.
-# It doesn't matter what color the text is, as long as it's not black.
-# Make it plenty big so it fills most of the foreground.
-text = Magick::Draw.new
-text.annotate(foreground, 0,0,0,0, 'RMagick') {
-    self.gravity = Magick::CenterGravity
-    self.pointsize = 70
-    self.font_weight = Magick::BoldWeight
-    self.fill = 'gray50'
-    self.stroke = 'gray50'
-}
+gc.draw(img)
 
-# Set the border color to the text color. The matte_fill_to_border
-# method will make all the contiguous pixels starting at 0,0 transparent.
-foreground.border_color = 'gray50'
-foreground = foreground.matte_fill_to_border(0,0)
+img.write('matte_fill_to_border_before.gif')
 
-# Composite the foreground over the background.
-composite = bg.composite(foreground, Magick::CenterGravity, Magick::OverCompositeOp)
-#composite.display
-composite.write('matte_fill_to_border.gif')
+# Set the border color. Set the fuzz attribute so that
+# the matte fill will fill the aliased pixels around
+# the edges of the black circles.
+img.border_color = 'black'
+img.fuzz = 10
+img = img.matte_fill_to_border(100, 100)
 
+# Composite the image over a nice bright background
+# so that the transparent pixels will be obvious.
+img = bg[0].composite(img, CenterGravity, OverCompositeOp)
+
+img.write('matte_fill_to_border_after.gif')
 exit
-
 

@@ -3,13 +3,10 @@ require 'RMagick'
 
 # Demonstrate the Image#frame method
 
-jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-jj.scale!(250.0/jj.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-jj.matte_color="VioletRed4"
-jj = jj.frame
+img.matte_color="gray75"
+img = img.frame
 
-
-#jj.display
-jj.write('frame.jpg')
+img.write('frame.jpg')
 exit

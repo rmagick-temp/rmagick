@@ -13,17 +13,17 @@ begin
     wmcols = watermark.columns
 
     # Read the image in which we'll hide the watermark.
-    jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-    jj.scale!(250.0/jj.rows)
+    img = Magick::Image.read('images/Flower_Hat.jpg').first
+    img.scale!(250.0/img.rows)
 
     # Embed the watermark starting at offset 91.
     puts 'Embedding watermark...'
-    stegano = jj.stegano(watermark, 91)
+    stegano = img.stegano(watermark, 91)
 
-    # Write the watermarked image in PNG format. Note that
+    # Write the watermarked image in MIFF format. Note that
     # the format must be lossless - Image#stegano doesn't work
     # with lossy formats like JPEG.
-    stegano.write('jj.png')
+    stegano.write('img.miff')
 
     # Read the image and retrieve the watermark. The size
     # attribute describes the size and offset of the watermark.
@@ -33,15 +33,14 @@ begin
         printf("%s %3.0f%% complete\n", text, ((1.0-(quantum/span.to_f))*100.0))
         }
     Magick.set_monitor(monitor)
-    stegano = Magick::Image.read('stegano:jj.png') {
+    stegano = Magick::Image.read('stegano:img.miff') {
         self.size = Magick::Geometry.new(wmcols, wmrows, 91)
     }
     Magick.set_monitor(nil)
 
     # We don't need this any more.
-    File.delete('jj.png')
+    File.delete('img.miff')
 
-    #stegano[0].display
     stegano[0].write('stegano.gif')
 
 rescue Magick::ImageMagickError

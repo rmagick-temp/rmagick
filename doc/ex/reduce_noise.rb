@@ -3,26 +3,26 @@ require 'RMagick'
 
 # Demonstrate the Image#reduce_noise method
 
-jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-jj.scale!(250.0/jj.rows)
-jj = jj.add_noise(Magick::UniformNoise)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
+img = img.add_noise(Magick::UniformNoise)
 
-ejj = jj.reduce_noise(0)
+eimg = img.reduce_noise(0)
+
+# Zoom in so we can see the change
+img.resize!(3)
+eimg.resize!(3)
 
 # Make a before-and-after composite
-ejj.crop!(ejj.columns/2, 0, ejj.columns/2, ejj.rows)
-jj = jj.composite(ejj, Magick::EastGravity, Magick::OverCompositeOp)
+eimg.crop!(eimg.columns/2, 0, eimg.columns/2, eimg.rows)
+img = img.composite(eimg, Magick::EastGravity, Magick::OverCompositeOp)
 
 # Draw a black line between the before and after parts.
 line = Magick::Draw.new
-line.line(jj.columns/2, 0, jj.columns/2, jj.rows)
-line.draw(jj)
+line.line(img.columns/2, 0, img.columns/2, img.rows)
+line.draw(img)
 
-# Zoom in so we can see the change,
-# then crop everything but the face.
-jj.resize!(3)
-jj.crop!(169,106,222,325)
+# Crop everything but the face.
+img.crop!(Magick::CenterGravity, 250, 200)
 
-#jj.display
-jj.write('reduce_noise.jpg')
+img.write('reduce_noise.jpg')
 exit

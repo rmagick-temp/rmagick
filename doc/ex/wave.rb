@@ -1,10 +1,9 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-blonde = Magick::Image.read('images/Blonde_with_dog.jpg').first
-blonde.resize!(250.0/blonde.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-blonde = blonde.wave
-#blonde.display
-blonde.write('wave.jpg')
+img = img.wave
+
+img.write('wave.jpg')
 exit

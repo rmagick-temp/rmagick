@@ -8,7 +8,7 @@ before = Magick::Image.new(200,200) {
     self.background_color = 'white'
     self.border_color = 'black'
     }
-before.border!(2,2,'black')
+before.border!(1,1,'black')
 
 circle = Magick::Draw.new
 circle.fill('transparent')
@@ -23,16 +23,12 @@ circle.circle(100, 60,100, 40)
 circle.circle(100,140,100,120)
 circle.draw(before)
 
+before.compression = Magick::LZWCompression
+before.write('texture_fill_to_border_before.gif')
+
+# Use the builtin 'rose' image as the texture fill.
 rose = Magick::Image.read('rose:').first
 after = before.texture_fill_to_border(100,100, rose)
 
-after.crop!(after.columns/2, 0, after.columns/2, after.rows)
-result = before.composite(after, Magick::EastGravity, Magick::OverCompositeOp)
-
-line = Magick::Draw.new
-line.line(result.columns/2, 0, result.columns/2, result.rows)
-line.draw(result)
-
-#result.display
-result.write('texture_fill_to_border.gif')
+after.write('texture_fill_to_border_after.gif')
 exit

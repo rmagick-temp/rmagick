@@ -13,7 +13,7 @@ f2 = Magick::Image.from_blob(blob) {
     self.size = Magick::Geometry.new(rows, cols)
     self.depth = depth
     }
-#f2[0].display
+
 f2[0].write("to_blob.gif")
 exit
 

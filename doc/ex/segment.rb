@@ -3,9 +3,9 @@ require 'RMagick'
 
 # Demonstrate the Image#segment method.
 
-grandma = Magick::Image.read('images/Grandma.jpg').first
-grandma.resize!(250.0/grandma.rows)
-grandma = grandma.segment(Magick::YUVColorspace)
-#grandma.display
-grandma.write('segment.jpg')
+img = Magick::Image.read('images/Flower_Hat.jpg').first
+
+img = img.segment(Magick::YUVColorspace, 0.4, 0.4)
+
+img.write('segment.jpg')
 exit

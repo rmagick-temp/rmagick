@@ -5,17 +5,13 @@
 require 'RMagick'
 include Magick
 
-img = Image.read('images/Balloon_Girl.jpg').first
-img.resize!(200.0/img.rows)
+img = Image.read('images/Flower_Hat.jpg').first
 
 begin
     img2 = img.random_channel_threshold('intensity', '35%')
-    img2.crop!(img2.columns/2, 0, img2.columns/2, img2.rows)
-    result = img.composite(img2, EastGravity, OverCompositeOp)
 rescue NotImplementedError
-    result = Image.read('images/notimplemented.gif').first
+    img2 = Image.read('images/notimplemented.gif').first
 end
 
-#result.display
-result.write('random_channel_threshold.jpg')
+img2.write('random_channel_threshold.jpg')
 exit

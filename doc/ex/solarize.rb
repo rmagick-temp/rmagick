@@ -3,11 +3,9 @@ require 'RMagick'
 
 # Demonstrate the Image#solarize method
 
-jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-jj.scale!(250.0/jj.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-jj = jj.solarize
+img = img.solarize(127.5)
 
-#jj.display
-jj.write('solarize.jpg')
+img.write('solarize.jpg')
 exit

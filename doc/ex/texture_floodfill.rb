@@ -20,16 +20,12 @@ circle.circle(100, 60,100, 40)
 circle.circle(100,140,100,120)
 circle.draw(before)
 
+before.compression = Magick::LZWCompression
+before.write('texture_floodfill_before.gif')
+
 rose = Magick::Image.read('rose:').first
+before.fuzz = 25
 after = before.texture_floodfill(100,100, rose)
 
-after.crop!(after.columns/2, 0, after.columns/2, after.rows)
-result = before.composite(after, Magick::EastGravity, Magick::OverCompositeOp)
-
-line = Magick::Draw.new
-line.line(result.columns/2, 0, result.columns/2, result.rows)
-line.draw(result)
-
-#result.display
-result.write('texture_floodfill.gif')
+after.write('texture_floodfill_after.gif')
 exit

@@ -129,7 +129,6 @@ montage = list.montage {
     self.stroke = 'transparent'
 }
 
-#montage.display
 montage.write('composite.gif')
 exit
 

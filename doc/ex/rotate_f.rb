@@ -3,13 +3,12 @@ require 'RMagick'
 
 # Demonstrate the Image#rotate method
 
-dog = Magick::Image.read('images/Dog2.jpg').first
-dog.resize!(250.0/dog.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-dog.rotate!(45)
+img.rotate!(45)
 
 # Make the corners transparent
-dog = dog.matte_replace(0,0)
-#dog.display
-dog.write('rotate_f.jpg')
+img = img.matte_replace(0,0)
+
+img.write('rotate_f.jpg')
 exit

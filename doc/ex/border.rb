@@ -3,9 +3,8 @@ require 'RMagick'
 
 # Demonstrate the Image#border method
 
-ballerina = Magick::Image.read('images/Ballerina.jpg').first
-ballerina.scale!(250.0/ballerina.rows)
-ballerina.border!(10,10,'HotPink2')
-#ballerina.display
-ballerina.write('border.jpg')
+img = Magick::Image.read('images/Flower_Hat.jpg').first
+
+img.border!(10,10,'rgb(255,110,140)')
+img.write('border.jpg')
 exit

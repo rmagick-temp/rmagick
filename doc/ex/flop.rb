@@ -3,11 +3,9 @@ require 'RMagick'
 
 # Demonstrate the Image#flop method
 
-jj = Magick::Image.read('images/Jean_Jacket.jpg').first
-jj.scale!(250.0/jj.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-jj.flop!
+img.flop!
 
-#jj.display
-jj.write('flop.jpg')
+img.write('flop.jpg')
 exit

@@ -3,16 +3,15 @@ require 'RMagick'
 
 # Demonstrate the Image#swirl method
 
-dog = Magick::Image.read('images/Dog2.jpg').first
-dog.scale!(250.0/dog.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
 # Make an animated image.
 animation = Magick::ImageList.new
-animation << dog.copy
-30.step(360,45) { |degrees| animation << dog.swirl(degrees) }
+animation << img.copy
+30.step(360,45) { |degrees| animation << img.swirl(degrees) }
 
 animation.delay = 20
 animation.iterations = 10000
-#animation.animate
+
 animation.write('swirl.gif')
 exit

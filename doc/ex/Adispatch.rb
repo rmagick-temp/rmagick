@@ -1,7 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-f = Magick::Image.read("images/small.tif").first
+f = Magick::Image.read("images/Flower_Hat.jpg").first
+
 pixels = f.dispatch(0,0,f.columns,f.rows,"RGB")
 
 # Write the pixels to a file, to be included

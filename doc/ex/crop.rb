@@ -3,11 +3,10 @@ require 'RMagick'
 
 # Demonstrate the Image#crop method
 
-lighthouse = Magick::Image.read('images/Lighthouse.jpg')[0]
-lighthouse.scale!(250.0/lighthouse.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg')[0]
 
-# Crop the specified rectangle out of the lighthouse.
-chopped = lighthouse.crop(78, 66, 90, 110)
+# Crop the specified rectangle out of the img.
+chopped = img.crop(23, 81, 107, 139)
 
 # Go back to the original and highlight the area
 # corresponding to the retained rectangle.
@@ -15,20 +14,18 @@ rect = Magick::Draw.new
 rect.stroke('transparent')
 rect.fill('white')
 rect.fill_opacity(0.25)
-rect.rectangle(78, 66, 90+78, 110+66)
-rect.draw(lighthouse)
+rect.rectangle(23, 81, 107+23, 139+81)
+rect.draw(img)
+
+img.write('crop_before.jpg')
 
 # Create a image to use as a background for
-# the "before & after" images.
-bg = Magick::Image.new(lighthouse.columns*2, lighthouse.rows) {
-    self.background_color = 'black'
-    }
+# the "after" image.
+bg = Magick::Image.new(img.columns, img.rows)
 
-# Composite the "before" image on the left side
-# and the "after" (chopped) image on the right.
-bg = bg.composite(lighthouse, Magick::WestGravity, Magick::OverCompositeOp)
-bg = bg.composite(chopped, lighthouse.columns+78, 66, Magick::OverCompositeOp)
+# Composite the the "after" (chopped) image on the background
+bg = bg.composite(chopped, 23, 81, Magick::OverCompositeOp)
 
-bg.write('crop.jpg')
-#bg.display
+bg.write('crop_after.jpg')
+
 exit

@@ -3,36 +3,27 @@ require 'RMagick'
 
 # Demonstrate the Image#chop method
 
-lighthouse = Magick::Image.read('images/Lighthouse.jpg')[0]
-lighthouse = lighthouse.scale(250.0/lighthouse.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg')[0]
 
-# Chop the specified rectangle out of the lighthouse.
-chopped = lighthouse.chop(0, 0, lighthouse.columns/2, lighthouse.rows/2)
+# Chop the specified rectangle out of the img.
+chopped = img.chop(0, img.rows/2, img.columns/2, img.rows)
 
-# Go back to the original and draw a semi-transparent rectangle
-# corresponding to the chopped rectangle.
-rect = Magick::Draw.new
-rect.stroke('transparent')
-rect.fill_opacity(0.40)
-rect.rectangle(0,0,(lighthouse.columns/2)-1, lighthouse.rows/2)
-rect.draw(lighthouse)
+# Make a "before" image by highlighting the chopped area.
+gc = Magick::Draw.new
+gc.fill('white')
+gc.stroke('transparent')
+gc.fill_opacity(0.25)
+gc.rectangle(0, img.rows/2, img.columns/2, img.rows)
+gc.draw(img)
+
+img.write('chop_before.jpg')
 
 # Create a image to use as a background for
-# the "before & after" images.
-bg = Magick::Image.new(lighthouse.columns+chopped.columns, lighthouse.rows) {
-    self.background_color = 'gray50'
-    }
+# the after image. Make the chopped image the
+# same size as before the chop.
+bg = Magick::Image.new(img.columns, img.rows)
 
-# Composite the "before" image on the left side
-# and the "after" (chopped) image on the right.
-bg = bg.composite(lighthouse, Magick::WestGravity, Magick::OverCompositeOp)
-bg = bg.composite(chopped, Magick::SouthEastGravity, Magick::OverCompositeOp)
+chopped = bg.composite(chopped, Magick::NorthEastGravity, Magick::OverCompositeOp)
 
-# Draw a line between the before & after images.
-line = Magick::Draw.new
-line.line(lighthouse.columns, 0, lighthouse.columns, bg.rows-1)
-line.draw(bg)
-
-bg.write('chop.jpg')
-#bg.display
+chopped.write('chop_after.jpg')
 exit

@@ -1,44 +1,26 @@
 #! /usr/local/bin/ruby -w
 
 require 'RMagick'
+include Magick
 
-# Extract the red, green, and blue channels
-# from a picture of a vase of roses. Display
-# the original image and the 3 channels as
-# a 2x2 grid.
+img = Image.read('images/Flower_Hat.jpg').first
+imgs = ImageList.new
 
-# We'll need a legend for each
-# channel so create a Draw object now
-legend = Magick::Draw.new
-legend.stroke = 'transparent'
-legend.gravity = Magick::SouthGravity
-legend.fill = 'white'
+imgs << img
+imgs << img.channel(RedChannel)
+imgs.cur_image['Label'] = 'RedChannel'
+imgs <<  img.channel(GreenChannel)
+imgs.cur_image['Label'] = 'GreenChannel'
+imgs << img.channel(BlueChannel)
+imgs.cur_image['Label'] = 'BlueChannel'
 
-# Read the image and change it to a manageable size.
-roses = Magick::Image.read('images/roses.jpg').first
-roses.resize!(200.0/roses.rows)
-
-channels = Magick::ImageList.new
-
-# Append each channel to the imagelist.
-channels << roses.channel(Magick::RedChannel)
-legend.annotate(channels, 0, 0, 10, 20, 'Red Channel')
-channels << roses.channel(Magick::GreenChannel)
-legend.annotate(channels, 0, 0, 10, 20, 'Green Channel')
-channels << roses.channel(Magick::BlueChannel)
-legend.annotate(channels, 0, 0, 10, 20, 'Blue Channel')
-
-# Finally, insert the original at the beginning of the list.
-channels.unshift(roses)
-legend.annotate(channels, 0, 0, 10, 20, 'Original')
-
-# ImageList#montage makes a 2x2 grid easy.
-combined = channels.montage {
-    self.geometry = "#{roses.columns}x#{roses.rows}+5+5"
+result = imgs.montage {
     self.tile = "2x2"
-    self.background_color = 'white'
+    self.background_color = 'black'
+    self.stroke = 'transparent'
+    self.fill = 'white'
+    self.geometry = Geometry.new(img.columns/2, img.rows/2, 5, 5)
     }
 
-#combined.display
-combined.write('channel.jpg')
-exit
+result.write('channel.jpg')
+

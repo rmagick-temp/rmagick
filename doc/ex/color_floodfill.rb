@@ -19,16 +19,10 @@ circle.circle(100, 60,100, 40)
 circle.circle(100,140,100,120)
 circle.draw(before)
 
+before.write('color_floodfill_before.gif')
+
 aquamarine = Magick::Pixel.from_color('aquamarine')
 after = before.color_floodfill(100,100, aquamarine)
 
-after.crop!(after.columns/2, 0, after.columns/2, after.rows)
-result = before.composite(after, Magick::EastGravity, Magick::OverCompositeOp)
-
-line = Magick::Draw.new
-line.line(result.columns/2, 0, result.columns/2, result.rows)
-line.draw(result)
-
-#result.display
-result.write('color_floodfill.gif')
+after.write('color_floodfill_after.gif')
 exit

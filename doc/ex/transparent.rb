@@ -2,41 +2,37 @@
 require 'RMagick'
 
 # Demonstrate the Image#transparent method.
-# Very similar to the Image#matte_replace example, except
-# that instead of identifing the pixels to make transparent
-# by location we identify them by name.
+# Change all black pixels in the image to transparent.
 
-Rows = 100
-Cols = 425
+before = Magick::Image.new(200,200) {
+    self.background_color = 'black'
+    }
 
-# Create a background layer with a gradient fill
-fill = Magick::GradientFill.new(0, Rows, Cols, Rows, 'MediumOrchid', 'MistyRose')
-bg = Magick::Image.new(Cols, Rows, fill)
+circle = Magick::Draw.new
+circle.fill('transparent')
+circle.stroke('white')
+circle.stroke_width(8)
+circle.circle(100,100,180,100)
+circle.fill('transparent')
+circle.stroke('white')
+circle.circle( 60,100, 40,100)
+circle.circle(140,100,120,100)
+circle.circle(100, 60,100, 40)
+circle.circle(100,140,100,120)
+circle.draw(before)
 
-# Create a black foreground layer
-foreground = Magick::Image.new(Cols, Rows) { self.background_color = 'black' }
+before.compression = Magick::LZWCompression
+before.write('transparent_before.gif')
 
-# Make a "mask" by annotating the foreground using medium-gray text.
-# It doesn't matter what color the text is, as long as it's not black.
-# Make it plenty big so it fills most of the foreground.
-text = Magick::Draw.new
-text.annotate(foreground, 0,0,0,0, 'RMagick') {
-    self.gravity = Magick::CenterGravity
-    self.pointsize = 70
-    self.font_weight = Magick::BoldWeight
-    self.fill = 'gray50'
-    self.stroke = 'gray50'
-}
+before.fuzz = 100
+after = before.transparent('black', Magick::TransparentOpacity)
 
-# Make all the 'gray50' pixels transparent. The result
-# is that our mask is now transparent.
-foreground = foreground.transparent('gray50')
+# Different way of reading an image - start with an imagelist.
+# Use the plasma image as a background so we can see that
+# the black pixels have been made transparent.
+bg = Magick::ImageList.new
+bg.read('plasma:purple-gold') { self.size = '200x200' }
 
-# Composite the foreground over the background.
-composite = bg.composite(foreground, Magick::CenterGravity, Magick::OverCompositeOp)
-#composite.display
-composite.write('transparent.gif')
-
+after = bg.composite(after, Magick::CenterGravity, Magick::OverCompositeOp)
+after.write('transparent_after.gif')
 exit
-
-

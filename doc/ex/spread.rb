@@ -3,11 +3,9 @@ require 'RMagick'
 
 # Demonstrate the Image#spread method
 
-grandma = Magick::Image.read('images/Grandma.jpg').first
-grandma.scale!(250.0/grandma.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-grandma = grandma.spread
+img = img.spread
 
-#grandma.display
-grandma.write('spread.jpg')
+img.write('spread.jpg')
 exit

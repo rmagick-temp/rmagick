@@ -3,9 +3,10 @@ require 'RMagick'
 
 # Demonstrate the Image#charcoal method
 
-einstein = Magick::Image.read('images/Einstein.jpg').first
-einstein = einstein.scale(250.0/einstein.rows)
-einstein = einstein.charcoal
-einstein.write('charcoal.jpg')
-#einstein.display
+img = Magick::Image.read('images/Flower_Hat.jpg').first
+
+img = img.charcoal(0.75)
+
+img.write('charcoal.jpg')
+
 exit

@@ -3,11 +3,13 @@ require 'RMagick'
 
 # Demonstrate the Image#shave method
 
-dog = Magick::Image.read('images/Dog2.jpg').first
-dog.scale!(250.0/dog.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-after = dog.shave(dog.columns/10, dog.rows/10)
-#after.display
-dog.write('shave1.jpg')
-after.write('shave2.jpg')
+img = img.shave(20, 25)
+
+# Add a border so the shaved image is the
+# same size as the original image.
+img.border!(20, 25, 'white')
+
+img.write('shave.jpg')
 exit

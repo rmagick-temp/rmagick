@@ -3,9 +3,24 @@ require 'RMagick'
 
 # Demonstrate the Image#channel_threshold method
 
-img = Magick::Image.read('images/Blonde_with_dog.jpg').first
-img = img.scale(250.0/img.rows)
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 
+# Make the "before" image
+imgs = Magick::ImageList.new
+imgs << img.copy
+imgs.cur_image['Label'] = "\n\n"
+imgs << img.copy
+imgs.cur_image['Label'] = "\n\n\n"
+
+montage = imgs.montage {
+    self.background_color = "white"
+    self.geometry = "#{img.columns}x#{img.rows}+10+10"
+    self.tile = "2x1"
+    }
+montage.border!(1,1,"black")
+montage.write("channel_threshold_before.jpg")
+
+# Now the "after" image.
 # Channel threshold values should be a %-age of MaxRGB
 # Let the opacity threshold default to MaxRGB.
 img2 = img.channel_threshold(Magick::MaxRGB*0.75,
@@ -29,7 +44,5 @@ montage = imgs.montage {
 
 # Give the montage a black border
 montage.border!(1,1,'black')
-
-#montage.display
-montage.write('channel_threshold.jpg')
+montage.write('channel_threshold_after.jpg')
 exit

@@ -17,11 +17,13 @@ puts <<END_INFO
 END_INFO
 
 ballerina = Image.read("../doc/ex/images/Ballerina3.jpg")[0]
+ballerina.matte = true
 
 # Note: this technique won't work with every image. To make a pretty
 # vignette you need an image with a uniform, fairly dark background.
 
-# Start by drawing a black oval on a white background.
+# Start by drawing a black oval on a white background. (Although you don't
+# have to use an oval at all! Any shape will work. Try a rounded rectangle.)
 
 # The size of the oval is arbitrary - in this case it's 90% of the
 # size of the image.
@@ -35,81 +37,57 @@ gc.ellipse(ballerina.columns/2, ballerina.rows/2,
            ballerina.rows/2-(ballerina.rows*0.10), 0, 360)
 gc.draw(oval)
 
-# Add a lot of blurring to the oval. I use blur_image because it's
-# much faster than the gaussian_blur method and produces no observable
-# difference. The exact amount of blurring is a judgment call. The
-# higher the 2nd argument, the more blurring, although increasing the
-# value above 20 doesn't add significant additional blurriness.
+# Add a lot of blurring to the oval. I use blur_image because it's much faster
+# than the gaussian_blur method and produces no observable difference. The
+# exact amount of blurring is a judgment call. The higher the 2nd argument, the
+# more blurring, although increasing the value above 20 doesn't seem to add any
+# additional blurriness.
 
 puts 'Blurring...'
 oval = oval.blur_image(0, 20)
-oval_copy = oval.copy               # We'll need this later.
 
-# Use the "grayness" of the pixels to compute their transparency. The
-# grayer the pixels, the more transparent. The black center pixels are
-# entirely transparent. The outside white pixels are entirely opaque.
+# Use the blurred oval to create a transparent border around the ballerina. Use
+# the gray level of the pixels in the oval to determine the transparency of the
+# pixels in the vignette. All-white pixels outside of the oval cause the image
+# borders to become transparent, gray transition pixels cause less transparency.
+# In the center of the oval, the pixels are black and so the ballerina pixels
+# remain opaque.
 
-puts 'Making oval transparent...'
-oval.rows.times do |y|
-    pixels = oval.get_pixels(0, y, oval.columns, 1)
-    pixels.each do |p|
-
-        # For gray pixels, R=G=B, so we can simply use the
-        # R value to determine the "grayness" of the pixel.
-
-        p.opacity = TransparentOpacity - p.red
-    end
-    oval.store_pixels(0, y, oval.columns, 1, pixels)
-end
-
-# Composite the oval over the image to produce the vignette. We
-# could stop here with a perfectly fine vignette with solid white
-# borders.
-
-vignette = ballerina.composite(oval, CenterGravity, OverCompositeOp)
-
-# However, let's go one step farther and turn the white borders
-# transparent. That way we can overlay the vignette over any background.
-# This is where the copy of the oval we made earlier comes in. Use the
-# "whiteness" of the pixels in the copy to determine the transparency
-# of the pixels in the vignette. All-white pixels become transparent,
-# gray pixels less so. The black center pixels are entirely opaque.
-
-vignette.matte = true
 puts 'Making border transparent...'
 
-oval_copy.rows.times do |y|
-    copy_pixels = oval_copy.get_pixels(0, y, oval_copy.columns, 1)
-    vignette_pixels = vignette.get_pixels(0, y, vignette.columns, 1)
-    copy_pixels.each_with_index do |p, x|
+oval.rows.times do |y|
+    oval_pixels = oval.get_pixels(0, y, oval.columns, 1)
+    ballerina_pixels = ballerina.get_pixels(0, y, ballerina.columns, 1)
+    oval_pixels.each_with_index do |p, x|
 
-        # Again, we need only inspect one of the RGB values to determine
-        # the "grayness" of the pixel. Use that value to set the opacity
-        # of the corresponding pixel in the vignette.
+        # For gray pixels, R=G=B, so we need only inspect one of the
+        # RGB values to determine the gray level of the pixel. Use
+        # that value to set the opacity of the corresponding pixel
+        # in the vignette.
 
-        vignette_pixels[x].opacity = p.red
+        ballerina_pixels[x].opacity = p.red
     end
-    vignette.store_pixels(0, y, vignette.columns, 1, vignette_pixels)
+    ballerina.store_pixels(0, y, ballerina.columns, 1, ballerina_pixels)
 end
 
 # Since the vignette has multiple levels of transparency, we can't
 # save it as a GIF or a JPEG. The PNG format can handle it, though.
 
 begin
-    puts "Writing ``vignette.png'..."
-    vignette.write("vignette.png")
+    puts "Writing `vignette.png'..."
+    ballerina.write("vignette.png")
 rescue ImageMagickError
+    puts "Write failed. No PNG support?"
     # In case PNG support isn't installed, just ignore the exception.
 end
 
-# At this point the vignette is complete. However, the `display'
-# method only supports 1`level of transparency. Therefore,
-# composite the vignette over a standard "checkerboard" background.
-# The resulting image will be 100% opaque.
+# At this point the vignette is complete. However, the `display' method only
+# supports 1`level of transparency. Therefore, composite the vignette over a
+# standard "checkerboard" background. The resulting image will be 100% opaque.
 
 puts 'Preparing for display...'
 checkerboard = Image.read("pattern:checkerboard") {self.size = "#{ballerina.columns}x#{ballerina.rows}"}
-vignette = checkerboard[0].composite(vignette, CenterGravity, OverCompositeOp)
+vignette = checkerboard[0].composite(ballerina, CenterGravity, OverCompositeOp)
 vignette.display
 exit
 

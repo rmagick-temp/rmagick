@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.43 2004/12/05 21:28:01 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.44 2004/12/05 21:32:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -559,6 +559,7 @@ Pixel_red_eq(VALUE self, VALUE v)
 {
     Pixel *pixel;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Pixel, pixel);
     pixel->red = (Quantum) NUM2UINT(v);
     rb_funcall(self, ID_changed, 0);
@@ -573,6 +574,7 @@ Pixel_green_eq(VALUE self, VALUE v)
 {
     Pixel *pixel;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Pixel, pixel);
     pixel->green = (Quantum) NUM2UINT(v);
     rb_funcall(self, ID_changed, 0);
@@ -587,6 +589,7 @@ Pixel_blue_eq(VALUE self, VALUE v)
 {
     Pixel *pixel;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Pixel, pixel);
     pixel->blue = (Quantum) NUM2UINT(v);
     rb_funcall(self, ID_changed, 0);
@@ -601,6 +604,7 @@ Pixel_opacity_eq(VALUE self, VALUE v)
 {
     Pixel *pixel;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Pixel, pixel);
     pixel->opacity = (Quantum) NUM2UINT(v);
     rb_funcall(self, ID_changed, 0);

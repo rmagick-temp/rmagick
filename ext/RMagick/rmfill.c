@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.7 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.8 2004/06/15 17:28:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -162,7 +162,7 @@ vertical_fill(
 {
     double steps;
     long x, y;
-    PixelPacket *master;
+    volatile PixelPacket *master;
     double red_step, green_step, blue_step;
 
     // Keep in mind that x1 could be < 0 or > image->columns. If steps
@@ -212,14 +212,14 @@ vertical_fill(
             rb_raise(rb_eNoMemError, "not enough memory to continue");
         }
 
-        memcpy(row_pixels, master, image->columns * sizeof(PixelPacket));
+        memcpy(row_pixels, (PixelPacket *)master, image->columns * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
             rb_raise(Class_ImageMagickError, "can't set image pixels");
         }
     }
 
-    xfree(master);
+    xfree((PixelPacket *)master);
 }
 
 /*
@@ -235,7 +235,7 @@ horizontal_fill(
 {
     double steps;
     long x, y;
-    PixelPacket *master;
+    volatile PixelPacket *master;
     double red_step, green_step, blue_step;
 
     // Bear in mind that y1 could be < 0 or > image->rows. If steps is
@@ -262,7 +262,7 @@ horizontal_fill(
 
     // All the columns are the same, so make a master column and copy it to
     // each of the "real" columns.
-    master = ALLOC_N(PixelPacket, image->rows);
+    master = ALLOC_N(volatile PixelPacket, image->rows);
 
     for (y = 0; y < image->rows; y++)
     {
@@ -281,14 +281,14 @@ horizontal_fill(
         {
             rb_raise(rb_eNoMemError, "not enough memory to continue");
         }
-        memcpy(col_pixels, master, image->rows * sizeof(PixelPacket));
+        memcpy(col_pixels, (PixelPacket *)master, image->rows * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
             rb_raise(Class_ImageMagickError, "can't set image pixels");
         }
     }
 
-    xfree(master);
+    xfree((PixelPacket *)master);
 }
 
 /*

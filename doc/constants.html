@@ -15,7 +15,7 @@
    .typetable {
       padding-bottom: 1em;
    }
-                                               </style>
+                                                   </style>
   </head>
   <body>
     <div class="header">
@@ -405,10 +405,13 @@
               </tr>
               <tr valign="top">
                 <td>OverCompositeOp</td>
-                <td class="imquote">The result is the union of the
-                the two image shapes with <var>composite
+                <td><span class="imquote">The result is the union
+                of the the two image shapes with <var>composite
                 image</var> obscuring <var>image</var> in the
-                region of overlap.</td>
+                region of overlap.</span> The matte channel of the
+                composite image is respected, so that if the
+                composite pixel is part or all transparent, the
+                corresponding image pixel will show through.</td>
               </tr>
               <tr valign="top">
                 <td>InCompositeOp</td>
@@ -443,17 +446,13 @@
               </tr>
               <tr valign="top">
                 <td>PlusCompositeOp</td>
-                <td class="imquote">The result is just the sum of
-                the&nbsp;image data. Output values are cropped to
-                255 (no overflow). This operation is independent of
-                the matte channels.</td>
+                <td>
+                </td>
               </tr>
               <tr valign="top">
                 <td>MinusCompositeOp</td>
-                <td class="imquote">The result of <var>composite
-                image</var> - <var>image</var>, with overflow
-                cropped to zero. The matte chanel is ignored (set
-                to 255, full coverage).</td>
+                <td>
+                </td>
               </tr>
               <tr valign="top">
                 <td>AddCompositeOp</td>
@@ -478,7 +477,9 @@
               </tr>
               <tr valign="top">
                 <td>MultiplyCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Multiplies the color of each target image pixel
+                by the color of the corresponding composite image
+                pixel. The result color is always darker.</td>
               </tr>
               <tr valign="top">
                 <td>BumpmapCompositeOp</td>
@@ -487,27 +488,38 @@
               </tr>
               <tr valign="top">
                 <td>CopyCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Replace the target image with the composite
+                image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyRedCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Copy the red channel from the composite image
+                to the target image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyGreenCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Copy the green channel from the composite image
+                to the target image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyBlueCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Copy the blue channel from the composite image
+                to the target image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyOpacityCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>If the composite image's <a href=
+                "imageattrs.html#Image.matte">matte</a> attribute
+                is <code>true</code>, copy the opacity channel from
+                the composite image to the target image. Otherwise,
+                set the target image pixel's opacity to the
+                intensity of the corresponding pixel in the
+                composite image.</td>
               </tr>
               <tr valign="top">
                 <td>ClearCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Make the target image transparent. The
+                composite image is ignored.</td>
               </tr>
               <tr valign="top">
                 <td>DissolveCompositeOp</td>
@@ -515,7 +527,12 @@
               </tr>
               <tr valign="top">
                 <td>DisplaceCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Displace target image pixels as defined by a
+                displacement map. The amount of displacement can be
+                controlled via the <a href=
+                "imageattrs.html#Image.geometry">geometry</a>
+                attribute of the composite image. The default is
+                "20x20".</td>
               </tr>
               <tr valign="top">
                 <td>ModulateCompositeOp</td>
@@ -531,31 +548,48 @@
               </tr>
               <tr valign="top">
                 <td>DarkenCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Replace target image cyan pixels with darker
+                pixels from the composite image.</td>
               </tr>
               <tr valign="top">
                 <td>LightenCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Replace target image pixels with lighter pixels
+                from the composite image.</td>
               </tr>
               <tr valign="top">
                 <td>HueCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Each pixel in the result image is the
+                combination of the hue of the target image and the
+                saturation and brightness of the composite
+                image.</td>
               </tr>
               <tr valign="top">
                 <td>SaturateCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Each pixel in the result image is the
+                combination of the saturation of the target image
+                and the hue and brightness of the composite
+                image.</td>
               </tr>
               <tr valign="top">
                 <td>ColorizeCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Each pixel in the result image is the
+                combination of the brightness of the target image
+                and the saturation and hue of the composite image.
+                This is the <i>opposite</i> of
+                LuminizeCompositeOp.</td>
               </tr>
               <tr valign="top">
                 <td>LuminizeCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Each pixel in the result image is the
+                combination of the brightness of the composite
+                image and the saturation and hue of the target
+                image. This is the <i>opposite</i> of
+                ColorizeCompositeOp.</td>
               </tr>
               <tr valign="top">
                 <td>ScreenCompositeOp</td>
-                <td>&nbsp;</td>
+                <td>Multiplies the inverse of each image's color
+                information.</td>
               </tr>
               <tr valign="top">
                 <td>OverlayCompositeOp</td>
@@ -563,19 +597,27 @@
               </tr>
               <tr valign="top">
                 <td>CopyCyanCompositeOp</td>
-                <td><span class="imversion">5.5.7</span></td>
+                <td><span class="imversion">5.5.7</span> Copy the
+                cyan channel from the composite image to the target
+                image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyMagentaCompositeOp</td>
-                <td><span class="imversion">5.5.7</span></td>
+                <td><span class="imversion">5.5.7</span> Copy the
+                magenta channel from the composite image to the
+                target image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyYellowCompositeOp</td>
-                <td><span class="imversion">5.5.7</span></td>
+                <td><span class="imversion">5.5.7</span> Copy the
+                yellow channel from the composite image to the
+                target image.</td>
               </tr>
               <tr valign="top">
                 <td>CopyBlackCompositeOp</td>
-                <td><span class="imversion">5.5.7</span></td>
+                <td><span class="imversion">5.5.7</span> Copy the
+                black channel from the composite image to the
+                target image.</td>
               </tr>
             </tbody>
           </table>
@@ -1385,12 +1427,12 @@
 </pre>
       Each &times;Magick enumeration type is a separate subclass of
       <code>Enum</code>. For example, the AlignType enumeration is
-      defined as:
+      defined as: 
 <pre>
     class AlignType &lt; Enum
     end
 </pre>
-      The AlignType constants are then created by the code:
+      The AlignType constants are then created by the code: 
 <pre>
     UndefinedAlign = AlignType.new(:UndefinedAlign, 0)
     LeftAlign = AlignType.new(:LeftAlign, 1)

@@ -2494,14 +2494,16 @@ img.to_color(pixel)
   <div class="desc">
     <h4>Description</h4>
 
-    <p><span class="imquote">Sharpens an image. We convolve the
-    image with a Gaussian operator of the given <span class=
+    <p class="imquote">Sharpens an image. We convolve the image
+    with a Gaussian operator of the given <span class=
     "arg">radius</span> and standard deviation (<span class=
     "arg">sigma</span>). For reasonable results, <span class=
     "arg">radius</span> should be larger than <span class=
     "arg">sigma</span>. Use a radius of 0 and
     <code>unsharp_mask_channel</code> selects a suitable radius for
-    you.</span> Only the specified channels are sharpened.</p>
+    you.</p>
+
+    <p>Only the specified channels are sharpened.</p>
 
     <h4>Arguments</h4>
 
@@ -2651,9 +2653,10 @@ end
     level of overhead to pixel manipulation compared to methods
     that use the &times;Magick API to identify and change pixels. I
     recommend that you use <code>view</code> only when the number
-    of pixels identified in the view is fairly small (a few hundred
-    to a few thousand, depending on the speed of your computer) and
-    there is no other way to get the effect you want.</p>
+    of pixels identified in the view is fairly small (a few
+    thousand to a few hundred thousand, depending on your patience
+    and the speed of your computer) and you need this degree of
+    control.</p>
   </div>
 
   <div class="sig">

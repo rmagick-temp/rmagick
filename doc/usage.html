@@ -73,11 +73,11 @@
     width:300px;
     margin-bottom:1em;
   }
-  #degrees {
+  #footnotes {
     border-top: thin solid black;
     padding-top: 1em;????
   }
-  #degrees h5 {
+  #footnotes h5 {
     display: none;
   }
 
@@ -122,8 +122,9 @@
   <h2 id="basics">Basic concepts</h2>
 
   <p>Let's look at the RMagick equivalent of "Hello, world". This
-  program reads an image file named "Cheetah.jpg" and displays it
-  on your monitor.</p>
+  program reads an image file named "Cheetah.jpg" and
+  displays<sup><a href="#display">1</a></sup> it on your
+  monitor.</p>
   <pre class="example">
 1. require 'RMagick'
 2. include Magick
@@ -258,15 +259,6 @@
   the simple case, <code>new</code> reads a single image from a
   file and sets the scene number to 0.</p>
 
-  <p>Underneath the covers, <code>new</code> calls the Image
-  class's <a href="image3.html#read">read</a> method to read the
-  image file. The <code>read</code> method is a class method. Given
-  one or more file names, <code>read</code> reads the files and
-  constructs a Image object for each image in the files. The return
-  value is an <em>array</em> of one or more images. Upon return,
-  <code>new</code> simply appends the new images to the
-  imagelist.</p>
-
   <p>You can also create an image from scratch by calling <a href=
   "image1.html#new"><code>Image.new</code></a>. This method takes 2
   or 3 arguments. The first argument is the number of columns in
@@ -302,10 +294,6 @@ exit
   <p>Within the parameter block you must use <code>self</code> so
   that Ruby can knows that this statement is a method call, not an
   assignment to a variable.</p>
-
-  <p>Similar to <code>Image.new</code>,
-  <code>ImageList#new_image</code> also accepts an optional block,
-  passing it on to <code>Image.new</code>.</p>
 
   <p>You can create an image by capturing it from the XWindow
   screen using <a href=
@@ -1120,7 +1108,7 @@ exit
       extends to the right. The y axis extends downward. The units
       are pixels. 0&deg; is at 3 o'clock and rotation is clockwise.
       The units of rotation are usually degrees.<sup><a href=
-      "#degrees">1</a></sup></p>
+      "#degrees">2</a></sup></p>
 
       <p>You can change the default coordinate system by specifying
       a <em>scaling</em>, <em>rotation</em>, or
@@ -1300,11 +1288,16 @@ exit
 
   <p>Good luck!</p>
 
-  <div id="degrees">
-    <h5>Footnotes</h5>
+  <div>
+    <h5 id="footnotes">Footnotes</h5>
 
-    <p><sup>1</sup>The rotation attributes <code>rx</code> and
-    <code>ry</code> in the <a href=
+    <p id="display"><sup>1</sup>The <code>display</code> and
+    <code>animate</code> methods do not work on MS Windows. You
+    will have to write the image to a file and view it with a
+    separate image viewer.</p>
+
+    <p id="degrees"><sup>2</sup>The rotation attributes
+    <code>rx</code> and <code>ry</code> in the <a href=
     "struct.html#AffineMatrix"><code>AffineMatrix</code></a> class
     use radians instead of degrees.</p>
   </div>

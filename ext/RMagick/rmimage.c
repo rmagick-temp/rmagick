@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.90 2004/12/30 03:13:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.91 2005/01/02 21:11:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5856,7 +5856,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         filename = STRING_PTR_LEN(file, filename_l);
-        filename_l = min(filename_l, (long)sizeof(info->filename));
+        filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
         info->file = NULL;      // Reset FILE *, if any

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.20 2003/09/24 00:21:05 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.10.2.1 2003/11/08 13:47:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -36,7 +36,7 @@ Magick_colors(VALUE class)
 #if defined(HAVE_GETCOLORINFOARRAY)
     const ColorInfo **color_ary;
     ExceptionInfo exception;
-    volatile VALUE ary, el;
+    VALUE ary, el;
     int x;
 
     GetExceptionInfo(&exception);
@@ -59,7 +59,7 @@ Magick_colors(VALUE class)
     const ColorInfo *color_list;
     ColorInfo *color;
     ExceptionInfo exception;
-    volatile VALUE ary, el;
+    VALUE ary, el;
 
     GetExceptionInfo(&exception);
 
@@ -104,7 +104,7 @@ Magick_fonts(VALUE class)
     const TypeInfo *type_list;
     TypeInfo *type, *next;
     ExceptionInfo exception;
-    volatile VALUE ary;
+    VALUE ary;
 
     GetExceptionInfo(&exception);
 
@@ -155,7 +155,7 @@ VALUE
 Magick_init_formats(VALUE class)
 {
     MagickInfo *m;
-    volatile VALUE formats;
+    VALUE formats;
     ExceptionInfo exception;
     char mode[5] = {0};
 
@@ -192,12 +192,12 @@ Magick_init_formats(VALUE class)
 static unsigned int
 monitor_handler(
     const char *text,
-    const magick_int64_t quantum,
-    const magick_uint64_t span,
+    const ExtendedSignedIntegralType quantum,
+    const ExtendedUnsignedIntegralType span,
     ExceptionInfo *exception)
 {
-    volatile VALUE monitor;
-    volatile VALUE args[3];
+    VALUE monitor;
+    VALUE args[3];
 
     if (rb_cvar_defined(Module_Magick, Magick_Monitor))
     {
@@ -208,7 +208,7 @@ monitor_handler(
         args[2] = UINT2NUM((unsigned long) span);
 
         monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2((VALUE)monitor, call_ID, 3, (VALUE *)args);
+        (void) rb_funcall2(monitor, call_ID, 3, args);
     }
 
     return True;
@@ -311,11 +311,10 @@ Magick_set_log_format(VALUE class, VALUE format)
 {
 #ifdef HAVE_SETLOGFORMAT
     SetLogFormat(STRING_PTR(format));
-    return class;
 #else
-    not_implemented("set_log_format");
-    return (VALUE) 0;
+    rb_notimplement();
 #endif
+    return class;
 }
 
 
@@ -343,7 +342,7 @@ Draw_align_eq(VALUE self, VALUE align)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    VALUE_TO_ENUM(align, draw->info->align, AlignType);
+    draw->info->align = Num_to_AlignType(align);
     return self;
 }
 
@@ -352,12 +351,12 @@ Draw_align_eq(VALUE self, VALUE align)
     Purpose:    decorate attribute writer
 */
 static VALUE
-Draw_decorate_eq(VALUE self, VALUE decorate)
+Draw_decorate_eq(VALUE self, VALUE decoration)
 {
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    VALUE_TO_ENUM(decorate, draw->info->decorate, DecorationType);
+    draw->info->decorate = Num_to_DecorationType(decoration);
     return self;
 }
 
@@ -445,7 +444,7 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    VALUE_TO_ENUM(stretch, draw->info->stretch, StretchType);
+    draw->info->stretch = Num_to_StretchType(stretch);
     return self;
 }
 
@@ -459,7 +458,7 @@ Draw_font_style_eq(VALUE self, VALUE style)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    VALUE_TO_ENUM(style, draw->info->style, StyleType);
+    draw->info->style = Num_to_StyleType(style);
     return self;
 }
 
@@ -483,44 +482,36 @@ static VALUE
 Draw_font_weight_eq(VALUE self, VALUE weight)
 {
     Draw *draw;
-    WeightType w;
+    WeightType w = FIX2INT(weight);
 
     Data_Get_Struct(self, Draw, draw);
 
-    if (FIXNUM_P(weight))
+    switch (w)
     {
-        w = FIX2INT(weight);
-        if (w < 100 || w > 900)
-            rb_raise(rb_eArgError, "invalid font weight (%d given)", w);
+        case AnyWeight:
+            draw->info->weight = 0;
+            break;
+        case NormalWeight:
+            draw->info->weight = 400;
+            break;
+        case BoldWeight:
+            draw->info->weight = 700;
+            break;
+        case BolderWeight:
+            if (draw->info->weight <= 800)
+                draw->info->weight += 100;
+            break;
+        case LighterWeight:
+            if (draw->info->weight >= 100)
+                draw->info->weight -= 100;
+            break;
+        default:
+            if (w >= 100 && w <= 900)
+                draw->info->weight = w;
+            else
+                rb_raise(rb_eArgError, "invalid font weight (%d given)", w);
+            break;
     }
-    else
-    {
-        VALUE_TO_ENUM(weight, w, WeightType);
-        switch (w)
-        {
-            case AnyWeight:
-                draw->info->weight = 0;
-                break;
-            case NormalWeight:
-                draw->info->weight = 400;
-                break;
-            case BoldWeight:
-                draw->info->weight = 700;
-                break;
-            case BolderWeight:
-                if (draw->info->weight <= 800)
-                    draw->info->weight += 100;
-                break;
-            case LighterWeight:
-                if (draw->info->weight >= 100)
-                    draw->info->weight -= 100;
-                break;
-            default:
-                rb_raise(rb_eArgError, "unknown font weight");
-                break;
-        }
-    }
-
     return self;
 }
 
@@ -545,7 +536,7 @@ Draw_gravity_eq(VALUE self, VALUE grav)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    VALUE_TO_ENUM(grav, draw->info->gravity, GravityType);
+    draw->info->gravity = Num_to_GravityType(grav);
 
     return self;
 }
@@ -724,19 +715,19 @@ static Draw_annotate(
 }
 
 /*
-    Method:     Draw#composite(x,y,width,height,img,operator=OverCompositeOp)
+    Method:     Draw#composite(x,y,width,height,img<,operator>)
     Purpose:    Implement the "image" drawing primitive
     Notes:      The "img" argument can be either an ImageList object
-                or an Image argument.
+                or an Image argument
 */
- static VALUE
+static VALUE
 Draw_composite(int argc, VALUE *argv, VALUE self)
 {
     Draw *draw;
     const char *op = "Over";
     double x, y, width, height;
-    CompositeOperator cop = OverCompositeOp;
-    volatile VALUE image;
+    int cop;
+    VALUE image;
     Image *comp_img;
     char name[MaxTextExtent];
                             // Buffer for "image" primitive
@@ -760,7 +751,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eTypeError, "composite operator must be a Fixnum (%s given)",
                                 rb_class2name(CLASS_OF(argv[5])));
         }
-        VALUE_TO_ENUM(argv[5], cop, CompositeOperator);
+        cop = FIX2INT(argv[5]);
         switch(cop)
         {
             case AddCompositeOp:
@@ -884,19 +875,19 @@ Draw_draw(VALUE self, VALUE image_arg)
     Method:     Draw#get_type_metrics([image, ]text)
     Purpose:    returns measurements for a given font and text string
     Notes:      If the image argument has been omitted, use a dummy
-                image, but make sure the text has none of the special
+                image, but make sure the text has none of the special 
                 characters that refer to image attributes.
 */
 
 static VALUE get_dummy_tm_img(VALUE klass)
 {
-    volatile VALUE dummy_img = 0;
+    VALUE dummy_img = 0;
     Info *info;
     Image *image;
 
     if (rb_cvar_defined(klass, _dummy_img__ID) != Qtrue)
     {
-
+        
         info = CloneImageInfo(NULL);
         if (!info)
         {
@@ -909,12 +900,12 @@ static VALUE get_dummy_tm_img(VALUE klass)
         }
         DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
-
+        
         RUBY18(rb_cvar_set(klass, _dummy_img__ID, dummy_img, 0));
         RUBY16(rb_cvar_set(klass, _dummy_img__ID, dummy_img));
     }
     dummy_img = rb_cvar_get(klass, _dummy_img__ID);
-
+    
     return dummy_img;
 }
 
@@ -939,7 +930,7 @@ Draw_get_type_metrics(
     {
         case 1:                   // use default image
             text = STRING_PTR_LEN(argv[0], text_l);
-
+            
             for (x = 0; x < text_l; x++)
             {
                 // Ensure text string doesn't refer to image attributes.
@@ -947,30 +938,30 @@ Draw_get_type_metrics(
                 {
                     int y;
                     char spec = text[x+1];
-
+                    
                     for (y = 0; y < ATTRS_L; y++)
                     {
                         if (spec == attrs[y])
                         {
-                            rb_raise(rb_eArgError,
+                            rb_raise(rb_eArgError, 
                                 "text string contains image attribute reference `%%%c'",
                                 spec);
                         }
                     }
                 }
             }
-
-            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
-            break;
+            
+            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);            
+            break;  
         case 2:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);      
             text = STRING_PTR(argv[1]);
             break;                  // okay
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
             break;
     }
-
+    
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->text, text);
 
@@ -1007,7 +998,7 @@ Draw_initialize(VALUE self)
 {
     Draw *draw;
     Info *info;
-    volatile VALUE info_obj;
+    VALUE info_obj;
 
     Data_Get_Struct(self, Draw, draw);
 
@@ -1047,7 +1038,7 @@ RUBY16(Draw_new(VALUE class))
 RUBY18(Draw_alloc(VALUE class))
 {
     Draw *draw;
-    volatile VALUE draw_obj;
+    VALUE draw_obj;
 
     draw = ALLOC(Draw);
     memset(draw, '\0', sizeof(Draw));
@@ -1110,7 +1101,7 @@ static void
 destroy_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
-    volatile VALUE tmpfile;
+    VALUE tmpfile;
 
     DestroyDrawInfo(draw->info);
 
@@ -1178,7 +1169,7 @@ Montage_compose_eq(VALUE self, VALUE compose)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    VALUE_TO_ENUM(compose, montage->compose, CompositeOperator);
+    montage->compose = Num_to_CompositeOperator(compose);
     return self;
 }
 
@@ -1267,7 +1258,7 @@ Montage_gravity_eq(VALUE self, VALUE gravity)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    VALUE_TO_ENUM(gravity, montage->info->gravity, GravityType);
+    montage->info->gravity = Num_to_GravityType(gravity);
     return self;
 }
 
@@ -1307,7 +1298,7 @@ RUBY18(Montage_alloc(VALUE class))
     MontageInfo *montage_info;
     Montage *montage;
     Info *image_info;
-    volatile VALUE montage_obj;
+    VALUE montage_obj;
 
     // DO NOT call rm_info_new - we don't want to support an Info parm block.
     image_info = CloneImageInfo(NULL);
@@ -1580,7 +1571,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
     rb_define_method(Class_Image, "color_flood_fill", Image_color_flood_fill, 5);
-    rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
     rb_define_method(Class_Image, "colormap", Image_colormap, -1);
     rb_define_method(Class_Image, "composite", Image_composite, -1);
@@ -1637,7 +1627,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "palette?", Image_palette_q, 0);
     rb_define_method(Class_Image, "pixel_color", Image_pixel_color, -1);
 //  rb_define_method(Class_Image, "plasma", Image_plasma, 6);
-    rb_define_method(Class_Image, "profile!", Image_profile_bang, 3);
+    rb_define_method(Class_Image, "profile!", Image_profile_bang, 2);
     rb_define_method(Class_Image, "quantize", Image_quantize, -1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
     rb_define_method(Class_Image, "random_channel_threshold", Image_random_channel_threshold, 2);
@@ -1670,7 +1660,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "threshold", Image_threshold, 1);
     rb_define_method(Class_Image, "thumbnail", Image_thumbnail, -1);
     rb_define_method(Class_Image, "thumbnail!", Image_thumbnail_bang, -1);
-    rb_define_method(Class_Image, "tint", Image_tint, -1);
     rb_define_method(Class_Image, "to_color", Image_to_color, 1);
     rb_define_method(Class_Image, "to_blob", Image_to_blob, 0);
     rb_define_method(Class_Image, "transparent", Image_transparent, -1);
@@ -1739,7 +1728,7 @@ Init_RMagick(void)
 
     RUBY16(rb_define_singleton_method(Class_Montage, "new", Montage_new, 0);)
     RUBY18(rb_define_alloc_func(Class_Montage, Montage_alloc));
-
+    
     rb_define_method(Class_Montage, "initialize", Montage_initialize, 0);
 
     // These accessors supply optional arguments for Magick::ImageList::Montage.new
@@ -1802,7 +1791,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
-//  DCL_ATTR_ACCESSOR(Info, verbose) obsolete
+//  DCL_ATTR_ACCESSOR(Info, verbose)
 
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
@@ -1815,17 +1804,17 @@ Init_RMagick(void)
 
     // class Magick::TextureFill
     Class_TextureFill = rb_define_class_under(Module_Magick, "TextureFill", rb_cObject);
-
+    
     RUBY16(rb_define_singleton_method(Class_TextureFill, "new", TextureFill_new, 1);)
-    RUBY18(rb_define_alloc_func(Class_TextureFill, TextureFill_alloc);)
-
+    RUBY18(rb_define_alloc_func(Class_TextureFill, TextureFill_alloc));
+    
     rb_define_method(Class_TextureFill, "initialize", TextureFill_initialize, 1);
     rb_define_method(Class_TextureFill, "fill", TextureFill_fill, 1);
 
     // class Magick::ImageMagickError < StandardError
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, 2);
-    RUBY16(rb_enable_super(Class_ImageMagickError, "initialize");)
+    RUBY16(rb_enable_super(Class_ImageMagickError, "initialize"));
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
 
@@ -1838,279 +1827,148 @@ Init_RMagick(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
 
-    // Opacity constants
-    DEF_CONST(OpaqueOpacity);
-    DEF_CONST(TransparentOpacity);
-
-    /*-----------------------------------------------------------------------*/
-    /* Define Enumeration types                                              */
-    /*-----------------------------------------------------------------------*/
-
-    // class Magick::Enum includes Comparable
-    Class_Enum = rb_define_class_under(Module_Magick, "Enum", rb_cObject);
-    rb_include_module(Class_Enum, rb_mComparable);
-    RUBY16(rb_define_singleton_method(Class_Enum, "new", Enum_new, 1);)
-    RUBY18(rb_define_alloc_func(Class_Enum, Enum_alloc);)
-
-    rb_define_method(Class_Enum, "initialize", Enum_initialize, 2);
-    rb_define_method(Class_Enum, "to_s", Enum_to_s, 0);
-    rb_define_method(Class_Enum, "to_i", Enum_to_i, 0);
-    rb_define_method(Class_Enum, "<=>", Enum_spaceship, 1);
-    rb_define_method(Class_Enum, "===", Enum_case_eq, 1);
-
     // AlignType constants
-    DEF_ENUM(AlignType);
-    ENUM_VAL(AlignType, UndefinedAlign); ENUM_VAL(AlignType, LeftAlign);
-    ENUM_VAL(AlignType, CenterAlign);    ENUM_VAL(AlignType, RightAlign);
-
+    DEF_CONST(UndefinedAlign);      DEF_CONST(LeftAlign);
+    DEF_CONST(CenterAlign);         DEF_CONST(RightAlign); 
+    
     // AnchorType constants (for Draw#text_anchor - these are not defined by ImageMagick)
-    DEF_ENUM(AnchorType);
-    rb_define_const(Module_Magick, "StartAnchor",
-            rm_enum_new(Class_AnchorType, ID2SYM(rb_intern("StartAnchor")), INT2FIX(1)));
-    rb_define_const(Module_Magick, "MiddleAnchor",
-            rm_enum_new(Class_AnchorType, ID2SYM(rb_intern("MiddleAnchor")), INT2FIX(2)));
-    rb_define_const(Module_Magick, "EndAnchor",
-            rm_enum_new(Class_AnchorType, ID2SYM(rb_intern("EndAnchor")), INT2FIX(3)));
+    rb_define_const(Module_Magick, "StartAnchor", INT2FIX(1));
+    rb_define_const(Module_Magick, "MiddleAnchor", INT2FIX(2));
+    rb_define_const(Module_Magick, "EndAnchor", INT2FIX(3));
 
     // ChannelType constants
-    DEF_ENUM(ChannelType);
-    ENUM_VAL(ChannelType, UndefinedChannel);    ENUM_VAL(ChannelType, RedChannel);
-    ENUM_VAL(ChannelType, CyanChannel);         ENUM_VAL(ChannelType, GreenChannel);
-    ENUM_VAL(ChannelType, MagentaChannel);      ENUM_VAL(ChannelType, BlueChannel);
-    ENUM_VAL(ChannelType, YellowChannel);       ENUM_VAL(ChannelType, OpacityChannel);
-    ENUM_VAL(ChannelType, BlackChannel);        ENUM_VAL(ChannelType, MatteChannel);
+    DEF_CONST(UndefinedChannel);    DEF_CONST(RedChannel);
+    DEF_CONST(CyanChannel);         DEF_CONST(GreenChannel);
+    DEF_CONST(MagentaChannel);      DEF_CONST(BlueChannel);
+    DEF_CONST(YellowChannel);       DEF_CONST(OpacityChannel);
+    DEF_CONST(BlackChannel);        DEF_CONST(MatteChannel);
 
     // ClassType constants
-    DEF_ENUM(ClassType);
-    ENUM_VAL(ClassType, UndefinedClass);      ENUM_VAL(ClassType, PseudoClass);
-    ENUM_VAL(ClassType, DirectClass);
+    DEF_CONST(UndefinedClass);      DEF_CONST(PseudoClass);
+    DEF_CONST(DirectClass);
 
     // ColorspaceType constants
-    DEF_ENUM(ColorspaceType);
-    ENUM_VAL(ColorspaceType, UndefinedColorspace);
-    ENUM_VAL(ColorspaceType, RGBColorspace);
-    ENUM_VAL(ColorspaceType, GRAYColorspace);
-    ENUM_VAL(ColorspaceType, TransparentColorspace);
-    ENUM_VAL(ColorspaceType, OHTAColorspace);
-    ENUM_VAL(ColorspaceType, XYZColorspace);
-    ENUM_VAL(ColorspaceType, YCbCrColorspace);
-    ENUM_VAL(ColorspaceType, YCCColorspace);
-    ENUM_VAL(ColorspaceType, YIQColorspace);
-    ENUM_VAL(ColorspaceType, YPbPrColorspace);
-    ENUM_VAL(ColorspaceType, YUVColorspace);
-    ENUM_VAL(ColorspaceType, CMYKColorspace);
-    rb_define_const(Module_Magick, "SRGBColorspace"
-                  , rm_enum_new(Class_AnchorType
-                  , ID2SYM(rb_intern("SRGBColorspace"))
-                  , INT2FIX(sRGBColorspace)));
-#if defined(HAVE_HSLCOLORSPACE)
-    ENUM_VAL(ColorspaceType, HSLColorspace);       // 5.5.7
-#endif
-#if defined(HAVE_HWBCOLORSPACE)
-    ENUM_VAL(ColorspaceType, HWBColorspace);       // 5.5.7
-#endif
+    DEF_CONST(UndefinedColorspace); DEF_CONST(RGBColorspace);
+    DEF_CONST(GRAYColorspace);      DEF_CONST(TransparentColorspace);
+    DEF_CONST(OHTAColorspace);      DEF_CONST(XYZColorspace);
+    DEF_CONST(YCbCrColorspace);     DEF_CONST(YCCColorspace);
+    DEF_CONST(YIQColorspace);       DEF_CONST(YPbPrColorspace);
+    DEF_CONST(YUVColorspace);       DEF_CONST(CMYKColorspace);
+    rb_define_const(Module_Magick, "SRGBColorspace", INT2FIX(sRGBColorspace));
 
-    // ComplianceType constants are defined as enums but used as bit flags
-    DEF_ENUM(ComplianceType);
-    ENUM_VAL(ComplianceType, UndefinedCompliance);
+    // ComplianceType constants
     // AllCompliance is 0xffff, not too useful for us!
-    rb_define_const(Module_Magick, "AllCompliance"
-                  , rm_enum_new(Class_AnchorType
-                  , ID2SYM(rb_intern("AllCompliance"))
-                  , INT2FIX(SVGCompliance|X11Compliance|XPMCompliance)));
-
-#if defined(HAVE_NOCOMPLIANCE)
-    ENUM_VAL(ComplianceType, NoCompliance);
+    rb_define_const(Module_Magick, "AllCompliance", INT2FIX(SVGCompliance|X11Compliance|XPMCompliance));
+#if HAVE_NOCOMPLIANCE
+    DEF_CONST(NoCompliance);
 #endif
-    ENUM_VAL(ComplianceType, SVGCompliance);
-    ENUM_VAL(ComplianceType, X11Compliance);
-    ENUM_VAL(ComplianceType, XPMCompliance);
+    DEF_CONST(SVGCompliance);
+    DEF_CONST(X11Compliance);
+    DEF_CONST(XPMCompliance);
 
     // CompositeOperator constants
-    DEF_ENUM(CompositeOperator);
-    ENUM_VAL(CompositeOperator, UndefinedCompositeOp);
-    ENUM_VAL(CompositeOperator, OverCompositeOp);
-    ENUM_VAL(CompositeOperator, InCompositeOp);
-    ENUM_VAL(CompositeOperator, OutCompositeOp);
-    ENUM_VAL(CompositeOperator, AtopCompositeOp);
-    ENUM_VAL(CompositeOperator, XorCompositeOp);
-    ENUM_VAL(CompositeOperator, PlusCompositeOp);
-    ENUM_VAL(CompositeOperator, MinusCompositeOp);
-    ENUM_VAL(CompositeOperator, AddCompositeOp);
-    ENUM_VAL(CompositeOperator, SubtractCompositeOp);
-    ENUM_VAL(CompositeOperator, DifferenceCompositeOp);
-    ENUM_VAL(CompositeOperator, MultiplyCompositeOp);
-    ENUM_VAL(CompositeOperator, BumpmapCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyRedCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyGreenCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyBlueCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyOpacityCompositeOp);
-    ENUM_VAL(CompositeOperator, ClearCompositeOp);
-    ENUM_VAL(CompositeOperator, DissolveCompositeOp);
-    ENUM_VAL(CompositeOperator, DisplaceCompositeOp);
-    ENUM_VAL(CompositeOperator, ModulateCompositeOp);
-    ENUM_VAL(CompositeOperator, ThresholdCompositeOp);
-    ENUM_VAL(CompositeOperator, NoCompositeOp);
-    ENUM_VAL(CompositeOperator, DarkenCompositeOp);
-    ENUM_VAL(CompositeOperator, LightenCompositeOp);
-    ENUM_VAL(CompositeOperator, HueCompositeOp);
-    ENUM_VAL(CompositeOperator, SaturateCompositeOp);
-    ENUM_VAL(CompositeOperator, ColorizeCompositeOp);
-    ENUM_VAL(CompositeOperator, LuminizeCompositeOp);
-    ENUM_VAL(CompositeOperator, ScreenCompositeOp);
-    ENUM_VAL(CompositeOperator, OverlayCompositeOp);
-
-#if defined(HAVE_COPYCYANCOMPOSITEOP)
-                                        // CYMK added 5.5.7
-    ENUM_VAL(CompositeOperator, CopyCyanCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyMagentaCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyYellowCompositeOp);
-    ENUM_VAL(CompositeOperator, CopyBlackCompositeOp);
-#endif
+    DEF_CONST(UndefinedCompositeOp);    DEF_CONST(OverCompositeOp);
+    DEF_CONST(InCompositeOp);           DEF_CONST(OutCompositeOp);
+    DEF_CONST(AtopCompositeOp);         DEF_CONST(XorCompositeOp);
+    DEF_CONST(PlusCompositeOp);         DEF_CONST(MinusCompositeOp);
+    DEF_CONST(AddCompositeOp);          DEF_CONST(SubtractCompositeOp);
+    DEF_CONST(DifferenceCompositeOp);   DEF_CONST(MultiplyCompositeOp);
+    DEF_CONST(BumpmapCompositeOp);      DEF_CONST(CopyCompositeOp);
+    DEF_CONST(CopyRedCompositeOp);      DEF_CONST(CopyGreenCompositeOp);
+    DEF_CONST(CopyBlueCompositeOp);     DEF_CONST(CopyOpacityCompositeOp);
+    DEF_CONST(ClearCompositeOp);        DEF_CONST(DissolveCompositeOp);
+    DEF_CONST(DisplaceCompositeOp);     DEF_CONST(ModulateCompositeOp);
+    DEF_CONST(ThresholdCompositeOp);    DEF_CONST(NoCompositeOp);
+    DEF_CONST(DarkenCompositeOp);       DEF_CONST(LightenCompositeOp);
+    DEF_CONST(HueCompositeOp);          DEF_CONST(SaturateCompositeOp);
+    DEF_CONST(ColorizeCompositeOp);     DEF_CONST(LuminizeCompositeOp);
+    DEF_CONST(ScreenCompositeOp);       DEF_CONST(OverlayCompositeOp);
 
     // CompressionType constants
-    DEF_ENUM(CompressionType);
-    ENUM_VAL(CompressionType, UndefinedCompression);
-    ENUM_VAL(CompressionType, NoCompression);
-    ENUM_VAL(CompressionType, BZipCompression);
-    ENUM_VAL(CompressionType, FaxCompression);
-    ENUM_VAL(CompressionType, Group4Compression);
-    ENUM_VAL(CompressionType, JPEGCompression);
-    ENUM_VAL(CompressionType, LosslessJPEGCompression);
-    ENUM_VAL(CompressionType, LZWCompression);
-    ENUM_VAL(CompressionType, RunlengthEncodedCompression);
-    ENUM_VAL(CompressionType, ZipCompression);
+    DEF_CONST(UndefinedCompression);        DEF_CONST(NoCompression);
+    DEF_CONST(BZipCompression);             DEF_CONST(FaxCompression);
+    DEF_CONST(Group4Compression);           DEF_CONST(JPEGCompression);
+    DEF_CONST(LosslessJPEGCompression);     DEF_CONST(LZWCompression);
+    DEF_CONST(RunlengthEncodedCompression); DEF_CONST(ZipCompression);
 
     // DecorationType constants
-    DEF_ENUM(DecorationType);
-    ENUM_VAL(DecorationType, NoDecoration);
-    ENUM_VAL(DecorationType, UnderlineDecoration);
-    ENUM_VAL(DecorationType, OverlineDecoration);
-    ENUM_VAL(DecorationType, LineThroughDecoration);
+    DEF_CONST(NoDecoration);        DEF_CONST(UnderlineDecoration);
+    DEF_CONST(OverlineDecoration);  DEF_CONST(LineThroughDecoration);
 
-#if defined(HAVE_DISPOSETYPE)
+#if HAVE_DISPOSETYPE
     // DisposeType constants (5.5.1)
-    DEF_ENUM(DisposeType);
-    ENUM_VAL(DisposeType, UndefinedDispose);
-    ENUM_VAL(DisposeType, BackgroundDispose);
-    ENUM_VAL(DisposeType, NoneDispose);
-    ENUM_VAL(DisposeType, PreviousDispose);
+    DEF_CONST(UndefinedDispose);    DEF_CONST(BackgroundDispose);
+    DEF_CONST(NoneDispose);         DEF_CONST(PreviousDispose);
 #endif
 
-    // FilterTypes constants
-    DEF_ENUM(FilterTypes);
-    ENUM_VAL(FilterTypes, UndefinedFilter);
-    ENUM_VAL(FilterTypes, PointFilter);
-    ENUM_VAL(FilterTypes, BoxFilter);
-    ENUM_VAL(FilterTypes, TriangleFilter);
-    ENUM_VAL(FilterTypes, HermiteFilter);
-    ENUM_VAL(FilterTypes, HanningFilter);
-    ENUM_VAL(FilterTypes, HammingFilter);
-    ENUM_VAL(FilterTypes, BlackmanFilter);
-    ENUM_VAL(FilterTypes, GaussianFilter);
-    ENUM_VAL(FilterTypes, QuadraticFilter);
-    ENUM_VAL(FilterTypes, CubicFilter);
-    ENUM_VAL(FilterTypes, CatromFilter);
-    ENUM_VAL(FilterTypes, MitchellFilter);
-    ENUM_VAL(FilterTypes, LanczosFilter);
-    ENUM_VAL(FilterTypes, BesselFilter);
-    ENUM_VAL(FilterTypes, SincFilter);
+    // FilterType constants
+    DEF_CONST(UndefinedFilter);     DEF_CONST(PointFilter);
+    DEF_CONST(BoxFilter);           DEF_CONST(TriangleFilter);
+    DEF_CONST(HermiteFilter);       DEF_CONST(HanningFilter);
+    DEF_CONST(HammingFilter);       DEF_CONST(BlackmanFilter);
+    DEF_CONST(GaussianFilter);      DEF_CONST(QuadraticFilter);
+    DEF_CONST(CubicFilter);         DEF_CONST(CatromFilter);
+    DEF_CONST(MitchellFilter);      DEF_CONST(LanczosFilter);
+    DEF_CONST(BesselFilter);        DEF_CONST(SincFilter);
 
     // GravityType constants
-    DEF_ENUM(GravityType);
-    ENUM_VAL(GravityType, ForgetGravity);
-    ENUM_VAL(GravityType, NorthWestGravity);
-    ENUM_VAL(GravityType, NorthGravity);
-    ENUM_VAL(GravityType, NorthEastGravity);
-    ENUM_VAL(GravityType, WestGravity);
-    ENUM_VAL(GravityType, CenterGravity);
-    ENUM_VAL(GravityType, EastGravity);
-    ENUM_VAL(GravityType, SouthWestGravity);
-    ENUM_VAL(GravityType, SouthGravity);
-    ENUM_VAL(GravityType, SouthEastGravity);
-    ENUM_VAL(GravityType, StaticGravity);
+    DEF_CONST(ForgetGravity);       DEF_CONST(NorthWestGravity);
+    DEF_CONST(NorthGravity);        DEF_CONST(NorthEastGravity);
+    DEF_CONST(WestGravity);         DEF_CONST(CenterGravity);
+    DEF_CONST(EastGravity);         DEF_CONST(SouthWestGravity);
+    DEF_CONST(SouthGravity);        DEF_CONST(SouthEastGravity);
+    DEF_CONST(StaticGravity);
 
     // ImageType constants
-    DEF_ENUM(ImageType);
-    ENUM_VAL(ImageType, UndefinedType);
-    ENUM_VAL(ImageType, BilevelType);
-    ENUM_VAL(ImageType, GrayscaleType);
-    ENUM_VAL(ImageType, GrayscaleMatteType);
-    ENUM_VAL(ImageType, PaletteType);
-    ENUM_VAL(ImageType, PaletteMatteType);
-    ENUM_VAL(ImageType, TrueColorType);
-    ENUM_VAL(ImageType, TrueColorMatteType);
-    ENUM_VAL(ImageType, ColorSeparationType);
-    ENUM_VAL(ImageType, ColorSeparationMatteType);
-    ENUM_VAL(ImageType, OptimizeType);
+    DEF_CONST(UndefinedType);       DEF_CONST(BilevelType);
+    DEF_CONST(GrayscaleType);       DEF_CONST(GrayscaleMatteType);
+    DEF_CONST(PaletteType);         DEF_CONST(PaletteMatteType);
+    DEF_CONST(TrueColorType);       DEF_CONST(TrueColorMatteType);
+    DEF_CONST(ColorSeparationType); DEF_CONST(ColorSeparationMatteType);
+    DEF_CONST(OptimizeType);
 
     // InterlaceType constants
-    DEF_ENUM(InterlaceType);
-    ENUM_VAL(InterlaceType, UndefinedInterlace);
-    ENUM_VAL(InterlaceType, NoInterlace);
-    ENUM_VAL(InterlaceType, LineInterlace);
-    ENUM_VAL(InterlaceType, PlaneInterlace);
-    ENUM_VAL(InterlaceType, PartitionInterlace);
+    DEF_CONST(UndefinedInterlace);  DEF_CONST(NoInterlace);
+    DEF_CONST(LineInterlace);       DEF_CONST(PlaneInterlace);
+    DEF_CONST(PartitionInterlace);
 
     // NoiseType constants
-    DEF_ENUM(NoiseType);
-    ENUM_VAL(NoiseType, UniformNoise);
-    ENUM_VAL(NoiseType, GaussianNoise);
-    ENUM_VAL(NoiseType, MultiplicativeGaussianNoise);
-    ENUM_VAL(NoiseType, ImpulseNoise);
-    ENUM_VAL(NoiseType, LaplacianNoise);
-    ENUM_VAL(NoiseType, PoissonNoise);
+    DEF_CONST(UniformNoise);                DEF_CONST(GaussianNoise);
+    DEF_CONST(MultiplicativeGaussianNoise); DEF_CONST(ImpulseNoise);
+    DEF_CONST(LaplacianNoise);              DEF_CONST(PoissonNoise);
+
+    // Opacity constants
+    DEF_CONST(OpaqueOpacity);       DEF_CONST(TransparentOpacity);
 
     // Paint method constants
-    DEF_ENUM(PaintMethod);
-    ENUM_VAL(PaintMethod, PointMethod);
-    ENUM_VAL(PaintMethod, ReplaceMethod);
-    ENUM_VAL(PaintMethod, FloodfillMethod);
-    ENUM_VAL(PaintMethod, FillToBorderMethod);
-    ENUM_VAL(PaintMethod, ResetMethod);
+    DEF_CONST(PointMethod);         DEF_CONST(ReplaceMethod);
+    DEF_CONST(FloodfillMethod);     DEF_CONST(FillToBorderMethod);
+    DEF_CONST(ResetMethod);
 
     // RenderingIntent
-    DEF_ENUM(RenderingIntent);
-    ENUM_VAL(RenderingIntent, UndefinedIntent);
-    ENUM_VAL(RenderingIntent, SaturationIntent);
-    ENUM_VAL(RenderingIntent, PerceptualIntent);
-    ENUM_VAL(RenderingIntent, AbsoluteIntent);
-    ENUM_VAL(RenderingIntent, RelativeIntent);
+    DEF_CONST(UndefinedIntent);     DEF_CONST(SaturationIntent);
+    DEF_CONST(PerceptualIntent);    DEF_CONST(AbsoluteIntent);
+    DEF_CONST(RelativeIntent);
 
     // ResolutionType constants
-    DEF_ENUM(ResolutionType);
-    ENUM_VAL(ResolutionType, UndefinedResolution);
-    ENUM_VAL(ResolutionType, PixelsPerInchResolution);
-    ENUM_VAL(ResolutionType, PixelsPerCentimeterResolution);
+    DEF_CONST(UndefinedResolution); DEF_CONST(PixelsPerInchResolution);
+    DEF_CONST(PixelsPerCentimeterResolution);
 
     // StretchType constants
-    DEF_ENUM(StretchType);
-    ENUM_VAL(StretchType, NormalStretch);
-    ENUM_VAL(StretchType, UltraCondensedStretch);
-    ENUM_VAL(StretchType, ExtraCondensedStretch);
-    ENUM_VAL(StretchType, CondensedStretch);
-    ENUM_VAL(StretchType, SemiCondensedStretch);
-    ENUM_VAL(StretchType, SemiExpandedStretch);
-    ENUM_VAL(StretchType, ExpandedStretch);
-    ENUM_VAL(StretchType, ExtraExpandedStretch);
-    ENUM_VAL(StretchType, UltraExpandedStretch);
-    ENUM_VAL(StretchType, AnyStretch);
+    DEF_CONST(NormalStretch);           DEF_CONST(UltraCondensedStretch);
+    DEF_CONST(ExtraCondensedStretch);   DEF_CONST(CondensedStretch);
+    DEF_CONST(SemiCondensedStretch);    DEF_CONST(SemiExpandedStretch);
+    DEF_CONST(ExpandedStretch);         DEF_CONST(ExtraExpandedStretch);
+    DEF_CONST(UltraExpandedStretch);    DEF_CONST(AnyStretch);
 
     // StyleType constants
-    DEF_ENUM(StyleType);
-    ENUM_VAL(StyleType, NormalStyle);
-    ENUM_VAL(StyleType, ItalicStyle);
-    ENUM_VAL(StyleType, ObliqueStyle);
-    ENUM_VAL(StyleType, AnyStyle);
+    DEF_CONST(NormalStyle);             DEF_CONST(ItalicStyle);
+    DEF_CONST(ObliqueStyle);            DEF_CONST(AnyStyle);
 
     // WeightType constants
-    DEF_ENUM(WeightType);
-    ENUM_VAL(WeightType, AnyWeight);
-    ENUM_VAL(WeightType, NormalWeight);
-    ENUM_VAL(WeightType, BoldWeight);
-    ENUM_VAL(WeightType, BolderWeight);
-    ENUM_VAL(WeightType, LighterWeight);
+    DEF_CONST(AnyWeight);           DEF_CONST(NormalWeight);
+    DEF_CONST(BoldWeight);          DEF_CONST(BolderWeight);
+    DEF_CONST(LighterWeight);
 
     // Struct class constants - pass NULL as the structure name to
     // keep from polluting the Struct namespace. The only way to
@@ -2124,8 +1982,6 @@ Init_RMagick(void)
     Class_Pixel = rb_struct_define(NULL, "red", "green", "blue", "opacity", 0);
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
-    rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
-    rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
     rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
     rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);

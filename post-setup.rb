@@ -104,14 +104,14 @@ class ExampleSet
     build(example) unless up_to_date
   end
 
-end
+  #
+  # print message and exit
+  #
+  def err(msg)
+      $stderr.puts "#{$0}: #{msg}"
+      exit
+  end
 
-#
-# print message and exit
-#
-def err(msg)
-    $stderr.puts "#{$0}: #{msg}"
-    exit
 end
 
 

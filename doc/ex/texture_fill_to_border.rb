@@ -26,9 +26,9 @@ circle.draw(before)
 before.compression = Magick::LZWCompression
 before.write('texture_fill_to_border_before.gif')
 
-# Use the builtin 'rose' image as the texture fill.
-rose = Magick::Image.read('rose:').first
-after = before.texture_fill_to_border(100,100, rose)
+hat = Magick::Image.read('images/Flower_Hat.jpg').first
+hat.resize!(0.3)
+after = before.texture_fill_to_border(100,100, hat)
 
 after.write('texture_fill_to_border_after.gif')
 exit

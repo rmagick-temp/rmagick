@@ -23,9 +23,10 @@ circle.draw(before)
 before.compression = Magick::LZWCompression
 before.write('texture_floodfill_before.gif')
 
-rose = Magick::Image.read('rose:').first
+hat = Magick::Image.read('images/Flower_Hat.jpg').first
+hat.resize!(0.3)
 before.fuzz = 25
-after = before.texture_floodfill(100,100, rose)
+after = before.texture_floodfill(100,100, hat)
 
 after.write('texture_floodfill_after.gif')
 exit

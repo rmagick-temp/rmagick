@@ -354,7 +354,7 @@ primitives = Magick::Draw.new {
     </tr>
 
     <tr>
-      <td valign="top">&#215;Magick API</td>
+      <td valign="top">&times;Magick API</td>
 
       <td><a href=
       "http://www.imagemagick.org/www/api/render.html#clonedrawinfo">
@@ -587,8 +587,8 @@ primitives = Magick::Draw.new {
     <tr>
       <td>&nbsp;</td>
 
-      <td>See <a href="rotated_text.rb.html" alt=
-      "rotated_text.r example">rotated_text.rb</a>.</td>
+      <td>See <a href=
+      "rotated_text.rb.html">rotated_text.rb</a>.</td>
     </tr>
 
     <tr class="method">
@@ -1254,7 +1254,7 @@ primitives = Magick::Draw.new {
       drawn on the image inside the clip-path will appear. Anything
       drawn outside the clip-path will be hidden. (See <a href=
       "#Draw.clip_rule">clip_rule</a> for a definition of how
-      &#215;Magick decides what is "inside" and what is "outside"
+      &times;Magick decides what is "inside" and what is "outside"
       of the clip-path.)</td>
     </tr>
 
@@ -1353,7 +1353,7 @@ primitives = Magick::Draw.new {
       <td valign="top">Arguments</td>
 
       <td>"UTF-8". (Note: This looks like a placeholder in
-      &#215;Magick. All other arguments are ignored.)</td>
+      &times;Magick. All other arguments are ignored.)</td>
     </tr>
 
     <tr>
@@ -2120,7 +2120,7 @@ draw.fill_opacity('40%')
 
         <p><i>Note:</i> The push and pop primitives are probably
         not as useful in RMagick as they are in C language
-        &#215;Magick programs, since it is easy to create separate
+        &times;Magick programs, since it is easy to create separate
         draw objects, each with its own set of properties and
         primitives.</p>
       </td>
@@ -2205,7 +2205,7 @@ draw.fill_opacity('40%')
       <td valign="top">Arguments</td>
 
       <td>The amount of rotation, in degrees. The angle of rotation
-      is clockwise, so 90&#176; is south.</td>
+      is clockwise, so 90&deg; is south.</td>
     </tr>
 
     <tr>
@@ -2766,12 +2766,12 @@ draw.stroke_opacity('40%')
         apostrophe by preceding it with a backslash ("\"). To
         include a backslash in the text, use two consecutive
         backslashes. Here are some examples. The text to the right
-        of &#187; is the text that will be drawn.</p>
+        of &raquo; is the text that will be drawn.</p>
         <pre class="example">
-gc.text(10,10, '"Hello there!"') &#187; Hello there!
-gc.text(10,10, "'What\'s up?'") &#187; What's up?
-gc.text(10,10, %q/"What's up?"/) &#187; What's up?
-gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
+gc.text(10,10, '"Hello there!"') &raquo; Hello there!
+gc.text(10,10, "'What\'s up?'") &raquo; What's up?
+gc.text(10,10, %q/"What's up?"/) &raquo; What's up?
+gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 </pre>
       </td>
     </tr>
@@ -3050,7 +3050,7 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
     </tr>
 
     <tr>
-      <td valign="top">&#215;Magick API</td>
+      <td valign="top">&times;Magick API</td>
 
       <td><a href=
       "http://www.imagemagick.org/www/api/annotate.html#annotateimage">
@@ -3061,8 +3061,10 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
       <td valign="top">Advanced</td>
 
       <td>
-        You can include information about the image by including
-        one or more of the special characters shown in this table.
+        Specify a single '%' as '%%'. Specify a single '\'
+        (backslash) as '\\'. You can include information about the
+        image by including one or more of the special characters
+        shown in this table.
 
         <table summary="annotate special characters" border="1"
         bgcolor="#F0F0F0">
@@ -3243,7 +3245,7 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
     </tr>
 
     <tr>
-      <td valign="top">&#215;Magick API</td>
+      <td valign="top">&times;Magick API</td>
 
       <td><a href=
       "http://www.imagemagick.org/www/api/render.html#drawimage">DrawImage</a></td>
@@ -3287,12 +3289,12 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
           <dt>image <i>(optional)</i></dt>
 
           <dd>The image on which the string will be rendered.
-          &#215;Magick uses the attributes of the image (font name,
-          pointsize, etc.) to compute the metrics. If this argument
-          is omitted, <var>get_type_metrics</var> substitutes a
-          dummy image with default attributes. The <i>string</i>
-          argument may not contain any of the special characters
-          shown in the table <a href=
+          &times;Magick uses the attributes of the image (font
+          name, pointsize, etc.) to compute the metrics. If this
+          argument is omitted, <var>get_type_metrics</var>
+          substitutes a dummy image with default attributes. The
+          <i>string</i> argument may not contain any of the special
+          characters shown in the table <a href=
           "#Draw.spec_chars_table">above</a>.</dd>
 
           <dt>string</dt>
@@ -3412,7 +3414,7 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
     </tr>
 
     <tr>
-      <td valign="top">&#215;Magick API</td>
+      <td valign="top">&times;Magick API</td>
 
       <td><a href=
       "http://www.imagemagick.org/www/api/annotate.html#gettypemetrics">
@@ -3483,7 +3485,7 @@ gc.text(10,10, %q/{"What's up?"}/) &#187; "What's up?"
 
       <td>
         <pre>
-draw.inspect &#187;
+draw.inspect &raquo;
    "stroke red
     fill transparent
     rectangle 20,20 380,180

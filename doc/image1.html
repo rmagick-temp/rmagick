@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -78,6 +78,8 @@
       <li><a href="#ping">ping</a></li>
 
       <li><a href="#read">read</a></li>
+
+      <li><a href="#read_inline">read_inline</a></li>
     </ul>
 
     <h3>instance methods</h3>
@@ -533,6 +535,48 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     <p>ReadImage</p>
   </div>
 
+  <div class="sig">
+    <h3 id="read_inline">read_inline</h3>
+
+    <p>Image.read_inline(<span class="arg">content</span>) [
+    <span class="arg">{ optional arguments }</span> ] -&gt;
+    <em>anArray</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Converts a Base64-encoded image or multi-image sequence to
+    an array of Image objects.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A Base64-encoded string. Generally no optional arguments are
+    required. If the image format cannot be deduced from the image
+    data, you can use the <a href="info.html#format">format</a>
+    attribute. If you want to extract a subset of an image
+    sequence, you can use the <a href="info.html#scene">scene</a>
+    and <a href="info.html#number_scenes">number_scenes</a>
+    attributes.</p>
+
+    <h4>Returns</h4>
+
+    <p>An array containing 0 or more Image objects. If the content
+    is a multi-image sequence such as an animated GIF or a
+    Photoshop PSD file with multiple layers, the array contains an
+    Image object for each image or layer in the file.</p>
+
+    <h4>Example</h4>
+    <pre>
+content = "R0lGODlhnAEuAferAAAAAAcIBggJBgw..."
+img = Magick::Image.read_inline(content)
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="#read"><code>read</code></a></p>
+  </div>
+
   <h2 class="methods">instance methods</h2>
 
   <div class="sig">
@@ -916,8 +960,8 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
 
     <p>Blurs the specified channel. <span class="imquote">We
     convolve the image with a Gaussian operator of the given radius
-    and standard deviation (sigma) . The
-    <code>blur_channel</code> method differs from <a href=
+    and standard deviation (sigma) . The <code>blur_channel</code>
+    method differs from <a href=
     "image2.html#gaussian_blur_channel">gaussian_blur_channel</a>
     in that it uses a separable kernel which is faster but
     mathematically equivalent to the non-separable

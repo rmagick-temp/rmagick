@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.68 2004/11/22 01:28:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.69 2004/11/28 22:27:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -32,6 +32,7 @@ static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
+static VALUE images_to_array(Image *);
 
 static ImageAttribute *Next_Attribute;
 
@@ -3297,9 +3298,9 @@ Image_frame(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_from_blob(VALUE class, VALUE blob_arg)
 {
-    Image *image;
+    Image *images;
     Info *info;
-    volatile VALUE info_obj, image_ary;
+    volatile VALUE info_obj;
     ExceptionInfo exception;
     void *blob;
     long length;
@@ -3310,33 +3311,11 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    image_ary = rb_ary_new();
-
     GetExceptionInfo(&exception);
-    image = BlobToImage(info,  blob, (size_t)length, &exception);
+    images = BlobToImage(info,  blob, (size_t)length, &exception);
     HANDLE_ERROR
 
-    // Like read and ping, this function returns an array of Images.
-    // Orphan the image, create an Image object, add it to the array.
-    while (image)
-    {
-        volatile VALUE image_obj;
-        Image *next;
-
-#ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
-        next = RemoveFirstImageFromList(&image);
-        image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, next);
-        rb_ary_push(image_ary, image_obj);
-#else
-        next = image->next;
-        image->next = image->previous = NULL;
-        image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, image);
-        rb_ary_push(image_ary, image_obj);
-        image = next;
-#endif
-    }
-
-    return image_ary;
+    return images_to_array(images);
 }
 
 DEF_ATTR_READER(Image, fuzz, dbl)
@@ -5836,11 +5815,7 @@ Image_raise(int argc, VALUE *argv, VALUE self)
 /*
     Method:     Image.read(file)
     Purpose:    Call ReadImage
-    Returns:    An Image object created from the 1st image
-                in the file. OR, if there is a block,
-                yields to the block with the image. If there
-                was more than one image in the file, yields
-                once for each image.
+    Returns:    An array of 1 or more new image objects.
 */
 VALUE
 Image_read(VALUE class, VALUE file_arg)
@@ -5865,6 +5840,8 @@ file_arg_rescue(VALUE arg)
     Static:     rd_image(class, file, reader)
     Purpose:    Transform arguments, call either ReadImage or PingImage
     Returns:    see Image_read or Image_ping
+    Notes:      yields to a block to get Image::Info attributes
+                before calling Read/PingImage
 */
 static VALUE
 rd_image(VALUE class, VALUE file, reader_t reader)
@@ -5873,8 +5850,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     long filename_l;
     Info *info;
     volatile VALUE info_obj;
-    volatile VALUE image_obj, image_ary;
-    Image *image, *images, *next = NULL;
+    Image *images;
     ExceptionInfo exception;
 
     // Create a new Info structure for this read/ping
@@ -5907,31 +5883,99 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     images = (reader)(info, &exception);
     HANDLE_ERROR
 
-    // Orphan the image, create an Image object, add it to the array.
-
-    image_ary = rb_ary_new();
-#ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
-    next = next;        // defeat "never referenced" message from icc
-    while (images)
-    {
-        image = RemoveFirstImageFromList(&images);
-
-        image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, image);
-        rb_ary_push(image_ary, image_obj);
-    }
-#else
-    for (image = images; image; image = next)
-    {
-        next = images->next;
-
-        image->next = image->previous = NULL;
-        image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, image);
-        rb_ary_push(image_ary, image_obj);
-    }
-#endif
-
-    return image_ary;
+    return images_to_array(images);
 }
+
+
+/*
+    Method:     Image.read_inline(content)
+    Purpose:    Read a Base64-encoded image
+    Returns:    an array of new images
+    Notes:      this is similar to, but not the same as ReadInlineImage.
+                ReadInlineImage requires a comma preceeding the image
+                data. This method allows but does not require a comma.
+*/
+VALUE
+Image_read_inline(VALUE self, VALUE content)
+{
+     volatile VALUE info_obj;
+     Image *images;
+     ImageInfo *info;
+     char *image_data;
+     long x, image_data_l;
+     unsigned char *blob;
+     size_t blob_l;
+     ExceptionInfo exception;
+
+     image_data = STRING_PTR_LEN(content, image_data_l);
+
+     // Search for a comma. If found, we'll set the start of the
+     // image data just following the comma. Otherwise we'll assume
+     // the image data starts with the first byte.
+     for(x = 0; x < image_data_l; x++)
+     {
+          if (image_data[x] == ',')
+          {
+               break;
+          }
+     }
+     if (x < image_data_l)
+     {
+          image_data += x + 1;
+     }
+
+     blob = Base64Decode(image_data, &blob_l);
+     if (blob_l == 0)
+     {
+          rb_raise(rb_eArgError, "can't decode image");
+     }
+
+     GetExceptionInfo(&exception);
+
+     // Create a new Info structure for this read. About the
+     // only useful attribute that can be set is `format'.
+     info_obj = rm_info_new();
+     Data_Get_Struct(info_obj, Info, info);
+
+     images = BlobToImage(info, blob, blob_l, &exception);
+     HANDLE_ERROR
+     magick_free((void *)blob);
+
+     return images_to_array(images);
+}
+
+
+/*
+     Static:    images_to_array
+     Purpose:   convert a list of images to an array of Image objects
+*/
+static VALUE images_to_array(Image *images)
+{
+     volatile VALUE image_obj, image_ary;
+     Image *image, *next;
+
+     // Orphan the image, create an Image object, add it to the array.
+
+     image_ary = rb_ary_new();
+ #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
+     next = next;        // defeat "never referenced" message from icc
+     while (images)
+     {
+         image = RemoveFirstImageFromList(&images);
+
+ #else
+     for (image = images; image; image = next)
+     {
+         next = images->next;
+         image->next = image->previous = NULL;
+ #endif
+         image_obj = rm_image_new(image);
+         rb_ary_push(image_ary, image_obj);
+     }
+
+     return image_ary;
+}
+
 
 /*
     Method:     Image#reduce_noise(radius)

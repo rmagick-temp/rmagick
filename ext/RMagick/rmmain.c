@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.68 2004/11/24 00:08:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.69 2004/11/28 22:27:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -554,6 +554,7 @@ Init_RMagick(void)
     rb_define_singleton_method(Class_Image, "capture", Image_capture, -1);
     rb_define_singleton_method(Class_Image, "ping", Image_ping, 1);
     rb_define_singleton_method(Class_Image, "read", Image_read, 1);
+    rb_define_singleton_method(Class_Image, "read_inline", Image_read_inline, 1);
     rb_define_singleton_method(Class_Image, "from_blob", Image_from_blob, 1);
 
     DCL_ATTR_ACCESSOR(Image, background_color)
@@ -1480,7 +1481,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/11/24 00:08:23 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/11/28 22:27:08 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

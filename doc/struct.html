@@ -10,7 +10,9 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="draw.html">&lt;-
@@ -250,11 +252,51 @@
         </td>
       </tr>
       <tr class="method2">
+        <td class="methodname2"><a name="Pixel.fcmp">fcmp</a></td>
+        <td><i>pixel</i>.fcmp(<i>aPixel</i>, <i>fuzz</i>=0.0,
+        <i>colorspace</i>=RGBColorspace) -&gt; <code>true</code>
+        <i>or</i> <code>false</code></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Returns true if the argument is the same color as
+        <i>pixel</i>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          <dl>
+            <dt>fuzz</dt>
+            <dd>The amount of fuzz to allow before the colors are
+            considered to be different.</dd>
+            <dt>colorspace</dt>
+            <dd>If the pixels are in the CMYK colorspace, specify
+            <a href=
+            "constants.html#ColorspaceType">Magick::CMYKColorspace</a>.</dd>
+          </dl>
+        </td>
+      </tr>
+      <tr>
+        <td>Returns</td>
+        <td><code>true</code> or <code>false</code></td>
+      </tr>
+      <tr class="method2">
+        <td class="methodname2"><a name=
+        "Pixel.intensity">intensity</a></td>
+        <td><i>pixel</i>.intensity() -&gt; anInteger</td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Returns the <i>intensity</i> of the pixel. The
+        intensity is computed as 0.299*R+0.587*G+0.114*B.</td>
+      </tr>
+      <tr class="method2">
         <td class="methodname2"><a name=
         "Pixel.to_color">to_color</a></td>
         <td><i>pixel</i>.to_color(<i>compliance</i>=AllCompliance,
-        <i>matte</i>=<code>false</code>, <i>depth</i>=8 or 16)
-        -&gt; <i>aString</i></td>
+        <i>matte</i>=<code>false</code>,
+        <i>depth</i>=<code>QuantumDepth</code>) -&gt;
+        <i>aString</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -279,8 +321,8 @@
             ignored.</dd>
             <dt>depth</dt>
             <dd>An image depth. The default is the quantum depth
-            used when &times;Magick was compiled. The values 16
-            and 32 can be used only when &times;Magick was compiled
+            used when &times;Magick was compiled. The values 16 and
+            32 can be used only when &times;Magick was compiled
             with the appropriate QuantumDepth.</dd>
           </dl>
         </td>

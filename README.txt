@@ -329,6 +329,11 @@ cc1: warning: changing search order for system directory "/usr/local/include"
 cc1: warning:   as it has already been specified as a non-system directory
 
       This does not indicate a problem.
+   2. With older releases of ImageMagick you may see the warning:
+
+/usr/include/sys/ipc.h:25:3: warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
+
+      This is harmless.
 
 
     Reporting bugs
@@ -377,7 +382,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-<http://www.opensource.org/docs/definition.php> 	
+<http://www.opensource.org/docs/definition.php>
 
 *This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.*

@@ -335,6 +335,13 @@ cc1: warning:   as it has already been specified as a non-system directory
 </pre>
         This does not indicate a problem.
       </li>
+      <li>
+        With older releases of ImageMagick you may see the warning:
+<pre>
+/usr/include/sys/ipc.h:25:3: warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
+</pre>
+      This is harmless.
+      </li>
     </ol>
     <h2><a name="reporting_bugs">Reporting bugs</a></h2>
     <p>Please report bugs in RMagick, its documentation, or its

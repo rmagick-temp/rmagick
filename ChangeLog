@@ -4,7 +4,8 @@ RMagick 1.5.0
     o Do not allow changes to frozen Image, ImageList, and Draw objects.
     o Raise TypeError if freeze method sent to Image::Info or ImageList::Montage
       object.
-    o Added view method to Image, Image::View class
+    o Added view method to Image, Image::View class (thanks to Ara T. Howard and
+      Charles Comstock on c.l.r for the discussion which prompted me to add this class)
     o Added grayscale_pseudo_class method to Image class (GraphicsMagick 1.1)
     o Added radial_blur, random_threshold_channel methods to Image class
       (ImageMagick 6.0.0)

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.19 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.20 2003/09/24 00:21:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -724,18 +724,18 @@ static Draw_annotate(
 }
 
 /*
-    Method:     Draw#composite(x,y,width,height,img<,operator>)
+    Method:     Draw#composite(x,y,width,height,img,operator=OverCompositeOp)
     Purpose:    Implement the "image" drawing primitive
     Notes:      The "img" argument can be either an ImageList object
-                or an Image argument
+                or an Image argument.
 */
-static VALUE
+ static VALUE
 Draw_composite(int argc, VALUE *argv, VALUE self)
 {
     Draw *draw;
     const char *op = "Over";
     double x, y, width, height;
-    int cop;
+    CompositeOperator cop = OverCompositeOp;
     volatile VALUE image;
     Image *comp_img;
     char name[MaxTextExtent];
@@ -760,7 +760,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eTypeError, "composite operator must be a Fixnum (%s given)",
                                 rb_class2name(CLASS_OF(argv[5])));
         }
-        cop = FIX2INT(argv[5]);
+        VALUE_TO_ENUM(argv[5], cop, CompositeOperator);
         switch(cop)
         {
             case AddCompositeOp:

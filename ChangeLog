@@ -1,14 +1,17 @@
 RMagick 1.3.0
     o Added Image#strip!, Image#import_pixels, Image#export_pixels,
-      Image#random_channel_threshold for IM 5.5.8
+      Image#random_channel_threshold for IM 5.5.8, and
+      Image#black_threshold and Image#white_threshold for IM 5.5.7
     o Changed configure to generate top-level Makefile with install,
       uninstall targets. (Thanks to Bob Friesenhahn for the suggestion
       and original implementation.)
     o Incorporated 1.2.2 patch for bugs that occurred when building RMagick
       with Ruby 1.6.7
+    o Added "magick_location" r/o attribute to the ImageMagickError class
     o Tested with ImageMagick 5.5.8
     o Tested with GraphicsMagick 1.0.2
     o Tested with Ruby 1.8.0preview3
+    o Changed to MIT license
 
 RMagick 1.2.2
     o Fixed many bugs in configuration script

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image (class and instance methods, part
   1)</title>
@@ -217,7 +217,16 @@
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Reads an image from an X window.</p>
+    <p>Reads an image from an X window. Unless you identify a
+    window to capture via the <em>optional arguments</em> block,
+    when <code>capture</code> is invoked the cursor will turn into
+    a cross. Click the cursor on the window to be captured.</p>
+
+    <p>Within the optional arguments block, specify
+    <code>self.filename = "root"</code> to capture the entire
+    desktop. To programatically specify the window to be captured,
+    use <code>self.filename = window_id</code>, where window_id is
+    the id displayed by xwininfo(1).</p>
 
     <h4>Arguments</h4>
 
@@ -253,6 +262,16 @@
 
       <dd>If <code>true</code>, include the border in the
       image.</dd>
+
+      <dt>optional arguments</dt>
+
+      <dd>You can specify any of these Image::Info attributes in
+      the <em>optional arguments</em> block: <a href=
+      "info.html#colorspace">colorspace</a>, <a href=
+      "info.html#depth">depth</a>, <a href=
+      "info.html#dither">dither</a>, <a href=
+      "info.html#interlace">interlace</a>, and <a href=
+      "info.html#type">type</a>.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -721,7 +740,7 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-       /></a>
+      name="add_noise_example" /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1014,10 +1033,10 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     "padding:10px; display:none" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
+    "Click to see the example script" name="borderless" /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
-    "ex/border.jpg" alt="border example" /></a>
+    "ex/border.jpg" alt="border example" name="bordered" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left: 224px;" title=
     "Mouse over the example to see the original image" /></p>

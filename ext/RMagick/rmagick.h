@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.21 2003/10/02 12:45:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.22 2003/10/06 00:00:57 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -31,25 +31,6 @@
 #undef PACKAGE_TARNAME
 #include "rmagick_config.h"
 
-#if defined(HAVE_GETNEXTIMAGEINLIST)
-#define GET_NEXT_IMAGE(a) GetNextImageInList(a)
-#else
-#define GET_NEXT_IMAGE(a) (a)->next
-#endif
-
-#if defined(HAVE_GETLOCALEEXCEPTIONMESSAGE)
-#define GET_MSG(s,t) GetLocaleExceptionMessage((s), (t))
-#else
-#define GET_MSG(s,t) t
-#endif
-
-
-#define min(a,b) ((a)<(b)?(a):(b))
-#define max(a,b) ((a)>(b)?(a):(b))
-
-#define Q(N) Q2(N)
-#define Q2(N) #N
-
 // Define a pair of macros that make it easier to code
 // 1.6 and 1.8 alternatives. Code enclosed in RUBY18()
 // is present when compiled for 1.8.0 and later. Code
@@ -68,7 +49,7 @@
 
 
 // Define a version of StringValuePtr that works in both 1.6 and 1.8.
-#if RUBY_VERSION < 0x180
+#if !defined(StringValuePtr)
 #define STRING_PTR(v) rm_string_value_ptr(&(v))
 #else
 #define STRING_PTR(v) StringValuePtr(v)
@@ -78,9 +59,6 @@
 #define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
 
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
-
-RUBY18(typedef long Strlen_t;)
-RUBY16(typedef int Strlen_t;)
 
 typedef ImageInfo Info; // Make type name match class name
 
@@ -231,6 +209,25 @@ EXTERN ID call_ID;         // "call"
 EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 
 
+#if defined(HAVE_GETNEXTIMAGEINLIST)
+#define GET_NEXT_IMAGE(a) GetNextImageInList(a)
+#else
+#define GET_NEXT_IMAGE(a) (a)->next
+#endif
+
+#if defined(HAVE_GETLOCALEEXCEPTIONMESSAGE)
+#define GET_MSG(s,t) GetLocaleExceptionMessage((s), (t))
+#else
+#define GET_MSG(s,t) t
+#endif
+
+
+#define min(a,b) ((a)<(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
+
+#define Q(N) Q2(N)
+#define Q2(N) #N
+
 /*
    Handle warnings & errors
 
@@ -340,6 +337,7 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
    e = (type)(magick_enum->val);\
    } while(0)
 
+
 /*
 *   Method, external function declarations
 */
@@ -368,8 +366,11 @@ extern VALUE Draw_draw(VALUE, VALUE);
 extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
-RUBY16(extern VALUE Draw_new(VALUE);)
-RUBY18(extern VALUE Draw_alloc(VALUE);)
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE Draw_alloc(VALUE);
+#else
+extern VALUE Draw_new(VALUE);
+#endif
 extern VALUE Draw_primitive(VALUE, VALUE);
 
 ATTR_WRITER(Montage, background_color)
@@ -390,8 +391,11 @@ ATTR_WRITER(Montage, texture)
 ATTR_WRITER(Montage, tile)
 ATTR_WRITER(Montage, title)
 extern VALUE Montage_initialize(VALUE);
-RUBY16(extern VALUE Montage_new(VALUE);)
-RUBY18(extern VALUE Montage_alloc(VALUE);)
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE Montage_alloc(VALUE);
+#else
+extern VALUE Montage_new(VALUE);
+#endif
 extern VALUE rm_montage_new(void);
 
 
@@ -456,8 +460,11 @@ ATTR_ACCESSOR(Info, units)
 ATTR_ACCESSOR(Info, view)
 //ATTR_ACCESSOR(Info, verbose)
 
-RUBY16(extern VALUE Info_new(VALUE);)
-RUBY18(extern VALUE Info_alloc(VALUE);)
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE Info_alloc(VALUE);
+#else
+extern VALUE Info_new(VALUE);
+#endif
 
 extern VALUE Info_initialize(VALUE);
 extern VALUE rm_info_new(void);
@@ -517,11 +524,13 @@ ATTR_ACCESSOR(Image, units)
 ATTR_ACCESSOR(Image, x_resolution)
 ATTR_ACCESSOR(Image, y_resolution)
 
-RUBY16(extern VALUE Image_new(int, VALUE *, VALUE);)
-RUBY16(extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);)
-
-RUBY18(extern VALUE Image_alloc(VALUE);)
-RUBY18(extern VALUE Image_initialize(int, VALUE *, VALUE);)
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE Image_alloc(VALUE);
+extern VALUE Image_initialize(int, VALUE *, VALUE);
+#else
+extern VALUE Image_new(int, VALUE *, VALUE);
+extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);
+#endif
 
 extern VALUE Image_adaptive_threshold(int, VALUE *, VALUE);
 extern VALUE Image_add_noise(VALUE, VALUE);
@@ -648,14 +657,20 @@ extern VALUE rm_image_new(Image *);
 
 // rmfill.c
 
-RUBY16(VALUE GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);)
-RUBY18(VALUE GradientFill_alloc(VALUE));
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE GradientFill_alloc(VALUE);
+#else
+VALUE GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+#endif
 
 extern VALUE GradientFill_initialize(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE GradientFill_fill(VALUE, VALUE);
 
-RUBY16(VALUE TextureFill_new(VALUE, VALUE);)
-RUBY18(VALUE TextureFill_alloc(VALUE));
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE TextureFill_alloc(VALUE);
+#else
+VALUE TextureFill_new(VALUE, VALUE);
+#endif
 
 extern VALUE TextureFill_initialize(VALUE, VALUE);
 extern VALUE TextureFill_fill(VALUE, VALUE);
@@ -707,18 +722,21 @@ extern VALUE   TypeMetric_to_s(VALUE);
 extern VALUE   TypeMetric_to_Struct(TypeMetric *);
 
 extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
-RUBY18(extern VALUE Enum_alloc(VALUE);)
-RUBY16(extern VALUE Enum_new(VALUE, VALUE, VALUE);)
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE Enum_alloc(VALUE);
+#else
+extern VALUE Enum_new(VALUE, VALUE, VALUE);
+#endif
 extern VALUE   Enum_initialize(VALUE, VALUE, VALUE);
 extern VALUE   Enum_to_s(VALUE);
 extern VALUE   Enum_to_i(VALUE);
 extern VALUE   Enum_spaceship(VALUE, VALUE);
 extern VALUE   Enum_case_eq(VALUE, VALUE);
 
-#ifndef StringValuePtr
+#if !defined(StringValuePtr)
 extern char *rm_string_value_ptr(volatile VALUE *);
 #endif
-extern char *rm_string_value_ptr_len(volatile VALUE *, Strlen_t *);
+extern char *rm_string_value_ptr_len(volatile VALUE *, long *);
 
 extern void *magick_malloc(const size_t);
 extern void magick_free(void *);

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.2 2003/10/02 12:41:20 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.3 2003/10/06 00:00:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -616,7 +616,7 @@ Draw_get_type_metrics(
     Draw *draw;
     TypeMetric metrics;
     char *text;
-    Strlen_t text_l;
+    long text_l;
     int x;
     unsigned int okay;
 
@@ -723,13 +723,16 @@ Draw_inspect(VALUE self)
 }
 
 /*
-    Method:     Draw.new
+    Method:     Draw.new/Draw.allocate
     Purpose:    Create a new Draw object
     Raises:     ImageMagickError if no memory
 */
 VALUE
-RUBY16(Draw_new(VALUE class))
-RUBY18(Draw_alloc(VALUE class))
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+Draw_alloc(VALUE class)
+#else
+Draw_new(VALUE class)
+#endif
 {
     Draw *draw;
     volatile VALUE draw_obj;
@@ -738,7 +741,9 @@ RUBY18(Draw_alloc(VALUE class))
     memset(draw, '\0', sizeof(Draw));
     draw_obj = Data_Wrap_Struct(class, mark_Draw, destroy_Draw, draw);
 
-    RUBY16(rb_obj_call_init(draw_obj, 0, NULL);)
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_obj_call_init(draw_obj, 0, NULL);
+#endif
 
     return draw_obj;
 }
@@ -986,8 +991,11 @@ Montage_matte_color_eq(VALUE self, VALUE color)
     Purpose:    Create a new Montage object
 */
 VALUE
-RUBY16(Montage_new(VALUE class))
-RUBY18(Montage_alloc(VALUE class))
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+Montage_alloc(VALUE class)
+#else
+Montage_new(VALUE class)
+#endif
 {
     MontageInfo *montage_info;
     Montage *montage;
@@ -1014,7 +1022,9 @@ RUBY18(Montage_alloc(VALUE class))
     montage->compose = OverCompositeOp;
     montage_obj = Data_Wrap_Struct(class, NULL, destroy_Montage, montage);
 
-    RUBY16(rb_obj_call_init(montage_obj, 0, NULL);)
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_obj_call_init(montage_obj, 0, NULL);
+#endif
 
     return montage_obj;
 }
@@ -1026,8 +1036,11 @@ RUBY18(Montage_alloc(VALUE class))
 
 VALUE rm_montage_new(void)
 {
-    RUBY16(return Montage_new(Class_Montage);)
-    RUBY18(return Montage_initialize(Montage_alloc(Class_Montage)));
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    return Montage_initialize(Montage_alloc(Class_Montage));
+#else
+    return Montage_new(Class_Montage);
+#endif
 }
 
 /*

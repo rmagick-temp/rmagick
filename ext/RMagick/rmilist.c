@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.6 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.7 2003/10/06 00:00:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -562,7 +562,7 @@ ImageList_write(VALUE self, VALUE file)
     const MagickInfo *m;
     volatile VALUE info_obj;
     char *filename;
-    Strlen_t filenameL;
+    long filenameL;
     int scene;
     ExceptionInfo exception;
 

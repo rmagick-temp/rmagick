@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.17 2003/10/02 12:45:07 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.18 2003/10/06 00:00:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -88,7 +88,7 @@ void magick_clone_string(char **new_str, const char *str)
                 with a few minor changes to make it work in 1.6.
                 Always called via STRING_PTR
 */
-#if RUBY_VERSION < 0x180
+#if !defined StringValuePtr
 char *
 rm_string_value_ptr(volatile VALUE *ptr)
 {
@@ -119,7 +119,7 @@ rm_string_value_ptr(volatile VALUE *ptr)
                 argument.
                 Always called via STRING_PTR_LEN
 */
-char *rm_string_value_ptr_len(volatile VALUE *ptr, Strlen_t *len)
+char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
 {
     volatile VALUE v = *ptr;
     char *str;
@@ -2077,7 +2077,7 @@ toseq(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
-#ifndef HAVE_APPENDIMAGETOLIST
+#if !defined(HAVE_APPENDIMAGETOLIST)
     Image *tail = NULL;
 #endif
 
@@ -2093,7 +2093,7 @@ toseq(VALUE imagelist)
         Image *image;
 
         Data_Get_Struct(rb_ary_entry(imagelist, x), Image, image);
-#ifdef HAVE_APPENDIMAGETOLIST
+#if defined(HAVE_APPENDIMAGETOLIST)
         AppendImageToList(&head, image);
 #else
         if (!head)

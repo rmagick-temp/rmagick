@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.17 2003/10/02 12:45:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.18 2003/10/06 00:00:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -849,7 +849,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
 {
     Image *image;
     char *prof = NULL;
-    Strlen_t proflen = 0;
+    long proflen = 0;
 
     Data_Get_Struct(self, Image, image);
 
@@ -1346,7 +1346,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     unsigned long width, height;
     unsigned long x, npixels;
     char *map;
-    Strlen_t mapL;
+    long mapL;
     union
     {
        float *f;
@@ -1618,7 +1618,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
 {
     Image *image;
     char *density;
-    Strlen_t densityL;
+    long densityL;
     char temp[128];
     int count;
 
@@ -1744,7 +1744,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     volatile VALUE pixels_ary;
     StorageType stg_type = FIX_STG_TYPE;
     char *map;
-    Strlen_t mapL;
+    long mapL;
     boolean okay;
     ExceptionInfo exception;
     union
@@ -2399,7 +2399,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     volatile VALUE info_obj, image_ary;
     ExceptionInfo exception;
     void *blob;
-    Strlen_t length;
+    long length;
 
     blob = (void *) STRING_PTR_LEN(blob_arg, length);
 
@@ -2959,7 +2959,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
 {
     Image *image;
     char *prof = NULL;
-    Strlen_t profL = 0;
+    long profL = 0;
 
     Data_Get_Struct(self, Image, image);
 
@@ -3101,7 +3101,7 @@ Image__load(VALUE class, VALUE str)
     DumpedImage mi;
     ExceptionInfo exception;
     char *blob;
-    Strlen_t length;
+    long length;
 
     info = CloneImageInfo(NULL);
 
@@ -4085,7 +4085,7 @@ Image_profile_bang(
 {
     Image *image;
     char *prof;
-    Strlen_t len;
+    long len;
 
     Data_Get_Struct(self, Image, image);
     // ProfileImage issues a warning if something goes wrong.
@@ -4262,7 +4262,7 @@ static VALUE
 rd_image(VALUE class, VALUE file_arg, reader_t reader)
 {
     char *filename;
-    Strlen_t filenameL;
+    long filenameL;
     Info *info;
     volatile VALUE info_obj;
     volatile VALUE image_obj, image_ary;
@@ -5734,7 +5734,7 @@ Image_write(VALUE self, VALUE file)
     Info *info;
     volatile VALUE info_obj;
     char *filename;
-    Strlen_t filenameL;
+    long filenameL;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);

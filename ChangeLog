@@ -3,6 +3,7 @@ RMagick 1.3.0
       to Image class for IM 5.5.8, and black_threshold and white_threshold
       for IM 5.5.7
     o Added format= to Image class
+    o Added monochrome= to Image::Info class
     o Enhance read, write, and ping in both Image and ImageList classes
       to accept an open File object as well as filename arguments.
     o Changed configure to generate top-level Makefile with install,

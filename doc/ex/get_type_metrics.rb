@@ -83,7 +83,7 @@ Origin_x = 110
 Origin_y = 220
 Glyph = 'g'
 
-canvas = Image.new(350,300,HatchFill.new('white', 'lightcyan2'))
+canvas = Image.new(410,300,HatchFill.new('white', 'lightcyan2'))
 
 # Draw a big lowercase 'g' on the canvas.
 # Leave room on all sides for the labels.

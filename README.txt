@@ -503,7 +503,7 @@ with that software.
     WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
     MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
-OSI certified <http://www.opensource.org/>
+<http://www.opensource.org/docs/definition.php>
 
 *This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.*

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.64 2004/08/18 23:22:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.65 2004/08/20 19:20:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1682,6 +1682,15 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
+#if defined(HAVE_SETIMAGECOLORSPACE)
+
+    // SetImageColorspace was introduced in 5.5.7. It is essentially
+    // identical to the code below. It either works or throws an exception.
+    (void) SetImageColorspace(image, new_cs);
+    HANDLE_IMG_ERROR(image)
+
+#else
+
     if (new_cs == image->colorspace)
     {
         return self;
@@ -1699,17 +1708,16 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
            HANDLE_IMG_ERROR(image)
         }
         RGBTransformImage(image, new_cs);
-        HANDLE_IMG_ERROR(image);
-        return self;
+        HANDLE_IMG_ERROR(image)
     }
-
-    if (new_cs == RGBColorspace ||
+    else if (new_cs == RGBColorspace ||
         new_cs == TransparentColorspace ||
         new_cs == GRAYColorspace)
     {
         TransformRGBImage(image, image->colorspace);
-        HANDLE_IMG_ERROR(image);
+        HANDLE_IMG_ERROR(image)
     }
+#endif
 
     return self;
 }
@@ -7201,7 +7209,7 @@ trimmer(int bang, VALUE self)
 
     new_image = CropImage(image, &geometry, &exception);
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image);
+    HANDLE_IMG_ERROR(new_image)
     if (!new_image)
     {
         rb_raise(rb_eRuntimeError, "CropImage failed - "
@@ -7616,7 +7624,7 @@ xform_image(
 
     // An exception can occur in either the old or the new images
     HANDLE_ERROR
-    HANDLE_IMG_ERROR(new_image);
+    HANDLE_IMG_ERROR(new_image)
 
     if (bang)
     {

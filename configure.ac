@@ -82,7 +82,7 @@ AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
 AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
-AC_CHECK_FUNCS([CompareImageChannels PreviewImage])
+AC_CHECK_FUNCS([CompareImageChannels PreviewImage SetImageColorspace])
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.

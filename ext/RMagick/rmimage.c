@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.7 2003/08/03 21:49:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.8 2003/08/03 22:28:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -528,7 +528,7 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
     {
-       rb_raise(rb_eArgError, "invalid geometry string `%s'", geom_str);
+       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
     }
     
     ary = rb_ary_new2(3);
@@ -538,6 +538,33 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     
     return rb_yield(ary);
     
+#elif defined(HAVE_GETMAGICKGEOMETRY)
+    Image *image;
+    char *geometry;
+    unsigned int flags;
+    long x, y;
+    unsigned long width, height;
+    VALUE ary;
+
+    Data_Get_Struct(self, Image, image);
+    geometry = STRING_PTR(geom_str);
+
+    width = image->columns;
+    height = image->rows;
+
+    flags = GetMagickGeometry(geometry, &x, &y, &width, &height);
+    if (flags == NoValue)
+    {
+       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
+    }
+    
+    ary = rb_ary_new2(3);
+    rb_ary_store(ary, 0, ULONG2NUM(width));
+    rb_ary_store(ary, 1, ULONG2NUM(height));
+    rb_ary_store(ary, 2, self);
+    
+    return rb_yield(ary);
+        
 #else
     rb_notimplement();
     return (VALUE) 0;

@@ -2303,32 +2303,33 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </caption>
             <tr>
               <td>%b</td>
-              <td>the file size in bytes</td>
+              <td>file size in bytes</td>
             </tr>
             <tr>
               <td>%c</td>
-              <td>comment</td>
+              <td>"comment" property string</td>
             </tr>
             <tr>
               <td>%d</td>
-              <td>the directory in which the image file
+              <td>directory in which the file
               resides</td>
             </tr>
             <tr>
               <td>%e</td>
-              <td>the image filename extension</td>
+              <td>filename extension</td>
             </tr>
             <tr>
               <td>%f</td>
-              <td>original image filename</td>
+              <td>original filename</td>
             </tr>
+            <tr><td>%g</td><td>group number</td></tr>
             <tr>
               <td>%h</td>
-              <td>image height</td>
+              <td>height</td>
             </tr>
             <tr>
               <td>%i</td>
-              <td>current image filename</td>
+              <td>current filename</td>
             </tr>
             <tr>
               <td>%k</td>
@@ -2336,38 +2337,45 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%l</td>
-              <td>the label string</td>
+              <td>"label" property string</td>
             </tr>
             <tr>
               <td>%m</td>
-              <td>the image file format</td>
+              <td>file format</td>
             </tr>
             <tr>
               <td>%n</td>
-              <td>number of images in the image sequence (for
+              <td>number of images in the sequence (for
               RMagick, this is always 1)</td>
             </tr>
             <tr>
               <td>%o</td>
-              <td>output image filename</td>
+              <td>output filename</td>
             </tr>
             <tr>
               <td>%p</td>
-              <td>image page number</td>
+              <td>page number (for
+              RMagick, this is always 1)</td>
             </tr>
             <tr>
               <td>%q</td>
-              <td>image depth</td>
+              <td>depth</td>
+            </tr>
+            <tr>
+              <td>%r</td>
+              <td>A string of the form "ClasstypeColorspace,"
+              for example "DirectClassRGB". If the image's
+              <i>matte</i> attribute is <code>true</code>,
+              appends the word "Matte"
+              to the end of the string.</td>
             </tr>
             <tr>
               <td>%s</td>
-              <td>scene number (within a sequence, not to be
-              confused with the <var>Image#scene</var>
-              attribute)</td>
+              <td>scene number (always 1)</td>
             </tr>
             <tr>
               <td>%t</td>
-              <td>image filename without extension</td>
+              <td>filename without extension</td>
             </tr>
             <tr>
               <td>%u</td>
@@ -2375,7 +2383,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
             </tr>
             <tr>
               <td>%w</td>
-              <td>image widith</td>
+              <td>width</td>
             </tr>
             <tr>
               <td>%x</td>
@@ -2385,6 +2393,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
               <td>%y</td>
               <td>y resolution</td>
             </tr>
+            <tr><td>%z</td><td>depth</td></tr>
           </table>
         </td>
       </tr>

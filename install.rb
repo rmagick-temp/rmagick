@@ -59,7 +59,7 @@ class ConfigTable
                ((major == 1) and
                 ((minor >= 5) or
                  ((minor == 4) and (teeny >= 4)))))
-  
+
   re = Regexp.new('\A' + Regexp.quote(c['prefix']))
   subprefix = lambda {|path|
       re === path and path.sub(re, '$prefix')
@@ -198,7 +198,7 @@ class ConfigTable
       end
       c
     end
-  
+
   end
 
   def initialize
@@ -228,7 +228,7 @@ class ConfigTable
       @table[k] = v
     end
   end
-    
+
   def []( key )
     @table[key] or return nil
     @table[key].gsub( %r<\$([^/]+)> ) { self[$1] }
@@ -519,7 +519,7 @@ class Installer
   def srcdirectory?( path )
     dir? srcfile(path)
   end
-  
+
   def srcfile?( path )
     File.file? srcfile(path)
   end
@@ -671,7 +671,7 @@ class Installer
       install fname, dest, mode, @options['install-prefix']
     end
   end
-  
+
   def targfiles
     (targfilenames() - hookfilenames()).collect {|fname|
         File.exist?(fname) ? fname : File.join(curr_srcdir(), fname)
@@ -722,7 +722,7 @@ class Installer
   def clean_dir_ext( rel )
     clean
   end
-  
+
   def clean
     command config('make-prog') + ' clean' if File.file? 'Makefile'
   end
@@ -869,7 +869,7 @@ class ToplevelInstaller < Installer
       when '-v', '--version'
         puts "#{File.basename $0} version #{Version}"
         exit 0
-      
+
       when '--copyright'
         puts Copyright
         exit 0

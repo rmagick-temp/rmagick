@@ -2,7 +2,7 @@
 require 'RMagick'
 
 i = Magick::ImageList.new
-i.new_image 600, 300 do self.background_color = "white" end
+i.new_image(600, 300) {self.background_color = 'white'}
 
 primitives = Magick::Draw.new
 
@@ -43,7 +43,7 @@ primitives.text 210,30, "'200,25'"
 primitives.text 410,280, "'400,275'"
 
 # Outline
-primitives.stroke 'lavender'
+primitives.stroke 'gray50'
 primitives.stroke_width 1
 primitives.fill_opacity 0
 primitives.rectangle 0,0, 599, 299

@@ -2,7 +2,7 @@
 require 'RMagick'
 
 i = Magick::ImageList.new
-i.new_image 500, 400 do self.background_color = "white" end
+i.new_image(500, 400)  {self.background_color = 'white'}
 
 primitives = Magick::Draw.new
 
@@ -56,7 +56,7 @@ primitives.text 410,305, "'400,300'"
 primitives.text 260,305, "'auto ctl point'"
 
 # Outline
-primitives.stroke('lavender')
+primitives.stroke('gray50')
 primitives.stroke_width(1)
 primitives.fill_opacity(0)
 primitives.rectangle(0,0, 499, 399)

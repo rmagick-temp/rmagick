@@ -3,7 +3,8 @@ require 'RMagick'
 
 # Demonstrate the Draw#text_undercolor method
 
-canvas = Magick::Image.new(250, 100)
+canvas = Magick::Image.new(250, 100)  {self.background_color ='white'}
+
 gc = Magick::Draw.new
 
 gc.stroke('transparent')

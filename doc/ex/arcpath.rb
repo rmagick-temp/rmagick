@@ -4,7 +4,7 @@ require 'RMagick'
 # Demonstrate the "path" drawing primitive.
 
 i = Magick::ImageList.new
-i.new_image(600, 200) { self.background_color = "white" }
+i.new_image(600, 200)  {self.background_color = 'white'}
 
 primitives = Magick::Draw.new
 
@@ -27,7 +27,7 @@ primitives.path 'M300,175 l 25,-12.5 ' +
                 'a12.5,50   -15 0,1 25,-12.5 l 25,-12.5'
 
 # Outline
-primitives.stroke('lavender')
+primitives.stroke('gray50')
 primitives.stroke_width(1)
 primitives.rectangle(0,0, 599, 199)
 

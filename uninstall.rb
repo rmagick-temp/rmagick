@@ -64,6 +64,8 @@ File.safe_unlink("#{so_dir}/RMagick.so", true)
 
 rmdir(doc_dir+'/ex/images')
 rmdir(doc_dir+'/ex')
+rmdir(doc_dir+'/css')
+rmdir(doc_dir+'/scripts')
 rmdir(doc_dir)
 
 exit

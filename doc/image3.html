@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -66,6 +67,8 @@
           <li><a href="#properties">properties</a></li>
 
           <li><a href="#quantize">quantize</a></li>
+
+          <li><a href="#radial_blur">radial_blur</a></li>
 
           <li><a href="#raise">raise</a></li>
 
@@ -435,6 +438,48 @@
   </div>
 
   <div class="sig">
+    <h3 id="radial_blur">radial_blur</h3>
+
+    <p><span class="arg">image</span>.radial_blur(<span class=
+    "arg">aFloat</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Applies a radial blur to the
+    image.</span> This method is available in ImageMagick
+    6.0.0.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>angle</dt>
+
+      <dd>Amount of blur, in degrees</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('radial_blur.rb.html')"><img src=
+    "ex/radial_blur.jpg" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/radial_blur.jpg'" alt="radial_blur example"
+    title="Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>RadialBlurImage</p>
+  </div>
+
+  <div class="sig">
     <h3 id="raise">raise</h3>
 
     <p><span class="arg">image</span>.raise(<span class=
@@ -782,21 +827,21 @@
 
     <p class="rollover"><a href=
     "javascript:popup('rotate_f.rb.html')"><!--
-                This img tag displays the original image when the mouse is over.
-                Use CSS to add padding around the image to make it occupy the
-                same space as the rotated image. --><img style=
+                    This img tag displays the original image when the mouse is over.
+                    Use CSS to add padding around the image to make it occupy the
+                    same space as the rotated image. --><img style=
     "padding-top:34px;padding-bottom:34px; display:none" id=
     "notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
     "Click to see the example script" /><!--
-                  This img tag displays the rotated image.
-                  --><img class="hide" id="rotated" onmouseover=
-    "this.style.display='none'; notrotated.style.display='';"
-    src="ex/rotate_f.jpg" alt=
-    "rotate example" /></a> <img src="ex/images/spin.gif" alt=""
-    class="spin" style="left:322px;" title=
-    "Mouse over the example to see the original image" /></p>
+                      This img tag displays the rotated image.
+                      --><img class="hide" id="rotated"
+    onmouseover="this.style.display='none'; notrotated.style.display='';"
+         src="ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
+         "ex/images/spin.gif" alt="" class="spin" style=
+         "left:322px;" title=
+         "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
 
@@ -1224,21 +1269,20 @@
 
     <p class="rollover"><a href=
     "javascript:popup('shear.rb.html')"><!--
-                  This img tag displays the original image when the mouse is over
-                  --><img style=
+                      This img tag displays the original image when the mouse is over
+                      --><img style=
     "padding-top:34px; padding-bottom:33px; padding-left:49px; padding-right:49px; display:none"
-         id="noshear"
-         onmouseout=
+         id="noshear" onmouseout=
          "this.style.display='none'; sheared.style.display='';" src=
          "ex/images/Flower_Hat.jpg" alt="shear example" title=
          "Click to see the example script" /> <!--
-                   This img tag displays the sheared image when the mouse is not over
-                   -->
+                       This img tag displays the sheared image when the mouse is not over
+                       -->
      <img id="sheared" onmouseover=
-    "this.style.display='none'; noshear.style.display='';"
-    src="ex/shear.jpg" alt=
-    "shear example" /></a><img src="ex/images/spin.gif" alt=""
-    class="spin" style="left: 253px; top: 34px" title=
+    "this.style.display='none'; noshear.style.display='';" src=
+    "ex/shear.jpg" alt="shear example" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" style=
+    "left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href=
@@ -2069,12 +2113,11 @@ img.to_color(pixel)
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="wave example" /><!--
-          This img tag displays the framed image when the mouse is not over
-          --><img class="hide" id="waved" onmouseover=
-    "this.style.display='none'; nowave.style.display='';"
-    src="ex/wave.jpg" alt=
-    "wave example" /></a> <img src="ex/images/spin.gif" alt=""
-    class="spin" title=
+              This img tag displays the framed image when the mouse is not over
+              --><img class="hide" id="waved" onmouseover=
+    "this.style.display='none'; nowave.style.display='';" src=
+    "ex/wave.jpg" alt="wave example" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>Magick API</h4>

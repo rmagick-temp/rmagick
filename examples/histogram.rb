@@ -12,33 +12,8 @@ module Magick
         HISTOGRAM_ROWS = 200
         AIR_FACTOR = 1.025
 
-        # Given a channel name and the frequency data for the
-        # channel, draw a histogram for the specified channel.
-        def channel_histogram(color, label, freqs, scale, fg, bg)
-
-            # Make a blank image to draw on. Calls AllocateImage.
-            histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
-                self.background_color = bg
-                self.border_color = fg
-                }
-
-            gc = Draw.new
-            gc.stroke(color)
-            gc.stroke_width(1)
-            gc.affine(1, 0, 0, -scale, 0, HISTOGRAM_ROWS)
-
-            HISTOGRAM_COLS.times do |x|
-                gc.line(x, 0, x, freqs[x])
-            end
-
-            gc.draw(histogram)
-            histogram['Label'] = label
-
-            return histogram
-        end
-
         # The alpha frequencies are shown as white dots.
-        def alpha_histogram(freqs, scale, fg, bg)
+        def alpha_hist(freqs, scale, fg, bg)
             histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
                 self.background_color = bg
                 self.border_color = fg
@@ -58,27 +33,91 @@ module Magick
             return histogram
         end
 
-        # The RGB histogram must be drawn a pixel at a time. Of course
-        # we could've drawn all the histograms this way, but where's
-        # the fun in that?
-        def rgb_histogram(red, green, blue, scale, fg, bg)
-            histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
+        def channel_histograms(red, green, blue, int, scale, fg, bg)
+            rgb_histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
                 self.background_color = bg
                 self.border_color = fg
             }
+            rgb_histogram['Label'] = 'RGB'
+            red_histogram   = rgb_histogram.copy
+            red_histogram['Label'] = 'Red'
+            green_histogram = rgb_histogram.copy
+            green_histogram['Label'] = 'Green'
+            blue_histogram  = rgb_histogram.copy
+            blue_histogram['Label'] = 'Blue'
+            int_histogram = rgb_histogram.copy
+            int_histogram['Label'] = 'Intensity'
+            int_histogram.matte = true
 
             HISTOGRAM_COLS.times do |x|
-                column = histogram.get_pixels(x, 0, 1, HISTOGRAM_ROWS-1)
-                column.each_with_index do |p, n|
-                    p.red = MaxRGB if n >= HISTOGRAM_ROWS - (red[x] * scale)
-                    p.green = MaxRGB if n >= HISTOGRAM_ROWS - (green[x] * scale)
-                    p.blue = MaxRGB if n >= HISTOGRAM_ROWS - (blue[x] * scale)
+                rgb_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                red_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                green_column = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                blue_column  = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                int_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                HISTOGRAM_ROWS.times do |y|
+
+                    yf = Float(y)
+                    if yf >= HISTOGRAM_ROWS - (red[x] * scale)
+                        red_column[y].red = MaxRGB
+                        rgb_column[y].red = MaxRGB
+                    end
+                    if yf >= HISTOGRAM_ROWS - (green[x] * scale)
+                        green_column[y].green = MaxRGB
+                        rgb_column[y].green = MaxRGB
+                    end
+                    if yf >= HISTOGRAM_ROWS - (blue[x] * scale)
+                        blue_column[y].blue = MaxRGB
+                        rgb_column[y].blue = MaxRGB
+                    end
+                    if yf >= HISTOGRAM_ROWS - (int[x] * scale)
+                        int_column[y].opacity = TransparentOpacity
+                    end
                 end
-                histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS-1, column)
+                rgb_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, rgb_column)
+                red_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, red_column)
+                green_histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS, green_column)
+                blue_histogram.store_pixels( x, 0, 1, HISTOGRAM_ROWS, blue_column)
+                int_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, int_column)
             end
 
-            histogram['Label'] = 'RGB'
-            return histogram
+           return red_histogram, green_histogram, blue_histogram, rgb_histogram, int_histogram
+        end
+
+        # Make the color histogram. Quantize the image to 256 colors if necessary.
+        def color_hist(fg, bg)
+            img = number_colors > 256 ? quantize(256) : self
+
+            begin
+                hist = img.color_histogram
+            rescue NotImplementedError
+                $stderr.puts "The color_histogram method is not supported by this version "+
+                             "of ImageMagick/GraphicsMagick"
+
+            else
+                pixels = hist.keys.sort_by {|pixel| hist[pixel] }
+                scale = HISTOGRAM_ROWS / (hist.values.max*AIR_FACTOR)
+
+                histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
+                    self.background_color = bg
+                    self.border_color = fg
+                    }
+
+                x = 0
+                pixels.each do |pixel|
+                    column = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
+                    HISTOGRAM_ROWS.times do |y|
+                        if y >= HISTOGRAM_ROWS - (hist[pixel] * scale)
+                            column[y] = pixel;
+                        end
+                    end
+                    histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS, column)
+                    x = x.succ
+                end
+
+                histogram['Label'] = 'Color Frequency'
+                return histogram
+            end
         end
 
         # Use AnnotateImage to write the stats.
@@ -110,62 +149,19 @@ Colors: #{number_colors}
             return info
         end
 
-        # The intensity histogram is drawn as a gradient. Draw the histogram using
-        # white lines, then call TransparentImage to make the white lines transparent,
-        # then composite the histogram over a gradient background.
-        def intensity_histogram(freqs, scale, fg, bg)
-
-            histogram = channel_histogram('white', 'Intensity', freqs, scale, fg, bg)
-            histogram = histogram.transparent('white')
+        def intensity_hist(int_histogram)
 
             gradient = (Image.read("gradient:#ffff80-#ff9000") { self.size="#{HISTOGRAM_COLS}x#{HISTOGRAM_ROWS}" }).first
-            histogram = gradient.composite(histogram, CenterGravity, OverCompositeOp)
+            int_histogram = gradient.composite(int_histogram, CenterGravity, OverCompositeOp)
 
-            histogram['Label'] = 'Intensity'
+            int_histogram['Label'] = 'Intensity'
 
-            return histogram
+            return int_histogram
         end
 
         # Returns a value between 0 and 255. Same as the PixelIntensity macro.
         def pixel_intensity(pixel)
             (306*pixel.red + 601*pixel.green + 117*pixel.blue)/1024
-        end
-
-        # Make the color histogram. Quantize the image to 256 colors if necessary.
-        def color_freq(fg, bg)
-            img = number_colors > 256 ? quantize(256) : self
-
-            histogram = Image.new(HISTOGRAM_COLS, HISTOGRAM_ROWS) {
-                self.background_color = bg
-                self.border_color = fg
-                }
-
-            begin
-                hist = img.color_histogram
-                pixels = hist.keys.sort_by {|pixel| hist[pixel] }
-
-                scale = HISTOGRAM_ROWS / (hist.values.max*AIR_FACTOR)
-
-                gc = Draw.new
-                gc.affine(1, 0, 0, -scale, 0, HISTOGRAM_ROWS)
-                width = 256.0/img.number_colors
-                gc.stroke_width(width.to_i)
-
-                start = 256 - img.number_colors
-                pixels.each { |pixel|
-                    gc.stroke(pixel.to_color)
-                    gc.line(start, 0, start, hist[pixel])
-                    start += width
-                }
-
-                gc.draw(histogram)
-            rescue NotImplementedError
-                $stderr.puts "The color_histogram method is not supported by this version "+
-                             "of ImageMagick/GraphicsMagick"
-            end
-
-            histogram['Label'] = 'Color Frequency'
-            return histogram
         end
 
       public
@@ -181,16 +177,16 @@ Colors: #{number_colors}
             rows.times do |row|
                 pixels = get_pixels(0, row, columns, 1)
                 pixels.each do |pixel|
-                    red[pixel.red] = red[pixel.red].succ
-                    green[pixel.green] = green[pixel.green].succ
-                    blue[pixel.blue] = blue[pixel.blue].succ
+                    red[pixel.red] += 1
+                    green[pixel.green] += 1
+                    blue[pixel.blue] += 1
 
                     # Only count opacity channel if some pixels are not opaque.
                     if !opaque?
-                        alpha[pixel.opacity] = alpha[pixel.opacity].succ
+                        alpha[pixel.opacity] += 1
                     end
                     v = pixel_intensity(pixel)
-                    int[v]   = int[v].succ
+                    int[v] += 1
                 end
             end
 
@@ -207,25 +203,29 @@ Colors: #{number_colors}
             thumb['Label'] = File.basename(filename)
             charts << thumb
 
-            # Add the channel histograms
-            charts << channel_histogram('red', 'Red', red, scale, fg, bg)
-            charts << channel_histogram('rgb(0,255,0)', 'Green', green, scale, fg, bg)
-            charts << channel_histogram('blue', 'Blue', blue, scale, fg, bg)
+            # Compute the channel and intensity histograms.
+            channel_hists = channel_histograms(red, green, blue, int, scale, fg, bg)
+
+            # Add the red, green, and blue histograms to the list
+            charts << channel_hists.shift
+            charts << channel_hists.shift
+            charts << channel_hists.shift
 
             # Add Alpha channel or image stats
             if !opaque?
-                charts << alpha_histogram(alpha, scale, fg, bg)
+                charts << alpha_hist(alpha, scale, fg, bg)
             else
                 charts << info_text(fg, bg)
             end
 
-            charts << rgb_histogram(red, green, blue, scale, fg, bg)
+            # Add the RGB histogram
+            charts << channel_hists.shift
 
             # Add the intensity histogram.
-            charts << intensity_histogram(int, scale, fg, bg)
+            charts << intensity_hist(channel_hists.shift)
 
             # Add the color frequency histogram.
-            charts << color_freq(fg, bg)
+            charts << color_hist(fg, bg)
 
             # Make a montage.
             histogram = charts.montage {

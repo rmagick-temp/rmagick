@@ -65,7 +65,10 @@ AC_DEFINE_UNQUOTED(MAGICKNAME, $MAGICKNAME)
 AC_CHECK_HEADER(magick/api.h, [],
     [AC_MSG_ERROR([Can't find magick/api.h])])
 
-# What functions?
+# What standard functions?
+AC_CHECK_FUNCS([snprintf])
+    
+# What ImageMagick/GraphicsMagick functions?
 AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
 AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList]) 
 AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])

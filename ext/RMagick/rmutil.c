@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.2 2003/07/16 22:42:20 tim Exp $ */
+/* $Id: rmutil.c,v 1.3 2003/07/17 22:53:32 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1994,17 +1994,25 @@ magick_error_handler(
 
     if (severity >= ERROR_SEVERITY)
     {
-        strcpy(msg, GetLocaleExceptionMessage(severity, reason));
-        if (description)
-        {
-            strcat(msg, ": ");
-            strcat(msg, GetLocaleExceptionMessage(severity, description));
-        }
+#if defined(HAVE_SNPRINTF)
+        snprintf(msg, sizeof(msg)-1,
+#else
+        sprintf(msg,
+#endif
+                     "%s%s%s",
+            GetLocaleExceptionMessage(severity, reason),
+            description ? ": " : "",
+            description ? GetLocaleExceptionMessage(severity, description) : "");
+
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
         {
         char extra[100];
 
+#if defined(HAVE_SNPRINTF)
+        snprintf(extra, sizeof(extra)-1, "%s at %s:%lu", function, module, line);
+#else
         sprintf(extra, "%s at %s:%lu", function, module, line);
+#endif
         raise_error(msg, extra);
         }
 #else
@@ -2013,13 +2021,15 @@ magick_error_handler(
     }
     else if (severity != UndefinedException)
     {
-        strcpy(msg, "RMagick: ");
-        strcat(msg, GetLocaleExceptionMessage(severity, reason));
-        if (description)
-        {
-            strcat(msg, ": ");
-            strcat(msg, GetLocaleExceptionMessage(severity, description));
-        }
+#if defined(HAVE_SNPRINTF)
+        snprintf(msg, sizeof(msg)-1,
+#else
+        sprintf(msg,
+#endif
+                     "RMagick: %s%s%s",
+            GetLocaleExceptionMessage(severity, reason),
+            description ? ": " : "",
+            description ? GetLocaleExceptionMessage(severity, description) : "");
         rb_warning(msg);
     }
 }

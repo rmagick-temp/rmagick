@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.4 2003/10/11 15:29:57 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.5 2003/12/16 00:12:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -918,15 +918,18 @@ Montage_font_eq(VALUE self, VALUE font)
 /*
     Method:     Magick::Montage#frame(frame-geometry)
     Purpose:    set frame value
-    Notes:      The geometry is in the form:
+    Notes:      The geometry is a string in the form:
                 <width>x<height>+<outer-bevel-width>+<inner-bevel-width>
+                or a Geometry object
 */
 VALUE
-Montage_frame_eq(VALUE self, VALUE frame)
+Montage_frame_eq(VALUE self, VALUE frame_arg)
 {
     Montage *montage;
+    volatile VALUE frame;
 
     Data_Get_Struct(self, Montage, montage);
+    frame = rb_funcall(frame_arg, to_s_ID, 0);
     magick_clone_string(&montage->info->frame, STRING_PTR(frame));
 
     return self;
@@ -937,11 +940,13 @@ Montage_frame_eq(VALUE self, VALUE frame)
     Purpose:    set geometry value
 */
 VALUE
-Montage_geometry_eq(VALUE self, VALUE geometry)
+Montage_geometry_eq(VALUE self, VALUE geometry_arg)
 {
     Montage *montage;
+    volatile VALUE geometry;
 
     Data_Get_Struct(self, Montage, montage);
+    geometry = rb_funcall(geometry_arg, to_s_ID, 0);
     magick_clone_string(&montage->info->geometry, STRING_PTR(geometry));
 
     return self;
@@ -1140,11 +1145,13 @@ Montage_texture_eq(VALUE self, VALUE texture)
     Purpose:    set tile value
 */
 VALUE
-Montage_tile_eq(VALUE self, VALUE tile)
+Montage_tile_eq(VALUE self, VALUE tile_arg)
 {
     Montage *montage;
+    volatile VALUE tile;
 
     Data_Get_Struct(self, Montage, montage);
+    tile = rb_funcall(tile_arg, to_s_ID, 0);
     magick_clone_string(&montage->info->tile, STRING_PTR(tile));
 
     return self;

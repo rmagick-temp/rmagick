@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.24 2003/12/01 00:00:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.25 2003/12/16 00:12:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -549,22 +549,24 @@ Image_capture(
     Purpose:    parse geometry string, compute new image geometry
 */
 VALUE
-Image_change_geometry(VALUE self, VALUE geom_str)
+Image_change_geometry(VALUE self, VALUE geom_arg)
 {
 #if defined(HAVE_PARSESIZEGEOMETRY)
     Image *image;
     RectangleInfo rect = {0};
+    volatile VALUE geom_str;
     char *geometry;
     unsigned int flags;
     volatile VALUE ary;
 
     Data_Get_Struct(self, Image, image);
+    geom_str = rb_funcall(geom_arg, to_s_ID, 0);
     geometry = STRING_PTR(geom_str);
 
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
     {
-       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
+       rb_raise(rb_eArgError, "invalid geometry `%s'", geometry);
     }
 
     ary = rb_ary_new2(3);
@@ -1754,43 +1756,58 @@ Image_density(VALUE self)
 }
 
 /*
-    Method:     Image#density=
+    Method:     Image#density="XxY"
+                Image#density=aGeometry
     Purpose:    Set the x & y resolutions in the image
     Notes:      The density is a string of the form "XresxYres" or simply "Xres".
                 If the y resolution is not specified, set it equal to the x
                 resolution. This is equivalent to PerlMagick's handling of
                 density.
-                We use an auto buffer because the argument can never be more than
-                a few characters.
+
+                The density can also be a Geometry object. The width attribute
+                is used for the x resolution. The height attribute is used for
+                the y resolution. If the height attribute is missing, the
+                width attribute is used for both.
 */
 VALUE
 Image_density_eq(VALUE self, VALUE density_arg)
 {
     Image *image;
     char *density;
-    long density_l;
-    char temp[128];
+    volatile VALUE x_val, y_val;
     int count;
+    double x_res, y_res;
 
     Data_Get_Struct(self, Image, image);
-    density = STRING_PTR_LEN(density_arg, density_l);
-    // If the density string is longer than the temp buffer, it must be invalid
-    if (density_l >= sizeof(temp))
+
+    if (TYPE(density_arg) == T_STRING)
     {
-        rb_raise(rb_eArgError, "invalid density geometry %s", density);
+        density = STRING_PTR(density_arg);
+        if (!IsGeometry(density))
+        {
+            rb_raise(rb_eArgError, "invalid density geometry %s", density);
+        }
+
+        count = sscanf(density, "%lfx%lf", &image->x_resolution, &image->y_resolution);
+        if (count < 2)
+        {
+            image->y_resolution = image->x_resolution;
+        }
     }
 
-    memcpy(temp, density, (size_t)density_l);
-    temp[density_l] = '\0';
-    if (!IsGeometry(temp))
+    // Geometry object. Width and height attributes are always positive.
+    else
     {
-        rb_raise(rb_eArgError, "invalid density geometry %s", density);
-    }
-
-    count = sscanf(temp, "%lfx%lf", &image->x_resolution, &image->y_resolution);
-    if (count < 2)
-    {
-        image->y_resolution = image->x_resolution;
+        x_val = rb_funcall(density_arg, rb_intern("width"), 0);
+        x_res = NUM2DBL(x_val);
+        y_val = rb_funcall(density_arg, rb_intern("height"), 0);
+        y_res = NUM2DBL(y_val);
+        if(x_res == 0.0)
+        {
+            rb_raise(rb_eArgError, "invalid x resolution: %f", x_res);
+        }
+        image->y_resolution = y_res != 0.0 ? y_res : x_res;
+        image->x_resolution = x_res;
     }
 
     return self;

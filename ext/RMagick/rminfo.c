@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.12 2003/11/30 21:40:16 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.13 2003/12/16 00:12:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -133,25 +133,28 @@ DEF_ATTR_READER(Info, density, str)
     Raise:      ArgumentError
 */
 VALUE
-Info_density_eq(VALUE self, VALUE density)
+Info_density_eq(VALUE self, VALUE density_arg)
 {
     Info *info;
+    volatile VALUE density;
     char *dens;
 
     Data_Get_Struct(self, Info, info);
 
-    if (NIL_P(density) || STRING_PTR(density) == NULL)
+    if(NIL_P(density_arg))
     {
         magick_free(info->density);
         info->density = NULL;
         return self;
     }
 
+    density = rb_funcall(density_arg, to_s_ID, 0);
     dens = STRING_PTR(density);
     if (!IsGeometry(dens))
     {
         rb_raise(rb_eArgError, "invalid density geometry: %s", dens);
     }
+
     magick_clone_string(&info->density, dens);
 
     return self;
@@ -205,25 +208,28 @@ DEF_ATTR_ACCESSOR(Info, dither, bool)
 DEF_ATTR_READER(Info, extract, str)
 
 VALUE
-Info_extract_eq(VALUE self, VALUE extract)
+Info_extract_eq(VALUE self, VALUE extract_arg)
 {
     Info *info;
     char *extr;
+    volatile VALUE extract;
 
     Data_Get_Struct(self, Info, info);
 
-    if (NIL_P(extract) || STRING_PTR(extract) == NULL)
+    if (NIL_P(extract_arg))
     {
         magick_free(info->extract);
         info->extract = NULL;
         return self;
     }
 
+    extract = rb_funcall(extract_arg, to_s_ID, 0);
     extr = STRING_PTR(extract);
     if (!IsGeometry(extr))
     {
         rb_raise(rb_eArgError, "invalid extract geometry: %s", extr);
     }
+
     magick_clone_string(&info->extract, extr);
 
     return self;
@@ -284,25 +290,27 @@ Info_extract_eq(VALUE self, VALUE extr)
 DEF_ATTR_READER(Info, tile, str)
 
 VALUE
-Info_tile_eq(VALUE self, VALUE tile)
+Info_tile_eq(VALUE self, VALUE tile_arg)
 {
     Info *info;
     char *til;
+    volatile VALUE tile;
 
     Data_Get_Struct(self, Info, info);
 
-    if (NIL_P(tile) || STRING_PTR(tile) == NULL)
-    {
-        magick_free(info->tile);
-        info->tile = NULL;
+    if (NIL_P(tile_arg))
+        magick_free(info->tile_arg);
+        info->tile_arg = NULL;
         return self;
     }
 
+    tile = rb_funcall(tile_arg, to_s_ID, 0);
     til = STRING_PTR(tile);
     if (!IsGeometry(til))
     {
         rb_raise(rb_eArgError, "invalid tile geometry: %s", til);
     }
+
     magick_clone_string(&info->tile, til);
 
     return self;
@@ -720,28 +728,34 @@ DEF_ATTR_READER(Info, size, str)
 
 /*
     Method:     Info#size=<aString>
-    Purpose:    Set the size (a Geometry string, i.e. WxH{+-}x{+-}y
+                Info#size=<aGeometry>
+    Purpose:    Set the size (a Geometry string, i.e. WxH{+-}x{+-}y)
     Raises:     ArgumentError
 */
 VALUE
 Info_size_eq(VALUE self, VALUE size_arg)
 {
     Info *info;
+    volatile VALUE size;
+    char *sz;
 
     Data_Get_Struct(self, Info, info);
 
-    if (NIL_P(size_arg) || STRING_PTR(size_arg) == NULL)
+    if (NIL_P(size_arg))
     {
         magick_free(info->size);
         info->size = NULL;
         return self;
     }
 
-    if (!IsGeometry(STRING_PTR(size_arg)))
+    size = rb_funcall(size_arg, to_s_ID, 0);
+    sz = STRING_PTR(size);
+    if (!IsGeometry(sz))
     {
-        rb_raise(rb_eArgError, "invalid size geometry");
+        rb_raise(rb_eArgError, "invalid size geometry: %s", sz);
     }
-    magick_clone_string(&info->size, STRING_PTR(size_arg));
+
+    magick_clone_string(&info->size, sz);
 
     return self;
 }

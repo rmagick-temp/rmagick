@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.10 2003/12/05 00:10:58 rmagick Exp $
+# $Id: RMagick.rb,v 1.11 2003/12/16 00:12:58 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -22,6 +22,86 @@ def Magick.formats(&block)
         @@formats
     end
 end
+
+unless Object.methods.include? "object_id"
+    alias object_id id
+end
+
+
+# Geometry class and related enum constants
+class GeometryValue < Enum
+    # no methods
+end
+
+PercentGeometry  = GeometryValue.new(:PercentGeometry, 1)
+AspectGeometry   = GeometryValue.new(:AspectGeometry, 2)
+LessGeometry     = GeometryValue.new(:LessGeometry, 3)
+GreaterGeometry  = GeometryValue.new(:GreaterGeometry, 4)
+AreaGeometry     = GeometryValue.new(:AreaGeometry, 5)
+
+class Geometry
+    FLAGS = ['', '%', '!', '<', '>', '@']
+    RFLAGS = { '%' => PercentGeometry,
+               '!' => AspectGeometry,
+               '<' => LessGeometry,
+               '>' => GreaterGeometry,
+               '@' => AreaGeometry }
+
+    attr_accessor :width, :height, :x, :y, :flag
+
+    def initialize(width=nil, height=nil, x=nil, y=nil, flag=nil)
+
+        # Support floating-point width and height arguments so Geometry
+        # objects can be used to specify Image#density= arguments.
+        if width == nil
+            @width = 0
+        elsif width.to_f >= 0.0
+            @width = width.to_f
+        else
+            raise ArgumentError, "width must be >= 0: #{width}"
+        end
+        if height == nil
+            @height = 0
+        elsif height.to_f >= 0.0
+            @height = height.to_f
+        else
+            raise ArgumentError, "height must be >= 0: #{height}"
+        end
+
+        @x    = x.to_i
+        @y    = y.to_i
+        @flag = flag.to_i
+    end
+
+    # Construct an object from a geometry string
+    RE = /\A(\d*)(?:x(\d+))?([-+]\d+)?([-+]\d+)?([%!<>@]?)\Z/
+
+    def Geometry.from_s(str)
+        raise(ArgumentError, "no geometry string specified") unless str
+
+        m = RE.match(str)
+        if m
+            width  = m[1].to_i
+            height = m[2].to_i
+            x      = m[3].to_i
+            y      = m[4].to_i
+            flag   = RFLAGS[m[5]]
+        else
+            raise ArgumentError, "invalid geometry format"
+        end
+        Geometry.new(width, height, x, y, flag)
+    end
+
+    # Convert object to a geometry string
+    def to_s
+        str = ''
+        str << sprintf("%g", @width) if @width > 0
+        str << sprintf("x%g", @height) if @height > 0
+        str << sprintf("%+d%+d", @x, @y) if (@x != 0 || @y != 0)
+        str << FLAGS[@flag]
+    end
+end
+
 
 class Draw
 
@@ -681,7 +761,7 @@ protected
             return
         elsif cfid != nil
             each_with_index do |f,i|
-                if f.id == cfid
+                if f.object_id == cfid
                     @scene = i
                     return
                 end
@@ -733,7 +813,7 @@ public
 
     def &(other)
         is_a_image_array other
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -743,14 +823,14 @@ public
         unless n.kind_of? Integer
             raise ArgumentError, "Integer required (#{n.class} given)"
         end
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def +(other)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -758,7 +838,7 @@ public
 
     def -(other)
         is_a_image_array other
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -773,7 +853,7 @@ public
 
     def |(other)
         is_a_image_array other
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -785,7 +865,7 @@ public
     end
 
     def collect(&block)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
@@ -798,14 +878,14 @@ public
     end
 
     def compact
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def compact!
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super          # returns nil if no changes were made
         set_cf cfid
         return a
@@ -820,21 +900,21 @@ public
 
     def delete(obj, &block)
         is_a_image obj
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
     end
 
     def delete_at(ndx)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
     end
 
     def delete_if(&block)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -842,7 +922,7 @@ public
 
     def fill(obj, *args)
         is_a_image obj
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -856,7 +936,7 @@ public
 
     if Array.instance_methods(false).include? 'insert' then
         def insert(*args)
-            cfid = self[@scene].id rescue nil
+            cfid = self[@scene].object_id rescue nil
             a = self.class.new.replace super
             a.set_cf cfid
             return a
@@ -867,7 +947,7 @@ public
     # so it doesn't conflict with our own map method.
     if Array.instance_methods(false).include? '__map__' then
         def __map__(&block)
-            cfid = self[@scene].id rescue nil
+            cfid = self[@scene].object_id rescue nil
             a = self.class.new.replace super
             a.set_cf cfid
             return a
@@ -881,7 +961,7 @@ public
     end
 
     def pop
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -896,7 +976,7 @@ public
 
     if Array.instance_methods(false).include? 'reject' then
         def reject(&block)
-            cfid = self[@scene].id rescue nil
+            cfid = self[@scene].object_id rescue nil
             a = super
             set_cf cfid
             return a
@@ -904,7 +984,7 @@ public
     end
 
     def reject!(&block)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -916,7 +996,7 @@ public
         # test for it instead of letting rescue catch it.
         cfid = nil
         if @scene then
-            cfid = self[@scene].id rescue nil
+            cfid = self[@scene].object_id rescue nil
         end
         super
         set_cf cfid
@@ -924,14 +1004,14 @@ public
     end
 
     def reverse
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def reverse!
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -939,7 +1019,7 @@ public
 
     if Array.instance_methods(false).include? 'select' then
         def select(*args,&block)
-            cfid = self[@scene].id rescue nil
+            cfid = self[@scene].object_id rescue nil
             a = super
             a.set_cf cfid
             return a
@@ -947,7 +1027,7 @@ public
     end
 
     def shift
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -958,7 +1038,7 @@ public
     end
 
     def slice!(*args)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         if args.length > 1 || args[0].kind_of?(Range)
             a = self.class.new.replace super
         else
@@ -969,14 +1049,14 @@ public
     end
 
     def uniq
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = self.class.new.replace super
         a.set_cf cfid
         return a
     end
 
     def uniq!(*args)
-        cfid = self[@scene].id rescue nil
+        cfid = self[@scene].object_id rescue nil
         a = super
         set_cf cfid
         return a
@@ -1081,7 +1161,7 @@ public
                 super
             end
         rescue NameError
-          raise NameError, "undefined method `#{methID.id2name}' for #{self.class}"
+          raise NameError, "undefined method `#{methID.object_id2name}' for #{self.class}"
         rescue Exception
             $@.delete_if { |s| /:in `send'$/.match(s) || /:in `method_missing'$/.match(s) }
             raise

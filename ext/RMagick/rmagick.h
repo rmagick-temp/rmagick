@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.26 2003/12/01 00:00:41 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.27 2003/12/16 00:12:48 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -115,6 +115,8 @@ typedef struct
 
 #define MAGICK_LOC "magick_location"     // instance variable name in ImageMagickError class
 
+#define MAX_GEOM_STR 51                 // max length of a geometry string
+
 /*
     ImageMagick used simply size_t and off_t in 5.5.1, then defined the
     Extended(Un)SignedIntegralType from 5.5.2 thru 5.5.7. The 5.5.8 release
@@ -166,6 +168,7 @@ EXTERN VALUE Class_AffineMatrix;
 EXTERN VALUE Class_Chromaticity;
 EXTERN VALUE Class_Color;
 EXTERN VALUE Class_Font;
+EXTERN VALUE Class_Geometry;
 EXTERN VALUE Class_Pixel;
 EXTERN VALUE Class_Point;
 EXTERN VALUE Class_Primary;
@@ -206,6 +209,7 @@ EXTERN ID length_ID;       // "length"
 EXTERN ID values_ID;       // "values"
 EXTERN ID cur_image_ID;    // "cur_image"
 EXTERN ID call_ID;         // "call"
+EXTERN ID to_s_ID;         // "to_s"
 EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 
 

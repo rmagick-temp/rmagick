@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.41 2004/08/18 23:22:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.42 2004/11/28 22:26:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -69,7 +69,7 @@ void *magick_realloc(void *ptr, const size_t size)
     Purpose:    make a copy of a string in malloc'd memory
     Notes:      Any existing string pointed to by *new_str is freed.
                 CloneString asserts if no memory. No need to check
-                clsits return value.ls
+                its return value.
 
 */
 void magick_clone_string(char **new_str, const char *str)

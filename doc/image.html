@@ -139,7 +139,7 @@
                   <li><a href=
                   "#Image.get_exif_by_entry">get_exif_by_entry</a></li>
                   <li><a href=
-                  "#Image.get_exif_by_tag">get_exif_by_tag</a></li>
+                  "#Image.get_exif_by_number">get_exif_by_number</a></li>
                   <li><a href=
                   "#Image.get_pixels">get_pixels</a></li>
                   <li><a href="#Image.gray_q">gray?</a></li>
@@ -2780,22 +2780,23 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
         <td valign="top">Example</td>
         <td class="example">
 <pre>
-image.get_exif_by_entry('Make') &raquo; 'Canon'
-image.get_exif_by_entry("ShutterSpeedValue") &raquo; "125/32"
+image.get_exif_by_entry('Make') &raquo; [["Make", "Canon"]]
+image.get_exif_by_entry("ShutterSpeedValue") &raquo;
+    [["ShutterSpeedValue", "189/32"]]
 image.get_exif_by_entry() &raquo;
-    [["Make", "Canon"], ["ShutterSpeedValue", "125/32"] ...]
+    [["Make", "Canon"], ["ShutterSpeedValue", "189/32"] ...]
 </pre>
         </td>
       </tr>
       <tr>
         <td valign="top">See also</td>
         <td><a href=
-        "#Image.get_exif_by_tag">get_exif_by_tag</a></td>
+        "#Image.get_exif_by_number">get_exif_by_number</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
-        "Image.get_exif_by_tag">get_exif_by_tag</a></td>
-        <td><i>image</i>.get_exif_by_tag(<i>[tag]*</i>) -&gt;
+        "Image.get_exif_by_number">get_exif_by_number</a></td>
+        <td><i>image</i>.get_exif_by_number(<i>[tag]*</i>) -&gt;
         <i>aHash</i></td>
       </tr>
       <tr>
@@ -2809,16 +2810,16 @@ image.get_exif_by_entry() &raquo;
       <tr>
         <td valign="top">Returns</td>
         <td>A hash. If there is no entry with the specified number
-        the value is set to "unknown".</td>
+        the value is set to <code>nil</code>.</td>
       </tr>
       <tr>
         <td valign="top">Example</td>
         <td class="example">
 <pre>
-image.get_exif_by_tag(271) &raquo; 'Canon'
-image.get_exif_by_tag(37377) &raquo; "125/32"
-image.get_exif_by_tag() &raquo;
-    {271=&gt;"Canon"], [37377=&gt;"125/32"] ...}
+image.get_exif_by_number(271) &raquo; {271=&gt;"Canon"}
+image.get_exif_by_number(37377) &raquo; {37377=&gt;"189/32"}
+image.get_exif_by_number() &raquo;
+    {271=&gt;"Canon", 37377=&gt;"189/32" ...}
 </pre>
         </td>
       </tr>

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.10 2004/03/19 01:32:22 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.11 2004/04/02 23:47:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -22,7 +22,7 @@ Draw_affine_eq(VALUE self, VALUE matrix)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     AffineMatrix_to_AffineMatrix(&draw->info->affine, matrix);
     return self;
@@ -37,7 +37,7 @@ Draw_align_eq(VALUE self, VALUE align)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(align, draw->info->align, AlignType);
     return self;
@@ -52,7 +52,7 @@ Draw_decorate_eq(VALUE self, VALUE decorate)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(decorate, draw->info->decorate, DecorationType);
     return self;
@@ -67,7 +67,7 @@ Draw_density_eq(VALUE self, VALUE density)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->density, STRING_PTR(density));
 
@@ -83,7 +83,7 @@ Draw_encoding_eq(VALUE self, VALUE encoding)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->encoding, STRING_PTR(encoding));
 
@@ -99,7 +99,7 @@ Draw_fill_eq(VALUE self, VALUE fill)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->fill, fill);
     return self;
@@ -114,7 +114,7 @@ Draw_font_eq(VALUE self, VALUE font)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->font, STRING_PTR(font));
 
@@ -130,7 +130,7 @@ Draw_font_family_eq(VALUE self, VALUE family)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->family, STRING_PTR(family));
 
@@ -146,7 +146,7 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(stretch, draw->info->stretch, StretchType);
     return self;
@@ -161,7 +161,7 @@ Draw_font_style_eq(VALUE self, VALUE style)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(style, draw->info->style, StyleType);
     return self;
@@ -181,7 +181,7 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
     Draw *draw;
     WeightType w;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     if (FIXNUM_P(weight))
@@ -244,7 +244,7 @@ Draw_gravity_eq(VALUE self, VALUE grav)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(grav, draw->info->gravity, GravityType);
 
@@ -260,7 +260,7 @@ Draw_pointsize_eq(VALUE self, VALUE pointsize)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     draw->info->pointsize = NUM2DBL(pointsize);
     return self;
@@ -279,7 +279,7 @@ Draw_rotation_eq(VALUE self, VALUE deg)
     double degrees;
     AffineMatrix affine, current;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     degrees = NUM2DBL(deg);
@@ -317,7 +317,7 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->stroke, stroke);
     return self;
@@ -332,7 +332,7 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     draw->info->text_antialias = RTEST(text_antialias);
     return self;
@@ -347,7 +347,7 @@ Draw_undercolor_eq(VALUE self, VALUE undercolor)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->undercolor, undercolor);
     return self;
@@ -389,7 +389,7 @@ VALUE Draw_annotate(
         rb_obj_instance_eval(0, NULL, self);
     }
 
-    rb_check_frozen(ImageList_cur_image(image_arg));
+    rm_check_frozen(ImageList_cur_image(image_arg));
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Copy text to Draw structure
@@ -592,7 +592,7 @@ Draw_draw(VALUE self, VALUE image_arg)
         rb_raise(rb_eArgError, "nothing to draw");
     }
 
-    rb_check_frozen(ImageList_cur_image(image_arg));
+    rm_check_frozen(ImageList_cur_image(image_arg));
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Point the DrawInfo structure at the current set of primitives.
@@ -848,7 +848,7 @@ Draw_primitive(VALUE self, VALUE primitive)
 {
     Draw *draw;
 
-    rb_check_frozen(self);
+    rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
 
     if (!draw->primitives)

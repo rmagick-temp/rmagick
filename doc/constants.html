@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -428,11 +429,16 @@
 
     <dt>PlusCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd class="imquote">The result is just the sum of
+    the&nbsp;image data. Output values are cropped to 255 (no
+    overflow). This operation is independent of the matte
+    channels.</dd>
 
     <dt>MinusCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd class="imquote">The result of composite image - image, with
+    overflow cropped to zero. The matte chanel is ignored (set to
+    255, full coverage).</dd>
 
     <dt>AddCompositeOp</dt>
 
@@ -463,6 +469,12 @@
 
     <dd class="imquote">The result <code>image</code> shaded by
     <code>composite image</code>.</dd>
+
+    <dt>ReplaceCompositeOp</dt>
+
+    <dd class="imquote">The resulting image is image replaced with
+    composite image. Here the matte information is ignored.
+    Available in ImageMagick 6.0.0.</dd>
 
     <dt>CopyCompositeOp</dt>
 
@@ -567,8 +579,8 @@
 
     <dt>CopyCyanCompositeOp</dt>
 
-    <dd><span class="imversion">5.5.7</span> Copy the cyan channel
-    from the composite image to the target image.</dd>
+    <dd>Copy the cyan channel from the composite image to the
+    target image. Available in ImageMagick 5.5.7.</dd>
 
     <dt>CopyMagentaCompositeOp</dt>
 
@@ -584,13 +596,6 @@
 
     <dd>Copy the black channel from the composite image to the
     target image. Available in ImageMagick 5.5.7.</dd>
-
-    <dt>AnnotateCompositeOp</dt>
-
-    <dd>Produce a visual comparison of two images. If a pixel in
-    the composite image is different from the corresponding pixel
-    in the target image, the pixel in the result image is tinted
-    with red. Available in ImageMagick 6.0.0.</dd>
   </dl>
 
   <h3 class="const" id="CompressionType">CompressionType</h3>

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.22 2003/09/29 23:58:16 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.23 2003/10/01 00:30:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -748,7 +748,7 @@ Init_RMagick(void)
     ENUM_VAL(ColorspaceType, YUVColorspace);
     ENUM_VAL(ColorspaceType, CMYKColorspace);
     rb_define_const(Module_Magick, "SRGBColorspace"
-                  , rm_enum_new(Class_AnchorType
+                  , rm_enum_new(Class_ColorspaceType
                   , ID2SYM(rb_intern("SRGBColorspace"))
                   , INT2FIX(sRGBColorspace)));
 #if defined(HAVE_HSLCOLORSPACE)
@@ -1049,7 +1049,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/09/29 23:58:16 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/10/01 00:30:16 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "http://rmagick.rubyforge.org\n"

@@ -221,7 +221,7 @@ top directory. Then type:
 
     When |make| is running the examples, if you get a message like this:
 
-/home/you/RMagick-MAJOR.MINOR.TEENY/lib/RMagick.rb:11:in `require': libMagick.so.0:
+/home/you/RMagick-MAJOR.MINOR.TEENY/lib/RMagick.rb:11:in 'require': libMagick.so.0:
   cannot open shared object file: No such file or directory -
   /home/you/RMagick-MAJOR.MINOR.TEENY/ext/RMagick/RMagick.so (LoadError)
 
@@ -390,7 +390,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-<http://www.opensource.org/docs/definition.php> 	
+<http://www.opensource.org/docs/definition.php>
 
 *This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.*

@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -57,6 +58,9 @@
 
       <li><a href="#gray">Converting a color image to
       grayscale</a></li>
+
+      <li><a href="#quality">Specifying the compression
+      level</a></li>
 
       <li><a href="#shadow">Making a drop shadow</a></li>
     </ul>
@@ -174,12 +178,31 @@ thumb.write "thumb.gif"
   <h2 id="gray">Converting a color image to grayscale</h2>
 
   <p>Use the <a href=
-  "image3.html#quantize"><code>quantize</code></a> method with
-  the <a href=
+  "image3.html#quantize"><code>quantize</code></a> method with the
+  <a href=
   "constants.html#ColorspaceType">Magick::GRAYColorspace</a>
   argument. If you want real "grayscale," quantize the image to 256
   colors. If you want to convert a color image to black-and-white,
-  use 2 colors. See <a href="javascript:popup('demo.rb.html')">demo.rb</a>.</p>
+  use 2 colors. See <a href=
+  "javascript:popup('demo.rb.html')">demo.rb</a>.</p>
+
+  <h2 id="quality">Specifying the compression level</h2>
+
+  <p>You can specify the compression level when writing JPEG, MPEG,
+  MIFF, PNG, and MNG images. Use the <code>quality</code> optional
+  parameter to the <a href="image3.html#write">write</a> method.
+  The value can range from 0 to 100, with 100 representing the
+  least compression. For JPEG and MPEG, which are lossy image
+  formats, more compression usually results in a lower quality
+  image. The MIFF format is lossless so the compression level does
+  not affect the image quality.</p>
+
+  <p>For more information, see the &times;Magick documentation for
+  the <code>-quality</code> option to the utility commands.</p>
+  <pre class="example">
+img.write("myimage.jpg") { self.quality = 50 }
+    
+</pre>
 
   <h2 id="shadow">Making a drop shadow</h2>
 

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.2 2003/07/19 01:49:03 tim Exp $ */
+/* $Id: rmilist.c,v 1.3 2003/07/22 13:15:34 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -15,7 +15,8 @@
                 second (0 to 65535) to delay between images.
 */
 
-VALUE ImageList_animate(int argc, VALUE *argv, VALUE self)
+VALUE
+ImageList_animate(int argc, VALUE *argv, VALUE self)
 {
     Image *images;
     Info *info;
@@ -35,7 +36,7 @@ VALUE ImageList_animate(int argc, VALUE *argv, VALUE self)
         unsigned int delay;
 
         delay = NUM2UINT(argv[0]);
-        for (img = images; img; img = GetNextImageInList(img))
+        for (img = images; img; img = GET_NEXT_IMAGE(img))
         {
             img->delay = delay;
         }
@@ -47,12 +48,8 @@ VALUE ImageList_animate(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     ok = AnimateImages(info, images);
+    handle_all_errors(images);
     unseq(images);
-
-    if (!ok)
-    {
-        handle_error(&images->exception);
-    }
 
     return self;
 }
@@ -62,7 +59,8 @@ VALUE ImageList_animate(int argc, VALUE *argv, VALUE self)
     Purpose:    Append all the images by calling ImageAppend
     Returns:    an Frame object for the result
 */
-VALUE ImageList_append(VALUE self, VALUE stack_arg)
+VALUE
+ImageList_append(VALUE self, VALUE stack_arg)
 {
     Image *images, *result;
     unsigned int stack;
@@ -77,8 +75,9 @@ VALUE ImageList_append(VALUE self, VALUE stack_arg)
 
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
+
     return rm_image_new(result);
 }
 
@@ -87,7 +86,8 @@ VALUE ImageList_append(VALUE self, VALUE stack_arg)
     Purpose:    Average all images together by calling AverageImages
     Returns:    an Frame object for the averaged image
 */
-VALUE ImageList_average(VALUE self)
+VALUE
+ImageList_average(VALUE self)
 {
     Image *images, *result;
     ExceptionInfo exception;
@@ -97,8 +97,9 @@ VALUE ImageList_average(VALUE self)
 
     GetExceptionInfo(&exception);
     result = AverageImages(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
+
     return rm_image_new(result);
 }
 
@@ -122,8 +123,8 @@ ImageList_coalesce(VALUE self)
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
 
     new_imagelist = rm_imagelist_new();
 
@@ -139,7 +140,7 @@ ImageList_coalesce(VALUE self)
 #else
     for (result = results; result; result = next)
     {
-        next = GetNextImageInList(result);
+        next = GET_NEXT_IMAGE(result);
         result->previous = result->next = NULL;
         rm_imagelist_push(new_imagelist, rm_image_new(result));
     }
@@ -167,8 +168,9 @@ ImageList_deconstruct(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = DeconstructImages(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
+
     return rm_image_new(new_image);
 }
 
@@ -192,12 +194,11 @@ ImageList_display(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     ok = DisplayImages(info, images);
-    unseq(images);
-
     if (!ok)
     {
-        handle_error(&images->exception);
+        handle_all_errors(images);
     }
+    unseq(images);
 
     return self;
 }
@@ -217,8 +218,9 @@ ImageList_flatten_images(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
+
     return rm_image_new(new_image);
 }
 
@@ -250,8 +252,8 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_images = CloneImageList(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
@@ -306,7 +308,7 @@ ImageList_montage(VALUE self)
     if (montage->compose != UndefinedCompositeOp)
     {
         Image *i;
-        for (i = image_list; i; i = GetNextImageInList(i))
+        for (i = image_list; i; i = GET_NEXT_IMAGE(i))
         {
             i->compose = montage->compose;
         }
@@ -316,14 +318,14 @@ ImageList_montage(VALUE self)
 
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
+    handle_all_errors(image_list);
     unseq(image_list);
-    HANDLE_ERROR
 
     // Construct a new image and store the image(s) in its images array.
     new_imagelist = rm_imagelist_new();
     for (image = montage_seq; image; image = next)
     {
-        next = GetNextImageInList(image);
+        next = GET_NEXT_IMAGE(image);
         image->previous = image->next = NULL;
         rm_imagelist_push(new_imagelist, rm_image_new(image));
     }
@@ -363,12 +365,12 @@ ImageList_morph(VALUE self, VALUE nimages)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, number_images, &exception);
-    HANDLE_ERROR
+    handle_all_errors(images);
 
     new_imagelist = rm_imagelist_new();
     for (new = new_images; new; new = next)
     {
-        next = GetNextImageInList(new);
+        next = GET_NEXT_IMAGE(new);
         new->previous = new->next = NULL;
         rm_imagelist_push(new_imagelist, rm_image_new(new));
     }
@@ -393,8 +395,8 @@ ImageList_mosaic(VALUE self)
     images = toseq(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
 
     return rm_image_new(new_image);
 }
@@ -478,8 +480,8 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     images = toseq(self);
     new_images = CloneImageList(images, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_ERROR
 
     QuantizeImages(&quantize_info, new_images);
 
@@ -526,7 +528,7 @@ ImageList_to_blob(VALUE self)
     if (*info->magick != '\0')
     {
         Image *img;
-        for (img = images; img; img = GetNextImageInList(img))
+        for (img = images; img; img = GET_NEXT_IMAGE(img))
         {
             strncpy(img->magick, info->magick, sizeof(info->magick)-1);
         }
@@ -538,8 +540,8 @@ ImageList_to_blob(VALUE self)
     info->adjoin = True;
     GetExceptionInfo(&exception);
     blob = ImageToBlob(info, images, &length, &exception);
+    handle_all_errors(images);
     unseq(images);
-    HANDLE_IMG_ERROR(images)
 
     return (blob && length) ? rb_str_new(blob, length) : Qnil;
 }
@@ -571,8 +573,7 @@ ImageList_write(VALUE self, VALUE file)
     // Convert the images array to an images sequence.
     images = toseq(self);
 
-    // Copy the filename to the Info and to the Image, then call
-    // SetImageInfo. (Ref: ImageMagick's magick/convert.c.)
+    // Copy the filename to the Info and to the Image.
     if (TYPE(file) == T_STRING)
     {
         filename = STRING_PTR_LEN(file, filenameL);
@@ -597,7 +598,7 @@ ImageList_write(VALUE self, VALUE file)
 
     // Copy the filename into each images. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c
-    for (scene = 0, img = images; img; img = GetNextImageInList(img))
+    for (scene = 0, img = images; img; img = GET_NEXT_IMAGE(img))
     {
         img->scene = scene++;
         strcpy(img->filename, info->filename);
@@ -616,15 +617,10 @@ ImageList_write(VALUE self, VALUE file)
         info->adjoin = True;
     }
 
-    for (img = images; img; img = GetNextImageInList(img))
+    for (img = images; img; img = GET_NEXT_IMAGE(img))
     {
         (void) WriteImage(info, img);
-        if (img->exception.severity != UndefinedException)
-        {
-            unseq(images);
-            HANDLE_IMG_ERROR(img)
-            return self;
-        }
+        handle_all_errors(images);
         if (info->adjoin)
         {
             break;

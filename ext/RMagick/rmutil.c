@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.5 2003/07/19 12:51:40 tim Exp $ */
+/* $Id: rmutil.c,v 1.6 2003/07/22 13:14:51 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1992,7 +1992,7 @@ magick_error_handler(
 {
     char msg[1024];
 
-    if (severity >= ERROR_SEVERITY)
+    if (severity > WarningException)
     {
 #if defined(HAVE_SNPRINTF)
         snprintf(msg, sizeof(msg)-1,
@@ -2000,9 +2000,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "%s%s%s",
-            GETLOCALEEXCEPTIONMESSAGE(severity, reason),
+            GET_MSG(severity, reason),
             description ? ": " : "",
-            description ? GETLOCALEEXCEPTIONMESSAGE(severity, description) : "");
+            description ? GET_MSG(severity, description) : "");
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
         {
@@ -2027,9 +2027,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "RMagick: %s%s%s",
-            GETLOCALEEXCEPTIONMESSAGE(severity, reason),
+            GET_MSG(severity, reason),
             description ? ": " : "",
-            description ? GETLOCALEEXCEPTIONMESSAGE(severity, description) : "");
+            description ? GET_MSG(severity, description) : "");
         rb_warning(msg);
     }
 }
@@ -2061,7 +2061,7 @@ handle_error(ExceptionInfo *ex)
     reason[0] = '\0';
     desc[0] = '\0';
 
-    if (sev== UndefinedException)
+    if (sev == UndefinedException)
     {
         return;
     }
@@ -2105,6 +2105,45 @@ handle_error(ExceptionInfo *ex)
 #else
     magick_error_handler(sev, reason, desc, module, function, line);
 #endif
+}
+
+/*
+    Extern:     handle_all_errors
+    Purpose:    Examine all the images in a sequence. If any
+                image has an error, raise an exception. Otherwise
+                if any image has a warning, issue a warning message.
+*/
+void handle_all_errors(Image *seq)
+{
+    Image *badboy = NULL;
+    Image *image = seq;
+
+    while (image)
+    {
+        if (image->exception.severity != UndefinedException)
+        {
+            // Stop at the 1st image with an error
+            if (image->exception.severity > WarningException)
+            {
+                badboy = image;
+                break;
+            }
+            else if (!badboy)
+            {
+                badboy = image;
+            }
+        }
+        image = GET_NEXT_IMAGE(image);
+    }
+
+    if (badboy)
+    {
+        if (badboy->exception.severity > WarningException)
+        {
+            unseq(seq);
+        }
+        handle_error(&badboy->exception);
+    }
 }
 
 
@@ -2176,7 +2215,7 @@ unseq(Image *image)
 #else
         Image *next;
 
-        next = GetNextImageInList(image);
+        next = GET_NEXT_IMAGE(image);
         image->previous = image->next = NULL;
         image = next;
 #endif

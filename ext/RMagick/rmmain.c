@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.25 2003/10/06 00:00:57 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.26 2003/10/09 22:33:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -450,6 +450,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
     rb_define_method(Class_Image, "_dump", Image__dump, 1);
+    rb_define_method(Class_Image, "each_profile", Image_each_profile, 0);
     rb_define_method(Class_Image, "edge", Image_edge, -1);
     rb_define_method(Class_Image, "emboss", Image_emboss, -1);
     rb_define_method(Class_Image, "enhance", Image_enhance, 0);
@@ -490,7 +491,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "palette?", Image_palette_q, 0);
     rb_define_method(Class_Image, "pixel_color", Image_pixel_color, -1);
 //  rb_define_method(Class_Image, "plasma", Image_plasma, 6);
-    rb_define_method(Class_Image, "profile!", Image_profile_bang, 3);
+    rb_define_method(Class_Image, "profile!", Image_profile_bang, 2);
     rb_define_method(Class_Image, "quantize", Image_quantize, -1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
     rb_define_method(Class_Image, "random_channel_threshold", Image_random_channel_threshold, 2);
@@ -1069,7 +1070,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/10/06 00:00:57 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/10/09 22:33:04 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "http://rmagick.rubyforge.org\n"

@@ -104,15 +104,18 @@
                   "#Image.difference">difference</a></li>
                   <li><a href="#Image.dispatch">dispatch</a></li>
                   <li><a href="#Image.display">display</a></li>
+                  <li><a href=
+                  "#Image.each_profile">each_profile</a>&nbsp;<span
+                  class="imversion">&nbsp;(5.5.8)</span></li>
                   <li><a href="#Image.edge">edge</a></li>
                   <li><a href="#Image.emboss">emboss</a></li>
                   <li><a href="#Image.enhance">enhance</a></li>
                   <li><a href="#Image.equalize">equalize</a></li>
-                  <li><a href="#Image.erase_bang">erase!</a></li>
                 </ul>
               </td>
               <td valign="top">
                 <ul>
+                  <li><a href="#Image.erase_bang">erase!</a></li>
                   <li><a href=
                   "#Image.export_pixels">export_pixels</a>
                   &nbsp;<span class=
@@ -2175,6 +2178,28 @@ exit
         <td><a href=
         "http://www.imagemagick.org/www/api/image.html#displayimages">
         DisplayImages</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.each_profile">each_profile</a><span class=
+        "imversion">&nbsp;(5.5.8)</span></td>
+        <td><i>image</i>.each_profile {|<i>name</i>, <i>value</i>|
+        <i>block</i>} -&gt; <i>???</i> (see <i>Returns</i>)</td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Calls <i>block</i> once for each profile in the image,
+        passing the profile name and value as parameters.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>the last value returned by the block.</td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/profile.html#getnextimageprofile">
+        GetNextImageProfile</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name="Image.edge">edge</a></td>

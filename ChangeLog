@@ -1,7 +1,8 @@
 RMagick 1.4.0
     o Implemented xMagick enumeration values as instances of an Enum
-      class. Based on a suggestion from Paul Brannon in ruby-talk 79041.
-    o Added color_histogram (IM 5.5.8, GM 1.1)
+      class. Based on a description by Paul Brannon in ruby-talk 79041.
+    o Added color_histogram to Image class. (IM 5.5.8, GM 1.1)
+    o Added each_profile to Image class. (IM 5.5.8)
     o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
       CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)

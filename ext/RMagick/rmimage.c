@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.19 2003/10/06 12:18:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.20 2003/10/09 22:33:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -818,6 +818,28 @@ Image_color_profile(VALUE self)
 {
     Image *image;
 
+#if defined(HAVE_GETIMAGEPROFILE)
+    StringInfo *str_info;
+    char *str;
+    VALUE profile;
+
+    Data_Get_Struct(self, Image, image);
+
+    str_info = GetImageProfile(image, "icc");
+    if (!str_info)
+    {
+        profile = Qnil;
+    }
+    else
+    {
+        str = StringInfoToString(str_info);
+        profile = rb_str_new2(str);
+        DestroyString(str);
+    }
+
+    return profile;
+
+#else
     Data_Get_Struct(self, Image, image);
 
     // Ensure consistency between the data field and the length field. If
@@ -837,6 +859,7 @@ Image_color_profile(VALUE self)
         return Qnil;
     }
     return rb_str_new(image->color_profile.info, image->color_profile.length);
+#endif
 }
 
 /*
@@ -848,25 +871,67 @@ VALUE
 Image_color_profile_eq(VALUE self, VALUE profile)
 {
     Image *image;
+
+#if defined(HAVE_GETIMAGEPROFILE)
+    StringInfo *str_info;
+    unsigned int status = True;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (profile == Qnil)
+    {
+        str_info = RemoveImageProfile(image, "icc");
+        if(str_info)
+        {
+            DestroyStringInfo(str_info);
+        }
+    }
+    else
+    {
+        str_info = StringToStringInfo(STRING_PTR(profile));
+        if (str_info)
+        {
+            if (str_info->length > 0)
+            {
+                status = PutImageProfile(image, "icc", str_info);
+            }
+
+            DestroyStringInfo(str_info);
+
+            if(!status)
+            {
+                rb_raise(rb_eNoMemError, "not enough memory to continue");
+            }
+        }
+    }
+
+#else
+
     char *prof = NULL;
-    long proflen = 0;
+    long prof_l = 0;
 
     Data_Get_Struct(self, Image, image);
 
     if (profile != Qnil)
     {
-        prof = STRING_PTR_LEN(profile, proflen);
+        prof = STRING_PTR_LEN(profile, prof_l);
     }
+
     magick_free(image->color_profile.info);
     image->color_profile.info = NULL;
 
-    if (proflen > 0)
+    if (prof_l > 0)
     {
-        image->color_profile.info = magick_malloc((size_t)proflen);
-        memcpy(image->color_profile.info, prof, (size_t)proflen);
-        image->color_profile.length = proflen;
+        image->color_profile.info = magick_malloc((size_t)prof_l);
+        if(!image->color_profile.info)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        memcpy(image->color_profile.info, prof, (size_t)prof_l);
+        image->color_profile.length = prof_l;
     }
 
+#endif
     return self;
 }
 
@@ -1618,20 +1683,20 @@ Image_density_eq(VALUE self, VALUE density_arg)
 {
     Image *image;
     char *density;
-    long densityL;
+    long density_l;
     char temp[128];
     int count;
 
     Data_Get_Struct(self, Image, image);
-    density = STRING_PTR_LEN(density_arg, densityL);
+    density = STRING_PTR_LEN(density_arg, density_l);
     // If the density string is longer than the temp buffer, it must be invalid
-    if (densityL >= sizeof(temp))
+    if (density_l >= sizeof(temp))
     {
         rb_raise(rb_eArgError, "invalid density geometry %s", density);
     }
 
-    memcpy(temp, density, (size_t)densityL);
-    temp[densityL] = '\0';
+    memcpy(temp, density, (size_t)density_l);
+    temp[density_l] = '\0';
     if (!IsGeometry(temp))
     {
         rb_raise(rb_eArgError, "invalid density geometry %s", density);
@@ -1905,6 +1970,52 @@ Image__dump(VALUE self, VALUE depth)
     // Concatenate the blob onto the header & return the result
     str = rb_str_new((char *)&mi, mi.len+offsetof(DumpedImage,magick));
     return rb_str_cat(str, (char *)blob, length);
+}
+
+/*
+    Method:  Image#each_profile
+    Purpose: Iterate over image profiles
+    Notes:   5.5.8 and later
+*/
+VALUE
+Image_each_profile(VALUE self)
+{
+#if defined(HAVE_GETIMAGEPROFILE)
+    Image *image;
+    volatile VALUE ary, val;
+    char *str, *name;
+    StringInfo *str_info;
+
+    Data_Get_Struct(self, Image, image);
+
+    ResetImageProfileIterator(image);
+
+    ary = rb_ary_new2(2);
+
+    name = GetNextImageProfile(image);
+    while (name)
+    {
+        rb_ary_store(ary, 0, rb_str_new2(name));
+
+        str_info = GetImageProfile(image, name);
+        if (str_info)
+        {
+            str = StringInfoToString(str_info);
+            rb_ary_store(ary, 1, rb_str_new2(str));
+            DestroyString(str);
+        }
+        else
+        {
+            rb_ary_store(ary, 1, Qnil);
+        }
+        val = rb_yield(ary);
+        name = GetNextImageProfile(image);
+    }
+
+    return val;
+#else
+    return not_implemented("each_profile")
+#endif
 }
 
 /*
@@ -2927,6 +3038,29 @@ Image_iptc_profile(VALUE self)
 {
     Image *image;
 
+#if defined(HAVE_GETIMAGEPROFILE)
+    StringInfo *str_info;
+    char *str;
+    VALUE profile;
+
+    Data_Get_Struct(self, Image, image);
+
+    str_info = GetImageProfile(image, "iptc");
+    if (!str_info)
+    {
+        profile = Qnil;
+    }
+    else
+    {
+        str = StringInfoToString(str_info);
+        profile = rb_str_new2(str);
+        DestroyString(str);
+    }
+
+    return profile;
+
+#else
+
     Data_Get_Struct(self, Image, image);
 
     // Ensure consistency between the data field and the length field. If
@@ -2947,6 +3081,7 @@ Image_iptc_profile(VALUE self)
         return Qnil;
     }
     return rb_str_new(image->iptc_profile.info, image->iptc_profile.length);
+#endif
 }
 
 /*
@@ -2958,24 +3093,65 @@ VALUE
 Image_iptc_profile_eq(VALUE self, VALUE profile)
 {
     Image *image;
+
+#if defined(HAVE_GETIMAGEPROFILE)
+    StringInfo *str_info;
+    unsigned int status = True;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (profile == Qnil)
+    {
+        str_info = RemoveImageProfile(image, "iptc");
+        if(str_info)
+        {
+            DestroyStringInfo(str_info);
+        }
+    }
+    else
+    {
+        str_info = StringToStringInfo(STRING_PTR(profile));
+        if (str_info)
+        {
+            if (str_info->length > 0)
+            {
+                status = PutImageProfile(image, "iptc", str_info);
+            }
+
+            DestroyStringInfo(str_info);
+
+            if(!status)
+            {
+                rb_raise(rb_eNoMemError, "not enough memory to continue");
+            }
+        }
+    }
+
+#else
+
     char *prof = NULL;
-    long profL = 0;
+    long prof_l = 0;
 
     Data_Get_Struct(self, Image, image);
 
     if (profile != Qnil)
     {
-        prof = STRING_PTR_LEN(profile, profL);
+        prof = STRING_PTR_LEN(profile, prof_l);
     }
     magick_free(image->iptc_profile.info);
     image->iptc_profile.info = NULL;
-    if (profL > 0)
+    if (prof_l > 0)
     {
-        image->iptc_profile.info = magick_malloc((size_t)profL);
-        memcpy(image->iptc_profile.info, prof, (size_t)profL);
-        image->iptc_profile.length = (size_t) profL;
+        image->iptc_profile.info = magick_malloc((size_t)prof_l);
+        if(!image->iptc_profile.info)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        memcpy(image->iptc_profile.info, prof, (size_t)prof_l);
+        image->iptc_profile.length = (size_t) prof_l;
     }
 
+#endif
     return self;
 }
 
@@ -4084,21 +4260,17 @@ Image_profile_bang(
     VALUE profile)
 {
     Image *image;
-    char *prof;
-    long len;
+    char *prof = NULL;
+    long prof_l = 0;
 
     Data_Get_Struct(self, Image, image);
+
     // ProfileImage issues a warning if something goes wrong.
-    if (profile == Qnil)
+    if (profile != Qnil)
     {
-        prof = NULL;
-        len = 0;
+        prof = STRING_PTR_LEN(profile, prof_l);
     }
-    else
-    {
-        prof = STRING_PTR_LEN(profile, len);
-    }
-    (void) ProfileImage(image, STRING_PTR(name), prof, (size_t)len, True);
+    (void) ProfileImage(image, STRING_PTR(name), prof, (size_t)prof_l, True);
     HANDLE_IMG_ERROR(image)
     return self;
 }
@@ -4262,7 +4434,7 @@ static VALUE
 rd_image(VALUE class, VALUE file_arg, reader_t reader)
 {
     char *filename;
-    long filenameL;
+    long filename_l;
     Info *info;
     volatile VALUE info_obj;
     volatile VALUE image_obj, image_ary;
@@ -4275,10 +4447,10 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
 
     if (TYPE(file_arg) == T_STRING)
     {
-        filename = STRING_PTR_LEN(file_arg, filenameL);
-        filenameL = min(filenameL, sizeof(info->filename));
-        memcpy(info->filename, filename, (size_t)filenameL);
-        info->filename[filenameL] = '\0';
+        filename = STRING_PTR_LEN(file_arg, filename_l);
+        filename_l = min(filename_l, sizeof(info->filename));
+        memcpy(info->filename, filename, (size_t)filename_l);
+        info->filename[filename_l] = '\0';
         info->file = NULL;      // Reset FILE *, if any
     }
     else if (TYPE(file_arg) == T_FILE)
@@ -5734,7 +5906,7 @@ Image_write(VALUE self, VALUE file)
     Info *info;
     volatile VALUE info_obj;
     char *filename;
-    long filenameL;
+    long filename_l;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -5747,11 +5919,11 @@ Image_write(VALUE self, VALUE file)
         // Copy the filename to the Info and to the Image, then call
         // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
         Check_Type(file, T_STRING);
-        filename = STRING_PTR_LEN(file, filenameL);
-        filenameL = min(filenameL, MaxTextExtent-1);
+        filename = STRING_PTR_LEN(file, filename_l);
+        filename_l = min(filename_l, MaxTextExtent-1);
 
-        memcpy(info->filename, filename, (size_t)filenameL);
-        info->filename[filenameL] = '\0';
+        memcpy(info->filename, filename, (size_t)filename_l);
+        info->filename[filename_l] = '\0';
         strcpy(image->filename, info->filename);
 
         GetExceptionInfo(&exception);

@@ -22,9 +22,8 @@ text.gravity = CenterGravity
 fill = GradientFill.new(100,100,100,100,"yellow","red")
 bg = Image.new(200, 200, fill)
 
-# Since antialiasing text on a transparent background doesn't
-# look good, write the text on an opaque yellow background.
-fg = Image.new(bg.columns, bg.rows) { self.background_color = "yellow" }
+# The "none" color is transparent.
+fg = Image.new(bg.columns, bg.rows) { self.background_color = "none" }
 
 # Here's where we'll collect the individual frames.
 animation = ImageList.new

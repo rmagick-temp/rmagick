@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.62 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.63 2004/08/02 22:39:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4809,7 +4809,7 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
     // fillobj.fill(self)
     else
     {
-        (void) rb_funcall(fill, rb_intern("fill"), 1, self);
+        (void) rb_funcall(fill, ID_fill, 1, self);
     }
 
     return self;
@@ -4886,7 +4886,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     // fillobj.fill(self)
     else
     {
-        (void) rb_funcall(fill, rb_intern("fill"), 1, self);
+        (void) rb_funcall(fill, ID_fill, 1, self);
     }
 
     return self;

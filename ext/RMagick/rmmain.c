@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.63 2004/07/31 22:04:09 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.64 2004/08/02 22:39:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -469,6 +469,7 @@ Init_RMagick(void)
     ID_cur_image        = rb_intern("cur_image");
     ID_dup              = rb_intern("dup");
     ID_enumerators      = rb_intern("enumerators");
+    ID_fill             = rb_intern("fill");
     ID_flag             = rb_intern("flag");
     ID_from_s           = rb_intern("from_s");
     ID_Geometry         = rb_intern("Geometry");
@@ -1442,7 +1443,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/07/31 22:04:09 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/08/02 22:39:15 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

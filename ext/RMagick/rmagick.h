@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.59 2004/07/31 22:04:09 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.60 2004/08/02 22:39:15 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -259,6 +259,7 @@ EXTERN ID ID_call;              // "call"
 EXTERN ID ID_cur_image;         // "cur_image"
 EXTERN ID ID_dup;               // "dup"
 EXTERN ID ID_enumerators;       // "enumerators"
+EXTERN ID ID_fill;              // "fill"
 EXTERN ID ID_flag;              // "flag"
 EXTERN ID ID_from_s;            // "from_s"
 EXTERN ID ID_Geometry;          // "Geometry"

@@ -1,19 +1,14 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 
-f = Magick::Image.read("images/small.tif").first
-blob = f.to_blob
-format = f.format
-rows = f.rows
-cols = f.columns
-depth = f.depth
+before = Magick::Image.read("images/Flower_Hat.jpg").first
+before.resize!(0.50)  # make it small so this example will run fast
 
-f2 = Magick::Image.from_blob(blob) {
-    self.format = format
-    self.size = Magick::Geometry.new(rows, cols)
-    self.depth = depth
-    }
+blob = before.to_blob
+# We could pass the format, depth, and geometry as optional
+# arguments to `from_blob' but that is not required.
+after = Magick::Image.from_blob(blob)
 
-f2[0].write("to_blob.gif")
+after[0].write("to_blob.gif")
 exit
 

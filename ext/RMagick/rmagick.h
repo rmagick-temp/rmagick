@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.14 2003/09/13 02:33:58 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.15 2003/09/13 23:50:25 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -609,9 +609,9 @@ extern PaintMethod     Num_to_PaintMethod(VALUE);
 extern StretchType     Num_to_StretchType(VALUE);
 extern StyleType       Num_to_StyleType(VALUE);
 #ifndef StringValuePtr
-extern char *rm_string_value_ptr(volatile VALUE *);
+extern char *rm_string_value_ptr(VALUE *);
 #endif
-extern char *rm_string_value_ptr_len(volatile VALUE *, Strlen_t *);
+extern char *rm_string_value_ptr_len(VALUE *, Strlen_t *);
 
 extern void *magick_malloc(const size_t);
 extern void magick_free(void *);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.10 2003/09/12 01:08:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.11 2003/09/13 23:51:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -106,7 +106,7 @@ void magick_clone_string(char **new_str, const char *str)
 */
 #if RUBY_VERSION < 0x180
 char *
-rm_string_value_ptr(volatile VALUE *ptr)
+rm_string_value_ptr(VALUE *ptr)
 {
     volatile VALUE s = *ptr;
 
@@ -135,7 +135,7 @@ rm_string_value_ptr(volatile VALUE *ptr)
                 argument.
                 Always called via STRING_PTR_LEN
 */
-char *rm_string_value_ptr_len(volatile VALUE *ptr, Strlen_t *len)
+char *rm_string_value_ptr_len(VALUE *ptr, Strlen_t *len)
 {
     volatile VALUE v = *ptr;
     char *str;

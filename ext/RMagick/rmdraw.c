@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.12 2004/04/07 23:05:58 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.13 2004/06/12 21:52:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -481,12 +481,8 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     // The default composition operator is "Over".
     if (argc == 6)
     {
-        if (TYPE(argv[5]) != T_FIXNUM)
-        {
-            rb_raise(rb_eTypeError, "composite operator must be a Fixnum (%s given)",
-                                rb_class2name(CLASS_OF(argv[5])));
-        }
         VALUE_TO_ENUM(argv[5], cop, CompositeOperator);
+
         switch(cop)
         {
             case AddCompositeOp:

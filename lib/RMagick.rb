@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.21 2004/09/01 22:49:49 rmagick Exp $
+# $Id: RMagick.rb,v 1.22 2004/10/06 22:23:49 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -92,7 +92,8 @@ class Geometry
     def to_s
         str = ''
         str << sprintf("%g", @width) if @width > 0
-        str << sprintf("x%g", @height) if @height > 0
+        str << 'x' if (@width > 0 || @height > 0)
+        str << sprintf("%g", @height) if @height > 0
         str << sprintf("%+d%+d", @x, @y) if (@x != 0 || @y != 0)
         str << FLAGS[@flag.to_i]
     end

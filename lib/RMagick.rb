@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.3 2003/07/18 01:56:37 tim Exp $
+# $Id: RMagick.rb,v 1.4 2003/07/19 01:46:10 tim Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -790,7 +790,7 @@ public
         set_cf cfid
         return a
     end
-    
+
     if Array.instance_methods(false).include? 'fetch' then
         def fetch(*args,&block)
             super
@@ -1037,11 +1037,11 @@ public
     end
 
     # Ping files and concatenate the new images
-    def ping(*filenames, &block)
-        if (filenames.length == 0)
-            raise ArgumentError, "no filenames given"
+    def ping(*files, &block)
+        if (files.length == 0)
+            raise ArgumentError, "no files given"
         end
-        filenames.each { |f|
+        files.each { |f|
             Magick::Image.ping(f, &block).each { |n| self << n }
             }
         @scene = length - 1
@@ -1049,11 +1049,11 @@ public
     end
 
     # Read files and concatenate the new images
-    def read(*filenames, &block)
-        if (filenames.length == 0)
-            raise ArgumentError, "no filenames given"
+    def read(*files, &block)
+        if (files.length == 0)
+            raise ArgumentError, "no files given"
         end
-        filenames.each { |f|
+        files.each { |f|
             Magick::Image.read(f, &block).each { |n| self << n }
             }
         @scene = length - 1

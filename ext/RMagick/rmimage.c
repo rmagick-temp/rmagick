@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.22 2003/10/31 13:10:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.23 2003/11/30 21:40:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2579,7 +2579,50 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     return image_ary;
 }
 
-DEF_ATTR_ACCESSOR(Image, fuzz, dbl)
+DEF_ATTR_READER(Image, fuzz, dbl)
+
+/*
+    Method:     Image#fuzz=number
+                Image#fuzz=NN%
+    Notes:      If the fuzz value is a string in the form 'NN%',
+                set the fuzz to a percentage of MaxRGB.
+                See Info#fuzz.
+*/
+VALUE Image_fuzz_eq(VALUE self, VALUE fuzz_arg)
+{
+    Image *image;
+    char *fuzz_str, *end;
+    double fuzz;
+
+    // If the fuzz argument is a string, convert it to a double.
+    // If the argument ends in '%', treat it as a percentage.
+    if(TYPE(fuzz_arg) == T_STRING)
+    {
+        fuzz_str = STRING_PTR(fuzz_arg);
+        fuzz = strtod(fuzz_str, &end);
+        if(*end == '%')
+        {
+            fuzz = (fuzz * MaxRGB) / 100;
+        }
+        else if(*end != '\0')
+        {
+            rb_raise(rb_eTypeError, "expected percentage, got `%s'", fuzz_str);
+        }
+    }
+
+    // Otherwise it's supposed to be a number.
+    else
+    {
+        fuzz = NUM2DBL(fuzz_arg);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    image->fuzz = fuzz;
+
+    return self;
+}
+
 DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 
 /*

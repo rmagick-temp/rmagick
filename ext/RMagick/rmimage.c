@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.5 2003/07/20 13:09:26 tim Exp $ */
+/* $Id: rmimage.c,v 1.6 2003/07/28 00:41:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2148,18 +2148,20 @@ Image_format_eq(VALUE self, VALUE magick)
 
 
 /*
-    Method:     Image#frame(<width<, height<, x<, y<, inner_bevel<, outer_bevel<, color>>>>>>>)
+    Method:     Image#frame(<width<, height<, x<, y<, inner_bevel<, outer_bevel
+                                                                <, color>>>>>>>)
     Purpose:    adds a simulated three-dimensional border around the image.
                 "Width" and "height" specify the width and height of the frame.
-                The "x" and "y" arguments position the image within the frame. If
-                the image is supposed to be centered in the frame, x and y should
-                y should be 1/2 the width and height of the frame. (I.e. if the
-                frame is 50 pixels high and 50 pixels wide, x and y should both be
-                25)."Inner_bevel" and "outer_bevel" indicate the width of the inner
-                and outer shadows of the frame. They should be much smaller than the
-                frame and cannot be > 1/2 the frame width or height of the image.
-    Default:    All arguments are optional. The defaults are the same as they are in
-                Magick++:
+                The "x" and "y" arguments position the image within the frame. 
+                If the image is supposed to be centered in the frame, x and y 
+                should be 1/2 the width and height of the frame. (I.e. if the
+                frame is 50 pixels high and 50 pixels wide, x and y should both 
+                be 25)."Inner_bevel" and "outer_bevel" indicate the width of the 
+                inner and outer shadows of the frame. They should be much 
+                smaller than the frame and cannot be > 1/2 the frame width or 
+                height of the image.
+    Default:    All arguments are optional. The defaults are the same as they 
+                are in Magick++:
 
                 width:  image-columns+25*2
                 height: image-rows+25*2
@@ -3507,6 +3509,10 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     image = AllocateImage(info);
+    if (!image)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
     
     // NOW store a real image in the image object.
     DATA_PTR(self) = image;

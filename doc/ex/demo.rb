@@ -149,7 +149,7 @@ begin
     # the same size as the model image.
     puts "   gradient..."
     example.read("gradient:#20a0ff-#ffff00") {
-        self.size = sprintf("%ux%u", model.columns, model.rows)
+        self.size = Geometry.new(model.columns, model.rows)
         }
     example.cur_image[:Label] = "Gradient"
 
@@ -188,7 +188,7 @@ begin
     # The plasma format is very similar to the gradient format, above.
     puts "   plasma..."
     example.read("plasma:fractal") {
-        self.size = sprintf("%ux%u", model.columns, model.rows)
+        self.size = Geometry.new(model.columns, model.rows)
         }
     example.cur_image[:Label] = "Plasma"
 

@@ -34,7 +34,7 @@ begin
         }
     Magick.set_monitor(monitor)
     stegano = Magick::Image.read('stegano:jj.png') {
-        self.size = "#{wmcols}x#{wmrows}+91"
+        self.size = Magick::Geometry.new(wmcols, wmrows, 91)
     }
     Magick.set_monitor(nil)
 
@@ -45,7 +45,7 @@ begin
     stegano[0].write('stegano.gif')
 
 rescue Magick::ImageMagickError
-	puts "#{$0}: ImageMagickError - #{$!}"
+    puts "#{$0}: ImageMagickError - #{$!}"
 end
 
 exit

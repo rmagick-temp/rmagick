@@ -10,7 +10,7 @@ depth = f.depth
 
 f2 = Magick::Image.from_blob(blob) {
     self.format = format
-    self.size = sprintf("%dx%d", rows, cols)
+    self.size = Magick::Geometry.new(rows, cols)
     self.depth = depth
     }
 #f2[0].display

@@ -3,10 +3,10 @@ require 'RMagick'
 
 # Demonstrate the Image#affine_transform method
 
-# Construct a simple affine matrix
-flipflop = Magick::AffineMatrix.new(-1, Math::PI/6, Math::PI/6, -1, 0, 0)
-
 img = Magick::Image.read("images/Flower_Hat.jpg").first
+
+# Construct a simple affine matrix
+flipflop = Magick::AffineMatrix.new(1, Math::PI/6, Math::PI/6, 1, 0, 0)
 
 # Apply the transform
 img = img.affine_transform(flipflop)

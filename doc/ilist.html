@@ -263,7 +263,7 @@ imagelist.scene &raquo; 10
           scene number. The scene number will never exceed the
           number of images in the list, and if the imagelist
           contains no images the scene number will be
-          <var>nil</var>. 
+          <var>nil</var>.
           <p>Most array methods keep the current image current. If
           the method moves the current image to a new position, the
           method updates the scene number to the new index. If the
@@ -306,7 +306,7 @@ imagelist.scene &raquo; 10
         <td valign="top">Example</td>
         <td>
           Add noise to a model image. Append the resulting image to
-          the imagelist in "example". (See: demo.rb) 
+          the imagelist in "example". (See: demo.rb)
           <div class="example">
 <pre>
 example = Magick::ImageList.new
@@ -349,7 +349,7 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
           Compares two imagelists and returns -1, 0, or 1 if the
           receiver is less than, equal to, or greater than the
           other imagelist. The comparison between the recipient (a)
-          and the other (b) is performed this way: 
+          and the other (b) is performed this way:
           <ol>
             <li>For all images, if the result of <code>a[n]
             &lt;=&gt; b[n]</code>, is not 0 then that is the result
@@ -484,7 +484,7 @@ imagelist.animate { self.server_name = "other.lnx:0.0" }
         <td>
           Merges all the images in the imagelist into a new
           imagelist. Each image in the new imagelist is formed by
-          flattening all the previous images. 
+          flattening all the previous images.
           <p>The length of time between images in the new image is
           specified by the <a href=
           "imageattrs.html#Image.delay">delay</a> attribute of the
@@ -893,7 +893,7 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
           many configuration options. For example, you can specify
           the number of columns and rows, the distance between
           images, and include a label with each small image
-          (<i>tile</i>). 
+          (<i>tile</i>).
           <p>All of <var>montage</var>'s configuration options are
           specified by assigning values to attribute methods in a
           block associated with the method call.</p>
@@ -910,7 +910,7 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
             <tr>
               <td valign="top"><i>background_color=</i></td>
               <td>
-                The composite image background color. 
+                The composite image background color.
 <pre>
 self.background_color = "white"
 </pre>
@@ -920,7 +920,7 @@ self.background_color = "white"
             <tr>
               <td valign="top"><i>border_color=</i></td>
               <td>
-                The tile border color. 
+                The tile border color.
 <pre>
 self.border_color = "black"
 </pre>
@@ -935,7 +935,7 @@ self.border_color = "black"
             <tr>
               <td valign="top"><i>border_width=</i></td>
               <td>
-                The width in pixels of the tile borders. 
+                The width in pixels of the tile borders.
 <pre>
 self.border_width = 10
 </pre>
@@ -948,12 +948,12 @@ self.border_width = 10
                 The <a href=
                 "constants.html#CompositeOperator">composite
                 operator</a> to use when compositing the tile
-                images onto the background. 
+                images onto the background.
 <pre>
 self.compose = Magick::AtopCompositeOp
 </pre>
                 The default composition operator is
-                OverCompositeOp. 
+                OverCompositeOp.
                 <p><i>Hint:</i> You can use a different composite
                 operator for each tile by setting each image's <a
                 href="imageattrs.html#Image.compose">compose=</a>
@@ -971,7 +971,7 @@ self.compose = Magick::AtopCompositeOp
             <tr>
               <td valign="top"><i>fill=</i></td>
               <td>
-                If the tiles have labels, the label fill color. 
+                If the tiles have labels, the label fill color.
 <pre>
 self.fill = "red"
 </pre>
@@ -981,7 +981,7 @@ self.fill = "red"
             <tr>
               <td valign="top"><i>font=</i></td>
               <td>
-                If the tiles have labels, the label font. 
+                If the tiles have labels, the label font.
 <pre>
 self.font = "Courier"
 </pre>
@@ -997,12 +997,12 @@ self.font = "Courier"
                 bevel width&gt;+&lt;inner bevel width&gt;</var>.
                 The values are in pixels. For example, to surround
                 each tile with a frame 20 pixels wide by 20 pixels
-                high and a 4-pixel inner and outer bevel, use: 
+                high and a 4-pixel inner and outer bevel, use:
 <pre>
 self.frame = "20x20+4+4"
 </pre>
                 If the tile has a label, the label is included in
-                the frame. The default is to have no frame. 
+                the frame. The default is to have no frame.
                 <p>See <a href=
                 "image.html#Image.frame">Image#frame</a>.</p>
               </td>
@@ -1015,11 +1015,11 @@ self.frame = "20x20+4+4"
                 <var>&lt;tile-width&gt;x&lt;tile-height&gt;+&lt;distance-between-columns&gt;+&lt;distance-between-rows&gt;</var>.
                 To create tiles that are 130 pixels wide and 194
                 pixels tall, with 10 pixels between each column of
-                tiles and 5 between each row, use: 
+                tiles and 5 between each row, use:
 <pre>
 self.geometry = "130x194+10+5"
 </pre>
-                The default geometry is "120x120+4+3&gt;". 
+                The default geometry is "120x120+4+3&gt;".
                 <p>See <a href=
                 "imusage.html#geometry"><var>geometry</var></a>.</p>
               </td>
@@ -1030,7 +1030,7 @@ self.geometry = "130x194+10+5"
                 The <a href=
                 "constants.html#GravityType">direction</a> used
                 when adding the tile labels. (See <a href=
-                "draw.html#Draw.annotate">annotate</a>.) 
+                "draw.html#Draw.annotate">annotate</a>.)
 <pre>
 self.gravity = Magick::CenterGravity
 </pre>
@@ -1045,7 +1045,7 @@ self.gravity = Magick::CenterGravity
               <td valign="top"><i>pointsize=</i></td>
               <td>
                 If the tiles have labels, the size of the label
-                font. 
+                font.
 <pre>
 self.pointsize = 20
 </pre>
@@ -1056,7 +1056,7 @@ self.pointsize = 20
               <td valign="top"><i>shadow=</i></td>
               <td>
                 If set to <var>true</var>, adds a drop shadow to
-                each tile. 
+                each tile.
 <pre>
 self.shadow = true
 </pre>
@@ -1067,7 +1067,7 @@ self.shadow = true
               <td valign="top"><i>stroke=</i></td>
               <td>
                 If the tiles have labels, sets the stroke (outline)
-                color of the label text. 
+                color of the label text.
 <pre>
 self.stroke = "red"
 </pre>
@@ -1082,7 +1082,7 @@ self.stroke = "red"
                 composite image. If present, overrides the
                 background color. For example, to use
                 &times;Magick's built-in "granite" texture as the
-                background, use: 
+                background, use:
 <pre>
 self.texture = Magick::Image.read("granite:").first
 </pre>
@@ -1096,7 +1096,7 @@ self.texture = Magick::Image.read("granite:").first
                 arranging the tiles on the composite image. The
                 value is a string in the form
                 <var>"&lt;columns&gt;x&lt;rows&gt;"</var>. To
-                arrange the tiles 4 across and 10 down, use: 
+                arrange the tiles 4 across and 10 down, use:
 <pre>
 self.tile = "4x10"
 </pre>
@@ -1109,7 +1109,7 @@ self.tile = "4x10"
             <tr>
               <td valign="top"><i>title=</i></td>
               <td>
-                The composite image title. 
+                The composite image title.
 <pre>
 self.title = "My Images"
 </pre>
@@ -1132,7 +1132,7 @@ self.title = "My Images"
         <td>
           To add labels to the tiles, assign a "Label" attribute to
           each image. The <var>montage</var> method will use the
-          value of the attribute as the tile's label. For example, 
+          value of the attribute as the tile's label. For example,
 <pre>
 img[2]['Label'] = "Mom's Birthday"
 </pre>
@@ -1147,7 +1147,7 @@ img[2]['Label'] = "Mom's Birthday"
       </tr>
       <tr>
         <td valign="top">Returns</td>
-        <td>An imagelist that contains as many images as were necessary to
+        <td>An image containing as many images as were necessary to
         tile all the images in the original image.</td>
       </tr>
       <tr>
@@ -1260,7 +1260,7 @@ img[2]['Label'] = "Mom's Birthday"
           columns. If the optional <var>fill</var> argument is
           used, calls the <var>fill</var> method to fill the image.
           Otherwise, the image is filled with the background color.
-          
+
           <p>You can set any <a href="info.html">Image::Info</a>
           attributes in an associated block. These attributes
           supply options to be used when creating the image. For
@@ -1381,7 +1381,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
             <dt>measure_error</dt>
             <dd>
               <span class="imquote">Calculate quantization errors
-              when quantizing the image.</span> 
+              when quantizing the image.</span>
               <p>Stores the results for each image in the imagelist
               <a href=
               "imageattrs.html#Image.mean_error_per_pixel">mean_error_per_pixel</a>,
@@ -1446,7 +1446,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
           Reads one or more image files and adds the images to the
           imagelist. After reading all the files, sets the <a href=
           "#ImageList.scene">scene</a> number to the last image in
-          the list. 
+          the list.
           <p>The image files may be multi-frame (animated) files.
           In this case <var>read</var> adds multiple images per
           file to the imagelist.</p>
@@ -1455,7 +1455,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
       <tr>
         <td valign="top">Arguments</td>
         <td>
-          One or more filenames or open file objects. 
+          One or more filenames or open file objects.
           <p>You can also specify optional arguments to be used
           when reading the file(s) by setting <a href=
           "info.html">Image::Info</a> attributes in the optional
@@ -1560,7 +1560,7 @@ s = i.to_blob &raquo; a string representing the image.
           supports multiple images per file (animated images),
           <var>write</var> writes all the images in the imagelist
           to a single file. Otherwise, writes each image to a
-          separate file. 
+          separate file.
           <p>Regardless of the original format, <var>write</var>
           converts the images to the format specified by the
           filename.</p>
@@ -1582,7 +1582,7 @@ s = i.to_blob &raquo; a string representing the image.
           the prefix (<code>ps:</code>) to the filename. If the
           argument is an open file object, you can specify a format
           for each image in the list by setting its <a href=
-          "imageattrs.html#Image.write">format</a> attribute. 
+          "imageattrs.html#Image.write">format</a> attribute.
           <p>You can also specify optional arguments by setting <a
           href="info.html">Image::Info</a> attributes in an
           associated block.</p>
@@ -1627,7 +1627,7 @@ i.write "animated.miff" &raquo; animated.miff
           a format that supports multi-frame files, loop over the
           images individually and use the <a href=
           "image.html#Image.write">write</a> method in the Image
-          class: 
+          class:
 <pre>
 x = 'A'
 imagelist.each { |f| f.write "#{image}_#{x}.gif"; x.succ! }

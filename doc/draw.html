@@ -10,9 +10,7 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">
-      RMagick User's Guide and Reference
-    </div>
+    <div class="header">RMagick User's Guide and Reference</div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="image.html">&lt;-
@@ -188,7 +186,7 @@
           of the Draw instance methods to set these values while
           the primitives are being executed. When the values are
           initialized by <var>new</var>, they will be overridden by
-          the corresponding instance method. 
+          the corresponding instance method.
           <p>The attributes you can set are shown in the following
           table.</p>
           <table bgcolor="#F0F0F0" width="100%" border="1"
@@ -468,7 +466,7 @@ primitives = Magick::Draw.new {
             <tr>
               <td>
                 This example displays the effect of the following
-                attribute values: 
+                attribute values:
 <pre>
       font = "Helvetica"
       decorate = Magick::OverlineDecoration
@@ -599,8 +597,8 @@ primitives = Magick::Draw.new {
       <tr>
         <td valign="top">Notes</td>
         <td>This primitive is deprecated. Use the SVG elliptical
-        arc commands (A and a) instead. See <a href=
-        "#Draw.path">path</a> .</td>
+        arc commands (A and a) instead. See <a href="#Draw.path">path
+        </a>.</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -746,7 +744,7 @@ primitives = Magick::Draw.new {
           <span class="imquote">Draws the clip path on the image
           mask. The clip path defines a clipping area, where only
           the contained area will be drawn upon. Areas outside of
-          the clipping area are masked.</span> 
+          the clipping area are masked.</span>
           <p>Before using a clip-path, you must create it using the
           <a href="#Draw.define_clip_path">define_clip_path</a>
           method.</p>
@@ -1058,7 +1056,7 @@ primitives = Magick::Draw.new {
         <td valign="top">Example</td>
         <td>
 <pre>
-draw.fill_opacity(0.4)
+draw.fill_opacity(.4)
 draw.fill_opacity('40%')
 </pre>
           <p>See the example for <a href=
@@ -1105,7 +1103,7 @@ draw.fill_opacity('40%')
           tag a font to specify whether it is a Postscript,
           Truetype, or OPTION1 font. For example, Arial.ttf is a
           Truetype font, ps:helvetica is Postscript, and x:fixed is
-          OPTION1.</span> 
+          OPTION1.</span>
           <p>The font name can be a complete filename such as
           <code>"/mnt/windows/windows/fonts/Arial.ttf"</code>. The
           font name can also be a fully qualified X font name such
@@ -1276,7 +1274,7 @@ draw.fill_opacity('40%')
             constant, to set transparent pixels in the image.</dd>
             <dt>aPaintMethod</dt>
             <dd>
-              One of the following PaintMethod constants: 
+              One of the following PaintMethod constants:
               <dl>
                 <dt>PointMethod</dt>
                 <dd>Make the pixel at <i>(x,y)</i>
@@ -1364,7 +1362,7 @@ draw.fill_opacity('40%')
         <td>
           These examples are all taken from the <a href=
           "http://www.w3.org/TR/SVG/paths.html">SVG path</a>
-          examples. 
+          examples.
           <table>
             <tr>
               <td><i><b>Example arcs01</b></i></td>
@@ -1579,7 +1577,7 @@ draw.fill_opacity('40%')
         <td>
           Save the current state of the graphics context, including
           the attribute settings and the current set of primitives.
-          Use the <var>pop</var> primitive to restore the state. 
+          Use the <var>pop</var> primitive to restore the state.
           <p><i>Note:</i> The push and pop primitives are probably
           not as useful in RMagick as they are in C language
           &times;Magick programs, since it is easy to create
@@ -1871,7 +1869,7 @@ draw.fill_opacity('40%')
           The third argument is another dash width, followed by
           another gap width, etc. If you specify an odd number of
           arguments, the arguments are repeated to produce an even
-          number. All arguments must be &gt; 0. 
+          number. All arguments must be &gt; 0.
           <p>To produce a solid stroke, specify no arguments, i.e.
           <code>stroke_dasharray()</code></p>
         </td>
@@ -2022,7 +2020,7 @@ draw.fill_opacity('40%')
         <td valign="top">Example</td>
         <td>
 <pre>
-draw.stroke_opacity(0.4)
+draw.stroke_opacity(.4)
 draw.stroke_opacity('40%')
 </pre>
           <p>See the example for <a href=
@@ -2057,31 +2055,16 @@ draw.stroke_opacity('40%')
       </tr>
       <tr>
         <td valign="top">Description</td>
-        <td>
-          <p>Draw text at the location specified by (x,y). Use <a
-          href="#Draw.gravity">gravity</a> to position the text
-          relative to (x, y). Specify the text appearance with the
-          <a href="#Draw.font">font</a>, <a href=
-          "#Draw.font_family">font_family</a>, <a href=
-          "#Draw.font_stretch">font_stretch</a>, <a href=
-          "#Draw.font_style">font_style</a>, and <a href=
-          "#Draw.font_weight">font_weight</a> methods. Use the <a
-          href="#Draw.text_antialias">text_antialias</a> method to
-          set antialiasing on or off.</p>
-          <p>If the text string contains an embedded blank, quote,
-          or apostrophe, surround the entire text string using a
-          character that is not in the text. You can use quotes,
-          apostrophes, or braces ("{}"). You can also escape a
-          blank, quote, or apostrophe by preceding it with a
-          backslash ("\"). To include a backslash in the text, use
-          two consecutive backslashes. Here are some examples:</p>
-<pre class="example">
-gc.text(10,10, "'Quoted with apostrophes.'") &raquo; Quoted with apostrophes.
-gc.text(10,10, '"Quoted with quotes."') &raquo; Quoted with quotes.
-gc.text(10,10, %q/"What's up?"/) &raquo; "What's up?"
-gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
-</pre>
-        </td>
+        <td>Draw text at the location specified by (x,y). Use <a
+        href="#Draw.gravity">gravity</a> to position the text
+        relative to (x, y). Specify the text appearance with the <a
+        href="#Draw.font">font</a>, <a href=
+        "#Draw.font_family">font_family</a>, <a href=
+        "#Draw.font_stretch">font_stretch</a>, <a href=
+        "#Draw.font_style">font_style</a>, and <a href=
+        "#Draw.font_weight">font_weight</a> methods. Use the <a
+        href="#Draw.text_antialias">text_antialias</a> method to
+        set antialiasing on or off.</td>
       </tr>
       <tr>
         <td valign="top">Arguments</td>
@@ -2239,22 +2222,16 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
       </tr>
       <tr>
         <td valign="top">Description</td>
-        <td>
-          <p>Annotates a image with text. The text is positioned
-          according to the <var>gravity</var> attribute around the
-          rectangle described by the x, y, width, and height
-          arguments. If either of the width or height arguments are
-          omitted, uses the image width - x and the image height -
-          y to compute the rectangle width and height. The
-          attributes described in <a href=
-          "#attribute_writers">attribute writers</a>, above,
-          influence the appearance and position of the text. These
-          attributes may be set within the optional <i>additional
-          parameters</i> block.</p>
-          <p>If the text argument contains an embedded blank,
-          quote, or apostrophe, you must add an extra level of
-          quotes. See <a href="#Draw.text">text</a>.</p>
-        </td>
+        <td>Annotates a image with text. The text is positioned
+        according to the <var>gravity</var> attribute around the
+        rectangle described by the x, y, width, and height
+        arguments. If either of the width or height arguments are
+        omitted, uses the image width - x and the image height - y
+        to compute the rectangle width and height. The attributes
+        described in <a href="#attribute_writers">attribute
+        writers</a>, above, influence the appearance and position
+        of the text. These attributes may be set within the
+        optional <i>additional parameters</i> block.</td>
       </tr>
       <tr>
         <td valign="top">Arguments</td>
@@ -2298,7 +2275,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
         <td>
           You can include information about the image by including
           one or more of the special characters shown in this
-          table. 
+          table.
           <table border="1" bgcolor="#F0F0F0">
             <caption>
               <b><a name="Draw.spec_chars_table">Special
@@ -2412,7 +2389,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/render.html#drawimage">DrawImage</a></td>
+        "http://www.imagemagick.org/www/api/render.html#drawimage">
+        DrawImage</a></td>
       </tr>
       <tr>
         <td valign="top">Notes</td>
@@ -2466,7 +2444,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
           following attributes. (The descriptions are taken from
           the <a href=
           "http://www.imagemagick.org/www/Magick++/TypeMetric.html">
-          Magick++</a> documentation and source code.) 
+          Magick++</a> documentation and source code.)
           <table border="1" width="100%" bgcolor="#F0F0F0">
             <tr>
               <th>Accessor</th>
@@ -2545,7 +2523,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
         <td>
           The Magick++ documentation for its TypeMetric class
           provides this useful additional information. (I've
-          changed it a bit to use RMagick names.) 
+          changed it a bit to use RMagick names.)
           <div class="imquote">
             <p>The TypeMetric class provides the means to pass data
             from the Draw class's get_type_metric method to the

@@ -82,7 +82,17 @@ AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
 AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
 AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
-AC_CHECK_FUNCS([CompareImageChannels GetImageQuantumDepth PreviewImage])
+AC_CHECK_FUNCS([CompareImageChannels PreviewImage])
+
+# We need to be able to query this later in the configure script, so set a shell variable here
+# as well as defining a symbol.
+AC_CHECK_FUNC(GetImageQuantumDepth,
+              rm_have_getimagequantumdepth=yes,
+              rm_have_getimagequantumdepth=no)
+if test "$rm_have_getimagequantumdepth" = yes; then
+   AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
+fi
+
 AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
 AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
@@ -248,19 +258,19 @@ if test "$rm_cv_enum_dstcompositeop" = yes; then
   AC_DEFINE(HAVE_DSTCOMPOSITEOP)
 fi
 
-AC_CACHE_CHECK(for ColorizeCompositeOp enum value, rm_cv_enum_colorizecompositeop,
+AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompositeOp,
   [AC_TRY_COMPILE(
 [#include <stdio.h>
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
 #include "magick/api.h"],
-     [CompositeOperator x; x = ColorizeCompositeOp],
-     rm_cv_enum_colorizecompositeop='yes',
-     rm_cv_enum_colorizecompositeop='no')])
+     [CompositeOperator x; x = ColorDodgeCompositeOp],
+     rm_cv_enum_ColorDodgeCompositeOp='yes',
+     rm_cv_enum_ColorDodgeCompositeOp='no')])
 
-if test "$rm_cv_enum_colorizecompositeop" = yes; then
-  AC_DEFINE(HAVE_COLORIZECOMPOSITEOP)
+if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
+  AC_DEFINE(HAVE_ColorDodgeCompositeOp)
 fi
 
 
@@ -292,6 +302,24 @@ AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
 
 if test "$rm_cv_enum_allchannels" = yes; then
   AC_DEFINE(HAVE_ALLCHANNELS)
+fi
+
+if test "$rm_have_getimagequantumdepth" = yes; then
+   # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
+   AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [Image *image; (void)GetImageQuantumDepth(image)],
+        rm_cv_args_get_image_quantum_depth='yes',
+        rm_cv_args_get_image_quantum_depth='no')])
+
+   if test "$rm_cv_args_get_image_quantum_depth" = yes; then
+      AC_DEFINE(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+   fi
 fi
 
 # Where is ****Magick installed?

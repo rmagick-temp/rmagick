@@ -3,7 +3,10 @@ RMagick 1.7.0
     o Added sharpen_channel, blur_channel to Image class (ImageMagick 6.0.1)
     o Added get_multiline_type_metrics to Draw class (ImageMagick 6.1.5),
       added new example scripts and images
+    o Added normalize_channel to Image class (ImageMagick 6.1.0)
     o Added read_inline to Image class
+    o Renamed channel_compare to compare_channel, retained old name as an alias
+      for backward compatibility.
 
 RMagick 1.6.2
     o Fixed ImageList#deconstruct to return an imagelist

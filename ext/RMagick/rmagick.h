@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.68 2004/12/04 16:51:32 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.69 2004/12/04 23:43:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -714,6 +714,7 @@ extern VALUE Image_motion_blur(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_negate(int, VALUE *, VALUE);
 extern VALUE Image_negate_channel(int, VALUE *, VALUE);
 extern VALUE Image_normalize(VALUE);
+extern VALUE Image_normalize_channel(int, VALUE *, VALUE);
 extern VALUE Image_oil_paint(int, VALUE *, VALUE);
 extern VALUE Image_opaque(VALUE, VALUE, VALUE);
 extern VALUE Image_opaque_q(VALUE);

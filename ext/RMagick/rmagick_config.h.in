@@ -121,6 +121,8 @@
 #undef HAVE_NEGATEIMAGECHANNEL
 /* Introduced in IM 5.5.1, GM 1.0 */
 #undef HAVE_NOCOMPLIANCE
+/* Introduced in IM 6.1.0 */
+#undef HAVE_NORMALIZEIMAGECHANNEL
 /* Introduced in IM 5.5.4 */
 #undef HAVE_PARSESIZEGEOMETRY
 /* Introduced in IM 6.0.0 */

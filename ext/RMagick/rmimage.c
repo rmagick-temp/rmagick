@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.76 2004/12/04 22:21:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.77 2004/12/04 23:43:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4897,9 +4897,47 @@ Image_normalize(VALUE self)
     okay = NormalizeImage(new_image);
     if (!okay)
     {
-        rb_warning("RMagick: normalize failed");
+        rb_raise(rb_eRuntimeError, "NormalizeImage failed");
     }
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#normalize_channel(channel=AllChannels)
+    Purpose:    Call NormalizeImageChannel
+*/
+VALUE
+Image_normalize_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_NORMALIZEIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channels;
+    ExceptionInfo exception;
+    unsigned int okay;
+
+    channels = extract_channels(&argc, argv);
+    // Ensure all arguments consumed.
+    if (argc > 0)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    okay = NormalizeImageChannel(new_image, channels);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "NormalizeImageChannels failed");
+    }
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 DEF_ATTR_READERF(Image, normalized_mean_error, error.normalized_mean_error, dbl)

@@ -142,6 +142,8 @@
 
           <li><a href="#normalize">normalize</a></li>
 
+          <li><a href="#normalize_channel">normalize_channel</a></li>
+
           <li><a href="#oil_paint">oil_paint</a></li>
 
           <li><a href="#opaque">opaque</a></li>
@@ -482,12 +484,12 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" name="frameless" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img class="hide"
     id="framed" onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example" name="framed" /></a>
+    "ex/frame.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -1854,7 +1856,39 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Magick API</h4>
 
     <p>NormalizeImage</p>
+    <h4>See also</h4>
+    <p><a href="#normalize_channel">normalize_channel</a></p>
   </div>
+
+  <div class="sig">
+    <h3 id="normalize_channel">normalize_channel</h3>
+      <p><span class="arg">image</span>.normalize_channel([<span class="arg">channel</span>[,
+    <span class="arg">channel</span>...]]) = <em>anImage</em></p>
+  </div>
+
+
+<div class="desc">
+<h4>Description</h4>
+<p><span class="imquote">Enhances the contrast of a color image by adjusting the pixel color to span the entire range of colors available.</span> Only the specified channels are normalized.</p>
+
+<h4>Arguments</h4>
+    <dl>
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are normalized.
+      Specifying no channel arguments has the same effect as the
+      <code>normalize</code> method, above.</dd>
+    </dl>
+
+<h4>Returns</h4>
+<p>A new image</p>
+<h4>Magick API</h4>
+<p>NormalizeImageChannel (available in ImageMagick 6.1.0)</p>
+    <h4>See also</h4>
+    <p><a href="#normalize">normalize</a></p>
+</div>
 
   <div class="sig">
     <h3 id="oil_paint">oil_paint</h3>

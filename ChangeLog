@@ -5,8 +5,12 @@ RMagick 1.7.0
     o Added get_multiline_type_metrics to Draw class (ImageMagick 6.1.5),
       added new example scripts and images
     o Added read_inline to Image class
-    o Fixed bug #1048, memory leak in Image#to_blob
-    o Fixed bugs in install procedure
+
+RMagick 1.6.2
+    o Fixed ImageList#deconstruct to return an imagelist
+    o Fixed installation procedure to propagate user's CFLAGS, CPPFLAGS,
+      and LDFLAGS through to the low-level Makefile
+    o Fixed bugs #1048, #1127
 
 RMagick 1.6.1
     o Changed to match changes in ImageMagick 6.1.4 API

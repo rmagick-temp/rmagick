@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.15 2004/06/19 20:41:18 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.16 2004/12/01 23:17:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -156,21 +156,45 @@ ImageList_coalesce(VALUE self)
     Purpose:    compares each image with the next in a sequence and returns
                 the maximum bounding region of any pixel differences it
                 discovers.
-    Returns:    a new image, or nil
+    Returns:    a new imagelist
 */
 VALUE
 ImageList_deconstruct(VALUE self)
 {
-    Image *images, *new_image;
+    Image *new_images, *images, *image, *next;
     ExceptionInfo exception;
+    volatile VALUE new_imagelist;
 
     images = rm_toseq(self);
     GetExceptionInfo(&exception);
-    new_image = DeconstructImages(images, &exception);
+    new_images = DeconstructImages(images, &exception);
     HANDLE_ERROR
     rm_unseq(images);
 
-    return rm_image_new(new_image);
+    new_imagelist = rm_imagelist_new();
+
+    // DeconstructImages returns an image sequence. Create a
+    // new ImageList and store the images in the array.
+#if HAVE_REMOVEFIRSTIMAGEFROMLIST
+    image = new_images;
+    while (image)
+    {
+        next = RemoveFirstImageFromList(&image);
+        rm_imagelist_push(new_imagelist, rm_image_new(next));
+    }
+#else
+    for (image = new_images; image; image = next)
+    {
+        next = GET_NEXT_IMAGE(image);
+        image->previous = image->next = NULL;
+        rm_imagelist_push(new_imagelist, rm_image_new(image));
+    }
+#endif
+
+    // Set new_imagelist.scene = 0
+    rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
+
+    return new_imagelist;
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.49 2004/03/19 01:32:22 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.50 2004/04/02 23:53:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -331,6 +331,7 @@ Magick_set_log_format(VALUE class, VALUE format)
 void
 Init_RMagick(void)
 {
+    volatile VALUE observable;
 
     InitializeMagick("RMagick");
 
@@ -629,6 +630,43 @@ Init_RMagick(void)
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
 
     /*-----------------------------------------------------------------------*/
+    /* Class Magick::Pixel                                                   */
+    /*-----------------------------------------------------------------------*/
+
+    Class_Pixel = rb_define_class_under(Module_Magick, "Pixel", rb_cObject);
+
+    // include Observable in Pixel for Image::View class
+    rb_require("observer");
+    observable = rb_const_get(rb_cObject, rb_intern("Observable"));
+    rb_include_module(Class_Pixel, observable);
+
+    // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_define_alloc_func(Class_Pixel, Pixel_alloc);
+#else
+    rb_define_singleton_method(Class_Pixel, "new", Pixel_new, -1);
+#endif
+    rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
+    rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
+
+    // Define the RGBA attributes
+    DCL_ATTR_ACCESSOR(Pixel, red)
+    DCL_ATTR_ACCESSOR(Pixel, green)
+    DCL_ATTR_ACCESSOR(Pixel, blue)
+    DCL_ATTR_ACCESSOR(Pixel, opacity)
+
+    // Define the instance methods
+    rb_define_method(Class_Pixel, "initialize", Pixel_initialize, -1);
+    rb_define_method(Class_Pixel, "initialize_copy", Pixel_init_copy, 1);
+    rb_define_method(Class_Pixel, "clone", Pixel_clone, 0);
+    rb_define_method(Class_Pixel, "dup", Pixel_dup, 0);
+    rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
+    rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
+    rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
+    rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
+    rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);
+
+    /*-----------------------------------------------------------------------*/
     /* Class Magick::ImageList::Montage methods                              */
     /*-----------------------------------------------------------------------*/
 
@@ -741,7 +779,7 @@ Init_RMagick(void)
     /*-----------------------------------------------------------------------*/
 
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
-    rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, 2);
+    rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, -1);
     RUBY16(rb_enable_super(Class_ImageMagickError, "initialize");)
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
@@ -1141,17 +1179,6 @@ Init_RMagick(void)
     Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", 0);
     rb_define_const(Module_Magick, "AffineMatrix", Class_AffineMatrix);
 
-    // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
-    Class_Pixel = rb_struct_define(NULL, "red", "green", "blue", "opacity", 0);
-    rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
-    rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
-    rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
-    rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
-    rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
-    rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
-    rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);
-    rb_define_const(Module_Magick, "Pixel", Class_Pixel);
-
     // Magick::Primary
     Class_Primary = rb_struct_define(NULL, "x", "y", "z", 0);
     rb_define_method(Class_Primary, "to_s", PrimaryInfo_to_s, 0);
@@ -1205,23 +1232,25 @@ Init_RMagick(void)
     /* Create IDs for frequently used methods, etc.                          */
     /*-----------------------------------------------------------------------*/
 
-    ID__dummy_img_     = rb_intern("_dummy_img_");
-    ID_cur_image       = rb_intern("cur_image");
-    ID_dup             = rb_intern("dup");
-    ID_flag            = rb_intern("flag");
-    ID_from_s          = rb_intern("from_s");
-    ID_Geometry        = rb_intern("Geometry");
-    ID_GeometryValue   = rb_intern("GeometryValue");
-    ID_height          = rb_intern("height");
-    ID_initialize_copy = rb_intern("initialize_copy");
-    ID_length          = rb_intern("length");
-    ID_new             = rb_intern("new");
-    ID_push            = rb_intern("push");
-    ID_to_s            = rb_intern("to_s");
-    ID_values          = rb_intern("values");
-    ID_width           = rb_intern("width");
-    ID_x               = rb_intern("x");
-    ID_y               = rb_intern("y");
+    ID__dummy_img_      = rb_intern("_dummy_img_");
+    ID_changed          = rb_intern("changed");
+    ID_cur_image        = rb_intern("cur_image");
+    ID_dup              = rb_intern("dup");
+    ID_flag             = rb_intern("flag");
+    ID_from_s           = rb_intern("from_s");
+    ID_Geometry         = rb_intern("Geometry");
+    ID_GeometryValue    = rb_intern("GeometryValue");
+    ID_height           = rb_intern("height");
+    ID_initialize_copy  = rb_intern("initialize_copy");
+    ID_length           = rb_intern("length");
+    ID_notify_observers = rb_intern("notify_observers");
+    ID_new              = rb_intern("new");
+    ID_push             = rb_intern("push");
+    ID_to_s             = rb_intern("to_s");
+    ID_values           = rb_intern("values");
+    ID_width            = rb_intern("width");
+    ID_x                = rb_intern("x");
+    ID_y                = rb_intern("y");
 }
 
 /*
@@ -1238,7 +1267,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/03/19 01:32:22 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/04/02 23:53:48 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

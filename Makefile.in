@@ -1,0 +1,28 @@
+
+# Path to ruby interpreter
+RUBY=@RUBY@
+
+# Any extra options from configure script to pass to 'install.rb config'
+RUBY_CONFIG_OPTS=@RUBY_CONFIG_OPTS@
+
+all: config.save
+	$(RUBY) install.rb setup
+
+install:
+	$(RUBY) install.rb install
+
+clean: config.save
+	$(RUBY) install.rb clean
+
+distclean: config.save
+	$(RUBY) install.rb clean
+	rm -f Makefile ext/RMagick/extconf.rb metaconfig
+	rm -f config.status Makefile config.cache config.log
+	rm -rf autom4te.cache
+
+uninstall: config.save
+	$(RUBY) uninstall.rb $(RUBY_CONFIG_OPTS)
+
+config.save: metaconfig
+	$(RUBY) install.rb config $(RUBY_CONFIG_OPTS)
+

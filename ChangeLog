@@ -1,0 +1,114 @@
+RMagick 1.3.0
+    o Added Image#strip!, Image#import_pixels, Image#export_pixels,
+      Image#random_channel_threshold for IM 5.5.8
+    o Changed configure to generate top-level Makefile with install,
+      uninstall targets. (Thanks to Bob Friesenhahn for the suggestion
+      and original implementation.)
+    o Incorporated 1.2.2 patch for bugs that occurred when building RMagick
+      with Ruby 1.6.7
+    o Tested with ImageMagick 5.5.8
+    o Tested with GraphicsMagick 1.0.2
+    o Tested with Ruby 1.8.0preview3
+
+RMagick 1.2.2
+    o Fixed many bugs in configuration script
+    o Added support for GraphicsMagick 1.0 (with assistance from Bob Friesenhahn)
+    o Changed default documentation directory (--doc-dir option default) to
+      $prefix/share/RMagick
+    o Added "examples" directory to contain example programs that aren't
+      referenced by the documentation
+
+RMagick 1.2.1
+    o Yet another fix to the Cygwin installation procedure
+
+RMagick 1.2.0
+    o Changed install to work correctly on Cygwin
+      (Cygwin testing by Yuki Hirakawa and David Martinez Garcia.)
+    o Changed install to support Gentoo ebuild
+      (Gentoo support provided by Tom Payne.)
+    o Changed configure script to find IM doc in IM 5.5.7
+    o Added Image#capture
+    o Added optional matte_pct argument to Image#colorize
+    o Add default argument values to Image#gaussian_blur
+    o Fix bug in Image#store_pixels that prevented it from working with
+      GIF and other PseudoClass image formats
+    o Changed Image#crop and Image#crop! to accept a GravityType constant
+      as the first argument, instead of the x- and y-offset arguments.
+      (Suggested by Robert Wagner.)
+    o Added Image::Info#filename=, image_type=
+    o Added ImageList#__map__ as an alias for Enumerable#map
+    o Added fetch, insert, select, reject methods to ImageList class for
+      Ruby 1.8.0
+    o Undefined zip and transpose methods in ImageList class for Ruby 1.8.0
+    o ImageMagick 5.5.7 supported
+
+RMagick 1.1.0
+    o Fixed bug in handle_error that caused an abend when linked with IM 5.5.6
+    o Added RMAGICK image "format". When read, returns 252x108 RMagick logo
+      in PNG format.
+    o Changed examples to give all floating point constants a leading digit.
+    o Added Image#rotate!
+    o Tested with Ruby 1.8.0preview2
+    o Added Image#extract_info, Image::Info#extract=, Image::Info#scene=,
+      Image::Info#number_scenes=, Image::Info#tile=
+    o Added Draw#text_align, Draw#text_anchor, Draw#text_undercolor
+    o ImageMagick 5.5.6 supported
+
+RMagick 1.0.0
+    o Fixed warnings when compiling with Ruby 1.8.0
+    o Added Draw#rotation=, rotated_text.rb
+    o Fixed temp image files in Montage_texture and Draw_composite
+    o ImageMagick 5.5.5 supported
+
+RMagick 0.9.5
+    o Added channel.rb example
+    o Fixed install problems with IM 5.5.1
+
+RMagick 0.9.4
+    o Cleaned up documentation.
+    o Added logging methods Magick.set_log_event_mask and Magick.set_log_format
+    o Added Magick.set_monitor
+    o Added custom serialization methods _dump and _load to Image class.
+      Added marshaling section to usage doc.
+    o Added Image#mime_type
+    o Changed install to use autoconf-generated configure script
+    o Replaced makedoc.rb with post-install.rb hook
+    o Added rmconst.rb utility script
+    o ImageMagick 5.5.4 supported
+
+RMagick 0.9.3
+    o Changed ImageList#<=> to use same algorithm as Array#<=>
+    o Changed Draw class variables to class constants
+    o Fixed bug in Magick::colors method that caused some colors
+      to be repeated or missed when the optional block is used
+    o Changed fill classes to not inherit from common Fill class.
+      Removed Fill class.
+    o Improved usage documentation
+    o Added Image#level_channel, introduced with IM 5.5.3
+    o ImageMagick 5.5.3 supported
+    o Ruby 1.6.8, 1.8.0preview1 supported
+
+RMagick 0.9.2
+    o Added crop!, flip!, flop!, magnify!, minify!, resize!, sample!,
+      scale!, shave!, channel_threshold methods to Image class
+    o Documented DisposeType, ColorSeparationMatteType and OptimizeType
+      constants
+    o Changed Image#<=>, ImageList#<=> to raise TypeError if the other
+      argument is not in the same class
+    o Deleted Image#==, ImageList#==, include Comparable in both classes
+    o Added Image#thumbnail, thumbnail!, adaptive_threshold for 5.5.2 & later
+    o Used image list functions in 5.5.2 & later
+    o ImageMagick 5.5.2 supported
+    o Removed last vestiges of 5.4.9 support
+
+RMagick 0.9.1
+    o Added -Wl,rpath option to $LDFLAGS in extconf.rb
+    o #include <sys/types.h> in rmagick.h
+    o Changed set_cache_threshold to call SetMagickResourceLimit instead of SetCacheThreshold
+    o Changed Image_texture_flood_fill to clone texture image instead of adding a reference
+    o Many fixes to the Array methods in ImageList
+    o Defined Image#<=>, defined Image#== in terms of Image#<=>
+    o Defined ImageList#<=> in terms of Image#<=>
+
+RMagick 0.9.0
+    1st beta

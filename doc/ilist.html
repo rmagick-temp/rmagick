@@ -1,0 +1,1641 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st September 2002), see www.w3.org">
+    <title>class ImageList</title>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content="Quanta Plus">
+    <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="magick.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href=
+        "imageattrs.html">Next -&gt;</a></td>
+      </tr>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="5">
+      <tr class="classname">
+        <td colspan="2">
+          <h1>class ImageList</h1>
+        </td>
+      </tr>
+      <tr bgcolor="#C3C3C3">
+        <td colspan="2">
+          <h3>Table Of Contents</h3>
+        </td>
+      </tr>
+      <tr class="toc">
+        <td colspan="2">
+          <h3>class methods</h3>
+          <ul>
+            <li><a href="#ImageList.new">new</a></li>
+          </ul>
+          <h3>instance attribute methods</h3>
+          <ul>
+            <li><a href="#ImageList.delay_eq">delay=</a></li>
+            <li><a href=
+            "#ImageList.iterations_eq">iterations=</a></li>
+            <li><a href="#ImageList.length">length</a></li>
+            <li><a href="#ImageList.scene">scene</a></li>
+            <li><a href="#ImageList.scene_eq">scene=</a></li>
+          </ul>
+          <h3>instance methods</h3>
+          <ul>
+            <li><a href="#ImageList.array_methods">Array
+            methods</a></li>
+            <li><a href="#ImageList.spaceship">&lt;=&gt;</a></li>
+            <li><a href="#ImageList.animate">animate</a></li>
+            <li><a href="#ImageList.append">append</a></li>
+            <li><a href="#ImageList.average">average</a></li>
+            <li><a href="#ImageList.coalesce">coalesce</a></li>
+            <li><a href="#ImageList.copy">copy</a></li>
+            <li><a href="#ImageList.cur_image">cur_image</a></li>
+            <li><a href=
+            "#ImageList.deconstruct">deconstruct</a></li>
+            <li><a href="#ImageList.display">display</a></li>
+            <li><a href=
+            "#ImageList.flatten_images">flatten_images</a></li>
+            <li><a href="#ImageList.from_blob">from_blob</a></li>
+            <li><a href="#ImageList.inspect">inspect</a></li>
+            <li><a href="#ImageList.map">map</a></li>
+            <li><a href="#ImageList.montage">montage</a></li>
+            <li><a href="#ImageList.morph">morph</a></li>
+            <li><a href="#ImageList.mosaic">mosaic</a></li>
+            <li><a href="#ImageList.new_image">new_image</a></li>
+            <li><a href="#ImageList.ping">ping</a></li>
+            <li><a href="#ImageList.quantize">quantize</a></li>
+            <li><a href="#ImageList.read">read</a></li>
+            <li><a href="#ImageList.to_blob">to_blob</a></li>
+            <li><a href="#ImageList.write">write</a></li>
+          </ul>
+        </td>
+      </tr>
+      <tr class="methodsection">
+        <td colspan="2">
+          <h2>class methods</h2>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname" valign="top"><a name=
+        "ImageList.new">new</a></td>
+        <td>Magick::ImageList.new -&gt; <i>image</i><br>
+         Magick::ImageList.new(<i>filename[, filename...]]</i>)
+        -&gt; <i>image</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Creates a new imagelist. If one or more image filenames
+        are specified, opens and reads the files, adding a new
+        image for each image in the image file(s). Sets the scene
+        number to the index of the last image, or <i>nil</i> if no
+        filenames are specified.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>Zero or more image file names.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new imagelist. The imagelist contains an Image object
+        for each image in the specified files. A file can contain
+        more than one image. For example, new will create an image
+        for each frame in an animated GIF or each layer in a
+        multi-layer Photoshop file.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+i = Magick::ImageList.new
+i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
+</pre>
+        </td>
+      </tr>
+      <tr class="methodsection">
+        <td colspan="2">
+          <h2>instance attribute accessor methods</h2>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.delay_eq">delay=</a></td>
+        <td><i>imagelist.</i>delay=<i>n</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Sets the length of time that each image in the
+        imagelist will be displayed when the sequence is
+        animated.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>An integer value representing the number of 100ths of a
+        second to display each image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td><var>self</var></td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist.delay = 20 # delay 1/5 of a second between images.
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick notes</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/types/Image.html">Image
+        Structure Members</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "imageattrs.html#Image.delay">Image#delay=</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>The ImageList class <var>delay=</var> attribute assigns
+        the same delay to all the images in the imagelist. Use <a
+        href="imageattrs.html#Image.delay">Image#delay=</a> to set
+        different delay values on individual images.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.iterations_eq">iterations=</a></td>
+        <td><i>imagelist.</i>iterations=<i>n</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Sets the number of times an animated image should
+        loop.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>The number of iterations</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist.iterations = 10
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick notes</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/types/Image.html">Image
+        Structure Members</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Notes</td>
+        <td>The <a href="#ImageList.animate">animate</a> method and
+        the ImageMagick animate/GraphicsMagick gm utilities do not
+        respect this number. Both will repeat the animation until
+        you stop them. Mozilla (and presumably Netscape) do respect
+        the value of <var>iterations</var>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.length">length</a></td>
+        <td><i>imagelist.</i>length -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Returns the number of images in the imagelist.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+i = Magick::ImageList.new("images/Button_A.gif", "images/Button_B.gif")
+i.length &raquo; 2
+</pre>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.scene">scene</a><br>
+         <a name="ImageList.scene_eq">scene=</a></td>
+        <td>scene -&gt; <i>anInteger</i><br>
+         scene=<i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Get or set the current <i>scene number</i>. The scene
+        number indicates the image to which <a href=
+        "image.html">Image</a> methods are sent.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist.scene = 10
+imagelist.scene &raquo; 10
+</pre>
+        </td>
+      </tr>
+      <tr class="methodsection">
+        <td colspan="2">
+          <h2>instance methods</h2>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.array_methods">Array methods</a></td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          You can manipulate the images in an imagelist using <a
+          href="#ImageList.array_methods.advanced">almost any</a>
+          Array method. Many of these methods will also update the
+          scene number. The scene number will never exceed the
+          number of images in the list, and if the imagelist
+          contains no images the scene number will be
+          <var>nil</var>. 
+          <p>Most array methods keep the current image current. If
+          the method moves the current image to a new position, the
+          method updates the scene number to the new index. If the
+          method deletes the current image, the scene number is set
+          to the last image in the list. The following table lists
+          the methods that do not follow these rules.</p>
+          <table border="1" bgcolor="#F0F0F0">
+            <thead>
+              <tr>
+                <th>Array method</th>
+                <th>scene number will be...</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td valign="top">&lt;&lt;</td>
+                <td>set to index the last image in the list</td>
+              </tr>
+              <tr>
+                <td valign="top">clear</td>
+                <td>set to <var>nil</var></td>
+              </tr>
+              <tr>
+                <td valign="top">concat</td>
+                <td>set to index the last image in the list</td>
+              </tr>
+              <tr>
+                <td valign="top">push</td>
+                <td>set to index the last image in the list</td>
+              </tr>
+              <tr>
+                <td valign="top">unshift</td>
+                <td>set to 0</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+          Add noise to a model image. Append the resulting image to
+          the imagelist in "example". (See: demo.rb) 
+          <div class="example">
+<pre>
+example = Magick::ImageList.new
+model = Magick::ImageList.new "model.miff"
+example &lt;&lt; model.add_noise Magick::LaplacisanNoise
+</pre>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.scene">scene</a><br>
+         <a href="#ImageList.scene_eq">scene=</a><br>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top"><a name=
+        "ImageList.array_methods.advanced">Advanced</a></td>
+        <td>
+          <p>The <var>assoc</var>, <var>flatten</var>,
+          <var>flatten!</var>, <var>join</var>, <var>pack</var>,
+          and <var>rassoc</var> methods are not defined in the
+          ImageList class.</p>
+          <p>Array methods defined in the ImageList class that
+          would normally return an array return an ImageList.</p>
+          <p>Adding anything other than a image to an imagelist has
+          undefined results. Most of the time RMagick will raise an
+          ArgumentError exception.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.spaceship">&lt;=&gt;</a></td>
+        <td><i>imagelist &lt;=&gt; anOtherImageList</i> -&gt; -1,
+        0, 1</td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          Compares two imagelists and returns -1, 0, or 1 if the
+          receiver is less than, equal to, or greater than the
+          other imagelist. The comparison between the recipient (a)
+          and the other (b) is performed this way: 
+          <ol>
+            <li>For all images, if the result of <code>a[n]
+            &lt;=&gt; b[n]</code>, is not 0 then that is the result
+            of a &lt;=&gt; b</li>
+            <li>If <code>a.scene &lt;=&gt; b.scene</code> is not 0,
+            returns the result</li>
+            <li>Returns <code>a.length &lt;=&gt;
+            b.length</code></li>
+          </ol>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "image.html#Image.spaceship">Image#&lt;=&gt;</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>
+          <p>Individual images are compared by comparing their <a
+          href="image.html#Image.signature">signatures</a>.</p>
+          <p><code>ImageList</code> mixes in the
+          <code>Comparable</code> module.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.animate">animate</a></td>
+        <td><i>imagelist.</i>animate(<i>[delay]</i>) <i>[&nbsp;{
+        optional arguments }&nbsp;]</i> -&gt; <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Animate the images to an X Window screen. By default
+        displays to the local screen. You can specify a different
+        screen by assigning the name to the <var>server_name</var>
+        attribute in the optional arguments block.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist.animate<br>
+imagelist.animate { self.server_name = "other.lnx:0.0" }
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/image.html#animateimages">
+        AnimateImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.display">display</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.append">append</a></td>
+        <td><i>imagelist.</i>append(<code>true</code> or
+        <code>false</code>) -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Append all the images in the imagelist, either
+        vertically or horizontally. If the images are not of the
+        same width, any narrow images will be expanded to fit using
+        the background color.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>If <code>true</code>, rectangular images are stacked
+        top-to-bottom, otherwise left-to-right.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A image composed of all the images in the
+        imagelist.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>See the <a href="#ImageList.map">map</a> example.</td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/image.html#appendimages">
+        AppendImages</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.average">average</a></td>
+        <td><i>imagelist.</i>average -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Averages all the images together. Each image in the
+        image must have the same width and height.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A single image representing the average of all the
+        images in the imagelist.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td><a href="average.rb.html" target="_blank"><img src=
+        "ex/average.gif" alt="average example" border="0"></a></td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/image.html#averageimages">
+        AverageImages</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.coalesce">coalesce</a></td>
+        <td><i>imagelist.</i>coalesce -&gt; <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          Merges all the images in the imagelist into a new
+          imagelist. Each image in the new imagelist is formed by
+          flattening all the previous images. 
+          <p>The length of time between images in the new image is
+          specified by the <a href=
+          "imageattrs.html#Image.delay">delay</a> attribute of the
+          input image. The position of the image on the merged
+          images is specified by the <a href=
+          "imageattrs.html#Image.page">page</a> attribute of the
+          input image.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new multi-frame image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+          <table class="example">
+            <tr>
+              <td><a href="coalesce.rb.html" target="_blank"><img
+              border="0" alt="coalesce example" src=
+              "ex/coalesce.gif"></a></td>
+              <td>This animated GIF is created by coalescing 25
+              small images in a grid.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/transform.html#coalesceimages">
+        CoalesceImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "#ImageList.flatten_images">flatten_images</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.copy">copy</a></td>
+        <td><i>imagelist.</i>copy -&gt; <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Creates a deep copy of the imagelist. The new imagelist
+        contains a copy of all the images in the original
+        imagelist.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist2 = imagelist1.copy
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="image.html#Image.copy">Image#copy</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.cur_image">cur_image</a></td>
+        <td><i>imagelist.</i>cur_image -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Retrieves the image indexed by <a href=
+        "#ImageList.scene">scene</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>The image in the <a href=
+        "#ImageList.array_methods">images</a> array indexed by the
+        current value of <a href=
+        "#ImageList.array_methods">scene</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+f = imagelist.cur_image
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>Both the ImageList class and the Image class support
+        the <var>cur_image</var> method. Of course, in the Image
+        class, <var>cur_image</var> simply returns <var>self</var>.
+        When a RubyMagick method accepts either an image or a
+        imagelist as an argument, it sends the <var>cur_image</var>
+        method to the argument to get the current image.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.deconstruct">deconstruct</a></td>
+        <td><i>imagelist.</i>deconstruct -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td><span class="imquote">Compares each image with the next
+        in a sequence and returns the maximum bounding region of
+        any pixel differences it discovers.</span></td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+f = imagelist.deconstruct
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/transform.html#deconstructimages">
+        DeconstructImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Other</td>
+        <td>I'm looking for an example.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.display">display</a></td>
+        <td><i>imagelist.</i>display <i>[&nbsp;{ optional arguments
+        }&nbsp;]</i> -&gt; <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Displays the images in the imagelist to any X Window
+        screen. By default displays to the local screen. You can
+        specify a different screen by assigning the name to the
+        <var>server_name</var> attribute in the optional arguments
+        block.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist.display
+imagelist.display { self.server_name = "other.lnx:0.0" }
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/image.html#displayimages">
+        DisplayImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.animate">animate</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.flatten_images">flatten_images</a></td>
+        <td><i>imagelist.</i>flatten_images -&gt;
+        <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Combines all the images in the imagelist into a single
+        image by overlaying each successive image onto the
+        preceding images. If a image has transparent areas, the
+        underlying image will show through. Use the <a href=
+        "imageattrs.html#Image.page_eq">page</a> attribute to
+        specify the position of each image with respect to the
+        preceding images.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A image that is the combination of all the images in
+        the image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td><a href="flatten_images.rb.html" target="_blank"><img
+        border="0" alt="flatten_images example" src=
+        "ex/flatten_images.gif"></a></td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/transform.html#flattenimage">
+        FlattenImageList</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.coalesce">coalesce</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td><span class="imquote">This is useful for combining
+        Photoshop layers into a single image.</span></td>
+      </tr>
+      <tr>
+        <td valign="top">Notes</td>
+        <td>Since the Array class defines a <var>flatten</var>
+        method I used a different name for this method.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.from_blob">from_blob</a></td>
+        <td><i>imagelist.</i>from_blob(blob<i>[, blob...]</i>)
+        <i>[&nbsp;{ optional arguments }&nbsp;]</i> -&gt;
+        <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Creates images from the blob (<i>B</i>inary
+        <i>L</i>arge <i>O</i>bjects) arguments and appends the
+        images to the imagelist in the image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>One or more of the strings produced by <a href=
+        "#ImageList.to_blob">to_blob</a>. Control the format of the
+        created image(s) by setting additional <a href=
+        "info.html">Image::Info</a> attributes in the optional
+        block argument. Useful attributes include <a href=
+        "info.html#Info.format_eq">format</a>, <a href=
+        "info.html#Info.size_eq">size</a>, and <a href=
+        "info.html#Info.depth_eq">depth</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>An image created from the blob argument(s). The
+        <var>scene</var> attribute is set to the last image in the
+        image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist = Magick::ImageList.new
+imagelist.from_blob(blob) {
+   self.format = "GIF"
+   self.size = "120x120"
+   self.depth = Magick::QuantumDepth
+   }
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/blob.html#blobtoimage">BlobToImageList</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.to_blob">to_blob</a><br>
+         <a href="image.html#Image.to_blob">Image#to_blob</a><br>
+         <a href=
+        "image.html#Image.from_blob">Image.from_blob</a><br>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.inspect">inspect</a></td>
+        <td><i>imagelist.</i>inspect -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Produces a string that describes the images in the
+        image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>The returned string is a concatenation of the strings
+        returned by <a href=
+        "image.html#Image.inspect">Image#inspect</a> for all the
+        images in the imagelist.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+i = Magick::ImageList.new("images/Button_A.gif", "images/Button_B.gif")
+imagelist.inspect &raquo;
+"images/Button_A.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 18136b
+images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick notes</td>
+        <td>Produces essentially the same information as <a href=
+        "http://www.imagemagick.org/www/api/image.html#describeimage">
+        DescribeImageList</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "image.html#Image.inspect">Image#inspect</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="ImageList.map">map</a></td>
+        <td><i>imagelist.map</i>(<i>reference</i>, <i>dither</i>)
+        -&gt; <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Reduces the colors in the imagelist images to the set
+        of colors in the reference image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          <dl>
+            <dt>reference</dt>
+            <dd>An image or a image. If an image, <var>map</var>
+            uses the current image as the reference image.</dd>
+            <dt>dither</dt>
+            <dd>if <var>true</var>, dither the mapped images.</dd>
+          </dl>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new imagelist containing one image for every image in
+        the receiver.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+          <table class="example">
+            <tr>
+              <td>This example demonstrates how to map images into
+              the 216 "Web safe" colors. The top half of the images
+              are in the original colors. The bottom half of the
+              images have been mapped using &times;Magick's
+              built-in "NETSCAPE:" format.</td>
+            </tr>
+            <tr>
+              <td><a href="map.rb.html" target="_blank"><img
+              border="0" alt="map example" src="ex/map.jpg">
+              </a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/quantize.html#mapimages">
+        MapImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="image.html#Image.map">Image#map</a><br>
+         <a href="#ImageList.quantize">quantize</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.montage">montage</a></td>
+        <td><i>imagelist.</i>montage <i>[&nbsp;{ optional arguments
+        }&nbsp;]</i> -&gt; <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          Creates a composite image by reducing the size of the
+          image images and arranging them in a grid on the
+          background color or texture of your choice. There are
+          many configuration options. For example, you can specify
+          the number of columns and rows, the distance between
+          images, and include a label with each small image
+          (<i>tile</i>). 
+          <p>All of <var>montage</var>'s configuration options are
+          specified by assigning values to attribute methods in a
+          block associated with the method call.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Configuration attributes</td>
+        <td>
+          <table bgcolor="#F0F0F0" border="1" cellpadding="5">
+            <tr>
+              <th>Attribute&nbsp;accessor</th>
+              <th>Description</th>
+            </tr>
+            <tr>
+              <td valign="top"><i>background_color=</i></td>
+              <td>
+                The composite image background color. 
+<pre>
+self.background_color = "white"
+</pre>
+                The default background color is white.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>border_color=</i></td>
+              <td>
+                The tile border color. 
+<pre>
+self.border_color = "black"
+</pre>
+                The default border color is #dfdfdf (gray).
+                (<i>Note:</i> I have not been able to get this
+                attribute to override the value of the individual
+                tile's <a href=
+                "imageattrs.html#Image.border_color">border_color</a>
+                attribute.)
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>border_width=</i></td>
+              <td>
+                The width in pixels of the tile borders. 
+<pre>
+self.border_width = 10
+</pre>
+                The default border width is 0.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>compose=</i></td>
+              <td>
+                The <a href=
+                "constants.html#CompositeOperator">composite
+                operator</a> to use when compositing the tile
+                images onto the background. 
+<pre>
+self.compose = Magick::AtopCompositeOp
+</pre>
+                The default composition operator is
+                OverCompositeOp. 
+                <p><i>Hint:</i> You can use a different composite
+                operator for each tile by setting each image's <a
+                href="imageattrs.html#Image.compose">compose=</a>
+                attribute to the desired operator. In the optional
+                arguments block, set <var>compose</var> to
+                UndefinedCompositeOp.</p>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>filename=</i></td>
+              <td>The filename of the composite image.
+              (<i>Note:</i> Currently RubyMagick does not use this
+              value.)</td>
+            </tr>
+            <tr>
+              <td valign="top"><i>fill=</i></td>
+              <td>
+                If the tiles have labels, the label fill color. 
+<pre>
+self.fill = "red"
+</pre>
+                The default fill color is black.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>font=</i></td>
+              <td>
+                If the tiles have labels, the label font. 
+<pre>
+self.font = "Courier"
+</pre>
+                The default font is Helvetica.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>frame=</i></td>
+              <td>
+                The size of an ornamental frame surrounding each
+                tile. The frame specification is a string in the
+                form <var>&lt;width&gt;x&lt;height&gt;+&lt;outer
+                bevel width&gt;+&lt;inner bevel width&gt;</var>.
+                The values are in pixels. For example, to surround
+                each tile with a frame 20 pixels wide by 20 pixels
+                high and a 4-pixel inner and outer bevel, use: 
+<pre>
+self.frame = "20x20+4+4"
+</pre>
+                If the tile has a label, the label is included in
+                the frame. The default is to have no frame. 
+                <p>See <a href=
+                "image.html#Image.frame">Image#frame</a>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>geometry=</i></td>
+              <td>
+                The size of the tiles and the distance between
+                tiles. The value should be a string in the form
+                <var>&lt;tile-width&gt;x&lt;tile-height&gt;+&lt;distance-between-columns&gt;+&lt;distance-between-rows&gt;</var>.
+                To create tiles that are 130 pixels wide and 194
+                pixels tall, with 10 pixels between each column of
+                tiles and 5 between each row, use: 
+<pre>
+self.geometry = "130x194+10+5"
+</pre>
+                The default geometry is "120x120+4+3&gt;". 
+                <p>See <a href=
+                "imusage.html#geometry"><var>geometry</var></a>.</p>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>gravity=</i></td>
+              <td>
+                The <a href=
+                "constants.html#GravityType">direction</a> used
+                when adding the tile labels. (See <a href=
+                "draw.html#Draw.annotate">annotate</a>.) 
+<pre>
+self.gravity = Magick::CenterGravity
+</pre>
+                The default is CenterGravity.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>matte_color=</i></td>
+              <td>The matte color. The default is #bdbdbd.</td>
+            </tr>
+            <tr>
+              <td valign="top"><i>pointsize=</i></td>
+              <td>
+                If the tiles have labels, the size of the label
+                font. 
+<pre>
+self.pointsize = 20
+</pre>
+                The default is 12.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>shadow=</i></td>
+              <td>
+                If set to <var>true</var>, adds a drop shadow to
+                each tile. 
+<pre>
+self.shadow = true
+</pre>
+                The default is <var>false</var>.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>stroke=</i></td>
+              <td>
+                If the tiles have labels, sets the stroke (outline)
+                color of the label text. 
+<pre>
+self.stroke = "red"
+</pre>
+                The default is "transparent," that is, no stroke
+                color.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>texture=</i></td>
+              <td>
+                A image to be tiled on the background of the
+                composite image. If present, overrides the
+                background color. For example, to use
+                &times;Magick's built-in "granite" texture as the
+                background, use: 
+<pre>
+self.texture = Magick::Image.read("granite:").first
+</pre>
+                The default is no texture.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>tile=</i></td>
+              <td>
+                The number of columns and rows to use when
+                arranging the tiles on the composite image. The
+                value is a string in the form
+                <var>"&lt;columns&gt;x&lt;rows&gt;"</var>. To
+                arrange the tiles 4 across and 10 down, use: 
+<pre>
+self.tile = "4x10"
+</pre>
+                The default is "6x4". <i>Note:</i> If there are too
+                many tiles to fit on one composite image,
+                <var>montage</var> creates multiple composite
+                images.
+              </td>
+            </tr>
+            <tr>
+              <td valign="top"><i>title=</i></td>
+              <td>
+                The composite image title. 
+<pre>
+self.title = "My Images"
+</pre>
+                The default is no title. <i>Note:</i> I have not
+                been able to get this to actually put a title on
+                the composite image.
+              </td>
+            </tr>
+          </table>
+          <p><i>Note:</i>In the above examples, the reference to
+          <var>self</var> is necessary to distinguish the method
+          call from an assignment to a local variable.</p>
+          <p><i>Note:</i>You may assign a <a href=
+          "struct.html#Pixel">Pixel</a> object to any attribute
+          that accepts a color name.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Tile labels</td>
+        <td>
+          To add labels to the tiles, assign a "Label" attribute to
+          each image. The <var>montage</var> method will use the
+          value of the attribute as the tile's label. For example, 
+<pre>
+img[2]['Label'] = "Mom's Birthday"
+</pre>
+          See <a href="image.html#Image.aset">Image#[]=</a>.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/montage.html#montageimages">
+        MontageImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>An image containing as many images as were necessary to
+        tile all the images in the original image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td><a href="demo.rb.html" target="_blank">demo.rb</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/montage.html">The
+        &times;Magick montage utility</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.morph">morph</a></td>
+        <td><i>imagelist.</i>morph(<i>n</i>) -&gt;
+        <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Transforms a image into another image by inserting
+        <var>n</var> in-between images. Requires at least two
+        images. If more images are present, the 2nd image is
+        transformed into the 3rd, the 3rd to the 4th, etc.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>The number of in-between images to insert between each
+        pair of images.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>An imagelist containing copies of the original images
+        plus the in-between images.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+          <table class="example">
+            <tr>
+              <td><a href="morph.rb.html" target="_blank"><img src=
+              "ex/morph.gif" alt="morph example" border="0">
+              </a></td>
+              <td>This animated GIF is created by reading the "0",
+              "1", "2" and "3" images, then using <var>morph</var>
+              to create 8 images between each original image.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/fx.html#morphimages">MorphImages</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.mosaic">mosaic</a></td>
+        <td><i>imagelist.</i>mosaic -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Composites all the images into a single new image. The
+        location of each image is determined by the value of its <a
+        href="imageattrs.html#Image.page">page</a> attribute.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td><a href="mosaic.rb.html" target="_blank"><img src=
+        "ex/mosaic.gif" alt="mosaic example" border="0"></a></td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/transform.html#mosaicimages">
+        MosaicImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.coalesce">coalesce</a><br>
+         <a href="#ImageList.flatten_images">flatten_images</a><br>
+         <a href="#ImageList.montage">montage</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.new_image">new_image</a></td>
+        <td><i>imagelist.</i>new_image(<i>columns</i>,
+        <i>rows</i><i>[, fill]</i>) <i>[&nbsp;{ optional arguments
+        }&nbsp;]</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Adds a new image to the imagelist. The image can have
+        an optional <a href="fill.html">fill</a> applied to
+        it.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          Creates a new image with the specified number of rows and
+          columns. If the optional <var>fill</var> argument is
+          used, calls the <var>fill</var> method to fill the image.
+          Otherwise, the image is filled with the background color.
+          
+          <p>You can set any <a href="info.html">Image::Info</a>
+          attributes in an associated block. These attributes
+          supply options to be used when creating the image. For
+          example, you can specify the <a href=
+          "imageattrs.html#Image.background_color">background
+          color</a> to fill the image with (see the example), the
+          <a href="imageattrs.html#Image.depth">depth</a>, <a href=
+          "imageattrs.html#Image.border_color">border color</a>,
+          etc.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+# Create a square red image.
+imagelist = Magick::ImageList.new
+imagelist.new_image(100, 100) { self.background_color = "red" }
+</pre>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.ping">ping</a></td>
+        <td><i>imagelist.</i>ping(<i>filename</i>[,
+        <i>filename</i>...]) -&gt; <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Reads the image files and creates one or more images
+        that contain all the image attributes but without the pixel
+        data. If all you need is the image attributes, the
+        <var>ping</var> method is much faster and consumes less
+        memory than <a href=
+        "#ImageList.read"><var>read</var></a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>One or more image file names.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+imagelist = Magick::ImageList.new
+imagelist.ping "Button_A.gif"
+puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
+      The image has 127 columns and 120 rows.
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/constitute.html#pingimage">
+        PingImage</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.read">read</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.quantize">quantize</a></td>
+        <td><i>imagelist.</i>quantize(nc=256,
+        colorspace=<code>Magick::RGBColorspace</code>,
+        dither=<code>true</code>, tree_depth=0,
+        measure_error=<code>false</code>) -&gt;
+        <i>anImageList</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td class="imquote">Analyzes the colors within a set of
+        reference images and chooses a fixed number of colors to
+        represent the set. The goal of the algorithm is to minimize
+        the difference between the input and output images while
+        minimizing the processing time.</td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          <dl>
+            <dt>nc</dt>
+            <dd>The maximum number of colors to use in the output
+            images. Must be less than or equal to <a href=
+            "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+            <dt>colorspace</dt>
+            <dd class="imquote">The <a href=
+            "constants.html#ColorspaceType">colorspace</a> to
+            quantize in. Color reduction, by default, takes place
+            in the RGB color space. Empirical evidence suggests
+            that distances in color spaces such as YUV or YIQ
+            correspond to perceptual color differences more closely
+            than do distances in RGB space. The Transparent color
+            space behaves uniquely in that it preserves the matte
+            channel of the image if it exists.</dd>
+            <dt>dither</dt>
+            <dd><span class="imquote">Apply Floyd/Steinberg error
+            diffusion to the image. When the size of the color
+            palette is less than the image colors, this trades off
+            spacial resolution for color resolution by dithering to
+            achieve a similar looking image.</span></dd>
+            <dt>tree_depth</dt>
+            <dd class="imquote">Specify the tree depth to use while
+            quantizing. The values 0 and 1 support automatic tree
+            depth determination. The tree depth may be forced via
+            values ranging from two to eight. The ideal tree depth
+            depends on the characteristics of the input image, and
+            may be determined through experimentation.</dd>
+            <dt>measure_error</dt>
+            <dd>
+              <span class="imquote">Calculate quantization errors
+              when quantizing the image.</span> 
+              <p>Stores the results for each image in the imagelist
+              <a href=
+              "imageattrs.html#Image.mean_error_per_pixel">mean_error_per_pixel</a>,
+              <a href=
+              "imageattrs.html#Image.normalized_maximum_error">normalized_maximum_error</a>,
+              and <a href=
+              "imageattrs.html#Image.normalized_mean_error">normalized_mean_error</a>
+              attributes. Stores the number of colors used for the
+              image in the <a href=
+              "imageattrs.html#Image.total_colors">total_colors</a>
+              attribute.</p>
+            </dd>
+          </dl>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new imagelist containing quantized copies of the
+        images in the original image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+          <table class="example">
+            <tr>
+              <td>This example shows the effect of quantizing 3
+              images to a set of 16 colors in the RGB colorspace.
+              The original images are on top. The quantized images
+              are on the bottom.</td>
+            </tr>
+            <tr>
+              <td><a href="quantize-m.rb.html" target="_blank"><img
+              alt="quantize example" src="ex/quantize-m.jpg"
+              border="0"></a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/quantize.html#quantizeimages">
+        QuantizeImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "image.html#Image.quantize">Image#quantize</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.read">read</a></td>
+        <td><i>imagelist.</i>read(<i>filename[, filename...]</i>)
+        <i>[&nbsp;{ optional arguments }&nbsp;]</i> -&gt;
+        <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          Reads one or more image files and adds the images to the
+          imagelist. After reading all the files, sets the <a href=
+          "#ImageList.scene">scene</a> number to the last image in
+          the list. 
+          <p>The image files may be multi-frame (animated) files.
+          In this case <var>read</var> adds multiple images per
+          file to the imagelist.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          One or more filenames. 
+          <p>You can also specify optional arguments to be used
+          when reading the file(s) by setting <a href=
+          "info.html">Image::Info</a> attributes in the optional
+          block.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+i = Magick::ImageList.new
+number = '0'
+4.times do
+        i.read "images/Button_" + number + ".gif"
+        number.succ!
+        end
+</pre>
+          See the <a href="#ImageList.morph">morph</a> example and
+          <a href="demo.rb.html" target="_blank">demo.rb</a>.
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick notes</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/constitute.html#readimage">
+        ReadImageList</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="image.html#Image.read">Image.read</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>You can create images using &times;Magick's built-in
+        formats with the <var>read</var> method. See <a href=
+        "imusage.html#builtin_formats">Built-in image
+        formats</a>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.to_blob">to_blob</a></td>
+        <td><i>imagelist.</i>to_blob <i>[&nbsp;{ optional arguments
+        }&nbsp;]</i> -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Converts the images in the imagelist to a <i>blob</i>.
+        <span class="imquote">A blob contains data that directly
+        represent a particular image format in memory instead of on
+        disk.</span></td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>None. You can control the format of the blob by setting
+        <a href="info.html">Image::Info</a> attributes in an
+        associated block.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>The blob in the form of a Ruby string.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+i = Magick::ImageList.new "birthday.png"
+s = i.to_blob &raquo; a string representing the image.
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/blob.html#imagetoblob">ImageListToBlob</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="#ImageList.from_blob">from_blob</a><br>
+         <a href="image.html#Image.to_blob">Image#to_blob</a><br>
+         <a href=
+        "image.html#Image.from_blob">Image.from_blob</a><br>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "ImageList.write">write</a></td>
+        <td><i>imagelist.</i>write(<i>filename</i>) <i>[&nbsp;{
+        optional arguments }&nbsp;]</i> -&gt; <i>self</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          If the image format <a href=
+          "imusage.html#formats">indicated by the filename</a>
+          supports multiple images per file (animated images),
+          <var>write</var> writes all the images in the imagelist
+          to a single file. Otherwise, writes each image to a
+          separate file. 
+          <p>Regardless of the original format, <var>write</var>
+          converts the images to the format specified by the
+          filename.</p>
+          <p>If the imagelist contains more than one image and the
+          output format does not support multi-frame images, each
+          image is written to a file that has the filename you
+          specify followed by a period (.) and the scene number.
+          You can change this behavior by embedding a %d, %0Nd, %o,
+          %0No, %x, or %0Nx printf format specification in the file
+          name.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>
+          A filename. Indicate the desired image <a href=
+          "imusage.html#formats">format</a> either by the suffix
+          (i.e. <code>.jpg</code>, <code>.png</code>) or the prefix
+          (<code>ps:</code>) to the filename. 
+          <p>You can also specify optional arguments by setting <a
+          href="info.html">Image::Info</a> attributes in an
+          associated block.</p>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>self, or <code>nil</code> if the format cannot be
+        determined.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+# The PNG format does not support multi-frame files,
+# so each image is written to a separate file.
+i = Magick::ImageList.new "animated.gif"
+p i.length &raquo; 3 # contains 3 images
+i.write "test.png" &raquo; test.png.0
+                   &raquo; test.png.1
+                   &raquo; test.png.2
+# &times;Magick's MIFF format does support multi-frame
+# files, so all 3 images are written to one file.
+i.write "animated.miff" &raquo; animated.miff
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/constitute.html#writeimages">
+        WriteImages</a></td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href="image.html#Image.write">Image#write</a></td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>
+          If you want to write each image to a separate file using
+          a format that supports multi-frame files, loop over the
+          images individually and use the <a href=
+          "image.html#Image.write">write</a> method in the Image
+          class: 
+<pre>
+x = 'A'
+imagelist.each { |f| f.write "#{image}_#{x}.gif"; x.succ! }
+</pre>
+        </td>
+      </tr>
+    </table>
+    <hr>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="magick.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href=
+        "imageattrs.html">Next -&gt;</a></td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+.stdtitle {
+   background-color: gray;
+   font-size: xx-large;
+   font-weight: bold;
+   color: white;
+   line-height: 1.5;
+}
+
+.classname {
+   background-color: gray;
+   font-size: x-large;
+   color: white;
+   padding-top: 1em;
+   padding-bottom: 1em;
+}
+  
+.classname2 {
+   background-color: gray;
+   font-size: large;
+   font-weight: bold;
+   color: white;
+   padding-top: .5em;
+   padding-bottom: .5em;
+}
+
+.methodsection {
+   padding-top: 1em;
+   padding-bottom: 1em;
+   background-color: #C3C3C3;
+   font-size: large;
+}
+
+.methodsection2 {
+   padding-top: 0.5em;
+   padding-bottom: 0.5em;
+   background-color: #C3C3C3;
+}
+
+.method {
+   padding-top: 1em;
+   padding-bottom: 1em;
+   background-color: #DCDCDC;
+}
+
+.method2 {
+   background-color: #DCDCDC;
+}
+
+.methodname {
+	font-size: x-large;
+	font-weight: bold;
+	vertical-align: top;
+}
+
+.methodname2 {
+	font-weight: bold;
+}
+
+/* Quoted from ImageMagick documentation */
+blockquote.imquote {
+ color: #990000;
+ text-indent: 1em;
+}
+
+.toc {
+ padding-top: 1em;
+ padding-bottom: 2em;
+}
+
+.example {
+ background-color: #ccffff;
+}
+
+table.example {
+ background-color: transparent;
+ width: 80%;
+}  
+
+.imversion {
+ font-style: italic;
+ font-size: small;
+ /* font-weight: bold; */
+ color: #ff9900;
+}
+
+.gmversion {
+ font-style: italic;
+ font-size: small;
+ color: #008B45;
+}
+
+.imquote {
+ color: #990000;
+}
+
+dt {
+	font-style: italic;
+}
+
+

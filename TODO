@@ -1,0 +1,27 @@
+
+unit tests
+	to_blob, read_blob
+	Magick::Pixel#to_color, from_color
+	Magick::Pixel#to_HSL, from_HSL
+	Image#colormap(index<, color_name || pixel>)
+	Image#pixel_color(x,y<,color_name || pixel>)		Gets/Sets color at pixel(x,y) See Image::pixelColor
+
+test
+	Image#draw_affine_image
+	Image#profile!
+	Magick.set_cache_threshold
+
+Watch "deprecated.c"
+
+Magick++
+	continue reading sources
+
+Next release
+
+Immediate (!) forms
+    transparent
+    opaque
+
+Far future
+    MagickWand API
+    support Ruby coder

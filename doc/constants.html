@@ -1,0 +1,1304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st September 2002), see www.w3.org">
+    <meta http-equiv="CONTENT-TYPE" content=
+    "text/html; charset=iso-8859-1">
+    <title>Constants</title>
+    <link type="text/css" rel="stylesheet" href="rubymgen.css">
+    <style type="text/css">
+      .typename {
+         background-color: #c3c3c3;
+         vertical-align: top;
+      }
+   .typetable {
+      padding-bottom: 1em;
+   }
+                                   </style>
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="info.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href="index.html">Next
+        -&gt;</a></td>
+      </tr>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="5">
+      <tr class="stdtitle">
+        <td>Constants</td>
+      </tr>
+    </table>
+    <p align="left">All RMagick constants are defined in the Magick
+    module.</p>
+    <h3>Table of contents</h3>
+    <ul>
+      <li><a href="#Miscellaneous_constants">Miscellaneous
+      constants</a></li>
+      <li><a href="#AlignType">AlignType</a></li>
+      <li><a href="#ChannelType">ChannelType</a></li>
+      <li><a href="#ClassType">ClassType</a></li>
+      <li><a href="#ColorspaceType">ColorspaceType</a></li>
+      <li><a href="#ComplianceType">ComplianceType</a></li>
+      <li><a href="#CompositeOperator">CompositeOperator</a></li>
+      <li><a href="#CompressionType">CompressionType</a></li>
+      <li><a href="#DecorationType">DecorationType</a></li>
+      <li><a href="#DisposeType">DisposeType</a></li>
+      <li><a href="#FilterType">FilterType</a></li>
+      <li><a href="#GravityType">GravityType</a></li>
+      <li><a href="#ImageType">ImageType</a></li>
+      <li><a href="#InterlaceType">InterlaceType</a></li>
+      <li><a href="#NoiseType">NoiseType</a></li>
+      <li><a href="#Opacity">Opacity</a></li>
+      <li><a href="#PaintMethod">PaintMethod</a></li>
+      <li><a href="#RenderingIntent">RenderingIntent</a></li>
+      <li><a href="#ResolutionType">ResolutionType</a></li>
+      <li><a href="#StretchType">StretchType</a></li>
+      <li><a href="#StyleType">StyleType</a></li>
+      <li><a href="#WeightType">WeightType</a></li>
+    </ul>
+    <table>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "Miscellaneous_constants"><b>Miscellaneous
+                constants</b></a></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>MagickVersion</td>
+                <td>The &times;Magick version string. This has the
+                form:<br>
+                 <tt>@(#)ImageMagick X.Y.Z MM/DD/YY Q:16
+                http://www.imagemagick.org</tt><br>
+                 or<br>
+                 <tt>GraphicsMagick 1.0 05/05/03 Q8
+                http://www.GraphicsMagick.org/</tt></td>
+              </tr>
+              <tr valign="top">
+                <td>MaxRGB</td>
+                <td>The maximum value of a <i>Quantum</i> . A
+                quantum is one of the red, green, blue, or opacity
+                elements of a pixel in the RGB colorspace, or cyan,
+                yellow, magenta, or black elements in the CYMK
+                colorspace. If &times;Magick is built using
+                -DQuantumDepth=16, then MaxRGB is 65535, otherwise
+                it is 255.</td>
+              </tr>
+              <tr valign="top">
+                <td>QuantumDepth</td>
+                <td>The number of bits in a quantum. If
+                &times;Magick is built using -DQuantumDepth=16,
+                then QuantumDepth is 16, otherwise it is 8.</td>
+              </tr>
+              <tr valign="top">
+                <td>Version</td>
+                <td>The RMagick version string. This has the
+                form:<br>
+                 <tt>RMagick X.Y.Z</tt></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "AlignType"><b>AlignType</b></a> - See <a href=
+                "draw.html#Draw.align_eq">Draw#align=</a>, <a href=
+                "draw.html#Draw.text_align">Draw#text_align</a>.</td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td colspan="2">UndefinedAlign</td>
+              </tr>
+              <tr>
+                <td colspan="2">LeftAlign</td>
+              </tr>
+              <tr>
+                <td colspan="2">CenterAlign</td>
+              </tr>
+              <tr>
+                <td colspan="2">RightAlign</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td width="100%"><a name=
+                "ChannelType"><b>ChannelType</b></a> - see <a href=
+                "image.html#Image.channel">Image#channel</a></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr>
+                <td colspan="2" valign="top">UndefinedChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">RedChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">GreenChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">BlueChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">MagentaChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">YellowChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">BlackChannel</td>
+              </tr>
+              <tr>
+                <td colspan="2" valign="top">OpacityChannel</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="ClassType"><b>ClassType</b></a> - The
+                  ClassType constants specify the image storage
+                  class. 
+                  <p>See <a href=
+                  "imageattrs.html#Image.class_type">Image#class_type</a></p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedClass</td>
+                <td>Unset value</td>
+              </tr>
+              <tr valign="top">
+                <td>DirectClass</td>
+                <td><span class="imquote">Image is composed of
+                pixels which represent literal color
+                values.</span></td>
+              </tr>
+              <tr valign="top">
+                <td>PseudoClass</td>
+                <td><span class="imquote">Image is composed of
+                pixels which specify an index in a color
+                palette.</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <p><a name=
+                  "ColorspaceType"><b>ColorspaceType</b></a> - The
+                  ColorspaceType constants are <span class=
+                  "imquote">used to specify the colorspace that
+                  quantization (color reduction and mapping) is
+                  done under or to specify the colorspace when
+                  encoding an output image. Colorspaces are ways of
+                  describing colors to fit the requirements of a
+                  particular application (e.g. Television, offset
+                  printing, color monitors).&nbsp; Color reduction,
+                  by default, takes place in the RGBColorspace.
+                  Empirical evidence suggests that distances in
+                  color spaces such as YUVColorspace or
+                  YIQColorspace correspond to perceptual color
+                  differences more closely than do distances in RGB
+                  space. These color spaces may give better results
+                  when color reducing an image.</span></p>
+                  <p><span class="imquote">When encoding an output
+                  image, the colorspaces RGBColorspace,
+                  CMYKColorspace, and GRAYColorspace may be
+                  specified. The CMYKColorspace option is only
+                  applicable when writing TIFF, JPEG, and Adobe
+                  Photoshop bitmap (PSD) files.</span></p>
+                  <p>See <a href=
+                  "imageattrs.html#Image.colorspace">Image#colorspace</a></p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>RGBColorspace</td>
+                <td><span class="imquote">Red-Green-Blue
+                colorspace</span></td>
+              </tr>
+              <tr valign="top">
+                <td>GRAYColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>TransparentColorspace</td>
+                <td><span class="imquote">The Transparent color
+                space behaves uniquely in that it preserves the
+                matte channel of the image if it
+                exists.</span></td>
+              </tr>
+              <tr valign="top">
+                <td>OHTAColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>XYZColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>YCbCrColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>YIQColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>YPbPrColorspace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>YUVColorspace</td>
+                <td><span class="imquote">Y-signal, U-signal, and
+                V-signal colorspace. YUV is most widely used to
+                encode color for use in television
+                transmission.</span></td>
+              </tr>
+              <tr valign="top">
+                <td>CMYKColorspace</td>
+                <td><span class="imquote">Cyan-Magenta-Yellow-Black
+                colorspace. CYMK is a subtractive color system used
+                by printers and photographers for the rendering of
+                colors with ink or emulsion, normally on a white
+                surface.</span></td>
+              </tr>
+              <tr valign="top">
+                <td>SRGBColorspace</td>
+                <td>In &times;Magick, this constant is named
+                sRGBColorspace</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "ComplianceType"><b>ComplianceType</b></a> - see <a
+                href="struct.html#Pixel">Pixel#to_color</a></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>SVGCompliance</td>
+                <td>Adhere to SVG color standard.</td>
+              </tr>
+              <tr valign="top">
+                <td>X11Compliance</td>
+                <td>Adhere to X11 color standard.</td>
+              </tr>
+              <tr valign="top">
+                <td>XPMCompliance</td>
+                <td>Adhere to XPM color standard.</td>
+              </tr>
+              <tr valign="top">
+                <td>AllCompliance</td>
+                <td>The union of the 3 color standards.</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "CompositeOperator"><b>CompositeOperator</b></a> -
+                The CompositeOperator constants are <span class=
+                "imquote">used to select the image composition
+                algorithm used to compose a <var>composite
+                image</var> with a <var>image</var>. By default,
+                each of the <var>composite image</var> pixels are
+                replaced by the corresponding <var>image</var> tile
+                pixel. Specify <var>CompositeOperator</var> to
+                select a different algorithm.</span></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>OverCompositeOp</td>
+                <td class="imquote">The result is the union of the
+                the two image shapes with <var>composite
+                image</var> obscuring <var>image</var> in the
+                region of overlap.</td>
+              </tr>
+              <tr valign="top">
+                <td>InCompositeOp</td>
+                <td class="imquote">The result is simply
+                <var>composite image</var> cut by the shape of
+                <var>image</var>. None of the image data of
+                <var>image</var> is included in the result.</td>
+              </tr>
+              <tr valign="top">
+                <td>OutCompositeOp</td>
+                <td class="imquote">The resulting image is
+                <var>composite image</var> with the shape of
+                <var>image</var> cut out.</td>
+              </tr>
+              <tr valign="top">
+                <td>AtopCompositeOp</td>
+                <td class="imquote">The result is the same shape as
+                <var>image</var>, with <var>composite image</var>
+                obscuring <var>image</var> where the image shapes
+                overlap. Note that this differs from
+                OverCompositeOp because the portion of
+                <var>composite image</var> outside of
+                <var>image</var>'s shape does not appear in the
+                result.</td>
+              </tr>
+              <tr valign="top">
+                <td>XorCompositeOp</td>
+                <td class="imquote">The result is the image data
+                from both <var>composite image</var> and
+                <var>image</var> that is outside the overlap
+                region. The overlap region will be blank.</td>
+              </tr>
+              <tr valign="top">
+                <td>PlusCompositeOp</td>
+                <td class="imquote">The result is just the sum of
+                the&nbsp;image data. Output values are cropped to
+                255 (no overflow). This operation is independent of
+                the matte channels.</td>
+              </tr>
+              <tr valign="top">
+                <td>MinusCompositeOp</td>
+                <td class="imquote">The result of <var>composite
+                image</var> - <var>image</var>, with overflow
+                cropped to zero. The matte chanel is ignored (set
+                to 255, full coverage).</td>
+              </tr>
+              <tr valign="top">
+                <td>AddCompositeOp</td>
+                <td class="imquote">The result of <var>composite
+                image</var> + <var>image</var>, with overflow
+                wrapping around (mod 256).</td>
+              </tr>
+              <tr valign="top">
+                <td>SubtractCompositeOp</td>
+                <td class="imquote">The result of <var>composite
+                image</var> - <var>image</var>, with underflow
+                wrapping around (mod 256). The add and subtract
+                operators can be used to perform reversable
+                transformations.</td>
+              </tr>
+              <tr valign="top">
+                <td>DifferenceCompositeOp</td>
+                <td class="imquote">The result of
+                abs(<var>composite image</var> - <var>image</var>).
+                This is useful for comparing two very similar
+                images.</td>
+              </tr>
+              <tr valign="top">
+                <td>MultiplyCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>BumpmapCompositeOp</td>
+                <td class="imquote">The result <var>image</var>
+                shaded by <var>composite image</var>.</td>
+              </tr>
+              <tr valign="top">
+                <td>CopyCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>CopyRedCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>CopyGreenCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>CopyBlueCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>CopyOpacityCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ClearCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>DissolveCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>DisplaceCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ModulateCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ThresholdCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>NoCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>DarkenCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>LightenCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>HueCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>SaturateCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ColorizeCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>LuminizeCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ScreenCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>OverlayCompositeOp</td>
+                <td>&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name=
+                  "CompressionType"><b>CompressionType</b></a> -
+                  The CompressionType constants are <span class=
+                  "imquote">used to express the desired compression
+                  type when encoding an image. Be aware that most
+                  image types only support a sub-set of the
+                  available compression types. If the compression
+                  type specified is incompatable with the image,
+                  &times;Magick selects a compression type
+                  compatable with the image type.</span> 
+                  <p>See <a href=
+                  "imageattrs.html#Image.compression">Image#compression</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedCompression</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>NoCompression</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>BZipCompression</td>
+                <td class="imquote">BZip (Burrows-Wheeler
+                block-sorting text compression algorithm and
+                Huffman coding)&nbsp; as used by bzip2
+                utilities</td>
+              </tr>
+              <tr valign="top">
+                <td>FaxCompression</td>
+                <td class="imquote">CCITT Group 3 FAX
+                compression</td>
+              </tr>
+              <tr valign="top">
+                <td>Group4Compression</td>
+                <td class="imquote">CCITT Group 4 FAX compression
+                (used only for TIFF)</td>
+              </tr>
+              <tr valign="top">
+                <td>JPEGCompression</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>LosslessJPEGCompression</td>
+                <td>This compression format is almost never
+                used.</td>
+              </tr>
+              <tr valign="top">
+                <td>LZWCompression</td>
+                <td class="imquote">Lempel-Ziv-Welch (LZW)
+                compression (caution, patented by Unisys)</td>
+              </tr>
+              <tr valign="top">
+                <td>RunlengthEncodedCompression</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>ZipCompression</td>
+                <td class="imquote">Lempel-Ziv compression (LZ77)
+                as used in PKZIP and GNU gzip.</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "DecorationType"><b>DecorationType</b></a> - The
+                DecorationType constants can be used with the <a
+                href="draw.html#Draw.decorate">decorate=</a> method
+                in the Draw class to specify the text decoration
+                for the <a href=
+                "draw.html#Draw.annotate">annotate</a> method.</td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>NoDecoration</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>UnderlineDecoration</td>
+                <td>Underline the text.</td>
+              </tr>
+              <tr valign="top">
+                <td>OverlineDecoration</td>
+                <td>Overline the text.</td>
+              </tr>
+              <tr valign="top">
+                <td>LineThroughDecoration</td>
+                <td>Draw a horizontal line through the middle of
+                the text.</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "DisposeType"><b>DisposeType</b></a> - The value of
+                the <a href=
+                "imageattrs.html#Image.dispose">Image#dispose</a>
+                attribute.</td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td colspan="2">UndefinedDispose</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">NoneDispose</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">BackgroundDispose</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">PreviousDispose</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules='ALL'>
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="FilterType"><b>FilterType</b></a> - The
+                  FilterType constants are <span class=
+                  "imquote">used to adjust the filter algorithm
+                  used when resizing images. Different filters
+                  experience varying degrees of success with
+                  various images and can take sigificantly
+                  different amounts of processing time.
+                  &times;Magick uses the LanczosFilter by default
+                  since this filter has been shown to provide the
+                  best results for most images in a reasonable
+                  amount of time. Other filter types (e.g.
+                  TriangleFilter) may execute much faster but may
+                  show artifacts when the image is re-sized or
+                  around diagonal lines. The only way to be sure is
+                  to test the filter with sample images.</span> 
+                  <p>See <a href=
+                  "image.html#Image.resize">Image#resize</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td colspan="2">UndefinedFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">PointFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">BoxFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">TriangleFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">HermiteFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">HanningFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">HammingFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">BlackmanFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">GaussianFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">QuadraticFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">CubicFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">CatromFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">MitchellFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">LanczosFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">BesselFilter</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">SincFilter</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="GravityType"><b>GravityType</b></a> -
+                  The GravityType constants specify <span class=
+                  "imquote">positioning of an object (e.g. text,
+                  image) within a bounding region (e.g. an image).
+                  Gravity provides a convenient way to locate
+                  objects irrespective of the size of the bounding
+                  region, in other words, you don't need to provide
+                  absolute coordinates in order to position an
+                  object. A common default for gravity is
+                  <i>NorthWestGravity</i>.</span> 
+                  <p>See <a href=
+                  "draw.html#Draw.annotate">Draw#annotate</a> and
+                  <a href=
+                  "image.html#Image.composite">Image#composite</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>ForgetGravity</td>
+                <td class="imquote">Don't use gravity.</td>
+              </tr>
+              <tr valign="top">
+                <td>NorthWestGravity</td>
+                <td class="imquote">Position object at top-left of
+                region</td>
+              </tr>
+              <tr valign="top">
+                <td>NorthGravity</td>
+                <td class="imquote">Postiion object at top-center
+                of region</td>
+              </tr>
+              <tr valign="top">
+                <td>NorthEastGravity</td>
+                <td class="imquote">Position object at top-right of
+                region</td>
+              </tr>
+              <tr valign="top">
+                <td>WestGravity</td>
+                <td class="imquote">Position object at left-center
+                of region</td>
+              </tr>
+              <tr valign="top">
+                <td>CenterGravity</td>
+                <td class="imquote">Position object at center of
+                region</td>
+              </tr>
+              <tr valign="top">
+                <td>EastGravity</td>
+                <td class="imquote">Position object at right-center
+                of region</td>
+              </tr>
+              <tr valign="top">
+                <td>SouthWestGravity</td>
+                <td class="imquote">Position object at left-bottom
+                of region</td>
+              </tr>
+              <tr valign="top">
+                <td>SouthGravity</td>
+                <td class="imquote">Position object at
+                bottom-center of region</td>
+              </tr>
+              <tr valign="top">
+                <td>SouthEastGravity</td>
+                <td class="imquote">Position object at bottom-right
+                of region</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="ImageType"><b>ImageType</b></a> - The
+                  ImageType constants indicate <span class=
+                  "imquote">the type classification of the
+                  image.</span> 
+                  <p>See <a href=
+                  "imageattrs.html#Image.image_type">Image#image_type</a>
+                  and <a href=
+                  "info.html#Info.image_type_eq">Image::Info#image_type</a></p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedType</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>BilevelType</td>
+                <td class="imquote">Monochrome image</td>
+              </tr>
+              <tr valign="top">
+                <td>GrayscaleType</td>
+                <td class="imquote">Grayscale image</td>
+              </tr>
+              <tr valign="top">
+                <td>PaletteType</td>
+                <td class="imquote">Indexed color (palette)
+                image</td>
+              </tr>
+              <tr valign="top">
+                <td>PaletteMatteType</td>
+                <td class="imquote">Indexed color (palette) image
+                with opacity</td>
+              </tr>
+              <tr valign="top">
+                <td>TrueColorType</td>
+                <td class="imquote">Truecolor image</td>
+              </tr>
+              <tr valign="top">
+                <td>TrueColorMatteTypeType</td>
+                <td class="imquote">Truecolor image with
+                opacity</td>
+              </tr>
+              <tr valign="top">
+                <td>ColorSeparationType</td>
+                <td class="imquote">Cyan/Yellow/Magenta/Black
+                (CYMK) image</td>
+              </tr>
+              <tr valign="top">
+                <td>ColorSeparationMatteType</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>OptimizeType</td>
+                <td>&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="InterlaceType"><b>InterlaceType</b></a>
+                  - The InterlaceType constants specify <span
+                  class="imquote">the ordering of the red, green,
+                  and blue pixel information in the image.
+                  Interlacing is usually used to make image
+                  information available to the user faster by
+                  taking advantage of the space vs time tradeoff.
+                  For example, interlacing allows images on the Web
+                  to be recognizable sooner and satellite images to
+                  accumulate/render with image resolution
+                  increasing over time.</span> 
+                  <div class="imquote">
+                    Use <i>LineInterlace</i> or
+                    <i>PlaneInterlace</i> to create an interlaced
+                    GIF or progressive JPEG image.
+                  </div>
+                  <p>See <a href=
+                  "imageattrs.html#Image.interlace">Image#interlace</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedInterlace</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>NoInterlace</td>
+                <td class="imquote">Don't interlace image
+                (RGBRGBRGBRGBRGBRGB...)</td>
+              </tr>
+              <tr valign="top">
+                <td>LineInterlace</td>
+                <td class="imquote">Use scanline interlacing
+                (RRR...GGG...BBB...RRR...GGG...BBB...)</td>
+              </tr>
+              <tr valign="top">
+                <td>PlaneInterlace</td>
+                <td class="imquote">Use plane interlacing
+                (RRRRRR...GGGGGG...BBBBBB...)</td>
+              </tr>
+              <tr valign="top">
+                <td>PartitionInterlace</td>
+                <td class="imquote">Similar to plane interlacing
+                except that the different planes are saved to
+                individual files (e.g. image.R, image.G, and
+                image.B)</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="NoiseType"><b>NoiseType</b></a> - The
+                  NoiseType constants <span class="imquote">select
+                  the type of noise to be added to the
+                  image.</span> 
+                  <p>See <a href=
+                  "image.html#Image.add_noise">Image#add_noise</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td colspan="2">UniformNoise</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">GaussianNoise</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">MultiplicativeGaussianNoise</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">ImpulseNoise</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">LaplacianNoise</td>
+              </tr>
+              <tr valign="top">
+                <td colspan="2">PoissonNoise</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "Opacity"><b>Opacity</b></a> - The Opacity
+                constants represent the maximum and minimum levels
+                of opacity. You can specify a partial level of
+                opacity by choosing a number between OpaqueOpacity
+                and TransparentOpacity. For example, 25% opacity is
+                <code>abs(Magick::TransparentOpacity-Magick::OpaqueOpacity)
+                * 0.25</code></td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>TransparentOpacity</td>
+                <td>The minimum amount of opacity.</td>
+              </tr>
+              <tr valign="top">
+                <td>OpaqueOpacity</td>
+                <td>The maximum amount of opacity.</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name="PaintMethod"><b>PaintMethod</b></a> -
+                  The PaintMethod constants <span class=
+                  "imquote">specify how pixel colors are to be
+                  replaced in the image.</span> 
+                  <p>See <a href=
+                  "image.html#Image.matte_floodfill">Image#matte_floodfill</a>
+                  and <a href=
+                  "image.html#Image.texture_floodfill">Image#texture_floodfill</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>PointMethod</td>
+                <td class="imquote">Replace pixel color at
+                point.</td>
+              </tr>
+              <tr valign="top">
+                <td>ReplaceMethod</td>
+                <td class="imquote">Replace color for all image
+                pixels matching color at point.</td>
+              </tr>
+              <tr valign="top">
+                <td>FloodfillMethod</td>
+                <td class="imquote">Replace color for pixels
+                surrounding point until encountering pixel that
+                fails to match color at point.</td>
+              </tr>
+              <tr valign="top">
+                <td>FillToBorderMethod</td>
+                <td class="imquote">Replace color for pixels
+                surrounding point until encountering pixels
+                matching border color.</td>
+              </tr>
+              <tr valign="top">
+                <td>ResetMethod</td>
+                <td class="imquote">Replace colors for <b>all</b>
+                pixels in image with fill color.</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name=
+                  "RenderingIntent"><b>RenderingIntent</b></a> -
+                  <span class="imquote">Rendering intent is a
+                  concept defined by ICC Spec ICC.1:1998-09, "File
+                  Format for Color Profiles". &times;Magick uses
+                  RenderingIntent in order to support ICC Color
+                  Profiles.</span> 
+                  <p class="imquote">From the specification:
+                  "Rendering intent specifies the style of
+                  reproduction to be used during the evaluation of
+                  this profile in a sequence of profiles. It
+                  applies specifically to that profile in the
+                  sequence and not to the entire sequence.
+                  Typically, the user or application will set the
+                  rendering intent dynamically at runtime or
+                  embedding time."</p>
+                  <p>See <a href=
+                  "imageattrs.html#Image.rendering_intent">Image#rendering_intent</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedIntent</td>
+                <td class="imquote">&nbsp;</td>
+              </tr>
+              <tr valign="top">
+                <td>SaturationIntent</td>
+                <td class="imquote">A rendering intent that
+                specifies the saturation of the pixels in the image
+                is preserved perhaps at the expense of accuracy in
+                hue and lightness.</td>
+              </tr>
+              <tr valign="top">
+                <td>PerceptualIntent</td>
+                <td class="imquote">A rendering intent that
+                specifies the full gamut of the image is compressed
+                or expanded to fill the gamut of the destination
+                device. Gray balance is preserved but colorimetric
+                accuracy might not be preserved.</td>
+              </tr>
+              <tr valign="top">
+                <td>AbsoluteIntent</td>
+                <td class="imquote">Absolute colorimetric</td>
+              </tr>
+              <tr valign="top">
+                <td>RelativeIntent</td>
+                <td class="imquote">Relative colorimetric</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2">
+                  <a name=
+                  "ResolutionType"><b>ResolutionType</b></a> -
+                  <span class="imquote">By default, &times;Magick
+                  defines resolutions in pixels per inch.
+                  ResolutionType provides a means to adjust
+                  this.</span> 
+                  <p>See <a href=
+                  "imageattrs.html#Image.units">Image#units</a>.</p>
+                </td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>UndefinedResolution</td>
+                <td class="imquote">
+                </td>
+              </tr>
+              <tr valign="top">
+                <td>PixelsPerInchResolution</td>
+                <td class="imquote">Density specifications are
+                specified in units of pixels per inch (english
+                units).</td>
+              </tr>
+              <tr valign="top">
+                <td>PixelsPerCentimeterResolution</td>
+                <td class="imquote">Density specifications are
+                specified in units of pixels per centimeter (metric
+                units).</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "StretchType"><b>StretchType</b></a> - See <a href=
+                "draw.html#Draw.font_stretch">Draw#font_stretch</a>,
+                <a href=
+                "draw.html#Draw.font_stretch_eq">Draw#font_stretch=</a>.</td>
+              </tr>
+            </tbody>
+            <tbody>
+              <tr valign="top">
+                <td>NormalStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>UltraCondensedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>ExtraCondensedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>CondensedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>SemiCondensedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>SemiExpandedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>ExpandedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>ExtraExpandedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>UltraExpandedStretch</td>
+              </tr>
+              <tr valign="top">
+                <td>AnyStretch</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tr class="typename">
+              <td width="100%"><a name=
+              "StyleType"><b>StyleType</b></a> - See <a href=
+              "draw.html#Draw.font_style">Draw#font_style</a>, <a
+              href=
+              "draw.html#Draw.font_style_eq">Draw#font_style=</a>.</td>
+            </tr>
+            <tr valign="top">
+              <td>NormalStyle</td>
+            </tr>
+            <tr>
+              <td>ItalicStyle</td>
+            </tr>
+            <tr>
+              <td>ObliqueStyle</td>
+            </tr>
+            <tr>
+              <td>AnyStyle</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="typetable">
+        <td>
+          <table width="100%" border="1" cellpadding="2"
+          cellspacing="3" rules="ALL">
+            <tbody>
+              <tr class="typename">
+                <td colspan="2"><a name=
+                "WeightType"><b>WeightType</b></a> - The font
+                weight can be specified as one of 100, 200, 300,
+                400, 500, 600, 700, 800, or 900, or one of the
+                following constants. See <a href=
+                "draw.html#Draw.font_weight">Draw#font_weight</a>,
+                <a href=
+                "draw.html#Draw.font_weight_eq">Draw#font_weight=</a>.</td>
+              </tr>
+              <tr valign="top">
+                <td>AnyWeight</td>
+                <td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>NormalWeight</td>
+                <td>Equivalent to 400</td>
+              </tr>
+              <tr>
+                <td>BoldWeight</td>
+                <td>Equivalent to 700</td>
+              </tr>
+              <tr>
+                <td>BolderWeight</td>
+                <td>Increases weight by 100</td>
+              </tr>
+              <tr>
+                <td>LighterWeight</td>
+                <td>Decreases weight by 100</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="info.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href="index.html">Next
+        -&gt;</a></td>
+      </tr>
+    </table>
+  </body>
+</html>

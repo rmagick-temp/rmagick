@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.52 2004/04/07 23:08:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.53 2004/04/09 21:03:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1235,18 +1235,18 @@ Init_RMagick(void)
         ENUM_VAL(JPEGPreview)
     END_ENUM
 
-#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
-    DEF_ENUM(QuantumOperator)
-        ENUM_VAL(UndefinedQuantumOp)
-        ENUM_VAL(AddQuantumOp)
-        ENUM_VAL(AndQuantumOp)
-        ENUM_VAL(DivideQuantumOp)
-        ENUM_VAL(LShiftQuantumOp)
-        ENUM_VAL(MultiplyQuantumOp)
-        ENUM_VAL(OrQuantumOp)
-        ENUM_VAL(RShiftQuantumOp)
-        ENUM_VAL(SubtractQuantumOp)
-        ENUM_VAL(XorQuantumOp)
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
+    DEF_ENUM(QuantumExpressionOperator)
+        ENUM_VAL(UndefinedQuantumOperator)
+        ENUM_VAL(AddQuantumOperator)
+        ENUM_VAL(AndQuantumOperator)
+        ENUM_VAL(DivideQuantumOperator)
+        ENUM_VAL(LShiftQuantumOperator)
+        ENUM_VAL(MultiplyQuantumOperator)
+        ENUM_VAL(OrQuantumOperator)
+        ENUM_VAL(RShiftQuantumOperator)
+        ENUM_VAL(SubtractQuantumOperator)
+        ENUM_VAL(XorQuantumOperator)
     END_ENUM
 #endif
 
@@ -1408,7 +1408,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/04/07 23:08:27 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/04/09 21:03:00 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.88 2004/12/22 00:38:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.89 2004/12/24 21:29:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1663,7 +1663,7 @@ Image_colorspace(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    return INT2NUM(image->colorspace);
+    return ColorspaceType_new(image->colorspace);
 }
 
 /*
@@ -7488,7 +7488,7 @@ VALUE Image_image_type(VALUE self)
     GetExceptionInfo(&exception);
     type = GetImageType(image, &exception);
     HANDLE_ERROR
-    return INT2NUM(type);
+    return ImageType_new(type);
 }
 
 

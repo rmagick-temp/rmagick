@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.5 2003/10/06 12:18:24 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.6 2003/12/17 23:46:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -157,9 +157,6 @@ static void
 vertical_fill(
     Image *image,
     double x1,
-    double y1,
-    double x2,
-    double y2,
     PixelPacket *start_color,
     PixelPacket *stop_color)
 {
@@ -198,7 +195,7 @@ vertical_fill(
 
     for (x = 0; x < image->columns; x++)
     {
-        double distance   = abs(x1 - x);
+        double distance   = fabs(x1 - x);
         master[x].red     = start_color->red   + (red_step * distance);
         master[x].green   = start_color->green + (green_step * distance);
         master[x].blue    = start_color->blue  + (blue_step * distance);
@@ -232,10 +229,7 @@ vertical_fill(
 static void
 horizontal_fill(
     Image *image,
-    double x1,
     double y1,
-    double x2,
-    double y2,
     PixelPacket *start_color,
     PixelPacket *stop_color)
 {
@@ -272,7 +266,7 @@ horizontal_fill(
 
     for (y = 0; y < image->rows; y++)
     {
-        double distance   = abs(y1 - y);
+        double distance   = fabs(y1 - y);
         master[y].red     = start_color->red   + (distance * red_step);
         master[y].green   = start_color->green + (distance * green_step);
         master[y].blue    = start_color->blue  + (distance * blue_step);
@@ -329,16 +323,16 @@ v_diagonal_fill(
 
     if (d1 < 0 && d2 < 0)
     {
-        steps += max(abs(d1),abs(d2));
+        steps += max(fabs(d1),fabs(d2));
     }
     else if (d1 > image->rows && d2 > image->rows)
     {
         steps += max(d1-image->rows, d2-image->rows);
     }
 
-    d1 = max(b, image->rows-b);
-    d2 = max(d2, image->rows-d2);
-    steps += max(d1, d2);
+    d1 = fmax(b, image->rows-b);
+    d2 = fmax(d2, image->rows-d2);
+    steps += fmax(d1, d2);
 
     // If the line is entirely > image->rows, swap the start & end color
     if (steps < 0)
@@ -363,7 +357,7 @@ v_diagonal_fill(
         }
         for (x = 0; x < image->columns; x++)
         {
-            double distance = abs(y-(m * x + b));
+            double distance = fabs(y-(m * x + b));
             row_pixels[x].red     = start_color->red   + (distance * red_step);
             row_pixels[x].green   = start_color->green + (distance * green_step);
             row_pixels[x].blue    = start_color->blue  + (distance * blue_step);
@@ -410,11 +404,11 @@ h_diagonal_fill(
     // the number of steps.
     if (d1 < 0 && d2 < 0)
     {
-        steps += max(abs(d1),abs(d2));
+        steps += fmax(fabs(d1),fabs(d2));
     }
     else if (d1 > image->columns && d2 > image->columns)
     {
-        steps += max(abs(image->columns-d1),abs(image->columns-d2));
+        steps += fmax(fabs(image->columns-d1),fabs(image->columns-d2));
     }
 
     d1 = max(d1, image->columns-d1);
@@ -444,7 +438,7 @@ h_diagonal_fill(
         }
         for (x = 0; x < image->columns; x++)
         {
-            double distance = abs(x-((y-b)/m));
+            double distance = fabs(x-((y-b)/m));
             row_pixels[x].red     = start_color->red   + (distance * red_step);
             row_pixels[x].green   = start_color->green + (distance * green_step);
             row_pixels[x].blue    = start_color->blue  + (distance * blue_step);
@@ -481,10 +475,10 @@ GradientFill_fill(VALUE self, VALUE image_obj)
     start_color = fill->start_color;
     stop_color  = fill->stop_color;
 
-    if (abs(x2-x1) < 0.5)       // vertical?
+    if (fabs(x2-x1) < 0.5)       // vertical?
     {
         // If the x1,y1 and x2,y2 points are essentially the same
-        if (abs(y2-y1) < 0.5)
+        if (fabs(y2-y1) < 0.5)
         {
             point_fill(image, x1, y1, &start_color, &stop_color);
         }
@@ -493,15 +487,15 @@ GradientFill_fill(VALUE self, VALUE image_obj)
         // as both the 2nd and 4th arguments!)
         else
         {
-            vertical_fill(image, x1, y1, x1, y2, &start_color, &stop_color);
+            vertical_fill(image, x1, &start_color, &stop_color);
         }
     }
 
     // A horizontal line is a special case.
-    else if (abs(y2-y1) < 0.5)
+    else if (fabs(y2-y1) < 0.5)
     {
         // Pass y1 as both the 3rd and 5th arguments!
-        horizontal_fill(image, x1, y1, x1, y1, &start_color, &stop_color);
+        horizontal_fill(image, y1, &start_color, &stop_color);
     }
 
     // This is the general case - a diagonal line. If the line is more horizontal
@@ -511,7 +505,7 @@ GradientFill_fill(VALUE self, VALUE image_obj)
     {
         double m = ((double)(y2 - y1))/((double)(x2 - x1));
         double diagonal = ((double)image->rows)/image->columns;
-        if (abs(m) <= diagonal)
+        if (fabs(m) <= diagonal)
         {
             v_diagonal_fill(image, x1, y1, x2, y2, &start_color, &stop_color);
         }

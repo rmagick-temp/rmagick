@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.6 2003/07/28 00:38:28 rmagick Exp $
+# $Id: RMagick.rb,v 1.7 2003/08/24 18:46:17 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -589,6 +589,47 @@ class Image
         texture_flood_fill(border_color, texture, x, y, Magick::FillToBorderMethod)
     end
 
+    # Retrieve EXIF data by entry or all. If one or more entry names specified,
+    # return the values associated with the entries. If no entries specified,
+    # return all entries and values. The return value is an array of [name,value]
+    # arrays.
+    def get_exif_by_entry(*entry)
+        ary = Array.new
+        if entry.length == 0
+            exif_data = self['EXIF:*']
+            if exif_data
+                exif_data.split("\n").each { |exif| ary.push(exif.split('=')) }
+            end
+        else
+            entry.each do |name|
+                rval = self["EXIF:#{name}"]
+                ary.push([name, rval])
+            end
+        end
+        return ary
+    end
+
+    # Retrieve EXIF data by tag number or all tag/value pairs. The return value is a hash.
+    def get_exif_by_number(*tag)
+        hash = Hash.new
+        if tag.length == 0
+            exif_data = self['EXIF:!']
+            if exif_data
+                exif_data.split("\n").each do |exif|
+                    tag, value = exif.split('=')
+                    tag = tag[1,4].hex
+                    hash[tag] = value
+                end
+            end
+        else
+            tag.each do |num|
+                rval = self["EXIF:#{'#%04X' % num}"]
+                hash[num] = rval
+            end
+        end
+        return hash
+    end
+
 end # class Magick::Image
 
 class ImageList < Array
@@ -645,9 +686,9 @@ public
     # Allow scene to be set to nil
     def scene=(n)
         if (length == 0 && n != nil) || (length > 0 && n == nil)
-            raise IndexError, "scene # out of bounds"
+            raise IndexError, "scene number out of bounds"
         elsif (length == 0) || (Integer(n) < 0) || (Integer(n) > length - 1)
-            raise IndexError, "scene # out of bounds"
+            raise IndexError, "scene number out of bounds"
         end
         @scene = Integer(n)
     end
@@ -789,7 +830,7 @@ public
         set_cf cfid
         return a
     end
-
+	
     def fill(obj, *args)
         is_a_image obj
         cfid = self[@scene].id rescue nil

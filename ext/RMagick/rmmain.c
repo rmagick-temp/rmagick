@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.26 2003/10/09 22:33:04 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.27 2003/10/13 23:34:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -31,7 +31,7 @@ VALUE
 Magick_colors(VALUE class)
 {
 #if defined(HAVE_GETCOLORINFOARRAY)
-    const ColorInfo **color_ary;
+    ColorInfo **color_ary;
     ExceptionInfo exception;
     volatile VALUE ary, el;
     int x;
@@ -1070,11 +1070,11 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/10/09 22:33:04 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/10/13 23:34:46 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
-        "http://rmagick.rubyforge.org\n"
-        "rmagick@rubyforge.org\n",
+        "Web page: http://rmagick.rubyforge.org\n"
+        "Email: rmagick@rubyforge.org\n",
         PACKAGE_STRING, mgk_version, RUBY_VERSION_STRING);
     rb_define_const(Module_Magick, "Long_version", rb_str_new2(long_version));
 

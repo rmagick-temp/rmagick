@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.7 2003/07/26 23:01:10 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.8 2003/07/28 00:40:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -872,21 +872,98 @@ Draw_draw(VALUE self, VALUE image_arg)
 }
 
 /*
-    Method:     Draw#get_type_metrics(image, text)
+    Method:     Draw#get_type_metrics([image, ]text)
     Purpose:    returns measurements for a given font and text string
+    Notes:      If the image argument has been omitted, use a dummy
+                image, but make sure the text has none of the special 
+                characters that refer to image attributes.
 */
-static VALUE
-Draw_get_type_metrics(VALUE self, VALUE image_arg, VALUE text)
+
+static VALUE get_dummy_tm_img(VALUE klass)
 {
+    VALUE dummy_img = 0;
+    Info *info;
+    Image *image;
+
+    if (rb_cvar_defined(klass, _dummy_img__ID) != Qtrue)
+    {
+        
+        info = CloneImageInfo(NULL);
+        if (!info)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        image = AllocateImage(info);
+        if (!image)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        DestroyImageInfo(info);
+        dummy_img = rm_image_new(image);
+        
+        RUBY18(rb_cvar_set(klass, _dummy_img__ID, dummy_img, 0));
+        RUBY16(rb_cvar_set(klass, _dummy_img__ID, dummy_img));
+    }
+    dummy_img = rb_cvar_get(klass, _dummy_img__ID);
+    
+    return dummy_img;
+}
+
+
+static VALUE
+Draw_get_type_metrics(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+    static char attrs[] = "bcdefhiklmnopqstuwxy";
+#define ATTRS_L (sizeof(attrs)-1)
     Image *image;
     Draw *draw;
     TypeMetric metrics;
+    char *text;
+    Strlen_t text_l;
+    int x;
     unsigned int okay;
 
+    switch (argc)
+    {
+        case 1:                   // use default image
+            text = STRING_PTR_LEN(argv[0], text_l);
+            
+            for (x = 0; x < text_l; x++)
+            {
+                // Ensure text string doesn't refer to image attributes.
+                if (text[x] == '%' && x < text_l-1)
+                {
+                    int y;
+                    char spec = text[x+1];
+                    
+                    for (y = 0; y < ATTRS_L; y++)
+                    {
+                        if (spec == attrs[y])
+                        {
+                            rb_raise(rb_eArgError, 
+                                "text string contains image attribute reference `%%%c'",
+                                spec);
+                        }
+                    }
+                }
+            }
+            
+            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);            
+            break;  
+        case 2:
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);      
+            text = STRING_PTR(argv[1]);
+            break;                  // okay
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+    
     Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->text, STRING_PTR(text));
-
-    Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
+    magick_clone_string(&draw->info->text, text);
 
     okay = GetTypeMetrics(image, draw->info, &metrics);
 
@@ -1639,7 +1716,7 @@ Init_RMagick(void)
     rb_define_method(Class_Draw, "annotate", Draw_annotate, 6);
     rb_define_method(Class_Draw, "composite", Draw_composite, -1);
     rb_define_method(Class_Draw, "draw", Draw_draw, 1);
-    rb_define_method(Class_Draw, "get_type_metrics", Draw_get_type_metrics, 2);
+    rb_define_method(Class_Draw, "get_type_metrics", Draw_get_type_metrics, -1);
     rb_define_method(Class_Draw, "initialize", Draw_initialize, 0);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
@@ -1961,4 +2038,5 @@ Init_RMagick(void)
     length_ID = rb_intern("length");
     cur_image_ID = rb_intern("cur_image");
     values_ID = rb_intern("values");
+    _dummy_img__ID = rb_intern("_dummy_img_");
 }

@@ -1,0 +1,284 @@
+
+/* Global styles. */
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  color: #7F7FFF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+  color: white;
+  background-color: blue;
+  text-decoration: underline;
+}
+
+body {
+    background-color: white;
+    color: black;
+    font-size: 100.01%;
+}
+
+img {
+  display: block;
+  border-width: 0;
+}
+
+h1 {
+  background-color: #900;
+  font-size: x-large;
+  font-weight: bold;
+  color: #ebebeb;
+  padding: .3em 5px .5em 5px;
+  margin: 0 0;
+}
+
+h6#header {
+    padding-top: 0.5em;
+    font-size: small;
+    font-weight: bold;
+    color: #545454;
+    letter-spacing: .5em;
+    text-align: center;
+    margin: 0 0;
+}
+
+/*
+ * Table of Contents styles
+ */
+#toc h2 {
+  background-color: #545454;
+  color: white;
+  padding: 5px .3em .3em .3em;
+  margin: 0 0;
+}
+
+#toc h3 {
+  clear: both;
+  padding-left: 5px;
+  padding-right: 1em;
+  border-bottom: thin solid black;
+}
+
+#toc ul {
+  list-style: none;
+}
+
+.toccol {
+  float: left;
+  width: 33%;
+}
+
+/*
+ * Navigation bar. Appears at both top and bottom.
+ */
+div.nav {
+  clear: both;
+  background-color: #900;
+  color: white;
+  font-size: 8pt;
+  font-family: sans-serif;
+  font-weight: bold;
+  margin-bottom: 0;
+  margin-top: 1em;    /* Separate from header at the top and  */
+                      /* from the last element at the bottom  */
+  padding: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: right;
+}
+
+div.nav a:link {
+  text-decoration: none;
+  color: white;
+}
+
+div.nav a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+div.nav a:hover {
+  background-color: white;
+  color: #900;
+}
+
+div.nav a:active {
+  text-decoration: none;
+  color: white;
+}
+
+/*
+ * Method signatures, descriptions
+ */
+
+h2.methods  {           /* "class methods" */
+  margin-top: 2em;
+  margin-bottom: 0;
+  padding: .5em 5px .5em 5px;
+/*  background-color: #545454; */
+/*  background-color: #877B6F; */
+  background-color: #663;
+  color: white;
+  clear: both;
+}
+
+/*
+ * Method signatures
+ */
+
+div.sig {
+  margin-bottom: .5em;
+}
+
+.sig h3 {   /* method name: total width 210px */
+  background-color: #c0c0c0;
+  color: #000;
+  width: 205px;
+  float: left;
+  padding-left: 5px;
+  margin-top: 0;
+}
+
+.sig p {
+  background-color: #c0c0c0;
+  color: #000;
+  padding-right: 5px;
+  padding-bottom: 1em;
+  margin-top: 0;
+}
+
+/*
+ * Method descriptions
+ */
+
+.desc {
+  margin-left: 215px;
+  margin-bottom: 2em;
+}
+
+.desc h4 {
+  position: relative;
+  left: -215px;
+  padding-left: 5px;
+  background-image: url(ex/images/graydient210x6.gif);
+  background-repeat: repeat-y;
+  color: black;
+  font-weight: normal;
+  font-size: small;
+  padding-bottom: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.desc dl,p,pre,img,ul {
+  margin-top: 0;
+}
+
+.desc dt {
+  font-style: italic;
+  display: compact;
+}
+
+.arg {
+  font-style: italic;
+}
+
+/*
+ * The next 2 styles are for example scripts.
+ */
+.example, .desc pre {
+  padding: 0 .5em 1em .5em;   /* Tell Kong to not pad at the top. */
+  padd\ing-top: 1em;          /* Tell everybody else to use 1em padding at the top. */
+  background-color: #f8f8f8;
+  border-left: thin dashed black;
+  border-top: thin dashed black;
+  border-bottom: 4px solid #c0c0c0;
+  border-right: 4px solid #c0c0c0
+}
+
+.example {
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 1em;
+  }
+
+/*
+ *  The following three styles govern the display of example
+ *  images with rollover effects and the "spin" image that
+ *  accompanies them.
+ */
+/*
+ * This <p> encloses example images and the spin image.
+ */
+p.rollover {
+  position: relative;
+}
+
+/*
+ * Neither the example image nor the spin.gif get a border.
+ */
+.rollover img {
+  display: inline;
+  border-width: 0;
+}
+
+/*
+ * The spin.gif image must be positioned at the upper-right
+ * corner of the example image.
+ */
+img.spin {
+  position: absolute;
+  top: 0;
+  left: 204px;
+}
+
+/*
+ *  Plain small gray tables
+ */
+.simple_table {
+  border-collapse: collapse;
+  border: thin solid black;
+  background-color: #f8f8f8;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  width: 100%;
+}
+.simple_table td {
+  padding: 3px 1em 3px 1em;
+}
+.simple_table caption {
+  font-weight: bold;
+}
+
+/*
+ * Miscellaneous styles
+ */
+/*
+ * Insert white space between elements when CSS not enabled.
+ */
+p.spacer {
+  display: none;
+}
+
+/*
+ * Text quoted from the xMagick doc.
+ */
+
+.imquote {
+  color: #545454;
+}
+.imquote p, .imquote ul {
+    margin-left: 100px;
+    margin-right: 100px;
+    padding-bottom: 1em;
+  }
+
+

@@ -1,0 +1,34 @@
+/* Styles for the example script popup */
+
+body {
+  background:#fffff0;
+  margin:10px;
+  }
+
+h1 {
+  color: #516650;
+  width: 100%;
+  text-align: center;
+}
+
+.bodybox {
+  background-color:white;
+  border:1px solid black;
+  text-align:left;
+}
+
+.bodyfloat	{
+  padding:10px;
+  color:black;
+  text-align:left;
+}
+
+#close {
+  width: 100%;
+  text-align: center;
+}
+
+a:link {
+  color:#516650;
+  font-weight:bold;
+}

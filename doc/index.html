@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <style type="text/css">
   /*<![CDATA[*/
@@ -68,9 +69,6 @@
       background-color: #545454;
       color: white;
     }
-  #content h2 {
-      background-color: #663;
-  }
 
   #toc ul {
     padding-top: 1em;
@@ -87,7 +85,9 @@
     list-style: circle;
   }
 
-  #content {
+  #Introduction {
+      background-color: #663;
+      margin-bottom: 1em;
   }
 
   #version {
@@ -162,19 +162,22 @@
             </ul>
           </li>
 
-          <li><a href="struct.html">Miscellaneous classes</a>
+          <li>
+            <a href="struct.html">Miscellaneous classes</a>
 
             <ul>
-              <li><a href="struct.html#struct">Struct classes</a></li>
+              <li><a href="struct.html#struct">Struct
+              classes</a></li>
 
               <li><a href="struct.html#fill">Fill classes</a></li>
 
-              <li><a href="struct.html#exception">Exception classes</a></li>
+              <li><a href="struct.html#exception">Exception
+              classes</a></li>
             </ul>
+          </li>
 
           <li><a href="info.html">Image::Info - Optional method
-              arguments</a>
-          </li>
+          arguments</a></li>
 
           <li><a href="constants.html">Constants</a></li>
         </ul>
@@ -182,176 +185,172 @@
     </ul>
   </div>
 
-  <div id="content">
-    <h2 id="Introduction">Introduction</h2>
+  <h2 id="Introduction">Introduction</h2>
 
-    <h3>What is RMagick?</h3>
+  <h3>What is RMagick?</h3>
 
-    <p>RMagick is a binding from Ruby to the ImageMagick
-    <span class="tm">TM</span> and GraphicsMagick image
-    manipulation libraries. Here's how the <a href=
-    "http://www.imagemagick.org/index.html">ImageMagick home
-    page</a> describes ImageMagick:</p>
+  <p>RMagick is a binding from Ruby to the ImageMagick <span class=
+  "tm">TM</span> and GraphicsMagick image manipulation libraries.
+  Here's how the <a href=
+  "http://www.imagemagick.org/index.html">ImageMagick home page</a>
+  describes ImageMagick:</p>
 
-    <div class="imquote">
-      <p>ImageMagick<span style=
-      "font-size: x-small; vertical-align: super">TM</span> is a
-      robust collection of tools and libraries...to read, write,
-      and manipulate an image in many image formats (over 87 major
-      formats) including popular formats like TIFF, JPEG, PNG, PDF,
-      PhotoCD, and GIF. With ImageMagick you can create images
-      dynamically, making it suitable for Web applications. You can
-      also resize, rotate, sharpen, color reduce, or add special
-      effects to an image and save your completed work in the same
-      or differing image format.</p>
-    </div>
+  <div class="imquote">
+    <p>ImageMagick<span style=
+    "font-size: x-small; vertical-align: super">TM</span> is a
+    robust collection of tools and libraries...to read, write, and
+    manipulate an image in many image formats (over 87 major
+    formats) including popular formats like TIFF, JPEG, PNG, PDF,
+    PhotoCD, and GIF. With ImageMagick you can create images
+    dynamically, making it suitable for Web applications. You can
+    also resize, rotate, sharpen, color reduce, or add special
+    effects to an image and save your completed work in the same or
+    differing image format.</p>
+  </div>
 
-    <p>GraphicsMagick is a branch from ImageMagick 5.5.2 and
-    provides a nearly identical API. The <a href=
-    "http://www.graphicsmagick.org">GraphicsMagick web site</a>
-    says this about GraphicsMagick:</p>
+  <p>GraphicsMagick is a branch from ImageMagick 5.5.2 and provides
+  a nearly identical API. The <a href=
+  "http://www.graphicsmagick.org">GraphicsMagick web site</a> says
+  this about GraphicsMagick:</p>
 
-    <div class="imquote">
-      <p><em>GraphicsMagick</em> 1.0.1 is a robust collection of
-      tools and libraries which support reading, writing, and
-      manipulating an image in over 88 major formats including
-      popular formats like TIFF, JPEG, JPEG-2000, PNG, PDF,
-      PhotoCD, SVG, and GIF. <em>GraphicsMagick</em> supports
-      creating new images on the fly, making it suitable for
-      building dynamic Web applications. GraphicsMagick may be used
-      to resize, rotate, sharpen, color reduce, or add special
-      effects to an image and save the result in the same or
-      differing image format. Image processing operations are
-      available from the command line, as well as through C, C++,
-      Perl, Java, or COM programming interfaces. Extensions are
-      available from third-parties to support programming in
-      Borland's Delphi, Java, PHP, Python, Scheme, and Ruby.</p>
-    </div>
+  <div class="imquote">
+    <p><em>GraphicsMagick</em> 1.0.1 is a robust collection of
+    tools and libraries which support reading, writing, and
+    manipulating an image in over 88 major formats including
+    popular formats like TIFF, JPEG, JPEG-2000, PNG, PDF, PhotoCD,
+    SVG, and GIF. <em>GraphicsMagick</em> supports creating new
+    images on the fly, making it suitable for building dynamic Web
+    applications. GraphicsMagick may be used to resize, rotate,
+    sharpen, color reduce, or add special effects to an image and
+    save the result in the same or differing image format. Image
+    processing operations are available from the command line, as
+    well as through C, C++, Perl, Java, or COM programming
+    interfaces. Extensions are available from third-parties to
+    support programming in Borland's Delphi, Java, PHP, Python,
+    Scheme, and Ruby.</p>
+  </div>
 
-    <p>Both libraries offer a full range of image processing tools
-    that provide the capability to:</p>
+  <p>Both libraries offer a full range of image processing tools
+  that provide the capability to:</p>
 
-    <div class="imquote">
-      <ul>
-        <li>Convert an image from one format to another (e.g. TIFF
-        to JPEG)</li>
+  <div class="imquote">
+    <ul>
+      <li>Convert an image from one format to another (e.g. TIFF to
+      JPEG)</li>
 
-        <li>Resize, rotate, sharpen, color reduce, or add special
-        effects to an image</li>
+      <li>Resize, rotate, sharpen, color reduce, or add special
+      effects to an image</li>
 
-        <li>Create a montage of image thumbnails</li>
+      <li>Create a montage of image thumbnails</li>
 
-        <li>Create a transparent image suitable for use on the
-        Web</li>
+      <li>Create a transparent image suitable for use on the
+      Web</li>
 
-        <li>Turn a group of images into a GIF animation
-        sequence</li>
+      <li>Turn a group of images into a GIF animation sequence</li>
 
-        <li>Create a composite image by combining several separate
-        images</li>
+      <li>Create a composite image by combining several separate
+      images</li>
 
-        <li>Draw shapes or text on an image</li>
+      <li>Draw shapes or text on an image</li>
 
-        <li>Decorate an image with a border or frame</li>
+      <li>Decorate an image with a border or frame</li>
 
-        <li>Describe the format and characteristics of an
-        image</li>
-      </ul>
-    </div>
+      <li>Describe the format and characteristics of an image</li>
+    </ul>
+  </div>
 
-    <p>RMagick is a complete interface to ImageMagick and
-    GraphicsMagick, defining three major classes containing over
-    100 methods, plus numerous attributes and constants. RMagick
-    exploits Ruby idioms such as blocks and iterators, Struct and
-    Array classes, symbols, ?- and !-suffixed methods, and
-    exceptions.</p>
+  <p>RMagick is a complete interface to ImageMagick and
+  GraphicsMagick, defining three major classes containing over 100
+  methods, plus numerous attributes and constants. RMagick exploits
+  Ruby idioms such as blocks and iterators, Struct and Array
+  classes, symbols, ?- and !-suffixed methods, and exceptions.</p>
 
-    <h3>About this document</h3>
+  <h3>About this document</h3>
 
-    <p>This document is divided into 3 parts. The first is this
-    page. The second part is a usage guide covering both RMagick
-    and ImageMagick/GraphicsMagick usage and conventions. The
-    third, and largest, is the reference guide, which describes all
-    of the RMagick classes and constants. The reference guide
-    includes many examples.</p>
+  <p>This document is divided into 3 parts. The first is this page.
+  The second part is a usage guide covering both RMagick and
+  ImageMagick/GraphicsMagick usage and conventions. The third, and
+  largest, is the reference guide, which describes all of the
+  RMagick classes and constants. The reference guide includes many
+  examples.</p>
 
-    <p>Accompanying the HTML documentation is a set of over 100
-    example RMagick programs. Each is a complete, stand-alone
-    program that either creates an image from scratch or modifies
-    an input image using one or more RMagick methods. The output
-    images are used as illustrations in the HTML documentation.
-    Throughout this document, click any example image to see the
-    program that created it.</p>
+  <p>Accompanying the HTML documentation is a set of over 100
+  example RMagick programs. Each is a complete, stand-alone program
+  that either creates an image from scratch or modifies an input
+  image using one or more RMagick methods. The output images are
+  used as illustrations in the HTML documentation. Throughout this
+  document, click any example image to see the program that created
+  it.</p>
 
-    <h4>Conventions</h4>
+  <h4>Conventions</h4>
 
-    <p><b>Names&nbsp;&nbsp;</b>I've tried to follow existing Ruby
-    conventions in this document. A class is identified by its
-    name, which always starts with a capital letter. An object is
-    referred to by its class name, starting with a small letter.
-    For example, a generic ImageList object is referred to as an
-    <em>imagelist</em>. In the Reference section, when a method
-    signature identifies the type of an argument or return value,
-    the type is shown by preceding the class name by "a" or "an".
-    For example, <code>anImage</code> refers to an Image object,
-    and <code>anImageList</code> refers to an ImageList object.
-    Class methods are identified like this:
-    <code>Class.method</code>. Instance methods are identified like
-    this: <code>Class#method</code>.</p>
+  <p><b>Names&nbsp;&nbsp;</b>I've tried to follow existing Ruby
+  conventions in this document. A class is identified by its name,
+  which always starts with a capital letter. An object is referred
+  to by its class name, starting with a small letter. For example,
+  a generic ImageList object is referred to as an
+  <em>imagelist</em>. In the Reference section, when a method
+  signature identifies the type of an argument or return value, the
+  type is shown by preceding the class name by "a" or "an". For
+  example, <code>anImage</code> refers to an Image object, and
+  <code>anImageList</code> refers to an ImageList object. Class
+  methods are identified like this: <code>Class.method</code>.
+  Instance methods are identified like this:
+  <code>Class#method</code>.</p>
 
-    <p>RMagick is implemented in the <b>Magick</b> module,
-    therefore its constants are in the Magick namespace. However,
-    for clarity I've omitted the <code>Magick::</code> prefix in
-    most places in this document. You can use the <code>include
-    Magick</code> statement to add the constants and methods to the
-    Object namespace.</p>
+  <p>RMagick is implemented in the <b>Magick</b> module, therefore
+  its constants are in the Magick namespace. However, for clarity
+  I've omitted the <code>Magick::</code> prefix in most places in
+  this document. You can use the <code>include Magick</code>
+  statement to add the constants and methods to the Object
+  namespace.</p>
 
-    <p><b>References to ImageMagick and GraphicsMagick</b>&nbsp;
-    &nbsp;GraphicsMagick is a fork of ImageMagick and shares most
-    of its APIs. When describing a feature, API, convention,
-    component, or other element that is shared by both, I use the
-    string <b>&times;Magick</b>. For example, "&times;Magick
-    supports over 89 major image formats" means that both
-    ImageMagick and GraphicsMagick support over 89 formats.</p>
+  <p><b>References to ImageMagick and GraphicsMagick</b>&nbsp;
+  &nbsp;GraphicsMagick is a fork of ImageMagick and shares most of
+  its APIs. When describing a feature, API, convention, component,
+  or other element that is shared by both, I use the string
+  <b>&times;Magick</b>. For example, "&times;Magick supports over
+  89 major image formats" means that both ImageMagick and
+  GraphicsMagick support over 89 formats.</p>
 
-    <p><b>&times;Magick documentation&nbsp;&nbsp;</b><span class=
-    "imquote">Text that looks like this</span> is quoted from the
-    &times;Magick documentation.</p>
+  <p><b>&times;Magick documentation&nbsp;&nbsp;</b><span class=
+  "imquote">Text that looks like this</span> is quoted from the
+  &times;Magick documentation.</p>
 
-    <p><b>Example programs and images&nbsp;&nbsp;</b> All of the
-    example images on these pages were created by RMagick. Click
-    the image to see the progam code. (You may need to configure
-    your browser to allow popup windows.) All example images show
-    the result of applying the method. Many example images show the
-    "before" image as well. When the image is accompanied by this
-    symbol <img style="display:inline" src="ex/images/spin.gif"
-    alt="rollover" /> mouse over the image to see the "before"
-    version.</p>
+  <p><b>Example programs and images&nbsp;&nbsp;</b> All of the
+  example images on these pages were created by RMagick. Click the
+  image to see the progam code. (You may need to configure your
+  browser to allow popup windows.) All example images show the
+  result of applying the method. Many example images show the
+  "before" image as well. When the image is accompanied by this
+  symbol <img style="display:inline" src="ex/images/spin.gif" alt=
+  "rollover" /> mouse over the image to see the "before"
+  version.</p>
 
-    <h3>How to get help</h3>If you have a question that is not
-    answered by these pages, you can post it at the <a href=
-    "http://rubyforge.org/projects/rmagick">Support Request
-    Tracker</a> or the <a href=
-    "http://rubyforge.org/projects/rmagick">Feature Request
-    Tracker</a> on RubyForge, or email me at <code>rmagick at
-    rubyforge.org</code>.
+  <h3>How to get help</h3>If you have a question that is not
+  answered by these pages, you can post it at the <a href=
+  "http://rubyforge.org/projects/rmagick">Support Request
+  Tracker</a> or the <a href=
+  "http://rubyforge.org/projects/rmagick">Feature Request
+  Tracker</a> on RubyForge, or email me at <code>rmagick at
+  rubyforge.org</code>.
 
-    <h3><a name="bugs" id="bugs">Reporting bugs</a></h3>
+  <h3><a name="bugs" id="bugs">Reporting bugs</a></h3>
 
-    <p>Please report problems with RMagick installation and usage
-    to the <a href="http://rubyforge.org/projects/rmagick/">Bug
-    Tracker</a> at RubyForge, or email me at <code>rmagick at
-    rubyforge.org</code> . If you include "RMagick" in the subject
-    I'll probably give your email top priority.</p>
+  <p>Please report problems with RMagick installation and usage to
+  the <a href="http://rubyforge.org/projects/rmagick/">Bug
+  Tracker</a> at RubyForge, or email me at <code>rmagick at
+  rubyforge.org</code> . If you include "RMagick" in the subject
+  I'll probably give your email top priority.</p>
 
-    <p>For quickest results, include the RMagick, &times;Magick and
-    Ruby version numbers, along with a thorough description of the
-    problem. RMagick will tell you both its version number and
-    &times;Magick's version number. Simply bring up irb and print
-    the <code>Magick::Long_version</code> constant:</p>
-<pre class="example" id="version">
-irb(main):001:0> puts Magick::Long_version
-This is RMagick 1.4.0 ($Date: 2004/02/08 15:55:37 $)
+  <p>For quickest results, include the RMagick, &times;Magick and
+  Ruby version numbers, along with a thorough description of the
+  problem. RMagick will tell you both its version number and
+  &times;Magick's version number. Simply bring up irb and print the
+  <code>Magick::Long_version</code> constant:</p>
+  <pre class="example" id="version">
+irb(main):001:0&gt; puts Magick::Long_version
+This is RMagick 1.4.0 ($Date: 2004/02/09 23:51:58 $)
 Copyright (C) 2004 by Timothy P. Hunter
 Built with ImageMagick 6.0.0 12/18/03 Q8 http://www.imagemagick.org
 Built for ruby 1.8.1 (2003-12-25) [i686-linux]
@@ -359,55 +358,53 @@ Web page: http://rmagick.rubyforge.org
 Email: rmagick@rubyforge.org
 </pre>
 
-    <p>It will help a lot if you supply a small Ruby program that
-    reproduces the problem. (Don't forget to include any input
-    image files!).</p>
+  <p>It will help a lot if you supply a small Ruby program that
+  reproduces the problem. (Don't forget to include any input image
+  files!).</p>
 
-    <p>Please remember I can't help with Ruby or &times;Magick
-    installation and configuration problems. For help with Ruby,
-    post your questions to <code>comp.lang.ruby</code>. For help
-    with ImageMagick or GraphicsMagick, join the ImageMagick or
-    GraphicsMagick mailing list. See the instructions at <a href=
-    "http://www.imagemagick.org/www/magick-list.html">http://www.imagemagick.org/www/magick-list.html</a>
-    or <a href=
-    "http://sourceforge.net/mail/?group_id=73485">http://sourceforge.net/mail/?group_id=73485</a>.</p>
+  <p>Please remember I can't help with Ruby or &times;Magick
+  installation and configuration problems. For help with Ruby, post
+  your questions to <code>comp.lang.ruby</code>. For help with
+  ImageMagick or GraphicsMagick, join the ImageMagick or
+  GraphicsMagick mailing list. See the instructions at <a href=
+  "http://www.imagemagick.org/www/magick-list.html">http://www.imagemagick.org/www/magick-list.html</a>
+  or <a href=
+  "http://sourceforge.net/mail/?group_id=73485">http://sourceforge.net/mail/?group_id=73485</a>.</p>
 
-    <p>I'm not an image processing guru, either, so I probably
-    won't be able to help with questions about specific image
-    formats and transformation algorithms. I will be glad, however,
-    to translate between the RMagick API and the &times;Magick C
-    API to help you compose a question to the &times;Magick
-    developers.</p>
+  <p>I'm not an image processing guru, either, so I probably won't
+  be able to help with questions about specific image formats and
+  transformation algorithms. I will be glad, however, to translate
+  between the RMagick API and the &times;Magick C API to help you
+  compose a question to the &times;Magick developers.</p>
 
-    <h3>Contributions</h3>If you have a script or an image using
-    RMagick that you're particularly proud of, let me know. I'd
-    like to collect your contributions, along with other users'
-    contributions, and put them in a <code>contrib</code> directory
-    to distribute with RMagick. I'm particularly interested in
-    getting examples for the RMagick methods that currently have no
-    examples.
+  <h3>Contributions</h3>If you have a script or an image using
+  RMagick that you're particularly proud of, let me know. I'd like
+  to collect your contributions, along with other users'
+  contributions, and put them in a <code>contrib</code> directory
+  to distribute with RMagick. I'm particularly interested in
+  getting examples for the RMagick methods that currently have no
+  examples.
 
-    <h3><a name="copyrights" id="copyrights">Copyright
-    Notices</a></h3>
+  <h3><a name="copyrights" id="copyrights">Copyright
+  Notices</a></h3>
 
-    <ul>
-      <li>RMagick is copyright &copy; 2004 by Timothy P.
-      Hunter.</li>
+  <ul>
+    <li>RMagick is copyright &copy; 2004 by Timothy P. Hunter.</li>
 
-      <li>ImageMagick is copyright &copy; 2004 ImageMagick
-      Studio.</li>
+    <li>ImageMagick is copyright &copy; 2004 ImageMagick
+    Studio.</li>
 
-      <li>GraphicsMagick is copyright &copy; 2004 GraphicsMagick
-      Group.</li>
+    <li>GraphicsMagick is copyright &copy; 2004 GraphicsMagick
+    Group.</li>
 
-      <li>Ruby is copyrighted free software by Yukihiro
-      Matsumoto.</li>
-    </ul>
-  </div>
+    <li>Ruby is copyrighted free software by Yukihiro
+    Matsumoto.</li>
+  </ul>
 
   <div class="nav">
-    &laquo;&nbsp;<a href="index.html">Prev</a> | <a href="index.html">Contents</a> |
-    <a href="usage.html">Next</a>&nbsp;&raquo;
+    &laquo; <a href="index.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="usage.html">Next</a>
+    &raquo;
   </div>
 </body>
 </html>

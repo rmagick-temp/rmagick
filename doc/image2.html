@@ -10,7 +10,8 @@
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -62,6 +63,8 @@
 
           <li><a href="#frame">frame</a></li>
 
+          <li><a href="#gamma_channel">gamma_channel</a></li>
+
           <li><a href="#gamma_correct">gamma_correct</a></li>
 
           <li><a href="#gaussian_blur">gaussian_blur</a></li>
@@ -106,13 +109,13 @@
           <li><a href="#matte_point">matte_point</a></li>
 
           <li><a href="#matte_replace">matte_replace</a></li>
+
+          <li><a href="#matte_reset_bang">matte_reset!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#matte_reset_bang">matte_reset!</a></li>
-
           <li><a href="#median_filter">median_filter</a></li>
 
           <li><a href="#minify">minify</a></li>
@@ -126,6 +129,8 @@
           <li><a href="#motion_blur">motion_blur</a></li>
 
           <li><a href="#negate">negate</a></li>
+
+          <li><a href="#negate_channel">negate_channel</a></li>
 
           <li><a href="#normalize">normalize</a></li>
 
@@ -463,16 +468,14 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     "javascript:popup('frame.rb.html')">
     <!-- This img tag displays the original image when the mouse is over -->
      <img style="padding:25px; display:none" id="frameless"
-     onmouseout=
-    "this.style.display='none';framed.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="frame example" title=
+    onmouseout="this.style.display='none';framed.style.display='';"
+    src="ex/images/Flower_Hat.jpg" alt="frame example" title=
     "Click to see the example script" /><!--
-                  This img tag displays the framed image when the mouse is not over
-                  --><img class="hide" id="framed" onmouseover=
-    "this.style.display='none';frameless.style.display='';"
-    src="ex/frame.jpg" alt=
-    "frame example" /></a> <img src="ex/images/spin.gif" alt=""
-    style="margin-bottom: 280px" title=
+                      This img tag displays the framed image when the mouse is not over
+                      --><img class="hide" id="framed" onmouseover=
+    "this.style.display='none';frameless.style.display='';" src=
+    "ex/frame.jpg" alt="frame example" /></a> <img src=
+    "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="image1.html#border">border</a>
@@ -480,6 +483,53 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Magick API</h4>
 
     <p>FrameImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="gamma_channel">gamma_channel</h3>
+
+    <p><span class="arg">image</span>.gamma_channel(<span class=
+    "arg">gamma</span>, [<span class="arg">channel</span>[,
+    <span class="arg">channel</span>...]] = <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Gamma-correct a particular image
+    channel. The same image viewed on different devices will have
+    perceptual differences in the way the image's intensities are
+    represented on the screen.</span> This method is available in
+    ImageMagick 6.0.0.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>gamma</dt>
+
+      <dd class="imquote">Values typically range from 0.8 to 2.3.
+      You can also reduce the influence of a particular channel
+      with a gamma value of 0.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are corrected using
+      the <span class="arg">gamma</span> value.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>The older <a href=
+    "#gamma_correct">gamma_correct</a> method is implemented in
+    terms of <code>gamma_channel</code>.
+
+    <h4>Magick API</h4>
+
+    <p>GammaImageChannel</p>
   </div>
 
   <div class="sig">
@@ -506,6 +556,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     2.3.</span></p>
 
     <h4>Returns</h4>A new image
+
+    <h4>See also</h4><a href="#gamma_channel">gamma_channel</a>
 
     <h4>Magick API</h4>
 
@@ -694,9 +746,9 @@ image.get_exif_by_number() &raquo;
     more opaque than the column on its left, so that the resulting
     composite changes smoothly from color on the left to
     black-and-white on the right.</p><!--
-                        Reduce the size of the original image by specifying
-                        the size of the example image.
-                        -->
+                            Reduce the size of the original image by specifying
+                            the size of the example image.
+                            -->
 
     <p class="rollover"><a href=
     "javascript:popup('get_pixels.rb.html')"><img width="384"
@@ -1555,9 +1607,67 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
+    <h4>See also</h4><a href="#negate_channel">negate_channel</a>
+
     <h4>Magick API</h4>
 
     <p>NegateImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="negate_channel">negate_channel</h3>
+
+    <p><span class="arg">image</span>.negate_channel(<span class=
+    "arg">grayscale</span>=<code>false</code>, [<span class=
+    "arg">channel</span>[, <span class="arg">channel</span>...]] =
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Negate a particular image channel or channels. This method
+    is available in ImageMagick 6.0.0.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>grayscale</dt>
+
+      <dd class="imquote">if <code>true</code>, only negate
+      grayscale pixels within the image</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are negated.
+      Specifying no channel arguments has the same effect as the
+      <code>negate</code> method, above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p><code>negate_channel(false, GreenChannel)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('negate_channel.rb.html')"><img src=
+    "ex/negate_channel.jpg" alt="negate_channel example"
+    onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/negate_channel.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href="#negate">negate</a>.
+
+    <h4>Magick API</h4>
+
+    <p>NegateImageChannel</p>
   </div>
 
   <div class="sig">

@@ -6,11 +6,13 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
 
-  <title>RMagick: class Image (class and instance methods, part 1)</title>
+  <title>RMagick: class Image (class and instance methods, part
+  1)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2004 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <script type="text/javascript" src="scripts/doc.js">
   </script>
@@ -96,6 +98,8 @@
 
           <li><a href="#annotate">annotate</a></li>
 
+          <li><a href="#bilevel_channel">bilevel_channel</a></li>
+
           <li><a href="#black_threshold">black_threshold</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
@@ -119,6 +123,8 @@
           <li><a href="#channel_depth">channel_depth</a></li>
 
           <li><a href="#channel_extrema">channel_extrema</a></li>
+
+          <li><a href="#channel_mean">channel_mean</a></li>
 
           <li><a href=
           "#channel_threshold">channel_threshold</a></li>
@@ -382,7 +388,8 @@ img = Magick::Image.capture {
 
       <dt>fill</dt>
 
-      <dd>A <a href="struct.html#fill"><code>Fill</code></a> object</dd>
+      <dd>A <a href="struct.html#fill"><code>Fill</code></a>
+      object</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -813,6 +820,60 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
   </div>
 
   <div class="sig">
+    <h3 id="bilevel_channel">bilevel_channel</h3>
+
+    <p><span class="arg">image</span>.bilevel_channel(<span class=
+    "arg">threshold</span>, [<span class="arg">channel</span>[,
+    <span class="arg">channel</span>...]] = <em>aNewImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Changes the value of individual pixels
+    based on the intensity of each pixel channel. The result is a
+    high-contrast image.</span> This method is available in
+    ImageMagick 6.0.0.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>threshold</dt>
+
+      <dd>The threshold value, a number between 0 and
+      <code>MaxRGB</code>.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are
+      thresholded.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p><code>bilevel_channel(2*MaxRGB/3, RedChannel)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('bilevel_channel.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/bilevel_channel.jpg'" src=
+    "ex/bilevel_channel.jpg" alt="bilevel_channel example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>BilevelImageChannel</p>
+  </div>
+
+  <div class="sig">
     <h3 id="blur_image">blur_image</h3>
 
     <p><span class="arg">image</span>.blur_image(<span class=
@@ -939,26 +1000,17 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
 
     <h4>Example</h4>
 
-    <p class="rollover">
-      <a href="javascript:popup('border.rb.html')">
-        <img style="padding:10px; display:none"
-             id="borderless"
-             onmouseout="this.style.display='none'; bordered.style.display='';"
-             src="ex/images/Flower_Hat.jpg"
-             alt="border example"
-             title="Click to see the example script" />
-
-        <img id="bordered"
-             onmouseover="this.style.display='none'; borderless.style.display='';"
-             src="ex/border.jpg"
-             alt="border example" />
-      </a>
-      <img src="ex/images/spin.gif"
-           alt=""
-           class="spin"
-           style="left: 224px;"
-           title="Mouse over the example to see the original image" />
-    </p>
+    <p class="rollover"><a href=
+    "javascript:popup('border.rb.html')"><img style=
+    "padding:10px; display:none" id="borderless" onmouseout=
+    "this.style.display='none'; bordered.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="border example" title=
+    "Click to see the example script" /> <img id="bordered"
+    onmouseover=
+    "this.style.display='none'; borderless.style.display='';" src=
+    "ex/border.jpg" alt="border example" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left: 224px;"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4><a href="image2.html#frame">frame</a>
 
@@ -1209,6 +1261,40 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Magick API</h4>
 
     <p>GetImageChannelExtrema (available in ImageMagick 6.0.0)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="channel_mean">channel_mean</h3>
+
+    <p><span class="arg">image</span>.channel_mean([<span class=
+    "arg">channel</span> [, <span class="arg">channel</span>]...])
+    -&gt; <em>[aNumeric, aNumeric]</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the mean and standard deviation values for the
+    specified channel or channels.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>[channel [, channel...]]</dt>
+
+      <dd>Zero or more <a href=
+      "constants.html#ChannelType">ChannelType</a> constants. If no
+      arguments are specified, the default is all channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>An array. The first element in the array is the mean value.
+    The second element is the standard deviation.</p>
+
+    <h4>Magick API</h4>
+
+    <p>GetImageChannelMean (available in ImageMagick 6.0.0)</p>
   </div>
 
   <div class="sig">

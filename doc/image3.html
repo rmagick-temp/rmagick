@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+f<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -118,6 +118,8 @@
           "#set_channel_depth">set_channel_depth</a></li>
 
           <li><a href="#shade">shade</a></li>
+
+          <li><a href="#shadow">shadow</a></li>
 
           <li><a href="#sharpen">sharpen</a></li>
 
@@ -376,8 +378,10 @@
     <p>If called without a block, returns a hash, otherwise returns
     <code>self</code>.</p>
 
-    <h4>See also</h4><p><a href="image1.html#aref">[&nbsp;]</a>,
-    <a href="image1.html#aset">[&nbsp;]=</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#aref">[&nbsp;]</a>, <a href=
+    "image1.html#aset">[&nbsp;]=</a></p>
 
     <h4>Note</h4>
 
@@ -584,9 +588,10 @@ img.quantum_operator(DivideQuantumOp, 2, RedChannel)
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
-    <p><a href="image1.html#blur_image">blur_image</a>,
-    <a href="image2.html#gaussian_blur">gaussian_blur</a>,
-    <a href="image2.html#motion_blur">motion_blur</a></p>
+
+    <p><a href="image1.html#blur_image">blur_image</a>, <a href=
+    "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
+    "image2.html#motion_blur">motion_blur</a></p>
 
     <h4>Magick API</h4>
 
@@ -705,7 +710,9 @@ random_threshold_channel(geom, RedChannel)
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href=
+    <h4>See also</h4>
+
+    <p><a href=
     "image1.html#adaptive_threshold">adaptive_threshold</a>,
     <a href="image1.html#channel_threshold">channel_threshold</a>,
     <a href="#threshold">threshold</a></p>
@@ -1093,7 +1100,9 @@ random_threshold_channel(geom, RedChannel)
 
     <p>A new image</p>
 
-    <h4>See also</h4><p><a href="#scale_bang">scale!</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="#scale_bang">scale!</a>, <a href=
     "image2.html#magnify">magnify</a>, <a href=
     "image2.html#minify">minify</a>, <a href="#resize">resize</a>,
     <a href="#sample">sample</a>, <a href=
@@ -1225,8 +1234,9 @@ random_threshold_channel(geom, RedChannel)
 
     <p>self</p>
 
-    <h4>See also</h4><p><a href=
-    "image1.html#channel_depth">channel_depth</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#channel_depth">channel_depth</a></p>
 
     <h4>Magick API</h4>
 
@@ -1287,6 +1297,78 @@ random_threshold_channel(geom, RedChannel)
     <h4>Magick API</h4>
 
     <p>ShadeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="shadow">shadow</h3>
+
+    <p><span class="arg">image</span>.shadow(<span class=
+    "arg">x_offset=4</span>, <span class="arg">y_offset=4</span>,
+    <span class="arg">sigma=4.0</span>, <span class=
+    "arg">opacity=1.0</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Draws the shadow of opaque parts of the
+    image. This method only works when the image has opaque parts
+    and transparent parts. Note that the resulting image is just
+    the shadow. You must composite the original image over the
+    shadow to produce the shadowed results.
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x_offset</dt>
+
+      <dd>The shadow x-offset</dd>
+
+      <dt>y_offset</dt>
+
+      <dd>The shadow y-offset</dd>
+
+      <dt>sigma</dt>
+
+      <dd>The standard deviation of the Gaussian operator used to
+      produce the shadow. The higher the number, the "blurrier" the
+      shadow, but the longer it takes to produce the shadow. Must
+      be &gt; 0.0.</dd>
+
+      <dt>opacity</dt>
+
+      <dd>The percent opacity of the shadow. May be either a number
+      between 0.1 and 1.0, or a string in the form "NN%" between
+      "1%" and "100%". If the percentage is greater than 100 it is reduced to
+      100.</dd>
+
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('shadow.rb.html')">
+    <!-- This img tag displays the original image when the mouse is over -->
+     <img style="padding:8px; display:none" id="shadowless" onmouseout=
+    "this.style.display='none';shadowed.style.display='';" src=
+    "ex/shadow_before.gif" alt="shadow example" title=
+    "Click to see the example script"  /><!--
+                                                          This img tag displays the shadowed image when the mouse is not over
+                                                          --><img class="hide"
+    id="shadowed" onmouseover=
+    "this.style.display='none';shadowless.style.display='';" src=
+    "ex/shadow_after.gif" alt="shadow example"
+     /></a> <img src="ex/images/spin.gif" alt="" style=
+    "margin-bottom: 120px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>ShadowImage (available in ImageMagick 6.1.7)</p>
+
+    <h4>Notes</h4>
   </div>
 
   <div class="sig">
@@ -1412,7 +1494,9 @@ random_threshold_channel(geom, RedChannel)
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#shave_bang">shave!</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="#shave_bang">shave!</a>, <a href=
     "image1.html#crop">crop</a></p>
 
     <h4>Magick API</h4>
@@ -1484,13 +1568,15 @@ random_threshold_channel(geom, RedChannel)
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example"  /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example"
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href=
-    "image1.html#affine_transform">affine_transform</a>, <a href=
-    "#rotate">rotate</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#affine_transform">affine_transform</a>,
+    <a href="#rotate">rotate</a></p>
 
     <h4>Magick API</h4>
 
@@ -1533,8 +1619,10 @@ img.properties &raquo;
    "comment"=&gt;"File written by Adobe Photoshop\250 4.0"}
 </pre>
 
-    <h4>See also</h4><p><a href="image1.html#spaceship">&lt;=&gt;</a>,
-    <a href="image1.html#difference">difference</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#spaceship">&lt;=&gt;</a>, <a href=
+    "image1.html#difference">difference</a></p>
 
     <h4>Magick API</h4>
 
@@ -1893,8 +1981,10 @@ p stats.red.stddev &raquo; 0.231399683489667
     <p>Also see the example for <a href=
     "image2.html#get_pixels"><code>get_pixels</code></a>.</p>
 
-   <h4>See also</h4><p><a href="image2.html#get_pixels">get_pixels</a>,
-    <a href="#view">view</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image2.html#get_pixels">get_pixels</a>, <a href=
+    "#view">view</a></p>
 
     <h4>Magick API</h4>
 
@@ -2019,7 +2109,9 @@ p stats.red.stddev &raquo; 0.231399683489667
     "ex/images/spin.gif" alt="" class="spin" style="left:206px;"
     title="Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href=
+    <h4>See also</h4>
+
+    <p><a href=
     "image1.html#color_fill_to_border">color_fill_to_border</a>,
     <a href=
     "image2.html#matte_fill_to_border">matte_fill_to_border</a></p>
@@ -2189,9 +2281,11 @@ img = Magick::Image.read("images/Cheetah.jpg").first
 thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
 </pre>
 
-    <h4>See also</h4><p><a href="image2.html#minify">minify</a>,
-    <a href="#resize">resize</a>, <a href="#sample">sample</a>,
-    <a href="#scale">scale</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image2.html#minify">minify</a>, <a href=
+    "#resize">resize</a>, <a href="#sample">sample</a>, <a href=
+    "#scale">scale</a></p>
 
     <h4>Magick API</h4>ThumbnailImage (available in ImageMagick
     5.5.2)
@@ -2252,7 +2346,9 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
     "ex/to_blob.gif" alt="to_blob example" title=
     "Click to see the example script" /></a></p>
 
-    <h4>See also</h4><p><a href="image1.html#Ifrom_blob">from_blob</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#Ifrom_blob">from_blob</a></p>
 
     <h4>Magick API</h4>
 
@@ -2476,8 +2572,10 @@ img.to_color(pixel)
     alt="unsharp_mask example" title=
     "Click to see the example script" /></a></p>
 
-    <h4>See also</h4><p><a href="image1.html#enhance">enhance</a>,
-    <a href="image2.html#median_filter">median_filter</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="image1.html#enhance">enhance</a>, <a href=
+    "image2.html#median_filter">median_filter</a>, <a href=
     "image3.html#reduce_noise">reduce_noise</a>, <a href=
     "#unsharp_mask_channel">unsharp_mask_channel</a></p>
 
@@ -2552,8 +2650,10 @@ img.to_color(pixel)
 
     <p>A new image</p>
 
-    <h4>See also</h4><p><a href="image1.html#enhance">enhance</a>,
-    <a href="image2.html#median_filter">median_filter</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="image1.html#enhance">enhance</a>, <a href=
+    "image2.html#median_filter">median_filter</a>, <a href=
     "image3.html#reduce_noise">reduce_noise</a>, <a href=
     "#unsharp_mask">unsharp_mask</a></p>
 

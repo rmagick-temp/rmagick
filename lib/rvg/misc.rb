@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
+# $Id: misc.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -16,7 +16,8 @@ class Magick::RVG
                 ivars.each do |ivar|
                     ivalue = instance_variable_get(ivar)
                     cvalue = case
-                        when NilClass === ivalue, Symbol === ivalue, Float === ivalue, Fixnum === ivalue
+                        when NilClass === ivalue, Symbol === ivalue, Float === ivalue,
+                             Fixnum === ivalue, FalseClass === ivalue, TrueClass === ivalue
                             ivalue
                         when ivalue.respond_to?(:deep_copy)
                             ivalue.deep_copy(h)
@@ -427,7 +428,7 @@ module Magick::RVG::Utility
 
         def non_default?
             @baseline_shift[-1] != :baseline || @letter_spacing[-1] != 0 ||
-            @word_spacing[-1] != 0 || @writing_mode[-1] !~ /\Alr/ ||
+            @word_spacing[-1] != 0 || @writing_mode[-1][/\Alr/].nil? ||
             @glyph_orientation_horizontal[-1] != 0
         end
 

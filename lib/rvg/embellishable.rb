@@ -1,5 +1,5 @@
 #--
-# $Id: embellishable.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
+# $Id: embellishable.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 
@@ -332,7 +332,7 @@ class Magick::RVG
         # transforms specified on this object will be used by objects
         # contained within, unless overridden by an inner container or
         # the contained object itself.
-        def rvg(cols=nil, rows=nil, x=0, y=0, &block)
+        def rvg(cols, rows, x=0, y=0, &block)
             rvg = RVG.new(cols, rows, &block)
             begin
                 x, y = Float(x), Float(y)

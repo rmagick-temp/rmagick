@@ -1,5 +1,5 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
+# $Id: rvg.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
 #
 #                    Copyright (C) 2005 by Timothy P. Hunter
 #
@@ -140,6 +140,7 @@ class Magick::RVG
 
     # Sets an image to use as the canvas background. See background_position= for layout options.
     def background_image=(bg_image)
+        warn "background_image= has no effect in nested RVG objects" if @nested
         if bg_image && ! bg_image.kind_of?(::Magick::Image)
             raise ArgumentError, "background image must be an Image (got #{bg_image.class})"
         end
@@ -150,6 +151,7 @@ class Magick::RVG
     # The object must have a <tt>fill</tt> method. See the <b>Fill Classes</b>
     # section in the RMagick doc for more information.
     def background_pattern=(filler)
+        warn "background_pattern= has no effect in nested RVG objects" if @nested
         @background_pattern = filler
     end
 
@@ -160,6 +162,7 @@ class Magick::RVG
     #        image proportions. Center the image on the canvas. Color any part of
     #        the canvas not covered by the image with the background color.
     def background_position=(pos)
+        warn "background_position= has no effect in nested RVG objects" if @nested
         bg_pos = pos.to_s.downcase
         if ! ['scaled', 'tiled', 'fit'].include?(bg_pos)
             raise ArgumentError, "background position must be `scaled', `tiled', or `fit' (#{pos} given)"
@@ -170,6 +173,7 @@ class Magick::RVG
     # Sets the canvas background color. Either a Magick::Pixel or a color name.
     # The default fill is "none", that is, transparent black.
     def background_fill=(color)
+        warn "background_fill= has no effect in nested RVG objects" if @nested
         if ! color.kind_of?(Pixel)
             begin
                 @background_fill = Pixel.from_color(color)
@@ -188,6 +192,7 @@ class Magick::RVG
     # Opacity of the background fill color, a number between 0.0 (transparent) and
     # 1.0 (opaque). The default is 1.0 when the background_fill= attribute has been set.
     def background_fill_opacity=(opacity)
+        warn "background_fill_opacity= has no effect in nested RVG objects" if @nested
         begin
             @background_fill_opacity = Float(opacity)
         rescue ArgumentError
@@ -219,12 +224,14 @@ class Magick::RVG
         @background_position = :scaled
         @background_pattern, @background_image, @desc, @title, @metadata = nil
         @x, @y = 0.0
+        @nested = false
         yield(self) if block_given?
     end
 
     # Construct a canvas or reuse an existing canvas.
     # Execute drawing commands. Return the canvas.
     def draw
+        raise StandardError, "draw not permitted in nested RVG objects" if @nested
         @canvas ||= new_canvas    # allow drawing over existing canvas
         gc = Utility::GraphicContext.new
         add_outermost_primitives(gc)
@@ -244,6 +251,7 @@ class Magick::RVG
 
     # Used by ::Magick::Embellishable.rvg to set non-0 x- and y-coordinates
     def corner(x, y)        #:nodoc:
+        @nested = true
         @x, @y = Float(x), Float(y)
         translate(@x, @y) if (@x != 0.0 || @y != 0.0)
     end

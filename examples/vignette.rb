@@ -17,21 +17,24 @@ puts <<END_INFO
 END_INFO
 
 ballerina = Image.read("../doc/ex/images/Ballerina3.jpg")[0]
-ballerina.matte = true
 
 # Note: this technique won't work with every image. To make a pretty
 # vignette you need an image with a uniform, fairly dark background.
 
-# Start by drawing a black oval on a white background. (Although you don't
-# have to use an oval at all! Any shape will work. Try a rounded rectangle.)
+# Start by drawing a white oval on a black background. (Although you don't
+# have to use an oval at all! Any shape will work. Try a rounded rectangle.
+# The black pixels correspond to pixels in the image that will become
+# transparent. The white pixels correspond to pixels in the image that will
+# remain unchanged. Gray pixels, introduced by the blurring below, will
+# become more or less transparent depending on how dark or light the pixel is.)
 
 # The size of the oval is arbitrary - in this case it's 90% of the
 # size of the image.
 
-oval = Image.new(ballerina.columns, ballerina.rows) {self.background_color = 'white'}
+oval = Image.new(ballerina.columns, ballerina.rows) {self.background_color = 'black'}
 gc = Draw.new
-gc.stroke('black')
-gc.fill('black')
+gc.stroke('white')
+gc.fill('white')
 gc.ellipse(ballerina.columns/2, ballerina.rows/2,
            ballerina.columns/2-(ballerina.columns*0.10),
            ballerina.rows/2-(ballerina.rows*0.10), 0, 360)
@@ -43,38 +46,25 @@ gc.draw(oval)
 # more blurring, although increasing the value above 20 doesn't seem to add any
 # additional blurriness.
 
-puts 'Blurring...'
 oval = oval.blur_image(0, 20)
 
-# Use the blurred oval to create a transparent border around the ballerina. Use
-# the gray level of the pixels in the oval to determine the transparency of the
-# pixels in the vignette. All-white pixels outside of the oval cause the image
-# borders to become transparent, gray transition pixels cause less transparency.
-# In the center of the oval, the pixels are black and so the ballerina pixels
-# remain opaque.
+# The CopyOpacityCompositeOp transforms the opacity level of each image pixel
+# according to the intensity of the composite image pixels. In this case, the
+# black pixels outside the oval become transparent and the white pixels inside
+# the oval remain opaque. Each gray pixel around the border of the oval has a
+# varying level of transparency depending on how dark or light it is.
 
-puts 'Making border transparent...'
+ballerina.matte = true  # Ensure the ballerina image's opacity channel is respected.
+oval.matte = false      # Force the CopyOpacityCompositeOp to use pixel intensity
+                        # to determine how much transparency to add to the ballerina
+                        # pixels.
 
-oval.rows.times do |y|
-    oval_pixels = oval.get_pixels(0, y, oval.columns, 1)
-    ballerina_pixels = ballerina.get_pixels(0, y, ballerina.columns, 1)
-    oval_pixels.each_with_index do |p, x|
-
-        # For gray pixels, R=G=B, so we need only inspect one of the
-        # RGB values to determine the gray level of the pixel. Use
-        # that value to set the opacity of the corresponding pixel
-        # in the vignette.
-
-        ballerina_pixels[x].opacity = p.red
-    end
-    ballerina.store_pixels(0, y, ballerina.columns, 1, ballerina_pixels)
-end
+ballerina = ballerina.composite(oval, CenterGravity, CopyOpacityCompositeOp)
 
 # Since the vignette has multiple levels of transparency, we can't
 # save it as a GIF or a JPEG. The PNG format can handle it, though.
 
 begin
-    puts "Writing `vignette.png'..."
     ballerina.write("vignette.png")
 rescue ImageMagickError
     puts "Write failed. No PNG support?"
@@ -85,7 +75,6 @@ end
 # supports 1`level of transparency. Therefore, composite the vignette over a
 # standard "checkerboard" background. The resulting image will be 100% opaque.
 
-puts 'Preparing for display...'
 checkerboard = Image.read("pattern:checkerboard") {self.size = "#{ballerina.columns}x#{ballerina.rows}"}
 vignette = checkerboard[0].composite(ballerina, CenterGravity, OverCompositeOp)
 vignette.display

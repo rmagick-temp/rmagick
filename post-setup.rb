@@ -10,14 +10,12 @@ ENTITY     = Hash['&' => '&amp;', '>' => '&gt;', '<' => '&lt;']
 
 if defined?(ToplevelInstaller) && self.class == ToplevelInstaller
 
-  IMBASEURI = get_config('imdoc-base-uri')
   RUBYPROG  = get_config('ruby-prog')
   SRCDIR    = srcdir()
   ALLOW_EXAMPLE_ERRORS = get_config('allow-example-errors') == 'yes'
 
 else
 
-  IMBASEURI = 'file:///usr/local/share/ImageMagick'
   RUBYPROG  = 'ruby'
   SRCDIR    = '.'
   ALLOW_EXAMPLE_ERRORS = true
@@ -221,26 +219,17 @@ cwd = Dir.getwd()
 Dir.chdir('doc')
 begin
 
-  # Step 1: replace www.imagemagick.org with local doc uri
-  unless IMBASEURI == STD_URI
-    files = Dir['*.html']
-    files.delete_if { |file| /\.rb\.html\z/.match(file) }
-    files.each do |file|
-      filter(file) { |line| line.gsub(STD_URI_RE, "\"#{IMBASEURI}") }
-    end
-  end
-
-  # Step 2A: edit the shebang line in the examples
+  # Step 1A: edit the shebang line in the examples
   Dir.chdir('ex')
   files = Dir['*.rb']
   files.each do |file|
     filter(file) { |line| line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ') }
 
-    # Step 2B: Make a copy of the example as HTML in the doc directory
+    # Step 1B: Make a copy of the example as HTML in the doc directory
     filetoHTML(file, "../#{file}.html")
   end
 
-  # Step 3: run the examples
+  # Step 2: run the examples
   examples = Dir['*.rb'].sort
   examples -= DONT_RUN
   es = ExampleSet.new(examples.length)

@@ -183,35 +183,6 @@ X11 Configuration:
     configuration options. In addition to the regular options,
     there are a few RMagick-specific options:</p>
     <dl>
-      <dt>--with-imdoc-base-uri=uri</dt>
-      <dd>
-        <p>During installation, all links in the RMagick
-        documentation that link to the ImageMagick or
-        GraphicsMagick web site are replaced with links to your
-        local copies of the documentation. If you want to
-        specify a different location, use the --with-imdoc-base-uri
-        option during the config step to specify a different base
-        URI for the links. By default, the base URI is
-        "file:///$prefix/share/****Magick" (where $prefix is the
-        prefix you used when you installed ImageMagick or
-        GraphicsMagick). If the configure script doesn't find the
-        documentation in the default directory it will use
-        "http://www.imagemagick.org" or
-        "http://www.graphicsmagick.org". For example,</p>
-<pre>
-./configure --with-imdoc-base-uri=file:///home/user/ImageMagick
-</pre>
-      <p><i>Cygwin tip:</i>&nbsp;&nbsp;Use this option to specify
-      a Windows folder as the documentation base URI. Otherwise
-      the URI will refer to the Cygwin file system and Internet Explorer won't
-      be able to find the files. For example, suppose C:\CYGWIN is
-      mounted to / and you installed the
-      ImageMagick documentation in /usr/local/share/ImageMagick. Specify
-      </p>
-<pre>
-./configure --with-imdoc-base-uri=file://C:\cygwin\usr\local\share\ImageMagick
-</pre>
-      </dd>
       <dt>--with-doc-dir=directory</dt>
       <dd>
         Specify the directory to install the RMagick documentation.

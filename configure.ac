@@ -278,11 +278,6 @@ if test `eval echo $datadir` != ${prefix}/share; then
   RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --datadir=`eval echo $datadir`"
 fi
 
-AC_ARG_WITH(imdoc-base-uri,
-    AC_HELP_STRING([--with-imdoc-base-uri=URI], [ImageMagick/GraphicsMagick documentation URI]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --imdoc-base-uri=$withval"; rm_cv_path_doc_base_uri=$withval],
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --imdoc-base-uri=$rm_cv_path_doc_base_uri"])
-
 AC_ARG_WITH(doc-dir,
     AC_HELP_STRING([--with-doc-dir=DIR], [RMagick documentation directory [[PREFIX/share/RMagick]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --doc-dir=$withval"], )

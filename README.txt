@@ -39,8 +39,7 @@ ImageMagick and GraphicsMagick image processing libraries.
     Contact Information
 
 *Author:* Tim Hunter
-*Email:* cyclists@nc.rr.com
-<mailto:cyclists@nc.rr.com?subject=RMagick%20Feedback>
+*Email:* rmagick@rubyforge.org <mailto:rmagick@rubyforge.org>
 *RubyForge Forums:* RMagick project page
 <http://rubyforge.org/projects/rmagick>
 *Mailing list:* rmagick-users@rubyforge.org
@@ -181,30 +180,6 @@ depending on the speed of your computer.
 
 Type |./configure --help| to see a list of configuration options. In
 addition to the regular options, there are a few RMagick-specific options:
-
---with-imdoc-base-uri=uri
-
-    During installation, all links in the RMagick documentation that
-    link to the ImageMagick or GraphicsMagick web site are replaced with
-    links to your local copies of the documentation. If you want to
-    specify a different location, use the --with-imdoc-base-uri option
-    during the config step to specify a different base URI for the
-    links. By default, the base URI is
-    "file:///$prefix/share/****Magick" (where $prefix is the prefix you
-    used when you installed ImageMagick or GraphicsMagick). If the
-    configure script doesn't find the documentation in the default
-    directory it will use "http://www.imagemagick.org" or
-    "http://www.graphicsmagick.org". For example,
-
-./configure --with-imdoc-base-uri=file:///home/user/ImageMagick
-
-    /Cygwin tip:/  Use this option to specify a Windows folder as the
-    documentation base URI. Otherwise the URI will refer to the Cygwin
-    file system and Internet Explorer won't be able to find the files.
-    For example, suppose C:\CYGWIN is mounted to / and you installed the
-    ImageMagick documentation in /usr/local/share/ImageMagick. Specify
-
-./configure --with-imdoc-base-uri=file://C:\cygwin\usr\local\share\ImageMagick
 
 --with-doc-dir=directory
     Specify the directory to install the RMagick documentation. By
@@ -359,9 +334,7 @@ cc1: warning:   as it has already been specified as a non-system directory
     Reporting bugs
 
 Please report bugs in RMagick, its documentation, or its installation
-programs to me at cyclists@nc.rr.com
-<mailto:cyclists@nc.rr.com?subject=RMagick%20bug%20report>. You can also
-use the bug tracker on the RMagick project page
+programs to me via the bug tracker on the RMagick project page
 <http://rubyforge.org/projects/rmagick/> at RubyForge. However, I cannot
 help with Ruby installation and configuration or ImageMagick or
 GraphicsMagick installation and configuration. Please report problems
@@ -383,7 +356,7 @@ Thanks to
 
     License
 
-Copyright © 2003 by Timothy P. Hunter
+Copyright © 2004 by Timothy P. Hunter
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -404,7 +377,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-<http://www.opensource.org/docs/definition.php>
+<http://www.opensource.org/docs/definition.php> 	
 
 *This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.*

@@ -1,7 +1,5 @@
 # metaconfig.in -> metaconfig
 # define additional install.rb config options
-# add --imdoc-base-uri - default is location of locally installed doc
-add_config('imdoc-base-uri', 'uri', "@MAGICKBASEURI@", '@MAGICKNAME@ documentation base URI')
 # add --allow-example-errors - default is false (only allow 5 examples to fail)
 add_bool_config('allow-example-errors', false, 'Allow installation to proceed even if a lot of examples fail')
 # add --doc-dir - default is $prefix/share/RMagick

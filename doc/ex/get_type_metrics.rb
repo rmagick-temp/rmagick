@@ -6,26 +6,20 @@ include Magick
 # is drawn as a pair of quadratic bezier curves.
 class Draw
 
-    # (w,h) - width & height of rectangle enclosing brace
+    # (w,h) - width & height of rectangle enclosing brace.
+    # Normally the brace is drawn with its opening to the
+    # left and its lower point on the origin.
+    #
+    # Set w < 0 to draw right-opening brace. Set h < 0 to
+    # position top point at origin.
+    #
     # The placement & orientation is affected by the
     # current user coordinate system.
     def brace(w, h)
-        raise(ArgumentError, "width must be > 0") unless w > 0
-        raise(ArgumentError, "height must be > 0") unless h > 0
-
-        qx = w
-        x0 =  w / 2.0
-        y0 = h/4.0
-        ty = h/2.0
-
-        push
-        #outline(x, y, qx, qy, x0, y0, qx, ty)
-        path("M0,0Q#{w},0 #{x0},#{y0}T#{w},#{ty}")
-
-        y0 = 3*h/4
-        #outline(tx, ty, qx, ty, x0, y0, 0, h)
-        path("M#{w},#{ty}Q0,#{ty} #{x0},#{y0}T0,#{h}")
-        pop
+        raise(ArgumentError, "width must be != 0") unless w != 0
+        raise(ArgumentError, "height must be != 0") unless h != 0
+        path("M0,0 Q#{w},0 #{w/2.0},#{-h/4.0} T#{w},#{-h/2.0}" +
+             "Q0,#{-h/2.0}, #{w/2.0},#{-(3.0*h/4.0)} T0,#{-h}")
     end
 
     def rotate_about(degrees, x, y)
@@ -111,32 +105,32 @@ gc.stroke_width(1)
 # Draw a brace between the origin and descent
 gc.push
 gc.translate(Origin_x+metrics.width+23, Origin_y)
-gc.brace(10, metrics.descent.abs)
+gc.brace(10, metrics.descent)
 gc.pop
 
 # Draw a brace between the origin and ascent
 gc.push
-gc.translate(Origin_x+metrics.width+23, Origin_y-metrics.ascent)
+gc.translate(Origin_x+metrics.width+23, Origin_y)
 gc.brace(10, metrics.ascent)
 gc.pop
 
 # Draw a brace between the origin and height
 gc.push
-gc.translate(Origin_x-13, Origin_y)
+gc.translate(Origin_x-13, Origin_y-metrics.height)
 gc.rotate(180)
 gc.brace(10, metrics.height)
 gc.pop
 
 # Draw a brace between the origin and the width
 gc.push
-gc.translate(Origin_x, 27.0)
+gc.translate(Origin_x+metrics.width, 27.0)
 gc.rotate(-90)
 gc.brace(10, metrics.width)
 gc.pop
 
 # Draw a brace between the origin and max_advance
 gc.push
-gc.translate(Origin_x+metrics.max_advance, Origin_y-metrics.descent+14)
+gc.translate(Origin_x, Origin_y-metrics.descent+14)
 gc.rotate(90)
 gc.brace(10, metrics.max_advance)
 gc.pop

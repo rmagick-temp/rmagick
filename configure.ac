@@ -108,7 +108,8 @@ AC_CHECK_TYPES([DisposeType,
                 ExtendedSignedIntegralType,
                 ExtendedUnsignedIntegralType,
                 MagickOffsetType,
-                MagickSizeType],
+                MagickSizeType,
+                MagickBooleanType],
                 [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H

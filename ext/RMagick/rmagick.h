@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.61 2004/08/20 20:22:32 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.62 2004/10/05 23:04:17 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -176,6 +176,10 @@ typedef ExtendedUnsignedIntegralType magick_uint64_t;
 #else
 typedef size_t magick_uint64_t;
 #endif
+#endif
+
+#if !defined(HAVE_MAGICKBOOLEANTYPE)
+typedef unsigned int MagickBooleanType;
 #endif
 
 // This implements the "omitted storage class model" for external variables.

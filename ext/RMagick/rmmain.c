@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.23 2003/10/01 00:30:16 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.24 2003/10/02 12:43:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -47,7 +47,7 @@ Magick_colors(VALUE class)
     x = 0;
     while (color_ary[x])
     {
-        rb_ary_push(ary, ColorInfo_to_Struct(color_ary[x]));
+        rb_ary_push(ary, Color_from_ColorInfo(color_ary[x]));
         x += 1;
     }
 
@@ -72,7 +72,7 @@ Magick_colors(VALUE class)
     ary = rb_ary_new();
     for (color = (ColorInfo *)color_list; color; color = color->next)
     {
-        rb_ary_push(ary, ColorInfo_to_Struct(color));
+        rb_ary_push(ary, Color_from_ColorInfo(color));
     }
 #endif
 
@@ -117,7 +117,7 @@ Magick_fonts(VALUE class)
             next = type->next;  // Protect against recursive calls to GetTypeInfo
             if (! type->stealth)
             {
-                rb_yield(TypeInfo_to_Struct(type));
+                rb_yield(Font_from_TypeInfo(type));
             }
         }
 
@@ -128,7 +128,7 @@ Magick_fonts(VALUE class)
         ary = rb_ary_new();
         for (type = (TypeInfo *)type_list; type; type = type->next)
         {
-            rb_ary_push(ary, TypeInfo_to_Struct(type));
+            rb_ary_push(ary, Font_from_TypeInfo(type));
         }
         return ary;
     }
@@ -1049,7 +1049,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/10/01 00:30:16 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/10/02 12:43:21 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "http://rmagick.rubyforge.org\n"

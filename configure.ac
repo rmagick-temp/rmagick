@@ -6,6 +6,9 @@ echo "Configuring ${PACKAGE_STRING}"
 
 AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h])
 
+# Save caller's CFLAGS before configure changes it.
+rm_saved_CFLAGS=${CFLAGS}
+
 # Check for required programs
 AC_PROG_CC
 AC_PROG_CC_STDC
@@ -52,6 +55,11 @@ fi
 # Append ***Magick's lists of flags to the user's lists (if any)
 LDFLAGS="${LDFLAGS} `${MAGICKCONFIG} --ldflags`"
 CPPFLAGS="${CPPFLAGS} `${MAGICKCONFIG} --cppflags`"
+
+AC_SUBST(LDFLAGS, ${LDFLAGS})
+AC_SUBST(CFLAGS, ${rm_saved_CFLAGS})
+AC_SUBST(CPPFLAGS, ${CPPFLAGS})
+AC_SUBST(LOCAL_LIBS, `${MAGICKCONFIG} --libs`)
 
 AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
     [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB}])],
@@ -410,10 +418,10 @@ if test "x$prefix" != xNONE; then
   RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --prefix=$prefix"
 fi
 if test `eval echo $bindir` != NONE/bin; then
-  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --bindir=`eval echo $bindir`"
+  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --bin-dir=`eval echo $bindir`"
 fi
 if test `eval echo $datadir` != ${prefix}/share; then
-  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --datadir=`eval echo $datadir`"
+  RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --data-dir=`eval echo $datadir`"
 fi
 
 AC_ARG_WITH(doc-dir,
@@ -475,7 +483,8 @@ AC_DEFINE_UNQUOTED(RUBY_VERSION_STRING, "$RUBY_VERSION_STRING")
 AC_SUBST(RUBY)
 AC_SUBST(RUBY_CONFIG_OPTS)
 
-AC_OUTPUT(Makefile ext/RMagick/extconf.rb metaconfig)
+AC_CONFIG_FILES(Makefile ext/RMagick/extconf.rb metaconfig)
+AC_OUTPUT
 
 echo ""
 echo ""

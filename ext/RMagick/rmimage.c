@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.51 2004/04/04 14:22:46 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.52 2004/04/09 21:03:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5219,26 +5219,24 @@ Image_quantum_depth(VALUE self)
 
 
 /*
-    Method:     Image#quantum_operator(operator, rvalue[, region[, channel...]] )
-    Purpose:    Call the QuantumOperatorRegionImage method
-    Notes:      If the `region' argument is nil or not present, then the region is
-                the entire image.  If `region' is present then it can be nil.  If not nil,
-                then it must be either a Geometry object or a Geometry string that
-                describes a region within the image.  The effects of the operator are
-                limited to the region.  If no channel arguments are used, the default is
-                AllChannels.
+    Method:     Image#quantum_operator(operator, rvalue[, channel] )
+    Purpose:    This method is an adapter method that calls either the
+                    QuantumOperatorRegionImage method (GraphicsMagick 1.1) or the
+                    EvaluateImageChannel method (ImageMagick 6.0.0)
+    Note 1:     By necessity this method implements the "lowest common denominator"
+                of the two implementations.
+
+    Note 2:     If the channel argument is omitted, the default is AllChannels.
 */
 VALUE
 Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
     Image *image;
-    volatile VALUE geom;
-    long x, y;
-    unsigned long cols, rows;
-    QuantumOperator quantum_operator;
+    QuantumExpressionOperator operator;
+    QuantumOperator qop;
     ChannelType channel_type;
-    Quantum rvalue;
+    double rvalue;
     MagickPassFail okay;
     ExceptionInfo exception;
 
@@ -5247,51 +5245,62 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     // The default channel is AllChannels
     channel_type = AllChannels;
 
-    // The default region is the entire image.
-    x    = 0;
-    y    = 0;
-    cols = image->columns;
-    rows = image->rows;
-
     /*
-        If there are 4 arguments, argument 4 is a ChannelType argument.  If there
-        are 3 arguments, argument 2 is a Geometry object or a Geometry string.
+        If there are 3 arguments, argument 2 is a ChannelType argument.
         Arguments 1 and 0 are required and are the rvalue and operator,
         respectively.
     */
     switch(argc)
     {
-        case 4:
-            VALUE_TO_ENUM(argv[3], channel_type, ChannelType);
-            /* Fall through */
         case 3:
-            if (TYPE(argv[2]) == T_STRING)
-            {
-                if (!Class_Geometry)
-                {
-                    Class_Geometry = rb_const_get(Module_Magick, ID_Geometry);
-                }
-                geom = rb_funcall(Class_Geometry, ID_from_s, 1, argv[2]);
-                get_geometry(geom, &x, &y, &cols, &rows, NULL);
-            }
-            else if(argv[2] != Qnil)
-            {
-                get_geometry(argv[2], &x, &y, &cols, &rows, NULL);
-            }
+            VALUE_TO_ENUM(argv[2], channel_type, ChannelType);
             /* Fall through */
         case 2:
-            rvalue = (Quantum) NUM2LONG(argv[1]);
-            VALUE_TO_ENUM(argv[0], quantum_operator, QuantumOperator);
+            rvalue = NUM2DBL(argv[1]);
+            VALUE_TO_ENUM(argv[0], operator, QuantumExpressionOperator);
             break;
-        case 1:
-        case 0:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2, 3, or 4)", argc);
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
+    }
+
+    // Map QuantumExpressionOperator to QuantumOperator
+    switch(operator)
+    {
+        case UndefinedQuantumOperator:
+            qop = UndefinedQuantumOp;
+            break;
+        case AddQuantumOperator:
+            qop = AddQuantumOp;
+            break;
+        case AndQuantumOperator:
+            qop = AndQuantumOp;
+            break;
+        case DivideQuantumOperator:
+            qop = DivideQuantumOp;
+            break;
+        case LShiftQuantumOperator:
+            qop = LShiftQuantumOp;
+            break;
+        case MultiplyQuantumOperator:
+            qop = MultiplyQuantumOp;
+            break;
+        case OrQuantumOperator:
+            qop = OrQuantumOp;
+            break;
+        case RShiftQuantumOperator:
+            qop = RShiftQuantumOp;
+            break;
+        case SubtractQuantumOperator:
+            qop = SubtractQuantumOp;
+            break;
+        case XorQuantumOperator:
+            qop = XorQuantumOp;
             break;
     }
 
     GetExceptionInfo(&exception);
-    okay = QuantumOperatorRegionImage(image, x, y, cols, rows,
-                                    channel_type, quantum_operator, rvalue, &exception);
+    okay = QuantumOperatorImage(image, channel_type, qop, rvalue, &exception);
     HANDLE_ERROR
     if (okay != MagickPass)
     {
@@ -5299,6 +5308,85 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     }
 
     return self;
+
+#elif defined(HAVE_EVALUATEIMAGECHANNEL)
+    Image *image;
+    QuantumExpressionOperator operator;
+    MagickEvaluateOperator qop;
+    double rvalue;
+    ChannelType channel_type;
+    ExceptionInfo exception;
+    unsigned int okay;
+
+    Data_Get_Struct(self, Image, image);
+
+    // The default channel is AllChannels
+    channel_type = AllChannels;
+
+    /*
+        If there are 3 arguments, argument 2 is a ChannelType argument.
+        Arguments 1 and 0 are required and are the rvalue and operator,
+        respectively.
+    */
+    switch(argc)
+    {
+        case 3:
+            VALUE_TO_ENUM(argv[2], channel_type, ChannelType);
+            /* Fall through */
+        case 2:
+            rvalue = NUM2DBL(argv[1]);
+            VALUE_TO_ENUM(argv[0], operator, QuantumExpressionOperator);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
+    }
+
+    // Map QuantumExpressionOperator to MagickEvaluateOperator
+    switch(operator)
+    {
+        case UndefinedQuantumOperator:
+            qop = UndefinedEvaluateOperator;
+            break;
+        case AddQuantumOperator:
+            qop = AddEvaluateOperator;
+            break;
+        case AndQuantumOperator:
+            qop = AndEvaluateOperator;
+            break;
+        case DivideQuantumOperator:
+            qop = DivideEvaluateOperator;
+            break;
+        case LShiftQuantumOperator:
+            qop = LeftShiftEvaluateOperator;
+            break;
+        case MultiplyQuantumOperator:
+            qop = MultiplyEvaluateOperator;
+            break;
+        case OrQuantumOperator:
+            qop = OrEvaluateOperator;
+            break;
+        case RShiftQuantumOperator:
+            qop = RightShiftEvaluateOperator;
+            break;
+        case SubtractQuantumOperator:
+            qop = SubtractEvaluateOperator;
+            break;
+        case XorQuantumOperator:
+            qop = XorEvaluateOperator;
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    okay = EvaluateImageChannel(image, channel_type, operator, rvalue, &exception);
+    HANDLE_ERROR
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "EvaluateImageChannel failed.");
+    }
+
+    return self;
+
 #else
     not_implemented("quantum_operator");
     return (VALUE)0;

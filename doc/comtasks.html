@@ -59,8 +59,7 @@
       <li><a href="#gray">Converting a color image to
       grayscale</a></li>
 
-      <li><a href="#quality">Specifying the compression
-      level</a></li>
+      <li><a href="#compressing">Compressing image files</a></li>
 
       <li><a href="#shadow">Making a drop shadow</a></li>
     </ul>
@@ -186,16 +185,21 @@ thumb.write "thumb.gif"
   use 2 colors. See <a href=
   "javascript:popup('demo.rb.html')">demo.rb</a>.</p>
 
-  <h2 id="quality">Specifying the compression level</h2>
+  <h2 id="compressing">Compressing image files</h2>
 
-  <p>You can specify the compression level when writing JPEG, MPEG,
-  MIFF, PNG, and MNG images. Use the <code>quality</code> optional
-  parameter to the <a href="image3.html#write">write</a> method.
-  The value can range from 0 to 100, with 100 representing the
-  least compression. For JPEG and MPEG, which are lossy image
-  formats, more compression usually results in a lower quality
-  image. The MIFF format is lossless so the compression level does
-  not affect the image quality.</p>
+  <p>Many image formats, including JPEG, PDF, and BMP, support
+  compressed image files. The type of compression used depends on
+  the format. Specify the compression type by assigning a <a href=
+  "constants.html#CompressionType">CompressionType</a> value the
+  optional <a href="info.html#compression">compression</a> argument
+  to the <a href="image3.html#write">write</a> method.</p>
+
+  <p>The JPEGCompression and ZipCompression types support multiple
+  levels of compression. Use the optional <a href=
+  "info.html#quality">quality</a> argument to the
+  <code>write</code> method. The quality attribute is a number
+  between 0 and 100, with 100 representing the least
+  compression.</p>
 
   <p>For more information, see the &times;Magick documentation for
   the <code>-quality</code> option to the utility commands.</p>

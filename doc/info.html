@@ -35,6 +35,9 @@
   #intro h2 {
     clear: both;
   }
+  #compression_notes li {
+    font-style: italic;
+  }
 
   /*]]>*/
   </style>
@@ -139,8 +142,8 @@
     "optional arguments" block in which you can set attributes that
     modify the method's output. These attributes belong to the
     <code>Image::Info</code> class. The <code>Image::Info</code>
-    class exists only to accept optional arguments for those Image
-    and ImageList methods.</p>
+    class exists only to accept optional arguments for those
+    <code>Image</code> and <code>ImageList</code> methods.</p>
 
     <p>This page explains the methods defined in the
     <code>Image::Info</code> class. Generally, each
@@ -150,18 +153,18 @@
     that is, only those attributes that are meaningful for the
     particular method. Any other attributes that you set are
     ignored. Also, some attributes are only used by a subset of the
-    image formats. See the ImageMagick documentation for more
+    image formats. See the &times;Magick documentation for more
     information.</p>
 
     <p>Remember, you do not ever need to create an
-    I<code>mage::Info</code> object. The object is created for you
+    <code>Image::Info</code> object. The object is created for you
     before the optional arguments block is entered and destroyed
     after the block is exited.</p>
 
-    <p>All the attributes in the Image::Info class are read/write.
-    For simplicity, and because usually you only set these
-    attributes, just the setter version of each attribute method is
-    described.</p>
+    <p>All the attributes in the <code>Image::Info</code> class are
+    read/write. For simplicity, and because usually you only set
+    these attributes, this page only describes the setter version
+    of each attribute method.</p>
   </div>
 
   <h2 class="methods">instance methods</h2>
@@ -297,10 +300,170 @@ self.define("tiff", "bits-per-sample", 2)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the image compression type. Not all compression
-    types are supported for all image formats. If you specify an
-    unsupported compression type, the default compression type is
-    used instead.</p>
+    <p>Specify the type of compression used when writing the image.
+    Only some image formats support compression. For those that do,
+    only some compression types are supported. If you specify an
+    compression type that is not supported, the default compression
+    type (usually NoCompression) is used instead.</p>
+
+    <p>Some compression types support varying levels of
+    compression. See the <a href=
+    "#quality"><code>quality</code></a> attribute.</p>
+
+    <p>The following table shows the image formats that support
+    compression. For each format, the right-hand column shows the
+    supported compression types. The default compression type is
+    shown in <strong>bold</strong>.</p>
+
+    <table class="simple_table" summary=
+    "supported compression types by image format">
+      <caption>
+        Supported Compression Types
+      </caption>
+
+      <tr>
+        <th>Format</th>
+
+        <th>Compression Types</th>
+      </tr>
+
+      <tr>
+        <td>BMP</td>
+
+        <td><strong>NoCompression</strong>, RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>DIB</td>
+
+        <td><strong>NoCompression</strong>, RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>FPX</td>
+
+        <td><strong>NoCompression</strong>, JPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>GIF</td>
+
+        <td><strong>NoCompression</strong>, LZWCompression <em>(see
+        Notes, below)</em></td>
+      </tr>
+
+      <tr>
+        <td>JNG</td>
+
+        <td><strong>NoCompression</strong>, JPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>JP2</td>
+
+        <td><strong>JPEGCompression</strong>,
+        LosslessJPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>JPG</td>
+
+        <td><strong>JPEGCompression</strong>,
+        LosslessJPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>MIFF</td>
+
+        <td><strong>NoCompression</strong>, RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>MNG</td>
+
+        <td><strong>NoCompression</strong>, JPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>PALM</td>
+
+        <td><strong>NoCompression</strong>, FaxCompression,
+        RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>PDB</td>
+
+        <td><strong>NoCompression</strong>, RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>PDF</td>
+
+        <td><strong>NoCompression</strong>, JPEGCompression,
+        LZWCompression, ZipCompression</td>
+      </tr>
+
+      <tr>
+        <td>PICT</td>
+
+        <td><strong>NoCompression</strong>, JPEGCompression</td>
+      </tr>
+
+      <tr>
+        <td>PNG</td>
+
+        <td><strong>NoCompression</strong>, ZIPCompression</td>
+      </tr>
+
+      <tr>
+        <td>PS</td>
+
+        <td><strong>NoCompression</strong>, RLECompression</td>
+      </tr>
+
+      <tr>
+        <td>PS2</td>
+
+        <td><strong>RLECompression</strong>, FaxCompression,
+        JPEGCompression, LZWCompression, NoCompression</td>
+      </tr>
+
+      <tr>
+        <td>PS3</td>
+
+        <td><strong>FaxCompression</strong>, JPEGCompression,
+        LZWCompression, NoCompression, RLECompression,
+        ZipCompression</td>
+      </tr>
+
+      <tr>
+        <td>TIFF</td>
+
+        <td><strong>NoCompression</strong>, FaxCompression,
+        Group4Compression, JPEGCompression, LZWCompression,
+        NoCompression, RLECompression, ZipCompression</td>
+      </tr>
+    </table>
+
+    <h5>Notes</h5>
+
+    <ol id="compression_notes">
+      <li>NoCompression is accepted for all image formats. Except
+      as noted in the table, it is the default.</li>
+
+      <li>After July 10, 2004, the default for GIF images will be
+      LZWCompression.</li>
+
+      <li>&times;Magick must be configured and built with extra
+      support to use LZWCompression (in releases prior to July 10,
+      2004) and LosslessJPEGCompression.</li>
+
+      <li>This table is based on my examination of the
+      &times;Magick source code. It is not intended to be
+      authoritative. If your needs require an authoritative or
+      exhaustive list, consult the &times;Magick developers.</li>
+    </ol>
 
     <h4>Arguments</h4>A <a href=
     "constants.html#CompressionType">CompressionType</a> constant.
@@ -317,7 +480,12 @@ self.define("tiff", "bits-per-sample", 2)
     <h4>Description</h4>
 
     <p>Specify the vertical and horizontal resolution in pixels.
-    The default density is "72.0x72.0".</p>
+    The default density is "72.0x72.0". This attribute can be used
+    when writing JBIG, PCL, PS, PS2, and PS3 format images.</p>
+
+    <p>This attribute can also be used to specify the width and
+    height of HISTOGRRAM format images. For HISTOGRAM, the default
+    is 256x200.</p>
 
     <h4>Arguments</h4>
 
@@ -345,6 +513,10 @@ self.define("tiff", "bits-per-sample", 2)
     <p>Either 8, 16, or 32. You can specify 16 and 32 only when
     &times;Magick was compiled with a QuantumDepth that allows
     these depth values.</p>
+
+    <p>Use <code>depth</code> to specify the depth of CMYK, GRAY,
+    RGB, RGBA, MAP, and XC format images. See also <a href=
+    "#size"><code>size</code></a>.</p>
   </div>
 
   <div class="sig">
@@ -357,6 +529,8 @@ self.define("tiff", "bits-per-sample", 2)
 
   <div class="desc">
     <h4>Description</h4>
+
+    <p>This attribute can be used when writing GIF images.</p>
 
     <p class="imquote">Apply Floyd/Steinberg error diffusion to the
     image. The basic strategy of dithering is to trade intensity
@@ -451,7 +625,8 @@ self.define("tiff", "bits-per-sample", 2)
     <p>Set the level of "fuzziness" for comparing pixels. By
     default the pixels must be identical to be considered equal.
     The larger the <code>fuzz</code> value the more difference is
-    tolerated.See <a href="imageattrs.html#fuzz">fuzz</a>.</p>
+    tolerated. See <a href=
+    "imageattrs.html#fuzz">Image#fuzz</a>.</p>
 
     <h4>Arguments</h4>
 
@@ -538,7 +713,7 @@ self.define("tiff", "bits-per-sample", 2)
     <h4>Description</h4>
 
     <p>Transform the image to black and white on input. Only the
-    ETP, PDF, and PS formats respect this attribute.</p>
+    EPT, PDF, and PS formats respect this attribute.</p>
   </div>
 
   <div class="sig">
@@ -593,10 +768,11 @@ self.define("tiff", "bits-per-sample", 2)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Set the compression level to use when writing JPEG, MIFF,
-    and PNG images. The value may range from 0 to 100, with 100
-    representing the least compression. The default is 75. See
-    <em><a href="comtasks.html#quality">Specifying the compression
+    <p>Set the compression level to use with the
+    <code>JPEGCompression</code> and <code>ZipCompression</code>
+    types. The value may range from 0 to 100, with 100 representing
+    the least compression. The default is 75. See <em><a href=
+    "comtasks.html#quality">Specifying the compression
     level</a></em>.</p>
   </div>
 
@@ -652,6 +828,12 @@ self.define("tiff", "bits-per-sample", 2)
     format</a> that does not have an inherent size, or when reading
     an image from a multi-resolution file format such as Photo CD,
     JBIG, or JPEG.</p>
+
+    <p>Use <code>size</code> to specify the width and height of
+    images in the CMYK, DIB, EMF, GRAY, RGB, RGBA, UYVY, YUV, or XC
+    formats, the width and height of some <a href=
+    "imusage.html#builtin_formats">builtin formats</a>, or the
+    subimage size of PTIF-format images.</p>
 
     <h4>Arguments</h4>
 

@@ -365,7 +365,7 @@ monitor = Proc.new { |text, quantum, span|
     printf("%s %3.0f%% complete\n", text, ((quantum/span.to_f)*100.0))
     }
 Magick.set_monitor(monitor)
-img.resize!(.50)
+img.resize!(0.50)
 exit
 </pre>
           </div>

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.1 2003/07/01 12:19:49 tim Exp $ */
+/* $Id: rminfo.c,v 1.2 2003/07/19 01:48:21 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -377,8 +377,16 @@ VALUE
 Info_format_eq(VALUE self, VALUE magick)
 {
     Info *info;
+    const MagickInfo *m;
+    ExceptionInfo exception;
+
     Data_Get_Struct(self, Info, info);
-    strncpy(info->magick, STRING_PTR(magick), MaxTextExtent-1);
+
+    GetExceptionInfo(&exception);
+    m = GetMagickInfo(STRING_PTR(magick), &exception);
+    HANDLE_ERROR
+
+    strncpy(info->magick, m->name, MaxTextExtent-1);
     return self;
 }
 

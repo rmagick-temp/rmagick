@@ -1,27 +1,29 @@
 RMagick 1.4.0
-    o Implemented xMagick enumeration values as instances of an Enum
+    o Revised and updated documentation
+    o Implemented enumeration values as instances of an Enum
       class. Based on a description by Paul Brannon in ruby-talk 79041.
-    o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2 and
-      later)
+    o Added HSLColorspace, HWBColorspace constants (ImageMagick 5.5.7,
+      GraphicsMagick 1.0.2)
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
-      CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7 and
-      later)
-    o Added ReplaceCompositeOp. CopyCompositeOp constants (IM 6.0.0 only)
-    o Added color_histogram to Image class. (IM 6.0.0, GM 1.1 only)
-    o Added define to Image::Info class (IM 6.0.0, GM 1.1 only)
+      CopyYellowCompositeOp, CopyBlackCompositeOp constants (ImageMagick 5.5.7,
+      GraphicsMagick 1.1)
+    o Added ReplaceCompositeOp. CopyCompositeOp constants (ImageMagick 6.0.0)
+    o Added color_histogram to Image class. (ImageMagick 6.0.0, GraphicsMagick 1.1)
+    o Added define method to Image::Info class (ImageMagick 6.0.0, GraphicsMagick 1.1)
     o Added tint, each_profile, channel_extrema, channel_compare,
       channel_depth, channel_mean, quantum_depth, preview, gamma_channel,
-      negate_channel, bilevel_channel methods to Image class (IM 6.0.0 only)
+      negate_channel, bilevel_channel methods to Image class (ImageMagick 6.0.0)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added border! method to Image class
-    o Added fcmp, intensity to Pixel class
+    o Added fcmp, intensity methods to Pixel class
     o Added Version_long constant
     o The 'fuzz' attribute in the Image and ImageInfo classes now
       accepts a percentage value as well as a numeric value.
     o Added Geometry class and changed all methods that accept a geometry
-      string to accept a Geometry object as well.
+      string to accept a Geometry object as well
     o Added dup and clone methods to the ImageList, Image, and Draw
-      classes. (Fix for bug #254.)
+      classes (Fix for bug #254.)
+    o Tested with latest ImageMagick 6.0.0 beta and GraphicsMagick 1.1 snapshot
 
 RMagick 1.3.2
     o Fix profile! to require only 2 arguments, as documented.

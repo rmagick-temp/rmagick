@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.17 2004/03/10 01:11:36 rmagick Exp $
+# $Id: RMagick.rb,v 1.18 2004/04/02 23:45:37 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -717,6 +717,244 @@ class Image
         end
         return hash
     end
+
+    # Construct a view. If a block is present, yield and pass the view
+    # object, otherwise return the view object.
+    def view(x, y, width, height)
+        view = View.new(self, x, y, width, height)
+
+        if block_given?
+            begin
+                yield(view)
+            ensure
+                view.sync(self)
+            end
+            return nil
+        else
+            return view
+        end
+    end
+
+    # Magick::Image::View class
+    class View
+        attr_reader :x, :y, :width, :height
+        attr_accessor :dirty
+
+        def initialize(img, x, y, width, height)
+            @view = img.get_pixels(x, y, width, height)
+            @x = x
+            @y = y
+            @width = width
+            @height = height
+            @dirty = false
+        end
+
+        def [](*args)
+            rows = Rows.new(@view, @width, @height, args)
+            rows.add_observer(self)
+            return rows
+        end
+
+        # Store changed pixels back to image
+        def sync(img, force=false)
+            img.store_pixels(x, y, width, height, @view) if (@dirty || force)
+            return (@dirty || force)
+        end
+
+        # Get update from Rows - if @dirty ever becomes
+        # true, don't change it back to false!
+        def update(rows)
+            @dirty ||= true
+            rows.delete_observer(self)      # No need to tell us again.
+        end
+
+        # Magick::Image::View::Pixels
+        # Defines channel attribute getters/setters
+        class Pixels < Array
+            include Observable
+
+            # Define a getter and a setter for each channel.
+            [:red, :green, :blue, :opacity].each do |c|
+                module_eval <<-END_EVAL
+                    def #{c}
+                        return collect { |p| p.#{c} }
+                    end
+                    def #{c}=(v)
+                        each { |p| p.#{c} = v }
+                        changed
+                        notify_observers(true)
+                        nil
+                    end
+                END_EVAL
+            end
+
+        end # class Magick::Image::View::Pixels
+
+        # Magick::Image::View::Rows
+        class Rows
+            include Observable
+
+            def initialize(view, width, height, rows)
+                @view = view
+                @width = width
+                @height = height
+                @rows = rows
+            end
+
+            def [](*args)
+                cols(args)
+
+                # Both View::Pixels and Magick::Pixel implement Observable
+                if @unique
+                    pixels = @view[@rows[0]*@width + @cols[0]]
+                    pixels.add_observer(self)
+                else
+                    pixels = View::Pixels.new
+                    each do |x|
+                        p = @view[x]
+                        p.add_observer(self)
+                        pixels << p
+                    end
+                end
+                pixels
+            end
+
+            def []=(*args)
+                rv = args.delete_at(-1)     # get rvalue
+                if ! rv.is_a?(Pixel)        # must be a Pixel or a color name
+                    rv = Pixel.from_color(rv)
+                end
+                cols(args)
+                each { |x| @view[x] = rv.dup }
+                changed
+                notify_observers(self)
+                nil
+            end
+
+            # A pixel has been modified. Tell the view.
+            def update(pixel)
+                changed
+                notify_observers(self)
+                pixel.delete_observer(self) # Don't need to hear again.
+            end
+
+        private
+
+            def cols(*args)
+                @cols = args[0]     # remove the outermost array
+                @unique = false
+
+                # Convert @rows to an Enumerable object
+                case @rows.length
+                    when 0                      # Create a Range for all the rows
+                        @rows = Range.new(0, @height, true)
+                    when 1                      # Range, Array, or a single integer
+                        # if the single element is already an Enumerable
+                        # object, get it.
+                        if @rows.first.respond_to? :each
+                            @rows = @rows.first
+                        else
+                            @rows = Integer(@rows.first)
+                            if @rows < 0
+                                @rows += @height
+                            end
+                            if @rows < 0 || @rows > @height-1
+                                raise IndexError, "index [#{@rows}] out of range"
+                            end
+                            # Convert back to an array
+                            @rows = Array.new(1, @rows)
+                            @unique = true
+                        end
+                    when 2
+                        # A pair of integers representing the starting column and the number of columns
+                        start = Integer(@rows[0])
+                        length = Integer(@rows[1])
+
+                        # Negative start -> start from last row
+                        if start < 0
+                            start += @height
+                        end
+
+                        if start > @height || start < 0 || length < 0
+                                raise IndexError, "index [#{@rows.first}] out of range"
+                        else
+                            if start + length > @height
+                                length = @height - length
+                                length = [length, 0].max
+                            end
+                        end
+                        # Create a Range for the specified set of rows
+                        @rows = Range.new(start, start+length, true)
+                end
+
+                case @cols.length
+                    when 0                  # all rows
+                        @cols = Range.new(0, @width, true)  # convert to range
+                        @unique = false
+                    when 1                  # Range, Array, or a single integer
+                        # if the single element is already an Enumerable
+                        # object, get it.
+                        if @cols.first.respond_to? :each
+                            @cols = @cols.first
+                            @unique = false
+                        else
+                            @cols = Integer(@cols.first)
+                            if @cols < 0
+                                @cols += @width
+                            end
+                            if @cols < 0 || @cols > @width-1
+                                raise IndexError, "index [#{@cols}] out of range"
+                            end
+                            # Convert back to array
+                            @cols = Array.new(1, @cols)
+                            @unique &&= true
+                        end
+                    when 2
+                        # A pair of integers representing the starting column and the number of columns
+                        start = Integer(@cols[0])
+                        length = Integer(@cols[1])
+
+                        # Negative start -> start from last row
+                        if start < 0
+                            start += @width
+                        end
+
+                        if start > @width || start < 0 || length < 0
+                            ; #nop
+                        else
+                            if start + length > @width
+                                length = @width - length
+                                length = [length, 0].max
+                            end
+                        end
+                        # Create a Range for the specified set of columns
+                        @cols = Range.new(start, start+length, true)
+                        @unique = false
+                end
+
+            end
+
+            # iterator called from subscript methods
+            def each
+                maxrows = @height - 1
+                maxcols = @width - 1
+
+                @rows.each do |j|
+                    if j > maxrows
+                        raise IndexError, "index [#{j}] out of range"
+                    end
+                    @cols.each do |i|
+                        if i > maxcols
+                            raise IndexError, "index [#{i}] out of range"
+                        end
+                        yield j*@width + i
+                    end
+                end
+            end
+
+        end # class Magick::Image::View::Rows
+
+    end     # class Magick::Image::View
 
 end # class Magick::Image
 

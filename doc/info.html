@@ -10,7 +10,9 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="fill.html">&lt;-
@@ -253,21 +255,30 @@
       <tr>
         <td>&nbsp;</td>
         <td>Set the image format, "GIF" or "JPG" for example. See
-        <a href=
-        "http://www.imagemagick.org/www/formats.html">
-        File Formats</a>.</td>
+        <a href="http://www.imagemagick.org/www/formats.html">File
+        Formats</a>.</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
         "Info.fuzz_eq">fuzz=</a></td>
-        <td><i>self.</i>fuzz= <i>anInteger</i></td>
+        <td><i>self.</i>fuzz= <i>aNumeric</i><br>
+         <i>self.</i>fuzz= <i>aString</i></td>
       </tr>
       <tr>
         <td>&nbsp;</td>
-        <td>Set the level of "fuzziness" for comparing pixels. By
-        default the pixels must be identical to be considered
-        equal. The larger the <var>fuzz</var> value the more
-        difference is tolerated.</td>
+        <td>
+          <p>The argument may be a Numeric value or a String in the
+          form "NN%". In the second case, the argument is computed
+          as a percentage of <a href=
+          "constants.html#Miscellaneous_constants">MaxRGB</a>. For
+          example, a value of '5%' sets <var>fuzz</var> to
+          0.05*MaxRGB.</p>
+          <p>Set the level of "fuzziness" for comparing pixels. By
+          default the pixels must be identical to be considered
+          equal. The larger the <var>fuzz</var> value the more
+          difference is tolerated.</p>
+          See <a href="imageattrs.html#Image.fuzz">Image#fuzz=</a>.
+        </td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -279,7 +290,7 @@
         <td>The <a href="constants.html#ImageType">image type</a>
         classification. For example, GrayscaleType. Don't confuse
         this attribute with the <a href=
-        "#Info.format_eq">format</a>, that is "GIF" or "JPG".</td>
+        "#Info.format_eq">format</a> such as "GIF" or "JPG".</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=

@@ -10,7 +10,9 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="ilist.html">&lt;-
@@ -515,18 +517,23 @@
         <td class="methodname"><a name="Image.fuzz">fuzz</a><br>
          fuzz=</td>
         <td><i>image.</i>fuzz -&gt; <i>aFloat</i><br>
-         <i>image.</i>fuzz = <i>aFloat</i></td>
+         <i>image.</i>fuzz = <i>aNumeric</i><br>
+         <i>image.</i>fuzz = <i>aString</i></td>
       </tr>
       <tr>
         <td>&nbsp;</td>
         <td>
-          <div class="imquote">
-            Colors within this distance are considered equal. A
-            number of algorithms search for a target color. By
-            default the color must be exact. Use this option to
-            match colors that are close to the target color in RGB
-            space.
-          </div>
+          <p>The argument may be a Numeric value or a String in the
+          form "NN%". In the second case, the argument is computed
+          as a percentage of <a href=
+          "constants.html#Miscellaneous_constants">MaxRGB</a>. For
+          example, a value of '5%' sets <var>fuzz</var> to
+          0.05*MaxRGB.</p>
+          <p class="imquote">Colors within this distance are
+          considered equal. A number of algorithms search for a
+          target color. By default the color must be exact. Use
+          this option to match colors that are close to the target
+          color in RGB space.</p>
           <p>See the <a href="image.html#Image.opaque">opaque</a>,
           <a href=
           "image.html#Image.texture_floodfill">texture_floodfill</a>,

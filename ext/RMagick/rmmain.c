@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.32 2003/12/16 00:12:48 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.33 2003/12/16 00:45:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -742,7 +742,7 @@ Init_RMagick(void)
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Enum, Enum_alloc);
 #else
-    rb_define_singleton_method(Class_Enum, "new", Enum_new, 1);
+    rb_define_singleton_method(Class_Enum, "new", Enum_new, 2);
 #endif
 
     rb_define_method(Class_Enum, "initialize", Enum_initialize, 2);
@@ -1112,7 +1112,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/12/16 00:12:48 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/12/16 00:45:44 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

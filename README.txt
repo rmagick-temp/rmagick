@@ -16,7 +16,6 @@
     * Tips for installing and configuring ImageMagick and GraphicsMagick
       <#tips>
     * Installing RMagick <#installing_rmagick>
-    *
           o Configuration options <#configuration_options>
           o Running the configure and make scripts <#running>
     * Things that can go wrong <#things_that_can_go_wrong>
@@ -49,8 +48,7 @@ ImageMagick and GraphicsMagick image processing libraries.
     Prerequisites
 
 *O/S*
-    Linux, Sun Solaris, Cygwin, FreeBSD. RMagick does not run on MS
-    Windows except with Cygwin.
+    Linux, Sun Solaris, Cygwin, FreeBSD, MS Windows 98 and later.
 *Ruby*
     Ruby 1.6.7 or later. You can get Ruby from www.ruby-lang.org
     <http://www.ruby-lang.org>
@@ -58,7 +56,7 @@ ImageMagick and GraphicsMagick image processing libraries.
 One of
 
 *ImageMagick*
-    ImageMagick 5.5.1 or later. You can get ImageMagick from
+    ImageMagick 6.0.0 or later. You can get ImageMagick from
     www.imagemagick.org <http://www.imagemagick.org>.
 *GraphicsMagick*
     GraphicsMagick is a friendly fork of ImageMagick 5.5.1. You can get
@@ -80,19 +78,12 @@ can be difficult to configure. Follow these tips to minimize the amount
 of time you'll spend and your frustration level.
 
 Do /not/ simply type ./configure and expect the defaults to be correct
-for you. By default, ImageMagick is configured to use a color depth
-("quantum-depth") of 16. Unless you have very special image processing
-needs you should use the --with-quantum-depth=8 option. This will cause
-ImageMagick run faster and use half as much memory. If you need to use
-16 as the color depth, you'll know it.
-
-GraphicsMagick defaults to a color depth of 8, so you need do nothing.
-
-Since you are installing ImageMagick/GraphicsMagick to use with Ruby,
-consider whether you want to skip ImageMagick's/GraphicMagicks' support
-for Perl and C++ by using the --without-perl and
+for you. Since you are installing ImageMagick/GraphicsMagick to use with
+Ruby, consider whether you want to skip ImageMagick's/GraphicMagicks'
+support for Perl and C++ by using the --without-perl and
 --without-magick-plus-plus options. Doing so will speed up the
-installation process and save some disk space.
+installation process and save some disk space. You will almost certainly
+want to specify the --enable-shared and --disable-static options.
 
 Determine which image formats you are interested in using and make sure
 that you have installed the libraries that ImageMagick/GraphicsMagick
@@ -104,30 +95,30 @@ JPG, PNG, TIFF, and WMF formats in order to execute all the RMagick
 sample programs. See ImageMagick's or GraphicMagick's README.txt file
 for more information.
 
-You will almost certainly want to specify the --enable-shared and
---disable-static options.
-
 Once you have determined the configuration options you need, run the
 configure script. When it completes, read the summary output to see if
 configuration worked the way you expected. Here's an example of the
 summary output from ImageMagick's configure script. Notice that the
 result of each option is listed in the "Configured value" column.
 
-Option            Configure option              Configured value
------------------------------------------------------------------
+                  Option                        Value
+-------------------------------------------------------------------------
 Shared libraries  --enable-shared=yes           yes
 Static libraries  --enable-static=no            no
+Module support    --with-modules=yes            yes
 GNU ld            --with-gnu-ld=yes             yes
-LZW support       --enable-lzw=no               no
+LZW support       --enable-lzw=yes              yes
 Quantum depth     --with-quantum-depth=8        8
+
 Delegate Configuration:
 BZLIB             --with-bzlib=yes              yes
-DPS               --with-dps=yes                no (failed tests)
+DPS               --with-dps=yes                yes
 FlashPIX          --with-fpx=yes                no
 FreeType 2.0      --with-ttf=yes                yes
-Ghostscript       None                          /usr/bin/gs
+Ghostscript       None                          gs (7.07.2)
 Ghostscript fonts --with-gs-font-dir=default    /usr/share/fonts/default/Type1/
 Ghostscript lib   --with-gslib=no               no
+Graphviz          --with-dot=yes                no
 JBIG              --with-jbig=yes               no
 JPEG v1           --with-jpeg=yes               yes
 JPEG-2000         --with-jp2=yes                no
@@ -141,6 +132,7 @@ WMF               --with-wmf=yes                yes
 X11               --with-x=                     yes
 XML               --with-xml=yes                yes
 ZLIB              --with-zlib=yes               yes
+
 X11 Configuration:
   X_CFLAGS     = -I/usr/X11R6/include
   X_PRE_LIBS   = -lSM -lICE
@@ -195,6 +187,20 @@ addition to the regular options, there are a few RMagick-specific options:
     failing examples and will always complete. This option is useful if
     you're having trouble installing RMagick and you want to see all the
     failing examples.
+--with-graphics-magick
+    If you have both ImageMagick and GraphicsMagick installed, this
+    option will force RMagick to be configured with GraphicsMagick.
+--with-so-dir=directory
+    The directory for ruby extensions.
+--with-ruby-path=directory
+    The path to set the !# line in Ruby scripts. The default is
+    |$prefix/bin/ruby|.
+--with-ruby-prog=name
+    The name of the Ruby executable. The default is |ruby|.
+--with-make-prog=name
+    The name of the |make| program.
+--with-rbconfig=path
+    The path to the rbconfig.rb file to use. The default is Ruby's rbconfig.
 
 
         Running the |configure| and |make| scripts
@@ -359,6 +365,7 @@ Thanks to
     * Mike Williams, for the RMagick Debian package
     * ImageMagick Studio LLC, for help with ImageMagick and for hosting
       the RMagick documentation.
+    * Kaspar Schiess, for the MS Windows gem.
 
 
     License
@@ -384,7 +391,7 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-<http://www.opensource.org/docs/definition.php>
+<http://www.opensource.org/docs/definition.php> 	
 
 *This software is OSI Certified Open Source Software.
 OSI Certified is a certification mark of the Open Source Initiative.*

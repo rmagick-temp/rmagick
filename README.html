@@ -23,8 +23,7 @@
       <li><a href="#prerequisites">Prerequisites</a></li>
       <li><a href="#tips">Tips for installing and configuring
       ImageMagick and GraphicsMagick</a></li>
-      <li><a href="#installing_rmagick">Installing RMagick</a></li>
-      <li>
+      <li><a href="#installing_rmagick">Installing RMagick</a>
         <ul>
           <li><a href="#configuration_options">Configuration
           options</a></li>
@@ -58,8 +57,7 @@
     <h2><a name="prerequisites">Prerequisites</a></h2>
     <dl>
         <dt><b>O/S</b></dt>
-        <dd>Linux, Sun Solaris, Cygwin, FreeBSD. RMagick does not run on MS Windows
-    except with Cygwin.</dd>
+        <dd>Linux, Sun Solaris, Cygwin, FreeBSD, MS Windows 98 and later.</dd>
         <dt><b>Ruby</b></dt>
         <dd>Ruby 1.6.7 or later. You can get Ruby from
             <a href="http://www.ruby-lang.org">www.ruby-lang.org</a></dd>
@@ -67,7 +65,7 @@
     One of
     <dl>
         <dt><b>ImageMagick</b></dt>
-        <dd>ImageMagick 5.5.1 or later. You can get ImageMagick
+        <dd>ImageMagick 6.0.0 or later. You can get ImageMagick
         from <a href="http://www.imagemagick.org">www.imagemagick.org</a>.</dd>
         <dt><b>GraphicsMagick</b></dt>
         <dd>GraphicsMagick is a friendly fork of ImageMagick 5.5.1.
@@ -86,21 +84,13 @@
     difficult to configure. Follow these tips to minimize the
     amount of time you'll spend and your frustration level.</p>
     <p>Do <i>not</i> simply type ./configure and expect the
-    defaults to be correct for you. By
-    default, ImageMagick is configured to use a color depth
-    ("quantum-depth") of 16. Unless you have very special image
-    processing needs you should use the --with-quantum-depth=8
-    option. This will cause ImageMagick run faster and use half as
-    much memory. If you need to use 16 as the color depth, you'll
-    know it.</p>
-    <p>GraphicsMagick defaults to a color depth of 8, so you need
-    do nothing.</p>
-    <p>Since you are installing ImageMagick/GraphicsMagick to use
+    defaults to be correct for you. Since you are installing ImageMagick/GraphicsMagick to use
     with Ruby, consider whether you want to skip
     ImageMagick's/GraphicMagicks' support for Perl and C++ by using
     the --without-perl and --without-magick-plus-plus options.
     Doing so will speed up the installation process and save some
-    disk space.</p>
+    disk space. You will almost certainly want to specify the
+    --enable-shared and --disable-static options.</p>
     <p>Determine which image formats you are interested in using
     and make sure that you have installed the libraries that
     ImageMagick/GraphicsMagick uses to process these formats.
@@ -111,8 +101,6 @@
     the JPG, PNG, TIFF, and WMF formats in order to execute all the
     RMagick sample programs. See ImageMagick's or GraphicMagick's
     README.txt file for more information.</p>
-    <p>You will almost certainly want to specify the
-    --enable-shared and --disable-static options.</p>
     <p>Once you have determined the configuration options you need,
     run the configure script. When it completes, read the summary
     output to see if configuration worked the way you expected.
@@ -120,21 +108,24 @@
     configure script. Notice that the result of each option is
     listed in the "Configured value" column.</p>
 <pre>
-Option            Configure option              Configured value
------------------------------------------------------------------
+                  Option                        Value
+-------------------------------------------------------------------------
 Shared libraries  --enable-shared=yes           yes
 Static libraries  --enable-static=no            no
+Module support    --with-modules=yes            yes
 GNU ld            --with-gnu-ld=yes             yes
-LZW support       --enable-lzw=no               no
+LZW support       --enable-lzw=yes              yes
 Quantum depth     --with-quantum-depth=8        8
+
 Delegate Configuration:
 BZLIB             --with-bzlib=yes              yes
-DPS               --with-dps=yes                no (failed tests)
+DPS               --with-dps=yes                yes
 FlashPIX          --with-fpx=yes                no
 FreeType 2.0      --with-ttf=yes                yes
-Ghostscript       None                          /usr/bin/gs
+Ghostscript       None                          gs (7.07.2)
 Ghostscript fonts --with-gs-font-dir=default    /usr/share/fonts/default/Type1/
 Ghostscript lib   --with-gslib=no               no
+Graphviz          --with-dot=yes                no
 JBIG              --with-jbig=yes               no
 JPEG v1           --with-jpeg=yes               yes
 JPEG-2000         --with-jp2=yes                no
@@ -148,6 +139,7 @@ WMF               --with-wmf=yes                yes
 X11               --with-x=                     yes
 XML               --with-xml=yes                yes
 ZLIB              --with-zlib=yes               yes
+
 X11 Configuration:
   X_CFLAGS     = -I/usr/X11R6/include
   X_PRE_LIBS   = -lSM -lICE
@@ -199,6 +191,18 @@ X11 Configuration:
       not check for failing examples and will always complete. This
       option is useful if you're having trouble installing RMagick
       and you want to see all the failing examples.</dd>
+      <dt>--with-graphics-magick</dt>
+      <dd>If you have both ImageMagick and GraphicsMagick installed, this option will force RMagick to be configured with GraphicsMagick.</dd>
+      <dt>--with-so-dir=directory</dt>
+      <dd>The directory for ruby extensions.</dd>
+      <dt>--with-ruby-path=directory</dt>
+      <dd>The path to set the !# line in Ruby scripts. The default is <code>$prefix/bin/ruby</code>.</dd>
+      <dt>--with-ruby-prog=name</dt>
+      <dd>The name of the Ruby executable. The default is <code>ruby</code>.</dd>
+      <dt>--with-make-prog=name</dt>
+      <dd>The name of the <code>make</code> program.</dd>
+      <dt>--with-rbconfig=path</dt>
+      <dd>The path to the rbconfig.rb file to use. The default is Ruby's rbconfig.</dd>
     </dl>
     <br>
 
@@ -367,6 +371,7 @@ cc1: warning:   as it has already been specified as a non-system directory
       <li>Mike Williams, for the RMagick Debian package</li>
       <li>ImageMagick Studio LLC, for help with ImageMagick and for
       hosting the RMagick documentation.</li>
+      <li>Kaspar Schiess, for the MS Windows gem.</li>
     </ul>
     <h2><a name="license">License</a></h2>
 

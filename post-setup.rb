@@ -88,7 +88,7 @@ class ExampleSet
          err(<<-END_EXFAIL
             Too many examples failed. The RMagick documentation cannot be installed
             successfully. Consult the README.txt file and try again, or send email
-            to cyclists@nc.rr.com.
+            to rmagick@rubyforge.org.
             END_EXFAIL
             )
       end

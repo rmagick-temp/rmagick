@@ -41,6 +41,10 @@ ImageMagick and GraphicsMagick image processing libraries.
 *Author:* Tim Hunter
 *Email:* cyclists@nc.rr.com
 <mailto:cyclists@nc.rr.com?subject=RMagick%20Feedback>
+*RubyForge Forums:* RMagick project page
+<http://rubyforge.org/projects/rmagick>
+*Mailing list:* rmagick-users@rubyforge.org
+<mailto:rmagick-users@rubyforge.org>
 
 
     Prerequisites
@@ -356,8 +360,10 @@ cc1: warning:   as it has already been specified as a non-system directory
 
 Please report bugs in RMagick, its documentation, or its installation
 programs to me at cyclists@nc.rr.com
-<mailto:cyclists@nc.rr.com?subject=RMagick%20bug%20report>. However, I
-cannot help with Ruby installation and configuration or ImageMagick or
+<mailto:cyclists@nc.rr.com?subject=RMagick%20bug%20report>. You can also
+use the bug tracker on the RMagick project page
+<http://rubyforge.org/projects/rmagick/> at RubyForge. However, I cannot
+help with Ruby installation and configuration or ImageMagick or
 GraphicsMagick installation and configuration. Please report problems
 with that software to their respective authors or distributors.
 

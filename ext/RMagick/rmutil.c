@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.39 2004/06/21 22:07:14 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.40 2004/07/15 22:39:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -68,17 +68,13 @@ void *magick_realloc(void *ptr, const size_t size)
     Extern:     magick_clone_string
     Purpose:    make a copy of a string in malloc'd memory
     Notes:      Any existing string pointed to by *new_str is freed.
-                If malloc fails, raises an exception
+                CloneString asserts if no memory. No need to check
+                clsits return value.ls
+
 */
 void magick_clone_string(char **new_str, const char *str)
 {
-    unsigned int okay;
-
-    okay = CloneString(new_str, str);
-    if (!okay)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
+    CloneString(new_str, str);
 }
 
 
@@ -2608,12 +2604,13 @@ magick_error_handler(
 void
 rm_handle_error(ExceptionInfo *ex)
 {
+#define RM_MAX_ERROR_CLAUSE 250
     ExceptionType sev = ex->severity;
-    char reason[251];
-    char desc[251];
+    char reason[RM_MAX_ERROR_CLAUSE+1];
+    char desc[RM_MAX_ERROR_CLAUSE+1];
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
-    char module[251], function[251];
+    char module[RM_MAX_ERROR_CLAUSE+1], function[RM_MAX_ERROR_CLAUSE+1];
     unsigned long line;
 #endif
 
@@ -2626,12 +2623,12 @@ rm_handle_error(ExceptionInfo *ex)
     }
     if (ex->reason)
     {
-        strncpy(reason, ex->reason, 250);
+        strncpy(reason, ex->reason, RM_MAX_ERROR_CLAUSE);
         reason[250] = '\0';
     }
     if (ex->description)
     {
-        strncpy(desc, ex->description, 250);
+        strncpy(desc, ex->description, RM_MAX_ERROR_CLAUSE);
         desc[250] = '\0';
     }
 
@@ -2641,12 +2638,12 @@ rm_handle_error(ExceptionInfo *ex)
 
     if (ex->module)
     {
-        strncpy(module, ex->module, 250);
+        strncpy(module, ex->module, RM_MAX_ERROR_CLAUSE);
         module[250] = '\0';
     }
     if (ex->function)
     {
-        strncpy(function, ex->function, 250);
+        strncpy(function, ex->function, RM_MAX_ERROR_CLAUSE);
         function[250] = '\0';
     }
     line = ex->line;

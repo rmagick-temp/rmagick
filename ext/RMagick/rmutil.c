@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.15 2003/09/20 22:41:26 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.16 2003/09/26 00:15:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1699,7 +1699,7 @@ handle_error(ExceptionInfo *ex)
     // Reset the severity. If the exception structure is in an
     // Image and this exception is rescued and the Image reused,
     // we need the Image to be pristine!
-    ex->severity = UndefinedException;
+    GetExceptionInfo(ex);
 
 #if !defined(HAVE_EXCEPTIONINFO_MODULE)
     magick_error_handler(sev, reason, desc);

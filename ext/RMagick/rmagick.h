@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.32 2003/12/25 21:15:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.33 2003/12/26 16:50:21 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -97,7 +97,14 @@ typedef enum {
     BoldWeight,
     BolderWeight,
     LighterWeight
-    } WeightType;
+} WeightType;
+
+// Draw#text_anchor AnchorType argument
+typedef enum {
+    StartAnchor = 1,
+    MiddleAnchor = 2,
+    EndAnchor = 3
+} AnchorType;
 
 
 typedef struct
@@ -324,14 +331,18 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
     ATTR_WRITER(class, attr)
 
 /*
- *  Define enums and constants
+ *  Enum constants - define a subclass of Enum for the specified enumeration.
+ *  Define an instance of the subclass for each member in the enumeration.
+ *  Initialize each instance with its name and value.
  */
+#define DEF_ENUM(type) {\
+   VALUE _cls, _enum;\
+   _cls =  Class_##type = rb_define_class_under(Module_Magick, #type, Class_Enum);
+#define ENUM_VAL(val)\
+   _enum = rm_enum_new(_cls, ID2SYM(rb_intern(#val)), INT2FIX(val));\
+   rb_define_const(Module_Magick, #val, _enum);
+#define END_ENUM }
 
-// Define a subclass of Magick::Enum
-#define DEF_ENUM(type) Class_##type = rb_define_class_under(Module_Magick, #type, Class_Enum);
-//  Define an Magick module constant from an ImageMagick enumeration value
-#define ENUM_VAL(type, val) rb_define_const(Module_Magick, #val, \
-    rm_enum_new(Class_##type, ID2SYM(rb_intern(#val)), INT2FIX(val)))
 //  Define a Magick module constant
 #define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.85 2004/12/12 00:19:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.86 2004/12/17 00:28:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5450,6 +5450,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     // Map QuantumExpressionOperator to QuantumOperator
     switch(operator)
     {
+        default:
         case UndefinedQuantumOperator:
             qop = UndefinedQuantumOp;
             break;
@@ -7956,10 +7957,12 @@ static ChannelType extract_channels(
         *argc -= 1;
     }
 
+#if defined(HAVE_ALLCHANNELS)
     if (channels == 0)
     {
         channels = AllChannels;
     }
+#endif
 
     return channels;
 }

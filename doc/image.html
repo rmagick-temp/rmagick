@@ -466,7 +466,9 @@ img = Magick::Image.capture {
       <tr class="method">
         <td class="methodname"><a name="Image.ping">ping</a></td>
         <td>Image.ping(<i>filename</i>) [ <i>{ optional arguments
-        }</i> ] -&gt; <i>anArray</i></td>
+        }</i> ] -&gt; <i>anArray</i><br>
+         Image.ping(<i>file</i>) [ <i>{ optional arguments }</i> ]
+        -&gt; <i>anArray</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -477,9 +479,10 @@ img = Magick::Image.capture {
       </tr>
       <tr>
         <td valign="top">Arguments</td>
-        <td>An image file name. You can specify other arguments by
-        setting <a href="info.html">Image::Info</a> attributes in
-        the optional block.</td>
+        <td>An image file name or open file object. You can specify
+        other arguments by setting <a href=
+        "info.html">Image::Info</a> attributes in the optional
+        block.</td>
       </tr>
       <tr>
         <td valign="top">Returns</td>
@@ -509,7 +512,9 @@ p cheetah[0].columns &raquo; 1024
       <tr class="method">
         <td class="methodname"><a name="Image.read">read</a></td>
         <td>Image.read(<i>filename</i>) [ <i>{ optional arguments
-        }</i> ] -&gt; <i>anArray</i></td>
+        }</i> ] -&gt; <i>anArray</i><br>
+         Image.read(<i>file</i>) [ <i>{ optional arguments }</i> ]
+        -&gt; <i>anArray</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -517,9 +522,10 @@ p cheetah[0].columns &raquo; 1024
       </tr>
       <tr>
         <td valign="top">Arguments</td>
-        <td>An image file name. You can specify other arguments by
-        setting <a href="info.html">Image::Info</a> attributes in
-        the optional block.</td>
+        <td>An image file name or open file object. You can specify
+        other arguments by setting <a href=
+        "info.html">Image::Info</a> attributes in the optional
+        block.</td>
       </tr>
       <tr>
         <td valign="top">Returns</td>
@@ -5223,7 +5229,9 @@ f.to_color(p) &raquo; "#3F3D31"
       <tr class="method">
         <td class="methodname"><a name="Image.write">write</a></td>
         <td><i>image</i>.write(<i>filename</i>) <i>[ { optional
-        arguments } ]</i> -&gt; <i>image</i></td>
+        arguments } ]</i> -&gt; <i>image</i><br>
+         <i>image</i>.write(<i>file</i>) <i>[ { optional arguments
+        } ]</i> -&gt; <i>image</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -5233,9 +5241,10 @@ f.to_color(p) &raquo; "#3F3D31"
       </tr>
       <tr>
         <td valign="top">Arguments</td>
-        <td>The file name. You may also specify optional arguments
-        by setting <a href="info.html">Image::Info</a> attributes
-        in an associated block.</td>
+        <td>A file name or open file object. You may also specify
+        optional arguments by setting <a href=
+        "info.html">Image::Info</a> attributes in an associated
+        block.</td>
       </tr>
       <tr>
         <td valign="top">Returns</td>
@@ -5245,6 +5254,12 @@ f.to_color(p) &raquo; "#3F3D31"
       <tr>
         <td valign="top">Example</td>
         <td>Almost all of the examples call <var>write</var>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Advanced</td>
+        <td>If the argument is an open file, you can write the
+        image in a different format by setting the image's <a href=
+        "imageattrs.html#Image.format">format</a> attribute.</td>
       </tr>
       <tr>
         <td valign="top">&times;Magick API</td>

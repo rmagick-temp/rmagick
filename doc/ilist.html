@@ -1435,7 +1435,9 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
         "ImageList.read">read</a></td>
         <td><i>imagelist.</i>read(<i>filename[, filename...]</i>)
         <i>[&nbsp;{ optional arguments }&nbsp;]</i> -&gt;
-        <i>self</i></td>
+        <i>self</i><br>
+         <i>imagelist.</i>read(<i>file[, file...]</i>) <i>[&nbsp;{
+        optional arguments }&nbsp;]</i> -&gt; <i>self</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -1452,7 +1454,7 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
       <tr>
         <td valign="top">Arguments</td>
         <td>
-          One or more filenames. 
+          One or more filenames or open file objects. 
           <p>You can also specify optional arguments to be used
           when reading the file(s) by setting <a href=
           "info.html">Image::Info</a> attributes in the optional
@@ -1544,7 +1546,9 @@ s = i.to_blob &raquo; a string representing the image.
         <td class="methodname"><a name=
         "ImageList.write">write</a></td>
         <td><i>imagelist.</i>write(<i>filename</i>) <i>[&nbsp;{
-        optional arguments }&nbsp;]</i> -&gt; <i>self</i></td>
+        optional arguments }&nbsp;]</i> -&gt; <i>self</i><br>
+         <i>imagelist.</i>write(<i>file</i>) <i>[&nbsp;{ optional
+        arguments }&nbsp;]</i> -&gt; <i>self</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -1570,10 +1574,13 @@ s = i.to_blob &raquo; a string representing the image.
       <tr>
         <td valign="top">Arguments</td>
         <td>
-          A filename. Indicate the desired image <a href=
-          "imusage.html#formats">format</a> either by the suffix
-          (i.e. <code>.jpg</code>, <code>.png</code>) or the prefix
-          (<code>ps:</code>) to the filename. 
+          A filename or open file object. Indicate the desired
+          image <a href="imusage.html#formats">format</a> either by
+          the suffix (i.e. <code>.jpg</code>, <code>.png</code>) or
+          the prefix (<code>ps:</code>) to the filename. If the
+          argument is an open file object, you can specify a format
+          for each image in the list by setting its <a href=
+          "imageattrs.html#Image.write">format</a> attribute. 
           <p>You can also specify optional arguments by setting <a
           href="info.html">Image::Info</a> attributes in an
           associated block.</p>

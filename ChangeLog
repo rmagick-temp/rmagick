@@ -1,7 +1,8 @@
 RMagick 1.4.0
-	o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
-	o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
-	   CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
+    o Added color_histogram (IM 5.5.8, GM 1.1)
+    o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
+    o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
+	  CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added TintImage (IM 5.5.8)
 

@@ -7,7 +7,19 @@ RMagick 1.4.0
       CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
     o Added fcmp, intensity to Pixel class
+    o Added Version_long constant
     o Added TintImage (IM 5.5.8)
+
+RMagick 1.3.1
+    o Fixed default base URI in the links to the installed xMagick doc
+    o Applied the patch for bug #76 that caused the rubyname.rb example
+      to hang when installing on FreeBSD.
+    o Fixed the <=> method in Image to return nil when the class of the
+      other object is not Image
+    o Added code to ensure that the `text' argument to Draw#text is not
+      nil or empty
+    o Fixed the handle_error function to re-initialize the exception
+      structure after destroying its contents.
 
 RMagick 1.3.0
     o Added strip!, import_pixels, export_pixels, random_channel_threshold

@@ -1,3 +1,9 @@
+RMagick 1.6.2
+    o Fixed ImageList#deconstruct to return an imagelist
+    o Fixed installation procedure to propagate user's CFLAGS, CPPFLAGS,
+      and LDFLAGS through to the low-level Makefile
+    o Fixed bugs #1048, #1127
+
 RMagick 1.6.1
     o Changed to match changes in ImageMagick 6.1.4 API
     o Fixed bug #950

@@ -122,6 +122,10 @@
                   <li><a href=
                   "#Image.gaussian_blur">gaussian_blur</a></li>
                   <li><a href=
+                  "#Image.get_exif_by_entry">get_exif_by_entry</a></li>
+                  <li><a href=
+                  "#Image.get_exif_by_tag">get_exif_by_tag</a></li>
+                  <li><a href=
                   "#Image.get_pixels">get_pixels</a></li>
                   <li><a href="#Image.gray_q">gray?</a></li>
                   <li><a href="#Image.grey_q">grey?</a></li>
@@ -168,16 +172,16 @@
                   <li><a href="#Image.palette_q">palette?</a></li>
                   <li><a href=
                   "#Image.pixel_color">pixel_color</a></li>
-                  <li><a href=
-                  "#Image.profile_bang">profile!</a></li>
-                  <li><a href=
-                  "#Image.properties">properties</a></li>
                 </ul>
               </td>
               <td valign="top">
                 <ul>
+                  <li><a href=
+                  "#Image.profile_bang">profile!</a></li>
                   <li><a href="#Image.quantize">quantize</a></li>
                   <li><a href="#Image.raise">raise</a></li>
+                  <li><a href=
+                  "#Image.properties">properties</a></li>
                   <li><a href=
                   "#Image.reduce_noise">reduce_noise</a></li>
                   <li><a href=
@@ -1004,9 +1008,9 @@ animated = Magick::Image.read("animated.gif") &raquo;
           <p>The argument is an &times;Magick geometry string.
           <var>Change_geometry</var> parses the string (ignoring
           the x and y values, if any) with respect to
-          <var>self</var>. Yields to the block, passing the new
-          width and height values. The return value is the return
-          value of the block.</p>
+          <var>self</var>. Then it yields to the block, passing the
+          new width and height values. The return value is the
+          return value of the block.</p>
         </td>
       </tr>
       <tr>
@@ -2604,6 +2608,79 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
         <td><a href=
         "file:///usr/local/share/ImageMagick-5.5.7/www/api/effect.html#gaussianblurimage">
         GaussianBlurImage</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.get_exif_by_entry">get_exif_by_entry</a></td>
+        <td><i>image</i>.get_exif_by_entry(<i>[name]*</i>) -&gt;
+        <i>anArray</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Returns the value associated with the specified EXIF
+        entry name or names. If no names are specified, returns all
+        the entries. The return value is an array containing one or
+        more [name, value] elements.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>The elements in the returned array are 2-element arrays
+        in the form [name, value]. If &times;Magick does not know
+        the name for an entry it uses "unknown." There may be more
+        than one entry for "unknown" in the returned array. If
+        there is no entry with the specified name the value is set
+        to <code>nil</code>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+image.get_exif_by_entry('Make') &raquo; 'Canon'
+image.get_exif_by_entry("ShutterSpeedValue") &raquo; "125/32"
+image.get_exif_by_entry() &raquo;
+    [["Make", "Canon"], ["ShutterSpeedValue", "125/32"] ...]
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "#Image.get_exif_by_tag">get_exif_by_tag</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.get_exif_by_tag">get_exif_by_tag</a></td>
+        <td><i>image</i>.get_exif_by_tag(<i>[tag]*</i>) -&gt;
+        <i>aHash</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Returns the value associated with the specified EXIF
+        entry number or numbers. If no numbers are specified,
+        returns all the entries. The return value is a hash. The
+        hash keys are EXIF entry numbers. The values are the values
+        associated with the entries.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A hash. If there is no entry with the specified number
+        the value is set to "unknown".</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+image.get_exif_by_tag(271) &raquo; 'Canon'
+image.get_exif_by_tag(37377) &raquo; "125/32"
+image.get_exif_by_tag() &raquo;
+    {271=&gt;"Canon"], [37377=&gt;"125/32"] ...}
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">See also</td>
+        <td><a href=
+        "#Image.get_exif_by_entry">get_exif_by_entry</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=

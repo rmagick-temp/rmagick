@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.12 2003/09/04 13:00:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.13 2003/09/06 22:25:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -739,6 +739,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
 /*
     Method:     Image_color_histogram(VALUE self);
     Purpose:    Call GetColorHistogram (>= GM 1.1)
+                     GetImageHistogram (>= IM 5.5.8)
     Notes:      returns hash {aPixel=>count}
 */
 VALUE
@@ -772,6 +773,33 @@ Image_color_histogram(VALUE self)
 
     return hash;
 
+
+#elif defined(HAVE_GETIMAGEHISTOGRAM)
+    Image *image;
+    VALUE hash, pixel;
+    unsigned long x, colors;
+    ColorPacket *histogram;
+    ExceptionInfo exception;
+    
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    histogram = GetImageHistogram(image, &colors, &exception);
+    HANDLE_ERROR
+
+    hash = rb_hash_new();
+    for (x = 0; x < colors; x++)
+    {
+        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
+        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
+    }
+
+    /*
+        Christy evidently didn't agree with Bob's memory management.
+    */
+    RelinquishMagickMemory(histogram);
+
+    return hash;
 #else
     not_implemented("color_histogram");
     return (VALUE) 0;

@@ -8,6 +8,7 @@ RMagick 1.7.0
     o Added read_inline to Image class
     o Renamed channel_compare to compare_channel, retained old name as an alias
       for backward compatibility.
+    o Added default values for unsharp_mask arguments
 
 RMagick 1.6.2
     o Fixed ImageList#deconstruct to return an imagelist

@@ -1,7 +1,7 @@
 
 # RMagick configure.ac
 
-AC_INIT(RMagick, x.y.z, cyclists@nc.rr.com, RMagick-x.y.z.tar.gz)
+AC_INIT(RMagick, x.y.z, rmagick@rubyforge.org, RMagick-x.y.z.tar.gz)
 echo "Configuring ${PACKAGE_STRING}"
 
 AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h])

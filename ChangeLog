@@ -12,6 +12,7 @@ RMagick 1.7.0
     o Fixed bug #1193
     o Fixed segfault in destroy_Draw when Ruby gc'd the temp file name
       array before calling destroy_Draw
+    o Tested with ImageMagick 6.1.6, GraphicsMagick 1.1.4, Ruby 1.8.2preview3.
 
 RMagick 1.6.2
     o Fixed ImageList#deconstruct to return an imagelist

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.3 2003/07/16 22:42:20 tim Exp $ */
+/* $Id: rmagick.h,v 1.4 2003/07/19 01:47:03 tim Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -34,6 +34,13 @@
 #ifndef HAVE_GETNEXTIMAGEINLIST
 #define GetNextImageInList(a) (a)->next
 #endif
+
+#if defined(HAVE_GETLOCALEEXCEPTIONMESSAGE)
+#define GETLOCALEEXCEPTIONMESSAGE(s, t) GetLocaleExceptionMessage(s, t)
+#else
+#define GETLOCALEEXCEPTIONMESSAGE(s, t) t
+#endif
+
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -356,7 +363,7 @@ ATTR_ACCESSOR(Image, extract_info)
 ATTR_READER(Image, filename)
 ATTR_READER(Image, filesize)
 ATTR_ACCESSOR(Image, filter)
-ATTR_READER(Image, format)
+ATTR_ACCESSOR(Image, format)
 ATTR_ACCESSOR(Image, fuzz)
 ATTR_ACCESSOR(Image, gamma)
 ATTR_ACCESSOR(Image, geometry)

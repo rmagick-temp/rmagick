@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.3 2003/07/17 22:53:32 tim Exp $ */
+/* $Id: rmutil.c,v 1.4 2003/07/19 01:47:03 tim Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2000,9 +2000,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "%s%s%s",
-            GetLocaleExceptionMessage(severity, reason),
+            GETLOCALEEXCEPTIONMESSAGE(severity, reason),
             description ? ": " : "",
-            description ? GetLocaleExceptionMessage(severity, description) : "");
+            description ? GETLOCALEEXCEPTIONMESSAGE(severity, description) : "");
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
         {
@@ -2027,9 +2027,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "RMagick: %s%s%s",
-            GetLocaleExceptionMessage(severity, reason),
+            GETLOCALEEXCEPTIONMESSAGE(severity, reason),
             description ? ": " : "",
-            description ? GetLocaleExceptionMessage(severity, description) : "");
+            description ? GETLOCALEEXCEPTIONMESSAGE(severity, description) : "");
         rb_warning(msg);
     }
 }

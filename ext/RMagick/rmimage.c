@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.69 2004/11/28 22:27:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.70 2004/11/29 00:59:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2044,7 +2044,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     unsigned long width, height;
     long x, npixels;
     char *map;
-    long mapL;
+    long map_l;
     union
     {
        volatile float *f;
@@ -2059,7 +2059,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 
     class = class;  // Suppress "never referenced" message from icc
 
-    Check_Type(pixels_arg, T_ARRAY);
+    // rb_Array converts objects that are not Arrays to Arrays if possible,
+    // and raises TypeError if it can't.
+    pixels_arg = rb_Array(pixels_arg);
 
     width = NUM2INT(width_arg);
     height = NUM2INT(height_arg);
@@ -2069,9 +2071,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         rb_raise(rb_eArgError, "width and height must be non-zero");
     }
 
-    map = STRING_PTR_LEN(map_arg, mapL);
+    map = STRING_PTR_LEN(map_arg, map_l);
 
-    npixels = width * height * mapL;
+    npixels = width * height * map_l;
     if (RARRAY(pixels_arg)->len != npixels)
     {
         rb_raise(rb_eArgError, "wrong number of array elements (%d for %d)"
@@ -3721,6 +3723,7 @@ Image_implode(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#import_pixels
     Purpose:    store image pixel data from an array
@@ -3761,11 +3764,12 @@ Image_import_pixels(
         rb_raise(rb_eArgError, "invalid import geometry");
     }
 
-
     npixels = cols * rows * strlen(map);
 
-    // Got enough pixels?
-    Check_Type(pixel_ary, T_ARRAY);
+    // rb_Array converts objects that are not Arrays to Arrays if possible,
+    // and raises TypeError if it can't.
+    pixel_ary = rb_Array(pixel_ary);
+
     if (RARRAY(pixel_ary)->len < npixels)
     {
         rb_raise(rb_eArgError, "pixel array too small (need %lu, got %ld)"

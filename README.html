@@ -198,13 +198,23 @@ X11 Configuration:
 <pre>
 ./configure --with-imdoc-base-uri=file:///home/user/ImageMagick
 </pre>
+      <p><i>Cygwin tip:</i>&nbsp;&nbsp;Use this option to specify
+      a Windows folder as the documentation base URI. Otherwise
+      the URI will refer to the Cygwin file system and Internet Explorer won't
+      be able to find the files. For example, suppose C:\CYGWIN is
+      mounted to / and you installed the
+      ImageMagick documentation in /usr/local/share/ImageMagick. Specify
+      </p>
+<pre>
+./configure --with-imdoc-base-uri=file://C:\cygwin\usr\local\share\ImageMagick
+</pre>
       </dd>
       <dt>--with-doc-dir=directory</dt>
       <dd>
         Specify the directory to install the RMagick documentation.
         By default this is $prefix/share/RMagick, where $prefix is
         the prefix specified by --prefix. For example, to install
-        the documentation in /home/user/RMagick, specify: 
+        the documentation in /home/user/RMagick, specify:
 <pre>
 ./configure --with-doc-dir=/home/user/RMagick
 </pre>
@@ -217,7 +227,7 @@ X11 Configuration:
       and you want to see all the failing examples.</dd>
     </dl>
     <br>
-     
+
     <h4><a name="running">Running the <code>configure</code> and
     <code>make</code> scripts</a></h4>
     <p>De-compress the RMagick-MAJOR.MINOR.TEENY.tar.gz archive and
@@ -519,6 +529,18 @@ cc1: warning:   as it has already been specified as a non-system directory
       </div>
     </blockquote>
     <div align="center" style="padding: 3em">
+    <table>
+    <tr>
+    <td>
+    <a href="http://www.opensource.org/">
+    <img src="osi-certified-60x50.gif" alt="OSI certified "
+    width=60 height=50 border=0></td></a>
+    <td align="center">
+    <p><strong>This software is OSI Certified Open Source Software.<br>
+OSI Certified is a certification mark of the Open Source Initiative.</strong></p>
+    </td></tr></table>
+    </div>
+    <div align="center">
       RMagick is Copyright &copy; 2003 by Timothy P. Hunter
     </div>
   </body>

@@ -193,6 +193,14 @@ addition to the regular options, there are a few RMagick-specific options:
 
 ./configure --with-imdoc-base-uri=file:///home/user/ImageMagick
 
+    /Cygwin tip:/  Use this option to specify a Windows folder as the
+    documentation base URI. Otherwise the URI will refer to the Cygwin
+    file system and Internet Explorer won't be able to find the files.
+    For example, suppose C:\CYGWIN is mounted to / and you installed the
+    ImageMagick documentation in /usr/local/share/ImageMagick. Specify
+
+./configure --with-imdoc-base-uri=file://C:\cygwin\usr\local\share\ImageMagick
+
 --with-doc-dir=directory
     Specify the directory to install the RMagick documentation. By
     default this is $prefix/share/RMagick, where $prefix is the prefix
@@ -494,5 +502,10 @@ with that software.
     THIS PACKAGE IS PROVIDED "AS IS" AND WITHOUT ANY EXPRESS OR IMPLIED
     WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
     MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+OSI certified <http://www.opensource.org/>
+
+*This software is OSI Certified Open Source Software.
+OSI Certified is a certification mark of the Open Source Initiative.*
 
 RMagick is Copyright © 2003 by Timothy P. Hunter

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.15 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.16 2003/09/20 22:36:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -92,7 +92,7 @@ Image_add_noise(VALUE self, VALUE noise)
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    NUM_TO_ENUM(noise, nt, NoiseType);
+    VALUE_TO_ENUM(noise, nt, NoiseType);
     new_image = AddNoiseImage(image, nt, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
@@ -602,7 +602,7 @@ Image_channel(VALUE self, VALUE channel)
 
     Data_Get_Struct(self, Image, image);
 
-    NUM_TO_ENUM(channel, channel_type, ChannelType);
+    VALUE_TO_ENUM(channel, channel_type, ChannelType);
 
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
@@ -913,7 +913,7 @@ Image_color_flood_fill(
                , x, y, image->columns, image->rows);
     }
 
-    NUM_TO_ENUM(method, fill_method, PaintMethod);
+    VALUE_TO_ENUM(method, fill_method, PaintMethod);
     if (!(fill_method == FloodfillMethod || fill_method == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -1094,7 +1094,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     Image *image;
     ColorspaceType new_cs;
 
-    NUM_TO_ENUM(colorspace, new_cs, ColorspaceType);
+    VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
     if (new_cs == image->colorspace)
@@ -1143,7 +1143,7 @@ VALUE Image_compose_eq(
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(compose_arg, image->compose, CompositeOperator);
+    VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
     return self;
 }
 
@@ -1175,8 +1175,8 @@ VALUE Image_composite(
     switch (argc)
     {
         case 3:                 // argv[1] is gravity, argv[2] is composite_op
-            NUM_TO_ENUM(argv[1], gravity, GravityType);
-            NUM_TO_ENUM(argv[2], operator, CompositeOperator);
+            VALUE_TO_ENUM(argv[1], gravity, GravityType);
+            VALUE_TO_ENUM(argv[2], operator, CompositeOperator);
 
                                 // convert gravity to x, y offsets
             switch (gravity)
@@ -1227,7 +1227,7 @@ VALUE Image_composite(
                                 // argv[3] is composite_op
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
-            NUM_TO_ENUM(argv[3], operator, CompositeOperator);
+            VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
         break;
 
         default:
@@ -1293,7 +1293,7 @@ Image_compression_eq(VALUE self, VALUE compression)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(compression, image->compression, CompressionType);
+    VALUE_TO_ENUM(compression, image->compression, CompressionType);
     return self;
 }
 
@@ -2174,7 +2174,7 @@ Image_filter_eq(VALUE self, VALUE filter)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(filter, image->filter, FilterTypes);
+    VALUE_TO_ENUM(filter, image->filter, FilterTypes);
     return self;
 }
 
@@ -2887,7 +2887,7 @@ Image_interlace_eq(VALUE self, VALUE interlace)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(interlace, image->interlace, InterlaceType);
+    VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
     return self;
 }
 
@@ -3043,7 +3043,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    NUM_TO_ENUM(argv[0], channel, ChannelType);
+    VALUE_TO_ENUM(argv[0], channel, ChannelType);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
     new_image = CloneImage(image, 0, 0, True, &exception);
@@ -3269,7 +3269,7 @@ Image_matte_flood_fill(
         rb_raise(rb_eArgError, "opacity (%d) exceeds MaxRGB", op);
     }
 
-    NUM_TO_ENUM(method, pm, PaintMethod);
+    VALUE_TO_ENUM(method, pm, PaintMethod);
     if (!(pm == FloodfillMethod || pm == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -4101,7 +4101,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
         case 3:
             quantize_info.dither = RTEST(argv[2]);
         case 2:
-            NUM_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
+            VALUE_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
         case 1:
             quantize_info.number_colors = NUM2INT(argv[0]);
         case 0:
@@ -4331,7 +4331,7 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
+    VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
     return self;
 }
 
@@ -4368,7 +4368,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
         case 4:
             blur = NUM2DBL(argv[3]);
         case 3:
-            NUM_TO_ENUM(argv[2], filter, FilterTypes);
+            VALUE_TO_ENUM(argv[2], filter, FilterTypes);
         case 2:
             rows = NUM2ULONG(argv[1]);
             columns = NUM2ULONG(argv[0]);
@@ -4590,7 +4590,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
         case 2:
             cluster_threshold = NUM2DBL(argv[1]);
         case 1:
-            NUM_TO_ENUM(argv[0], colorspace, ColorspaceType);
+            VALUE_TO_ENUM(argv[0], colorspace, ColorspaceType);
         case 0:
             break;
         default:
@@ -4950,7 +4950,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     QuantizeInfo qinfo;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(new_class_type, class_type, ClassType);
+    VALUE_TO_ENUM(new_class_type, class_type, ClassType);
 
     if (image->class == PseudoClass && class_type == DirectClass)
     {
@@ -5109,7 +5109,7 @@ Image_texture_flood_fill(
                , x, y, image->columns, image->rows);
     }
 
-    NUM_TO_ENUM(method_obj, method, PaintMethod);
+    VALUE_TO_ENUM(method_obj, method, PaintMethod);
     if (method != FillToBorderMethod && method != FloodfillMethod)
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
@@ -5544,7 +5544,7 @@ VALUE Image_image_type_eq(VALUE self, VALUE type)
     ImageType it;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(type, it, ImageType);
+    VALUE_TO_ENUM(type, it, ImageType);
     SetImageType(image, it);
 
     return self;
@@ -5580,7 +5580,7 @@ Image_units_eq(
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-    NUM_TO_ENUM(restype, image->units, ResolutionType);
+    VALUE_TO_ENUM(restype, image->units, ResolutionType);
     return self;
 }
 
@@ -5767,7 +5767,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             // Convert the width & height arguments to unsigned longs.
             // Compute the x & y offsets from the gravity and then
             // convert them to VALUEs.
-            NUM_TO_ENUM(argv[0], gravity, GravityType);
+            VALUE_TO_ENUM(argv[0], gravity, GravityType);
             width   = argv[1];
             height  = argv[2];
             columns = NUM2ULONG(width);

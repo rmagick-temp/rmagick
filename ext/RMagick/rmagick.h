@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.17 2003/09/18 19:53:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.18 2003/09/20 22:36:29 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -321,7 +321,7 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 //  Define a Magick module constant
 #define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
 
-#define NUM_TO_ENUM(value, e, type) \
+#define VALUE_TO_ENUM(value, e, type) \
    do {\
    MagickEnum *magick_enum;\
    if (CLASS_OF(value) != Class_##type)\
@@ -646,7 +646,6 @@ extern VALUE   Enum_to_i(VALUE);
 extern VALUE   Enum_spaceship(VALUE, VALUE);
 extern VALUE   Enum_case_eq(VALUE, VALUE);
 
-extern const char *    Str_to_CompositeOperator(VALUE);
 #ifndef StringValuePtr
 extern char *rm_string_value_ptr(volatile VALUE *);
 #endif

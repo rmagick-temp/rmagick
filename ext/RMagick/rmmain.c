@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.18 2003/09/18 19:53:01 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.19 2003/09/20 22:36:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -343,7 +343,7 @@ Draw_align_eq(VALUE self, VALUE align)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    NUM_TO_ENUM(align, draw->info->align, AlignType);
+    VALUE_TO_ENUM(align, draw->info->align, AlignType);
     return self;
 }
 
@@ -357,7 +357,7 @@ Draw_decorate_eq(VALUE self, VALUE decorate)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    NUM_TO_ENUM(decorate, draw->info->decorate, DecorationType);
+    VALUE_TO_ENUM(decorate, draw->info->decorate, DecorationType);
     return self;
 }
 
@@ -445,7 +445,7 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    NUM_TO_ENUM(stretch, draw->info->stretch, StretchType);
+    VALUE_TO_ENUM(stretch, draw->info->stretch, StretchType);
     return self;
 }
 
@@ -459,7 +459,7 @@ Draw_font_style_eq(VALUE self, VALUE style)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    NUM_TO_ENUM(style, draw->info->style, StyleType);
+    VALUE_TO_ENUM(style, draw->info->style, StyleType);
     return self;
 }
 
@@ -495,7 +495,7 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
     }
     else
     {
-        NUM_TO_ENUM(weight, w, WeightType);
+        VALUE_TO_ENUM(weight, w, WeightType);
         switch (w)
         {
             case AnyWeight:
@@ -545,7 +545,7 @@ Draw_gravity_eq(VALUE self, VALUE grav)
     Draw *draw;
 
     Data_Get_Struct(self, Draw, draw);
-    NUM_TO_ENUM(grav, draw->info->gravity, GravityType);
+    VALUE_TO_ENUM(grav, draw->info->gravity, GravityType);
 
     return self;
 }
@@ -1178,7 +1178,7 @@ Montage_compose_eq(VALUE self, VALUE compose)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    NUM_TO_ENUM(compose, montage->compose, CompositeOperator);
+    VALUE_TO_ENUM(compose, montage->compose, CompositeOperator);
     return self;
 }
 
@@ -1267,7 +1267,7 @@ Montage_gravity_eq(VALUE self, VALUE gravity)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    NUM_TO_ENUM(gravity, montage->info->gravity, GravityType);
+    VALUE_TO_ENUM(gravity, montage->info->gravity, GravityType);
     return self;
 }
 
@@ -1910,7 +1910,7 @@ Init_RMagick(void)
     ENUM_VAL(ColorspaceType, HWBColorspace);       // 5.5.7
 #endif
 
-    // ComplianceType constants
+    // ComplianceType constants are defined as enums but used as bit flags
     DEF_ENUM(ComplianceType);
     ENUM_VAL(ComplianceType, UndefinedCompliance);
     // AllCompliance is 0xffff, not too useful for us!

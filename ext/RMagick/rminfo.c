@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.8 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.9 2003/09/20 22:36:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -81,7 +81,7 @@ Info_colorspace_eq(VALUE self, VALUE colorspace)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    NUM_TO_ENUM(colorspace, info->colorspace, ColorspaceType);
+    VALUE_TO_ENUM(colorspace, info->colorspace, ColorspaceType);
     return self;
 }
 
@@ -98,7 +98,7 @@ Info_compression_eq(VALUE self, VALUE type)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    NUM_TO_ENUM(type, info->compression, CompressionType);
+    VALUE_TO_ENUM(type, info->compression, CompressionType);
     return self;
 }
 
@@ -418,7 +418,7 @@ Info_image_type_eq(VALUE self, VALUE type)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    NUM_TO_ENUM(type, info->type, ImageType);
+    VALUE_TO_ENUM(type, info->type, ImageType);
     return self;
 }
 
@@ -435,7 +435,7 @@ Info_interlace_eq(VALUE self, VALUE inter)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    NUM_TO_ENUM(inter, info->interlace, InterlaceType);
+    VALUE_TO_ENUM(inter, info->interlace, InterlaceType);
     return self;
 }
 
@@ -670,7 +670,7 @@ Info_units_eq(VALUE self, VALUE units)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    NUM_TO_ENUM(units, info->units, ResolutionType);
+    VALUE_TO_ENUM(units, info->units, ResolutionType);
     return self;
 }
 

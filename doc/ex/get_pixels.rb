@@ -8,7 +8,7 @@ require 'RMagick'
 # Read the colorful picture of a rock formation. Scale
 # it to 300 pixels high because we don't want a big picture.
 rocks = Magick::Image.read('images/Red_Rocks.jpg').first
-rocks.scale!(300.0/rocks.rows)
+rocks.scale!(250.0/rocks.rows)
 
 # Make a monochrome copy. See Image#quantize for details
 grayrocks = rocks.quantize(256, Magick::GRAYColorspace)

@@ -16,7 +16,7 @@ legend.fill = 'white'
 
 # Read the image and change it to a manageable size.
 roses = Magick::Image.read('images/roses.jpg').first
-roses.resize!(300.0/roses.rows)
+roses.resize!(200.0/roses.rows)
 
 channels = Magick::ImageList.new
 

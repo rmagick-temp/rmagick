@@ -104,6 +104,10 @@
                 <li><a href="#Image.chanel">channel</a></li>
 
                 <li><a href=
+                "#Image.channel_depth">channel_depth</a>
+                <span class="imversion">&nbsp;(5.5.8)</span></li>
+
+                <li><a href=
                 "#Image.channel_extrema">channel_extrema</a>
                 <span class="imversion">&nbsp;(5.5.8)</span></li>
 
@@ -135,9 +139,8 @@
                 <li><a href=
                 "#Image.color_reset_bang">color_reset!</a></li>
 
-                <li><a href=
-                "#Image.compare">compare</a><span class="imversion">
-                &nbsp;(5.5.8)</span></li>
+                <li><a href="#Image.compare">compare</a>
+                <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href="#Image.composite">composite</a></li>
 
@@ -173,13 +176,13 @@
                 <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href="#Image.edge">edge</a></li>
-
-                <li><a href="#Image.emboss">emboss</a></li>
               </ul>
             </td>
 
             <td valign="top">
               <ul>
+                <li><a href="#Image.emboss">emboss</a></li>
+
                 <li><a href="#Image.enhance">enhance</a></li>
 
                 <li><a href="#Image.equalize">equalize</a></li>
@@ -190,9 +193,6 @@
                 "#Image.export_pixels">export_pixels</a>
                 &nbsp;<span class="imversion">&nbsp;(5.5.7)</span>
                 <span class="gmversion">&nbsp;(1.1)</span></li>
-
-                <li><a href="#Image.extrema">extrema</a>
-                <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href="#Image.flip">flip</a></li>
 
@@ -1192,9 +1192,9 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <td class="methodname"><a name=
       "Image.annotate">annotate</a></td>
 
-      <td><em>img.</em>annotate(<i>draw, width, height, x, y,
+      <td><em>image.</em>annotate(<i>draw, width, height, x, y,
       text</i>) <i>[&nbsp;{ additional parameters }&nbsp;]</i>
-      -&gt; <i>img</i></td>
+      -&gt; <i>image</i></td>
     </tr>
 
     <tr>
@@ -1413,9 +1413,11 @@ animated = Magick::Image.read("animated.gif") &raquo;
       "Image.change_geometry">change_geometry</a></td>
 
       <td><i>image</i>.change_geometry(<i>aString</i>)
-      {|cols,rows,image| <i>block</i>} -&gt; <i>anObject</i><br>
+      {|cols,rows,image| <i>block</i>} -&gt; <i>??? (see
+      Returns)</i><br>
       <i>image</i>.change_geometry(<i>aGeometry</i>)
-      {|cols,rows,image| <i>block</i>} -&gt; <i>anObject</i></td>
+      {|cols,rows,image| <i>block</i>} -&gt; <i>??? (see
+      Returns)</i></td>
     </tr>
 
     <tr>
@@ -1562,25 +1564,78 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <tr class="method">
       <td class="methodname"><a name=
+      "Image.channel_depth">channel_depth</a> <span class=
+      "imversion">5.5.8</span></td>
+
+      <td><i>image</i>.channel_depth([<i>channel</i> [,
+      <i>channel</i>]...]) -&gt; <i>aNumeric</i></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>Returns the maximum depth for the specified channel or
+      channels.</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Arguments</td>
+
+      <td>
+        <dl>
+          <dt>[channel [, channel...]]</dt>
+
+          <dd>Zero or more <a href=
+          "constants.html#ChannelType">ChannelType</a> constants.
+          If no arguments are specified, the default is all
+          channels.</dd>
+        </dl>
+      </td>
+    </tr>
+
+    <tr>
+      <td valign="top">Returns</td>
+
+      <td>The maximum depth</td>
+    </tr>
+
+    <tr>
+      <td valign="top">&times;Magick API</td>
+
+      <td><a href=
+      "http://www.imagemagick.org/www/api/image.html#getimagechanneldepth">
+      GetImageChannelDepth</a></td>
+    </tr>
+
+    <tr class="method">
+      <td class="methodname"><a name=
       "Image.channel_extrema">channel_extrema</a> <span class=
       "imversion">5.5.8</span></td>
 
-      <td><i>image</i>.channel_extrema(<i>aChannelType</i>) -&gt;
-      <i>[min, max]</i></td>
+      <td><i>image</i>.channel_extrema([<i>channel</i> [,
+      <i>channel</i>]...]) -&gt; <i>[aNumeric, aNumeric]</i></td>
     </tr>
 
     <tr>
       <td valign="top">Description</td>
 
       <td>Returns the minimum and maximum intensity values for the
-      specified channel.</td>
+      specified channel or channels.</td>
     </tr>
 
     <tr>
       <td valign="top">Arguments</td>
 
-      <td>A <a href="constants.html#ChannelType">ChannelType</a>
-      value.</td>
+      <td>
+        <dl>
+          <dt>[channel [, channel...]]</dt>
+
+          <dd>Zero or more <a href=
+          "constants.html#ChannelType">ChannelType</a> constants.
+          If no arguments are specified, the default is all
+          channels.</dd>
+        </dl>
+      </td>
     </tr>
 
     <tr>
@@ -1594,12 +1649,6 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">&times;Magick API</td>
 
       <td>GetImageChannelExtrema</td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Image.extrema">extrema</a></td>
     </tr>
 
     <tr class="method">
@@ -3432,38 +3481,6 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     </tr>
 
     <tr class="method">
-      <td class="methodname"><a name="Image.extrema">extrema</a>
-      <span class="imversion">5.5.8</span></td>
-
-      <td><i>image</i>.extrema -&gt; <i>[min, max]</i></td>
-    </tr>
-
-    <tr>
-      <td valign="top">Description</td>
-
-      <td>Returns the minimum and maximum intensity values.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">Returns</td>
-
-      <td>An array. The first element in the array is the minimum
-      value. The second element is the maximum value.</td>
-    </tr>
-
-    <tr>
-      <td valign="top">&times;Magick API</td>
-
-      <td>GetImageChannelExtrema</td>
-    </tr>
-
-    <tr>
-      <td valign="top">See also</td>
-
-      <td><a href="#Image.channel_extrema">channel_extrema</a></td>
-    </tr>
-
-    <tr class="method">
       <td class="methodname"><a name="Image.flip">flip</a></td>
 
       <td><i>image</i>.flip -&gt; <i>anImage</i></td>
@@ -4048,7 +4065,7 @@ image.get_exif_by_number() &raquo;
 
       <td><i>image</i>.import_pixels(<i>x</i>, <i>y</i>,
       <i>columns</i>, <i>rows</i>, <i>map</i>, <i>pixels</i>) -&gt;
-      <i>self</i></td>
+      <i>image</i></td>
     </tr>
 
     <tr>
@@ -6739,7 +6756,7 @@ puts jj.signature
       <span class="imversion">&nbsp;(5.5.8)</span><span class=
       "gmversion">(1.1)</span></td>
 
-      <td><i>image</i>.strip! -&gt; <i>self</i></td>
+      <td><i>image</i>.strip! -&gt; <i>image</i></td>
     </tr>
 
     <tr>
@@ -7081,7 +7098,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
       <td><i>image</i>.thumbnail!(<i>new_width</i>,
       <i>new_height</i>) -&gt; <i>image</i><br>
       <i>image</i>.thumbnail!(<i>scale_factor</i>) -&gt;
-      <i>i</i></td>
+      <i>image</i></td>
     </tr>
 
     <tr>

@@ -18,7 +18,11 @@ rescue NotImplementedError
 end
 
 # sort pixels by increasing count
-pixels = hist.keys.sort_by {|pixel| hist[pixel] }
+begin
+    pixels = hist.keys.sort_by {|pixel| hist[pixel] }
+rescue NameError    # No sort_by?
+    pixels = hist.keys.sort { |p, q| hist[p] <=> hist[q] }
+end
 
 scale = HIST_HEIGHT / (hist.values.max*1.025)   # put 2.5% air at the top
 

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.1 2003/07/01 12:19:49 tim Exp $
+# $Id: RMagick.rb,v 1.2 2003/07/04 21:34:35 tim Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1013,7 +1013,10 @@ public
                 super
             end
         rescue NameError
-            raise NameError, "undefined method `#{methID.id2name}' for #{self.class}"
+          raise NameError, "undefined method `#{methID.id2name}' for #{self.class}"
+        rescue Exception
+            $@.delete_if { |s| /:in `send'$/.match(s) || /:in `method_missing'$/.match(s) }
+            raise
         end
     end
 

@@ -87,6 +87,7 @@ AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
 AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
+AC_CHECK_FUNCS([GetColorInfoList GetTypeInfoList GetMagickInfoList])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

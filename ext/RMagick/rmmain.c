@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.57 2004/06/11 23:09:26 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.58 2004/06/14 23:11:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -437,8 +437,7 @@ Magick_set_log_format(VALUE class, VALUE format)
     SetLogFormat(STRING_PTR(format));
     return class;
 #else
-    not_implemented("set_log_format");
-    return (VALUE) 0;
+    NOT_IMPLEMENTED
 #endif
 }
 
@@ -1414,7 +1413,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/06/11 23:09:26 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/06/14 23:11:08 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.53 2004/06/13 19:59:23 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.54 2004/06/14 23:11:08 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -128,6 +128,7 @@ typedef struct
 
 #define MAX_GEOM_STR 51                 // max length of a geometry string
 
+#define NOT_IMPLEMENTED not_implemented(); return (VALUE)0;
 
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
 /*
@@ -880,7 +881,7 @@ extern void *magick_realloc(void *, size_t);
 extern void magick_clone_string(char **, const char *);
 extern void write_temp_image(Image *, char *);
 extern void delete_temp_image(char *);
-extern void not_implemented(const char *);
+extern void not_implemented(void);
 extern void handle_error(ExceptionInfo *);
 extern void handle_all_errors(Image *);
 extern void attr_write(VALUE, VALUE);

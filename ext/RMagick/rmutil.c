@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.34 2004/06/13 19:59:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.35 2004/06/14 23:11:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2324,12 +2324,12 @@ delete_temp_image(char *tmpnam)
                 until 5.5.7. Use MAGICKNAME instead.
 */
 void
-not_implemented(const char *method)
+not_implemented(void)
 {
 
-    rb_raise(rb_eNotImpError, "the %s method is not supported by "
+    rb_raise(rb_eNotImpError, "the `%s' method is not supported by "
                               Q(MAGICKNAME) " " MagickLibVersionText
-                              , method);
+                              , rb_id2name(rb_frame_last_func()));
 }
 
 /*

@@ -1,5 +1,6 @@
 RMagick 1.7.1
     o Fix bugs #1250, #1253
+    o Tested with ImageMagick 6.1.7, Ruby 1.8.2
 
 RMagick 1.7.0
     o Added splice, set_channel_depth to Image class (ImageMagick 6.0.0)

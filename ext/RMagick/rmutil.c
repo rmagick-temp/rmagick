@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.27 2004/04/02 23:56:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.28 2004/04/03 21:11:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1318,6 +1318,8 @@ Pixel_from_PixelPacket(PixelPacket *pp)
 void
 Color_to_PixelPacket(PixelPacket *pp, VALUE color)
 {
+    Pixel *pixel;
+
     // Allow color name or Pixel
     if (TYPE(color) == T_STRING)
     {
@@ -1325,7 +1327,8 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
     }
     else if (CLASS_OF(color) == Class_Pixel)
     {
-        Data_Get_Struct(color, Pixel, pp);
+        Data_Get_Struct(color, Pixel, pixel);
+        *pp = *pixel;
     }
     else
     {

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.18 2004/04/02 23:45:37 rmagick Exp $
+# $Id: RMagick.rb,v 1.19 2004/04/03 15:31:23 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -727,7 +727,7 @@ class Image
             begin
                 yield(view)
             ensure
-                view.sync(self)
+                view.sync
             end
             return nil
         else
@@ -742,6 +742,7 @@ class Image
 
         def initialize(img, x, y, width, height)
             @view = img.get_pixels(x, y, width, height)
+            @img = img
             @x = x
             @y = y
             @width = width
@@ -756,8 +757,8 @@ class Image
         end
 
         # Store changed pixels back to image
-        def sync(img, force=false)
-            img.store_pixels(x, y, width, height, @view) if (@dirty || force)
+        def sync(force=false)
+            @img.store_pixels(x, y, width, height, @view) if (@dirty || force)
             return (@dirty || force)
         end
 
@@ -766,6 +767,7 @@ class Image
         def update(rows)
             @dirty ||= true
             rows.delete_observer(self)      # No need to tell us again.
+            nil
         end
 
         # Magick::Image::View::Pixels
@@ -822,7 +824,11 @@ class Image
             def []=(*args)
                 rv = args.delete_at(-1)     # get rvalue
                 if ! rv.is_a?(Pixel)        # must be a Pixel or a color name
-                    rv = Pixel.from_color(rv)
+                    begin
+                        rv = Pixel.from_color(rv)
+                    rescue TypeError
+                        raise TypeError, "cannot convert #{rv.class} into Pixel"
+                    end
                 end
                 cols(args)
                 each { |x| @view[x] = rv.dup }
@@ -836,6 +842,7 @@ class Image
                 changed
                 notify_observers(self)
                 pixel.delete_observer(self) # Don't need to hear again.
+                nil
             end
 
         private
@@ -950,6 +957,7 @@ class Image
                         yield j*@width + i
                     end
                 end
+                nil    # useless return value
             end
 
         end # class Magick::Image::View::Rows

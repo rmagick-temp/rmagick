@@ -57,6 +57,9 @@
                   <li><a href=
                   "#Image.affine_transform">affine_transform</a></li>
                   <li><a href=
+                  "#Image.black_threshold">black_threshold</a>
+                  <span class="imversion">&nbsp;(5.5.7)</span></li>
+                  <li><a href=
                   "#Image.blur_image">blur_image</a></li>
                   <li><a href="#Image.border">border</a></li>
                   <li><a href="#Image.changed_q">changed?</a></li>
@@ -163,12 +166,12 @@
                   "#Image.pixel_color">pixel_color</a></li>
                   <li><a href=
                   "#Image.profile_bang">profile!</a></li>
+                  <li><a href=
+                  "#Image.properties">properties</a></li>
                 </ul>
               </td>
               <td valign="top">
                 <ul>
-                  <li><a href=
-                  "#Image.properties">properties</a></li>
                   <li><a href="#Image.quantize">quantize</a></li>
                   <li><a href="#Image.raise">raise</a></li>
                   <li><a href=
@@ -218,6 +221,9 @@
                   <li><a href=
                   "#Image.unsharp_mask">unsharp_mask</a></li>
                   <li><a href="#Image.wave">wave</a></li>
+                  <li><a href=
+                  "#Image.white_threshold">white_threshold</a>
+                  <span class="imversion">&nbsp;(5.5.7)</span></li>
                   <li><a href="#Image.write">write</a></li>
                 </ul>
               </td>
@@ -861,6 +867,47 @@ animated = Magick::Image.read("animated.gif") &raquo;
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
+        "Image.black_threshold">black_threshold</a> <span class=
+        "imversion">(5.5.7)</span></td>
+        <td><i>image</i>.black_threshold(<i>red_channel</i> [,
+        <i>green_channel</i>[, <i>blue_channel</i>[,
+        <i>opacity_channel</i>]]]) -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td><span class="imquote">Forces all pixels below the
+        threshold into black while leaving all pixels above the
+        threshold unchanged.</span></td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>Each channel argument is a number between 0 and MaxRGB.
+        All arguments except the first may be omitted. If the
+        <var>green_channel</var> or <var>blue_channel</var>
+        argument is omitted, the default value is the
+        <var>red_channel</var> value. If the
+        <var>opacity_channel</var> argument is omitted, the default
+        value is <a href=
+        "constants.html#Opacity">OpaqueOpacity</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new image.</td>
+      </tr>
+      <tr>
+        <td>See Also</td>
+        <td><a href="#Image.white_threshold">white_threshold</a>,
+        <a href=
+        "#Image.channel_threshold">channel_threshold</a></td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/effect.html#blackthresholdimage">
+        BlackThresholdImage</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
         "Image.border">border</a></td>
         <td><i>image</i>.border(<i>width</i>, <i>height</i>,
         <i>color</i>) -&gt; <i>anImage</i></td>
@@ -973,8 +1020,8 @@ animated = Magick::Image.read("animated.gif") &raquo;
         <td class="methodname"><a name=
         "Image.channel_threshold">channel_threshold</a></td>
         <td><i>image</i>.channel_threshold(<i>red_channel</i>,
-        <i>green_channel</i>=MaxRGB, <i>blue_channel</i>=MaxRGB,
-        <i>opacity_channel</i>=MaxRGB) -&gt; <i>anImage</i></td>
+        [<i>green_channel</i>[, <i>blue_channel</i>[,
+        <i>opacity_channel</i>]]]) -&gt; <i>anImage</i></td>
       </tr>
       <tr>
         <td valign="top">Description</td>
@@ -984,8 +1031,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <tr>
         <td valign="top">Arguments</td>
         <td>Each channel argument is a number between 0 and MaxRGB.
-        All arguments except the first may be omitted. The default
-        value for each omitted argument is MaxRGB.</td>
+        All arguments except the first may be omitted. If the
+        <var>green_channel</var> or <var>blue_channel</var>
+        argument is omitted, the default value is the
+        <var>red_channel</var> value. If the
+        <var>opacity_channel</var> argument is omitted, the default
+        value is <a href=
+        "constants.html#Opacity">OpaqueOpacity</a>.</td>
       </tr>
       <tr>
         <td valign="top">Returns</td>
@@ -1007,9 +1059,10 @@ animated = Magick::Image.read("animated.gif") &raquo;
         <td valign="top">See also</td>
         <td><a href=
         "#Image.adaptive_threshold">adaptive_threshold</a>, <a
-        href=
+        href="#Image.black_threshold">black_threshold</a>, <a href=
         "#Image.random_channel_threshold">random_channel_threshold</a>,
-        <a href="#Image.threshold">threshold</a></td>
+        <a href="#Image.threshold">threshold</a>, <a href=
+        "#Image.white_threshold">white_threshold</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -5125,6 +5178,47 @@ f.to_color(p) &raquo; "#3F3D31"
         <td valign="top">&times;Magick API</td>
         <td><a href=
         "http://www.imagemagick.org/www/api/fx.html#waveimage">WaveImage</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.white_threshold">white_threshold</a> <span class=
+        "imversion">(5.5.7)</span></td>
+        <td><i>image</i>.white_threshold(<i>red_channel</i> [,
+        <i>green_channel</i>[, <i>blue_channel</i>[,
+        <i>opacity_channel</i>]]]) -&gt; <i>anImage</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td><span class="imquote">Forces all pixels above the
+        threshold into white while leaving all pixels below the
+        threshold unchanged.</span></td>
+      </tr>
+      <tr>
+        <td valign="top">Arguments</td>
+        <td>Each channel argument is a number between 0 and MaxRGB.
+        All arguments except the first may be omitted. If the
+        <var>green_channel</var> or <var>blue_channel</var>
+        argument is omitted, the default value is the
+        <var>red_channel</var> value. If the
+        <var>opacity_channel</var> argument is omitted, the default
+        value is <a href=
+        "constants.html#Opacity">OpaqueOpacity</a>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A new image.</td>
+      </tr>
+      <tr>
+        <td>See Also</td>
+        <td><a href="#Image.black_threshold">black_threshold</a>,
+        <a href=
+        "#Image.channel_threshold">channel_threshold</a></td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td><a href=
+        "http://www.imagemagick.org/www/api/effect.html#blackthresholdimage">
+        BlackThresholdImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name="Image.write">write</a></td>

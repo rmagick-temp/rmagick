@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.79 2004/12/05 21:26:43 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.80 2004/12/05 22:27:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1443,10 +1443,6 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     if (prof_l > 0)
     {
         image->color_profile.info = magick_malloc((size_t)prof_l);
-        if(!image->color_profile.info)
-        {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
-        }
         memcpy(image->color_profile.info, prof, (size_t)prof_l);
         image->color_profile.length = prof_l;
     }
@@ -4064,10 +4060,6 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     if (prof_l > 0)
     {
         image->iptc_profile.info = magick_malloc((size_t)prof_l);
-        if(!image->iptc_profile.info)
-        {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
-        }
         memcpy(image->iptc_profile.info, prof, (size_t)prof_l);
         image->iptc_profile.length = (size_t) prof_l;
     }

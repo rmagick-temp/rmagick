@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.13 2003/08/26 13:14:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.14 2003/09/03 00:37:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1572,6 +1572,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
     rb_define_method(Class_Image, "color_flood_fill", Image_color_flood_fill, 5);
+    rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
     rb_define_method(Class_Image, "colormap", Image_colormap, -1);
     rb_define_method(Class_Image, "composite", Image_composite, -1);

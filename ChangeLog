@@ -6,6 +6,7 @@ RMagick 1.4.0
     o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
       CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
     o Added get_exif_by_entry, get_exif_by_tag to Image class
+    o Added fcmp, intensity to Pixel class
     o Added TintImage (IM 5.5.8)
 
 RMagick 1.3.0

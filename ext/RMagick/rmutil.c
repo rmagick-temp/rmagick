@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.13 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.14 2003/09/18 19:53:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -348,6 +348,88 @@ Pixel_from_HSL(VALUE self, VALUE hsl)
     HSLTransform(hue, saturation, luminosity,
                  &rgb.red, &rgb.green, &rgb.blue);
     return PixelPacket_to_Struct(&rgb);
+}
+
+/*
+    Method:  Pixel#fcmp(other[, fuzz[, colorspace]])
+    Purpose: Compare pixel values for equality
+    Notes:   The colorspace value is ignored < 5.5.5
+             and > 5.5.7.
+*/
+VALUE
+Pixel_fcmp(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_FUZZYCOLORCOMPARE)
+    Image *image;
+    Info *info;
+#endif
+
+    PixelPacket this, that;
+    ColorspaceType colorspace = RGBColorspace;
+    double fuzz = 0.0;
+    unsigned int equal;
+
+    switch (argc)
+    {
+        case 3:
+            NUM_TO_ENUM(argv[2], colorspace, ColorspaceType);
+        case 2:
+            fuzz = NUM2DBL(argv[1]);
+        case 1:
+            // Allow 1 argument
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
+            break;
+    }
+
+    Struct_to_PixelPacket(&this, self);
+    Struct_to_PixelPacket(&that, argv[0]);
+
+#if defined(HAVE_FUZZYCOLORCOMPARE)
+    // The FuzzyColorCompare function expects to get the
+    // colorspace and fuzz parameters from an Image structure.
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    image = AllocateImage(info);
+    if (!image)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    DestroyImageInfo(info);
+
+    image->colorspace = colorspace;
+    image->fuzz = fuzz;
+
+    equal = FuzzyColorCompare(image, &this, &that);
+    DestroyImage(image);
+
+#else
+    equal = FuzzyColorMatch(&this, &that, fuzz);
+#endif
+
+    return equal ? Qtrue : Qfalse;
+}
+
+/*
+    Method:  Pixel#intensity
+    Purpose: Return the "intensity" of a pixel
+*/
+VALUE
+Pixel_intensity(VALUE self)
+{
+    PixelPacket pixel;
+    unsigned long intensity;
+
+    Struct_to_PixelPacket(&pixel, self);
+    intensity = (unsigned long)
+                (0.299*pixel.red) + (0.587*pixel.green) + (0.114*pixel.blue);
+    return ULONG2NUM(intensity);
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.17 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.18 2003/09/18 19:53:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -2124,6 +2124,8 @@ Init_RMagick(void)
     Class_Pixel = rb_struct_define(NULL, "red", "green", "blue", "opacity", 0);
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
+    rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
+    rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
     rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
     rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);

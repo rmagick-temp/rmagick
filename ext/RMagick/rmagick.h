@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.16 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.17 2003/09/18 19:53:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -599,41 +599,43 @@ extern VALUE TextureFill_initialize(VALUE, VALUE);
 extern VALUE TextureFill_fill(VALUE, VALUE);
 
 // rmutil.c
-extern VALUE   ImageList_cur_image(VALUE);
-extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
-extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE   AffineMatrix_to_Struct(AffineMatrix *);
-extern void    Struct_to_AffineMatrix(AffineMatrix *, VALUE);
-extern VALUE   ColorInfo_to_Struct(const ColorInfo *);
-extern void    Struct_to_ColorInfo(ColorInfo *, VALUE);
-extern VALUE   Color_to_s(VALUE);
-extern VALUE   PixelPacket_to_Struct(PixelPacket *);
-extern void    Struct_to_PixelPacket(PixelPacket *, VALUE);
+extern VALUE   ChromaticityInfo_to_s(VALUE);
+extern VALUE   ChromaticityInfo_to_Struct(ChromaticityInfo *);
 extern void    Color_to_PixelPacket(PixelPacket *, VALUE);
+extern VALUE   Color_to_s(VALUE);
+extern VALUE   ColorInfo_to_Struct(const ColorInfo *);
+extern VALUE   Font_to_s(VALUE);
+extern VALUE   ImageList_cur_image(VALUE);
+extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
+extern VALUE   Pixel_fcmp(int, VALUE *, VALUE);
 extern VALUE   Pixel_from_color(VALUE, VALUE);
+extern VALUE   Pixel_from_HSL(VALUE, VALUE);
+extern VALUE   Pixel_intensity(VALUE);
 extern VALUE   Pixel_to_color(int, VALUE *, VALUE);
 extern VALUE   Pixel_to_HSL(VALUE);
-extern VALUE   Pixel_from_HSL(VALUE, VALUE);
 extern VALUE   Pixel_to_s(VALUE);
-extern VALUE   PrimaryInfo_to_Struct(PrimaryInfo *);
-extern void    Struct_to_PrimaryInfo(PrimaryInfo *, VALUE);
+extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
+extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
+extern VALUE   PixelPacket_to_Struct(PixelPacket *);
 extern VALUE   PrimaryInfo_to_s(VALUE);
-extern VALUE   ChromaticityInfo_to_Struct(ChromaticityInfo *);
-extern void    Struct_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
-extern VALUE   ChromaticityInfo_to_s(VALUE);
-extern void    Struct_to_RectangleInfo(RectangleInfo *, VALUE);
-extern VALUE   RectangleInfo_to_Struct(RectangleInfo *);
+extern VALUE   PrimaryInfo_to_Struct(PrimaryInfo *);
 extern VALUE   RectangleInfo_to_s(VALUE);
-extern void    Struct_to_SegmentInfo(SegmentInfo *, VALUE);
-extern VALUE   SegmentInfo_to_Struct(SegmentInfo *);
+extern VALUE   RectangleInfo_to_Struct(RectangleInfo *);
 extern VALUE   SegmentInfo_to_s(VALUE);
-extern VALUE   TypeInfo_to_Struct(TypeInfo *);
+extern VALUE   SegmentInfo_to_Struct(SegmentInfo *);
+extern void    Struct_to_AffineMatrix(AffineMatrix *, VALUE);
+extern void    Struct_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
+extern void    Struct_to_ColorInfo(ColorInfo *, VALUE);
+extern void    Struct_to_PixelPacket(PixelPacket *, VALUE);
+extern void    Struct_to_PrimaryInfo(PrimaryInfo *, VALUE);
+extern void    Struct_to_RectangleInfo(RectangleInfo *, VALUE);
+extern void    Struct_to_SegmentInfo(SegmentInfo *, VALUE);
 extern void    Struct_to_TypeInfo(TypeInfo *, VALUE);
-extern VALUE   Font_to_s(VALUE);
 extern void    Struct_to_TypeMetric(TypeMetric *, VALUE);
-extern VALUE   TypeMetric_to_Struct(TypeMetric *);
+extern VALUE   TypeInfo_to_Struct(TypeInfo *);
 extern VALUE   TypeMetric_to_s(VALUE);
-extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
+extern VALUE   TypeMetric_to_Struct(TypeMetric *);
 
 extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
 RUBY18(extern VALUE Enum_alloc(VALUE);)

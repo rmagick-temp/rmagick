@@ -3,7 +3,14 @@
 require 'RMagick'
 
 img = Magick::Image.read("images/Blonde_with_dog.jpg").first
-preview = img.preview(Magick::SolarizePreview)
+
+begin
+    preview = img.preview(Magick::SolarizePreview)
+rescue NotImplementedError
+    img = Image.read('images/notimplemented.gif').first
+    img.write('preview.jpg')
+    exit
+end
 preview.minify.write('preview.jpg')
 exit
 

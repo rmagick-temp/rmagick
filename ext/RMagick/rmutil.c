@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.11 2003/09/13 23:51:28 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.12 2003/09/15 13:27:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -265,13 +265,22 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
         case 3:
             depth = NUM2UINT(argv[2]);
 
-            // This test ensures that depth is either 8 or, if QuantumDepth is
-            // 16, 16.
-            if (depth != 8 && depth != QuantumDepth)
+            // Ensure depth is appropriate for the way xMagick was compiled.
+            switch (depth)
             {
-                rb_raise(rb_eArgError, "invalid depth (%d)", depth);
+                case 8:
+#if QuantumDepth == 16 || QuantumDepth == 32
+                case 16:
+#endif
+#if QuantumDepth == 32
+                case 32:
+#endif
+                    break;
+                default:
+                    rb_raise(rb_eArgError, "invalid depth (%d)", depth);
+                    break;
             }
-        case 2:
+       case 2:
             matte = RTEST(argv[1]);
         case 1:
             compliance = Num_to_ComplianceType(argv[0]);

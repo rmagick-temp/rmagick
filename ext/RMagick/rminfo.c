@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.6 2003/09/12 01:08:23 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.7 2003/09/15 13:27:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -138,7 +138,7 @@ DEF_ATTR_READER(Info, depth, int)
 
 /*
     Method:     Info#depth=
-    Purpose:    Set the depth (8 or 16).
+    Purpose:    Set the depth (8, 16, 32).
     Raises:     ArgumentError
 */
 VALUE
@@ -152,8 +152,11 @@ Info_depth_eq(VALUE self, VALUE depth)
     switch (d)
     {
         case 8:                     // always okay
-#if QuantumDepth == 16
+#if QuantumDepth == 16 || QuantumDepth == 32
         case 16:
+#endif
+#if QuantumDepth == 32
+        case 32:
 #endif
             break;
         default:

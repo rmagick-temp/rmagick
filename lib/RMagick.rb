@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.5 2003/07/22 23:52:36 tim Exp $
+# $Id: RMagick.rb,v 1.6 2003/07/28 00:38:28 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2003 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -486,6 +486,13 @@ end # class Magick::Draw
 # Ruby-level Magick::Image methods
 class Image
     include Comparable
+    
+    # Provide an alternate version of Draw#annotate, for folks who 
+    # want to find it in this class.
+    def annotate(draw, width, height, x, y, text, &block)
+      draw.annotate(self, width, height, x, y, text, &block)
+      self
+    end    
 
     # Set the color at x,y
     def color_point(x, y, fill)

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- $Id: rvgtut.html,v 1.1 2005/03/12 16:52:45 rmagick Exp $ -->
+<head>
+  <title>RMagick: RVG Tutorial</title>
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<style type="text/css">
+  /*<![CDATA[*/
+  img {
+      padding-bottom:1em;
+    padding-top:1em;
+  }
+    /*]]>*/
+</style>
+</head>
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="constants.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgref.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>Drawing with RVG</h1>
+  <div id="toc">
+    <h2>A tutorial</h2>
+ </div>
+<div style="position:relative;">
+<img src="ex/images/duck.gif" alt="duck|type" width="180" height="180" border="0" />
+<div style="position:absolute; left: 200px;top:1em">
+<h3>Introduction</h3>
+<p>RVG is the newest addition to RMagick. RVG (Ruby Vector Graphics) is a facade for RMagick's <a href="draw.html">Draw</a>
+class that supplies a drawing API based on the <a href="http://www.w3.org/Graphics/SVG/">Scalable Vector Graphics</a>
+W3C recommendation.</p>
+<p>RVG is a <em>scalable</em> <em>vector</em> drawing library.
+ <em>Scalable</em> means that drawings are not fixed to a single size in pixels. The same drawing can be rendered
+ for a screen display or for printing. <em>Vector</em> images are drawn using geometric objects like lines and circles.
+ Unlike raster images, vector images don't get "pixelated" when you make them bigger.
+ </p>
+ As an introduction to the RVG library, let's see how to draw this little duck on the left. Here is the complete program.
+ </div>
+</div>
+<pre class="example">
+ 1   require 'RMagick'
+ 2   include Magick
+ 3
+ 4   RVG::dpi = 72
+ 5
+ 6   rvg = RVG.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
+ 7       canvas.background_fill = 'white'
+ 8
+ 9       canvas.g.translate(100, 150).rotate(-30).styles(:fill=>'yellow',
+10                                     :stroke=>'black', :stroke_width=>2) do |body|
+11          body.ellipse(50, 30)
+12          body.rect(45, 20, -20, -10).skewX(-35)
+13      end
+14
+15      canvas.g.translate(130, 83).styles(:stroke=>'black', :stroke_width=>2) do |head|
+16          head.circle(30).styles(:fill=>'yellow')
+17          head.circle(5, 10, -5).styles(:fill=>'black')
+18          head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=>'orange')
+19       end
+20
+21       foot = RVG::Group.new do |_foot|
+22           _foot.path('M0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
+23                 styles(:stroke_width=>2, :fill=>'orange', :stroke=>'black')
+24       end
+25       canvas.use(foot).translate(75, 188).rotate(15)
+26       canvas.use(foot).translate(100, 185).rotate(-15)
+27
+28       canvas.text(125, 30) do |title|
+29           title.tspan("duck|").styles(:text_anchor=>'end', :font_size=>20,
+30                                     :font_family=>'Helvetica', :fill=>'black')
+31           title.tspan("type").styles(:font_size=>22,
+32                     :font_family=>'Times', :font_style=>'italic', :fill=>'red')
+33       end
+34       canvas.rect(249,249).styles(:stroke=>'blue', :fill=>'none')
+35   end
+36
+37   rvg.draw.write('duck.gif')
+</pre>
+<h2>Summary</h2>
+<p>
+All drawings follow the same 3 steps:
+</p>
+<ol>
+<li>
+Create an RVG object. Specify the width and height of the final image.
+The <code>RVG.new</code> method yields to a block.
+</li>
+<li>Within the block, call methods on the RVG object to specify a background, add shapes, text, or raster images,
+or add groups of shapes, text, or raster images.</li>
+<li>Call the <code>draw</code> method to draw the shapes, text, or raster images onto the background.</li>
+</ol>
+<p>I'll step through the example line-by-line.</p>
+<h2>Lines 1-3</h2>
+<pre class="example">
+ 1   require 'RMagick'
+ 2   include Magick
+</pre>
+<p>These are just the usual Ruby code to load the RMagick extension. To save some typing, I've included the Magick module into Object's namespace.</p>
+<h2>Lines 4-6</h2>
+<pre class="example">
+ 4   RVG::dpi = 72
+ 5
+ 6   rvg = RVG.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
+</pre>
+<p>
+<code>RVG::dpi</code> enables the use of <em>unit methods</em> in RVG. When you set <code>RVG::dpi</code> to a non-nil value, RVG adds a number of conversion methods to the Fixnum
+and Float classes . These methods allow you to specify measurements in units such as inches, millimeters, and centimeters. <em>DPI</em> stands for "dots per inch," the image resolution. Here I set <code>RVG::dpi</code> to 72, a common value for displays.
+</p>
+<p>The <code>RVG.new</code> method accepts 2 parameters. These parameters specify the width and height of the final image in pixels. Since
+I've defined <code>RVG::dpi</code>, I can specify these values in inches using the <code>in</code> conversion method. At 72dpi, the final image will be 2.5*72=180 pixels on a side.</p>
+<p>By default, RVG uses pixels as its unit of measurement, but since I'm drawing a scalable picture I don't want to confine myself to pixels. The <code>viewbox</code> method defines a coordinate system with a logical unit. <code>Viewbox</code> takes 4 parameters, <code>min_x</code>, <code>min_y</code>, <code>width</code>, and <code>height</code>. On line 6 I define my coordinate system to have its origin at (0,0) and a width and height of 250 units. By using my own coordinate system, I can later change the size of the image to 5 inches square or 1 inch square just by changing the arguments to <code>new</code>.</p>
+<div style="position:relative">
+<img src="ex/images/duck0.gif" alt="default coordinate system" width="180" height="180" border="0" />
+<div style="position:absolute; left:200px;top:0;">
+<p><strong>The default coordinate system</strong></p>
+ <p>By default, the RVG coordinate system has its origin in the upper-left corner. The x-axis proceeds to the right. The y-axis proceeds downwards.
+The image on the left shows the axes of this coordinate system. I've added a light-blue "graph-paper" background to the example images to help associate the coordinate arguments to the actual locations in the image. Just remember that the axes and graph-paper background are not actually part of the image I'm producing.
+ </p>
+ </div>
+</div>
+<p>The RVG class is one of the two <em>container</em> classes defined by RVG. Container objects can contain graphic objects such as circles and lines, text, raster images, and other container objects. The outermost container is always an RVG object. I will add all the graphic objects that form the duck to this container.</p>
+<p>Container constructors normally yield to a block. However, here I've chained <code>viewbox</code> to <code>new</code>, so <code>viewbox</code> takes responsibility for yielding and passes the new instance of RVG to the <code>canvas</code> argument.</p>
+<h2>Line 7</h2>
+<pre class="example">
+ 7       canvas.background_fill = 'white'
+</pre>
+ <p>By default, RVG graphics are drawn on a transparent background. This is convenient when you want to display your image over another image. You can override the default background color by assigning a color to the <code>background_fill=</code> attribute. Here I set the background color to "white."</p>
+ <h2>Lines 9-13</h2>
+ <pre class="example">
+ 9       canvas.g.translate(100, 150).rotate(-30).styles(:fill=>'yellow',
+10                                     :stroke=>'black', :stroke_width=>2) do |body|
+11           body.ellipse(50, 30)
+12           body.rect(45, 20, -20, -10).skewX(-35)
+13       end
+</pre>
+ <p>There's a lot going on in these few lines - seven method calls - so let's take it one method at a time.</p>
+ <h3>Groups</h3>
+ <p><code>Group</code> is the second container class in RVG. The purpose of a group is to associate a set of coordinate system transformations and a set of styles with the graphic objects within the group. To create a Group object within another container, call the <code>g</code> method on the container. The <code>g</code> method yields if a block is present. In this example, there is no block associated with <code>g</code>, so <code>g</code> returns the new group. The <code>g</code> method adds the group to the content of the container, so when the container is drawn the graphic objects in the group will be drawn as well. The three methods chained to <code>g</code> - <code>translate</code>, <code>rotate</code>, and <code>styles</code> - modify the group by adding <em>coordinate system transforms</em> and by modifying the default <em>styles</em>.
+ <p>(Okay, there <em>is</em> a block, but there are 3 method calls between <code>g</code> and the block. I'll explain more later.)</p>
+ <h3>Transforms</h3>
+ <p>I'm going to use this group to contain the ellipse that forms the duck's body and the rectangle that forms the wing. I could just specify x- and y-coordinates to position these shapes relative to the origin, but it's easier to move the origin to where I want to draw the shapes. This is the purpose of the <code>translate</code> method. This method moves the origin to the (x,y) position specified by its arguments. I call <code>translate</code> on the group object, and since the content of the group gets the coordinate system transformations specified for the group, the ellipse and the rectangle  will be drawn on a coordinate system with the origin at (100, 150) relative to the old coordinate system.</p>
+ <p>Also, I want the duck's body to slant upward, so I use the <code>rotate</code> method to rotate the axes. The argument to <code>rotate</code> is the number of degrees of rotation. A negative number indicates counter-clockwise rotation.</p>
+  <p>After translating and rotating the coordinate system, the axes look like this:</p>
+ <div style="position:relative">
+<img src="ex/images/duck1.gif" width="180" height="180" border="0" />
+<div style="position:absolute; left:200px;top:0">
+<p><strong>The other transform methods</strong></p>
+ <p>There are six transform methods. In addition to <code>translate</code> and <code>rotate</code>, there's <code>scale</code>, <code>skewX</code>, <code>skewY</code>, and <code>affine</code>. When groups are nested, any transforms defined on the inner group(s) are added to the outer transforms.
+ </p>
+ </div>
+ </div>
+<h3>Styles</h3>
+ <p>Recall that the <code>styles</code> method modifies the default group styles. The <code>styles</code> method takes a hash as an argument. The hash keys are style names, and the hash values are, well, style values. In this example there are three style names. The :fill style sets the fill color to 'yellow'.  The :stroke style sets the outline color to 'black'. The :stroke_width style sets the width of the outline to 2. The <code>styles</code> method is a real workhorse. It's defined in almost every class in RVG and there are many other style names in addition to these three..</p>
+ <h3>Basic shapes</h3>
+ <p>The group contains two basic shapes, an ellipse and a rectangle. I add the ellipse to the group with the <code>ellipse</code> method. <code>Ellipse</code> has four parameters. The first two, the radius on the x-axis and the radius on the y-axis, are required. The last two are the (x,y) coordinate of the center. When these are omitted, as here, they default to (0,0).  I add the rectange with the <code>rect</code> method, which also has four parameters. The first two are the width and height of the rectangle. The last two are the (x,y) coordinate of the upper-left corner. Both of these methods return <code>self</code>, so you can chain other methods to them.</p>
+ <p>Here's what the group looks like when rendered. The ellipse is centered on the origin. The upper-left corner of the rectangle is slightly up and to the left of the origin.</p>
+ <img src="ex/images/duck3.gif" alt="default coordinate system" width="180" height="180" border="0" />
+ <h3>SkewX</h3>
+ <p>Everybody knows that a wing doesn't look like a rectangle! A wing looks like a slanted parallelogram. (Well, it does in this example!) Fortunately, I can use the transform methods on shapes as well as containers. The <code>skewX</code> method makes it easy for us to give the rectangle a slant. The <code>skewX</code> method is another transform. It takes a single argument, the number of degrees to skew the x-axis. Since all the shape constructors, including <code>rect</code>, return <code>self</code>, I can chain <code>skewX</code> directly to <code>rect</code> and limit the effect of the transform to just the rectangle. The result looks like this. (I've drawn in the axes for the wing coordinate system.)</p>
+ <img src="ex/images/duck4.gif" width="180" height="180" border="0" />
+ <p>That's it for the body. Let's tie up one loose end before I move on. I said earlier that container constructors (such as <code>g</code>) yield to a block if present. In this case, though, there are three intervening method calls - <code>translate</code>, <code>rotate</code>, and <code>styles</code> - between <code>g</code> and the block. The <code>style</code> method and the transform methods will all yield when there is an associated block, so I can easily chain them to a container constructor and still use a block argument to define the graphic objects in the group. Method chaining is a common RVG idiom. You'll see it a lot in the examples.</p>
+ <p>The next group draws the head.</p>
+ <h2>Lines 15-19</h2>
+ <pre class="example">
+15       canvas.g.translate(130, 83).styles(:stroke=>'black', :stroke_width=>2) do |head|
+16           head.circle(30).styles(:fill=>'yellow')
+17           head.circle(5, 10, -5).styles(:fill=>'black')
+18           head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=>'orange')
+19       end
+</pre>
+<p>This section is very similar to the previous one. I'm defining a group to contain the graphic objects that draw the duck's head, eye, and beak. First I use the translate method to move the origin to (130,83):</p>
+<img src="ex/images/duck6.gif" width="180" height="180" border="0" />
+<p>Notice that I can use <code>styles</code> on shapes as well as containers. In this group each shape has its own fill color. (The styles defined on the group propogate to the contained shapes, unless you override them.) The yellow circle forms the head. The <code>circle</code> method takes 3 parameters. The first parameter is the radius of the circle. The other two parameters are the (x,y) coordinate of the center. If omitted, as here, they default to (0,0). I use a small black circle for the eye.</p>
+<p> Last, I use the <code>polygon</code> method to draw the beak. This method draws a polygon from a series of (x,y) coordinates. If the last coordinate is not the same as the first, <code>polygon</code> implicitly adds it to close the polygon. Again, I use <code>styles</code> to set the fill color to orange.</p>
+<img src="ex/images/duck8.gif" width="180" height="180" border="0" />
+<h2>Lines 21-24</h2>
+<pre class="example">
+21       foot = RVG::Group.new do |_foot|
+22           _foot.path('M0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
+23                 styles(:stroke_width=>2, :fill=>'orange', :stroke=>'black')
+24       end
+</pre>
+<p>Here I create a group by directly calling <code>new</code> instead of calling the <code>g</code> method on a container. The graphic objects within the group are not (yet) contained within the canvas and so will not be drawn when the canvas is drawn. You might think of the foot as not being attached to anything, like this:</p>
+<img src="ex/images/duck9.gif" width="180" height="180" border="0" />
+<h2>Lines 25-26</h2>
+<pre class="example">
+25       canvas.use(foot).translate(75, 188).rotate(15)
+26       canvas.use(foot).translate(100, 185).rotate(-15)
+</pre>
+<p>To add the group to the canvas I use the <code>use</code> method. The use method can accept any container or graphic object as an argument. Optionally you can specify an (x,y) coordinate that specifies where to position the objects. In this example, however, I let those arguments default to (0,0) and use <code>translate</code> to position the feet. Here's how the left foot attaches to the duck:</p>
+<img src="ex/images/duck10.gif" width="180" height="180" border="0" />
+<p>Of course, the duck is walking, so I have to give the foot a little slant with <code>rotate</code>:</p>
+<img src="ex/images/duck11.gif" width="180" height="180" border="0" />
+<p>Attaching the right foot is easy. Call <code>use</code> again but give different arguments to <code>translate</code> and <code>rotate</code>:</p>
+<img src="ex/images/duck12.gif" width="180" height="180" border="0" />
+<h2>Lines 28-33</h2>
+<pre class="example">
+28       canvas.text(125, 30) do |title|
+29           title.tspan("duck|").styles(:text_anchor=>'end', :font_size=>20,
+30                                   :font_family=>'Helvetica', :fill=>'black')
+31           title.tspan("type").styles(:font_size=>22,
+32                   :font_family=>'Times', :font_style=>'italic', :fill=>'red')
+33       end
+</pre>
+<p>All I need now is a title for the picture. Text in RVG is a job for the <code>text</code> method. Like the shape methods, <code>text</code> can be used with any container object. <code>Text</code> itself is a container, except that it can only contain text-related objects. The <code>text</code> method takes 2 or 3 arguments, an (x,y) pair and optionally a string. The (x,y) pair define a <em>current text position</em> at which rendering starts. If there is a string argument, it will be rendered starting at the current text position. Rendering text changes the current text position to the end of the text.</p>
+<p>In the example, text is used as a container. Text objects can contain Tspan objects. Each tspan can specify its own styles. By default each tspan is rendered starting at the current text position.</p>
+<p>As usual, I can change the appearance of the text with <code>styles</code>. Here I choose a font, a font style (the default is "normal"), its size in points, and the color.</p>
+<img src="ex/images/duck14.gif" width="180" height="180" border="0" />
+<h2>Line 34</h2>
+<pre class="example">
+34       canvas.rect(249,249).styles(:stroke=>'blue', :fill=>'none')
+</pre>
+<p>I'm almost done. All I need to do it add a blue border. (I'm going to remove the graph paper background because we don't need it any more.)</p>
+<img src="ex/images/duck15.gif" width="180" height="180" border="0" />
+<h2>Line 37</h2>
+<pre class="example">
+37   rvg.draw.write('duck.gif')
+</pre>
+<p>The <code>draw</code> method call doesn't occupy a lot of space - just 4 letters - but does a lot of work. The <code>draw</code> method goes through all the graphics objects that I've added to the outermost RVG container and draws them on the background. When the drawing is complete, <code>draw</code> returns the drawing in the form of an RMagick Image object. You can use any Image class methods on the drawing. Here I simply write the image to a GIF file.</p>
+<h2>Scalable graphics</h2>
+<p>Are RVG images really scalable? Let's try. Change the RVG.new call to make an image that's 4 times as big. That's 5 inches on a side:</p>
+<pre class="example">
+ 6   rvg = RVG.new(5.in, 5.in).viewbox(0,0,250,250) do |canvas|
+</pre>
+ <p>Change nothing else. Run the program again and see what you get.</p>
+ <img src="ex/images/big-duck.gif" width="360" height="360" border="0" />
+  <p class="spacer"> </p>
+
+  <div class="nav">
+    &laquo; <a href="constants.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgref.html">Next</a>
+    &raquo;
+  </div>
+  </body>
+  </html>

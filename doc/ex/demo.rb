@@ -276,7 +276,8 @@ begin
         self.geometry = "130x194+10+5>"
         self.gravity = CenterGravity
         self.border_width = 1
-        self.tile = "5x1000"
+        rows = (example.size + 4) / 5
+        self.tile = Geometry.new(5,rows)
         self.compose = OverCompositeOp
 
         # Use the ImageMagick built-in "granite" format

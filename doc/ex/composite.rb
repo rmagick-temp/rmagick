@@ -123,7 +123,8 @@ list.cur_image['Label'] = 'A overlay B'
 
 montage = list.montage {
     self.geometry = Geometry.new(COLS, ROWS, 3, 3)
-    self.tile = Geometry.new(4, 1000)
+    rows = (list.size+3) / 4
+    self.tile = Geometry.new(4, rows)
     self.texture = granite[0]
     self.fill = 'white'
     self.stroke = 'transparent'

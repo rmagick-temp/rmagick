@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.5 2003/07/20 13:09:04 tim Exp $ */
+/* $Id: rmagick.h,v 1.6 2003/07/22 13:14:15 tim Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -20,7 +20,6 @@
 #include "intern.h"
 #include "rubyio.h"
 #include "magick/api.h"
-#include "magick/image.h"       // Get QuantumLeap definition
 
 
 // Undef ImageMagick's versions of these symbols
@@ -31,14 +30,16 @@
 #undef PACKAGE_TARNAME
 #include "rmagick_config.h"
 
-#ifndef HAVE_GETNEXTIMAGEINLIST
-#define GetNextImageInList(a) (a)->next
+#if defined(HAVE_GETNEXTIMAGEINLIST)
+#define GET_NEXT_IMAGE(a) GetNextImageInList(a)
+#else
+#define GET_NEXT_IMAGE(a) (a)->next
 #endif
 
 #if defined(HAVE_GETLOCALEEXCEPTIONMESSAGE)
-#define GETLOCALEEXCEPTIONMESSAGE(s, t) GetLocaleExceptionMessage(s, t)
+#define GET_MSG(s,t) GetLocaleExceptionMessage((s), (t))
 #else
-#define GETLOCALEEXCEPTIONMESSAGE(s, t) t
+#define GET_MSG(s,t) t
 #endif
 
 
@@ -74,7 +75,7 @@
 
 // Define range of acceptable ImageMagick version numbers
 
-#ifndef GRAPHICSMAGICK
+#if !defined(GRAPHICSMAGICK)
 #define MIN_LIBVER 0x0551
 #define MAX_LIBVER 0x0558
 #endif
@@ -174,10 +175,6 @@ EXTERN ID values_ID;       // "values"
 EXTERN ID cur_image_ID;    // "cur_image"
 EXTERN ID call_ID;         // "call"
 
-/*
-*   ImageMagick exceptions that have severity >= 400 are errors, < 400 are warnings.
-*/
-#define ERROR_SEVERITY 400
 
 /*
 *   Handle warnings & errors
@@ -605,6 +602,7 @@ extern void magick_clone_string(char **, const char *);
 extern void write_temp_image(Image *, char *);
 extern void delete_temp_image(char *);
 extern void handle_error(ExceptionInfo *);
+extern void handle_all_errors(Image *);
 extern void attr_write(VALUE, VALUE);
 extern Image *toseq(VALUE);
 extern void unseq(Image *);

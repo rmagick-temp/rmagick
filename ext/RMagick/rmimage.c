@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.53 2004/04/17 21:18:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.54 2004/06/11 00:23:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5165,6 +5165,53 @@ Image_plasma(
 }
 #endif
 
+
+/*
+    Method:     posterize
+    Purpose:    call PosterizeImage
+    Notes:      Image#posterize(levels=4, dither=false)
+*/
+VALUE
+Image_posterize(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_POSTERIZEIMAGE)
+    Image *image, *new_image;
+    MagickBooleanType dither = False;
+    unsigned long levels = 4;
+    MagickBooleanType okay;
+    ExceptionInfo exception;
+
+    switch(argc)
+    {
+        case 2:
+            dither = RTEST(argv[1]);
+            /* fall through */
+        case 1:
+            levels = NUM2INT(argv[0]);
+            /* fall through */
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
+    }
+
+    GetExceptionInfo(&exception);
+    Data_Get_Struct(self, Image, image);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+    okay = PosterizeImage(new_image, levels, dither);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "PosterizeImage failed");
+    }
+
+    return rm_image_new(new_image);
+
+#else
+    not_implemented("posterize");
+    return (VALUE)0;
+#endif
+}
 
 /*
     Method:  preview

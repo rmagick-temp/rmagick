@@ -116,13 +116,13 @@
           <li><a href="#matte_replace">matte_replace</a></li>
 
           <li><a href="#matte_reset_bang">matte_reset!</a></li>
+
+          <li><a href="#median_filter">median_filter</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#median_filter">median_filter</a></li>
-
           <li><a href="#minify">minify</a></li>
 
           <li><a href="#minify_bang">minify!</a></li>
@@ -150,6 +150,8 @@
           <li><a href="#palette_q">palette?</a></li>
 
           <li><a href="#pixel_color">pixel_color</a></li>
+
+          <li><a href="#posterize">posterize</a></li>
         </ul>
       </div>
     </div>
@@ -476,9 +478,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
     "Click to see the example script" /><!--
-                                      This img tag displays the framed image when the mouse is not over
-                                      --><img class="hide" id=
-    "framed" onmouseover=
+                                              This img tag displays the framed image when the mouse is not over
+                                              --><img class="hide"
+    id="framed" onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
     "ex/frame.jpg" alt="frame example" /></a> <img src=
     "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
@@ -751,9 +753,9 @@ image.get_exif_by_number() &raquo;
     more opaque than the column on its left, so that the resulting
     composite changes smoothly from color on the left to
     black-and-white on the right.</p><!--
-                                            Reduce the size of the original image by specifying
-                                            the size of the example image.
-                                            -->
+                                                    Reduce the size of the original image by specifying
+                                                    the size of the example image.
+                                                    -->
 
     <p class="rollover"><a href=
     "javascript:popup('get_pixels.rb.html')"><img width="384"
@@ -1886,7 +1888,8 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><a href="image3.html#quantize">quantize</a>
+    <h4>See also</h4><a href="#posterize">posterize</a>, <a href=
+    "image3.html#quantize">quantize</a>
 
     <h4>Magick API</h4>
 
@@ -1956,6 +1959,59 @@ old = image.pixel_color(20,40,"white")
     <h4>Magick API</h4>
 
     <p>AcquireImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="posterize">posterize</h3>
+
+    <p><span class="arg">image</span>.posterize(<span class=
+    "arg">levels</span>=4, <span class=
+    "arg">dither</span>=<code>false</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Reduces the image to a limited number of
+    colors for a "poster" effect.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>levels</dt>
+
+      <dd><span class="imquote">Number of color levels allowed in
+      each channel. Very low values (2, 3, or 4) have the most
+      visible effect.</span> The default is 4.</dd>
+
+      <dt>dither</dt>
+
+      <dd>If <code>true</code>, dither the image. The default is
+      <code>false</code>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('posterize.rb.html')"><img src=
+    "ex/posterize.jpg" alt="posterize example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/posterize.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4><a href="#ordered_dither">ordered_dither</a>,
+    <a href="image3.html#quantize">quantize</a>
+
+    <h4>Magick API</h4>
+
+    <p>PosterizeImage</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

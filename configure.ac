@@ -88,7 +88,7 @@ AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
 AC_CHECK_FUNCS([GetColorInfoList GetTypeInfoList GetMagickInfoList])
-AC_CHECK_FUNCS([EvaluateImageChannel])
+AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

@@ -6,7 +6,7 @@ i.new_image(275, 170) { self.background_color = "white" }
 
 gc = Magick::Draw.new
 gc.fill('black')
-gc.stroke('tranparent')
+gc.stroke('transparent')
 
 gc.font_family('courier')
 gc.font_weight(Magick::BoldWeight)

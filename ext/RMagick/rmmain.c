@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.28 2003/10/31 13:10:32 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.29 2003/11/02 23:56:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -839,6 +839,11 @@ Init_RMagick(void)
     ENUM_VAL(CompositeOperator, CopyBlackCompositeOp);
 #endif
 
+#if defined(HAVE_ANNOTATECOMPOSITEOP)
+                                        // Added 5.5.8
+    ENUM_VAL(CompositeOperator, AnnotateCompositeOp);
+#endif
+
     // CompressionType constants
     DEF_ENUM(CompressionType);
     ENUM_VAL(CompressionType, UndefinedCompression);
@@ -1071,7 +1076,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2003/10/31 13:10:32 $) Copyright (C) 2003 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2003/11/02 23:56:18 $) Copyright (C) 2003 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

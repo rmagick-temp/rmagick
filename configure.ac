@@ -190,6 +190,21 @@ if test "$rm_cv_enum_copycyancompositeop" = yes; then
   AC_DEFINE(HAVE_COPYCYANCOMPOSITEOP)
 fi
 
+AC_CACHE_CHECK(for AnnotateCompositeOp enum value, rm_cv_enum_annotatecompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = AnnotateCompositeOp],
+     rm_cv_enum_annotatecompositeop='yes',
+     rm_cv_enum_annotatecompositeop='no')])
+
+if test "$rm_cv_enum_annotatecompositeop" = yes; then
+  AC_DEFINE(HAVE_ANNOTATECOMPOSITEOP)
+fi
+
 # Determine documentation base URI
 
 # Where is ****Magick installed?

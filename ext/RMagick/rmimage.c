@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.89.2.3 2005/04/02 21:36:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.89.2.2.4.1 2005/04/02 22:00:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c

@@ -308,3 +308,9 @@ AC_SUBST(RUBY_CONFIG_OPTS)
 
 AC_OUTPUT(Makefile ext/RMagick/extconf.rb metaconfig)
 
+echo ""
+echo ""
+echo "This installation of $PACKAGE_STRING is configured for"
+echo "`$RUBY --version` and $MAGICKNAME `$MAGICKCONFIG --version`."
+
+

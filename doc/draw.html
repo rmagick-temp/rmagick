@@ -10,7 +10,9 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href="image.html">&lt;-
@@ -597,8 +599,8 @@ primitives = Magick::Draw.new {
       <tr>
         <td valign="top">Notes</td>
         <td>This primitive is deprecated. Use the SVG elliptical
-        arc commands (A and a) instead. See <a href="#Draw.path">path
-        </a>.</td>
+        arc commands (A and a) instead. See <a href=
+        "#Draw.path">path</a> .</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -2055,16 +2057,31 @@ draw.stroke_opacity('40%')
       </tr>
       <tr>
         <td valign="top">Description</td>
-        <td>Draw text at the location specified by (x,y). Use <a
-        href="#Draw.gravity">gravity</a> to position the text
-        relative to (x, y). Specify the text appearance with the <a
-        href="#Draw.font">font</a>, <a href=
-        "#Draw.font_family">font_family</a>, <a href=
-        "#Draw.font_stretch">font_stretch</a>, <a href=
-        "#Draw.font_style">font_style</a>, and <a href=
-        "#Draw.font_weight">font_weight</a> methods. Use the <a
-        href="#Draw.text_antialias">text_antialias</a> method to
-        set antialiasing on or off.</td>
+        <td>
+          <p>Draw text at the location specified by (x,y). Use <a
+          href="#Draw.gravity">gravity</a> to position the text
+          relative to (x, y). Specify the text appearance with the
+          <a href="#Draw.font">font</a>, <a href=
+          "#Draw.font_family">font_family</a>, <a href=
+          "#Draw.font_stretch">font_stretch</a>, <a href=
+          "#Draw.font_style">font_style</a>, and <a href=
+          "#Draw.font_weight">font_weight</a> methods. Use the <a
+          href="#Draw.text_antialias">text_antialias</a> method to
+          set antialiasing on or off.</p>
+          <p>If the text string contains an embedded blank, quote,
+          or apostrophe, surround the entire text string using a
+          character that is not in the text. You can use quotes,
+          apostrophes, or braces ("{}"). You can also escape a
+          blank, quote, or apostrophe by preceding it with a
+          backslash ("\"). To include a backslash in the text, use
+          two consecutive backslashes. Here are some examples:</p>
+<pre class="example">
+gc.text(10,10, "'Quoted with apostrophes.'") &raquo; Quoted with apostrophes.
+gc.text(10,10, '"Quoted with quotes."') &raquo; Quoted with quotes.
+gc.text(10,10, %q/"What's up?"/) &raquo; "What's up?"
+gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
+</pre>
+        </td>
       </tr>
       <tr>
         <td valign="top">Arguments</td>
@@ -2222,16 +2239,22 @@ draw.stroke_opacity('40%')
       </tr>
       <tr>
         <td valign="top">Description</td>
-        <td>Annotates a image with text. The text is positioned
-        according to the <var>gravity</var> attribute around the
-        rectangle described by the x, y, width, and height
-        arguments. If either of the width or height arguments are
-        omitted, uses the image width - x and the image height - y
-        to compute the rectangle width and height. The attributes
-        described in <a href="#attribute_writers">attribute
-        writers</a>, above, influence the appearance and position
-        of the text. These attributes may be set within the
-        optional <i>additional parameters</i> block.</td>
+        <td>
+          <p>Annotates a image with text. The text is positioned
+          according to the <var>gravity</var> attribute around the
+          rectangle described by the x, y, width, and height
+          arguments. If either of the width or height arguments are
+          omitted, uses the image width - x and the image height -
+          y to compute the rectangle width and height. The
+          attributes described in <a href=
+          "#attribute_writers">attribute writers</a>, above,
+          influence the appearance and position of the text. These
+          attributes may be set within the optional <i>additional
+          parameters</i> block.</p>
+          <p>If the text argument contains an embedded blank,
+          quote, or apostrophe, you must add an extra level of
+          quotes. See <a href="#Draw.text">text</a>.</p>
+        </td>
       </tr>
       <tr>
         <td valign="top">Arguments</td>
@@ -2389,8 +2412,7 @@ draw.stroke_opacity('40%')
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/render.html#drawimage">
-        DrawImage</a></td>
+        "http://www.imagemagick.org/www/api/render.html#drawimage">DrawImage</a></td>
       </tr>
       <tr>
         <td valign="top">Notes</td>

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.5 2003/08/26 13:14:59 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.6 2003/09/12 01:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -684,7 +684,7 @@ Info_view_eq(VALUE self, VALUE view_arg)
     char *view;
 
     Data_Get_Struct(self, Info, info);
-              
+
     if (NIL_P(view_arg) || STRING_PTR(view_arg) == NULL)
     {
        magick_free(info->view);
@@ -710,7 +710,7 @@ VALUE
 Info_new(VALUE class)
 {
     Info *info;
-    VALUE new_obj;
+    volatile VALUE new_obj;
 
     info = CloneImageInfo(NULL);
     if (!info)
@@ -742,7 +742,7 @@ VALUE
 Info_alloc(VALUE class)
 {
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
 
     info = CloneImageInfo(NULL);
     if (!info)
@@ -760,7 +760,7 @@ Info_alloc(VALUE class)
 VALUE
 rm_info_new()
 {
-    VALUE info_obj;
+    volatile VALUE info_obj;
 
     info_obj = Info_alloc(Class_Info);
     return Info_initialize(info_obj);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.13 2003/09/06 22:25:17 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.14 2003/09/12 01:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -254,14 +254,14 @@ Image_properties(VALUE self)
 {
     Image *image;
     const ImageAttribute *attr;
-    VALUE attr_hash;
+    volatile VALUE attr_hash;
 
     Data_Get_Struct(self, Image, image);
 
     // If block, iterate over attributes
     if (rb_block_given_p())
     {
-        VALUE ary = rb_ary_new2(2);
+        volatile VALUE ary = rb_ary_new2(2);
         for (attr = image->attributes; attr; attr = Next_Attribute)
         {
             // Store the next ptr where Image#aset can see it.
@@ -465,7 +465,7 @@ Image_capture(
 #ifdef HAVE_XIMPORTIMAGE
     Image *image;
     ImageInfo *image_info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     XImportInfo ximage_info;
 
     XGetImportInfo(&ximage_info);
@@ -520,31 +520,31 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     RectangleInfo rect = {0};
     char *geometry;
     unsigned int flags;
-    VALUE ary;
-    
+    volatile VALUE ary;
+
     Data_Get_Struct(self, Image, image);
     geometry = STRING_PTR(geom_str);
-    
+
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
     {
        rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
     }
-    
+
     ary = rb_ary_new2(3);
     rb_ary_store(ary, 0, ULONG2NUM(rect.width));
     rb_ary_store(ary, 1, ULONG2NUM(rect.height));
     rb_ary_store(ary, 2, self);
-    
+
     return rb_yield(ary);
-    
+
 #elif defined(HAVE_GETMAGICKGEOMETRY)
     Image *image;
     char *geometry;
     unsigned int flags;
     long x, y;
     unsigned long width, height;
-    VALUE ary;
+    volatile VALUE ary;
 
     Data_Get_Struct(self, Image, image);
     geometry = STRING_PTR(geom_str);
@@ -557,14 +557,14 @@ Image_change_geometry(VALUE self, VALUE geom_str)
     {
        rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
     }
-    
+
     ary = rb_ary_new2(3);
     rb_ary_store(ary, 0, ULONG2NUM(width));
     rb_ary_store(ary, 1, ULONG2NUM(height));
     rb_ary_store(ary, 2, self);
-    
+
     return rb_yield(ary);
-        
+
 #else
     not_implemented("change_geometry");
     return (VALUE) 0;
@@ -747,7 +747,7 @@ Image_color_histogram(VALUE self)
 {
 #if defined(HAVE_GETCOLORHISTOGRAM)
     Image *image;
-    VALUE hash, pixel;
+    volatile VALUE hash, pixel;
     unsigned long x, colors;
     HistogramColorPacket *histogram;
     ExceptionInfo exception;
@@ -766,8 +766,8 @@ Image_color_histogram(VALUE self)
     }
 
     /*
-        The histogram array is specifically allocated by malloc because it is 
-        supposed to be freed by the caller.  
+        The histogram array is specifically allocated by malloc because it is
+        supposed to be freed by the caller.
     */
     free(histogram);
 
@@ -776,11 +776,11 @@ Image_color_histogram(VALUE self)
 
 #elif defined(HAVE_GETIMAGEHISTOGRAM)
     Image *image;
-    VALUE hash, pixel;
+    volatile VALUE hash, pixel;
     unsigned long x, colors;
     ColorPacket *histogram;
     ExceptionInfo exception;
-    
+
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -902,7 +902,7 @@ Image_color_flood_fill(
     // a Magick::Pixel.
     Color_to_PixelPacket(&target, target_color);
     Color_to_PixelPacket(&fill, fill_color);
-    
+
     x = NUM2LONG(xv);
     y = NUM2LONG(yv);
     if (x > image->columns || y > image->rows)
@@ -1093,7 +1093,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     ColorspaceType new_cs = Num_to_ColorspaceType(colorspace);
 
     Data_Get_Struct(self, Image, image);
-    
+
     if (new_cs == image->colorspace)
     {
         return self;
@@ -1114,7 +1114,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
         HANDLE_IMG_ERROR(image);
         return self;
     }
-    
+
     if (new_cs == RGBColorspace ||
         new_cs == TransparentColorspace ||
         new_cs == GRAYColorspace)
@@ -1122,7 +1122,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
         TransformRGBImage(image, image->colorspace);
         HANDLE_IMG_ERROR(image);
     }
-    
+
     return self;
 }
 
@@ -1332,7 +1332,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 {
     Image *image;
     ExceptionInfo exception;
-    VALUE pixel, pixel0;
+    volatile VALUE pixel, pixel0;
     unsigned long width, height;
     unsigned long x, npixels;
     char *map;
@@ -1536,7 +1536,7 @@ Image_copy(VALUE self)
 }
 
 /*
-    Method:     Image#crop(x, y, width, height) 
+    Method:     Image#crop(x, y, width, height)
                 Image#crop(gravity, width, height)
                 Image#crop!(x, y, width, height)
                 Image#crop!(gravity, width, height)
@@ -1693,7 +1693,7 @@ VALUE Image_difference(VALUE self, VALUE other)
 {
     Image *image;
     Image *image2;
-    VALUE mean, nmean, nmax;
+    volatile VALUE mean, nmean, nmax;
 
     Data_Get_Struct(self, Image, image);
     Data_Get_Struct(ImageList_cur_image(other), Image, image2);
@@ -1701,7 +1701,7 @@ VALUE Image_difference(VALUE self, VALUE other)
     (void) IsImagesEqual(image, image2);
     HANDLE_IMG_ERROR(image)
     HANDLE_IMG_ERROR(image2)
-    
+
     mean  = rb_float_new(image->error.mean_error_per_pixel);
     nmean = rb_float_new(image->error.normalized_mean_error);
     nmax  = rb_float_new(image->error.normalized_maximum_error);
@@ -1731,7 +1731,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     Image *image;
     unsigned long x, y, columns, rows;
     unsigned long n, npixels;
-    VALUE pixels_ary;
+    volatile VALUE pixels_ary;
     StorageType stg_type = FIX_STG_TYPE;
     char *map;
     Strlen_t mapL;
@@ -1828,7 +1828,7 @@ VALUE Image_display(VALUE self)
 {
     Image *image;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     unsigned int ok;
 
     Data_Get_Struct(self, Image, image);
@@ -1850,7 +1850,7 @@ VALUE Image_display(VALUE self)
 }
 
 DEF_ATTR_ACCESSOR(Image, dispose, ulong)
- 
+
 /*
     Method:     Image#_dump(aDepth)
     Purpose:    implement marshalling
@@ -1866,7 +1866,7 @@ Image__dump(VALUE self, VALUE depth)
     void *blob;
     size_t length;
     DumpedImage mi;
-    VALUE str;
+    volatile VALUE str;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -1891,7 +1891,7 @@ Image__dump(VALUE self, VALUE depth)
     mi.mi = DUMPED_IMAGE_MINOR_VERS;
     strcpy(mi.magick, image->magick);
     mi.len = strlen(mi.magick);
-    
+
     // Concatenate the blob onto the header & return the result
     str = rb_str_new((char *)&mi, mi.len+offsetof(DumpedImage,magick));
     return rb_str_cat(str, (char *)blob, length);
@@ -2058,7 +2058,7 @@ Image_export_pixels(
     unsigned int okay;
     char *map;
     unsigned int *pixels;
-    VALUE ary;
+    volatile VALUE ary;
     ExceptionInfo exception;
 
 
@@ -2301,15 +2301,15 @@ Image_format_eq(VALUE self, VALUE magick)
                                                                 <, color>>>>>>>)
     Purpose:    adds a simulated three-dimensional border around the image.
                 "Width" and "height" specify the width and height of the frame.
-                The "x" and "y" arguments position the image within the frame. 
-                If the image is supposed to be centered in the frame, x and y 
+                The "x" and "y" arguments position the image within the frame.
+                If the image is supposed to be centered in the frame, x and y
                 should be 1/2 the width and height of the frame. (I.e. if the
-                frame is 50 pixels high and 50 pixels wide, x and y should both 
-                be 25)."Inner_bevel" and "outer_bevel" indicate the width of the 
-                inner and outer shadows of the frame. They should be much 
-                smaller than the frame and cannot be > 1/2 the frame width or 
+                frame is 50 pixels high and 50 pixels wide, x and y should both
+                be 25)."Inner_bevel" and "outer_bevel" indicate the width of the
+                inner and outer shadows of the frame. They should be much
+                smaller than the frame and cannot be > 1/2 the frame width or
                 height of the image.
-    Default:    All arguments are optional. The defaults are the same as they 
+    Default:    All arguments are optional. The defaults are the same as they
                 are in Magick++:
 
                 width:  image-columns+25*2
@@ -2379,7 +2379,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
 {
     Image *image;
     Info *info;
-    VALUE info_obj, image_ary;
+    volatile VALUE info_obj, image_ary;
     ExceptionInfo exception;
     void *blob;
     Strlen_t length;
@@ -2400,7 +2400,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     // Orphan the image, create an Image object, add it to the array.
     while (image)
     {
-        VALUE image_obj;
+        volatile VALUE image_obj;
         Image *next;
 
 #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
@@ -2724,7 +2724,7 @@ Image_import_pixels(
 
     for (n = 0; n < npixels; n++)
     {
-        VALUE p = rb_ary_entry(pixel_ary, n);
+        volatile VALUE p = rb_ary_entry(pixel_ary, n);
         long q = ScaleQuantumToLong(NUM2LONG(p));
         pixels[n] = (int) q;
     }
@@ -3115,7 +3115,7 @@ Image__load(VALUE class, VALUE str)
     info->magick[mi.len] = '\0';
 
     GetExceptionInfo(&exception);
-    
+
     blob += offsetof(DumpedImage,magick) + mi.len;
     length -= offsetof(DumpedImage,magick) + mi.len;
     image = BlobToImage(info, blob, (size_t) length, &exception);
@@ -3182,7 +3182,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     Image *map;
     ExceptionInfo exception;
-    VALUE map_obj, map_arg;
+    volatile VALUE map_obj, map_arg;
     unsigned int dither = False;
 
     switch (argc)
@@ -3334,7 +3334,7 @@ Image_mime_type(VALUE self)
 {
     Image *image;
     char *type;
-    VALUE mime_type;
+    volatile VALUE mime_type;
 
     Data_Get_Struct(self, Image, image);
     type = MagickToMime(image->magick);
@@ -3544,9 +3544,9 @@ Image_new(int argc, VALUE *argv, VALUE class)
 {
     Info *info;
     Image *image;
-    VALUE info_obj;
-    VALUE new_image;
-    VALUE init_arg[4];
+    volatile VALUE info_obj;
+    volatile VALUE new_image;
+    volatile VALUE init_arg[4];
 
     if (argc < 2 || argc > 3)
     {
@@ -3621,7 +3621,7 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
 VALUE
 Image_alloc(VALUE class)
 {
-    VALUE image_obj;
+    volatile VALUE image_obj;
 
     image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, NULL);
     return image_obj;
@@ -3635,9 +3635,9 @@ Image_alloc(VALUE class)
 VALUE
 Image_initialize(int argc, VALUE *argv, VALUE self)
 {
-    VALUE fill = 0;
+    volatile VALUE fill = 0;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     Image *image;
     int cols, rows;
 
@@ -3663,7 +3663,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    
+
     // NOW store a real image in the image object.
     DATA_PTR(self) = image;
 
@@ -4236,8 +4236,8 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     char *filename;
     Strlen_t filenameL;
     Info *info;
-    VALUE info_obj;
-    VALUE image_obj, image_ary;
+    volatile VALUE info_obj;
+    volatile VALUE image_obj, image_ary;
     Image *image, *images, *next;
     ExceptionInfo exception;
 
@@ -4547,14 +4547,14 @@ scale_image(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
     GetExceptionInfo(&exception);
     new_image = (scaler)(image, columns, rows, &exception);
     HANDLE_ERROR
-    
+
     if (bang)
     {
         DATA_PTR(self) = new_image;
         DestroyImage(image);
         return self;
     }
-    
+
     return rm_image_new(new_image);
 }
 
@@ -4806,7 +4806,7 @@ Image_spaceship(VALUE self, VALUE other)
                                   rb_class2name(CLASS_OF(self)),
                                   rb_class2name(CLASS_OF(other)));
     }
-    
+
     Data_Get_Struct(self, Image, imageA);
     Data_Get_Struct(other, Image, imageB);
 
@@ -4871,7 +4871,7 @@ Image_stegano(
     VALUE offset)
 {
     Image *image, *new_image;
-    VALUE wm_image;
+    volatile VALUE wm_image;
     Image *watermark;
     ExceptionInfo exception;
 
@@ -4902,7 +4902,7 @@ Image_stereo(
     VALUE offset_image_arg)
 {
     Image *image, *new_image;
-    VALUE offset_image;
+    volatile VALUE offset_image;
     Image *offset;
     ExceptionInfo exception;
 
@@ -5085,7 +5085,7 @@ Image_texture_flood_fill(
     Image *image, *new_image;
     Image *texture_image;
     PixelPacket color;
-    VALUE texture;
+    volatile VALUE texture;
     DrawInfo *draw_info;
     long x, y;
     PaintMethod method;
@@ -5124,7 +5124,7 @@ Image_texture_flood_fill(
 
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
-                                     
+
     // Hack: By-pass bug in ColorFloodfillImage that tests
     // the fill color even though the fill color isn't used.
     if (method == FillToBorderMethod)
@@ -5258,14 +5258,14 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     new_image = ThumbnailImage(image, columns, rows, &exception);
     HANDLE_ERROR
-    
+
     if (bang)
     {
         DATA_PTR(self) = new_image;
         DestroyImage(image);
         return self;
     }
-    
+
     return rm_image_new(new_image);
 #else
     not_implemented(bang ? "thumbnail!" : "thumbnail");
@@ -5337,7 +5337,7 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     double alpha_pct_opaque = 1.0;
     char opacity[50];
     ExceptionInfo exception;
-    
+
     switch(argc)
     {
         case 2:
@@ -5364,8 +5364,8 @@ Image_tint(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 5)", argc);
             break;
     }
-    
-    if (red_pct_opaque < 0.0 || green_pct_opaque < 0.0 
+
+    if (red_pct_opaque < 0.0 || green_pct_opaque < 0.0
         || blue_pct_opaque < 0.0 || alpha_pct_opaque < 0.0)
     {
         rb_raise(rb_eArgError, "opacity percentages must be non-negative.");
@@ -5377,20 +5377,20 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     sprintf(opacity,
 #endif
                      "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
-                   , blue_pct_opaque*100.0, alpha_pct_opaque*100.0); 
-                      
+                   , blue_pct_opaque*100.0, alpha_pct_opaque*100.0);
+
     Struct_to_PixelPacket(&tint, argv[0]);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
-    
+
     new_image = TintImage(image, opacity, tint, &exception);
     HANDLE_ERROR
-    
+
     if (!new_image)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    
+
     return rm_image_new(new_image);
 #else
     not_implemented("tint");
@@ -5410,7 +5410,7 @@ Image_to_blob(VALUE self)
 {
     Image *image;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     void *blob = NULL;
     size_t length = 2048;       // Do what Magick++ does
     ExceptionInfo exception;
@@ -5673,7 +5673,7 @@ Image_write(VALUE self, VALUE file)
 {
     Image *image;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     char *filename;
     Strlen_t filenameL;
     ExceptionInfo exception;
@@ -5739,7 +5739,7 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
 static VALUE
 cropper(int bang, int argc, VALUE *argv, VALUE self)
 {
-    VALUE x, y, width, height;
+    volatile VALUE x, y, width, height;
     unsigned long nx = 0, ny = 0;
     unsigned long columns, rows;
     GravityType gravity;
@@ -5763,7 +5763,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             height  = argv[2];
             columns = NUM2ULONG(width);
             rows    = NUM2ULONG(height);
-            
+
             Data_Get_Struct(self, Image, image);
 
             switch (gravity)
@@ -5853,7 +5853,7 @@ xform_image(
     // An exception can occur in either the old or the new images
     HANDLE_ERROR
     HANDLE_IMG_ERROR(new_image);
-    
+
     if (bang)
     {
         DATA_PTR(self) = new_image;

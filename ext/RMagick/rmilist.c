@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.3 2003/07/22 13:15:34 tim Exp $ */
+/* $Id: rmilist.c,v 1.4 2003/09/12 01:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -20,7 +20,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
 {
     Image *images;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     unsigned int ok;
 
     // Convert the images array to an images sequence.
@@ -115,7 +115,7 @@ VALUE
 ImageList_coalesce(VALUE self)
 {
     Image *images, *results, *result, *next;
-    VALUE new_imagelist;
+    volatile VALUE new_imagelist;
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
@@ -183,7 +183,7 @@ ImageList_display(VALUE self)
 {
     Image *images;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     unsigned int ok;
 
     // Convert the images array to an images sequence.
@@ -237,7 +237,7 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     Image *new_image;
     Image *map;
     unsigned int dither;
-    VALUE image, image_obj, scene;
+    volatile VALUE image, image_obj, scene;
     ExceptionInfo exception;
 
     image = ImageList_cur_image(map_image);
@@ -285,10 +285,10 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
 VALUE
 ImageList_montage(VALUE self)
 {
-    VALUE montage_obj;
+    volatile VALUE montage_obj;
     Montage *montage;
     Image *montage_seq, *next, *image, *image_list;
-    VALUE new_imagelist;
+    volatile VALUE new_imagelist;
     ExceptionInfo exception;
 
     // Create a new instance of the Magick::Montage class
@@ -349,7 +349,7 @@ ImageList_morph(VALUE self, VALUE nimages)
 {
     Image *images, *new_images, *next, *new;
     ExceptionInfo exception;
-    VALUE new_imagelist;
+    volatile VALUE new_imagelist;
     unsigned long number_images;
 
     if (rm_imagelist_length(self) < 1)
@@ -418,7 +418,7 @@ rm_imagelist_new()
 int
 rm_imagelist_length(VALUE imagelist)
 {
-    VALUE len;
+    volatile VALUE len;
 
     len = rb_funcall(imagelist, length_ID, 0);
     return FIX2INT(len);
@@ -448,7 +448,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     Image *new_image;
     QuantizeInfo quantize_info;
     ExceptionInfo exception;
-    VALUE new_imagelist, scene;
+    volatile VALUE new_imagelist, scene;
 
     GetQuantizeInfo(&quantize_info);
 
@@ -511,7 +511,7 @@ ImageList_to_blob(VALUE self)
 {
     Image *images;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     void *blob = NULL;
     size_t length = 0;
     ExceptionInfo exception;
@@ -560,7 +560,7 @@ ImageList_write(VALUE self, VALUE file)
     Image *images, *img;
     Info *info;
     const MagickInfo *m;
-    VALUE info_obj;
+    volatile VALUE info_obj;
     char *filename;
     Strlen_t filenameL;
     int scene;

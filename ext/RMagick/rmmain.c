@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.14 2003/09/03 00:37:43 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.15 2003/09/12 01:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -36,7 +36,7 @@ Magick_colors(VALUE class)
 #if defined(HAVE_GETCOLORINFOARRAY)
     const ColorInfo **color_ary;
     ExceptionInfo exception;
-    VALUE ary, el;
+    volatile VALUE ary, el;
     int x;
 
     GetExceptionInfo(&exception);
@@ -59,7 +59,7 @@ Magick_colors(VALUE class)
     const ColorInfo *color_list;
     ColorInfo *color;
     ExceptionInfo exception;
-    VALUE ary, el;
+    volatile VALUE ary, el;
 
     GetExceptionInfo(&exception);
 
@@ -104,7 +104,7 @@ Magick_fonts(VALUE class)
     const TypeInfo *type_list;
     TypeInfo *type, *next;
     ExceptionInfo exception;
-    VALUE ary;
+    volatile VALUE ary;
 
     GetExceptionInfo(&exception);
 
@@ -155,7 +155,7 @@ VALUE
 Magick_init_formats(VALUE class)
 {
     MagickInfo *m;
-    VALUE formats;
+    volatile VALUE formats;
     ExceptionInfo exception;
     char mode[5] = {0};
 
@@ -196,8 +196,8 @@ monitor_handler(
     const ExtendedUnsignedIntegralType span,
     ExceptionInfo *exception)
 {
-    VALUE monitor;
-    VALUE args[3];
+    volatile VALUE monitor;
+    volatile VALUE args[3];
 
     if (rb_cvar_defined(Module_Magick, Magick_Monitor))
     {
@@ -208,7 +208,7 @@ monitor_handler(
         args[2] = UINT2NUM((unsigned long) span);
 
         monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2(monitor, call_ID, 3, args);
+        (void) rb_funcall2((VALUE)monitor, call_ID, 3, (VALUE *)args);
     }
 
     return True;
@@ -728,7 +728,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     const char *op = "Over";
     double x, y, width, height;
     int cop;
-    VALUE image;
+    volatile VALUE image;
     Image *comp_img;
     char name[MaxTextExtent];
                             // Buffer for "image" primitive
@@ -876,19 +876,19 @@ Draw_draw(VALUE self, VALUE image_arg)
     Method:     Draw#get_type_metrics([image, ]text)
     Purpose:    returns measurements for a given font and text string
     Notes:      If the image argument has been omitted, use a dummy
-                image, but make sure the text has none of the special 
+                image, but make sure the text has none of the special
                 characters that refer to image attributes.
 */
 
 static VALUE get_dummy_tm_img(VALUE klass)
 {
-    VALUE dummy_img = 0;
+    volatile VALUE dummy_img = 0;
     Info *info;
     Image *image;
 
     if (rb_cvar_defined(klass, _dummy_img__ID) != Qtrue)
     {
-        
+
         info = CloneImageInfo(NULL);
         if (!info)
         {
@@ -901,12 +901,12 @@ static VALUE get_dummy_tm_img(VALUE klass)
         }
         DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
-        
+
         RUBY18(rb_cvar_set(klass, _dummy_img__ID, dummy_img, 0));
         RUBY16(rb_cvar_set(klass, _dummy_img__ID, dummy_img));
     }
     dummy_img = rb_cvar_get(klass, _dummy_img__ID);
-    
+
     return dummy_img;
 }
 
@@ -931,7 +931,7 @@ Draw_get_type_metrics(
     {
         case 1:                   // use default image
             text = STRING_PTR_LEN(argv[0], text_l);
-            
+
             for (x = 0; x < text_l; x++)
             {
                 // Ensure text string doesn't refer to image attributes.
@@ -939,30 +939,30 @@ Draw_get_type_metrics(
                 {
                     int y;
                     char spec = text[x+1];
-                    
+
                     for (y = 0; y < ATTRS_L; y++)
                     {
                         if (spec == attrs[y])
                         {
-                            rb_raise(rb_eArgError, 
+                            rb_raise(rb_eArgError,
                                 "text string contains image attribute reference `%%%c'",
                                 spec);
                         }
                     }
                 }
             }
-            
-            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);            
-            break;  
+
+            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
+            break;
         case 2:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);      
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
             text = STRING_PTR(argv[1]);
             break;                  // okay
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
             break;
     }
-    
+
     Data_Get_Struct(self, Draw, draw);
     magick_clone_string(&draw->info->text, text);
 
@@ -999,7 +999,7 @@ Draw_initialize(VALUE self)
 {
     Draw *draw;
     Info *info;
-    VALUE info_obj;
+    volatile VALUE info_obj;
 
     Data_Get_Struct(self, Draw, draw);
 
@@ -1039,7 +1039,7 @@ RUBY16(Draw_new(VALUE class))
 RUBY18(Draw_alloc(VALUE class))
 {
     Draw *draw;
-    VALUE draw_obj;
+    volatile VALUE draw_obj;
 
     draw = ALLOC(Draw);
     memset(draw, '\0', sizeof(Draw));
@@ -1102,7 +1102,7 @@ static void
 destroy_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
-    VALUE tmpfile;
+    volatile VALUE tmpfile;
 
     DestroyDrawInfo(draw->info);
 
@@ -1299,7 +1299,7 @@ RUBY18(Montage_alloc(VALUE class))
     MontageInfo *montage_info;
     Montage *montage;
     Info *image_info;
-    VALUE montage_obj;
+    volatile VALUE montage_obj;
 
     // DO NOT call rm_info_new - we don't want to support an Info parm block.
     image_info = CloneImageInfo(NULL);
@@ -1731,7 +1731,7 @@ Init_RMagick(void)
 
     RUBY16(rb_define_singleton_method(Class_Montage, "new", Montage_new, 0);)
     RUBY18(rb_define_alloc_func(Class_Montage, Montage_alloc));
-    
+
     rb_define_method(Class_Montage, "initialize", Montage_initialize, 0);
 
     // These accessors supply optional arguments for Magick::ImageList::Montage.new
@@ -1807,10 +1807,10 @@ Init_RMagick(void)
 
     // class Magick::TextureFill
     Class_TextureFill = rb_define_class_under(Module_Magick, "TextureFill", rb_cObject);
-    
+
     RUBY16(rb_define_singleton_method(Class_TextureFill, "new", TextureFill_new, 1);)
     RUBY18(rb_define_alloc_func(Class_TextureFill, TextureFill_alloc));
-    
+
     rb_define_method(Class_TextureFill, "initialize", TextureFill_initialize, 1);
     rb_define_method(Class_TextureFill, "fill", TextureFill_fill, 1);
 
@@ -1832,8 +1832,8 @@ Init_RMagick(void)
 
     // AlignType constants
     DEF_CONST(UndefinedAlign);      DEF_CONST(LeftAlign);
-    DEF_CONST(CenterAlign);         DEF_CONST(RightAlign); 
-    
+    DEF_CONST(CenterAlign);         DEF_CONST(RightAlign);
+
     // AnchorType constants (for Draw#text_anchor - these are not defined by ImageMagick)
     rb_define_const(Module_Magick, "StartAnchor", INT2FIX(1));
     rb_define_const(Module_Magick, "MiddleAnchor", INT2FIX(2));
@@ -1859,7 +1859,7 @@ Init_RMagick(void)
     DEF_CONST(YUVColorspace);       DEF_CONST(CMYKColorspace);
     rb_define_const(Module_Magick, "SRGBColorspace", INT2FIX(sRGBColorspace));
 #if defined(HAVE_HSLCOLORSPACE)
-    DEF_CONST(HSLColorspace);       // 5.5.7   
+    DEF_CONST(HSLColorspace);       // 5.5.7
 #endif
 #if defined(HAVE_HWBCOLORSPACE)
     DEF_CONST(HWBColorspace);       // 5.5.7

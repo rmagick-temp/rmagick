@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.9 2003/08/30 23:53:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.10 2003/09/12 01:08:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -108,7 +108,7 @@ void magick_clone_string(char **new_str, const char *str)
 char *
 rm_string_value_ptr(volatile VALUE *ptr)
 {
-    VALUE s = *ptr;
+    volatile VALUE s = *ptr;
 
     // If VALUE is not a string, call to_str on it
     if (TYPE(s) != T_STRING)
@@ -131,13 +131,13 @@ rm_string_value_ptr(volatile VALUE *ptr)
     Extern:     rm_string_value_ptr_len
     Purpose:    safe replacement for rb_str2cstr
     Returns:    stores string length in 2nd arg, returns ptr to C string
-    Notes:      Uses rb/rm_string_value_ptr to ensure correct String 
-                argument. 
+    Notes:      Uses rb/rm_string_value_ptr to ensure correct String
+                argument.
                 Always called via STRING_PTR_LEN
 */
 char *rm_string_value_ptr_len(volatile VALUE *ptr, Strlen_t *len)
 {
-    VALUE v = *ptr;
+    volatile VALUE v = *ptr;
     char *str;
 
     str = STRING_PTR(v);
@@ -307,7 +307,7 @@ Pixel_to_HSL(VALUE self)
 {
     PixelPacket rgb;
     double hue, saturation, luminosity;
-    VALUE hsl;
+    volatile VALUE hsl;
 
     Struct_to_PixelPacket(&rgb, self);
     TransformHSL(rgb.red, rgb.green, rgb.blue,
@@ -406,12 +406,12 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
                 Note that the default depth is always used, and the matte
                 value is set to False, which means "don't use the alpha channel".
 */
-VALUE 
+VALUE
 PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
 {
     Image *image;
     Info *my_info;
-    VALUE color_name;
+    volatile VALUE color_name;
 
     my_info = info ? info : CloneImageInfo(NULL);
 
@@ -469,7 +469,7 @@ AffineMatrix_to_Struct(AffineMatrix *am)
 void
 Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
 {
-    VALUE values, v;
+    volatile VALUE values, v;
 
     if (CLASS_OF(st) != Class_AffineMatrix)
     {
@@ -498,9 +498,9 @@ Struct_to_AffineMatrix(AffineMatrix *am, VALUE st)
 VALUE
 ColorInfo_to_Struct(const ColorInfo *ci)
 {
-    VALUE name;
-    VALUE compliance;
-    VALUE color;
+    volatile VALUE name;
+    volatile VALUE compliance;
+    volatile VALUE color;
 
     name       = rb_str_new2(ci->name);
     compliance = INT2FIX(ci->compliance);
@@ -517,7 +517,7 @@ ColorInfo_to_Struct(const ColorInfo *ci)
 void
 Struct_to_ColorInfo(ColorInfo *ci, VALUE st)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(st) != Class_Color)
     {
@@ -528,7 +528,7 @@ Struct_to_ColorInfo(ColorInfo *ci, VALUE st)
     memset(ci, '\0', sizeof(ColorInfo));
 
     members = rb_funcall(st, values_ID, 0);
-                    
+
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
@@ -598,8 +598,8 @@ PixelPacket_to_Struct(PixelPacket *pp)
 void
 Struct_to_PixelPacket(PixelPacket *pp, VALUE st)
 {
-    VALUE values;
-    VALUE c;
+    volatile VALUE values;
+    volatile VALUE c;
 
     if (CLASS_OF(st) != Class_Pixel)
     {
@@ -661,7 +661,7 @@ PrimaryInfo_to_Struct(PrimaryInfo *p)
 void
 Struct_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(sp) != Class_Primary)
     {
@@ -695,7 +695,7 @@ PointInfo_to_Struct(PointInfo *p)
 void
 Struct_to_PointInfo(PointInfo *pi, VALUE sp)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(sp) != Class_Point)
     {
@@ -717,10 +717,10 @@ Struct_to_PointInfo(PointInfo *pi, VALUE sp)
 VALUE
 ChromaticityInfo_to_Struct(ChromaticityInfo *ci)
 {
-    VALUE red_primary;
-    VALUE green_primary;
-    VALUE blue_primary;
-    VALUE white_point;
+    volatile VALUE red_primary;
+    volatile VALUE green_primary;
+    volatile VALUE blue_primary;
+    volatile VALUE white_point;
 
     red_primary   = PrimaryInfo_to_Struct(&ci->red_primary);
     green_primary = PrimaryInfo_to_Struct(&ci->green_primary);
@@ -739,9 +739,9 @@ ChromaticityInfo_to_Struct(ChromaticityInfo *ci)
 void
 Struct_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 {
-    VALUE chrom_members;
-    VALUE red_primary, green_primary, blue_primary, white_point;
-    VALUE entry_members, x, y;
+    volatile VALUE chrom_members;
+    volatile VALUE red_primary, green_primary, blue_primary, white_point;
+    volatile VALUE entry_members, x, y;
     ID values_id;
 
     if (CLASS_OF(chrom) != Class_Chromaticity)
@@ -798,9 +798,9 @@ Struct_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 VALUE
 RectangleInfo_to_Struct(RectangleInfo *rect)
 {
-    VALUE width;
-    VALUE height;
-    VALUE x, y;
+    volatile VALUE width;
+    volatile VALUE height;
+    volatile VALUE x, y;
 
     width  = UINT2NUM(rect->width);
     height = UINT2NUM(rect->height);
@@ -817,7 +817,7 @@ RectangleInfo_to_Struct(RectangleInfo *rect)
 void
 Struct_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(sr) != Class_Rectangle)
     {
@@ -842,7 +842,7 @@ Struct_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
 VALUE
 SegmentInfo_to_Struct(SegmentInfo *segment)
 {
-    VALUE x1, y1, x2, y2;
+    volatile VALUE x1, y1, x2, y2;
 
     x1 = rb_float_new(segment->x1);
     y1 = rb_float_new(segment->y1);
@@ -858,7 +858,7 @@ SegmentInfo_to_Struct(SegmentInfo *segment)
 void
 Struct_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(s) != Class_Segment)
     {
@@ -884,9 +884,9 @@ Struct_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 VALUE
 TypeInfo_to_Struct(TypeInfo *ti)
 {
-    VALUE name, description, family;
-    VALUE style, stretch, weight;
-    VALUE encoding, foundry, format;
+    volatile VALUE name, description, family;
+    volatile VALUE style, stretch, weight;
+    volatile VALUE encoding, foundry, format;
 
     name        = rb_str_new2(ti->name);
     description = rb_str_new2(ti->description);
@@ -910,7 +910,7 @@ TypeInfo_to_Struct(TypeInfo *ti)
 void
 Struct_to_TypeInfo(TypeInfo *ti, VALUE st)
 {
-    VALUE members, m;
+    volatile VALUE members, m;
 
     if (CLASS_OF(st) != Class_Font)
     {
@@ -939,7 +939,7 @@ Struct_to_TypeInfo(TypeInfo *ti, VALUE st)
     m = rb_ary_entry(members, 3); ti->style   = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 4); ti->stretch = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 5); ti->weight  = m == Qnil ? 0 : FIX2INT(m);
-    
+
     m = rb_ary_entry(members, 6);
     if (m != Qnil)
         CloneString((char **)&(ti->encoding), STRING_PTR(m));
@@ -1023,10 +1023,10 @@ Font_to_s(VALUE self)
 VALUE
 TypeMetric_to_Struct(TypeMetric *tm)
 {
-    VALUE pixels_per_em;
-    VALUE ascent, descent;
-    VALUE width, height, max_advance;
-    VALUE bounds, underline_position, underline_thickness;
+    volatile VALUE pixels_per_em;
+    volatile VALUE ascent, descent;
+    volatile VALUE width, height, max_advance;
+    volatile VALUE bounds, underline_position, underline_thickness;
 
     pixels_per_em       = PointInfo_to_Struct(&tm->pixels_per_em);
     ascent              = rb_float_new(tm->ascent);
@@ -1051,8 +1051,8 @@ TypeMetric_to_Struct(TypeMetric *tm)
 void
 Struct_to_TypeMetric(TypeMetric *tm, VALUE st)
 {
-    VALUE members, m;
-    VALUE pixels_per_em;
+    volatile VALUE members, m;
+    volatile VALUE pixels_per_em;
 
     if (CLASS_OF(st) != Class_TypeMetric)
     {
@@ -1060,7 +1060,7 @@ Struct_to_TypeMetric(TypeMetric *tm, VALUE st)
                  rb_class2name(CLASS_OF(st)));
     }
     members = rb_funcall(st, values_ID, 0);
-                    
+
     pixels_per_em   = rb_ary_entry(members, 0);
     Struct_to_PointInfo(&tm->pixels_per_em, pixels_per_em);
 
@@ -1946,7 +1946,7 @@ delete_temp_image(char *tmpnam)
 /*
     External:   not_implemented
     Purpose:    raise NotImplementedError
-    Notes:      Called when a xMagick API is not available. 
+    Notes:      Called when a xMagick API is not available.
                 Replaces Ruby's rb_notimplement function.
     Notes:      The MagickPackageName macro is not available
                 until 5.5.7. Use MAGICKNAME instead.
@@ -1971,7 +1971,7 @@ not_implemented(const char *method)
 static void
 raise_error(const char *msg, const char *loc)
 {
-    VALUE exc, mesg, extra;
+    volatile VALUE exc, mesg, extra;
 
     mesg = rb_str_new2(msg);
     extra = loc ? rb_str_new2(loc) : Qnil;
@@ -1989,10 +1989,10 @@ raise_error(const char *msg, const char *loc)
 VALUE
 ImageMagickError_initialize(VALUE self, VALUE mesg, VALUE extra)
 {
-    VALUE argv[1];
+    volatile VALUE argv[1];
 
     argv[0] = mesg;
-    rb_call_super(1, argv);
+    rb_call_super(1, (VALUE *)argv);
     rb_iv_set(self, "@"MAGICK_LOC, extra);
 
     return self;

@@ -1,0 +1,951 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for Linux/x86 (vers 1st September 2002), see www.w3.org">
+    <title>class Image attributes</title>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content="Quanta Plus">
+    <link type="text/css" rel="stylesheet" href="rubymgen.css">
+  </head>
+  <body>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="ilist.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href="image.html">Next
+        -&gt;</a></td>
+      </tr>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="5">
+      <tr class="classname">
+        <td colspan="2">
+          <h1>class Image (attribute accessors)</h1>
+        </td>
+      </tr>
+      <tr bgcolor="#C3C3C3">
+        <td colspan="2">
+          <h3>Table Of Contents</h3>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <table width="100%">
+            <tr>
+              <td>
+                <ul>
+                  <li><a href=
+                  "#Image.background_color">background_color</a></li>
+                  <li><a href=
+                  "#Image.base_columns">base_columns</a></li>
+                  <li><a href=
+                  "#Image.base_filename">base_filename</a></li>
+                  <li><a href="#Image.base_rows">base_rows</a></li>
+                  <li><a href="#Image.blur">blur</a></li>
+                  <li><a href=
+                  "#Image.border_color">border_color</a></li>
+                  <li><a href=
+                  "#Image.bounding_box">bounding_box</a></li>
+                  <li><a href=
+                  "#Image.chromaticity">chromaticity</a></li>
+                  <li><a href=
+                  "#Image.class_type">class_type</a></li>
+                  <li><a href="#Image.clip_mask">clip_mask</a></li>
+                  <li><a href=
+                  "#Image.color_profile">color_profile</a></li>
+                  <li><a href="#Image.colors">colors</a></li>
+                  <li><a href=
+                  "#Image.colorspace">colorspace</a></li>
+                  <li><a href="#Image.columns">columns</a></li>
+                  <li><a href="#Image.compose">compose</a></li>
+                  <li><a href=
+                  "#Image.compression">compression</a></li>
+                  <li><a href="#Image.delay">delay</a></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li><a href="#Image.density">density</a></li>
+                  <li><a href="#Image.depth">depth</a></li>
+                  <li><a href="#Image.directory">directory</a></li>
+                  <li><a href="#Image.dispose">dispose</a></li>
+                  <li><a href=
+                  "#Image.extract_info">extract_info</a> <span
+                  class="imversion">&nbsp;(5.5.6)</span></li>
+                  <li><a href="#Image.filename">filename</a></li>
+                  <li><a href="#Image.filesize">filesize</a></li>
+                  <li><a href="#Image.filter">filter</a></li>
+                  <li><a href="#Image.format">format</a></li>
+                  <li><a href="#Image.fuzz">fuzz</a></li>
+                  <li><a href="#Image.gamma">gamma</a></li>
+                  <li><a href="#Image.geometry">geometry</a></li>
+                  <li><a href=
+                  "#Image.image_type">image_type</a></li>
+                  <li><a href="#Image.interlace">interlace</a></li>
+                  <li><a href=
+                  "#Image.iptc_profile">iptc_profile</a></li>
+                  <li><a href="#Image.matte">matte</a></li>
+                  <li><a href=
+                  "#Image.matte_color">matte_color</a></li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li><a href=
+                  "#Image.mean_error_per_pixel">mean_error_per_pixel</a></li>
+                  <li><a href="#Image.mime_type">mime_type</a></li>
+                  <li><a href="#Image.montage">montage</a></li>
+                  <li><a href=
+                  "#Image.normalized_mean_error">normalized_mean_error</a></li>
+                  <li><a href=
+                  "#Image.normalized_maximum_error">normalized_maximum_error</a></li>
+                  <li><a href=
+                  "#Image.number_colors">number_colors</a></li>
+                  <li><a href="#Image.offset">offset</a></li>
+                  <li><a href="#Image.opacity_eq">opacity</a></li>
+                  <li><a href="#Image.page">page</a></li>
+                  <li><a href=
+                  "#Image.rendering_intent">rendering_intent</a></li>
+                  <li><a href="#Image.rows">rows</a></li>
+                  <li><a href="#Image.scene">scene</a></li>
+                  <li><a href=
+                  "#Image.start_loop">start_loop</a></li>
+                  <li><a href="#Image.tile_info">tile_info</a></li>
+                  <li><a href=
+                  "#Image.total_colors">total_colors</a></li>
+                  <li><a href="#Image.units">units</a></li>
+                  <li><a href=
+                  "#Image.x_resolution">x_resolution</a></li>
+                  <li><a href=
+                  "#Image.y_resolution">y_resolution</a></li>
+                </ul>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.background_color">background_color</a><br>
+         background_color=</td>
+        <td><i>image.</i>background_color -&gt; <i>aString</i><br>
+         <i>image</i>.background_color = <i>aString</i><br>
+         <i>image</i>.background_color = <i>aPixel</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image's background color expressed as a <a href=
+        "imusage.html#color_names">color name</a> or a <a href=
+        "struct.html#Pixel">Pixel</a> object. By default the
+        background color is "white".</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.base_columns">base_columns</a></td>
+        <td><i>image.</i>base_columns -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The number of columns in the image before any
+        transformations.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.base_filename">base_filename</a></td>
+        <td><i>image</i>.base_filename -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image's original filename before any
+        transformations.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.base_rows">base_rows</a></td>
+        <td><i>image.</i>base_rows -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The number of rows in the image before any
+        transformations.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.blur">blur</a><br>
+         blur=</td>
+        <td><i>image.</i>blur -&gt; <i>aFloat</i><br>
+         <i>image.</i>blur = <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The blur factor to use when resizing. See <a href=
+        "image.html#Image.resize">resize</a>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.border_color">border_color</a><br>
+         border_color=</td>
+        <td><i>image.</i>border_color -&gt; <i>aString</i><br>
+         <i>image.</i>border_color = <i>aString</i><br>
+         <i>image.</i>border_color = <i>aPixel</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image's border color expressed as a <a href=
+        "imusage.html#color_names">color name</a> or a <a href=
+        "struct.html#Pixel">Pixel</a> object. The default border
+        color is "#dfdfdf" (gray).</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.bounding_box">bounding_box</a></td>
+        <td><i>image.</i>bounding_box -&gt; <i>aRectangle</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <table>
+            <tr>
+              <td valign="top">
+                The image's <i>bounding box</i>. The bounding box
+                is the rectangle that encloses all the pixels not
+                in the border color. In this example, the bounding
+                box is the gray square enclosing the blue circle.
+                (The coordinates and red circles were added after
+                the bounding box was computed.) 
+                <p>The return value is a <a href=
+                "struct.html#Rectangle">rectangle</a>.</p>
+              </td>
+              <td><a href="bounding_box.rb.html" target=
+              "_blank"><img src="ex/bounding_box.gif" alt=
+              "ex/bounding_box.rb"></a></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.chromaticity">chromaticity</a><br>
+         chromaticity=</td>
+        <td><i>image.</i>chromaticity -&gt;
+        <i>aChromaticity</i><br>
+         <i>image.</i>chromaticity = <i>aChromaticity</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The <span class="imquote">red, green, blue, and
+        white-point chromaticity values.</span> See <a href=
+        "struct.html#Chromaticity">Chromaticity</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.class_type">class_type</a><br>
+         <a name="Image.class_type_eq">class_type=</a></td>
+        <td><i>image.</i>class_type -&gt; <i>aClassType</i><br>
+         <i>image.</i>class_type = <i>aClassType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <p>The image's <i>storage class</i>.</p>
+          <p class="imquote">If DirectClass then the pixels contain
+          valid RGB or CMYK colors. If PseudoClass then the image
+          has a colormap referenced by the pixel's index
+          member.</p>
+          <p>See <a href=
+          "constants.html#ClassType">ClassType</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.clip_mask">clip_mask=</a></td>
+        <td><i>image.</i>clip_mask = <i>anImage</i><br>
+         <i>image.</i>clip_mask = <i>anImage</i><br>
+         <i>image.</i>clip_mask = <code>nil</code></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          Associates a clip mask with the image. The clip mask must
+          have the same dimensions as the image. <span class=
+          "imquote">Set any pixel component of the clip mask to
+          TransparentOpacity to prevent that corresponding image
+          pixel component from being updated.</span> If the
+          assigned object is an imagelist, uses the current image
+          as the clip mask. 
+          <p>Assign <code>nil</code> to remove the clip mask.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.color_profile">color_profile</a><br>
+         color_profile=</td>
+        <td><i>image.</i>color_profile -&gt; <i>aString</i><br>
+         <i>image.</i>color_profile = <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The <a href="http://www.color.org/icc_specs2.html">ICC
+        color profile</a>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.colors">colors</a></td>
+        <td><i>image.</i>colors -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The number of colors in the colormap. Only meaningful
+        for <a href="constants.html#ClassType">PseudoClass</a>
+        images.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.colorspace">colorspace</a><br>
+         colorspace=</td>
+        <td><i>image.</i>colorspace -&gt; <i>aColorspace</i><br>
+         <i>image.</i>colorspace = <i>aColorspace</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Image pixel interpretation. If the <a href=
+            "constants.html#ColorspaceType">colorspace</a> is
+            RGBColorspace the pixels are red, green, blue. If <a
+            href="#Image.matte">matte</a> is true, then red, green,
+            blue, and opacity. If it is CMYKColorspace, the pixels
+            are cyan, yellow, magenta, black. Otherwise the
+            colorspace is ignored.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.columns">columns</a></td>
+        <td><i>image.</i>columns -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The width of the image.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.compose">compose</a><br>
+         compose=</td>
+        <td><i>image.</i>compose -&gt;
+        <i>aCompositeOperator</i><br>
+         <i>image.</i>compose = <i>aCompositeOperator</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Image <a href=
+        "constants.html#CompositeOperator">composite operator</a>.
+        The default is OverCompositeOp.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.compression">compression</a><br>
+         compression=</td>
+        <td><i>image.</i>compression -&gt;
+        <i>aCompressionType</i><br>
+         <i>image.</i>compression = <i>aCompressionType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Image <a href=
+            "constants.html#CompressionType">compression type</a>.
+            The default is the compression type of the specified
+            image file.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.delay">delay</a><br>
+         delay=</td>
+        <td><i>image.</i>delay -&gt; <i>anInteger</i><br>
+         <i>image.</i>delay = <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Time in 1/100ths of a second (0 to 65535) which must
+            expire before displaying the next image in an animated
+            sequence.
+          </div>
+          <p>The default is 0.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.density">density</a><br>
+         density=</td>
+        <td><i>image.</i>density -&gt; <i>aString</i><br>
+         <i>image.</i>density = <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          The <span class="imquote">vertical and horizontal
+          resolution in pixels of the image.</span> The density is
+          a string in the form "XxY", or simply "X". If "Y" is
+          omitted it is set to "X". The default is "72x72". 
+          <p>Also see <a href=
+          "#Image.x_resolution">x_resolution</a> and <a href=
+          "#Image.y_resolution">y_resolution</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.depth">depth</a></td>
+        <td><i>image.</i>depth -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image depth (8 or 16).</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.directory">directory</a></td>
+        <td><i>image.</i>directory -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Tile names from within an image montage. Only valid
+            after calling <a href=
+            "ilist.html#ImageList.montage">Image#montage</a> or
+            reading a MIFF file which contains a directory.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.dispose">dispose</a><br>
+         dispose=</td>
+        <td><i>image.</i>dispose -&gt; <i>anInteger</i><br>
+         <i>image.</i>dispose = <i>aDisposeType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            GIF <a href="constants.html#DisposeType">disposal
+            method</a>. This attribute is used to control how
+            successive images are rendered (how the preceding image
+            is disposed of) when creating a GIF animation.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.extract_info">extract_info</a><span class=
+        "imversion">&nbsp;(5.5.6)</span><br>
+         extract_info=</td>
+        <td><i>image.</i>extract_info -&gt; <i><a href=
+        "struct.html#Rectangle">aRectangle</a></i><br>
+         <i>image.</i>extract_info = <i>aRectangle</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <p>Specify a rectangle within an image, or retrieve the
+          rectangle specified when the image was constituted. See
+          <a href=
+          "info.html#Info.extract_eq">Image::Info#extract=</a>.</p>
+          <p><b>Note:</b> with releases of ImageMagick prior to
+          5.5.6, this attribute is a synonym for <a href=
+          "#Image.tile_info">tile_info</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.filename">filename</a></td>
+        <td><i>image.</i>filename -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image filename.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.filesize">filesize</a></td>
+        <td><i>image.</i>filesize -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The image filesize in bytes.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.filter">filter</a><br>
+         filter=</td>
+        <td><i>image.</i>filter -&gt; <i>aFilterType</i><br>
+         <i>image.</i>filter = <i>aFilterType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            <a href="constants.html#FilterType">Filter</a> to use
+            when resizing image. The reduction filter employed has
+            a significant effect on the time required to resize an
+            image and the resulting quality. The default filter is
+            Lanczos which has been shown to produce high quality
+            results when reducing most images.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.format">format</a></td>
+        <td><i>image.</i>format -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The encoding format. For example, "GIF" or "PNG".</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.fuzz">fuzz</a><br>
+         fuzz=</td>
+        <td><i>image.</i>fuzz -&gt; <i>aFloat</i><br>
+         <i>image.</i>fuzz = <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Colors within this distance are considered equal. A
+            number of algorithms search for a target color. By
+            default the color must be exact. Use this option to
+            match colors that are close to the target color in RGB
+            space.
+          </div>
+          <p>See the <a href="image.html#Image.opaque">opaque</a>,
+          <a href=
+          "image.html#Image.texture_floodfill">texture_floodfill</a>,
+          and <a href=
+          "image.html#Image.transparent">transparent</a>
+          methods.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.gamma">gamma</a><br>
+         gamma=</td>
+        <td><i>image.</i>gamma -&gt; <i>aFloat</i><br>
+         <i>image.</i>gamma = <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Gamma level of the image. The same color image
+            displayed on two different workstations may look
+            different due to differences in the display monitor.
+            Use gamma correction to adjust for this color
+            difference.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.geometry">geometry</a><br>
+         geometry=</td>
+        <td><i>image.</i>geometry -&gt; <i>aString</i><br>
+         <i>image.</i>geometry = <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Preferred size of the image when encoding.
+          </div>
+          See <a href="imusage.html#geometry">The geometry
+          string</a>.
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.image_type">image_type</a><br>
+         image_type=</td>
+        <td><i>image.</i>image_type -&gt; <i>anImageType</i><br>
+         <i>image.</i>image_type = <i>anImageType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The <a href="constants.html#ImageType">image type</a>
+        classification. For example, GrayscaleType. Don't confuse
+        this attribute with the <a href="#Image.format">format</a>,
+        that is "GIF" or "JPG".</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.interlace">interlace</a><br>
+         interlace=</td>
+        <td><i>image.</i>interlace -&gt; <i>anInterlaceType</i><br>
+         <i>image.</i>interlace = <i>anInterlaceType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            The type of interlacing scheme (default NoInterlace).
+            This option is used to specify the type of interlacing
+            scheme for raw image formats such as RGB or YUV.
+            NoInterlace means do not interlace, LineInterlace uses
+            scanline interlacing, and PlaneInterlace uses plane
+            interlacing. PartitionInterlace is like PlaneInterlace
+            except the different planes are saved to individual
+            files (e.g. image.R, image.G, and image.B). Use
+            LineInterlace or PlaneInterlace to create an interlaced
+            GIF or progressive JPEG image.
+          </div>
+          <p>See <a href=
+          "constants.html#InterlaceType">InterlaceType</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.iptc_profile">iptc_profile</a><br>
+         iptc_profile=</td>
+        <td><i>image.</i>iptc_profile -&gt; <i>aString</i><br>
+         <i>image.</i>iptc_profile = <i>aString</i><br>
+         <i>image.</i>iptc_profile = <code>nil</code></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            IPTC profile. Specifications are available from the <a
+            href="http://www.iptc.org">International Press
+            Telecommunications Council</a> for IPTC profiles.
+          </div>
+          <p>To remove an existing profile, assign <code>nil</code>
+          to the <var>iptc_profile</var> attribute.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.matte">matte</a><br>
+         matte=</td>
+        <td><i>image.</i>matte -&gt; <code>true</code> <i>or</i>
+        <code>false</code><br>
+         <i>image.</i>matte = <code>true</code> <i>or</i>
+        <code>false</code></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>If <code>true</code>, honor the opacity values in the
+        image pixels. See <a href=
+        "struct.html#Pixel">Pixel</a>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.matte_color">matte_color</a><br>
+         matte_color=</td>
+        <td><i>image.</i>matte_color -&gt; <i>aString</i><br>
+         <i>image.</i>matte_color = <i>aString</i><br>
+         <i>image.</i>matte_color = <i>aPixel</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The matte color. Specify a color name or a <a href=
+        "struct.html#Pixel">Pixel</a> object. By default,
+        "#bdbdbd".</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.mean_error_per_pixel">mean_error_per_pixel</a></td>
+        <td><i>image.</i>mean_error_per_pixel -&gt;
+        <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            The mean error per pixel computed when a image is color
+            reduced. This parameter is only valid if the verbose
+            argument to <a href=
+            "image.html#Image.quantize">quantize</a> or <a href=
+            "image.html#Image.quantize">Image#quantize</a> is set
+            to true.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.mime_type">mime_type</a><br>
+        </td>
+        <td><i>image.</i>mime_type -&gt; <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Returns the officially registered (or de facto) MIME
+            media-type.
+          </div>
+          If there is no registered media-type, returns
+          "image/x-magick".
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.montage">montage</a><br>
+         montage=</td>
+        <td><i>image.</i>montage -&gt; <i>aString</i><br>
+         <i>image.</i>montage = <i>aString</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Tile size and offset within an image montage. Only
+            valid for montage images. The string is in the form of
+            a <a href="imusage.html#geometry">geometry</a> string.
+          </div>
+          <p>See <a href=
+          "ilist.html#ImageList.montage">ImageList#montage</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.normalized_mean_error">normalized_mean_error</a></td>
+        <td><i>image.</i>normalized_mean_error -&gt;
+        <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            The normalized mean error per pixel computed when an
+            image is color reduced. This parameter is only valid if
+            the verbose argument to <a href=
+            "image.html#Image.quantize">quantize</a> or <a href=
+            "image.html#Image.quantize">Image#quantize</a> is set
+            to true.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.normalized_maximum_error">normalized_maximum_error</a></td>
+        <td><i>image.</i>normalized_maximum_error -&gt;
+        <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            The normalized mean error per pixel computed when an
+            image is color reduced. This parameter is only valid if
+            the verbose argument to <a href=
+            "image.html#Image.quantize">quantize</a> or <a href=
+            "image.html#Image.quantize">Image#quantize</a> is set
+            to true.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.number_colors">number_colors</a></td>
+        <td><i>image.</i>number_colors -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Number of unique colors in the image.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.offset">offset</a><br>
+         offset=</td>
+        <td><i>image.</i>offset -&gt; <i>anInteger</i><br>
+         <i>image.</i>offset = <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Number of initial bytes to skip over when reading raw
+            image.
+          </div>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.opacity_eq">opacity=</a></td>
+        <td><i>image.</i>opacity = <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          A number between 0 and MaxRGB. <span class=
+          "imquote">Attenuates the opacity channel of an image. If
+          the image pixels are opaque, they are set to the
+          specified opacity level. Otherwise, the pixel opacity
+          values are blended with the supplied transparency
+          value.</span> 
+          <p>Note: there is no equivalent reader method.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.page">page</a><br>
+         <a name="Image.page_eq">page=</a></td>
+        <td><i>image.</i>page -&gt; <i>aRectangle</i><br>
+         <i>image.</i>page = <i>aRectangle</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          When compositing, this attribute describes the position
+          of this image with respect to the underlying image. See
+          <a href=
+          "ilist.html#ImageList.coalesce">ImageList#coalesce</a>,
+          <a href=
+          "ilist.html#ImageList.flatten_images">ImageList#flatten_images</a>,
+          and <a href=
+          "ilist.html#ImageList.mosaic">ImageList#mosaic</a>. 
+          <p>See <a href="struct.html#Rectangle">Rectangle</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.rendering_intent">rendering_intent</a><br>
+         rendering_intent=</td>
+        <td><i>image.</i>rendering_intent -&gt;
+        <i>aRenderingIntent</i><br>
+         <i>image.</i>rendering_intent =
+        <i>aRenderingIntent</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            The type of rendering intent.
+          </div>
+          <p>See <a href=
+          "constants.html#RenderingIntent">RenderingIntent</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.rows">rows</a></td>
+        <td><i>image.</i>rows -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The height of the image.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.scene">scene</a></td>
+        <td><i>image.</i>scene -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>The scene number assigned to the image the last time
+        the image was written to a multi-image image file. Don't
+        confuse this attribute with the <a href=
+        "ilist.html#ImageList.scene">ImageList#scene</a> attribute,
+        which denotes the image to which Image methods will be
+        sent.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.start_loop">start_loop</a><br>
+         start_loop=</td>
+        <td><i>image.</i>start_loop -&gt; <code>true</code>
+        <i>or</i> <code>false</code><br>
+         <i>image.</i>start_loop = <code>true</code> <i>or</i>
+        <code>false</code></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Indicates the first image in an animation.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.tile_info">tile_info</a><br>
+         tile_info=</td>
+        <td><i>image.</i>tile_info -&gt; <i>aRectangle</i><br>
+         <i>image.</i>tile_info = <i>aRectangle</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>
+          <div class="imquote">
+            Describes a tile within an image.&nbsp; For example, if
+            your image is 640x480 you may only want 320x256 with an
+            offset of +128+64. It is used for raw formats such as
+            RGB and CMYK as well as for TIFF.
+          </div>
+          <p><b>Note:</b> This attribute is deprecated in
+          ImageMagick 5.5.6 and later. Use <a href=
+          "#Image.extract_info">extract_info</a> instead.</p>
+          <p>See <a href="struct.html#Rectangle">Rectangle</a>.</p>
+        </td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.total_colors">total_colors</a></td>
+        <td><i>image.</i>total_colors -&gt; <i>anInteger</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>Set by <a href="image.html#Image.quantize">quantize</a>
+        and <a href="image.html#Image.quantize">Image#quantize</a>,
+        if the <var>verbose</var> argument is <code>true</code>.
+        The number of colors in the image.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name="Image.units">units</a><br>
+         units=</td>
+        <td><i>image.</i>units -&gt; <i>aResolutionType</i><br>
+         <i>image.</i>units = <i>aResolutionType</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="imquote">Units of image resolution.</span>
+        See <a href=
+        "constants.html#ResolutionType">ResolutionType</a>.</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.x_resolution">x_resolution</a><br>
+         x_resolution=</td>
+        <td><i>image.</i>x_resolution -&gt; <i>aFloat</i><br>
+         <i>image.</i>x_resolution = <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="imquote">Horizontal resolution of the
+        image.</span></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.y_resolution">y_resolution</a><br>
+         y_resolution=</td>
+        <td><i>image.</i>y_resolution -&gt; <i>aFloat</i><br>
+         <i>image.</i>y_resolution = <i>aFloat</i></td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td><span class="imquote">Vertical resolution of the
+        image.</span></td>
+      </tr>
+    </table>
+    <hr>
+    <table width="100%">
+      <tr>
+        <td style="text-align: left"><a href="ilist.html">&lt;-
+        Prev</a></td>
+        <td style="text-align: center"><a href=
+        "index.html">Contents</a></td>
+        <td style="text-align: right"><a href="image.html">Next
+        -&gt;</a></td>
+      </tr>
+    </table>
+  </body>
+</html>

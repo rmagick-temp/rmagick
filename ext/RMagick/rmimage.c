@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.11 2003/08/26 13:14:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.12 2003/09/04 13:00:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -734,6 +734,48 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
     }
 
     return self;
+}
+
+/*
+    Method:     Image_color_histogram(VALUE self);
+    Purpose:    Call GetColorHistogram (>= GM 1.1)
+    Notes:      returns hash {aPixel=>count}
+*/
+VALUE
+Image_color_histogram(VALUE self)
+{
+#if defined(HAVE_GETCOLORHISTOGRAM)
+    Image *image;
+    VALUE hash, pixel;
+    unsigned long x, colors;
+    HistogramColorPacket *histogram;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    histogram = GetColorHistogram(image, &colors, &exception);
+    HANDLE_ERROR
+
+    hash = rb_hash_new();
+    for (x = 0; x < colors; x++)
+    {
+        pixel = PixelPacket_to_Struct(&histogram[x].pixel);
+        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
+    }
+
+    /*
+        The histogram array is specifically allocated by malloc because it is 
+        supposed to be freed by the caller.  
+    */
+    free(histogram);
+
+    return hash;
+
+#else
+    not_implemented("color_histogram");
+    return (VALUE) 0;
+#endif
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.12 2003/08/30 23:53:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.13 2003/09/04 13:00:32 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -409,6 +409,7 @@ extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_color_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_color_histogram(VALUE);
 extern VALUE Image_colorize(int, VALUE *, VALUE);
 extern VALUE Image_colormap(int, VALUE *, VALUE);
 extern VALUE Image_composite(int, VALUE *, VALUE);

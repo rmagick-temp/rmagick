@@ -75,7 +75,7 @@ AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
 AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
 AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
 AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
-AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage])
+AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

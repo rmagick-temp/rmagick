@@ -1,3 +1,11 @@
+RMagick 1.3.2
+    o Fix profile! to require only 2 arguments, as documented.
+    o Correct spelling of 'transparent' in text_antialias.rb example.
+    o Add output of `Magick-config --libs` to LIBS variable in configure
+    o Minor fixes in documentation
+    o Test with GraphicsMagick 1.0.4
+    o Test with latest ImageMagick 5.5.8 beta
+
 RMagick 1.3.1
     o Fixed default base URI in the links to the installed xMagick doc
     o Applied the patch for bug #76 that caused the rubyname.rb example

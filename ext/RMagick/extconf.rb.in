@@ -6,17 +6,16 @@ require 'mkmf'
 # Pass along Ruby's version number
 VERSION_NUMBER = '0x'+RUBY_VERSION.tr('.','')
 
-$CFLAGS = "-std=gnu99 -Wall #{`@MAGICKCONFIG@ --cflags`}".chomp;
-$CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} #{`@MAGICKCONFIG@ --cppflags`}".chomp
+$CFLAGS = "-std=gnu99 -Wall @CFLAGS@"
+$CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} @CPPFLAGS@"
 
-ldflags = "#{`@MAGICKCONFIG@ --ldflags`}".chomp
 if RUBY_VERSION >= '1.8.0'
-    $DLDFLAGS = ldflags
+    $DLDFLAGS = "@LDFLAGS@"
 else
-    $LDFLAGS = ldflags
+    $LDFLAGS = "@LDFLAGS@"
 end
 
-$LOCAL_LIBS = " #{`@MAGICKCONFIG@ --libs`}".chomp
+$LOCAL_LIBS = "@LOCAL_LIBS@"
 
 create_makefile("RMagick")
 

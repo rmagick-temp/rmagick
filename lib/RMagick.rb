@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.14 2004/01/26 20:15:35 rmagick Exp $
+# $Id: RMagick.rb,v 1.15 2004/01/31 18:32:56 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2004 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1085,13 +1085,22 @@ public
         return self.length <=> other.length
     end
 
-    # Make a copy of
+    # Make a deep copy (see also dup)
     def copy
         copy_img = ImageList.new
         each { |f| copy_img << f.copy }
         copy_img.scene = @scene
         copy_img
     end
+
+    # Make a shallow copy (aka clone, see also copy)
+    def dup
+        copy_img = ImageList.new
+        each { |f| copy_img << f }
+        copy_img.scene = @scene
+        copy_img
+    end
+    alias clone dup
 
     # Return the current image
     def cur_image

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.41 2004/02/18 00:34:11 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.42 2004/02/23 00:31:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5819,7 +5819,7 @@ Image_class_type(VALUE self)
     Image *image;
     Data_Get_Struct(self, Image, image);
 
-    return INT2FIX(image->class);
+    return ClassType_new(image->class);
 }
 
 /*

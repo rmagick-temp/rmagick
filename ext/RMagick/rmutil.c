@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.22 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.23 2004/02/23 00:31:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -570,8 +570,36 @@ AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
     am->ty = v == Qnil ? 0.0 : NUM2DBL(v);
 }
 
+
 /*
- *  Static:     ColorspaceType_new
+    Extern:     ClassType_new
+    Purpose:    Construct a ClassType enum object for the specified value
+*/
+VALUE
+ClassType_new(ClassType cls)
+{
+    const char *name;
+
+    switch(cls)
+    {
+        default:
+        case UndefinedClass:
+            name = "UndefineClass";
+            break;
+        case DirectClass:
+            name = "DirectClass";
+            break;
+        case PseudoClass:
+            name = "PseudoClass";
+            break;
+    }
+
+    return rm_enum_new(Class_ClassType, ID2SYM(rb_intern(name)), INT2FIX(cls));
+}
+
+
+/*
+    Extern:     ColorspaceType_new
     Purpose:    construct a ColorspaceType enum object for the specified value
 */
 VALUE

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.38 2004/02/18 00:34:11 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.39 2004/02/23 00:31:21 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -726,6 +726,7 @@ extern VALUE   ChromaticityInfo_new(ChromaticityInfo *);
 extern void    Color_to_PixelPacket(PixelPacket *, VALUE);
 extern VALUE   Color_to_s(VALUE);
 extern VALUE   Color_from_ColorInfo(const ColorInfo *);
+extern VALUE   ClassType_new(ClassType);
 extern VALUE   ColorspaceType_new(ColorspaceType);
 extern VALUE   CompressionType_new(CompressionType);
 extern VALUE   FilterTypes_new(FilterTypes);

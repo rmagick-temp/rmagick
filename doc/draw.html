@@ -2070,15 +2070,19 @@ draw.stroke_opacity('40%')
           set antialiasing on or off.</p>
           <p>If the text string contains an embedded blank, quote,
           or apostrophe, surround the entire text string using a
-          character that is not in the text. You can use quotes,
+          character that is not in the text. ImageMagick uses these
+          characters to delimit the string but will strip them off
+          before drawing the text. You can use quotes,
           apostrophes, or braces ("{}"). You can also escape a
           blank, quote, or apostrophe by preceding it with a
           backslash ("\"). To include a backslash in the text, use
-          two consecutive backslashes. Here are some examples:</p>
+          two consecutive backslashes. Here are some examples.
+          The text to the right of &raquo; is the text that will
+          be drawn.</p>
 <pre class="example">
-gc.text(10,10, "'Quoted with apostrophes.'") &raquo; Quoted with apostrophes.
-gc.text(10,10, '"Quoted with quotes."') &raquo; Quoted with quotes.
-gc.text(10,10, %q/"What's up?"/) &raquo; "What's up?"
+gc.text(10,10, '"Hello there!"') &raquo; Hello there!
+gc.text(10,10, "'What\'s up?'") &raquo; What's up?
+gc.text(10,10, %q/"What's up?"/) &raquo; What's up?
 gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 </pre>
         </td>

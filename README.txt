@@ -357,6 +357,8 @@ Thanks to
       in many other ways
     * Simple Systems, for hosting the RMagick documentation online.
     * Mike Williams, for the RMagick Debian package
+    * ImageMagick Studio LLC, for help with ImageMagick and for hosting
+      the RMagick documentation.
 
 
     License

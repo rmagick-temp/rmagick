@@ -1,7 +1,7 @@
 
 # RMagick configure.ac
 
-AC_INIT(RMagick, 1.3.1, cyclists@nc.rr.com, RMagick-1.3.1.tar.gz)
+AC_INIT(RMagick, 1.3.2, cyclists@nc.rr.com, RMagick-1.3.2.tar.gz)
 echo "Configuring ${PACKAGE_STRING}"
 
 AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h])

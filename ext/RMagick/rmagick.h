@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.44 2004/03/19 01:32:22 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.45 2004/04/02 23:47:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -61,6 +61,7 @@
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
 
 typedef ImageInfo Info; // Make type name match class name
+typedef PixelPacket Pixel;
 
 // Montage
 typedef struct
@@ -224,6 +225,7 @@ EXTERN VALUE Class_WeightType;
 *   Commonly-used IDs
 */
 EXTERN ID ID__dummy_img_;       // "_dummy_img_"
+EXTERN ID ID_changed;           // "changed"
 EXTERN ID ID_call;              // "call"
 EXTERN ID ID_cur_image;         // "cur_image"
 EXTERN ID ID_dup;               // "dup"
@@ -234,6 +236,7 @@ EXTERN ID ID_GeometryValue;     // "GeometryValue"
 EXTERN ID ID_height;            // "height"
 EXTERN ID ID_initialize_copy;   // "initialize_copy"
 EXTERN ID ID_length;            // "length"
+EXTERN ID ID_notify_observers;  // "notify_observers"
 EXTERN ID ID_new;               // "new"
 EXTERN ID ID_push;              // "push"
 EXTERN ID ID_to_s;              // "to_s"
@@ -284,6 +287,7 @@ EXTERN ID ID_y;                 // "y"
 #define FIX_STG_TYPE LongPixel
 #endif
 
+
 /*
     Call rb_define_method for an attribute accessor method
 */
@@ -330,7 +334,7 @@ EXTERN ID ID_y;                 // "y"
     VALUE class##_##attr##_eq(VALUE self, VALUE val)\
     {\
         class *ptr;\
-        rb_check_frozen(self);\
+        rm_check_frozen(self);\
         Data_Get_Struct(self, class, ptr);\
         ptr->attr = R_##type##_to_C_##type(val);\
         return self;\
@@ -758,12 +762,26 @@ extern VALUE   EndianType_new(EndianType);
 extern VALUE   FilterTypes_new(FilterTypes);
 extern VALUE   Font_to_s(VALUE);
 extern VALUE   ImageList_cur_image(VALUE);
-extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
+extern VALUE   ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE   ImageType_new(ImageType);
 extern VALUE   InterlaceType_new(InterlaceType);
+
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE   Pixel_alloc(VALUE);
+#else
+extern VALUE   Pixel_new(int, VALUE *, VALUE);
+#endif
+ATTR_ACCESSOR(Pixel, red)
+ATTR_ACCESSOR(Pixel, green)
+ATTR_ACCESSOR(Pixel, blue)
+ATTR_ACCESSOR(Pixel, opacity)
+extern VALUE   Pixel_clone(VALUE);
+extern VALUE   Pixel_dup(VALUE);
 extern VALUE   Pixel_fcmp(int, VALUE *, VALUE);
 extern VALUE   Pixel_from_color(VALUE, VALUE);
 extern VALUE   Pixel_from_HSL(VALUE, VALUE);
+extern VALUE   Pixel_initialize(int, VALUE *, VALUE);
+extern VALUE   Pixel_init_copy(VALUE, VALUE);
 extern VALUE   Pixel_intensity(VALUE);
 extern VALUE   Pixel_to_color(int, VALUE *, VALUE);
 extern VALUE   Pixel_to_HSL(VALUE);
@@ -771,6 +789,7 @@ extern VALUE   Pixel_to_s(VALUE);
 extern VALUE   PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE   PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE   Pixel_from_PixelPacket(PixelPacket *);
+
 extern void    Point_to_PointInfo(PointInfo *, VALUE);
 extern VALUE   PointInfo_to_Point(PointInfo *);
 extern VALUE   PrimaryInfo_to_s(VALUE);
@@ -784,7 +803,6 @@ extern VALUE   Segment_from_SegmentInfo(SegmentInfo *);
 extern void    AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
 extern void    ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
 extern void    Color_to_ColorInfo(ColorInfo *, VALUE);
-extern void    Pixel_to_PixelPacket(PixelPacket *, VALUE);
 extern void    PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
 extern void    Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
 extern void    Segment_to_SegmentInfo(SegmentInfo *, VALUE);
@@ -812,6 +830,7 @@ extern VALUE   Enum_case_eq(VALUE, VALUE);
 extern char *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char *rm_string_value_ptr_len(volatile VALUE *, long *);
+extern void rm_check_frozen(VALUE);
 
 extern void *magick_malloc(const size_t);
 extern void magick_free(void *);

@@ -60,7 +60,8 @@
                   <li><a href="#Image.annotate">annotate</a></li>
                   <li><a href=
                   "#Image.black_threshold">black_threshold</a>
-                  <span class="imversion">&nbsp;(5.5.7)</span></li>
+                  <span class="imversion">&nbsp;(5.5.7)</span>
+                  <span class="gmversion">&nbsp;(1.1)</span></li>
                   <li><a href=
                   "#Image.blur_image">blur_image</a></li>
                   <li><a href="#Image.border">border</a></li>
@@ -76,6 +77,10 @@
                   "#Image.color_fill_to_border">color_fill_to_border</a></li>
                   <li><a href=
                   "#Image.color_floodfill">color_floodfill</a></li>
+                  <li><a href=
+                  "#Image.color_histogram">color_histogram</a>
+                  <span class="imversion">&nbsp;(5.5.8)</span>
+                  <span class="gmversion">&nbsp;(1.1)</span></li>
                   <li><a href="#Image.colorize">colorize</a></li>
                   <li><a href="#Image.colormap">colormap</a></li>
                   <li><a href=
@@ -111,7 +116,8 @@
                   <li><a href=
                   "#Image.export_pixels">export_pixels</a>
                   &nbsp;<span class=
-                  "imversion">&nbsp;(5.5.7)</span></li>
+                  "imversion">&nbsp;(5.5.7)</span> <span class=
+                  "gmversion">&nbsp;(1.1)</span></li>
                   <li><a href="#Image.flip">flip</a></li>
                   <li><a href="#Image.flip_bang">flip!</a></li>
                   <li><a href="#Image.flop">flop</a></li>
@@ -133,7 +139,8 @@
                   <li><a href=
                   "#Image.import_pixels">import_pixels</a>
                   &nbsp;<span class=
-                  "imversion">&nbsp;(5.5.7)</span></li>
+                  "imversion">&nbsp;(5.5.7)</span> <span class=
+                  "gmversion">&nbsp;(1.1)</span></li>
                   <li><a href="#Image.inspect">inspect</a></li>
                   <li><a href="#Image.level">level</a></li>
                   <li><a href=
@@ -186,7 +193,8 @@
                   "#Image.reduce_noise">reduce_noise</a></li>
                   <li><a href=
                   "#Image.random_channel_threshold">random_channel_threshold</a>&nbsp;<span
-                   class="imversion">&nbsp;(5.5.7)</span></li>
+                   class="imversion">&nbsp;(5.5.7)</span> <span
+                  class="gmversion">&nbsp;(1.0.2)</span></li>
                   <li><a href="#Image.resize">resize</a></li>
                   <li><a href="#Image.resize_bang">resize!</a></li>
                   <li><a href="#Image.roll">roll</a></li>
@@ -210,7 +218,8 @@
                   <li><a href=
                   "#Image.store_pixels">store_pixels</a></li>
                   <li><a href="#Image.strip_bang">strip!</a><span
-                  class="imversion">&nbsp;(5.5.8)</span></li>
+                  class="imversion">&nbsp;(5.5.8)</span><span
+                  class="gmversion">&nbsp;(1.1)</span></li>
                   <li><a href="#Image.swirl">swirl</a></li>
                   <li><a href=
                   "#Image.texture_fill_to_border">texture_fill_to_border</a></li>
@@ -231,7 +240,8 @@
                   <li><a href="#Image.wave">wave</a></li>
                   <li><a href=
                   "#Image.white_threshold">white_threshold</a>
-                  <span class="imversion">&nbsp;(5.5.7)</span></li>
+                  <span class="imversion">&nbsp;(5.5.7)</span><span
+                  class="gmversion">&nbsp;(1.1)</span></li>
                   <li><a href="#Image.write">write</a></li>
                 </ul>
               </td>
@@ -421,8 +431,7 @@ img = Magick::Image.capture {
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/blob.html#blobtoimage">
-        BlobToImage</a></td>
+        "http://www.imagemagick.org/www/api/blob.html#blobtoimage">BlobToImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -902,13 +911,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/effect.html#blurimage">
-        BlurImage</a></td>
+        "http://www.imagemagick.org/www/api/effect.html#blurimage">BlurImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
         "Image.black_threshold">black_threshold</a> <span class=
-        "imversion">(5.5.7)</span></td>
+        "imversion">(5.5.7)</span><span class=
+        "gmversion">(1.1)</span></td>
         <td><i>image</i>.black_threshold(<i>red_channel</i> [,
         <i>green_channel</i>[, <i>blue_channel</i>[,
         <i>opacity_channel</i>]]]) -&gt; <i>anImage</i></td>
@@ -1194,8 +1203,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#charcoalimage">
-        CharcoalImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#charcoalimage">CharcoalImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name="Image.chop">chop</a></td>
@@ -1366,6 +1374,39 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
+        "Image.color_histogram">color_histogram</a><span class=
+        "imversion">&nbsp;(5.5.8)</span> <span class=
+        "gmversion">&nbsp;(1.1)</span></td>
+        <td><i>image</i>.color_histogram() -&gt; <i>aHash</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>Computes the number of times each unique color appears
+        in the image.</td>
+      </tr>
+      <tr>
+        <td valign="top">Returns</td>
+        <td>A hash. Each key in the hash is a <a href=
+        "struct.html#Pixel">Pixel</a> representing a color that
+        appears in the image. The value associated with the key is
+        the number of times that color appears in the image.
+        <i>Caution:</i> if the image contains many colors the hash
+        will be very large. You may want to use the <a href=
+        "#Image.quantize">quantize</a> method to reduce the number
+        of colors before using <code>color_histogram</code>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td>GetColorHistogram (for GraphicsMagick)<br>
+         GetImageHistogram (for ImageMagick)</td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
         "Image.colorize">colorize</a></td>
         <td><i>image</i>.colorize(<i>red_pct</i>, <i>green_pct</i>,
         <i>blue_pct</i>, [<i>matte_pct</i>, ] <i>fill</i>) -&gt;
@@ -1415,8 +1456,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#colorizeimage">
-        ColorizeImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#colorizeimage">ColorizeImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -1556,8 +1596,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/image.html#setimage">
-        SetImage</a></td>
+        "http://www.imagemagick.org/www/api/image.html#setimage">SetImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -1771,8 +1810,7 @@ f.colors &raquo; 108
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#convolveimage">
-        ConvolveImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#convolveimage">ConvolveImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -1806,8 +1844,7 @@ f.colors &raquo; 108
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/image.html#cloneimage">
-        CloneImage</a></td>
+        "http://www.imagemagick.org/www/api/image.html#cloneimage">CloneImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -2163,8 +2200,7 @@ exit
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/effect.html#edgeimage">
-        EdgeImage</a></td>
+        "http://www.imagemagick.org/www/api/effect.html#edgeimage">EdgeImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -2306,8 +2342,7 @@ exit
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/image.html#setimage">
-        SetImage</a></td>
+        "http://www.imagemagick.org/www/api/image.html#setimage">SetImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -2316,7 +2351,8 @@ exit
       <tr class="method">
         <td class="methodname"><a name=
         "Image.export_pixels">export_pixels</a> <span class=
-        "imversion">(5.5.7)</span></td>
+        "imversion">(5.5.7)</span><span class=
+        "gmversion">(1.1)</span></td>
         <td><i>image</i>.export_pixels(<i>x</i>, <i>y</i>,
         <i>columns</i>, <i>rows</i>, <i>map</i>) -&gt;
         <i>anArray</i></td>
@@ -2809,13 +2845,13 @@ image.get_exif_by_tag() &raquo;
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#implodeimage">
-        ImplodeImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#implodeimage">ImplodeImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
         "Image.import_pixels">import_pixels</a> <span class=
-        "imversion">(5.5.7)</span></td>
+        "imversion">(5.5.7)</span><span class=
+        "gmversion">(1.1)</span></td>
         <td><i>image</i>.import_pixels(<i>x</i>, <i>y</i>,
         <i>columns</i>, <i>rows</i>, <i>map</i>, <i>pixels</i>)
         -&gt; <i>self</i></td>
@@ -3578,8 +3614,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#oilpaintimage">
-        OilPaintImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#oilpaintimage">OilPaintImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -3780,9 +3815,9 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
         thumbnail images as small as possible, use
         <var>profile!</var> to remove any profiles from the image
         as well. See <a href=
-        "http://www.imagemagick.org/www/FAQ.html#C31">
-        <cite>Why are my JPEG files larger than
-        expected?</cite></a> in the &times;Magick FAQ.</td>
+        "http://www.imagemagick.org/www/FAQ.html#C31"><cite>Why are
+        my JPEG files larger than expected?</cite></a> in the
+        &times;Magick FAQ.</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -4605,8 +4640,7 @@ f.inspect &raquo; "implode.jpg JPEG 396x280 DirectClass 8-bit 18037b"
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/shear.html#shearimage">
-        ShearImage</a></td>
+        "http://www.imagemagick.org/www/api/shear.html#shearimage">ShearImage</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -4689,8 +4723,7 @@ puts jj.signature
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#solarizeimage">
-        SolarizeImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#solarizeimage">SolarizeImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -4763,8 +4796,7 @@ puts jj.signature
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#steganoimage">
-        SteganoImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#steganoimage">SteganoImage</a></td>
       </tr>
       <tr>
         <td valign="top">Notes</td>
@@ -4799,8 +4831,7 @@ puts jj.signature
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#stereoimage">
-        StereoImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#stereoimage">StereoImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -4860,7 +4891,8 @@ puts jj.signature
       <tr class="method">
         <td class="methodname"><a name=
         "Image.strip_bang">strip!</a> <span class=
-        "imversion">&nbsp;(5.5.8)</span></td>
+        "imversion">&nbsp;(5.5.8)</span><span class=
+        "gmversion">(1.1)</span></td>
         <td><i>image</i>.strip! -&gt; <i>self</i></td>
       </tr>
       <tr>
@@ -4878,8 +4910,7 @@ puts jj.signature
       <tr>
         <td valign="top">ImageMagick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/image.html#stripimage">
-        StripImage</a></td>
+        "http://www.imagemagick.org/www/api/image.html#stripimage">StripImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name="Image.swirl">swirl</a></td>
@@ -4910,8 +4941,7 @@ puts jj.signature
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#swirlimage">
-        SwirlImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#swirlimage">SwirlImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
@@ -5170,8 +5200,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/blob.html#imagetoblob">
-        ImageToBlob</a></td>
+        "http://www.imagemagick.org/www/api/blob.html#imagetoblob">ImageToBlob</a></td>
       </tr>
       <tr>
         <td valign="top">See also</td>
@@ -5359,13 +5388,13 @@ f.to_color(p) &raquo; "#3F3D31"
       <tr>
         <td valign="top">&times;Magick API</td>
         <td><a href=
-        "http://www.imagemagick.org/www/api/fx.html#waveimage">
-        WaveImage</a></td>
+        "http://www.imagemagick.org/www/api/fx.html#waveimage">WaveImage</a></td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=
         "Image.white_threshold">white_threshold</a> <span class=
-        "imversion">(5.5.7)</span></td>
+        "imversion">(5.5.7)</span><span class=
+        "gmversion">(1.1)</span></td>
         <td><i>image</i>.white_threshold(<i>red_channel</i> [,
         <i>green_channel</i>[, <i>blue_channel</i>[,
         <i>opacity_channel</i>]]]) -&gt; <i>anImage</i></td>

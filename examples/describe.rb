@@ -1,4 +1,3 @@
-#! /usr/local/bin/ruby -w
 
 # Purpose: Demonstrate getting information from the image attributes.
 # Usage: describe.rb filename1 [filename2...]

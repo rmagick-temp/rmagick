@@ -1,4 +1,3 @@
-#! /usr/local/bin/ruby -w
 
 require 'RMagick'
 include Magick

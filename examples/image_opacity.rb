@@ -1,4 +1,3 @@
-#! /usr/local/bin/ruby -w
 
 # Use the Image#opacity attribute to create 
 # a semi-transparent title for an image.

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.19 2003/09/24 00:21:51 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.20 2003/09/29 23:58:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -112,6 +112,15 @@ typedef enum
     True = 1
 }
 boolean;
+
+typedef enum {
+    AnyWeight,
+    NormalWeight,
+    BoldWeight,
+    BolderWeight,
+    LighterWeight
+    } WeightType;
+
 
 typedef struct
 {
@@ -334,6 +343,59 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 /*
 *   Method, external function declarations
 */
+
+// rmdraw.c
+ATTR_WRITER(Draw, affine)
+ATTR_WRITER(Draw, align)
+ATTR_WRITER(Draw, decorate)
+ATTR_WRITER(Draw, density)
+ATTR_WRITER(Draw, encoding)
+ATTR_WRITER(Draw, fill)
+ATTR_WRITER(Draw, font)
+ATTR_WRITER(Draw, font_family)
+ATTR_WRITER(Draw, font_stretch)
+ATTR_WRITER(Draw, font_style)
+ATTR_WRITER(Draw, font_weight)
+ATTR_WRITER(Draw, gravity)
+ATTR_WRITER(Draw, pointsize)
+ATTR_WRITER(Draw, rotation)
+ATTR_WRITER(Draw, stroke)
+ATTR_WRITER(Draw, text_antialias)
+ATTR_WRITER(Draw, undercolor)
+extern VALUE Draw_annotate(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Draw_composite(int, VALUE *, VALUE);
+extern VALUE Draw_draw(VALUE, VALUE);
+extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
+extern VALUE Draw_initialize(VALUE);
+extern VALUE Draw_inspect(VALUE);
+RUBY16(extern VALUE Draw_new(VALUE);)
+RUBY18(extern VALUE Draw_alloc(VALUE);)
+extern VALUE Draw_primitive(VALUE, VALUE);
+
+ATTR_WRITER(Montage, background_color)
+ATTR_WRITER(Montage, border_color)
+ATTR_WRITER(Montage, border_width)
+ATTR_WRITER(Montage, compose)
+ATTR_WRITER(Montage, filename)
+ATTR_WRITER(Montage, fill)
+ATTR_WRITER(Montage, font)
+ATTR_WRITER(Montage, frame)
+ATTR_WRITER(Montage, geometry)
+ATTR_WRITER(Montage, gravity)
+ATTR_WRITER(Montage, matte_color)
+ATTR_WRITER(Montage, pointsize)
+ATTR_WRITER(Montage, shadow)
+ATTR_WRITER(Montage, stroke)
+ATTR_WRITER(Montage, texture)
+ATTR_WRITER(Montage, tile)
+ATTR_WRITER(Montage, title)
+extern VALUE Montage_initialize(VALUE);
+RUBY16(extern VALUE Montage_new(VALUE);)
+RUBY18(extern VALUE Montage_alloc(VALUE);)
+extern VALUE rm_montage_new(void);
+
+
+
 
 // rmmain.c
 extern VALUE rm_montage_new(void);

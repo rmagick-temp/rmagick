@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.9 2003/08/03 21:49:08 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.10 2003/08/26 12:25:14 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -499,6 +499,7 @@ extern VALUE Image_texture_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_threshold(VALUE, VALUE);
 extern VALUE Image_thumbnail(int, VALUE *, VALUE);
 extern VALUE Image_thumbnail_bang(int, VALUE *, VALUE);
+extern VALUE Image_tint(int, VALUE *, VALUE);
 extern VALUE Image_to_blob(VALUE);
 extern VALUE Image_to_color(VALUE, VALUE);
 extern VALUE Image_transparent(int, VALUE *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.9 2003/08/18 00:19:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.10 2003/08/26 12:25:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2455,6 +2455,7 @@ Image_geometry_eq(
     magick_clone_string(&image->geometry, geom);
     return self;
 }
+
 
 /*
     Method:     Image#get_pixels(x, y, columns. rows)
@@ -5246,6 +5247,83 @@ Image_tile_info_eq(VALUE self, VALUE rect)
     Struct_to_RectangleInfo(&image->tile_info, rect);
 #endif
     return self;
+}
+
+
+/*
+    Method:     Image#tint
+    Purpose:    Call TintImage
+    Notes:      New for 5.5.8
+                Opacity values are percentages: 0.10 -> 10%.
+*/
+VALUE
+Image_tint(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_TINTIMAGE)
+    Image *image, *new_image;
+    PixelPacket tint;
+    double red_pct_opaque, green_pct_opaque, blue_pct_opaque;
+    double alpha_pct_opaque = 1.0;
+    char opacity[50];
+    ExceptionInfo exception;
+    
+    switch(argc)
+    {
+        case 2:
+            red_pct_opaque   = NUM2DBL(argv[1]);
+            green_pct_opaque = blue_pct_opaque = red_pct_opaque;
+            break;
+        case 3:
+            red_pct_opaque   = NUM2DBL(argv[1]);
+            green_pct_opaque = NUM2DBL(argv[2]);
+            blue_pct_opaque  = red_pct_opaque;
+            break;
+        case 4:
+            red_pct_opaque     = NUM2DBL(argv[1]);
+            green_pct_opaque   = NUM2DBL(argv[2]);
+            blue_pct_opaque    = NUM2DBL(argv[3]);
+            break;
+        case 5:
+            red_pct_opaque     = NUM2DBL(argv[1]);
+            green_pct_opaque   = NUM2DBL(argv[2]);
+            blue_pct_opaque    = NUM2DBL(argv[3]);
+            alpha_pct_opaque   = NUM2DBL(argv[4]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 5)", argc);
+            break;
+    }
+    
+    if (red_pct_opaque < 0.0 || green_pct_opaque < 0.0 
+        || blue_pct_opaque < 0.0 || alpha_pct_opaque < 0.0)
+    {
+        rb_raise(rb_eArgError, "opacity percentages must be non-negative.");
+    }
+
+#if defined(HAVE_SNPRINTF)
+    snprintf(opacity, sizeof(opacity),
+#else
+    sprintf(opacity,
+#endif
+                     "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
+                   , blue_pct_opaque*100.0, alpha_pct_opaque*100.0); 
+                      
+    Struct_to_PixelPacket(&tint, argv[0]);
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+    
+    new_image = TintImage(image, opacity, tint, &exception);
+    HANDLE_ERROR
+    
+    if (!new_image)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    
+    return rm_image_new(new_image);
+#else
+    rb_notimplement();
+#endif
 }
 
 /*

@@ -1,8 +1,10 @@
 RMagick 1.4.0
-	o Added HSLColorspace, HWBColorspace constants
+	o Added HSLColorspace, HWBColorspace constants (IM 5.5.7, GM 1.0.2)
 	o Added CopyCyanCompositeOp, CopyMagentaCompositeOp,
-	   CopyYellowCompositeOp, CopyBlackCompositeOp constants
-	   
+	   CopyYellowCompositeOp, CopyBlackCompositeOp constants (IM 5.5.7)
+    o Added get_exif_by_entry, get_exif_by_tag to Image class
+    o Added TintImage (IM 5.5.8)
+
 RMagick 1.3.0
     o Added strip!, import_pixels, export_pixels, random_channel_threshold
       to the Image class. (Available only with ImageMagick 5.5.8, which

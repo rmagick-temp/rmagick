@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.11 2003/08/18 00:19:15 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.12 2003/08/26 12:25:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1660,6 +1660,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "threshold", Image_threshold, 1);
     rb_define_method(Class_Image, "thumbnail", Image_thumbnail, -1);
     rb_define_method(Class_Image, "thumbnail!", Image_thumbnail_bang, -1);
+    rb_define_method(Class_Image, "tint", Image_tint, -1);
     rb_define_method(Class_Image, "to_color", Image_to_color, 1);
     rb_define_method(Class_Image, "to_blob", Image_to_blob, 0);
     rb_define_method(Class_Image, "transparent", Image_transparent, -1);

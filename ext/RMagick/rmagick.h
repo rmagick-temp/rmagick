@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.18 2003/09/20 22:36:29 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.19 2003/09/24 00:21:51 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -137,7 +137,7 @@ typedef struct
     Here, if we don't already have magick_(u)int64_t, define them.
 */
 #if !defined(HAVE_MAGICK_INT64_T)
-#if defined(HAVE_MAGICKSIGNEDTYPE)
+#if defined(HAVE_MAGICKOFFSETTYPE)
 typedef MagickSignedType magick_int64_t;
 #elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
 typedef ExtendedSignedIntegralType magick_int64_t;
@@ -147,7 +147,7 @@ typedef off_t magick_int64_t;
 #endif
 
 #if !defined(HAVE_MAGICK_UINT64_T)
-#if defined(HAVE_MAGICKUNSIGNEDTYPE)
+#if defined(HAVE_MAGICKSIZETYPE)
 typedef MagickUnsignedType magick_uint64_t;
 #elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
 typedef ExtendedUnsignedIntegralType magick_uint64_t;

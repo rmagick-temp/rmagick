@@ -22,7 +22,7 @@
          background-color: #f0f0f0;
          vertical-align: top;
       }
-                </style>
+                    </style>
   </head>
   <body>
     <table width="100%">
@@ -75,20 +75,18 @@
     </div>
     <p>Line 1 requires the RMagick.rb file, which defines the
     <b>Magick</b> module. The Magick module contains 3 major
-    classes, <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. Thi
-    You don't have to write the file using the same format that it
-    was in when you read it.s section describes the ImageList and
-    Image classes. The Draw class is explained in <i><a href=
-    "#drawing">Drawing on and adding text to images</a></i>, below.
-    The statement on line 5 creates an imagelist object and
-    initializes it by reading the <code>Cheetah.jpg</code>
-    file<sup><a href="#cwd">1</a></sup>. Line 6 sends the
-    <var>display</var> method to <code>cat</code>. When you send
-    <var>display</var> to an imagelist, it causes all the images in
-    the imagelist to be displayed on the default X Window
-    screen<sup><a href="#0.0">2</a></sup> . In this case, the
-    <var>display</var> method makes a picture of a cheetah appear
-    on your monitor.</p>
+    classes, <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. This
+    section describes the ImageList and Image classes. The Draw
+    class is explained in <i><a href="#drawing">Drawing on and
+    adding text to images</a></i>, below. The statement on line 5
+    creates an imagelist object and initializes it by reading the
+    <code>Cheetah.jpg</code> file<sup><a href="#cwd">1</a></sup>.
+    Line 6 sends the <var>display</var> method to <code>cat</code>.
+    When you send <var>display</var> to an imagelist, it causes all
+    the images in the imagelist to be displayed on the default X
+    Window screen<sup><a href="#0.0">2</a></sup> . In this case,
+    the <var>display</var> method makes a picture of a cheetah
+    appear on your monitor.</p>
     <p>Type this program in and try running it now. The
     <code>Cheetah.jpg</code> file is in the <code>ex/images</code>
     subdirectory where you installed the RMagick documentation.</p>
@@ -108,7 +106,7 @@
     very few exceptions, any method defined in the Image class can
     be used as well. Since Image methods always operate on a single
     image, when an Image method is sent to an imagelist, the
-    ImageList class sends the method to the current image, that is
+    ImageList class sends the method to the current image, that is,
     the image specified by the scene number.</p>
     <p>The ImageList class is a subclass of the Array class, so you
     can use most Array methods to change the images in the

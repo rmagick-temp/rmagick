@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.38 2004/02/09 23:46:49 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.39 2004/02/11 23:03:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -633,6 +633,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     volatile VALUE geom_str;
 
     Data_Get_Struct(self, Image, image);
+    geom_str = rb_funcall(geom_arg, to_s_ID, 0);
     geometry = STRING_PTR(geom_str);
 
     width = image->columns;

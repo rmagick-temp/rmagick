@@ -1,3 +1,6 @@
+RMagick 1.7.0
+    o Added splice method to Image class (ImageMagick 6.0.0)
+
 RMagick 1.6.0
     o Added posterize, gaussian_blur_channel, convolve_channel methods to Image class
       (ImageMagick 6.0.0)

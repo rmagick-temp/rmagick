@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.60 2004/08/02 22:39:15 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.61 2004/08/20 20:22:32 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -744,6 +744,7 @@ extern VALUE Image_shear(VALUE, VALUE, VALUE);
 extern VALUE Image_signature(VALUE);
 extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
+extern VALUE Image_splice(int, VALUE *, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
 extern VALUE Image_statistics(VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);

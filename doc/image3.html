@@ -128,6 +128,8 @@
 
           <li><a href="#solarize">solarize</a></li>
 
+          <li><a href="#splice">splice</a></li>
+
           <li><a href="#spread">spread</a></li>
 
           <li><a href="#statistics">statistics</a></li>
@@ -137,13 +139,13 @@
           <li><a href="#stereo">stereo</a></li>
 
           <li><a href="#store_pixels">store_pixels</a></li>
-
-          <li><a href="#strip_bang">strip!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#strip_bang">strip!</a></li>
+
           <li><a href="#swirl">swirl</a></li>
 
           <li><a href=
@@ -1438,6 +1440,35 @@ img.properties &raquo;
 
     <p>SignatureImage</p>
   </div>
+
+<div class="sig">
+  <h3 id="splice">splice</h3>
+  <p><span class="arg">image</span>.splice(<span class="arg">geometry</span>[, <span class="arg">color</span>]) -&gt; <em>anImage</em></p>
+</div>
+
+<div class="desc">
+<h4>Description</h4>
+<p>Splice a solid color into the image as defined by the <code>geometry</code> argument.</p>
+
+<h4>Arguments</h4>
+<dl>
+<dt>geometry</dt>
+<dd>A <a href="imusage.html#geometry">geometry string</a> or <a href="struct.html#Geometry">Geometry object</a>.</dd>
+<dt>color</dt>
+<dd>The color to be spliced. Either a <a href="imusage.html#color_names">color name</a> or a <a href="struct.html#Pixel">pixel</a>. If omitted, uses the image's background color.</dd>
+</dl>
+
+<h4>Returns</h4>
+<p>A new image</p>
+<h4>See also</h4>
+<p><a href="image1.html#color_fill_to_border">color_fill_to_border</a>,
+<a href="image1.html#color_floodfill">color_floodfill</a>,
+<a href="image1.html#color_reset_bang">color_reset!</a>, <a href="image2.html#color_reset_bang">erase!</a>, <a href="image2.html#opaque">opaque</a></p>
+<h4>Magick API</h4>
+<p>SpliceImage (available in ImageMagick 6.0.0)</p>
+</div>
+
+
 
   <div class="sig">
     <h3 id="solarize">solarize</h3>

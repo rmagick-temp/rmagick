@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.65 2004/08/18 23:22:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.66 2004/08/20 20:22:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -697,6 +697,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "signature", Image_signature, 0);
     rb_define_method(Class_Image, "solarize", Image_solarize, -1);
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
+    rb_define_method(Class_Image, "splice", Image_splice, -1);
     rb_define_method(Class_Image, "spread", Image_spread, -1);
     rb_define_method(Class_Image, "statistics", Image_statistics, 0);
     rb_define_method(Class_Image, "stegano", Image_stegano, 2);
@@ -1443,7 +1444,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/08/18 23:22:36 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/08/20 20:22:32 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

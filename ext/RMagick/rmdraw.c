@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.7 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.8 2004/01/31 18:34:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -566,6 +566,37 @@ Draw_draw(VALUE self, VALUE image_arg)
     draw->info->primitive = NULL;
 
     return self;
+}
+
+/*
+ *  Method:     Draw#dup
+ *  Purpose:    Copy a Draw object
+ *  Notes:      a.k.a clone
+*/
+VALUE
+Draw_dup(VALUE self)
+{
+    Draw *draw, *draw2;
+    volatile VALUE dup;
+
+    draw2 = ALLOC(Draw);
+    memset(draw2, '\0', sizeof(Draw));
+
+    Data_Get_Struct(self, Draw, draw);
+
+    draw2->info = CloneDrawInfo(NULL, draw->info);
+    if (!draw2->info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    if (draw->primitives)
+    {
+        draw2->primitives = rb_str_dup(draw->primitives);
+    }
+    dup = Data_Wrap_Struct(CLASS_OF(self), mark_Draw, destroy_Draw, draw2);
+
+    return dup;
 }
 
 /*

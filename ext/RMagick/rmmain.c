@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.40 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.41 2004/01/31 18:34:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -447,6 +447,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
+    rb_define_method(Class_Image, "clone", Image_copy, 0);
     rb_define_method(Class_Image, "color_flood_fill", Image_color_flood_fill, 5);
     rb_define_method(Class_Image, "color_histogram", Image_color_histogram, 0);
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
@@ -465,6 +466,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
     rb_define_method(Class_Image, "_dump", Image__dump, 1);
+    rb_define_method(Class_Image, "dup", Image_copy, 0);
     rb_define_method(Class_Image, "each_profile", Image_each_profile, 0);
     rb_define_method(Class_Image, "edge", Image_edge, -1);
     rb_define_method(Class_Image, "emboss", Image_emboss, -1);
@@ -606,8 +608,10 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Draw, undercolor)
 
     rb_define_method(Class_Draw, "annotate", Draw_annotate, 6);
+    rb_define_method(Class_Draw, "clone", Draw_dup, 0);
     rb_define_method(Class_Draw, "composite", Draw_composite, -1);
     rb_define_method(Class_Draw, "draw", Draw_draw, 1);
+    rb_define_method(Class_Draw, "dup", Draw_dup, 0);
     rb_define_method(Class_Draw, "get_type_metrics", Draw_get_type_metrics, -1);
     rb_define_method(Class_Draw, "initialize", Draw_initialize, 0);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
@@ -1189,7 +1193,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/01/01 01:32:29 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/01/31 18:34:05 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

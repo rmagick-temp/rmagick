@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.34 2004/01/01 01:32:29 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.35 2004/01/31 18:34:05 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -392,6 +392,7 @@ ATTR_WRITER(Draw, undercolor)
 extern VALUE Draw_annotate(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Draw_composite(int, VALUE *, VALUE);
 extern VALUE Draw_draw(VALUE, VALUE);
+extern VALUE Draw_dup(VALUE);
 extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);

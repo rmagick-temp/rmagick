@@ -10,8 +10,8 @@ polynesia.scale!(300.0/polynesia.rows)
 # Convert the color image to monochrome
 mono = polynesia.quantize(256, Magick::GRAYColorspace)
 
-# Colorize with a 20% blend of a brownish-orange color
-colorized = mono.colorize(0.2, 0.2, 0.2, 'orange3')
+# Colorize with a 25% blend of a brownish-orange color
+colorized = mono.colorize(0.25, 0.25, 0.25, '#cc9933')
 
 # Do the usual before-and-after composite. Draw a line down the middle.
 colorized.crop!(colorized.columns/2,0,colorized.columns,colorized.rows)

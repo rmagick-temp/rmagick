@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.75 2004/12/15 23:58:33 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.76 2004/12/30 03:13:04 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -773,6 +773,7 @@ extern VALUE Image_scale_bang(int, VALUE *, VALUE);
 extern VALUE Image_segment(int, VALUE *, VALUE);
 extern VALUE Image_set_channel_depth(VALUE, VALUE, VALUE);
 extern VALUE Image_shade(int, VALUE *, VALUE);
+extern VALUE Image_shadow(int, VALUE *, VALUE);
 extern VALUE Image_sharpen(int, VALUE *, VALUE);
 extern VALUE Image_sharpen_channel(int, VALUE *, VALUE);
 extern VALUE Image_shave(VALUE, VALUE, VALUE);
@@ -922,8 +923,8 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern void   rm_check_ary_len(VALUE, int);
 extern void   rm_check_frozen(VALUE);
-extern VALUE  rm_obj_to_s(VALUE);
-extern double rm_fuzz_to_dbl(VALUE fuzz);
+extern double rm_fuzz_to_dbl(VALUE);
+extern double rm_percentage(VALUE);
 extern VALUE  rm_define_enum_type(char *);
 extern void   rm_write_temp_image(Image *, char *);
 extern void   rm_delete_temp_image(char *);

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.20 2004/12/05 22:36:11 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.21 2004/12/30 03:13:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -639,7 +639,7 @@ ImageList_write(VALUE self, VALUE file)
     else
     {
         // Convert arg to string. Catch exceptions.
-        file = rb_rescue(rm_obj_to_s, file, file_arg_rescue, file);
+        file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         // Copy the filename to the Info and to the Image.
         filename = STRING_PTR_LEN(file, filenameL);

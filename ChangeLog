@@ -1,3 +1,6 @@
+RMagick 1.8.0
+    o Added Image#shadow (ImageMagick 6.1.7)
+
 RMagick 1.7.1
     o Fix bugs #1250, #1253
     o Tested with ImageMagick 6.1.7, Ruby 1.8.2

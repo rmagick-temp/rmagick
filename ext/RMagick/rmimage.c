@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.89 2004/12/24 21:29:48 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.90 2004/12/30 03:13:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5853,7 +5853,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     else
     {
         // Convert arg to string. If an exception occurs raise an error condition.
-        file = rb_rescue(rm_obj_to_s, file, file_arg_rescue, file);
+        file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         filename = STRING_PTR_LEN(file, filename_l);
         filename_l = min(filename_l, (long)sizeof(info->filename));
@@ -6376,6 +6376,69 @@ Image_shade(int argc, VALUE *argv, VALUE self)
     new_image = ShadeImage(image, shading, azimuth, elevation, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#shadow(x_offset=4, y_offset=4, sigma=4.0, opacity=1.0)
+                x- and y-offsets are the pixel offset
+                opacity is either a number between 0 and 1 or a string "NN%"
+                sigma is the std. dev. of the Gaussian, in pixels.
+    Purpose:    Call ShadowImage
+    Notes:      The defaults are taken from the mogrify.c source, except
+                for opacity, which has no default.
+                Introduced in 6.1.7
+*/
+VALUE
+Image_shadow(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SHADOWIMAGE)
+    Image *image, *new_image;
+    double opacity = 100.0;
+    double sigma = 4.0;
+    long x_offset = 4L;
+    long y_offset = 4L;
+    ExceptionInfo exception;
+
+    switch(argc)
+    {
+        case 4:
+            opacity = rm_percentage(argv[3]);   // Clamp to 1.0 < x <= 100.0
+            if (fabs(opacity) < 0.01)
+            {
+                rb_warning("shadow will be transparent - opacity %g very small", opacity);
+            }
+            opacity = fmin(opacity, 1.0);
+            opacity = fmax(opacity, 0.01);
+            opacity *= 100.0;
+        case 3:
+            sigma = NUM2DBL(argv[2]);
+        case 2:
+            y_offset = NUM2ULONG(argv[1]);
+        case 1:
+            x_offset = NUM2ULONG(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 4)", argc);
+            break;
+    }
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = ShadowImage(image, opacity, sigma, x_offset, y_offset, &exception);
+    if (!new_image)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    HANDLE_ERROR_IMG(new_image)
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*
@@ -7715,7 +7778,7 @@ Image_write(VALUE self, VALUE file)
         // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
 
         // Convert arg to string. If an exception occurs raise an error condition.
-        file = rb_rescue(rm_obj_to_s, file, file_arg_rescue, file);
+        file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         filename = STRING_PTR_LEN(file, filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);

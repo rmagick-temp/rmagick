@@ -132,7 +132,7 @@ fi
 AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
 AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
-AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel])
+AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel ShadowImage])
 
 # What typedefs?
 AC_CHECK_TYPES([DisposeType,

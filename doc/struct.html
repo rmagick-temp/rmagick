@@ -50,6 +50,8 @@
 
           <li><a href="#Chromaticity">Chromaticity</a></li>
 
+          <li><a href="#Geometry">Geometry</a></li>
+
           <li><a href="#Pixel">Pixel</a></li>
 
           <li><a href="#Point">Point</a></li>
@@ -70,9 +72,9 @@
         <p>These structure classes are used to create objects used
         as attribute and argument values in other RMagick classes.
         Generally the classes define only attributes and their
-        accessor methods. The <code>Pixel</code> structure,
-        however, defines additional constructors and conversion
-        methods.</p>
+        accessor methods. The <code>Pixel</code> and
+        <code>Geometry</code> classes, however, define additional
+        constructors and conversion methods.</p>
       </td>
     </tr>
 
@@ -221,6 +223,205 @@
 
       <td valign="top">White point (e.g. white_point.x=0.3127,
       white_point.y=0.329)</td>
+    </tr>
+
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+
+    <tr class="classname2">
+      <td colspan="2"><a name="Geometry">class Geometry</a></td>
+    </tr>
+
+    <tr class="methodsection2">
+      <td colspan="2">
+        <h3>class methods</h3>
+      </td>
+    </tr>
+
+    <tr class="method2">
+      <td class="methodname2"><a name="Geometry.new">new</a></td>
+
+      <td>Magick::Geometry.<i>new</i>(<i>width</i>=nil,
+      <i>height</i>=nil, <i>x</i>=nil, <i>y</i>=nil,
+      <i>flag</i>=nil) -&gt; <i>aGeometry</i></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>
+        <p>A Geometry object is the equivalent of a <a href=
+        "imusage.html#geometry">geometry string</a>. A Geometry
+        object can be used anywhere a geometry string can be
+        used.</p>
+
+        <p>A geometry string has the general form
+        "WxH+x+y[!@%&lt;&gt;]. In a Geometry object, the
+        <code>width</code> attribute specifies the W value. The
+        <code>height</code> attribute specifies the H value. The
+        <code>x</code> and <code>y</code> attributes specify the x
+        and y values, respectively. If any of these attributes is
+        omitted the default is nil or 0.</p>
+
+        <p>The flag attribute is one of the constants shown
+        <a name="geometry_constants">here</a>:</p>
+
+        <table border="1" align="center" summary=
+        "geometry flag constants" bgcolor="#F0F0F0">
+          <caption>
+            <strong>Geometry flag constants</strong>
+          </caption>
+
+          <tr>
+            <td align="center"><strong>Constant<br>
+            name</strong></td>
+
+            <td align="center"><strong>Geometry<br>
+            string flag</strong></td>
+
+            <td align="center"><strong>Explanation</strong></td>
+          </tr>
+
+          <tr>
+            <td>PercentGeometry</td>
+
+            <td align="center">%</td>
+
+            <td>Normally the attributes are treated as pixels. Use
+            this flag when the <code>width</code> and
+            <code>height</code> attributes represent
+            <em>percentages</em>. For example, 125x75 means 125% of
+            the height and 75% of the width. The <code>x</code> and
+            <code>y</code> attributes are not affected by this
+            flag.</td>
+          </tr>
+
+          <tr>
+            <td>AspectGeometry</td>
+
+            <td align="center">!</td>
+
+            <td>Use this flag when you want to force the new image
+            to have exactly the size specified by the the
+            <code>width</code> and <code>height</code>
+            attributes.</td>
+          </tr>
+
+          <tr>
+            <td>LessGeometry</td>
+
+            <td align="center">&lt;</td>
+
+            <td>Use this flag when you want to change the size of
+            the image only if both its width and height are smaller
+            the values specified by those attributes. The image
+            size is changed proportionally.</td>
+          </tr>
+
+          <tr>
+            <td>GreaterGeometry</td>
+
+            <td align="center">&gt;</td>
+
+            <td>Use this flag when you want to change the size of
+            the image if either its width and height exceed the
+            values specified by those attributes. The image size is
+            changed proportionally.</td>
+          </tr>
+
+          <tr>
+            <td>AreaGeometry</td>
+
+            <td align="center">@</td>
+
+            <td>This flag is useful only with a single
+            <code>width</code> attribute. When present, it means
+            the <code>width</code> attribute represents the total
+            area of the image in pixels.</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td>Example</td>
+
+      <td>
+        <pre>
+g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
+</pre>
+      </td>
+    </tr>
+
+    <tr class="method2">
+      <td class="methodname2"><a name=
+      "Geometry.from_s">from_s</a></td>
+
+      <td>Magick::Geometry.<em>from_s</em>(<i>string</i>) -&gt;
+      <i>aGeometry</i></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>Creates a Geometry object from a <a href=
+      "imusage.html#geometry">geometry string</a>.</td>
+    </tr>
+
+    <tr class="methodsection2">
+      <td colspan="2">
+        <h3>instance methods</h3>
+      </td>
+    </tr>
+
+    <tr class="method2">
+      <td class="methodname2"><a name="Geometry.to_s">to_s</a></td>
+
+      <td><em>geometry.</em>to_s() -&gt; <i>aString</i></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Description</td>
+
+      <td>Returns the string equivalent of the receiver.</td>
+    </tr>
+
+    <tr class="methodsection2">
+      <td colspan="2">
+        <h3>attributes</h3>
+      </td>
+    </tr>
+
+    <tr>
+      <td>width</td>
+
+      <td valign="top">a positive Numeric value</td>
+    </tr>
+
+    <tr>
+      <td>height</td>
+
+      <td valign="top">a positive Numeric value</td>
+    </tr>
+
+    <tr>
+      <td>x</td>
+
+      <td valign="top">an integer</td>
+    </tr>
+
+    <tr>
+      <td>y</td>
+
+      <td valign="top">an integer</td>
+    </tr>
+
+    <tr>
+      <td>flag</td>
+
+      <td valign="top">one of the constants listed <a href=
+      "#geometry_constants">above</a>.</td>
     </tr>
 
     <tr>

@@ -796,8 +796,8 @@ f = imagelist.cur_image
       <td>Both the ImageList class and the Image class support the
       <var>cur_image</var> method. Of course, in the Image class,
       <var>cur_image</var> simply returns <var>self</var>. When a
-      RMagick method accepts either an image or a imagelist as
-      an argument, it sends the <var>cur_image</var> method to the
+      RMagick method accepts either an image or a imagelist as an
+      argument, it sends the <var>cur_image</var> method to the
       argument to get the current image.</td>
     </tr>
 
@@ -1115,8 +1115,9 @@ images/Button_B.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 5157b"
         <dl>
           <dt>reference</dt>
 
-          <dd>An image or a imagelist. If an imagelist, <var>map</var> uses
-          the current image as the reference image.</dd>
+          <dd>An image or a imagelist. If an imagelist,
+          <var>map</var> uses the current image as the reference
+          image.</dd>
 
           <dt>dither</dt>
 
@@ -1297,14 +1298,24 @@ self.font = "Courier"
 
             <td>
               The size of an ornamental frame surrounding each
-              tile. The frame specification is a string in the form
-              <var>&lt;width&gt;x&lt;height&gt;+&lt;outer bevel
-              width&gt;+&lt;inner bevel width&gt;</var>. The values
-              are in pixels. For example, to surround each tile
-              with a frame 20 pixels wide by 20 pixels high and a
-              4-pixel inner and outer bevel, use:
+              tile. The frame specification may be either a string
+              or a <a href="struct.html#Geometry">Geometry</a>
+              object. If the argument is a string, it must have the
+              form <var>&lt;width&gt;x&lt;height&gt;+&lt;outer
+              bevel width&gt;+&lt;inner bevel width&gt;</var>. If
+              the argument is a Geometry object, specify the width
+              and height of the frame with the <code>width</code>
+              and <code>height</code> attributes, and specify the
+              outer bevel width and the inner bevel width with the
+              <code>x</code> and <code>y</code> attributes. The
+              values are in pixels. For example, to surround each
+              tile with a frame 20 pixels wide by 20 pixels high
+              and a 4-pixel inner and outer bevel, use:
               <pre>
 self.frame = "20x20+4+4"
+</pre>or
+              <pre>
+self.frame = Magick::Geometry.new(20,20,4,4)
 </pre>If the tile has a label, the label is included in the frame.
 The default is to have no frame.
 
@@ -1318,13 +1329,23 @@ The default is to have no frame.
 
             <td>
               The size of the tiles and the distance between tiles.
-              The value should be a string in the form
+              The value can be either a string or a <a href=
+              "struct.html#Geometry">Geometry</a> object. If a
+              string, it should be in the form
               <var>&lt;tile-width&gt;x&lt;tile-height&gt;+&lt;distance-between-columns&gt;+&lt;distance-between-rows&gt;</var>.
-              To create tiles that are 130 pixels wide and 194
-              pixels tall, with 10 pixels between each column of
-              tiles and 5 between each row, use:
+              If a Geometry object, the tile width and height are
+              specified by the <code>width</code> and
+              <code>height</code> attributes, and the distance
+              between rows and distance between columns are
+              specified by the <code>x</code> and <code>y</code>
+              attributes. To create tiles that are 130 pixels wide
+              and 194 pixels tall, with 10 pixels between each
+              column of tiles and 5 between each row, use:
               <pre>
 self.geometry = "130x194+10+5"
+</pre>or
+              <pre>
+self.geometry = Magick::Geometry.new(130, 194, 10, 5)
 </pre>The default geometry is "120x120+4+3&gt;".
 
               <p>See <a href=
@@ -1406,12 +1427,20 @@ self.texture = Magick::Image.read("granite:").first
 
             <td>
               The number of columns and rows to use when arranging
-              the tiles on the composite image. The value is a
-              string in the form
-              <var>"&lt;columns&gt;x&lt;rows&gt;"</var>. To arrange
-              the tiles 4 across and 10 down, use:
+              the tiles on the composite image. The value can be
+              either a string or a <a href=
+              "struct.html#Geometry">Geometry</a> object. If the
+              value is a string, it should have the form
+              <var>"&lt;columns&gt;x&lt;rows&gt;"</var>. If the
+              value is a Geometry object, specify the number of
+              columns as the <code>width</code> attribute and the
+              number of rows as the <code>height</code> attribute.
+              To arrange the tiles 4 across and 10 down, use:
               <pre>
 self.tile = "4x10"
+</pre>or
+              <pre>
+self.tile = Magick::Geometry.new(4,10)
 </pre>The default is "6x4". <i>Note:</i> If there are too many
 tiles to fit on one composite image, <var>montage</var> creates
 multiple composite images.
@@ -1844,9 +1873,8 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
         the list.
 
         <p>The image files may be multi-frame (animated or layered)
-        files. In
-        this case <var>read</var> adds multiple images per file to
-        the imagelist.</p>
+        files. In this case <var>read</var> adds multiple images
+        per file to the imagelist.</p>
       </td>
     </tr>
 

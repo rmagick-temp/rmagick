@@ -165,8 +165,8 @@
                 <li><a href="#Image.display">display</a></li>
 
                 <li><a href=
-                "#Image.each_profile">each_profile</a>&nbsp;<span class="imversion">
-                &nbsp;(5.5.8)</span></li>
+                "#Image.each_profile">each_profile</a>&nbsp;
+                <span class="imversion">&nbsp;(5.5.8)</span></li>
 
                 <li><a href="#Image.edge">edge</a></li>
 
@@ -303,9 +303,9 @@
                 "#Image.reduce_noise">reduce_noise</a></li>
 
                 <li><a href=
-                "#Image.random_channel_threshold">random_channel_threshold</a>&nbsp;<span class="imversion">
-                &nbsp;(5.5.7)</span> <span class=
-                "gmversion">&nbsp;(1.0.2)</span></li>
+                "#Image.random_channel_threshold">random_channel_threshold</a>&nbsp;
+                <span class="imversion">&nbsp;(5.5.7)</span>
+                <span class="gmversion">&nbsp;(1.0.2)</span></li>
 
                 <li><a href="#Image.resize">resize</a></li>
 
@@ -1408,7 +1408,9 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <td class="methodname"><a name=
       "Image.change_geometry">change_geometry</a></td>
 
-      <td><i>image</i>.change_geometry(<i>aGeometryString</i>)
+      <td><i>image</i>.change_geometry(<i>aString</i>)
+      {|cols,rows,image| <i>block</i>} -&gt; <i>anObject</i><br>
+      <i>image</i>.change_geometry(<i>aGeometry</i>)
       {|cols,rows,image| <i>block</i>} -&gt; <i>anObject</i></td>
     </tr>
 
@@ -1423,12 +1425,13 @@ animated = Magick::Image.read("animated.gif") &raquo;
         should be no larger than 640 pixels wide and 480 pixels
         tall.</p>
 
-        <p>The argument is an &times;Magick geometry string.
-        <var>Change_geometry</var> parses the string (ignoring the
-        x and y values, if any) with respect to <var>self</var>.
-        Then it yields to the block, passing the new width and
-        height values. The return value is the return value of the
-        block.</p>
+        <p>The argument may be either a <a href=
+        "imusage.html#geometry">geometry string</a> or a <a href=
+        "struct.html#Geometry">Geometry</a> object.
+        <var>Change_geometry</var> yields to the block, passing new
+        width and height values based on the argument with respect
+        to <code>self</code>. The return value is the return value
+        of the block.</p>
       </td>
     </tr>
 
@@ -1461,7 +1464,7 @@ mona = Magick::Image.read('MonaLisa.jpg').first
 mona.change_geometry!('320x240') { |cols, rows, img|
   img.resize!(cols, rows)
   }
-     
+
 </pre>
       </td>
     </tr>

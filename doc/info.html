@@ -224,18 +224,20 @@
       <td class="methodname"><a name=
       "Info.density_eq">density=</a></td>
 
-      <td><i>self.</i>density= <i>aString</i></td>
+      <td><i>self.</i>density= <i>aString</i><br>
+      <em>self.</em>density = <em>aGeometry</em></td>
     </tr>
 
     <tr>
       <td>&nbsp;</td>
 
       <td>Specify the vertical and horizontal resolution in pixels.
-      The argument is a string in the form "XxY" where "X" is the
-      horizontal resolution and "Y" is the vertical resolution. You
-      can also specify simply "X", in which case the vertical
-      resolution is set equal to "X". The default is
-      "72.0x72.0".</td>
+      The argument can be either a string in the form "XxY" where
+      "X" is the horizontal resolution and "Y" is the vertical
+      resolution, or a <a href="struct.html#Geometry">Geometry</a>
+      object where <code>width</code> is the horizontal resolution
+      and <code>height</code> is the vertical resolution. The
+      default density is "72.0x72.0".</td>
     </tr>
 
     <tr class="method">
@@ -277,7 +279,8 @@
       "Info.extract_eq">extract=</a><span class=
       "imversion">&nbsp;(5.5.6)</span></td>
 
-      <td><i>self.</i>extract= <code>aString</code></td>
+      <td><i>self.</i>extract= <code>aString</code><br>
+      <em>self.</em>extract= <em>aGeometry</em></td>
     </tr>
 
     <tr>
@@ -285,10 +288,12 @@
 
       <td>
         <p>Specify a portion of an image to be extracted when the
-        image is constituted. The argument is a geometry string.
-        For example: <code>self.extract = "200x200+100+100"</code>.
-        This attribute can be used to identify a subset of an image
-        that is otherwise too large to keep in memory.</p>
+        image is constituted. The argument can be either a geometry
+        string or a <a href="struct.html#Geometry">Geometry</a>
+        object. For example: <code>self.extract =
+        "200x200+100+100"</code>. This attribute can be used to
+        identify a subset of an image that is otherwise too large
+        to keep in memory.</p>
 
         <p>Note: This attribute replaces the <a href=
         "#Info.tile_eq">tile=</a> attribute, which is deprecated in
@@ -533,7 +538,9 @@
     <tr class="method">
       <td class="methodname"><a name="Info.size_eq">size=</a></td>
 
-      <td><i>self.</i>size= <i>aString</i></td>
+      <td><i>self.</i>size= <i>aString</i><br>
+      <em>self.</em>size= <em><a href=
+      "struct.html#Geometry">aGeometry</a></em></td>
     </tr>
 
     <tr>
@@ -590,7 +597,8 @@
     <tr class="method">
       <td class="methodname"><a name="Info.tile_eq">tile=</a></td>
 
-      <td><i>self.</i>tile= <i>aString</i></td>
+      <td><i>self.</i>tile= <i>aString</i><br>
+      <em>self.</em>tile= <em>aGeometry</em></td>
     </tr>
 
     <tr>

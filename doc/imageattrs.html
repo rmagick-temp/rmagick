@@ -516,7 +516,8 @@
       density=</td>
 
       <td><i>image.</i>density -&gt; <i>aString</i><br>
-      <i>image.</i>density = <i>aString</i></td>
+      <i>image.</i>density = <i>aString</i><br>
+      <i>image.</i>density = <i>aGeometry</i></td>
     </tr>
 
     <tr>
@@ -524,9 +525,23 @@
 
       <td>
         The <span class="imquote">vertical and horizontal
-        resolution in pixels of the image.</span> The density is a
-        string in the form "XxY", or simply "X". If "Y" is omitted
-        it is set to "X". The default is "72x72".
+        resolution in pixels of the image.</span> The density may
+        be expressed either as a string or a <a href=
+        "struct.html#Geometry">Geometry</a> object. If a string, it
+        is in the form "XxY", or simply "X". If "Y" is omitted it
+        is set to "X".
+
+        <p>To specify the density with a Geometry object, set the
+        <code>width</code> attribute to the x resolution and the
+        <code>height</code> argument to the y resolution. If
+        <code>height</code> is nil, <code>width</code> will be used
+        as the y resolution as well.</p>
+
+        <p>The default is "72x72".</p>
+
+        <p>Regardless of how the <code>density=</code> argument is
+        specified, it is always returned by <code>density</code> as
+        a string.</p>
 
         <p>Also see <a href="#Image.x_resolution">x_resolution</a>
         and <a href="#Image.y_resolution">y_resolution</a>.</p>

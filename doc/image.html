@@ -10,7 +10,9 @@
     <link type="text/css" rel="stylesheet" href="rubymgen.css">
   </head>
   <body>
-    <div class="header">RMagick User's Guide and Reference</div>
+    <div class="header">
+      RMagick User's Guide and Reference
+    </div>
     <table align="right" class="nav" cellpadding="3">
       <tr>
         <td style="text-align: left"><a href=
@@ -62,6 +64,8 @@
                   <li><a href=
                   "#Image.blur_image">blur_image</a></li>
                   <li><a href="#Image.border">border</a></li>
+                  <li><a href=
+                  "#Image.change_geometry">change_geometry</a></li>
                   <li><a href="#Image.changed_q">changed?</a></li>
                   <li><a href="#Image.channel">channel</a></li>
                   <li><a href=
@@ -100,14 +104,14 @@
                   <li><a href="#Image.enhance">enhance</a></li>
                   <li><a href="#Image.equalize">equalize</a></li>
                   <li><a href="#Image.erase_bang">erase!</a></li>
-                  <li><a href=
-                  "#Image.export_pixels">export_pixels</a>
-                  &nbsp;<span class=
-                  "imversion">&nbsp;(5.5.7)</span></li>
                 </ul>
               </td>
               <td valign="top">
                 <ul>
+                  <li><a href=
+                  "#Image.export_pixels">export_pixels</a>
+                  &nbsp;<span class=
+                  "imversion">&nbsp;(5.5.7)</span></li>
                   <li><a href="#Image.flip">flip</a></li>
                   <li><a href="#Image.flip_bang">flip!</a></li>
                   <li><a href="#Image.flop">flop</a></li>
@@ -981,6 +985,59 @@ animated = Magick::Image.read("animated.gif") &raquo;
       <tr>
         <td valign="top">See also</td>
         <td><a href="#Image.frame">frame</a></td>
+      </tr>
+      <tr class="method">
+        <td class="methodname"><a name=
+        "Image.change_geometry">change_geometry</a></td>
+        <td><i>image</i>.change_geometry(<i>aGeometryString</i>)
+        {|cols,rows,image| <i>block</i>} -&gt; <i>anObject</i></td>
+      </tr>
+      <tr>
+        <td valign="top">Description</td>
+        <td>
+          <p>The <var>change_geometry</var> method supports
+          resizing a method by specifying constraints. For example,
+          you can specify that the image should be resized such
+          that the aspect ratio should be retained but the
+          resulting image should be no larger than 640 pixels wide
+          and 480 pixels tall.</p>
+          <p>The argument is an &times;Magick geometry string.
+          <var>Change_geometry</var> parses the string (ignoring
+          the x and y values, if any) with respect to
+          <var>self</var>. Yields to the block, passing the new
+          width and height values. The return value is the return
+          value of the block.</p>
+        </td>
+      </tr>
+      <tr>
+        <td>Arguments</td>
+        <td>An &times;Magick <a href=
+        "imusage.html#geometry">geometry string</a>.</td>
+      </tr>
+      <tr>
+        <td>Returns</td>
+        <td>whatever the block returns</td>
+      </tr>
+      <tr>
+        <td>Notes</td>
+        <td><var>change_geometry!</var> is an alias for
+        <var>change_geometry</var>.</td>
+      </tr>
+      <tr>
+        <td valign="top">Example</td>
+        <td class="example">
+<pre>
+mona = Magick::Image.read('MonaLisa.jpg').first
+mona.change_geometry!('320x240') { |cols, rows, img|
+  img.resize!(cols, rows)
+  }
+     
+</pre>
+        </td>
+      </tr>
+      <tr>
+        <td valign="top">&times;Magick API</td>
+        <td>ParseSizeString</td>
       </tr>
       <tr class="method">
         <td class="methodname"><a name=

@@ -1,3 +1,6 @@
+RMagick 1.7.2
+    o Fix bugs #1308, #1310, #1314, #1533
+
 RMagick 1.7.1
     o Fix bugs #1250, #1253
     o Tested with ImageMagick 6.1.7, Ruby 1.8.2

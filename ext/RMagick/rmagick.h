@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.74 2004/12/10 00:00:12 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.75 2004/12/15 23:58:33 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -72,11 +72,17 @@ typedef struct
 } Montage;
 
 // Draw
+struct TmpFile_Name
+{
+    struct TmpFile_Name *next;
+    char name[1];
+};
+
 typedef struct
 {
     DrawInfo *info;         // the DrawInfo struct
     VALUE primitives;       // the primitive string
-    VALUE tmpfile_ary;
+    struct TmpFile_Name *tmpfile_ary;
 } Draw;             // make the type match the class name
 
 // Enum

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.19 2004/12/05 22:36:11 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.20 2004/12/15 23:58:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -483,6 +483,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     CompositeOperator cop = OverCompositeOp;
     volatile VALUE image;
     Image *comp_img;
+    struct TmpFile_Name *tmpfile;
     char name[MaxTextExtent];
                             // Buffer for "image" primitive
     char primitive[MaxTextExtent];
@@ -573,12 +574,13 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(image, Image, comp_img);
     rm_write_temp_image(comp_img, name);
 
-    // Add the temp filename to the filename array
-    if (!draw->tmpfile_ary)
-    {
-        draw->tmpfile_ary = rb_ary_new();
-    }
-    rb_ary_push(draw->tmpfile_ary, rb_str_new2(name));
+    // Add the temp filename to the filename array.
+    // Use Magick storage since we need to keep the list around
+    // until destroy_Draw is called.
+    tmpfile = magick_malloc(sizeof(struct TmpFile_Name)+strlen(name));
+    strcpy(tmpfile->name, name);
+    tmpfile->next = draw->tmpfile_ary;
+    draw->tmpfile_ary = tmpfile;
 
     // Form the drawing primitive
     (void) sprintf(primitive, "image %s %g,%g,%g,%g '%s'", op, x, y, width, height, name);
@@ -736,8 +738,8 @@ Draw_initialize(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
     draw->info = CloneDrawInfo(info, NULL);
 
-    draw->primitives = 0;
-    draw->tmpfile_ary = 0;
+    draw->primitives = (VALUE)0;
+    draw->tmpfile_ary = NULL;
 
     return self;
 }
@@ -816,10 +818,6 @@ mark_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
 
-    if (draw->tmpfile_ary)
-    {
-        rb_gc_mark(draw->tmpfile_ary);
-    }
     if (draw->primitives)
     {
         rb_gc_mark(draw->primitives);
@@ -834,17 +832,17 @@ static void
 destroy_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
-    volatile VALUE tmpfile;
+    struct TmpFile_Name *tmpfile;
 
     DestroyDrawInfo(draw->info);
 
     // Erase any temporary image files.
-    if (draw->tmpfile_ary)
+    while (draw->tmpfile_ary)
     {
-        while ((tmpfile = rb_ary_shift(draw->tmpfile_ary)) != Qnil)
-        {
-            rm_delete_temp_image(STRING_PTR(tmpfile));
-        }
+        tmpfile = draw->tmpfile_ary;
+        draw->tmpfile_ary = draw->tmpfile_ary->next;
+        rm_delete_temp_image(tmpfile->name);
+        magick_free(tmpfile);
     }
 
     xfree(drawptr);

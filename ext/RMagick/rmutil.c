@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.49 2005/01/10 22:51:07 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.50 2005/01/11 23:09:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1354,6 +1354,50 @@ ResolutionType_new(ResolutionType type)
     return rm_enum_new(Class_ResolutionType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
+/*
+    External:   OrientationType_new
+    Purpose:    Construct an OrientationType enum object for the specified value.
+*/
+#if defined(HAVE_IMAGE_ORIENTATION)
+VALUE
+OrientationType_new(OrientationType type)
+{
+    const char *name;
+
+    switch(type)
+    {
+        default:
+        case UndefinedOrientation:
+            name = "UndefinedOrientation";
+            break;
+        case TopLeftOrientation:
+            name = "TopLeftOrientation";
+            break;
+        case TopRightOrientation:
+            name = "TopRightOrientation";
+            break;
+        case BottomRightOrientation:
+            name = "BottomRightOrientation";
+            break;
+        case BottomLeftOrientation:
+            name = "BottomLeftOrientation";
+            break;
+        case LeftTopOrientation:
+            name = "LeftTopOrientation";
+            break;
+        case RightTopOrientation:
+            name = "RightTopOrientation";
+            break;
+        case RightBottomOrientation:
+            name = "RightBottomOrientation";
+            break;
+        case LeftBottomOrientation:
+            name = "LeftBottomOrientation";
+            break;
+    }
+    return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+#endif
 /*
     External:   Color_from_ColorInfo
     Purpose:    Convert a ColorInfo structure to a Magick::Color

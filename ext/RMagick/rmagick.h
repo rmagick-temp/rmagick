@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.76 2004/12/30 03:13:04 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.77 2005/01/11 23:09:33 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -259,6 +259,9 @@ EXTERN VALUE Class_ResolutionType;
 EXTERN VALUE Class_StretchType;
 EXTERN VALUE Class_StyleType;
 EXTERN VALUE Class_WeightType;
+#if defined(HAVE_IMAGE_ORIENTATION)
+EXTERN VALUE Class_OrientationType;
+#endif
 
 /*
 *   Commonly-used IDs
@@ -632,7 +635,9 @@ ATTR_READER(Image, normalized_maximum_error)
 ATTR_READER(Image, number_colors)
 ATTR_ACCESSOR(Image, offset)
 ATTR_WRITER(Image, opacity)
+ATTR_READER(Image, orientation)
 ATTR_ACCESSOR(Image, page)
+ATTR_READER(Image, quality)
 ATTR_READER(Image, quantum_depth)
 ATTR_ACCESSOR(Image, rendering_intent)
 ATTR_READER(Image, rows)
@@ -895,6 +900,9 @@ extern VALUE  TypeMetric_to_s(VALUE);
 extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
 #if defined(HAVE_GETIMAGESTATISTICS)
 extern VALUE  Statistics_new(ImageStatistics *);
+#endif
+#if defined(HAVE_IMAGE_ORIENTATION)
+extern VALUE   OrientationType_new(OrientationType);
 #endif
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)

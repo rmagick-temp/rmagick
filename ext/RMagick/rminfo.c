@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.10 2003/10/02 12:45:07 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.11 2003/10/06 12:18:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -762,7 +762,7 @@ Info_view_eq(VALUE self, VALUE view_arg)
     Method:     Info.new
     Purpose:    Create an Info object by calling CloneInfo
 */
-#if RUBY_VERSION < 0x180
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE
 Info_new(VALUE class)
 {

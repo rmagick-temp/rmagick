@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.4 2003/09/18 13:21:13 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.5 2003/10/06 12:18:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -34,7 +34,7 @@ static void free_Fill(void *fill)
     Extern:     GradientFill.new(x1, y1, x2, y2, start_color, stop_color)
     Purpose:    Create new GradientFill object
 */
-#if RUBY_VERSION < 0x180
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE
 GradientFill_new(
     VALUE class,
@@ -544,7 +544,7 @@ free_TextureFill(void *fill_obj)
     Purpose:    Create new TextureFill object
     Notes:      the texture is an Image or Image *object
 */
-#if RUBY_VERSION < 0x180
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE
 TextureFill_new(VALUE class, VALUE texture)
 {

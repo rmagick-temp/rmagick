@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.18 2003/10/06 00:00:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.19 2003/10/06 12:18:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3566,7 +3566,7 @@ Image_negate(int argc, VALUE *argv, VALUE self)
                 the Image structure. The caller can supply an info parm block to
                 use for initializing the Info.
 */
-#if RUBY_VERSION < 0x180
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE
 Image_new(int argc, VALUE *argv, VALUE class)
 {

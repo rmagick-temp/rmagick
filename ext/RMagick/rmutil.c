@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.18 2003/10/06 00:00:57 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.19 2003/10/06 12:18:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1545,7 +1545,7 @@ TypeMetric_to_s(VALUE self)
     return rb_str_new2(buff);
 }
 
-#if RUBY_VERSION >= 0x180
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:  rm_enum_new (1.8)
     Purpose: Construct a new Enum instance

@@ -8,7 +8,14 @@ VERSION_NUMBER = '0x'+VERSION.tr('.','')
 
 $CFLAGS = "-Wall #{`@MAGICKCONFIG@ --cflags`}".chomp;
 $CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} #{`@MAGICKCONFIG@ --cppflags`}".chomp
-$LDFLAGS = "#{`@MAGICKCONFIG@ --ldflags`}".chomp
+
+ldflags = "#{`@MAGICKCONFIG@ --ldflags`}".chomp
+if VERSION == '1.8.0'
+	$DLDFLAGS = ldflags
+else
+	$LDFLAGS = ldflags
+end
+
 $LOCAL_LIBS = " #{`@MAGICKCONFIG@ --libs`}".chomp
 
 create_makefile("RMagick")

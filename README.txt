@@ -30,9 +30,11 @@ ImageMagick and GraphicsMagick image processing libraries.
 
 <h2 id="contact">Contact Information</h2>
 
-__Author:__ Tim Hunter  
-__Email:__ <rmagick@rubyforge.org>   
-__RubyForge:__ <http://rubyforge.org/projects/rmagick/>   
+__Author:__ Tim Hunter
+
+__Email:__ <rmagick@rubyforge.org>
+
+__RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 <h2 id="prereq">Prerequisites</h2>
 
@@ -45,7 +47,7 @@ __GraphicsMagick__.  GraphicsMagick is a friendly fork of ImageMagick
 5.5.1.  You can get ImageMagick from <http://www.imagemagick.org>.  You
 can get GraphicsMagick from <http://www.graphicsmagick.org>.  ImageMagick
 and GraphicsMagick have slightly different capabilities.  Please consult
-the web site if you have questions.
+their web sites if you have questions.
 
 <h2 id="tips">Tips for installing and configuring ImageMagick and GraphicsMagick</h2>
 
@@ -60,11 +62,11 @@ the amount of time you'll spend and your frustration level.
 
 _Do not_ simply type `./configure` and expect the defaults to be correct
 for you.  Since you are installing ImageMagick/GraphicsMagick to use with
-Ruby, consider whether you want to skip ImageMagick's/GraphicMagicks'
-support for Perl and C++ by using the --without-perl and
---without-magick-plus-plus options.  Doing so will speed up the
+Ruby, consider whether you want to skip ImageMagick's/GraphicMagick's
+support for Perl and C++ by using the `--without-perl` and
+`--without-magick-plus-plus` options.  Doing so will speed up the
 installation process and save some disk space.  You will almost certainly
-want to specify the --enable-shared and --disable-static options.
+want to specify the `--enable-shared` and `--disable-static` options.
 
 Determine which image formats you are interested in using and make sure
 that you have installed the libraries that ImageMagick/GraphicsMagick uses
@@ -181,8 +183,8 @@ addition to the regular options, there are a few RMagick-specific options:
     >  The name of the `make` program.
 
 * --with-rbconfig=_directory_
-    > The directory of the rbconfig.rb file to use.  The default is Ruby's 
-    > rbconfig.  
+    > The directory of the rbconfig.rb file to use.  The default is Ruby's
+    > rbconfig.
 
 <h4 id="scripts">Running the <code>configure</code> and <code>make</code> scripts</h4>
 
@@ -255,7 +257,7 @@ find them helpful for debugging your application.  (Caveat: these two
 methods may change behavior or be removed without advance notice!  You are
 on your own!)
 
-##### Magick::set\_log\_event_mask(event [,...]) ->  Magick
+##### Magick::set\_log\_event_mask(event [,...])
 
 The arguments are one or more "event domains".  The set_log_event_mask
 method recognizes these event domains: "all", "annotate", "blob", "cache",
@@ -271,7 +273,7 @@ file.) The purpose of the entries in this file is undocumented, so your
 guess is as good as mine.  Also, the meaning of the event domains and
 exactly what events are logged are undocumented.
 
-##### Magick::set\_log\_format(format) -> Magick
+##### Magick::set\_log\_format(format)
 
 The default log format is described in the log.mgk file.  This method
 allows you to redefine the format at run-time.  The format argument is a
@@ -295,6 +297,7 @@ For example, the default log format is:
         Magick::set_log_format("%t %r %u %p %m/%f/%l/%d:\n  %e")
 
 <h2 id="issues">Known issues</h2>
+
 1. gcc 3.2, during the "install.rb setup" step, issues the following warning.
    This does not indicate a problem.
 
@@ -350,14 +353,20 @@ Thanks to
    >  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
    >  DEALINGS IN THE SOFTWARE.
 
-   >  ![OSI Certified Open Source](http://www.opensource.org/trademarks/osi-certified/web/osi-certified-60x50.gif)
-   >  <strong>This software is OSI Certified Open Source Software.<br>
-   >  OSI Certified is a certification mark of the Open Source Initiative.</strong>
 
+<div align="center">
+<a href="http://www.opensource.org/docs/definition.php">
+<img src="http://opensource.org/trademarks/osi-certified/web/osi-certified-90x75.gif"
+border="0" width="90" height="75">
+</a>
+</div>
 
 -------------------------------------------------------------------------------
-<em>This file is marked up using [Markdown](http://daringfireball.net/projects/markdown).
-The HTML version was produced with [BlueCloth](http://bluecloth.rubyforge.org).</em>
+
+<em>
+This file is marked up using [Markdown](http://daringfireball.net/projects/markdown).
+The HTML version was produced with [BlueCloth](http://bluecloth.rubyforge.org).
+</em>
 
 [intro]: #intro
 [contact]: #contact
@@ -375,3 +384,4 @@ The HTML version was produced with [BlueCloth](http://bluecloth.rubyforge.org).<
 [bugs]: #bugs
 [credits]: #credits
 [license]: #license
+

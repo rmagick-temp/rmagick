@@ -458,7 +458,7 @@ class Installer
   end
 
   def inspect
-    "#<#{class} #{__id__}>"
+    "#<#{self.class} #{__id__}>"
   end
 
   #

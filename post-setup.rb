@@ -1,157 +1,248 @@
-# setup RMagick documentation
+#===============================================================================
+# post-setup.rb - setup documentation
+#===============================================================================
 
-require 'ftools'
-require 'tempfile'
+EXAMPLES   = '.examples'
+STD_URI    = 'http:\/\/www.imagemagick.org'
+STD_URI_RE = /"#{STD_URI}/
+DONT_RUN   = ['fonts.rb']  # never run these examples
+ENTITY     = Hash['&' => '&amp;', '>' => '&gt;', '<' => '&lt;']
 
+if defined?(ToplevelInstaller) && self.class == ToplevelInstaller
+
+  IMBASEURI = get_config('imdoc-base-uri')
+  RUBYPROG  = get_config('ruby-prog')
+  SRCDIR    = srcdir()
+  ALLOW_EXAMPLE_ERRORS = get_config('allow-example-errors') == 'yes'
+
+else
+
+  IMBASEURI = 'file:///usr/local/share/ImageMagick'
+  RUBYPROG  = 'ruby'
+  SRCDIR    = '.'
+  ALLOW_EXAMPLE_ERRORS = true
+
+end
+
+
+#
+# A set of example programs in a directory and the output image each example produces.
+#
+
+class ExampleSet
+  def initialize(of)
+    @status_quo = get_status_quo()
+    @errs = 0
+    begin
+      File.open(EXAMPLES) do |f|
+        @targets = Marshal.load(f)
+      end
+    rescue
+      @targets = Hash.new
+      @n = 0
+      @of = of
+      @first_time = true
+    else
+      @first_time = false
+    end
+  end
+
+  def persist
+    File.open(EXAMPLES, 'w') do |f|
+      Marshal.dump(@targets, f)
+    end
+  end
+
+  def targets(example)
+    @targets[example] || Array.new
+  end
+
+  def get_status_quo
+    sq = Dir["*"]
+    sq.delete_if { |entry| File.directory?(entry) }
+  end
+
+  def update_targets(example, new)
+    t = targets(example) + new
+    @targets[example] = t.uniq
+  end
+
+  def update_status_quo(example)
+    new_status_quo = get_status_quo()
+    new = new_status_quo - @status_quo
+    update_targets(example, new)
+    @status_quo = new_status_quo
+  end
+
+  def build(example)
+    cmd = "#{RUBYPROG} -I #{SRCDIR}/lib -I #{SRCDIR}/ext/RMagick #{example}"
+    print cmd
+    print " (example #{@n += 1} of #{@of})" if @first_time
+    puts
+    system cmd
+
+    if $? != 0 then
+      puts("post-setup.rb: #{example} example returned error code #{$?}")
+      @errs += 1 unless ALLOW_EXAMPLE_ERRORS
+      if @errs > 4
+         err(<<-END_EXFAIL
+            Too many examples failed. The RMagick documentation cannot be installed
+            successfully. Consult the README.txt file and try again, or send email
+            to cyclists@nc.rr.com.
+            END_EXFAIL
+            )
+      end
+    end
+
+    update_status_quo(example)
+  end
+
+  def update(example)
+    targets = targets(example)
+    up_to_date = ! targets.empty?
+    targets.each do |target|
+      up_to_date &&= File.exists?(target) && (File.stat(target) >= File.stat(example))
+    end
+    build(example) unless up_to_date
+  end
+
+end
+
+#
+# print message and exit
+#
 def err(msg)
     $stderr.puts "#{$0}: #{msg}"
     exit
 end
 
-# Where to find the ImageMagick documentation
-def imbaseuri
-    get_config('imdoc-base-uri')
-end
 
-# Various methods to get info from the install.rb config table
-def rubyprog
-    get_config('ruby-prog')
-end
+#
+# Modify file lines via proc. If no lines changed, discard new version.
+#
+def filter(filename, backup=nil, &filter)
+  if ! File.writable? filename then
+    raise ArgumentError, "`#{filename}' is write-protected"
+  end
 
-# Allow examples to fail?
-def allow_example_errors
-    get_config('allow-example-errors') == 'yes'
-end
-
-# Edit a file in place, replacing all instances of the re "targ" with the string "rep"
-def edit_in_place(src, targ, rep)
-    File.open('./rmagick.tmp', 'w') do |tmp|
-        File.open(src) do |s|
-            s.each do |line|
-                tmp.puts line.gsub(targ, rep)
-            end
-        end
+  backup_name = filename + '.' + (backup || 'old')
+  File.rename(filename, backup_name)
+  changed = false
+  begin
+    File.open(filename, 'w') do |output|
+      File.foreach(backup_name) do |line|
+        old = line
+        line = filter.call(line)
+        output.puts(line)
+        changed ||= line != old
+      end
     end
-    File.mv('./rmagick.tmp', src)
+  rescue
+    File.rename(backup_name, filename)
+    raise
+  end
+
+  if !changed
+    newname = filename + '.xxx'
+    File.rename(filename, newname)
+    File.rename(backup_name, filename)
+    File.unlink(newname)
+  elsif !backup
+    # Don't remove old copy if a backup extension was specified
+    File.unlink(backup_name) rescue nil
+  end
 end
 
-# Edit links to ImageMagick documentation.
-def edit_html
-    cwd = srcdir()
-    begin
-        Dir.chdir('doc')
-        Dir['*.html'].each { |file|
-            next if file =~ /\.rb.html/
-#           puts "post-setup.rb: setting up #{file}"
-            # include leading quote in regexp so only the href= attribute values are replaced
-            edit_in_place(file, /"http:\/\/www.imagemagick.org/, "\"#{imbaseuri()}")
-            }
-    ensure
-        Dir.chdir(cwd)
-    end
-end
 
-# Change shebang line to use path to installed ruby
-def edit_shebang(example)
-#   puts "post-setup.rb: editing #{example}"
-    edit_in_place(example, /\A\#!\s*\S*ruby\s/, '#!'+rubyprog()+' ')
-    File.chmod(0755, example)
-end
+#
+# Copy an example to the doc directory, wrap in HTML tags
+#
+def filetoHTML(file, html)
+  return if File.exists?(html) && File.stat(html) >= File.stat(file)
 
-# Create HTML version of a Ruby example in doc directory.
-def copy_to_html(example)
-    target = '../'+example+'.html'
-    return if FileTest.exist? target
-#   puts "post-setup.rb: setting up ../#{example}.html"
-    File.open(example) do |src|
-        File.open(target, 'w') do |dest|
-            dest.puts <<END_EXHTMLHEAD
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+  File.open(file) do |src|
+    File.open(html, 'w') do |dest|
+      dest.puts <<-END_EXHTMLHEAD
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 <HTML>
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<TITLE>Example: #{example}</TITLE>
+<TITLE>Example: #{file}</TITLE>
 </HEAD>
 <BODY style=\"background-color: #fffff0;\">
 <PRE>
-END_EXHTMLHEAD
-                src.each do |line|
-                    line.gsub!(/&/,'&amp;')
-                    line.gsub!(/>/,'&gt;')
-                    line.gsub!(/</,'&lt;')
-                    dest.puts line
-                end
-                dest.puts <<END_EXHTMLTAIL
+        END_EXHTMLHEAD
+
+      src.each do |line|
+        line.gsub!(/[&><]/) { |s| ENTITY[s] }
+        dest.puts(line)
+      end
+
+      dest.puts <<-END_EXHTMLTAIL
 </PRE>
 </BODY>
 </HTML>
-END_EXHTMLTAIL
-        end
-        File.chmod(0644, target)
+        END_EXHTMLTAIL
     end
+    File.chmod(0644, html)
+  end
+
 end
 
-def make_example_html
-    cwd = srcdir()
-    begin
-        Dir.chdir('doc/ex')
-        Dir['*.rb'].each { |file|
-            edit_shebang(file)
-            copy_to_html(file)
-        }
-    ensure
-        Dir.chdir(cwd)
-    end
-end
+puts "install.rb: entering post-setup phase..."
 
-# Add ./lib and ./ext/RMagick to $LOAD_PATH so that the examples are
-# run using built RMagick.rb and RMagick.so, not the installed files.
-# Gentoo installs into a temporary directory that is not in $LOAD_PATH.
-def gen1_image(n, of, file)
-    puts("post-setup.rb: run #{file} example (#{n} of #{of} examples)")
-    system(rubyprog(), '-I', srcdir()+'/lib', '-I', srcdir()+'/ext/RMagick', file) 
-    $?
-end
-
-# Generate the example images
-def gen_example_images
-    errs = 0
-    exn = 0
-    cwd = srcdir()
-    begin
-        Dir.chdir('doc/ex')
-        examples = Dir['*.rb'].sort
-        nex = examples.length
-        examples.each do |file|
-            exn += 1
-            rc = gen1_image(exn, nex, file)
-            if rc != 0
-                puts("post-setup.rb: #{file} example returned error code #{rc}")
-                errs += 1 unless allow_example_errors()
-                if errs > 4
-                    err(<<END_EXFAIL
-Too many examples failed. The RMagick documentation cannot be installed
-successfully. Consult the README.txt file and try again, or send email
-to cyclists@nc.rr.com.
-END_EXFAIL
-                        )
-                end
-            end
-        end
-    ensure
-        Dir.chdir(cwd)
-    end
-end
-
+#
+# Don't bother if we're in the sandbox
+#
 if File.exists? 'CVS/Entries'
-  puts "\nSkipping post-setup.rb - in CVS sandbox"
+  puts "post-setup.rb: in CVS sandbox - stopping..."
   exit
 end
 
-puts "\npost-setup.rb: setting up documentation..."
+puts "post-setup.rb: setting up documentation..."
 
-# No use doing this if base URI is the default.
-edit_html unless imbaseuri() == "http://www.imagemagick.org"
-make_example_html
-gen_example_images
-exit
+
+# We're in the source directory. Process the doc in-place. The post-install.rb
+# script moves the generated documentation tpost-setup.rbo the ultimate installation directories.
+
+
+cwd = Dir.getwd()
+Dir.chdir('doc')
+begin
+
+  # Step 1: replace www.imagemagick.org with local doc uri
+  unless IMBASEURI == STD_URI
+    files = Dir['*.html']
+    files.delete_if { |file| /\.rb\.html\z/.match(file) }
+    files.each do |file|
+      filter(file) { |line| line.gsub(STD_URI_RE, "\"#{IMBASEURI}") }
+    end
+  end
+
+  # Step 2A: edit the shebang line in the examples
+  Dir.chdir('ex')
+  files = Dir['*.rb']
+  files.each do |file|
+    filter(file) do |line|
+      line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ')
+    end
+
+    # Step 2B: Make a copy of the example as HTML in the doc directory
+    filetoHTML(file, "../#{file}.html")
+  end
+
+  # Step 3: run the examples
+  examples = Dir['*.rb'].sort
+  examples -= DONT_RUN
+  es = ExampleSet.new(examples.length)
+  begin
+    examples.each { |example| es.update(example) }
+  ensure
+    es.persist
+  end
+
+ensure
+  Dir.chdir(cwd)
+end
+

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.57 2004/06/13 19:59:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.58 2004/06/14 00:22:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5707,6 +5707,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
 
         // Ensure file is open - raise error if not
         GetOpenFile(file_arg, fptr);
+        rb_io_check_readable(fptr);
         info->file = GetReadFile(fptr);
     }
     else
@@ -7275,14 +7276,25 @@ Image_write(VALUE self, VALUE file)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    if (TYPE(file) == T_STRING)
+    if (TYPE(file) == T_FILE)
+    {
+        OpenFile *fptr;
+
+        // Ensure file is open - raise error if not
+        GetOpenFile(file, fptr);
+        rb_io_check_writable(fptr);
+        info->file = GetWriteFile(fptr);
+    }
+    else
     {
         // Copy the filename to the Info and to the Image, then call
         // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
-        Check_Type(file, T_STRING);
+
+        // Convert arg to string. If an exception occurs raise an error condition.
+        file = rb_rescue(rm_obj_to_s, file, file_arg_rescue, file);
+
         filename = STRING_PTR_LEN(file, filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);
-
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
         strcpy(image->filename, info->filename);
@@ -7295,19 +7307,6 @@ Image_write(VALUE self, VALUE file)
             return Qnil;
         }
         info->file = NULL;
-    }
-    else if (TYPE(file) == T_FILE)
-    {
-        OpenFile *fptr;
-
-        // Ensure file is open - raise error if not
-        GetOpenFile(file, fptr);
-        info->file = GetWriteFile(fptr);
-    }
-    else
-    {
-        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
-                rb_class2name(CLASS_OF(file)));
     }
 
     info->adjoin = False;

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.34 2004/01/27 21:36:31 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.35 2004/02/07 16:38:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3720,14 +3720,12 @@ DEF_ATTR_ACCESSOR(Image, matte, bool)
 /*
     Method:     Image#matte_color
     Purpose:    Return the matte color
-    Notes:      See below.
 */
 VALUE
 Image_matte_color(VALUE self)
 {
     Image *image;
 
-    rb_warning("matte_color is deprecated. It has no purpose.");
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->matte_color);
 }
@@ -3735,18 +3733,12 @@ Image_matte_color(VALUE self)
 /*
     Method:     Image#matte_color=
     Purpose:    Set the matte color
-    Notes:      This is a useless attribute. It is only used with
-                the frame method, but the frame method requires
-                that you specify the frame color as an argument.
-                As of 1.4.0 it's no longer documented but since
-                it used to work I have to leave it.
 */
 VALUE
 Image_matte_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
-    rb_warning("matte_color= is deprecated. It has no purpose.");
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->matte_color, color);
     return self;

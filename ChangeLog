@@ -13,6 +13,7 @@ RMagick 1.5.0
     o Added statistics method to Image class (GraphicsMagick 1.1)
     o Support channel_extrema, channel_mean with GraphicsMagick 1.1
     o Added endian attribute to Image class
+    o Added composite! method to Image class
     o Deprecated random_channel_threshold method when linked with ImageMagick 6.0.0.
 
 RMagick 1.4.0

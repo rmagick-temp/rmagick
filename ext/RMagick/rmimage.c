@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.52 2004/04/09 21:03:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.53 2004/04/17 21:18:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1751,7 +1751,9 @@ VALUE Image_compose_eq(
                 `composite' utility.
     Returns:    new composited image, or nil
 */
-VALUE Image_composite(
+
+static VALUE composite(
+    int bang,
     int argc,
     VALUE *argv,
     VALUE self)
@@ -1868,13 +1870,40 @@ VALUE Image_composite(
         y_offset = 0;
     }
 
-    GetExceptionInfo(&exception);
-    new_image = CloneImage(image, 0, 0, True, &exception);
-    HANDLE_ERROR
-    (void) CompositeImage(new_image, operator, comp_image, x_offset, y_offset);
-    HANDLE_IMG_ERROR(new_image)
-    return rm_image_new(new_image);
+    if (bang)
+    {
+        (void) CompositeImage(image, operator, comp_image, x_offset, y_offset);
+        HANDLE_IMG_ERROR(image)
+        return self;
+    }
+    else
+    {
+        GetExceptionInfo(&exception);
+        new_image = CloneImage(image, 0, 0, True, &exception);
+        HANDLE_ERROR
+        (void) CompositeImage(new_image, operator, comp_image, x_offset, y_offset);
+        HANDLE_IMG_ERROR(new_image)
+        return rm_image_new(new_image);
+    }
 }
+
+
+VALUE Image_composite_bang(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+    return composite(True, argc, argv, self);
+}
+
+VALUE Image_composite(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+    return composite(False, argc, argv, self);
+}
+
 
 /*
     Method:     Image#composite_affine(composite, affine_matrix)

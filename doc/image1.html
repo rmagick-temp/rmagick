@@ -154,12 +154,14 @@
 
           <li><a href="#composite">composite</a></li>
 
-          <li><a href="#composite_affine">composite_affine</a></li>
+          <li><a href="#composite_bang">composite!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#composite_affine">composite_affine</a></li>
+
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
 
@@ -2012,9 +2014,36 @@ f.color_reset!(red)
     "ex/composite.gif" alt="composite example" title=
     "Click the image to see the example script" /></a></p>
 
+    <h4>See also</h4>
+    <p><a href="#composite_bang">composite!</a></p>
+
     <h4>Magick API</h4>
 
     <p>CompositeImage</p>
+  </div>
+  <div class="sig">
+    <h3 id="composite_bang">composite!</h3>
+
+    <p><span class="arg">image</span>.composite!(<span class=
+    "arg">img</span>, <span class="arg">x</span>, <span class=
+    "arg">y</span>, <span class="arg">composite_op</span>) -&gt;
+    <em>self</em><br />
+    <span class="arg">image</span>.composite!(<span class=
+    "arg">img</span>, <span class="arg">gravity</span>,
+    <span class="arg">composite_op</span>) -&gt;
+    <em>self</em><br />
+    <span class="arg">image</span>.composite!(<span class=
+    "arg">img</span>, <span class="arg">gravity</span>,
+    <span class="arg">x</span>, <span class="arg">y</span>,
+    <span class="arg">composite_op</span>) -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+    <p>In-place form of <a href="#composite">composite</a>.</p>
+    <h4>Returns</h4>
+    <p>self</p>
   </div>
 
   <div class="sig">

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.54 2004/04/12 00:04:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.55 2004/04/17 21:18:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -580,6 +580,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "colorize", Image_colorize, -1);
     rb_define_method(Class_Image, "colormap", Image_colormap, -1);
     rb_define_method(Class_Image, "composite", Image_composite, -1);
+    rb_define_method(Class_Image, "composite!", Image_composite_bang, -1);
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
     rb_define_method(Class_Image, "contrast", Image_contrast, -1);
@@ -1410,7 +1411,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2004/04/12 00:04:27 $) Copyright (C) 2004 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2004/04/17 21:18:45 $) Copyright (C) 2004 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

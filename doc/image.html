@@ -2382,7 +2382,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td><i>image</i>.composite(<i>img</i>, <i>x</i>, <i>y</i>,
       <i>composite_op</i>) -&gt; <i>anImage</i><br>
       <i>image</i>.composite(<i>img</i>, <i>gravity</i>,
-      <i>composite_op</i>) -&gt; <i>anImage</i></td>
+      <i>composite_op</i>) -&gt; <i>anImage</i><br>
+      <i>image</i>.composite(<i>img</i>, <i>gravity</i>, <i>x</i>,
+      <i>y</i>, <i>composite_op</i>) -&gt; <i>anImage</i></td>
     </tr>
 
     <tr>
@@ -2396,30 +2398,147 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <td valign="top">Arguments</td>
 
       <td>
+        The composite method can be called three different ways:
+
         <dl>
-          <dt>img</dt>
+          <dt style="font-style:normal">1.&nbsp;Without a gravity
+          argument:</dt>
 
-          <dd>Either an imagelist or an image. If an imagelist,
-          uses the current image.</dd>
+          <dd>
+            <dl>
+              <dt>img</dt>
 
-          <dt>x, y</dt>
+              <dd>Either an imagelist or an image. If an imagelist,
+              uses the current image.</dd>
 
-          <dd>The x- and y-offset of the composited image.</dd>
+              <dt>x, y</dt>
 
-          <dt>gravity</dt>
+              <dd>The x- and y-offset of the composited image,
+              measured from the upper-left corner of the
+              image.</dd>
 
-          <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> constant
-          that specifies the location of <i>img</i> on
-          <i>image</i>. For example, NorthwestGravity causes
-          <i>img</i> to be positioned at the upper left corner of
-          <i>image</i>.</dd>
+              <dt>composite_op</dt>
 
-          <dt>composite_op</dt>
+              <dd>A <a href=
+              "constants.html#CompositeOperator">CompositeOperator</a>
+              constant.</dd>
+            </dl>
+          </dd>
 
-          <dd>A <a href=
-          "constants.html#CompositeOperator">CompositeOperator</a>
-          constant.</dd>
+          <dt style="font-style:normal">2.&nbsp;With a gravity
+          argument, without x and y arguments:</dt>
+
+          <dd>
+            <dl>
+              <dt>img</dt>
+
+              <dd>Either an imagelist or an image. If an imagelist,
+              uses the current image.</dd>
+
+              <dt>gravity</dt>
+
+              <dd>
+                A <a href=
+                "constants.html#GravityType">GravityType</a>
+                constant that specifies the location of <i>img</i>
+                on <i>image</i>:
+
+                <dl>
+                  <dt>NorthWestGravity</dt>
+
+                  <dd>The composited image abuts the top and left
+                  sides of the image.</dd>
+
+                  <dt>NorthGravity</dt>
+
+                  <dd>The composited image is centered
+                  left-to-right and abuts the top of the
+                  image.</dd>
+
+                  <dt>NorthEastGravity</dt>
+
+                  <dd>The composited image abuts the top and right
+                  sides of the image.</dd>
+
+                  <dt>EastGravity</dt>
+
+                  <dd>The composited image is centered
+                  top-to-bottom and abuts the right side of the
+                  image.</dd>
+
+                  <dt>SouthEastGravity</dt>
+
+                  <dd>The composited image abuts the bottom and
+                  right sides of the image.</dd>
+
+                  <dt>SouthGravity</dt>
+
+                  <dd>The composited image is centered
+                  left-to-right and abuts the bottom of the
+                  image.</dd>
+
+                  <dt>SouthWestGravity</dt>
+
+                  <dd>The composited image abuts the bottom and
+                  left sides of the image.</dd>
+
+                  <dt>WestGravity</dt>
+
+                  <dd>The composited image is centered
+                  top-to-bottom and abuts the left side of the
+                  image.</dd>
+
+                  <dt>CenterGravity</dt>
+
+                  <dd>The composited image is centered
+                  left-to-right and top-to-bottom.</dd>
+                </dl>
+              </dd>
+
+              <dt>composite_op</dt>
+
+              <dd>A <a href=
+              "constants.html#CompositeOperator">CompositeOperator</a>
+              constant.</dd>
+            </dl>
+          </dd>
+
+          <dt style="font-style:normal">3.&nbsp;With gravity, x,
+          and y arguments:</dt>
+
+          <dd>
+            <dl>
+              <dt>img</dt>
+
+              <dd>Either an imagelist or an image. If an imagelist,
+              uses the current image.</dd>
+
+              <dt>gravity</dt>
+
+              <dd>A <a href=
+              "constants.html#GravityType">GravityType</a>
+              constant. If the argument is NorthEastGravity,
+              EastGravity, or SouthEastGravity, the x-offset is
+              measured from the right side of the image. If the
+              argument is SouthEastGravity, SouthGravity, or
+              SouthWestGravity, the y-offset is measured from the
+              bottom of the image. All other values are ignored and
+              the x- and y-offsets are measured from the upper-left
+              corner of the image.</dd>
+
+              <dt>x, y</dt>
+
+              <dd>The x- and y-offset of the composited image,
+              measured as specified by the <em>gravity</em>
+              argument.</dd>
+
+              <dt>composite_op</dt>
+
+              <dd>A <a href=
+              "constants.html#CompositeOperator">CompositeOperator</a>
+              constant.</dd>
+            </dl>
+          </dd>
         </dl>
       </td>
     </tr>
@@ -2712,6 +2831,8 @@ f.colors &raquo; 108
 
       <td><i>image</i>.crop(<i>x</i>, <i>y</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>anImage</i><br>
+      <i>image</i>.crop(<i>gravity</i>, <i>x</i>, <i>y</i>,
+      <i>width</i>, <i>height</i>) -&gt; <i>anImage</i><br>
       <i>image</i>.crop(<i>gravity</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>anImage</i></td>
     </tr>
@@ -2726,22 +2847,122 @@ f.colors &raquo; 108
       <td valign="top">Arguments</td>
 
       <td>
+        The crop method can be called three different ways:
+
         <dl>
-          <dt>x, y</dt>
+          <dt style="font-style:normal">1.&nbsp;Without a gravity
+          argument:</dt>
 
-          <dd>The x- and y-offset of the rectangle relative to the
-          upper-left corner of the image, or</dd>
+          <dd>
+            <dl>
+              <dt>x, y</dt>
 
-          <dt>gravity</dt>
+              <dd>The x- and y-offset of the rectangle relative to
+              the upper-left corner of the image</dd>
 
-          <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> constant
-          indicating the position of the rectangle relative to the
-          upper-left hand corner of the image.</dd>
+              <dt>width, height</dt>
 
-          <dt>width, height</dt>
+              <dd>The width and height of the rectangle.</dd>
+            </dl>
+          </dd>
 
-          <dd>The width and height of the rectangle.</dd>
+          <dt style="font-style:normal">2.&nbsp;With a
+          <em>gravity</em> argument, but without <em>x</em> and
+          <em>y</em> arguments:</dt>
+
+          <dd>
+            <dl>
+              <dt>gravity</dt>
+
+              <dd>
+                A <a href=
+                "constants.html#GravityType">GravityType</a>
+                constant specifying the position of the rectangle.
+
+                <dl>
+                  <dt>NorthWestGravity</dt>
+
+                  <dd>The rectangle abuts the top and left sides of
+                  the image.</dd>
+
+                  <dt>NorthGravity</dt>
+
+                  <dd>The rectangle is centered left-to-right and
+                  abuts the top of the image.</dd>
+
+                  <dt>NorthEastGravity</dt>
+
+                  <dd>The rectangle abuts the top and right sides
+                  of the image.</dd>
+
+                  <dt>EastGravity</dt>
+
+                  <dd>The rectangle is centered top-to-bottom and
+                  abuts the right side of the image.</dd>
+
+                  <dt>SouthEastGravity</dt>
+
+                  <dd>The rectangle abuts the bottom and right
+                  sides of the image.</dd>
+
+                  <dt>SouthGravity</dt>
+
+                  <dd>The rectangle is centered left-to-right and
+                  abuts the bottom of the image.</dd>
+
+                  <dt>SouthWestGravity</dt>
+
+                  <dd>The rectangle abuts the bottom and left sides
+                  of the image.</dd>
+
+                  <dt>WestGravity</dt>
+
+                  <dd>The rectangle is centered top-to-bottom and
+                  abuts the left side of the image.</dd>
+
+                  <dt>CenterGravity</dt>
+
+                  <dd>The rectangle is centered left-to-right and
+                  top-to-bottom.</dd>
+                </dl>
+              </dd>
+
+              <dt>width, height</dt>
+
+              <dd>The width and height of the rectangle.</dd>
+            </dl>
+          </dd>
+
+          <dt style="font-style:normal">3.&nbsp;With
+          <em>gravity</em>, <em>x</em>, and <em>y</em>
+          arguments:</dt>
+
+          <dd>
+            <dl>
+              <dt>gravity</dt>
+
+              <dd>A <a href=
+              "constants.html#GravityType">GravityType</a>
+              constant. If the argument is NorthEastGravity,
+              EastGravity, or SouthEastGravity, the x-offset is
+              measured from the right side of the image. If the
+              argument is SouthEastGravity, SouthGravity, or
+              SouthWestGravity, the y-offset is measured from the
+              bottom of the image. All other values are ignored and
+              the x- and y-offsets are measured from the upper-left
+              corner of the image.</dd>
+
+              <dt>x, y</dt>
+
+              <dd>The x- and y-offset of the rectangle from the
+              sides specified by the <em>gravity</em>
+              argument.</dd>
+
+              <dt>width, height</dt>
+
+              <dd>The width and height of the rectangle.</dd>
+            </dl>
+          </dd>
         </dl>
       </td>
     </tr>
@@ -2787,8 +3008,10 @@ f.colors &raquo; 108
 
       <td><i>image</i>.crop!(<i>x</i>, <i>y</i>, <i>width</i>,
       <i>height</i>) -&gt; <i>image</i><br>
+      <i>image</i>.crop!(<i>gravity</i>, <i>x</i>, <i>y</i>,
+      <i>width</i>, <i>height</i>) -&gt; <i>image</i><br>
       <i>image</i>.crop!(<i>gravity</i>, <i>width</i>,
-      <i>height</i>) -&gt; <i>anImage</i></td>
+      <i>height</i>) -&gt; <i>image</i></td>
     </tr>
 
     <tr>

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.20 2003/10/09 22:33:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.21 2003/10/09 22:52:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2014,7 +2014,8 @@ Image_each_profile(VALUE self)
 
     return val;
 #else
-    return not_implemented("each_profile")
+    not_implemented("export_pixels");
+    return (VALUE) 0;
 #endif
 }
 

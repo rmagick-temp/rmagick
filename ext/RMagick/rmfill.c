@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.3 2003/09/12 01:08:23 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.4 2003/09/18 13:21:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -47,7 +47,7 @@ GradientFill_new(
 {
     GradientFill *fill;
     volatile VALUE new_fill;
-    volatile VALUE argv[6];
+    VALUE argv[6];
 
     argv[0] = x1;
     argv[1] = y1;
@@ -62,7 +62,7 @@ GradientFill_new(
                               , free_Fill
                               , fill);
 
-    rb_obj_call_init(new_fill, 6, argv);
+    rb_obj_call_init((VALUE)new_fill, 6, argv);
     return new_fill;
 }
 #else
@@ -549,7 +549,7 @@ VALUE
 TextureFill_new(VALUE class, VALUE texture)
 {
     TextureFill *fill;
-    volatile VALUE argv[1];
+    VALUE argv[1];
     volatile VALUE new_fill;
 
     new_fill = Data_Make_Struct(class
@@ -558,7 +558,7 @@ TextureFill_new(VALUE class, VALUE texture)
                               , free_TextureFill
                               , fill);
     argv[0] = texture;
-    rb_obj_call_init(new_fill, 1, argv);
+    rb_obj_call_init((VALUE)new_fill, 1, argv);
     return new_fill;
 }
 #else

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.12 2003/09/15 13:27:09 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.13 2003/09/18 13:21:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -106,7 +106,7 @@ void magick_clone_string(char **new_str, const char *str)
 */
 #if RUBY_VERSION < 0x180
 char *
-rm_string_value_ptr(VALUE *ptr)
+rm_string_value_ptr(volatile VALUE *ptr)
 {
     volatile VALUE s = *ptr;
 
@@ -135,7 +135,7 @@ rm_string_value_ptr(VALUE *ptr)
                 argument.
                 Always called via STRING_PTR_LEN
 */
-char *rm_string_value_ptr_len(VALUE *ptr, Strlen_t *len)
+char *rm_string_value_ptr_len(volatile VALUE *ptr, Strlen_t *len)
 {
     volatile VALUE v = *ptr;
     char *str;
@@ -283,7 +283,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
        case 2:
             matte = RTEST(argv[1]);
         case 1:
-            compliance = Num_to_ComplianceType(argv[0]);
+            NUM_TO_ENUM(argv[0], compliance, ComplianceType);
         case 0:
             break;
         default:
@@ -1115,106 +1115,142 @@ TypeMetric_to_s(VALUE self)
     return rb_str_new2(buff);
 }
 
+#if RUBY_VERSION >= 0x180
 /*
-    External:   Num_to_AlignType
-    Purpose:    Convert a Numeric value to a AlignType value.
-                Raise an exception if the value is not a AlignType.
+    Extern:  rm_enum_new (1.8)
+    Purpose: Construct a new Enum instance
 */
-AlignType
-Num_to_AlignType(VALUE type)
+VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
-    static AlignType at[] = {
-        UndefinedAlign,
-        LeftAlign,
-        CenterAlign,
-        RightAlign
- };
-#define ALIGN_N (sizeof(at)/sizeof(at[0]))
-    int x;
-    AlignType atype;
-
-    atype = NUM2INT(type);
-    for (x = 0; x < ALIGN_N; x++)
-    {
-        if (atype == at[x]) break;
-    }
-
-    if (x == ALIGN_N)
-    {
-        rb_raise(rb_eArgError, "invalid AlignType constant (%d)", atype);
-    }
-
-    return atype;
+   return Enum_initialize(Enum_alloc(class), sym, val);
 }
 
 /*
-    External:   Num_to_ChannelType
-    Purpose:    Convert a Numeric value to a ChannelType value.
-                Raise an exception if the value is not a ChannelType.
+    Extern:  Enum_alloc (1.8)
+    Purpose: Enum class alloc function
 */
-ChannelType
-Num_to_ChannelType(VALUE type)
+VALUE Enum_alloc(VALUE class)
 {
-    static ChannelType ct[] = {
-        UndefinedChannel,
-        RedChannel,
-        CyanChannel,
-        GreenChannel,
-        MagentaChannel,
-        BlueChannel,
-        YellowChannel,
-        OpacityChannel,
-        BlackChannel,
-        MatteChannel
- };
-#define CHANNEL_N (sizeof(ct)/sizeof(ct[0]))
-    int x;
-    ChannelType ctype;
+   MagickEnum *magick_enum;
 
-    ctype = NUM2INT(type);
-    for (x = 0; x < CHANNEL_N; x++)
-    {
-        if (ctype == ct[x]) break;
-    }
-
-    if (x == CHANNEL_N)
-    {
-        rb_raise(rb_eArgError, "invalid ChannelType constant (%d)", ctype);
-    }
-
-    return ctype;
+   return Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
+}
+#else
+/*
+    Extern:  rm_enum_new (1.8)
+    Purpose: Construct a new Enum instance
+*/
+VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
+{
+    return Enum_new(class, sym, val);
 }
 
 /*
-    External:   Num_to_ClassType
-    Purpose:    Convert a Numeric value to a ClassType value.
-                Raise an exception if the value is not a ClassType.
+    Method:  Enum.new
+    Purpose: Construct a new Enum object
+    Notes:   `class' can be an Enum subclass
 */
-ClassType
-Num_to_ClassType(VALUE type)
+VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
 {
-    static ClassType ct[] = {
-        UndefinedClass,
-        DirectClass,
-        PseudoClass
- };
-#define CHANNEL_N (sizeof(ct)/sizeof(ct[0]))
-    int x;
-    ClassType ctype;
+    volatile VALUE new_enum;
+    VALUE argv[2];
+    MagickEnum *magick_enum;
 
-    ctype = NUM2INT(type);
-    for (x = 0; x < CHANNEL_N; x++)
-    {
-        if (ctype == ct[x]) break;
-    }
+    new_enum = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
+    argv[0] = sym;
+    argv[1] = val;
 
-    if (x == CHANNEL_N)
-    {
-        rb_raise(rb_eArgError, "invalid ClassType constant (%d)", ctype);
-    }
-
-    return ctype;
+    rb_obj_call_init(new_enum, 2, argv);
+    return new_enum;
 }
+#endif
+
+/*
+    Method:  Enum#initialize
+    Purpose: Initialize a new Enum instance
+*/
+VALUE Enum_initialize(VALUE self, VALUE sym, VALUE val)
+{
+   MagickEnum *magick_enum;
+
+   Data_Get_Struct(self, MagickEnum, magick_enum);
+   magick_enum->id = rb_to_id(sym); /* convert symbol to ID */
+   magick_enum->val = NUM2INT(val);
+
+   return self;
+}
+
+/*
+    Method:  Enum#to_s
+    Purpose: Return the name of an enum
+*/
+VALUE Enum_to_s(VALUE self)
+{
+   MagickEnum *magick_enum;
+
+   Data_Get_Struct(self, MagickEnum, magick_enum);
+   return rb_str_new2(rb_id2name(magick_enum->id));
+}
+
+/*
+    Method:  Enum#to_i
+    Purpose: Return the value of an enum
+*/
+VALUE Enum_to_i(VALUE self)
+{
+   MagickEnum *magick_enum;
+
+   Data_Get_Struct(self, MagickEnum, magick_enum);
+   return INT2NUM(magick_enum->val);
+}
+
+/*
+    Method:  Enum#<=>
+    Purpose: Support Enumerable module in Enum
+    Returns: -1, 0, 1, or nil
+    Notes:   Enums must be instances of the same class to be equal.
+*/
+VALUE Enum_spaceship(VALUE self, VALUE other)
+{
+    MagickEnum *this, *that;
+
+    Data_Get_Struct(self, MagickEnum, this);
+    Data_Get_Struct(other, MagickEnum, that);
+
+    if (this->val > that->val)
+    {
+        return INT2FIX(1);
+    }
+    else if (this->val < that->val)
+    {
+        return INT2FIX(-1);
+    }
+
+    // Values are equal, check class.
+
+    return rb_funcall(CLASS_OF(self), rb_intern("<=>"), 1, CLASS_OF(other));
+}
+
+/*
+    Method:  Enum#===
+    Purpose: "Case equal" operator for Enum
+    Returns: true or false
+    Notes:   Yes, I know "case equal" is a misnomer.
+*/
+VALUE Enum_case_eq(VALUE self, VALUE other)
+{
+    MagickEnum *this, *that;
+
+    if (CLASS_OF(self) == CLASS_OF(other))
+    {
+        Data_Get_Struct(self, MagickEnum, this);
+        Data_Get_Struct(other, MagickEnum, that);
+        return this->val == that->val ? Qtrue : Qfalse;
+    }
+
+    return Qfalse;
+}
+
 
 /*
     Static:     Compliance_Const_Name
@@ -1241,561 +1277,6 @@ Compliance_Const_Name(ComplianceType c)
         }
 }
 
-/*
-    External:   Num_to_ComplianceType
-    Purpose:    Convert a Numeric value to a ComplianceType value.
-                Raise an exception if the value is not a ComplianceType.
-*/
-ComplianceType
-Num_to_ComplianceType(VALUE type)
-{
-    static ComplianceType ct[] = {
-#if HAVE_NOCOMPLIANCE
-        NoCompliance,
-#endif
-        SVGCompliance,
-        X11Compliance,
-        XPMCompliance,
-        AllCompliance
- };
-#define COMPLIANCE_N (sizeof(ct)/sizeof(ct[0]))
-    int x;
-    ComplianceType ctype;
-
-    ctype = NUM2INT(type);
-    for (x = 0; x < COMPLIANCE_N; x++)
-    {
-        if (ctype == ct[x]) break;
-    }
-
-    if (x == COMPLIANCE_N)
-    {
-        rb_raise(rb_eArgError, "invalid ComplianceType constant (%d)", ctype);
-    }
-
-    return ctype;
-}
-
-/*
-    External:   Num_to_CompositeOperator
-    Purpose:    Convert a Numeric value to a CompositeOperator value.
-                Raise an exception if the value is not a CompositeOperator.
-*/
-CompositeOperator
-Num_to_CompositeOperator(VALUE type)
-{
-    static CompositeOperator cm[] = {
-        UndefinedCompositeOp,
-        OverCompositeOp,
-        InCompositeOp,
-        OutCompositeOp,
-        AtopCompositeOp,
-        XorCompositeOp,
-        PlusCompositeOp,
-        MinusCompositeOp,
-        AddCompositeOp,
-        SubtractCompositeOp,
-        DifferenceCompositeOp,
-        MultiplyCompositeOp,
-        BumpmapCompositeOp,
-        CopyCompositeOp,
-        CopyRedCompositeOp,
-        CopyGreenCompositeOp,
-        CopyBlueCompositeOp,
-        CopyOpacityCompositeOp,
-        ClearCompositeOp,
-        DissolveCompositeOp,
-        DisplaceCompositeOp,
-        ModulateCompositeOp,
-        ThresholdCompositeOp,
-        NoCompositeOp,
-        DarkenCompositeOp,
-        LightenCompositeOp,
-        HueCompositeOp,
-        SaturateCompositeOp,
-        ColorizeCompositeOp,
-        LuminizeCompositeOp,
-        ScreenCompositeOp,
-        OverlayCompositeOp,
-#if defined(HAVE_COPYCYANCOMPOSITEOP)
-        CopyCyanCompositeOp,
-        CopyMagentaCompositeOp,
-        CopyYellowCompositeOp,
-        CopyBlackCompositeOp,
-#endif
-    };
-#define COMPOSITE_N (sizeof(cm)/sizeof(cm[0]))
-    int x;
-    CompositeOperator cop;
-
-    cop = NUM2INT(type);
-    for (x = 0; x < COMPOSITE_N; x++)
-    {
-        if (cop == cm[x]) break;
-    }
-
-    if (x == COMPOSITE_N)
-    {
-        rb_raise(rb_eArgError, "invalid CompositeOperator constant (%d)", cop);
-    }
-
-    return cop;
-}
-
-/*
-    External:   Num_to_CompressionType
-    Purpose:    Convert a Numeric value to a CompressionType value.
-                Raise an exception if the value is not a CompressionType.
-*/
-CompressionType
-Num_to_CompressionType(VALUE type)
-{
-    static CompressionType cm[] = {
-        UndefinedCompression, NoCompression, BZipCompression, FaxCompression,
-        Group4Compression, JPEGCompression, LosslessJPEGCompression,
-        LZWCompression, RunlengthEncodedCompression, ZipCompression };
-#define COMPRESSION_N (sizeof(cm)/sizeof(cm[0]))
-    int x;
-    CompressionType ctype;
-
-    ctype = NUM2INT(type);
-    for (x = 0; x < COMPRESSION_N; x++)
-    {
-        if (ctype == cm[x]) break;
-    }
-
-    if (x == COMPRESSION_N)
-    {
-        rb_raise(rb_eArgError, "invalid CompressionType constant (%d)", ctype);
-    }
-
-    return ctype;
-}
-
-/*
-    External:   Num_to_DecorationType
-    Purpose:    Convert a Numeric value to a DecorationType value.
-                Raise an exception if the value is not a DecorationType.
-*/
-DecorationType
-Num_to_DecorationType(VALUE type)
-{
-    static DecorationType dec[] = {
-        NoDecoration,
-        UnderlineDecoration,
-        OverlineDecoration,
-        LineThroughDecoration
-    };
-#define DECORATION_N (sizeof(dec)/sizeof(dec[0]))
-    int x;
-    DecorationType decoration;
-
-    decoration = NUM2INT(type);
-    for (x = 0; x < DECORATION_N; x++)
-    {
-        if (decoration == dec[x]) break;
-    }
-
-    if (x == DECORATION_N)
-    {
-        rb_raise(rb_eArgError, "invalid DecorationType constant (%d)", decoration);
-    }
-    return decoration;
-}
-
-#if HAVE_DISPOSETYPE
-/*
-    External:   Num_to_DisposeType
-    Purpose:    Convert a Numeric value to a DisposeType value.
-                Raise an exception if the value is not a DisposeType.
-*/
-DisposeType
-Num_to_DisposeType(VALUE type)
-{
-    static DisposeType dt[] = {
-        UndefinedDispose,
-        NoneDispose,
-        BackgroundDispose,
-        PreviousDispose
-    };
-#define DISPOSE_N (sizeof(dt)/sizeof(dt[0]))
-    int x;
-    DisposeType dtype;
-
-    dtype = NUM2INT(type);
-    for (x = 0; x < DISPOSE_N; x++)
-    {
-        if (dtype == dt[x]) break;
-    }
-
-    if (x == DISPOSE_N)
-    {
-        rb_raise(rb_eArgError, "invalid DisposeType constant (%d)", dtype);
-    }
-
-    return dtype;
-}
-#endif
-
-/*
-    External:   Num_to_FilterType
-    Purpose:    Convert a Numeric value to a FilterType value.
-                Raise an exception if the value is not a FilterType.
-*/
-FilterTypes
-Num_to_FilterType(VALUE type)
-{
-    static FilterTypes ft[] = {
-        UndefinedFilter,
-        PointFilter,
-        BoxFilter,
-        TriangleFilter,
-        HermiteFilter,
-        HanningFilter,
-        HammingFilter,
-        BlackmanFilter,
-        GaussianFilter,
-        QuadraticFilter,
-        CubicFilter,
-        CatromFilter,
-        MitchellFilter,
-        LanczosFilter,
-        BesselFilter,
-        SincFilter
-    };
-#define FILTER_N (sizeof(ft)/sizeof(ft[0]))
-    int x;
-    FilterTypes ftype;
-
-    ftype = NUM2INT(type);
-    for (x = 0; x < FILTER_N; x++)
-    {
-        if (ftype == ft[x]) break;
-    }
-
-    if (x == FILTER_N)
-    {
-        rb_raise(rb_eArgError, "invalid FilterType constant (%d)", ftype);
-    }
-
-    return ftype;
-}
-
-/*
-    External:   Num_to_GravityType
-    Purpose:    Convert a Numeric value to a GravityType value.
-                Raise an exception if the value is not a GravityType.
-*/
-GravityType
-Num_to_GravityType(VALUE type)
-{
-    static GravityType gtype[] = {
-        ForgetGravity,
-        NorthWestGravity,
-        NorthGravity,
-        NorthEastGravity,
-        WestGravity,
-        CenterGravity,
-        EastGravity,
-        SouthWestGravity,
-        SouthGravity,
-        SouthEastGravity,
-        StaticGravity
-    };
-#define GRAVITYTYPE_N (sizeof(gtype)/sizeof(gtype[0]))
-    int x;
-    GravityType grav;
-
-    grav = NUM2INT(type);
-    for (x = 0; x < GRAVITYTYPE_N; x++)
-    {
-        if (grav == gtype[x]) break;
-    }
-
-    if (x == GRAVITYTYPE_N)
-    {
-        rb_raise(rb_eArgError, "invalid GravityType (%d)", grav);
-    }
-    return grav;
-}
-
-/*
-    External:   Num_to_ImageType
-    Purpose:    Convert a Numeric value to a ImageType value.
-                Raise an exception if the value is not a ImageType.
-*/
-ImageType
-Num_to_ImageType(VALUE type)
-{
-    static ImageType imgtype[] = {
-        UndefinedType,
-        BilevelType,
-        GrayscaleType,
-        GrayscaleMatteType,
-        PaletteType,
-        PaletteMatteType,
-        TrueColorType,
-        TrueColorMatteType,
-        ColorSeparationType,
-        ColorSeparationMatteType,
-        OptimizeType
-    };
-#define IMAGETYPE_N (sizeof(imgtype)/sizeof(imgtype[0]))
-    int x;
-    ImageType it;
-
-    it = NUM2INT(type);
-    for (x = 0; x < IMAGETYPE_N; x++)
-    {
-        if (it == imgtype[x]) break;
-    }
-
-    if (x == IMAGETYPE_N)
-    {
-        rb_raise(rb_eArgError, "invalid ImageType constant (%d)", it);
-    }
-
-    return it;
-}
-
-/*
-    External:   Num_to_InterlaceType
-    Purpose:    Convert a Numeric value to a InterlaceType value.
-                Raise an exception if the value is not a InterlaceType.
-*/
-InterlaceType
-Num_to_InterlaceType(VALUE type)
-{
-    static InterlaceType it[] = {
-        UndefinedInterlace,
-        NoInterlace,
-        LineInterlace,
-        PlaneInterlace,
-        PartitionInterlace
-        };
-#define INTERLACE_N (sizeof(it)/sizeof(it[0]))
-    int x;
-    InterlaceType itype;
-
-    itype = NUM2INT(type);
-    for (x = 0; x < INTERLACE_N; x++)
-    {
-        if (itype == it[x]) break;
-    }
-
-    if (x == INTERLACE_N)
-    {
-        rb_raise(rb_eArgError, "invalid InterlaceType constant (%d)", itype);
-    }
-
-    return itype;
-}
-
-/*
-    External:   Num_to_ColorspaceType
-    Purpose:    Convert a Numeric value to a ColorspaceType value.
-                Raise an exception if the value is not a ColorspaceType.
-*/
-ColorspaceType
-Num_to_ColorspaceType(VALUE type)
-{
-    static ColorspaceType cs[] = {
-        UndefinedColorspace, RGBColorspace, GRAYColorspace, TransparentColorspace,
-        OHTAColorspace, XYZColorspace, YCbCrColorspace, YCCColorspace, YIQColorspace,
-        YPbPrColorspace, YUVColorspace, CMYKColorspace, sRGBColorspace,
-#if defined(HAVE_HSLCOLORSPACE)
-        HSLColorspace,
-#endif
-#if defined(HAVE_HWBCOLORSPACE)
-        HWBColorspace,
-#endif
-        };
-#define COLORSPACE_N (sizeof(cs)/sizeof(cs[0]))
-    int x;
-    ColorspaceType cstype;
-
-    cstype = NUM2INT(type);
-    for (x = 0; x < COLORSPACE_N; x++)
-    {
-        if (cstype == cs[x]) break;
-    }
-
-    if (x == COLORSPACE_N)
-    {
-        rb_raise(rb_eArgError, "invalid ColorspaceType constant (%d)", cstype);
-    }
-
-    return cstype;
-}
-
-/*
-    External:   Num_to_NoiseType
-    Purpose:    Convert a Numeric value to a NoiseType value.
-                Raise an exception if the number is not a NoiseType value.
-*/
-NoiseType
-Num_to_NoiseType(VALUE noise)
-{
-    static NoiseType types[] = {
-        UniformNoise,
-        GaussianNoise,
-        MultiplicativeGaussianNoise,
-        ImpulseNoise,
-        LaplacianNoise,
-        PoissonNoise
-    };
-#define NOISETYPE_N (sizeof(types)/sizeof(types[0]))
-    int x;
-    NoiseType n;
-
-    n = NUM2INT(noise);
-    for (x = 0; x < NOISETYPE_N; x++)
-    {
-        if (n == types[x]) break;
-    }
-
-    if (x == NOISETYPE_N)
-    {
-        rb_raise(rb_eArgError, "invalid NoiseType constant (%d)", n);
-    }
-
-    return n;
-}
-
-/*
-    External:   Num_to_RenderingIntent
-    Purpose:    Convert a Numeric value to a RenderingIntent value.
-                Raise an exception if the value is not a RenderingIntent.
-*/
-RenderingIntent
-Num_to_RenderingIntent(VALUE type)
-{
-    static RenderingIntent rs[] = {
-        UndefinedIntent,
-        SaturationIntent,
-        PerceptualIntent,
-        AbsoluteIntent,
-        RelativeIntent
-        };
-#define RENDERING_N (sizeof(rs)/sizeof(rs[0]))
-    int x;
-    RenderingIntent rtype;
-
-    rtype = NUM2INT(type);
-    for (x = 0; x < RENDERING_N; x++)
-    {
-        if (rtype == rs[x]) break;
-    }
-
-    if (x == RENDERING_N)
-    {
-        rb_raise(rb_eArgError, "invalid RenderingIntent constant (%d)", rtype);
-    }
-
-    return rtype;
-}
-
-/*
-    External:   Num_to_ResolutionType
-    Purpose:    Convert a Numeric value to a ResolutionType value.
-                Raise an exception if the value is not a ResolutionType.
-*/
-ResolutionType
-Num_to_ResolutionType(VALUE type)
-{
-    static ResolutionType rs[] = {
-        UndefinedResolution,
-        PixelsPerInchResolution,
-        PixelsPerCentimeterResolution
-        };
-#define RESOLUTION_N (sizeof(rs)/sizeof(rs[0]))
-    int x;
-    ResolutionType rtype;
-
-    rtype = NUM2INT(type);
-    for (x = 0; x < RESOLUTION_N; x++)
-    {
-        if (rtype == rs[x]) break;
-    }
-
-    if (x == RESOLUTION_N)
-    {
-        rb_raise(rb_eArgError, "invalid ResolutionType constant (%d)", rtype);
-    }
-
-    return rtype;
-}
-
-/*
-    External:   Num_to_PaintMethod
-    Purpose:    Convert a Numeric value to a PaintMethod value.
-                Raise an exception if the number is not a PaintMethod value.
-*/
-PaintMethod
-Num_to_PaintMethod(VALUE method)
-{
-    static PaintMethod meth[] = {
-        PointMethod,
-        ReplaceMethod,
-        FloodfillMethod,
-        FillToBorderMethod,
-        ResetMethod
-    };
-#define PAINTMETHOD_N (sizeof(meth)/sizeof(meth[0]))
-    int x;
-    PaintMethod m;
-
-    m = NUM2INT(method);
-    for (x = 0; x < PAINTMETHOD_N; x++)
-    {
-        if (m == meth[x]) break;
-    }
-
-    if (x == PAINTMETHOD_N)
-    {
-        rb_raise(rb_eArgError, "invalid PaintMethod constant (%d)", m);
-    }
-
-    return m;
-}
-
-/*
-    External:   Num_to_StretchType
-    Purpose:    Convert a Numeric value to a StretchType value.
-                Raise an exception if the number is not a StretchType value.
-*/
-StretchType
-Num_to_StretchType(VALUE stretch)
-{
-    static StretchType types[] = {
-        NormalStretch,
-        UltraCondensedStretch,
-        ExtraCondensedStretch,
-        CondensedStretch,
-        SemiCondensedStretch,
-        SemiExpandedStretch,
-        ExpandedStretch,
-        ExtraExpandedStretch,
-        UltraExpandedStretch,
-        AnyStretch
-    };
-#define STRETCHTYPE_N (sizeof(types)/sizeof(types[0]))
-    int x;
-    StretchType n;
-
-    n = NUM2INT(stretch);
-    for (x = 0; x < STRETCHTYPE_N; x++)
-    {
-        if (n == types[x]) break;
-    }
-
-    if (x == STRETCHTYPE_N)
-    {
-        rb_raise(rb_eArgError, "invalid StretchType constant (%d)", n);
-    }
-
-    return n;
-}
 
 static const char *
 Stretch_Const_Name(StretchType stretch)
@@ -1827,37 +1308,6 @@ Stretch_Const_Name(StretchType stretch)
     }
 }
 
-/*
-    External:   Num_to_StyleType
-    Purpose:    Convert a Numeric value to a StyleType value.
-                Raise an exception if the number is not a StyleType value.
-*/
-StyleType
-Num_to_StyleType(VALUE style)
-{
-    static StyleType types[] = {
-        NormalStyle,
-        ItalicStyle,
-        ObliqueStyle,
-        AnyStyle
-    };
-#define STYLETYPE_N (sizeof(types)/sizeof(types[0]))
-    int x;
-    StyleType n;
-
-    n = NUM2INT(style);
-    for (x = 0; x < STYLETYPE_N; x++)
-    {
-        if (n == types[x]) break;
-    }
-
-    if (x == STYLETYPE_N)
-    {
-        rb_raise(rb_eArgError, "invalid StyleType constant (%d)", n);
-    }
-
-    return n;
-}
 
 static const char *
 Style_Const_Name(StyleType style)

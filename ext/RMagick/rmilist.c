@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.4 2003/09/12 01:08:23 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.5 2003/09/18 13:21:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -461,7 +461,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
         case 3:
             quantize_info.dither = RTEST(argv[2]);
         case 2:
-            quantize_info.colorspace = Num_to_ColorspaceType(argv[1]);
+            NUM_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
         case 1:
             quantize_info.number_colors = NUM2INT(argv[0]);
         case 0:

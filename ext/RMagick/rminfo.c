@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.7 2003/09/15 13:27:09 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.8 2003/09/18 13:21:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -81,7 +81,7 @@ Info_colorspace_eq(VALUE self, VALUE colorspace)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    info->colorspace = Num_to_ColorspaceType(colorspace);
+    NUM_TO_ENUM(colorspace, info->colorspace, ColorspaceType);
     return self;
 }
 
@@ -98,7 +98,7 @@ Info_compression_eq(VALUE self, VALUE type)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    info->compression = Num_to_CompressionType(type);
+    NUM_TO_ENUM(type, info->compression, CompressionType);
     return self;
 }
 
@@ -418,7 +418,7 @@ Info_image_type_eq(VALUE self, VALUE type)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    info->type = Num_to_ImageType(type);
+    NUM_TO_ENUM(type, info->type, ImageType);
     return self;
 }
 
@@ -435,7 +435,7 @@ Info_interlace_eq(VALUE self, VALUE inter)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    info->interlace = Num_to_InterlaceType(inter);
+    NUM_TO_ENUM(inter, info->interlace, InterlaceType);
     return self;
 }
 
@@ -665,12 +665,12 @@ DEF_ATTR_READER(Info, units, int)
     Raises:     ArgumentError
 */
 VALUE
-Info_units_eq(VALUE self, VALUE units_arg)
+Info_units_eq(VALUE self, VALUE units)
 {
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    info->units = Num_to_ResolutionType(units_arg);
+    NUM_TO_ENUM(units, info->units, ResolutionType);
     return self;
 }
 

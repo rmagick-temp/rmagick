@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.15 2003/09/13 23:50:25 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.16 2003/09/18 13:21:13 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2003 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -99,6 +99,13 @@ typedef struct
     VALUE tmpfile_ary;
 } Draw;             // make the type match the class name
 
+// Enum
+typedef struct
+{
+   ID id;
+   int val;
+} MagickEnum;
+
 typedef enum
 {
     False = 0,
@@ -179,6 +186,30 @@ EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
 
+// Enum classes
+EXTERN VALUE Class_Enum;
+EXTERN VALUE Class_AlignType;
+EXTERN VALUE Class_AnchorType;
+EXTERN VALUE Class_ChannelType;
+EXTERN VALUE Class_ClassType;
+EXTERN VALUE Class_ColorspaceType;
+EXTERN VALUE Class_ComplianceType;
+EXTERN VALUE Class_CompositeOperator;
+EXTERN VALUE Class_CompressionType;
+EXTERN VALUE Class_DecorationType;
+EXTERN VALUE Class_DisposeType;
+EXTERN VALUE Class_FilterTypes;
+EXTERN VALUE Class_GravityType;
+EXTERN VALUE Class_ImageType;
+EXTERN VALUE Class_InterlaceType;
+EXTERN VALUE Class_NoiseType;
+EXTERN VALUE Class_PaintMethod;
+EXTERN VALUE Class_RenderingIntent;
+EXTERN VALUE Class_ResolutionType;
+EXTERN VALUE Class_StretchType;
+EXTERN VALUE Class_StyleType;
+EXTERN VALUE Class_WeightType;
+
 /*
 *   Commonly-used IDs
 */
@@ -192,11 +223,12 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 
 
 /*
-*   Handle warnings & errors
+   Handle warnings & errors
+
+   For ExceptionInfo structures in auto storage. Destroys the
+   ExceptionInfo structure (releasing any IM storage) before
+   calling rb_raise.
 */
-// For ExceptionInfo structures in auto storage. Destroys the
-// ExceptionInfo structure (releasing any IM storage) before
-// calling rb_raise.
 #define HANDLE_ERROR handle_error(&exception);
 // For ExceptionInfo structures in images.
 #define HANDLE_IMG_ERROR(img) handle_error(&((img)->exception));
@@ -267,11 +299,6 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
     DEF_ATTR_WRITER(class, attr, type)
 
 /*
- *  Define an Magick module constant from an ImageMagick enumeration value
- */
-#define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
-
-/*
  *  Declare attribute accessors
  */
 #define ATTR_READER(class, attr) \
@@ -281,6 +308,28 @@ EXTERN ID _dummy_img__ID;  // "_dummy_img_"
 #define ATTR_ACCESSOR(class, attr) \
     ATTR_READER(class, attr)\
     ATTR_WRITER(class, attr)
+
+/*
+ *  Define enums and constants
+ */
+
+// Define a subclass of Magick::Enum
+#define DEF_ENUM(type) Class_##type = rb_define_class_under(Module_Magick, #type, Class_Enum);
+//  Define an Magick module constant from an ImageMagick enumeration value
+#define ENUM_VAL(type, val) rb_define_const(Module_Magick, #val, \
+    rm_enum_new(Class_##type, ID2SYM(rb_intern(#val)), INT2FIX(val)))
+//  Define a Magick module constant
+#define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
+
+#define NUM_TO_ENUM(value, e, type) \
+   do {\
+   MagickEnum *magick_enum;\
+   if (CLASS_OF(value) != Class_##type)\
+       rb_raise(rb_eTypeError, "wrong enumeration type - expected %s, got %s"\
+                   , rb_class2name(Class_##type),rb_class2name(CLASS_OF(value)));\
+   Data_Get_Struct(value, MagickEnum, magick_enum);\
+   e = (type)(magick_enum->val);\
+   } while(0)
 
 /*
 *   Method, external function declarations
@@ -586,32 +635,20 @@ extern VALUE   TypeMetric_to_Struct(TypeMetric *);
 extern VALUE   TypeMetric_to_s(VALUE);
 extern VALUE   ImageMagickError_initialize(VALUE, VALUE, VALUE);
 
+extern VALUE   rm_enum_new(VALUE, VALUE, VALUE);
+RUBY18(extern VALUE Enum_alloc(VALUE);)
+RUBY16(extern VALUE Enum_new(VALUE, VALUE, VALUE);)
+extern VALUE   Enum_initialize(VALUE, VALUE, VALUE);
+extern VALUE   Enum_to_s(VALUE);
+extern VALUE   Enum_to_i(VALUE);
+extern VALUE   Enum_spaceship(VALUE, VALUE);
+extern VALUE   Enum_case_eq(VALUE, VALUE);
+
 extern const char *    Str_to_CompositeOperator(VALUE);
-extern AlignType       Num_to_AlignType(VALUE);
-extern ChannelType     Num_to_ChannelType(VALUE);
-extern ClassType       Num_to_ClassType(VALUE);
-extern ComplianceType  Num_to_ComplianceType(VALUE);
-extern CompressionType     Num_to_CompressionType(VALUE);
-extern CompositeOperator   Num_to_CompositeOperator(VALUE);
-extern DecorationType  Num_to_DecorationType(VALUE);
-#if HAVE_DISPOSETYPE
-extern DisposeType     Num_to_DisposeType(VALUE);
-#endif
-extern FilterTypes     Num_to_FilterType(VALUE);
-extern GravityType     Num_to_GravityType(VALUE);
-extern InterlaceType   Num_to_InterlaceType(VALUE);
-extern ImageType       Num_to_ImageType(VALUE);
-extern ColorspaceType  Num_to_ColorspaceType(VALUE);
-extern NoiseType       Num_to_NoiseType(VALUE);
-extern ResolutionType  Num_to_ResolutionType(VALUE);
-extern RenderingIntent Num_to_RenderingIntent(VALUE);
-extern PaintMethod     Num_to_PaintMethod(VALUE);
-extern StretchType     Num_to_StretchType(VALUE);
-extern StyleType       Num_to_StyleType(VALUE);
 #ifndef StringValuePtr
-extern char *rm_string_value_ptr(VALUE *);
+extern char *rm_string_value_ptr(volatile VALUE *);
 #endif
-extern char *rm_string_value_ptr_len(VALUE *, Strlen_t *);
+extern char *rm_string_value_ptr_len(volatile VALUE *, Strlen_t *);
 
 extern void *magick_malloc(const size_t);
 extern void magick_free(void *);

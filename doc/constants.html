@@ -89,15 +89,28 @@
                 quantum is one of the red, green, blue, or opacity
                 elements of a pixel in the RGB colorspace, or cyan,
                 yellow, magenta, or black elements in the CYMK
-                colorspace. If &times;Magick is built using
-                -DQuantumDepth=16, then MaxRGB is 65535, otherwise
-                it is 255.</td>
+                colorspace.
               </tr>
               <tr valign="top">
                 <td>QuantumDepth</td>
-                <td>The number of bits in a quantum. If
-                &times;Magick is built using -DQuantumDepth=16,
-                then QuantumDepth is 16, otherwise it is 8.</td>
+                <td>The number of bits in a quantum.
+                <div align="center">
+                <table border="1">
+                    <caption>
+                        <b>How MaxRGB and QuantumDepth are related</b>
+                    </caption>
+                    <tr>
+                    <td>
+                        <b>QuantumDepth</b>
+                    </td>
+                    <td><b>MaxRGB</b></td>
+                    </tr>
+                    <tr><td>8</td><td>255</td></tr>
+                    <tr><td>16</td><td>65535</td></tr>
+                    <tr><td>32</td><td>4294967295</td></tr>
+                </table>
+                </div>
+                </td>
               </tr>
               <tr valign="top">
                 <td>Version</td>
@@ -187,7 +200,7 @@
                 <td colspan="2">
                   <a name="ClassType"><b>ClassType</b></a> - The
                   ClassType constants specify the image storage
-                  class. 
+                  class.
                   <p>See <a href=
                   "imageattrs.html#Image.class_type">Image#class_type</a></p>
                 </td>
@@ -718,7 +731,7 @@
                   TriangleFilter) may execute much faster but may
                   show artifacts when the image is re-sized or
                   around diagonal lines. The only way to be sure is
-                  to test the filter with sample images.</span> 
+                  to test the filter with sample images.</span>
                   <p>See <a href=
                   "image.html#Image.resize">Image#resize</a>.</p>
                 </td>
@@ -793,7 +806,7 @@
                   region, in other words, you don't need to provide
                   absolute coordinates in order to position an
                   object. A common default for gravity is
-                  <i>NorthWestGravity</i>.</span> 
+                  <i>NorthWestGravity</i>.</span>
                   <p>See <a href=
                   "draw.html#Draw.annotate">Draw#annotate</a> and
                   <a href=
@@ -865,7 +878,7 @@
                   <a name="ImageType"><b>ImageType</b></a> - The
                   ImageType constants indicate <span class=
                   "imquote">the type classification of the
-                  image.</span> 
+                  image.</span>
                   <p>See <a href=
                   "imageattrs.html#Image.image_type">Image#image_type</a>
                   and <a href=
@@ -939,7 +952,7 @@
                   For example, interlacing allows images on the Web
                   to be recognizable sooner and satellite images to
                   accumulate/render with image resolution
-                  increasing over time.</span> 
+                  increasing over time.</span>
                   <div class="imquote">
                     Use <i>LineInterlace</i> or
                     <i>PlaneInterlace</i> to create an interlaced
@@ -991,7 +1004,7 @@
                   <a name="NoiseType"><b>NoiseType</b></a> - The
                   NoiseType constants <span class="imquote">select
                   the type of noise to be added to the
-                  image.</span> 
+                  image.</span>
                   <p>See <a href=
                   "image.html#Image.add_noise">Image#add_noise</a>.</p>
                 </td>
@@ -1059,7 +1072,7 @@
                   <a name="PaintMethod"><b>PaintMethod</b></a> -
                   The PaintMethod constants <span class=
                   "imquote">specify how pixel colors are to be
-                  replaced in the image.</span> 
+                  replaced in the image.</span>
                   <p>See <a href=
                   "image.html#Image.matte_floodfill">Image#matte_floodfill</a>
                   and <a href=
@@ -1112,7 +1125,7 @@
                   concept defined by ICC Spec ICC.1:1998-09, "File
                   Format for Color Profiles". &times;Magick uses
                   RenderingIntent in order to support ICC Color
-                  Profiles.</span> 
+                  Profiles.</span>
                   <p class="imquote">From the specification:
                   "Rendering intent specifies the style of
                   reproduction to be used during the evaluation of
@@ -1171,7 +1184,7 @@
                   <span class="imquote">By default, &times;Magick
                   defines resolutions in pixels per inch.
                   ResolutionType provides a means to adjust
-                  this.</span> 
+                  this.</span>
                   <p>See <a href=
                   "imageattrs.html#Image.units">Image#units</a>.</p>
                 </td>

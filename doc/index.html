@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick User's Guide and Reference</title>
   <meta http-equiv="Content-Type" content=
@@ -13,7 +13,7 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <style type="text/css">
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
@@ -96,7 +96,7 @@
     margin-right: 0;
   }
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -266,10 +266,11 @@
   </div>
 
   <p>RMagick is a complete interface to ImageMagick and
-  GraphicsMagick, defining three major classes containing over 100
-  methods, plus numerous attributes and constants. RMagick exploits
-  Ruby idioms such as blocks and iterators, Struct and Array
-  classes, symbols, ?- and !-suffixed methods, and exceptions.</p>
+  GraphicsMagick. Within its three major classes and 21 minor
+  classes RMagick defines over 550 methods and 225 constants.
+  RMagick exploits Ruby idioms such as blocks and iterators, Struct
+  and Array classes, symbols, ?- and !-suffixed methods, and
+  exceptions.</p>
 
   <h3>About this document</h3>
 
@@ -280,7 +281,7 @@
   RMagick classes and constants. The reference guide includes many
   examples.</p>
 
-  <p>Accompanying the HTML documentation is a set of over 100
+  <p>Accompanying the HTML documentation is a set of over 130
   example RMagick programs. Each is a complete, stand-alone program
   that either creates an image from scratch or modifies an input
   image using one or more RMagick methods. The output images are
@@ -326,15 +327,17 @@
   <p><b>Example programs and images&nbsp;&nbsp;</b> All of the
   example images on these pages were created by RMagick. Click the
   image to see the progam code. (You may need to configure your
-  browser to allow popup windows.) All example images show the
-  result of applying the method. Many example images show the
-  "before" image as well. When the image is accompanied by this
-  symbol <img style="display:inline" src="ex/images/spin.gif" alt=
-  "rollover" /> mouse over the image to see the "before"
-  version.</p>
+  browser to allow JavaScript and popup windows.) All example
+  images show the result of applying the method. Many example
+  images show the "before" image as well. When the image is
+  accompanied by this symbol <img style="display:inline" src=
+  "ex/images/spin.gif" alt="rollover" /> mouse over the image to
+  see the "before" version.</p>
 
-  <h3>How to get help</h3><p>If you have a question that is not
-  answered by these pages, you can post it at the <a href=
+  <h3>How to get help</h3>
+
+  <p>If you have a question that is not answered by these pages,
+  you can post it at the <a href=
   "http://rubyforge.org/projects/rmagick">Support Request
   Tracker</a> or the <a href=
   "http://rubyforge.org/projects/rmagick">Feature Request
@@ -346,8 +349,7 @@
   <p>Please report problems with RMagick installation and usage to
   the <a href="http://rubyforge.org/projects/rmagick/">Bug
   Tracker</a> at RubyForge, or email me at <code>rmagick at
-  rubyforge.org</code> . If you include "RMagick" in the subject
-  I'll probably give your email top priority.</p>
+  rubyforge.org</code>.</p>
 
   <p>For quickest results, include the RMagick, &times;Magick and
   Ruby version numbers, along with a thorough description of the
@@ -356,7 +358,7 @@
   <code>Magick::Long_version</code> constant:</p>
   <pre class="example" id="version">
 irb(main):001:0&gt; puts Magick::Long_version
-This is RMagick 1.4.0 ($Date: 2004/09/01 22:34:56 $)
+This is RMagick 1.4.0 ($Date: 2004/12/06 00:18:09 $)
 Copyright (C) 2004 by Timothy P. Hunter
 Built with ImageMagick 6.0.0 12/18/03 Q8 http://www.imagemagick.org
 Built for ruby 1.8.1 (2003-12-25) [i686-linux]
@@ -375,21 +377,22 @@ Email: rmagick@rubyforge.org
   GraphicsMagick mailing list. See the instructions at <a href=
   "http://www.imagemagick.org/www/magick-list.html">http://www.imagemagick.org/www/magick-list.html</a>
   or <a href=
-  "http://sourceforge.net/mail/?group_id=73485">http://sourceforge.net/mail/?group_id=73485</a>.</p>
+  "http://sourceforge.net/projects/graphicsmagick/">http://sourceforge.net/projects/graphicsmagick/</a>.</p>
 
   <p>I'm not an image processing guru, either, so I probably won't
   be able to help with questions about specific image formats and
-  transformation algorithms. I will be glad, however, to translate
-  between the RMagick API and the &times;Magick C API to help you
-  compose a question to the &times;Magick developers.</p>
+  transformations. I will be glad, however, to translate between
+  the RMagick API and the &times;Magick C API to help you compose a
+  question to the &times;Magick developers.</p>
 
-  <h3>Contributions</h3><p>If you have a script or an image using
-  RMagick that you're particularly proud of, let me know. I'd like
-  to collect your contributions, along with other users'
-  contributions, and put them in a <code>contrib</code> directory
-  to distribute with RMagick. I'm particularly interested in
-  getting examples for the RMagick methods that currently have no
-  examples.</p>
+  <h3>Contributions</h3>
+
+  <p>If you have a script or an image using RMagick that you're
+  particularly proud of, let me know. I'd like to collect your
+  contributions, along with other users' contributions, and put
+  them in a <code>contrib</code> directory to distribute with
+  RMagick. I'm particularly interested in getting examples for the
+  RMagick methods that currently have no examples.</p>
 
   <h3><a name="copyrights" id="copyrights">Copyright
   Notices</a></h3>

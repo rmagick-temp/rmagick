@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image::Info - Optional method
   arguments</title>
@@ -14,9 +14,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2004 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <style type="text/css">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
@@ -40,7 +40,7 @@
   }
 
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -348,8 +348,8 @@ self.define("tiff", "bits-per-sample", 2)
       <tr>
         <td>GIF</td>
 
-        <td><strong>NoCompression</strong>, LZWCompression <em>(see
-        Notes, below)</em></td>
+        <td><strong>LZWCompression</strong> <em>(see Notes,
+        below)</em></td>
       </tr>
 
       <tr>
@@ -452,8 +452,8 @@ self.define("tiff", "bits-per-sample", 2)
       <li>NoCompression is accepted for all image formats. Except
       as noted in the table, it is the default.</li>
 
-      <li>After July 10, 2004, ImageMagick will change the default
-      for GIF images to LZWCompression.</li>
+      <li>Prior to July 10, 2004, the default for GIF images was
+      NoCompression.</li>
 
       <li>&times;Magick must be configured and built with extra
       support to use LZWCompression (in releases prior to July 10,

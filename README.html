@@ -35,6 +35,7 @@
       <li><a href="#things_that_can_go_wrong">Things that can go
       wrong</a></li>
       <li><a href="#upgrading">Upgrading</a></li>
+      <li><a href="#uninstalling">Uninstalling</a></li>
       <li><a href="#more_samples">More samples</a></li>
       <li><a href="#undocumented_features">Undocumented
       features</a></li>
@@ -291,6 +292,9 @@ export TMPDIR=/home/me/tmp
     that supports that release. Usually I put out a new release of
     RMagick with every new release of ImageMagick. It's safe to
     install a newer release of RMagick over an earlier release.</p>
+    <h2><a name="uninstalling">Uninstalling</a></h2>
+    <p>The `uninstall' target will uninstall RMagick completely:</p>
+    <blockquote><code>make uninstall</code></blockquote>
     <h2>More samples</h2>
     <p>You can find more sample RMagick programs in the /example
     directory. These programs are not installed in the RMagick
@@ -315,7 +319,7 @@ export TMPDIR=/home/me/tmp
     The default domain is "none". For example,</p>
 <pre>
           Magick::set_log_event_mask("render")
-       
+
 </pre>
     <p>Logging is controlled by the log.mgk file, which may be
     found in the same directory as the delegates.mgk files. (See

@@ -21,6 +21,7 @@
           o Running the configure and make scripts <#running>
     * Things that can go wrong <#things_that_can_go_wrong>
     * Upgrading <#upgrading>
+    * Uninstalling <#uninstalling>
     * More samples <#more_samples>
     * Undocumented features <#undocumented_features>
     * Known issues <#known_issues>
@@ -277,6 +278,13 @@ ImageMagick. It's safe to install a newer release of RMagick over an
 earlier release.
 
 
+    Uninstalling
+
+The `uninstall' target will uninstall RMagick completely:
+
+    |make uninstall|
+
+
     More samples
 
 You can find more sample RMagick programs in the /example directory.
@@ -302,7 +310,6 @@ method recognizes these event domains: "all", "annotate", "blob",
 match the mask are logged. The default domain is "none". For example,
 
           Magick::set_log_event_mask("render")
-       
 
 Logging is controlled by the log.mgk file, which may be found in the
 same directory as the delegates.mgk files. (See ImageMagick's README.txt

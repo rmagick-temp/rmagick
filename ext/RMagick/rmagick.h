@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.51 2004/06/11 23:09:26 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.52 2004/06/12 21:55:25 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -871,6 +871,7 @@ extern char *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern void rm_check_frozen(VALUE);
+extern VALUE rm_obj_to_s(VALUE);
 
 extern void *magick_malloc(const size_t);
 extern void magick_free(void *);

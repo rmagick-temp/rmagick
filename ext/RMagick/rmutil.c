@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.32 2004/04/11 00:05:15 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.33 2004/06/12 21:55:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -156,6 +156,21 @@ rm_no_freeze(VALUE obj)
 {
     rb_raise(rb_eTypeError, "can't freeze %s", rb_class2name(CLASS_OF(obj)));
 }
+
+
+/*
+ *  Extern:     rm_obj_to_s(obj)
+ *  Purpose:    try to convert object to string by calling its `to_s' method
+ *  Notes:      Usually run via rb_rescue so TypeError or NoMethodError can be
+ *              rescued. I use this instead of rb_str_to_str so that objects
+ *              that don't have `to_str' but do have `to_s' can be converted.
+*/
+VALUE
+rm_obj_to_s(VALUE obj)
+{
+    return TYPE(obj) == T_STRING ? obj : rb_funcall(obj, ID_to_s, 0);
+}
+
 
 /*
     Extern:     ImageList_cur_image
@@ -1368,6 +1383,18 @@ Pixel_from_PixelPacket(PixelPacket *pp)
 
 
 /*
+ *  Static:     color_arg_rescue
+ *  Purpose:    raise ArgumentError if the color name cannot be converted
+ *              to a string via rb_str_to_str.
+*/
+static VALUE
+color_arg_rescue(VALUE arg)
+{
+    rb_raise(rb_eTypeError, "argument must be color name or pixel (%s given)",
+            rb_class2name(CLASS_OF(arg)));
+}
+
+/*
     Extern:     Color_to_PixelPacket
     Purpose:    Convert either a String color name or
                 a Magick::Pixel to a PixelPacket
@@ -1378,21 +1405,17 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
     Pixel *pixel;
 
     // Allow color name or Pixel
-    if (TYPE(color) == T_STRING)
-    {
-        Color_Name_to_PixelPacket(pp, color);
-    }
-    else if (CLASS_OF(color) == Class_Pixel)
+    if (CLASS_OF(color) == Class_Pixel)
     {
         Data_Get_Struct(color, Pixel, pixel);
         *pp = *pixel;
     }
     else
     {
-        rb_raise(rb_eTypeError, "color argument must be String or Pixel (%s given)",
-                rb_class2name(CLASS_OF(color)));
+        // require 'to_str' here instead of just 'to_s'.
+        color = rb_rescue(rb_str_to_str, color, color_arg_rescue, color);
+        Color_Name_to_PixelPacket(pp, color);
     }
-
 }
 
 /*

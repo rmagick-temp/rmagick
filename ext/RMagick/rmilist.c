@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.13 2004/04/02 23:50:19 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.14 2004/06/12 21:55:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -546,6 +546,18 @@ ImageList_to_blob(VALUE self)
     return (blob && length) ? rb_str_new(blob, length) : Qnil;
 }
 
+
+/*
+ *  Static:     file_arg_rescue
+ *  Purpose:    called when `arg_to_str' raised an exception
+*/
+static VALUE file_arg_rescue(VALUE arg)
+{
+    rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
+            rb_class2name(CLASS_OF(arg)));
+}
+
+
 /*
   Method:   ImageList#write(file)
   Purpose:  Write all the images to the specified file. If the file format
@@ -573,16 +585,7 @@ ImageList_write(VALUE self, VALUE file)
     // Convert the images array to an images sequence.
     images = toseq(self);
 
-    // Copy the filename to the Info and to the Image.
-    if (TYPE(file) == T_STRING)
-    {
-        filename = STRING_PTR_LEN(file, filenameL);
-        filenameL = min(filenameL, MaxTextExtent-1);
-        memcpy(info->filename, filename, (size_t)filenameL);
-        info->filename[filenameL] = '\0';
-        info->file = NULL;
-    }
-    else if (TYPE(file) == T_FILE)
+    if (TYPE(file) == T_FILE)
     {
         OpenFile *fptr;
 
@@ -592,8 +595,15 @@ ImageList_write(VALUE self, VALUE file)
     }
     else
     {
-        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
-                rb_class2name(CLASS_OF(file)));
+        // Convert arg to string. Catch exceptions.
+        file = rb_rescue(rm_obj_to_s, file, file_arg_rescue, file);
+
+        // Copy the filename to the Info and to the Image.
+        filename = STRING_PTR_LEN(file, filenameL);
+        filenameL = min(filenameL, MaxTextExtent-1);
+        memcpy(info->filename, filename, (size_t)filenameL);
+        info->filename[filenameL] = '\0';
+        info->file = NULL;
     }
 
     // Copy the filename into each images. Set a scene number to be used if

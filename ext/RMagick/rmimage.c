@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.55 2004/06/11 23:09:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.56 2004/06/12 21:55:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2004 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -144,16 +144,13 @@ Image_aref(VALUE self, VALUE key_arg)
         case T_SYMBOL:
             key = rb_id2name(SYM2ID(key_arg));
             break;
-        case T_STRING:
+
+        default:
             key = STRING_PTR(key_arg);
             if (*key == '\0')
             {
                 return Qnil;
             }
-            break;
-        default:
-            rb_raise(rb_eTypeError, "key must be String or Symbol (%s given)",
-                rb_class2name(CLASS_OF(key_arg)));
             break;
     }
 
@@ -198,16 +195,13 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
         case T_SYMBOL:
             key = rb_id2name(SYM2ID(key_arg));
             break;
-        case T_STRING:
+
+        default:
             key = STRING_PTR(key_arg);
             if (*key == '\0')
             {
                 return self;
             }
-            break;
-        default:
-            rb_raise(rb_eTypeError, "key must be a String or a symbol (%s given)"
-                   , rb_class2name(CLASS_OF(key_arg)));
             break;
     }
 
@@ -2286,6 +2280,7 @@ Image_density(VALUE self)
                 the y resolution. If the height attribute is missing, the
                 width attribute is used for both.
 */
+
 VALUE
 Image_density_eq(VALUE self, VALUE density_arg)
 {
@@ -2298,7 +2293,29 @@ Image_density_eq(VALUE self, VALUE density_arg)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    if (TYPE(density_arg) == T_STRING)
+    // Get the Class ID for the Geometry class.
+    if (!Class_Geometry)
+    {
+        Class_Geometry = rb_const_get(Module_Magick, ID_Geometry);
+    }
+
+    // Geometry object. Width and height attributes are always positive.
+    if (CLASS_OF(density_arg) == Class_Geometry)
+    {
+        x_val = rb_funcall(density_arg, rb_intern("width"), 0);
+        x_res = NUM2DBL(x_val);
+        y_val = rb_funcall(density_arg, rb_intern("height"), 0);
+        y_res = NUM2DBL(y_val);
+        if(x_res == 0.0)
+        {
+            rb_raise(rb_eArgError, "invalid x resolution: %f", x_res);
+        }
+        image->y_resolution = y_res != 0.0 ? y_res : x_res;
+        image->x_resolution = x_res;
+    }
+
+    // Convert the argument to a string
+    else
     {
         density = STRING_PTR(density_arg);
         if (!IsGeometry(density))
@@ -2311,21 +2328,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
         {
             image->y_resolution = image->x_resolution;
         }
-    }
 
-    // Geometry object. Width and height attributes are always positive.
-    else
-    {
-        x_val = rb_funcall(density_arg, rb_intern("width"), 0);
-        x_res = NUM2DBL(x_val);
-        y_val = rb_funcall(density_arg, rb_intern("height"), 0);
-        y_res = NUM2DBL(y_val);
-        if(x_res == 0.0)
-        {
-            rb_raise(rb_eArgError, "invalid x resolution: %f", x_res);
-        }
-        image->y_resolution = y_res != 0.0 ? y_res : x_res;
-        image->x_resolution = x_res;
     }
 
     return self;
@@ -5707,6 +5710,18 @@ Image_read(VALUE class, VALUE file_arg)
     return rd_image(class, file_arg, ReadImage);
 }
 
+
+/*
+ *  Static:     file_arg_rescue
+ *  Purpose:    called when `rm_obj_to_s' raised an exception
+*/
+static VALUE file_arg_rescue(VALUE arg)
+{
+    rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
+            rb_class2name(CLASS_OF(arg)));
+}
+
+
 /*
     Static:     rd_image(class, file, reader)
     Purpose:    Transform arguments, call either ReadImage or PingImage
@@ -5727,15 +5742,7 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    if (TYPE(file_arg) == T_STRING)
-    {
-        filename = STRING_PTR_LEN(file_arg, filename_l);
-        filename_l = min(filename_l, (long)sizeof(info->filename));
-        memcpy(info->filename, filename, (size_t)filename_l);
-        info->filename[filename_l] = '\0';
-        info->file = NULL;      // Reset FILE *, if any
-    }
-    else if (TYPE(file_arg) == T_FILE)
+    if (TYPE(file_arg) == T_FILE)
     {
         OpenFile *fptr;
 
@@ -5745,8 +5752,14 @@ rd_image(VALUE class, VALUE file_arg, reader_t reader)
     }
     else
     {
-        rb_raise(rb_eTypeError, "argument must be String or File (%s given)",
-                rb_class2name(CLASS_OF(file_arg)));
+        // Convert arg to string. Catch exceptions.
+        file_arg = rb_rescue(rm_obj_to_s, file_arg, file_arg_rescue, file_arg);
+
+        filename = STRING_PTR_LEN(file_arg, filename_l);
+        filename_l = min(filename_l, (long)sizeof(info->filename));
+        memcpy(info->filename, filename, (size_t)filename_l);
+        info->filename[filename_l] = '\0';
+        info->file = NULL;      // Reset FILE *, if any
     }
 
     GetExceptionInfo(&exception);

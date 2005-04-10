@@ -1,6 +1,11 @@
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
 
+RMagick 1.7.4
+    o Fix bug #1727
+    o Fix affine_transform.rb
+    o Tested with ImageMagick 6.2.1
+
 RMagick 1.7.3
     o Fix bug #1553, a build issue with ImageMagick 6.0.x
 

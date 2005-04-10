@@ -498,6 +498,16 @@ canvas.background_position = :scaled
     <p>Causes all the drawing objects that have been added to the
     canvas to be rendered.</p>
 
+    <p>Regardless of the order in which methods were called, <code>draw</code> executes the methods in this order::
+    <ol>
+    <li>transforms, in the order they were called.</li>
+    <li><code>viewbox</code> and <code>preserve_aspect_ratio</code></li>
+    <li>styles</li>
+    <li>nested groups, RVG objects, shapes, text, and images, in the order they were added to the containing object</li>
+    </ol>
+    Nested groups and RVG objects also follow this sequence.
+    </p>
+
     <h4>Returns</h4>
 
     <p>An image</p>
@@ -520,8 +530,10 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Constructs an <a href="rvggroup.html">RVG::Group</a> object
-    and adds it to the enclosing RVG object.</p>
+    <p>Calls <a href="rvggroup.html#new">RVG::Group.new</a> to construct a group
+    and adds it to the enclosing RVG object. Yields to a block if
+    one is present, passing the new group
+    as an argument.</p>
 
     <h4>Returns</h4>
 
@@ -536,13 +548,13 @@ canvas.background_position = :scaled
     "arg">raster_image</span>, <span class="arg">width</span>=nil,
     <span class="arg">height</span>=nil, <span class=
     "arg">x</span>=0, <span class="arg">y</span>=0) -&gt;
-    <span class="arg">amImage</span></p>
+    <span class="arg">anImage</span></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Constructs an <a href="rvgimage.html">RVG::Image</a> object
+    <p>Calls <a href="rvgimage.html#new">RVG::Image.new</a> to construct an image
     and adds it to the enclosing RVG object.</p>
 
     <h4>Returns</h4>
@@ -740,9 +752,9 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Constructs an <a href="rvgtext.html">RVG::Text</a> object
+    <p>Calls <a href="rvgtext.html#new">RVG::Text.new</a> to construct a text  object
     and adds it to the enclosing RVG object. Yields to a block if
-    one is present, passing the new <code>RVG::Text</code> object
+    one is present, passing the new text object
     as an argument.</p>
 
     <h4>Returns</h4>
@@ -765,7 +777,7 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Constructs an <a href="rvguse.html">RVG::Use</a> object and
+    <p>Calls <a href="rvguse.html#new">RVG::Use.new</a> to constructs a <code>use</code>  object and
     adds it to the RVG object.</p>
 
     <p>When the referenced argument is another RVG object,

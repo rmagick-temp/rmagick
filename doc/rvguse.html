@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: RVG::Use Class</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvgtext.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgstyle.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>class RVG::Use <span class="superclass">&lt;
+  Object</span></h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>class methods</h3>
+
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+
+    <h3>shared methods</h3>
+
+    <p>This class implements the <a href="rvgstyle.html">styles</a>
+    method and the <a href="rvgxform.html">transform
+    methods</a>.</p>
+  </div>
+
+  <h2 class="methods">class methods</h2>
+
+  <div class="sig">
+    <h3 id="new">new</h3>
+
+    <p>RVG::Use.new(<span class="arg">obj</span>, <span class=
+    "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
+    "arg">width</span>=nil, <span class=
+    "arg">height</span>=nil)-&gt; <span class="arg">aUse</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This method is usually invoked indirectly via the
+    <code>use</code> method in the <a href=
+    "rvg.html#RVG_use">RVG</a>, <a href=
+    "rvgclip.html#use">RVG::ClipPath</a>, <a href=
+    "rvggroup.html#use">RVG::Group</a>, and <a href=
+    "rvgpattern.html#use">RVG::Pattern</a> classes.</p>
+
+    <p>The use object is similar to a group. Any styles specified
+    on the use will propogate to the referenced object. However,
+    styles on the referenced object will override the styles
+    specified on the RVG::Use object.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>obj</dt>
+
+      <dd>The object to be re-used. This is typically a <a href=
+      "rvggroup.html#new">group</a> or <a href=
+      "rvg.html#RVG_new">RVG object</a> but can also be any
+      <a href="rvgshape.html">shape</a>, <a href=
+      "rvgtext.html#new">text</a>, or <a href=
+      "rvgimage.html#new">raster image</a>, or even another
+      <code>use</code>.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>These arguments can be used to specify an additional
+      <strong>translate</strong> transformation to be applied to
+      the object within the user coordinate system.</dd>
+
+      <dt>width, height</dt>
+
+      <dd>The width and height of the rectangular region in which
+      this object is placed. These arguments are ignored unless
+      object is an RVG object. In this case, the values of
+      <span class="arg">width</span> and <span class=
+      "arg">height</span> override the values of the width and
+      height arguments that were specified when the RVG object was
+      created.</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><strong>A simple 'use' on a 'rect'</strong><a href=
+    "javascript:popup('Use01.rb.html')"><img src="ex/Use01.gif"
+    title="Click to see the example script" alt=
+    "use example" /></a></p>
+
+    <p><strong>What happens when a 'use' has chained transform
+    methods</strong><a href=
+    "javascript:popup('Use03.rb.html')"><img src="ex/Use03.gif"
+    title="Click to see the example script" alt=
+    "use example" /></a></p>
+
+    <p><strong>What happens when a 'use' has a chained 'style'
+    method</strong><a href=
+    "javascript:popup('Use02.rb.html')"><img src="ex/Use02.gif"
+    title="Click to see the example script" alt=
+    "use example" /></a></p>
+
+    <p>Also see the example for <a href=
+    "rvg.html#RVG_new">RVG.new</a> and the example for <a href=
+    "rvggroup.html#new">RVG::Group.new</a>.</p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvgtext.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgstyle.html">Next</a>&nbsp;&raquo;
+  </div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 #--
-# $Id: embellishable.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
+# $Id: embellishable.rb,v 1.3 2005/04/10 15:12:45 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 
@@ -154,6 +154,8 @@ class Magick::RVG
         include Stylable
         include Transformable
         include Describable
+        include PreserveAspectRatio
+        include Duplicatable
 
       private
         def align_to_viewport(scale)
@@ -207,8 +209,6 @@ class Magick::RVG
         end
 
       public
-        include PreserveAspectRatio
-        include Duplicatable
 
         # Composite a raster image in the viewport defined by [x,y] and
         # +width+ and +height+.

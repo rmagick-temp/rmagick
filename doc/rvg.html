@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: RVG Reference: RVG Class</title>
   <meta http-equiv="Content-Type" content=
@@ -498,15 +498,22 @@ canvas.background_position = :scaled
     <p>Causes all the drawing objects that have been added to the
     canvas to be rendered.</p>
 
-    <p>Regardless of the order in which methods were called, <code>draw</code> executes the methods in this order::
+    <p>Regardless of the order in which methods were called,
+    <code>draw</code> executes the methods in this order:</p>
+
     <ol>
-    <li>transforms, in the order they were called.</li>
-    <li><code>viewbox</code> and <code>preserve_aspect_ratio</code></li>
-    <li>styles</li>
-    <li>nested groups, RVG objects, shapes, text, and images, in the order they were added to the containing object</li>
+      <li>transforms, in the order they were called.</li>
+
+      <li><code>viewbox</code> and
+      <code>preserve_aspect_ratio</code></li>
+
+      <li>styles</li>
+
+      <li>nested groups, RVG objects, shapes, text, and images, in
+      the order they were added to the containing object</li>
     </ol>
-    Nested groups and RVG objects also follow this sequence.
-    </p>
+
+    <p>Nested groups and RVG objects also follow this sequence.</p>
 
     <h4>Returns</h4>
 
@@ -530,10 +537,10 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Calls <a href="rvggroup.html#new">RVG::Group.new</a> to construct a group
-    and adds it to the enclosing RVG object. Yields to a block if
-    one is present, passing the new group
-    as an argument.</p>
+    <p>Calls <a href="rvggroup.html#new">RVG::Group.new</a> to
+    construct a group and adds it to the enclosing RVG object.
+    Yields to a block if one is present, passing the new group as
+    an argument.</p>
 
     <h4>Returns</h4>
 
@@ -554,8 +561,8 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Calls <a href="rvgimage.html#new">RVG::Image.new</a> to construct an image
-    and adds it to the enclosing RVG object.</p>
+    <p>Calls <a href="rvgimage.html#new">RVG::Image.new</a> to
+    construct an image and adds it to the enclosing RVG object.</p>
 
     <h4>Returns</h4>
 
@@ -752,10 +759,10 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Calls <a href="rvgtext.html#new">RVG::Text.new</a> to construct a text  object
-    and adds it to the enclosing RVG object. Yields to a block if
-    one is present, passing the new text object
-    as an argument.</p>
+    <p>Calls <a href="rvgtext.html#new">RVG::Text.new</a> to
+    construct a text object and adds it to the enclosing RVG
+    object. Yields to a block if one is present, passing the new
+    text object as an argument.</p>
 
     <h4>Returns</h4>
 
@@ -777,8 +784,9 @@ canvas.background_position = :scaled
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Calls <a href="rvguse.html#new">RVG::Use.new</a> to constructs a <code>use</code>  object and
-    adds it to the RVG object.</p>
+    <p>Calls <a href="rvguse.html#new">RVG::Use.new</a> to
+    constructs a <code>use</code> object and adds it to the RVG
+    object.</p>
 
     <p>When the referenced argument is another RVG object,
     <span class="arg">width</span> and <span class=
@@ -788,6 +796,10 @@ canvas.background_position = :scaled
     created. You must specify the viewport size either when
     creating the RVG object or when referencing it with
     <code>use</code>.</p>
+
+    <h4>Examples</h4>
+
+    <p>See <a href="rvguse.html#new">RVG::Use.new</a></p>
 
     <h4>Returns</h4>
 

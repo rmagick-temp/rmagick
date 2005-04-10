@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: RVG::Image Class</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvggroup.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgpattern.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>class RVG::Image <span class="superclass">&lt;
+  Object</span></h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>class methods</h3>
+
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+
+    <h3>attributes</h3>
+
+    <ul>
+      <li><a href="#desc">desc, desc=</a></li>
+
+      <li><a href="#metadata">metadata, metadata=</a></li>
+
+      <li><a href="#title">title, title=</a></li>
+    </ul>
+
+    <h3>instance methods</h3>
+
+    <ul>
+      <li><a href=
+      "#preserve_aspect_ratio">preserve_aspect_ratio</a></li>
+    </ul>
+
+    <h3>shared methods</h3>
+
+    <p>In addition to the methods listed above, <code>class
+    RVG::Image</code> also implements the <a href=
+    "rvgstyle.html">styles</a> method and the <a href=
+    "rvgxform.html">transform methods</a>.</p>
+  </div>
+
+  <h2 class="methods">class methods</h2>
+
+  <div class="sig">
+    <h3 id="new">new</h3>
+
+    <p><span class="arg">RVG::Image</span>.new(<span class=
+    "arg">raster_image</span>, <span class="arg">width</span>=nil,
+    <span class="arg">height</span>=nil, <span class=
+    "arg">x</span>=0, <span class="arg">y</span>=0) -&gt;
+    <span class="arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Constructs a raster image object. The viewbox is defined by
+    the image bounds. This method is usually called indirectly via
+    the <code>image</code> method in the <a href=
+    "rvg.html#RVG_image">RVG</a>, <a href=
+    "rvggroup.html#image">RVG::Group</a>, or <a href=
+    "rvgpattern.html">RVG::Pattern</a> classes.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>raster_image</dt>
+
+      <dd>A <a href="image1.html#new">Magick::Image</a>
+      object.</dd>
+
+      <dt>width, height</dt>
+
+      <dd>The width and height of the rectangle in which the image
+      is placed.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The <em>x-</em> and <em>y</em>-axis location of the
+      rectangle in which the image is placed.</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p>See <a href=
+    "#preserve_aspect_ratio">preserve_aspect_ratio</a></p>
+  </div>
+
+  <h2 class="methods">attributes</h2>
+
+  <div class="sig">
+    <h3 id="desc">desc, desc=</h3>
+
+    <p><span class="arg">image</span>.desc -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">image</span>.desc = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>desc</code> attribute to
+    assign a text description to the image.
+  </div>
+
+  <div class="sig">
+    <h3 id="metadata">metadata, metadata=</h3>
+
+    <p><span class="arg">image</span>.metadata -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">image</span>.metadata = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>metadata</code> attribute to
+    assign additional metadata to the image.
+  </div>
+
+  <div class="sig">
+    <h3 id="RVG_title">title, title=</h3>
+
+    <p><span class="arg">image</span>.title -&gt; <span class=
+    "arg">aString</span><br />
+    <span class="arg">image</span>.title = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Use the <code>title</code> attribute to
+    assign a title to the image.
+  </div>
+
+  <h2 class="methods">instance methods</h2>
+
+  <div class="sig">
+    <p><span class=
+    "arg">image</span>.preserve_aspect_ratio(<span class=
+    "arg">align</span>, <span class=
+    "arg">meet_or_slice</span>='meet') -&gt; <span class=
+    "arg">self</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Use <code>preserve_aspect_ratio</code> to specify whether or
+    not the image is stretched to fit the rectangle in which it is
+    placed. If not, you can specify how to fit the image into the
+    space.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>align</dt>
+
+      <dd>
+        When the value of the <code>meet_or_slice</code> argument
+        is 'meet' or 'slice', this argument controls the placement
+        of the image within the viewport. The <code>align</code>
+        argument is the concatenation of an <em>x</em>-aligment and
+        a <em>y</em>-alignment. The values are shown in these
+        lists:
+
+        <h6><em>x</em>-alignment</h6>
+
+        <dl>
+          <dt>xMin</dt>
+
+          <dd>align the minimum <em>x</em> value of the image with
+          the left corner of the viewport.</dd>
+
+          <dt>xMid</dt>
+
+          <dd>vertically center the image within the viewport.</dd>
+
+          <dt>xMax</dt>
+
+          <dd>align the maximum <em>x</em> value of the image with
+          the right corner of the viewport.</dd>
+        </dl>
+
+        <h6><em>y</em>-alignment</h6>
+
+        <dl>
+          <dt>YMin</dt>
+
+          <dd>align the minimum <em>y</em> value of the image with
+          the top of the viewport.</dd>
+
+          <dt>YMid</dt>
+
+          <dd>horizontally center the image within the
+          viewport.</dd>
+
+          <dt>YMax</dt>
+
+          <dd>align the maximum <em>y</em> value of the image with
+          the bottom of the viewport</dd>
+        </dl>
+      </dd>
+
+      <dt>meet_or_slice</dt>
+
+      <dd>
+        This argument can have one of these three values:
+
+        <dl>
+          <dt>'none'</dt>
+
+          <dd>The image is scaled as necessary so that it fits
+          exactly within the viewport. The aspect ratio is
+          <em>not</em> maintained.</dd>
+
+          <dt>'meet'</dt>
+
+          <dd>The image is scaled as necessary so that the larger
+          dimension exactly fits the viewport. There may be some
+          unused space in the viewport. The aspect ratio is
+          maintained.</dd>
+
+          <dt>'slice'</dt>
+
+          <dd>The image is scaled as necessary so that the smaller
+          dimension exactly fits the viewport. Some of the image in
+          the larger dimension may be cut off. The aspect ratio is
+          maintained.</dd>
+        </dl>
+      </dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('image.rb.html')"><img src=
+    "ex/image.gif" title="Click to see the example script" alt=
+    "preserve_aspect_ratio example" /></a></p>
+
+    <h4>Returns</h4>
+
+    <p><span class="arg">self</span></p>
+
+    <h4>See Also</h4>
+
+    <p><a href=
+    "#RVG_preserve_aspect_ratio">RVG#preserve_aspect_ratio</a></p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvggroup.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvgpattern.html">Next</a>&nbsp;&raquo;
+  </div>
+</body>
+</html>

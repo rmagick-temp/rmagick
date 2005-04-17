@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: RVG Reference: Styles</title>
   <meta http-equiv="Content-Type" content=
@@ -88,7 +88,7 @@
       <dt>:clip_path</dt>
 
       <dd>An outline used to clip a shape or collection of shapes.
-      The value is an <a href="#ClipPath_class">RVG::ClipPath</a>
+      The value is an <a href="rvgclip.html#new">RVG::ClipPath</a>
       object.</dd>
 
       <dt>:clip_rule</dt>
@@ -102,7 +102,8 @@
       <dt>:fill</dt>
 
       <dd>The fill color. The value must be a <a href=
-      "imusage.html#color_names">color name</a>. The default is
+      "imusage.html#color_names">color name</a> or a <a href=
+      "rvgpattern.html#new">pattern</a>. The default is
       'black'.</dd>
 
       <dt>:fill_opacity</dt>
@@ -158,8 +159,9 @@
       <dt>:stroke</dt>
 
       <dd>The stroke color. The value must be a <a href=
-      "imusage.html#color_names">color name</a>. The default is
-      'none', that is, transparent black ("#000000ff").</dd>
+      "imusage.html#color_names">color name</a> or a <a href=
+      "rvgpattern.html#new">pattern</a>. The default is 'none',
+      that is, transparent black ("#000000ff").</dd>
 
       <dt>:stroke_dasharray</dt>
 

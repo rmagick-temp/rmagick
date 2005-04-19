@@ -21,7 +21,13 @@
 </script>
 <style type="text/css">
   /*<![CDATA[*/
-    }
+  .styles_header h3 {
+    background-color: #c0c0c0;
+    width:100%;
+    color: #000;
+    margin-top: 0;
+  }
+
   /*]]>*/
 </style>
 </head>
@@ -73,14 +79,10 @@
       <div class="toccol">
         <ul>
           <li><a href="#basic">basic styles</a></li>
-        </ul>
-      </div>
-
-      <div class="toccol">
-        <ul>
           <li><a href="#advanced">advanced styles</a></li>
         </ul>
       </div>
+
     </div>
   </div>
 
@@ -92,6 +94,30 @@
     <p>RVG::Text.new(<span class="arg">x</span>=0, <span class=
     "arg">y</span>=0, <span class="arg">text</span>=nil) [
     <span class="arg">{ |text| ...}</span> ] -&gt; aText</p>
+  </div>
+
+  <div class="desc">
+  <h4>Description</h4>
+  <p>This method is usually invoked indirectly via the text method in the <a href="rvgclip.html#new">RVG::ClipPath</a>, <a href="rvggroup.html#new">RVG::Group</a>, <a href="rvgpattern.html#new">RVG::Pattern</a>, and <a href="rvg.html#new">RVG</a> classes.</p>
+  <p>Text objects are containers, so this method yields to a block if one is present. A text object can contain <a href="rvgtspan.html#new">RVG::Tspan</a> objects that are added directly via <a href="#tspan">tspan</a>, or indirectly via <a href="#tref">tref</a>.</p>
+  <h4>Arguments</h4>
+  <p>All arguments are optional. You can
+  omit all the arguments when you just want to use the <code>text</code> object as a container for <code>tspans</code>.</p>
+  <dl>
+  <dt>x, y</dt>
+  <dd>The [x, y] coordinate of the initial text position within the current user coordinate system. If omitted the default is [0, 0]. </dd>
+  <dt>text</dt>
+  <dd>A string. If present, this string is drawn at the initial text position. If omitted, only the initial text position is established.
+  By default the string is positioned with the lower-left corner of the first glyph at [x, y]. Use the <a href="#text_anchor">:text_anchor</a> style
+  to override this behavior.</dd>
+  </dl>
+  <h4>Example</h4>
+      <p><a href=
+    "javascript:popup('text01.rb.html')"><img src=
+    "ex/text01.gif" title=
+    "Click to see the example script" alt=
+    "preserve_aspect_ratio example" /></a></p>
+
   </div>
 
   <h2 class="methods">instance methods</h2>
@@ -130,6 +156,58 @@
   </div>
 
   <h2 class="methods">text styles</h2>
+  <div class="styles_header">
+  <h3 id="basic">basic styles</h3>
+  </div>
+  <div class="desc">
+  <h4>Description</h4>
+  <p>The basic styles include font styles and text styles. Note that &times;Magick uses the font styles to select a font from the available fonts. If it cannot find a font that exactly matches it will use the closest matching font. Unlike MS Windows, &times;Magick will <em>not</em> alter a font - by artificially slanting it to to simulate italics, for example - to produce a match.</p>
+  <h4>Styles</h4>
+  <dl>
+  <dt>:font</dt>
+  <dd>font name or font file name, such as "C:/Windows/Fonts/Arial.ttf" or "pfb:-urw-helvetica-medium-o-condensed--0-0-0-0-p-0-iso10646-1"</dd>
+  <dt>:font_family</dt>
+  <dd>font family name, such as "serif" or "courier"</dd>
+  <dt>:font_size</dt>
+  <dd>the font size in points</dd>
+  <dt>:font_stretch</dt>
+  <dd>one of the following strings: 'normal', 'ultra_condensed', 'extra_condensed', 'condensed', 'semi_condensed', 'semi_expanded', 'expanded', 'extra_expanded', 'ultra_expanded'</dd>
+  <dt>:font_style</dt>
+  <dd>one of the following strings: 'normal', 'italic', 'oblique'</dd>
+  <dt>:font_weight</dt>
+  <dd>one of the following strings:  'normal', 'bold', 'bolder', 'lighter', or a multiple of 100 between 100 and 900</dd>
+  <dt id='text_anchor'>:text_anchor</dt>
+  <dd>one of the following strings: 'start', 'middle', 'end'</dd>
+  <dt>:text_decoration</dt>
+  <dd>one of the following strings: 'none', 'underline', 'overline', 'line_through'</dd>
+  </dl>
+  <h4>Examples</h4>
+  </div>
+  <div class="styles_header">
+  <h3 id="advanced">advanced styles</h3>
+  <div class="desc">
+  <h4>Description</h4>
+  <p>Unlike the basic styles, these styles are emulated by RVG. Consequently any use of a non-default value for one of these styles will probably cause your script to slow down noticeably. If you specify an invalid value for any of these styles RVG ignores the value and uses the default. RVG frequently uses approximate measurements to emulate these styles so the results will not be as precise as when &times;Magick is doing the work.</p>
+  <h4>Styles</h4>
+  <dl>
+  <dt>:writing_mode</dt>
+  <dd>There are two possible values for :writing_mode, 'lr' for left-to-right (most Latin-based documents) and 'tb' for top-to-bottom (or vertical) text such as for column labels. The default is 'lr'.</dd>
+  <dt>:baseline_shift</dt>
+  <dd>Adjusts the baseline. There are five possible values: 'baseline' (the default), 'super', 'sub', a percentage specified as 'NN%', or a number. For the last two choices, positive numbers move the baseline upward. The percentage is a percentage of the line height.</dd>
+  <dt>:letter_spacing</dt>
+  <dd>Specifies an amount of space to be added between each letter. The default is 0.</dd>
+  <dt>:word_spacing</dt>
+  <dd>Specifies an amount of space to be added between each word. This amount is added for each blank between words, so if the words are separated by two blanks, for example, then twice the additional space is added. The default is 0.</dd>
+  <dd>RVG uses this statement to separate words: <strong>words = text.split(::Magick::RVG::WORD_SEP)
+</strong>You can change the regular expression that RVG uses to determine word breaks by assigning a new value to the <code>::Magick::RVG::WORD_SEP</code> constant. By default the value of <code>::Magick::RVG::WORD_SEP</code> is <code>/ /</code>.</dd>
+  <dt>:glyph_orientation_vertical</dt>
+  <dd>Applies only when :writing_mode='tb'. This style can have one of four values: 0, 90, 180, 270. The default is 90. This style specifies a rotation on each glyph. With the default value, each glyph is rotated 90 degrees. When :glyph_orientation_vertical=0 each glyph appears in its "normal" (upright) orientation.</dd>
+  <dt>:glyph_orientation_horizontal</dt>
+  <dd>Applies only when :writing_mode='lr'. This style can have one of four values: 0, 90, 180, 270. The default is 0. This style specifies a rotation on each glyph. With the default value, each glyph appears in its "normal" (upright) orientation.</dd>
+  </dl>
+  <h4>Examples</h4>
+  </div>
+  </div>
 
   <p class="spacer">&nbsp;</p>
 

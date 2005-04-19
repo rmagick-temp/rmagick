@@ -1,5 +1,5 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
+# $Id: rvg.rb,v 1.3 2005/04/19 23:27:01 rmagick Exp $
 #
 #                    Copyright (C) 2005 by Timothy P. Hunter
 #
@@ -47,8 +47,6 @@ require 'pp' if ENV['debug_rvg']
 # RVG is the main class in this library. All graphic elements
 # must be contained within an RVG object.
 class Magick::RVG
-
-    RVG_VERSION = '0.5.0'
 
     include Stylable
     include Transformable

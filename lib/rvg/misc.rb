@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.2 2005/04/01 23:42:39 rmagick Exp $
+# $Id: misc.rb,v 1.3 2005/04/19 23:28:56 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -314,7 +314,7 @@ module Magick::RVG::Utility
                     when :end
                          0
                   end
-            return [dx, 0]
+            [dx, 0]
         end
 
     end     # class NormalTextStrategy
@@ -514,11 +514,12 @@ module Magick::RVG::Utility
 
       public
 
-        attr_reader :gc, :shadow, :text_attrs
+        attr_reader :gc, :text_attrs
 
         def initialize()
             @gc = Draw.new
-            @shadow = Draw.new
+            @shadow = Array.new
+            @shadow << Draw.new
             @text_attrs = TextAttributes.new
             init_matrix()
         end
@@ -548,33 +549,33 @@ module Magick::RVG::Utility
 
         def font(name)
             @gc.font(name)
-            @shadow.font = name
+            @shadow[-1].font = name
             nil
         end
 
         def font_family(name)
             @gc.font_family(name)
-            @shadow.font_family = name
+            @shadow[-1].font_family = name
             nil
         end
 
         def font_size(points)
             @gc.font_size(points)
-            @shadow.pointsize = points
+            @shadow[-1].pointsize = points
             nil
         end
 
         def font_stretch(stretch)
             stretch = FONT_STRETCH.fetch(stretch.intern, Magick::NormalStretch)
             @gc.font_stretch(stretch)
-            @shadow.font_stretch = stretch
+            @shadow[-1].font_stretch = stretch
             nil
         end
 
         def font_style(style)
             style = FONT_STYLE.fetch(style.intern, Magick::NormalStyle)
             @gc.font_style(style)
-            @shadow.font_style = style
+            @shadow[-1].font_style = style
             nil
         end
 
@@ -582,7 +583,7 @@ module Magick::RVG::Utility
             # If the arg is not in the hash use it directly. Handles numeric values.
             weight = FONT_WEIGHT.fetch(weight) {|key| key}
             @gc.font_weight(weight)
-            @shadow.font_weight = weight
+            @shadow[-1].font_weight = weight
             nil
         end
 
@@ -609,7 +610,7 @@ module Magick::RVG::Utility
 
         def push()
             @gc.push
-            @shadow.push
+            @shadow.push(@shadow.last.dup)
             @text_attrs.push
             nil
         end
@@ -640,6 +641,10 @@ module Magick::RVG::Utility
             nil
         end
 
+        def shadow()
+            @shadow.last
+        end
+
         def skewX(degrees)
             degrees = RVG.convert_one_to_float(degrees)
             @gc.skewX(degrees)
@@ -659,7 +664,7 @@ module Magick::RVG::Utility
         def stroke_width(width)
             width = RVG.convert_one_to_float(width)
             @gc.stroke_width(width)
-            @shadow.stroke_width = width
+            @shadow[-1].stroke_width = width
             nil
         end
 
@@ -679,7 +684,7 @@ module Magick::RVG::Utility
             anchor_enum = TEXT_ANCHOR.fetch(anchor, Magick::StartAnchor)
             @gc.text_anchor(anchor_enum)
             align = ANCHOR_TO_ALIGN.fetch(anchor, Magick::LeftAlign)
-            @shadow.align = align
+            @shadow[-1].align = align
             @text_attrs.text_anchor = anchor
             nil
         end
@@ -687,7 +692,7 @@ module Magick::RVG::Utility
         def text_decoration(decoration)
             decoration = TEXT_DECORATION.fetch(decoration.intern, Magick::NoDecoration)
             @gc.decorate(decoration)
-            @shadow.decorate = decoration
+            @shadow[-1].decorate = decoration
             nil
         end
 

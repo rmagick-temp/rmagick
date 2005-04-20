@@ -3,7 +3,7 @@ require 'rvg/rvg'
 include Magick
 
 
-rvg = RVG.new(400, 300) do |canvas|
+rvg = RVG.new(200, 250) do |canvas|
     canvas.background_fill = 'white'
 
     canvas.g do |grp|
@@ -13,16 +13,16 @@ rvg = RVG.new(400, 300) do |canvas|
         grp.text(20, 90, ":font_size=>24").styles(:font_size=>24)
     end
 
-    canvas.g.styles(:font_size=>24) do |grp|
-        grp.text(18, 120, ":font_family=>'Courier'").styles(:font_family=>'Courier')
-        grp.text(20, 150, ":font_weight=>'bold'").styles(:font_weight=>'bold')
-        grp.text(20, 180, ":font_stretch=>'normal'").styles(:font_stretch=>'normal')
-        grp.text(20, 210, ":font_stretch=>'condensed'").styles(:font_stretch=>'condensed')
-        grp.text(20, 240, ":font_style=>'italic'").styles(:font_style=>'italic')
-        grp.text(20, 270, ":font_weight=>900").styles(:font_weight=>900)
+    canvas.g.styles(:font_size=>14) do |grp|
+        grp.text(18, 110, ":font_family=>'Courier'").styles(:font_family=>'Courier')
+        grp.text(20, 130, ":font_weight=>'bold'").styles(:font_weight=>'bold')
+        grp.text(20, 150, ":font_stretch=>'normal'").styles(:font_stretch=>'normal')
+        grp.text(20, 170, ":font_stretch=>'condensed'").styles(:font_stretch=>'condensed')
+        grp.text(20, 190, ":font_style=>'italic'").styles(:font_style=>'italic')
+        grp.text(20, 210, ":font_weight=>900").styles(:font_weight=>900)
     end
 
-    canvas.rect(399, 299).styles(:fill=>'none', :stroke=>'blue')
+    canvas.rect(199, 249).styles(:fill=>'none', :stroke=>'blue')
 end
 
 rvg.draw.write('font_styles.gif')

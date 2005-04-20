@@ -182,16 +182,18 @@
   <dd>one of the following strings: 'none', 'underline', 'overline', 'line_through'</dd>
   </dl>
   <h4>Examples</h4>
-  <p><a href="javascript:popup('font_styles.rb.html')"><img src=
+  <p><strong>font styles</strong><a href="javascript:popup('font_styles.rb.html')"><img src=
     "ex/font_styles.gif" title="Click to see the example script" alt=
-    "font styles example" /></a></p>
-
+    "font styles example" /></a><em>Depending on the fonts that &times;Magick is configured with you may not see the effect of some of the styles used in this example.</em></p>
+  <p><strong>text styles</strong><a href="javascript:popup('text_styles.rb.html')"><img src=
+    "ex/text_styles.gif" title="Click to see the example script" alt=
+    "text styles example" /></a></p>
   </div>
   <div class="styles_header">
   <h3 id="advanced">advanced styles</h3>
   <div class="desc">
   <h4>Description</h4>
-  <p>Unlike the basic styles, these styles are emulated by RVG. Consequently any use of a non-default value for one of these styles will probably cause your script to slow down noticeably. If you specify an invalid value for any of these styles RVG ignores the value and uses the default. RVG frequently uses approximate measurements to emulate these styles so the results will not be as precise as when &times;Magick is doing the work.</p>
+  <p>These styles are emulated by RVG by orienting and positioning each glyph individually. Consequently any use of a non-default value for one of these styles will probably cause your script to dramatically slow down. If you specify an invalid value for any of these styles RVG ignores the value and uses the default. RVG frequently uses approximate measurements to emulate these styles so the results will not be as precise as when &times;Magick is doing the work.</p>
   <h4>Styles</h4>
   <dl>
   <dt>:writing_mode</dt>
@@ -203,14 +205,24 @@
   <dt>:word_spacing</dt>
   <dd>Specifies an amount of space to be added between each word. This amount is added for each blank between words, so if the words are separated by two blanks, for example, then twice the additional space is added. The default is 0.</dd>
   <dd>RVG uses this statement to separate words: <strong>words = text.split(::Magick::RVG::WORD_SEP)
-</strong>You can change the regular expression that RVG uses to determine word breaks by assigning a new value to the <code>::Magick::RVG::WORD_SEP</code> constant. By default the value of <code>::Magick::RVG::WORD_SEP</code> is <code>/ /</code>.</dd>
+</strong>You can change the regular expression that RVG uses to determine word breaks by assigning a new regular expression to the <code>::Magick::RVG::WORD_SEP</code> constant. By default the value of <code>::Magick::RVG::WORD_SEP</code> is <code>/ /</code>.</dd>
   <dt>:glyph_orientation_vertical</dt>
   <dd>Applies only when :writing_mode='tb'. This style can have one of four values: 0, 90, 180, 270. The default is 90. This style specifies a rotation on each glyph. With the default value, each glyph is rotated 90 degrees. When :glyph_orientation_vertical=0 each glyph appears in its "normal" (upright) orientation.</dd>
   <dt>:glyph_orientation_horizontal</dt>
   <dd>Applies only when :writing_mode='lr'. This style can have one of four values: 0, 90, 180, 270. The default is 0. This style specifies a rotation on each glyph. With the default value, each glyph appears in its "normal" (upright) orientation.</dd>
   </dl>
   <h4>Examples</h4>
-  </div>
+  <p><strong>:writing_mode='tb'</strong><a href="javascript:popup('writing_mode01.rb.html')"><img src=
+    "ex/writing_mode01.gif" title="Click to see the example script" alt=
+    "writing mode 'tb' style example" /></a></p>
+  <p><strong>:writing_mode='lr'</strong><a href="javascript:popup('writing_mode02.rb.html')"><img src=
+    "ex/writing_mode02.gif" title="Click to see the example script" alt=
+    "writing mode 'lr' style example" /></a></p>
+    <p><strong>:baseline_shift=>'sub'<br />:baseline_shift=>'super'</strong><a href="javascript:popup('baseline_shift01.rb.html')"><img src=
+    "ex/baseline_shift01.gif" title="Click to see the example script" alt=
+    "baseline shift style example" /></a></p>
+
+    </div>
   </div>
 
   <p class="spacer">&nbsp;</p>

@@ -1,5 +1,7 @@
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
+    o Incorporated RVG classes
+    o Added RVG documentation, examples, updated installer
 
 RMagick 1.7.4
     o Fix bug #1727

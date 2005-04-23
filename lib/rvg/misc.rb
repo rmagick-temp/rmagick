@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.3 2005/04/19 23:28:56 rmagick Exp $
+# $Id: misc.rb,v 1.4 2005/04/23 15:28:00 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -38,11 +38,20 @@ class Magick::RVG
 
     # Convert an array of method arguments to Float objects. If any
     # cannot be converted, raise ArgumentError and issue a message.
+    def self.fmsg(*args)
+        "at least one argument cannot be converted to Float (got #{args.collect {|a| a.class}.join(', ')})"
+    end
+
     def self.convert_to_float(*args)
+        allow_nil = false
+        if args.last == :allow_nil
+            allow_nil = true
+            args.pop
+        end
         begin
-            fargs = args.collect {|a| Float(a)}
+            fargs = args.collect { |a| (allow_nil && a.nil?) ? a : Float(a) }
         rescue ArgumentError, TypeError
-            raise ArgumentError, "at least one argument cannot be converted to Float (got #{args.collect {|a| a.class}.join(', ')})"
+            raise ArgumentError, self.fmsg(args)
         end
         return fargs
     end

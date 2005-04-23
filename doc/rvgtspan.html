@@ -1,0 +1,235 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+
+  <title>RMagick: RVG Reference: RVG::Tspan Class</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+    }
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo;&nbsp;<a href="rvgtext.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href=
+    "rvguse.html">Next</a>&nbsp;&raquo;
+  </div>
+
+  <h1>class RVG::Tspan <span class="superclass">&lt;
+  TextBase</span></h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>class methods</h3>
+
+    <ul>
+      <li><a href="#new">new</a></li>
+    </ul>
+
+    <h3>instance methods</h3>
+
+    <div>
+      <div class="toccol">
+        <ul>
+          <li><a href="#d">d</a></li>
+
+          <li><a href="#rotate">rotate</a></li>
+
+          <li><a href="#tspan">tspan</a></li>
+        </ul>
+      </div>
+
+      <h3>shared methods</h3>
+
+      <p>In addition to the methods listed above, <code>class
+      RVG::Tspan</code> also implements the <a href=
+      "rvgstyle.html">styles</a> method.</p>
+    </div>
+  </div>
+
+  <h2 class="methods">class methods</h2>
+
+  <div class="sig">
+    <h3 id="new">new</h3>
+
+    <p>RVG::Tspan.new(<span class="arg">text</span>=nil,
+    <span class="arg">x</span>=0, <span class="arg">y</span>=0) [
+    <span class="arg">{ |tspan| ...}</span> ] -&gt; aTspan</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This method may be invoked indirectly via the <a href=
+    "rvgtext.html#tspan">tspan</a> method in
+    <code>RVG::Text</code>.</p>
+
+    <p>Tspan objects are containers, so this method yields to a
+    block if one is present. The only objects that a tspan can
+    contain are other tspans. Styles defined on a tspan propogate
+    to any tspans contained within it.</p>
+
+    <h4>Arguments</h4>
+
+    <p>All arguments are optional.</p>
+
+    <dl>
+      <dt>text</dt>
+
+      <dd>A string. If present, this string is drawn at the current
+      text position. By default the string is positioned with the
+      lower-left corner of the first glyph at the current text
+      position. Use the <a href="#text_anchor">:text_anchor</a>
+      style to override this behavior.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>Specify a new current text position within the current
+      user coordinate system.</dd>
+    </dl>
+
+    <h4>Examples</h4>
+
+    <p><a href="javascript:popup('tspan01.rb.html')"><img src=
+    "ex/tspan01.gif" title="Click to see the example script" alt=
+    "tspan example" /></a></p>
+  </div>
+
+  <h2 class="methods">instance methods</h2>
+
+  <div class='sig'>
+    <h3 id='d'>d</h3>
+
+    <p><span class="arg">tspan</span>.d(<span class=
+    "arg">dx</span>[, <span class="arg">dy</span>=0]) [
+    <span class="arg">{ |self| ...}</span> ] -&gt; <span class=
+    "arg">self</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The <span class="arg">dx</span> and <span class=
+    "arg">dy</span> arguments are added to the the current text
+    position to form a new current text position. Yields to a block
+    if one is present.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>dx, dy</dt>
+
+      <dd>The distance, in the user coordinate system, to be added
+      to the current text position.</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('tspan02.rb.html')"><img src=
+    "ex/tspan02.gif" title="Click to see the example script" alt=
+    "tspan example 2" /></a></p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class='sig'>
+    <h3 id='rotate'>rotate</h3>
+
+    <p><span class="arg">tspan</span>.rotate(<span class=
+    "arg">degrees</span>) [ <span class="arg">{ |self| ...}</span>
+    ] -&gt; <span class="arg">self</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Rotates the text about the current text position by the
+    specified number of <span class="arg">degrees</span>. Yields to
+    a block if one is present.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>degrees</dt>
+
+      <dd>The amount of rotation</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('tspan03.rb.html')"><img src=
+    "ex/tspan03.gif" title="Click to see the example script" alt=
+    "tspan example 3" /></a></p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class='sig'>
+    <h3 id='tspan'>tspan</h3>
+
+    <p><span class="arg">tspan</span>.tspan(<span class=
+    "arg">string</span>=0, <span class="arg">x</span>=nil,
+    <span class="arg">y</span>=0) [ <span class="arg">{ |tspan|
+    ...}</span> ] -&gt; aTspan</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Calls <a href="#new">RVG::Tspan.new</a> to construct a tspan
+    and adds it to the tspan. Yields to a block if one is present,
+    passing the new tspan as an argument. Styles defined on the
+    container tspan propogate to the contained tspan.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>string</dt>
+
+      <dd>A text string.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>A new initial text position</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>The new tspan, so other <code>RVG::Tspan</code> methods can
+    be chained to it.</p>
+  </div>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo; <a href="rvgtext.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvguse.html">Next</a>
+    &raquo;
+  </div>
+</body>
+</html>

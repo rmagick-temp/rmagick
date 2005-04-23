@@ -14,12 +14,12 @@ class Dir
 end
 
 # remove directory & contents if the directory was created by post-install.rb
-def rmdir(dir)
+def rmdir(dir, no_check)
   # This can 't happen, but you can never be too safe...
   if dir == '/' then
     raise RuntimeError, "rm -rf /? I don't think so!"
   end
-  if File.file? dir+'/.rmagick' then
+  if no_check || File.file? dir+'/.rmagick' then
     targets = Dir[dir+'/*']
     targets += Dir[dir+'/.*'].delete_if { |f| FileTest.directory?(f) }
     if not targets.empty?
@@ -62,6 +62,7 @@ doc_dir   ||= prefix+'/share/RMagick'
 File.safe_unlink("#{site_ruby}/RMagick.rb", true)
 File.safe_unlink("#{so_dir}/RMagick.so", true)
 
+rmdir("#{site_ruby}/rvg", true)
 rmdir(doc_dir+'/ex/images')
 rmdir(doc_dir+'/ex')
 rmdir(doc_dir+'/css')

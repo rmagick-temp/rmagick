@@ -1,5 +1,5 @@
 #--
-# $Id: text.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
+# $Id: text.rb,v 1.2 2005/04/23 15:29:47 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 # Text-related classes
@@ -35,13 +35,8 @@ class Magick::RVG
         end
 
         # Add <tt>x</tt> and <tt>y</tt> to the current text position.
-        def d(x, y=nil)
-            begin
-                @dx = Float(x)
-                @dy = y ? Float(y) : 0
-            rescue
-                raise TypeError, "at least one argument cannot be converted to Float (got #{[x,y].collect {|a| a.class}.join(', ')})"
-            end
+        def d(x, y=0)
+            @dx, @dy = RVG.convert_to_float(x, y)
             yield(self) if block_given?
             self
         end
@@ -111,12 +106,7 @@ class Magick::RVG
         include TextLink
 
         def initialize(obj, x, y, parent)
-            begin
-                @x = x ? Float(x) : nil
-                @y = y ? Float(y) : nil
-            rescue
-                raise TypeError, "at least one argument cannot be converted to Float (got #{[x,y,text].collect {|a| a.class}.join(', ')})"
-            end
+            @x, @y = RVG.convert_to_float(x, y, :allow_nil)
             super(nil)
             @tspans << obj
             @parent = parent
@@ -135,12 +125,7 @@ class Magick::RVG
         #
         # Tspan objects can contain Tspan objects.
         def initialize(text=nil, x=nil, y=nil, &block)
-            begin
-                @x = x ? Float(x) : nil
-                @y = y ? Float(y) : nil
-            rescue
-                raise TypeError, "at least one argument cannot be converted to Float (got #{[x,y,text].collect {|a| a.class}.join(', ')})"
-            end
+            @x, @y = RVG.convert_to_float(x, y, :allow_nil)
             super(text, &block)
         end
 
@@ -170,7 +155,7 @@ class Magick::RVG
         # like <tt>x</tt> and <tt>y</tt> in RVG::TextBase#tspan
         def tref(obj, x=nil, y=nil)
             if ! obj.kind_of?(Tspan)
-                raise TypeError, "wrong argument type #{obj.class} (expected Tspan)"
+                raise ArgumentError, "wrong argument type #{obj.class} (expected Tspan)"
             end
             obj = obj.deep_copy
             obj.parent = self

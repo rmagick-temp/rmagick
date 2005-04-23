@@ -38,7 +38,7 @@
   <div class="nav">
     &laquo;&nbsp;<a href="rvgclip.html">Prev</a> | <a href=
     "index.html">Contents</a> | <a href=
-    "rvguse.html">Next</a>&nbsp;&raquo;
+    "rvgtspan.html">Next</a>&nbsp;&raquo;
   </div>
 
   <h1>class RVG::Text <span class="superclass">&lt;
@@ -138,7 +138,7 @@
 
     <p><a href="javascript:popup('text01.rb.html')"><img src=
     "ex/text01.gif" title="Click to see the example script" alt=
-    "preserve_aspect_ratio example" /></a></p>
+    "text example" /></a></p>
   </div>
 
   <h2 class="methods">instance methods</h2>
@@ -147,8 +147,9 @@
     <h3 id='d'>d</h3>
 
     <p><span class="arg">text</span>.d(<span class=
-    "arg">dx</span>[, <span class="arg">dy</span>=0]) -&gt;
-    <span class="arg">self</span></p>
+    "arg">dx</span>[, <span class="arg">dy</span>=0]) [
+    <span class="arg">{ |self| ...}</span> ] -&gt; <span class=
+    "arg">self</span></p>
   </div>
 
   <div class="desc">
@@ -159,7 +160,7 @@
     "arg">x</span> and <span class="arg">y</span> te<code>xt</code>
     arguments to form the initial text position. This method is
     more useful when coupled with <a href="#tspan">tspan</a>,
-    below.</p>
+    below. Yields to a block if one is present.</p>
 
     <h4>Arguments</h4>
 
@@ -180,14 +181,16 @@
     <h3 id='rotate'>rotate</h3>
 
     <p><span class="arg">text</span>.rotate(<span class=
-    "arg">degrees</span>) -&gt; <span class="arg">self</span></p>
+    "arg">degrees</span>) [ <span class="arg">{ |text| ...}</span>
+    ] -&gt; <span class="arg">self</span></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Rotates the text about the initial text position by the
-    specified number of <span class="arg">degrees</span>.</p>
+    specified number of <span class="arg">degrees</span>. Yields to
+    a block if one is present.</p>
 
     <h4>Arguments</h4>
 
@@ -448,7 +451,7 @@
 
   <div class="nav">
     &laquo; <a href="rvgclip.html">Prev</a> | <a href=
-    "index.html">Contents</a> | <a href="rvguse.html">Next</a>
+    "index.html">Contents</a> | <a href="rvgtspan.html">Next</a>
     &raquo;
   </div>
 </body>

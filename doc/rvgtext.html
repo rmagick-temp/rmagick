@@ -131,7 +131,8 @@
       established. By default the string is positioned with the
       lower-left corner of the first glyph at [x, y]. Use the
       <a href="#text_anchor">:text_anchor</a> style to override
-      this behavior.</dd>
+      this behavior. After the string is rendered, the current text
+      position is moved to the end of the string.</dd>
     </dl>
 
     <h4>Example</h4>
@@ -157,10 +158,9 @@
 
     <p>The <span class="arg">dx</span> and <span class=
     "arg">dy</span> arguments are added to the <span class=
-    "arg">x</span> and <span class="arg">y</span> te<code>xt</code>
-    arguments to form the initial text position. This method is
-    more useful when coupled with <a href="#tspan">tspan</a>,
-    below. Yields to a block if one is present.</p>
+    "arg">x</span> and <span class="arg">y</span> <code>text</code>
+    arguments to form the initial text position. Yields to a block
+    if one is present.</p>
 
     <h4>Arguments</h4>
 

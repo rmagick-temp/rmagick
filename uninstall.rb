@@ -14,12 +14,12 @@ class Dir
 end
 
 # remove directory & contents if the directory was created by post-install.rb
-def rmdir(dir, no_check)
+def rmdir(dir, no_check=false)
   # This can 't happen, but you can never be too safe...
   if dir == '/' then
     raise RuntimeError, "rm -rf /? I don't think so!"
   end
-  if no_check || File.file? dir+'/.rmagick' then
+  if no_check || File.file?(dir+'/.rmagick') then
     targets = Dir[dir+'/*']
     targets += Dir[dir+'/.*'].delete_if { |f| FileTest.directory?(f) }
     if not targets.empty?

@@ -220,9 +220,11 @@
               <li><a href="rvgstyle.html">The styles
               method</a></li>
 
-              <li><a href="rvgshape.html">The shapes methods</a></li>
+              <li><a href="rvgshape.html">The shapes
+              methods</a></li>
 
-              <li><a href="rvgxform.html">The transform methods</a></li>
+              <li><a href="rvgxform.html">The transform
+              methods</a></li>
             </ul>
           </li>
         </ul>
@@ -306,21 +308,26 @@
   </div>
 
   <p>RMagick is a complete interface to ImageMagick and
-  GraphicsMagick. Within its three major classes and 21 minor
-  classes RMagick defines over 550 methods and 225 constants.
-  RMagick exploits Ruby idioms such as blocks and iterators, Struct
-  classes, symbols, ?- and !-suffixed methods, and exceptions.</p>
+  GraphicsMagick. Version 1.0.0 was released in February, 2003.
+  Within its four major classes and 30 minor classes RMagick
+  defines over 600 methods and 225 constants. RMagick exploits Ruby
+  idioms such as blocks and iterators, Struct classes, symbols, ?-
+  and !-suffixed methods, and exceptions.</p>
 
   <h3>About this document</h3>
 
-  <p>This document is divided into 3 parts. The first is this page.
+  <p>This document is divided into 4 parts. The first is this page.
   The second part is a usage guide covering both RMagick and
-  ImageMagick/GraphicsMagick usage and conventions. The third, and
-  largest, is the reference guide, which describes all of the
-  RMagick classes and constants. The reference guide includes many
-  examples.</p>
+  ImageMagick/GraphicsMagick usage and conventions. The third part
+  is a reference guide to the ImageList, Image, and Draw classes.
+  This guide includes many examples.</p>
 
-  <p>Accompanying the HTML documentation is a set of over 130
+  <p>The fourth part covers the newest addition to RMagick, Ruby
+  Vector Graphics (RVG). RVG is a facade for Draw that provides a
+  high-level API for scalable vector graphics. The RVG section
+  includes a tutorial and complete reference documentation.</p>
+
+  <p>Accompanying the HTML documentation is a set of over 175
   example RMagick programs. Each is a complete, stand-alone program
   that either creates an image from scratch or modifies an input
   image using one or more RMagick methods. The output images are
@@ -397,7 +404,7 @@
   <code>Magick::Long_version</code> constant:</p>
   <pre class="example" id="version">
 irb(main):001:0&gt; puts Magick::Long_version
-This is RMagick 1.7.0 ($Date: 2005/04/23 15:26:38 $) Copyright (C) 2004 by Timothy P. Hunter
+This is RMagick 1.7.0 ($Date: 2005/04/24 15:14:15 $) Copyright (C) 2004 by Timothy P. Hunter
 Built with GraphicsMagick 1.1.4 2004-11-13 Q8 http://www.GraphicsMagick.org/
 Built for ruby 1.8.1 (2003-12-25) [i686-linux]
 Web page: http://rmagick.rubyforge.org

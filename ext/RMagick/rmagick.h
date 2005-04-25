@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.78 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.79 2005/04/25 22:46:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -587,6 +587,7 @@ extern VALUE Info_new(VALUE);
 #endif
 
 extern VALUE Info_define(int, VALUE *, VALUE);
+extern VALUE Info_undefine(VALUE, VALUE);
 extern VALUE Info_initialize(VALUE);
 extern VALUE rm_info_new(void);
 

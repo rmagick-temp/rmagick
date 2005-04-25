@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.23 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.24 2005/04/25 22:46:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -843,6 +843,45 @@ Info_size_eq(VALUE self, VALUE size_arg)
     magick_clone_string(&info->size, sz);
 
     return self;
+}
+
+
+/*
+    Method:     Info#undefine
+    Purpose:    Undefine image option
+*/
+
+VALUE
+Info_undefine(VALUE self, VALUE key)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    char *v;
+
+    Data_Get_Struct(self, Info, info);
+    v = RemoveImageOption(info, STRING_PTR(key));
+    if (!v)
+    {
+        rb_raise(rb_eArgError, "no such key: `%s'", STRING_PTR(key));
+    }
+    return self;
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    unsigned int okay;
+
+    Data_Get_Struct(self, Info, info);
+    okay = RemoveDefinitions(info, STRING_PTR(key));
+    if (!okay)
+    {
+        rb_raise(rb_eArgError, "no such key: `%s'", STRING_PTR(key));
+    }
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.25 2005/04/26 00:23:20 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.26 2005/04/26 23:58:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -9,6 +9,148 @@
 #include "rmagick.h"
 
 DEF_ATTR_ACCESSOR(Info, antialias, bool)
+
+/*
+ * Method:  value = Info[format, key]
+ * Purpose: get the value of an option set by Info[]=
+*/
+#define MAX_FORMAT_LEN 60
+
+VALUE
+Info_aref(VALUE self, VALUE format, VALUE key)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    char *format_p, *key_p;
+    long format_l, key_l;
+    const char *value;
+    char fkey[MaxTextExtent];
+
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+
+    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent-1)
+    {
+        rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
+    }
+
+    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-61, STRING_PTR(key));
+
+    Data_Get_Struct(self, Info, info);
+    value = GetImageOption(info, fkey);
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(value);
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    const char *value;
+
+    Data_Get_Struct(self, Info, info);
+    value = AccessDefinition(info, STRING_PTR(format), STRING_PTR(key));
+
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(value);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Info[format, key] = value
+    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
+    Note:       Essentially the same function as Info#define but paired
+                with Info#[]=
+*/
+VALUE
+Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    char *format_p, *key_p, *value_p = "";
+    long format_l, key_l;
+    char ckey[MaxTextExtent];
+    unsigned int okay;
+
+
+    Data_Get_Struct(self, Info, info);
+
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+
+    /* Allow any argument that supports to_s */
+    value = rb_funcall(value, ID_to_s, 0);
+    value_p = STRING_PTR(value);
+
+    if (format_l > MAX_FORMAT_LEN || format_l+key_l > MaxTextExtent-1)
+    {
+        rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
+    }
+
+    (void) sprintf(ckey, "%.60s:%.*s", format_p, sizeof(ckey)-MAX_FORMAT_LEN, key_p);
+
+    okay = SetImageOption(info, ckey, value_p);
+    if (!okay)
+    {
+        rb_warn("%.60s:%.1024s not defined - SetImageOption failed.", format_p, key_p);
+        return Qnil;
+    }
+
+    return self;
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    char *format_p, *key_p, *value_p = NULL;
+    long format_l, key_l, value_l = 0;
+    unsigned int okay;
+    ExceptionInfo exception;
+    char definitions[MaxTextExtent*2];/* Make this buffer longer than the buffer used   */
+                                      /* for SetImageOptions since AddDefinitions cats  */
+                                      /* the value onto the format:key pair.            */
+
+    Data_Get_Struct(self, Info, info);
+
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+    value = rb_funcall(value, ID_to_s, 0);
+    value_p = STRING_PTR_LEN(value, value_l);
+
+    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
+    {
+        rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
+    }
+    (void)sprintf(definitions, "%s:%s=", format_p, key_p);
+    if (value_l > 0)
+    {
+        strcat(definitions, value_p);
+    }
+
+    GetExceptionInfo(&exception);
+    okay = AddDefinitions(info, definitions, &exception);
+    HANDLE_ERROR
+    if (!okay)
+    {
+        rb_warn("%.60s:%.1024s not defined - AddDefinitions failed.", format_p, key_p);
+        return Qnil;
+    }
+
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Info#background_color
@@ -229,6 +371,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     return (VALUE)0;
 #endif
 }
+
 
 DEF_ATTR_READER(Info, density, str)
 
@@ -554,48 +697,6 @@ VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
     return self;
 }
 
-/*
- * Method:  Info#get_definition
- * Purpose: get the value of an option set by Info#define
-*/
-VALUE
-Info_get_definition(VALUE self, VALUE format, VALUE key)
-{
-
-#if defined(HAVE_SETIMAGEOPTION)
-    Info *info;
-    const char *value;
-    char fkey[MaxTextExtent];
-
-    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
-
-    Data_Get_Struct(self, Info, info);
-    value = GetImageOption(info, fkey);
-    if (!value)
-    {
-        return Qnil;
-    }
-
-    return rb_str_new2(value);
-
-#elif defined(HAVE_ADDDEFINITIONS)
-    Info *info;
-    const char *value;
-
-    Data_Get_Struct(self, Info, info);
-    value = AccessDefinition(info, STRING_PTR(format), STRING_PTR(key));
-
-    if (!value)
-    {
-        return Qnil;
-    }
-
-    return rb_str_new2(value);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-}
 
 DEF_ATTR_ACCESSOR(Info, group, long)
 
@@ -899,10 +1000,20 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
 {
 #if defined(HAVE_SETIMAGEOPTION)
     Info *info;
+    char *format_p, *key_p;
+    long format_l, key_l;
     char *v;
     char fkey[MaxTextExtent];
 
-    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+
+    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
+    {
+        rb_raise(rb_eArgError, "can't undefine %.60s:%.1024s - too long", format_p, key_p);
+    }
+
+    sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
 
     Data_Get_Struct(self, Info, info);
     v = RemoveImageOption(info, fkey);
@@ -915,9 +1026,19 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
 #elif defined(HAVE_ADDDEFINITIONS)
     Info *info;
     unsigned int okay;
+    char *format_p, *key_p;
+    long format_l, key_l;
     char fkey[MaxTextExtent];
 
-    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+
+    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
+    {
+        rb_raise(rb_eArgError, "can't undefine %.60s:%.1024s - too long", format_p, key_p);
+    }
+
+    sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
 
     Data_Get_Struct(self, Info, info);
     okay = RemoveDefinitions(info, fkey);

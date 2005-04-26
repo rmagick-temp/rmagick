@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.24 2005/04/25 22:46:44 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.25 2005/04/26 00:23:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -554,6 +554,49 @@ VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
     return self;
 }
 
+/*
+ * Method:  Info#get_definition
+ * Purpose: get the value of an option set by Info#define
+*/
+VALUE
+Info_get_definition(VALUE self, VALUE format, VALUE key)
+{
+
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *value;
+    char fkey[MaxTextExtent];
+
+    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
+
+    Data_Get_Struct(self, Info, info);
+    value = GetImageOption(info, fkey);
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(value);
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    const char *value;
+
+    Data_Get_Struct(self, Info, info);
+    value = AccessDefinition(info, STRING_PTR(format), STRING_PTR(key));
+
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(value);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 DEF_ATTR_ACCESSOR(Info, group, long)
 
 /*
@@ -852,29 +895,35 @@ Info_size_eq(VALUE self, VALUE size_arg)
 */
 
 VALUE
-Info_undefine(VALUE self, VALUE key)
+Info_undefine(VALUE self, VALUE format, VALUE key)
 {
 #if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *v;
+    char fkey[MaxTextExtent];
+
+    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
 
     Data_Get_Struct(self, Info, info);
-    v = RemoveImageOption(info, STRING_PTR(key));
+    v = RemoveImageOption(info, fkey);
     if (!v)
     {
-        rb_raise(rb_eArgError, "no such key: `%s'", STRING_PTR(key));
+        rb_raise(rb_eArgError, "no such key: `%s'", fkey);
     }
     return self;
 
 #elif defined(HAVE_ADDDEFINITIONS)
     Info *info;
     unsigned int okay;
+    char fkey[MaxTextExtent];
+
+    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-60, STRING_PTR(key));
 
     Data_Get_Struct(self, Info, info);
-    okay = RemoveDefinitions(info, STRING_PTR(key));
+    okay = RemoveDefinitions(info, fkey);
     if (!okay)
     {
-        rb_raise(rb_eArgError, "no such key: `%s'", STRING_PTR(key));
+        rb_raise(rb_eArgError, "no such key: `%s'", fkey);
     }
     return self;
 

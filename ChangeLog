@@ -1,6 +1,6 @@
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
-    o Added Image::Info#undefine, #get_definition
+    o Added Image::Info#undefine, #[], #[]=
     o Incorporated RVG classes
     o Added RVG documentation, examples, updated installer
 

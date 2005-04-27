@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: class Image::Info - Optional method
   arguments</title>
@@ -60,7 +60,13 @@
     <h3>instance methods</h3>
 
     <ul>
+      <li><a href="#aset">[]=</a></li>
+
+      <li><a href="#aref">[]</a></li>
+
       <li><a href="#define">define</a></li>
+
+      <li><a href="#undefine">undefine</a></li>
     </ul>
 
     <h3>attribute methods</h3>
@@ -170,19 +176,25 @@
   <h2 class="methods">instance methods</h2>
 
   <div class="sig">
-    <h3 id="define">define</h3>
+    <h3 id="aset">[]=</h3>
 
-    <p><span class="arg">self</span>.define(<span class=
-    "arg">format</span>, <span class="arg">key</span>[,
-    <span class="arg">value</span>])</p>
+    <p><span class="arg">self</span>[<span class=
+    "arg">format</span>, <span class="arg">key</span>] =
+    <span class="arg">value</span> -&gt; <span class=
+    "arg">self</span></p>
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Define a format-specific option. The
-    <code>define</code> method is a new, general-purpose way of
-    specifying options that apply to specific image formats. This
-    method is available in ImageMagick 6.0.0 and GraphicsMagick
-    1.1.
+    <h4>Description</h4>
+
+    <p>Define a format-specific option. An alternative to <a href=
+    "#define">define</a>, below. Use this method to set options for
+    reading or writing certain image formats. ImageMagick and
+    GraphicsMagick support different options, and the list of
+    supported options changes from release to release. For a list
+    of the valid image formats, keys, and values, refer to the
+    documentation for the -define option for the specific release
+    of the library you're using.</p>
 
     <h4>Arguments</h4>
 
@@ -197,8 +209,9 @@
 
       <dt>value</dt>
 
-      <dd>The value of the option. If omitted, the key is simply
-      defined to an null value.</dd>
+      <dd>The value of the option. <span class="arg">Value</span>
+      can be any object that responds to <code>to_s</code>. Use
+      <code>nil</code> to set the key to a null value.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -206,10 +219,94 @@
     <p>self</p>
 
     <h4>Example</h4>
+    <pre>
+self["tiff", "bits-per-sample"] = 2
+</pre>
 
-    <p>See the &times;Magick documentation for the -define utility
-    command option for a list of valid formats, keys, and
-    values.</p>
+    <h4>Magick API</h4>
+
+    <p>SetImageOption (ImageMagick 6.0.0), AddDefinitions
+    (GraphicsMagick 1.1)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="aref">[]</h3>
+
+    <p><span class="arg">self</span>[<span class=
+    "arg">format</span>, <span class="arg">key</span>] -&gt;
+    <span class="arg">value</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the value of the specified option for the specified
+    format.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>format</dt>
+
+      <dd>An image format name such as "ps" or "tiff".</dd>
+
+      <dt>key</dt>
+
+      <dd>A string that identifies the option.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>The value of the option. Always a string.</p>
+
+    <h4>Example</h4>
+    <pre>
+self["tiff", "bits-per-sample"] &raquo; 2
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>GetImageOption (ImageMagick 6.0.0), AccessDefinitions
+    (GraphicsMagick 1.1)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="define">define</h3>
+
+    <p><span class="arg">self</span>.define(<span class=
+    "arg">format</span>, <span class="arg">key</span>[,
+    <span class="arg">value</span>])</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Define a format-specific option. See <a href="aset">[]=</a>,
+    above.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>format</dt>
+
+      <dd>An image format name such as "ps" or "tiff".</dd>
+
+      <dt>key</dt>
+
+      <dd>A string that identifies the option.</dd>
+
+      <dt>value</dt>
+
+      <dd>The value of the option. <span class="arg">Value</span>
+      can be any object that responds to <code>to_s</code>. If
+      omitted, the key is simply defined to an null value.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
     <pre>
 self.define("tiff", "bits-per-sample", 2)
 </pre>
@@ -218,6 +315,46 @@ self.define("tiff", "bits-per-sample", 2)
 
     <p>SetImageOption (ImageMagick 6.0.0), AddDefinitions
     (GraphicsMagick 1.1)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="undefine">undefine</h3>
+
+    <p><span class="arg">self</span>.undefine(<span class=
+    "arg">format</span>, <span class="arg">key</span>)</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Delete an option definition set by <a href="#aset">[]=</a>
+    or <a href="#define">define</a>. This is not the same as
+    setting the option to a null value. The <code>undefine</code>
+    method removes the option name from the list of options for the
+    specified format. Raises <code>ArgumentError</code> if the
+    option does not exist.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>format</dt>
+
+      <dd>An image format name such as "ps" or "tiff".</dd>
+
+      <dt>key</dt>
+
+      <dd>A string that identifies the option.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+self.undefine("tiff", "bits-per-sample")
+
+</pre>
   </div>
 
   <h2 class="methods">attribute methods</h2>

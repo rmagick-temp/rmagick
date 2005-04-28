@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.26 2005/04/26 23:58:02 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.27 2005/04/28 23:41:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1002,7 +1002,6 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     Info *info;
     char *format_p, *key_p;
     long format_l, key_l;
-    char *v;
     char fkey[MaxTextExtent];
 
     format_p = STRING_PTR_LEN(format, format_l);
@@ -1016,11 +1015,9 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
 
     Data_Get_Struct(self, Info, info);
-    v = RemoveImageOption(info, fkey);
-    if (!v)
-    {
-        rb_raise(rb_eArgError, "no such key: `%s'", fkey);
-    }
+    /* Depending on the IM version, RemoveImageOption returns either */
+    /* char * or MagickBooleanType. Ignore the return value.         */
+    (void) RemoveImageOption(info, fkey);
     return self;
 
 #elif defined(HAVE_ADDDEFINITIONS)

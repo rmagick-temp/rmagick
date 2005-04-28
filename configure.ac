@@ -142,6 +142,7 @@ AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
 AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel ShadowImage])
+AC_CHECK_FUNCS([SepiaToneImage SigmoidalContrastImageChannel])
 
 # What typedefs?
 
@@ -373,6 +374,21 @@ AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
 
 if test "$rm_cv_enum_allchannels" = yes; then
   AC_DEFINE(HAVE_ALLCHANNELS)
+fi
+
+AC_CACHE_CHECK(for JPEG2000Compression enum value, rm_cv_enum_jpeg2000compression,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompressionType x; x = JPEG2000Compression],
+     rm_cv_enum_jpeg2000compression='yes',
+     rm_cv_enum_jpeg2000compression='no')])
+
+if test "$rm_cv_enum_jpeg2000compression" = yes; then
+  AC_DEFINE(HAVE_JPEG2000COMPRESSION)
 fi
 
 if test "$rm_have_getimagequantumdepth" = yes; then

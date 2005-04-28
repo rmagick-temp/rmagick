@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.82 2005/04/26 23:58:02 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.83 2005/04/28 23:41:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -731,6 +731,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "scale", Image_scale, -1);
     rb_define_method(Class_Image, "scale!", Image_scale_bang, -1);
     rb_define_method(Class_Image, "segment", Image_segment, -1);
+    rb_define_method(Class_Image, "sepiatone", Image_sepiatone, -1);
     rb_define_method(Class_Image, "set_channel_depth", Image_set_channel_depth, 2);
     rb_define_method(Class_Image, "shade", Image_shade, -1);
     rb_define_method(Class_Image, "shadow", Image_shadow, -1);
@@ -739,6 +740,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "shave", Image_shave, 2);
     rb_define_method(Class_Image, "shave!", Image_shave_bang, 2);
     rb_define_method(Class_Image, "shear", Image_shear, 2);
+    rb_define_method(Class_Image, "sigmoidal_contrast_channel", Image_sigmoidal_contrast_channel, -1);
     rb_define_method(Class_Image, "signature", Image_signature, 0);
     rb_define_method(Class_Image, "solarize", Image_solarize, -1);
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
@@ -1191,6 +1193,9 @@ Init_RMagick(void)
         ENUMERATOR(FaxCompression)
         ENUMERATOR(Group4Compression)
         ENUMERATOR(JPEGCompression)
+#if defined(HAVE_JPEG2000COMPRESSION)
+        ENUMERATOR(JPEG2000Compression)
+#endif
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
         ENUMERATOR(RunlengthEncodedCompression)
@@ -1509,7 +1514,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/04/26 23:58:02 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/04/28 23:41:54 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.95 2005/04/02 20:49:11 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.96 2005/04/28 23:41:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6304,6 +6304,43 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 
 
 /*
+ * Method:  Image#sepiatone(threshold=MaxRGB)
+ * Purpose: Call SepiaToneImage
+*/
+VALUE
+Image_sepiatone(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SEPIATONEIMAGE)
+    Image *image, *new_image;
+    double threshold = (double) MaxRGB;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    switch(argc)
+    {
+        case 1:
+            threshold = NUM2DBL(argv[0]);
+            break;
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+    }
+
+    new_image = SepiaToneImage(image, threshold, &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
     Method:     Image#segment(colorspace=RGBColorspace,
                                    cluster_threshold=1.0,
                                    smoothing_threshold=1.5,
@@ -6578,6 +6615,53 @@ Image_shear(
     new_image = ShearImage(image, NUM2DBL(x_shear), NUM2DBL(y_shear), &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
+}
+
+
+/*
+ *  Method: Image#sigmoidal_contrast_channel(contrast=3.0, midpoint=50.0,
+                        sharpen=false [, channel=AllChannels]);
+*/
+VALUE
+Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SIGMOIDALCONTRASTIMAGECHANNEL)
+    Image *image, *new_image;
+    MagickBooleanType sharpen = MagickFalse;
+    double contrast = 3.0;
+    double midpoint = 50.0;
+    ChannelType channels;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    channels = extract_channels(&argc, argv);
+
+    switch(argc)
+    {
+        case 3:
+            sharpen  = RTEST(argv[2]);
+        case 2:
+            midpoint = NUM2DBL(argv[1]);
+        case 1:
+            contrast = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            raise_ChannelType_error(argv[argc-1]);
+            break;
+    }
+
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+    (void) SigmoidalContrastImageChannel(new_image, channels, sharpen, contrast, midpoint);
+
+    return rm_image_new(new_image);
+#else
+    rm_notimplemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

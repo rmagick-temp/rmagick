@@ -19,13 +19,19 @@ before = bg.composite(before, CenterGravity, OverCompositeOp)
 before.border!(1,1,'gray80')
 before.write('shadow_before.gif')
 
-# Create the shadow.
-shadow = img.shadow()
+begin
+    # Create the shadow.
+    shadow = img.shadow()
+    # Composite the original image over the shadow, composite the result
+    # onto a white background, add a border, write it to the "after" file.
+    shadow = shadow.composite(img, NorthWestGravity, OverCompositeOp)
+    bg = Image.new(shadow.columns, shadow.rows) {self.background_color='white'}
+    after = bg.composite(shadow, CenterGravity, OverCompositeOp)
+    after.border!(1,1,'gray80')
+rescue NotImplementedError
+    after = Image.read('images/notimplemented.gif').first
+    after.resize!(before.columns, before.rows)
+end
 
-# Composite the original image over the shadow, composite the result
-# onto a white background, add a border, write it to the "after" file.
-shadow = shadow.composite(img, NorthWestGravity, OverCompositeOp)
-bg = Image.new(shadow.columns, shadow.rows) {self.background_color='white'}
-after = bg.composite(shadow, CenterGravity, OverCompositeOp)
-after.border!(1,1,'gray80')
 after.write('shadow_after.gif')
+

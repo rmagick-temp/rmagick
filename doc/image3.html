@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 3)</title>
   <meta http-equiv="Content-Type" content=
@@ -105,14 +105,16 @@
           <li><a href="#sample_bang">sample!</a></li>
 
           <li><a href="#scale">scale</a></li>
+
+          <li><a href="#scale_bang">scale!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#scale_bang">scale!</a></li>
-
           <li><a href="#segment">segment</a></li>
+
+          <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
           "#set_channel_depth">set_channel_depth</a></li>
@@ -131,6 +133,9 @@
 
           <li><a href="#shear">shear</a></li>
 
+          <li><a href=
+          "#sigmoidal_contrast_channel">sigmoidal_contrast_channel</a></li>
+
           <li><a href="#signature">signature</a></li>
 
           <li><a href="#solarize">solarize</a></li>
@@ -144,13 +149,13 @@
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
-
-          <li><a href="#store_pixels">store_pixels</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#store_pixels">store_pixels</a></li>
+
           <li><a href="#strip_bang">strip!</a></li>
 
           <li><a href="#swirl">swirl</a></li>
@@ -1204,6 +1209,56 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="sepiatone">sepiatone</h3>
+
+    <p><span class="arg">image</span>.sepiatone(<span class=
+    "arg">threshold</span>=MaxRGB) -&gt; <span class=
+    "arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Applies a special effect to the image,
+    similar to the effect achieved in a photo darkroom by sepia
+    toning.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>threshold</dt>
+
+      <dd class="imquote"><span class="arg">Threshold</span> ranges
+      from 0 to <code>MaxRGB</code> and is a measure of the extent
+      of the sepia toning. A threshold of 80% is a good starting
+      point for a reasonable tone. The default is MaxRGB.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('sepiatone.rb.html')"><img src=
+    "ex/sepiatone.jpg" alt="sepiatone example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/sepiatone.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#colorize">colorize</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SepiaToneImage (available in ImageMagick 6.2.1)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="set_channel_depth">set_channel_depth</h3>
 
     <p><span class=
@@ -1585,6 +1640,69 @@ random_threshold_channel(geom, RedChannel)
     <h4>Magick API</h4>
 
     <p>ShearImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sigmoidal_contrast_channel">
+    sigmoidal_contrast_channel</h3>
+
+    <p><br />
+    <span class=
+    "arg">image</span>.sigmoidal_contrast_channel(<span class=
+    "arg">contrast</span>=3.0, <span class=
+    "arg">midpoint</span>=50.0, <span class=
+    "arg">sharpen</span>=false[,<span class="arg"><span class=
+    "arg">channel</span></span>, <span class="arg"><span class=
+    "arg">channel</span></span>...] -&gt; anImage</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Adjusts the contrast of an image channel
+    with a non-linear sigmoidal contrast algorithm. Increases the
+    contrast of the image using a sigmoidal transfer function
+    without saturating highlights or shadows.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>contrast</dt>
+
+      <dd class="imquote">indicates how much to increase the
+      contrast (0 is none; 3 is typical; 20 is pushing it)</dd>
+
+      <dt>midpoint</dt>
+
+      <dd class="imquote">indicates where midtones fall in the
+      resultant image (0 is white; 50% is middle-gray; 100% is
+      black)</dd>
+
+      <dt>sharpen</dt>
+
+      <dd class="imquote">Set <span class="arg">sharpen</span> to
+      <code>true</code> to increase the image contrast otherwise
+      the contrast is reduced.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are adjusted.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#contrast">contrast</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SigmoidalContrastImageChannel (available in ImageMagick
+    6.2.1)</p>
   </div>
 
   <div class="sig">
@@ -1987,7 +2105,8 @@ p stats.red.stddev &raquo; 0.231399683489667
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#constitute">constitute</a>, <a href="image2.html#get_pixels">get_pixels</a>, <a href=
+    <p><a href="image1.html#constitute">constitute</a>, <a href=
+    "image2.html#get_pixels">get_pixels</a>, <a href=
     "#view">view</a></p>
 
     <h4>Magick API</h4>
@@ -2804,7 +2923,7 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" />
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"

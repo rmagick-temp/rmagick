@@ -1,8 +1,11 @@
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
     o Added Image::Info#undefine, #[], #[]=
+    o Added sigmoidal_contrast_channel, sepiatone to Image class (ImageMagick 6.2.1)
+    o Added JPEG2000Compression constant (ImageMagick 6.2.2)
     o Incorporated RVG classes
     o Added RVG documentation, examples, updated installer
+    o Tested with ImageMagick 6.2.2-0, latest GraphicsMagick 1.2
 
 RMagick 1.7.4
     o Fix bug #1727

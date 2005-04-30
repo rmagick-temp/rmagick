@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.96 2005/04/28 23:41:54 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.97 2005/04/30 15:26:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6659,7 +6659,7 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
-    rm_notimplemented();
+    rm_not_implemented();
     return (VALUE)0;
 #endif
 }

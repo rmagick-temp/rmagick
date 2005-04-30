@@ -49,7 +49,7 @@ anim << ex.copy
 # Set the delay between frames to 1 second.
 anim.delay = 100
 
-# Set the delay after the last frame to 2 seconds.
+# Set the delay after the last frame to 3 seconds.
 anim.cur_image.delay = 300
 
 # Iterate forever.

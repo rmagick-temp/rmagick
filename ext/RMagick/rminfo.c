@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.27 2005/04/28 23:41:54 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.28 2005/04/30 23:01:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -34,7 +34,7 @@ Info_aref(VALUE self, VALUE format, VALUE key)
         rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
     }
 
-    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), MaxTextExtent-61, STRING_PTR(key));
+    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), (int)(MaxTextExtent-61), STRING_PTR(key));
 
     Data_Get_Struct(self, Info, info);
     value = GetImageOption(info, fkey);
@@ -96,7 +96,7 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
         rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
     }
 
-    (void) sprintf(ckey, "%.60s:%.*s", format_p, sizeof(ckey)-MAX_FORMAT_LEN, key_p);
+    (void) sprintf(ckey, "%.60s:%.*s", format_p, (int)(sizeof(ckey)-MAX_FORMAT_LEN), key_p);
 
     okay = SetImageOption(info, ckey, value_p);
     if (!okay)
@@ -1012,7 +1012,7 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
         rb_raise(rb_eArgError, "can't undefine %.60s:%.1024s - too long", format_p, key_p);
     }
 
-    sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
+    sprintf(fkey, "%.60s:%.*s", format_p, (int)(MaxTextExtent-61), key_p);
 
     Data_Get_Struct(self, Info, info);
     /* Depending on the IM version, RemoveImageOption returns either */

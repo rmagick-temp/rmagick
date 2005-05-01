@@ -193,7 +193,7 @@ div.sig {
 
 .desc dt {
   font-style: italic;
-  display: compact;
+/*  display: compact; */
 }
 
 .arg {

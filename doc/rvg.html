@@ -151,7 +151,7 @@
     render shapes, text, and raster images in the container.</p>
 
     <p>An RVG object is always the outermost container for a
-    drawing. Call the <a href="#draw">draw</a> method on the
+    drawing. Call the <a href="#RVG_draw">draw</a> method on the
     returned RVG object to produce the final image.</p>
 
     <h4>Arguments</h4>
@@ -166,9 +166,10 @@
     <p>Otherwise, wid<span class="arg">th</span> and <span class=
     "arg">height</span> specify the area of the viewbox. If the RVG
     object will be used as an argument to the <a href=
-    "#Use_use">use</a> method, then <span class="arg">width</span>
-    and <span class="arg">height</span> may be omitted here, then
-    specified as arguments to <code>use</code>.</p>
+    "rvguse.html#use">use</a> method, then <span class=
+    "arg">width</span> and <span class="arg">height</span> may be
+    omitted here, then specified as arguments to
+    <code>use</code>.</p>
 
     <h4>Returns</h4>
 
@@ -183,9 +184,10 @@
     "arg">width</span> and <span class="arg">height</span>
     arguments are omitted in the <code>RVG.new</code> call.
     Instead, the viewport width and height are specified as
-    arguments to 4 invocations of <a href="#Use_use">use</a>. Each
-    <code>use</code> specifies a different viewport size, so the
-    same RVG object draws 4 different-sized targets.</p>
+    arguments to 4 invocations of <a href=
+    "rvguse.html#use">use</a>. Each <code>use</code> specifies a
+    different viewport size, so the same RVG object draws 4
+    different-sized targets.</p>
 
     <p>Click the image to see the example script.</p>
 
@@ -195,7 +197,7 @@
 
     <h4>See also</h4>
 
-    <p><a href="#Group_class">Group</a></p>
+    <p><a href="rvggroup.html">Group</a></p>
   </div>
 
   <h2 class="methods">attributes</h2>

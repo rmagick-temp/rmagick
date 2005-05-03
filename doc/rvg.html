@@ -131,6 +131,14 @@
     "rvgstyle.html">styles</a> method, the <a href=
     "rvgshape.html">shape methods</a> and the <a href=
     "rvgxform.html">transform methods</a>.</p>
+
+    <h3>Units</h3>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#units">Units conversion methods</a></li>
+      </ul>
+    </div>
   </div>
 
   <h2 class="methods">class methods</h2>
@@ -880,6 +888,79 @@ canvas.background_position = :scaled
     <p><a href=
     "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a></p>
   </div>
+
+  <h2 id="units" class="methods">Units</h2>
+
+  <p>RVG supports a subset of the unit identifiers defined by the
+  SVG specification. In RVG, unit identifiers are methods in the
+  Float and Fixnum classes. The units are (for the most part)
+  defined in terms of "dots per inch," accordingly, the unit
+  identifier methods are added only if the value</p>
+  <pre>
+    Magick::RVG.dpi = NN
+</pre>
+
+  <p>is defined, where NN is the number of "dots" (pixels) per inch
+  you wish to use. (Hint: 90 is a good default.)</p>
+
+  <p>For example, to specify a length of 10 inches, you can use</p>
+  <pre>
+    Magick::RVG.dpi = 90
+    length = 10.in  # =&gt; 900 pixels
+</pre>
+
+  <p>If the dpi is defined, the following methods are added to
+  <code>Float</code> and <code>Fixnum</code></p>
+
+  <dl>
+    <dt>px</dt>
+
+    <dd>Pixel. The default unit of measurement.</dd>
+
+    <dt>in</dt>
+
+    <dd>Converts inches to pixels</dd>
+
+    <dt>mm</dt>
+
+    <dd>Converts millimeters to pixels</dd>
+
+    <dt>cm</dt>
+
+    <dd>Converts centimeters to pixels</dd>
+
+    <dt>pt</dt>
+
+    <dd>Converts points to pixels. There are 72 points to the
+    inch.</dd>
+
+    <dt>pc</dt>
+
+    <dd>Converts picas to pixels. There are 12 points to the
+    pica.</dd>
+
+    <dt>deg</dt>
+
+    <dd>Degrees. The default unit of rotation.</dd>
+
+    <dt>rad</dt>
+
+    <dd>Converts radians to degrees.</dd>
+
+    <dt>grad</dt>
+
+    <dd>Converts grads to degrees. There are 400 grads in a
+    circle.</dd>
+
+    <dt>pct</dt>
+
+    <dd>This conversion takes an numeric argument and returns a
+    percentage of the argument. For example 20.pct(150) -&gt;
+    30</dd>
+  </dl>
+
+  <p>SVG also supports <em>em</em> and <em>ex</em>, which are
+  measurements based on the font size. RVG does not.</p>
 
   <p class="spacer">&nbsp;</p>
 

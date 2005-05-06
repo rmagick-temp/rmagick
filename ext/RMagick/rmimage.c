@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.97 2005/04/30 15:26:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.98 2005/05/06 00:28:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6476,8 +6476,8 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
             {
                 rb_warning("shadow will be transparent - opacity %g very small", opacity);
             }
-            opacity = fmin(opacity, 1.0);
-            opacity = fmax(opacity, 0.01);
+            opacity = FMIN(opacity, 1.0);
+            opacity = FMAX(opacity, 0.01);
             opacity *= 100.0;
         case 3:
             sigma = NUM2DBL(argv[2]);

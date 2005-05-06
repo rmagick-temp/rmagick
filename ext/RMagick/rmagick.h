@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.82 2005/04/28 23:41:54 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.83 2005/05/06 00:28:41 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -60,6 +60,10 @@
 
 #undef DegreesToRadians     // defined in ImageMagick.h in 6.0.2
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
+
+#define LMAX(a,b) ((((long)(a))>((long)(b)))?((long)(a)):((long)(b)))
+#define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
+#define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
 
 typedef ImageInfo Info; // Make type name match class name
 typedef PixelPacket Pixel;

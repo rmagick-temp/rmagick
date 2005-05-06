@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.11 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.12 2005/05/06 00:28:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -168,7 +168,7 @@ vertical_fill(
     // Keep in mind that x1 could be < 0 or > image->columns. If steps
     // is negative, swap the start and end colors and use the absolute
     // value.
-    steps = fmax(x1, ((long)image->columns)-x1);
+    steps = FMAX(x1, ((long)image->columns)-x1);
     if (steps < 0)
     {
         PixelPacket t = *start_color;
@@ -240,7 +240,7 @@ horizontal_fill(
 
     // Bear in mind that y1 could be < 0 or > image->rows. If steps is
     // negative, swap the start and end colors and use the absolute value.
-    steps = fmax(y1, ((long)image->rows)-y1);
+    steps = FMAX(y1, ((long)image->rows)-y1);
     if (steps < 0)
     {
         PixelPacket t = *start_color;
@@ -323,16 +323,16 @@ v_diagonal_fill(
 
     if (d1 < 0 && d2 < 0)
     {
-        steps += fmax(fabs(d1),fabs(d2));
+        steps += FMAX(fabs(d1),fabs(d2));
     }
     else if (d1 > image->rows && d2 > image->rows)
     {
-        steps += fmax(d1-image->rows, d2-image->rows);
+        steps += FMAX(d1-image->rows, d2-image->rows);
     }
 
-    d1 = fmax(b, image->rows-b);
-    d2 = fmax(d2, image->rows-d2);
-    steps += fmax(d1, d2);
+    d1 = FMAX(b, image->rows-b);
+    d2 = FMAX(d2, image->rows-d2);
+    steps += FMAX(d1, d2);
 
     // If the line is entirely > image->rows, swap the start & end color
     if (steps < 0)
@@ -404,16 +404,16 @@ h_diagonal_fill(
     // the number of steps.
     if (d1 < 0 && d2 < 0)
     {
-        steps += fmax(fabs(d1),fabs(d2));
+        steps += FMAX(fabs(d1),fabs(d2));
     }
     else if (d1 > image->columns && d2 > image->columns)
     {
-        steps += fmax(fabs(image->columns-d1),fabs(image->columns-d2));
+        steps += FMAX(fabs(image->columns-d1),fabs(image->columns-d2));
     }
 
-    d1 = fmax(d1, image->columns-d1);
-    d2 = fmax(d2, image->columns-d2);
-    steps += fmax(d1, d2);
+    d1 = FMAX(d1, image->columns-d1);
+    d2 = FMAX(d2, image->columns-d2);
+    steps += FMAX(d1, d2);
 
     // If the line is entirely > image->columns, swap the start & end color
     if (steps < 0)

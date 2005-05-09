@@ -101,6 +101,8 @@
 /* Introduced in IM 5.5.6 */
 #undef HAVE_IMAGE_EXTRACT_INFO
 /* Introduced in IM 6.0.0 */
+#undef HAVE_IMAGE_QUALITY
+/* Introduced in IM 6.0.0 */
 #undef HAVE_IMAGE_ORIENTATION
 /* Introduced in IM 5.5.6 */
 #undef HAVE_IMAGEINFO_NUMBER_SCENES

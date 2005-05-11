@@ -62,7 +62,8 @@ AC_SUBST(CPPFLAGS, ${CPPFLAGS})
 AC_SUBST(LOCAL_LIBS, `${MAGICKCONFIG} --libs`)
 
 AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
-    [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB}])],
+    [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB} or one of the dependent libraries.
+                  Check the config.log file for more detailed information.])],
     [`${MAGICKCONFIG} --libs`])
 
 

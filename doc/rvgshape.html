@@ -250,7 +250,14 @@
 
     <p><span class="arg">obj</span>.polygon(<span class=
     "arg">x1</span>, y1, <span class="arg">x2</span>, <span class=
-    "arg">y2</span>...) -&gt; <span class="arg">aPolygon</span></p>
+    "arg">y2</span>...) -&gt; <span class=
+    "arg">aPolygon</span><br />
+    <span class="arg">obj</span>.polygon(<span class=
+    "arg">array</span>) -&gt; <span class=
+    "arg">aPolygon</span><br />
+    <span class="arg">obj</span>.polygon(<span class=
+    "arg">array1</span>, <span class="arg">array2</span>) -&gt;
+    <span class="arg">aPolygon</span></p>
   </div>
 
   <div class="desc">
@@ -261,8 +268,33 @@
 
     <h5>Arguments</h5>
 
-    <p>A list of points that make up the polygon. It is an error to
-    define an odd number of points.</p>
+    <p>The arguments to <code>polygon</code> and <a href=
+    "#polyline">polyline</a> can be</p>
+
+    <ol>
+      <li>At least 4 numbers that describe the [x, y] coordinates
+      of the points of the polygon/polyline.</li>
+
+      <li>One array containing at least 4 numbers.</li>
+
+      <li>Two arrays. The first array is a list of x-coordinates.
+      The second array is a list of y-coordinates. Both arrays must
+      have at least one element. If one array is shorter than the
+      other, the shorter array is extended by duplicating its
+      elements as necessary. The combined arrays must describe at
+      least 2 pairs of [x,y] coordinates. For example
+        <pre>
+    x = [1, 3, 5, 7, 9]
+    y = [2,4]
+    canvas.polygon(x, y)
+    # is equivalent to canvas.polygon(1,2, 3,4, 5,2, 7,4, 9,2)
+</pre>
+      </li>
+    </ol>
+
+    <p>It is an error to specify an odd number of coordinates.
+    Array arguments can be any objects that can be converted to
+    arrays by the Kernel#Array method.</p>
 
     <h5>Example</h5>
 
@@ -277,7 +309,13 @@
     <p><span class="arg">obj</span>.polyline(<span class=
     "arg">x1</span>, y1, <span class="arg">x2</span>, <span class=
     "arg">y2</span>...) -&gt; <span class=
-    "arg">apolyline</span></p>
+    "arg">aPolyline</span><br />
+    <span class="arg">obj</span>.polyline(<span class=
+    "arg">array</span>) -&gt; <span class=
+    "arg">aPolyline</span><br />
+    <span class="arg">obj</span>.polyline(<span class=
+    "arg">array1</span>, <span class="arg">array2</span>) -&gt;
+    <span class="arg">aPolyline</span></p>
   </div>
 
   <div class="desc">
@@ -288,8 +326,7 @@
 
     <h5>Arguments</h5>
 
-    <p>A list of points that make up the polyline. It is an error
-    to define an odd number of points.</p>
+    <p>See <a href="#polygon">polygon</a></p>
 
     <h5>Example</h5>
 

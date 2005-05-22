@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.4 2005/04/23 15:28:00 rmagick Exp $
+# $Id: misc.rb,v 1.5 2005/05/22 22:31:30 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -51,7 +51,7 @@ class Magick::RVG
         begin
             fargs = args.collect { |a| (allow_nil && a.nil?) ? a : Float(a) }
         rescue ArgumentError, TypeError
-            raise ArgumentError, self.fmsg(args)
+            raise ArgumentError, self.fmsg(*args)
         end
         return fargs
     end

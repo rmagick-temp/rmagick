@@ -1,5 +1,5 @@
 #--
-# $Id: embellishable.rb,v 1.3 2005/04/10 15:12:45 rmagick Exp $
+# $Id: embellishable.rb,v 1.4 2005/05/22 22:31:30 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 
@@ -111,7 +111,34 @@ class Magick::RVG
 
     end     # class Rect
 
-    class Polygon < Shape
+    class PolyShape < Shape
+
+        def polypoints(points)
+            case points.length
+                when 1
+                    points = Array(points[0])
+                when 2
+                    x_coords = Array(points[0])
+                    y_coords = Array(points[1])
+                    unless x_coords.length > 0 && y_coords.length > 0
+                        raise ArgumentError, "array arguments must contain at least one point"
+                    end
+                    n = x_coords.length - y_coords.length
+                    short = n > 0 ? y_coords : x_coords
+                    olen = short.length
+                    n.abs.times {|x| short << short[x % olen]}
+                    points = x_coords.zip(y_coords).flatten
+            end
+            n = points.length
+            if n < 4 || n % 2 != 0
+                raise ArgumentError, "insufficient/odd number of points specified: #{n}"
+            end
+            return RVG.convert_to_float(*points)
+        end
+
+    end     # class PolyShape
+
+    class Polygon < PolyShape
 
         # Draws a polygon. The arguments are [<tt>x</tt>, <tt>y</tt>] pairs that
         # define the points that make up the polygon. At least two
@@ -121,17 +148,13 @@ class Magick::RVG
         # Use the RVG::ShapeConstructors#polygon method to create Polygon objects in a container.
         def initialize(*points)
             super()
-            n = points.length
-            if n < 4 || n % 2 != 0
-                raise ArgumentError, "insufficient/odd number of points specified: #{n}"
-            end
             @primitive = :polygon
-            @args = RVG.convert_to_float(*points)
+            @args = polypoints(points)
         end
 
     end     # class Polygon
 
-    class Polyline < Shape
+    class Polyline < PolyShape
 
         # Draws a polyline. The arguments are [<tt>x</tt>, <tt>y</tt>] pairs that
         # define the points that make up the polyline. At least two
@@ -139,10 +162,7 @@ class Magick::RVG
         # Use the RVG::ShapeConstructors#polyline method to create Polyline objects in a container.
         def initialize(*points)
             super()
-            n = points.length
-            if n < 4 || n % 2 != 0
-                raise ArgumentError, "insufficient/odd number of points specified: #{n}"
-            end
+            points = polypoints(points)
             @primitive = :polyline
             @args = RVG.convert_to_float(*points)
         end

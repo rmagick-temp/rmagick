@@ -1,3 +1,9 @@
+RMagick 1.8.1
+    o Fix bugs #1876, #1888, #1919
+    o Added feature #1941, RVG's polyline, polygon accept array arguments
+    o Numerous fixes to the RVG documentation
+
+
 RMagick 1.8.0
     o Added Image#shadow (ImageMagick 6.1.7)
     o Added Image::Info#undefine, #[], #[]=

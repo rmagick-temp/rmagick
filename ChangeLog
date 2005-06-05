@@ -1,3 +1,6 @@
+RMagick 1.8.2
+	o Fix bug #1983, potential buffer overflow in version_constants
+
 RMagick 1.8.1
     o Fix bugs #1876, #1888, #1919
     o Added feature #1941, RVG's polyline, polygon accept array arguments

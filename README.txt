@@ -200,6 +200,9 @@ directory.  Then type:
 
 <h2 id="uhoh">Things that can go wrong</h2>
 
+#### Can't install RMagick. Can't find libMagick or one of the dependent libraries. Check the config.log file for more detailed information.
+The message can also refer to "libGraphicsMagick". Typically this message means that one or more of the libraries that Imagemagick/GraphicsMagick depends on hasn't been installed. Examine the config.log file in the installation directory for any error messages. These messages typically contain enough additional information for you to be able to diagnose the problem.
+
 #### Cannot open shared object file
 When make is running the examples, if you get a message like this:
 

@@ -5,10 +5,10 @@ GraphicsMagick, and the delegate libraries used by ImageMagick and
 GraphicsMagick.  You only need to install one of ImageMagick or GraphicsMagick.
 The procedure is the same for either library.  Throughout the remainder of this
 document I will use the word "xMagick" to refer to either of these two
-libraries.  I developed this procedure using a Powerbook G4 and Mac OS X 10.3.8.
-If you are using a different version of Mac OS X some of the details may be
-different.  In particular these instructions assume you are using bash as your
-shell.
+libraries.  I developed this procedure using a Powerbook G4 and Mac OS X
+10.3.8, and I've tested it with Tiger. If you are using a different version of
+Mac OS X some of the details may be different.  In particular these
+instructions assume you are using bash as your shell.
 
 You will need to have your Mac OS X installation disks, a connection to
 the Internet, and at least an hour of free time (assuming you have a
@@ -16,16 +16,14 @@ broadband connection).
 
 Step 1. Install X11, the Xcode Tools, and the X11SDK.
 
-xMagick needs a X server to display images, so you'll need to install X11.  Some
-versions of Mac OS X come with X11 on the installation disk.  Mine did not.  If
-your install disks do not include this package, you can download it from
-http://www.apple.com/macosx/features/x11/download/.
+xMagick needs the X11 fonts and a X server to display images, so you'll need to
+install X11. You also need the Xcode tools and the X11SDK. 
 
-After installing X11, install the Xcode Tools and the X11SDK.  These packages
-can be found on your OS X installation disk.  The X11SDK is not installed by
-default.  When you get to the Installer step labeled "Installation Type" click
-the "Custom" button.  You will be presented with a list of packages to install.
-Check "X11SDK".
+Apple says that both the Panther and Tiger install disks include these
+packages as an optional install (although I couldn't find X11 on my 10.3.8
+disks. Let's hope you can. Tiger definitely includes them). See
+http://developer.apple.com/darwin/runningX11.html for more information. Install 
+X11, the Xcode Tools and the X11SDK.  
 
 Step 2. Install DarwinPorts
 

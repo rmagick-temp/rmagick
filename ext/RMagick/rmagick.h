@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.83 2005/05/06 00:28:41 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.84 2005/06/09 23:17:54 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -572,7 +572,7 @@ ATTR_ACCESSOR(Info, number_scenes)
 ATTR_ACCESSOR(Info, page)
 ATTR_ACCESSOR(Info, pen)
 // ATTR_ACCESSOR(Info, ping) obsolete
-// ATTR_ACCESSOR(Info, pointsize)
+ATTR_ACCESSOR(Info, pointsize)
 ATTR_ACCESSOR(Info, quality)
 ATTR_ACCESSOR(Info, scene)
 ATTR_ACCESSOR(Info, server_name)

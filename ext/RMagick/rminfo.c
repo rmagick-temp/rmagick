@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.28 2005/04/30 23:01:13 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.29 2005/06/09 23:17:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -844,6 +844,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
     return self;
 }
 
+DEF_ATTR_ACCESSOR(Info, pointsize, dbl) 
 DEF_ATTR_ACCESSOR(Info, quality, long)
 
 #ifdef HAVE_IMAGEINFO_NUMBER_SCENES

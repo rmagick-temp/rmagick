@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.86 2005/06/09 23:17:54 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.87 2005/06/10 22:41:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -933,6 +933,7 @@ Init_RMagick(void)
     rb_define_method(Class_Info, "undefine", Info_undefine, 2);
 
     DCL_ATTR_ACCESSOR(Info, antialias)
+    DCL_ATTR_ACCESSOR(Info, authenticate)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
     DCL_ATTR_ACCESSOR(Info, colorspace)
@@ -950,9 +951,11 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, matte_color)
     DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
+    DCL_ATTR_ACCESSOR(Info, orientation)    // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, page)
     DCL_ATTR_ACCESSOR(Info, pointsize)
     DCL_ATTR_ACCESSOR(Info, quality)
+    DCL_ATTR_ACCESSOR(Info, sampling_factor)
     DCL_ATTR_ACCESSOR(Info, scene)      // new in 5.5.6, replaces subimage
     DCL_ATTR_ACCESSOR(Info, server_name)
     DCL_ATTR_ACCESSOR(Info, size)
@@ -1515,7 +1518,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/06/09 23:17:54 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/06/10 22:41:19 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

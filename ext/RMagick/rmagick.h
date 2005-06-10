@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.84 2005/06/09 23:17:54 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.85 2005/06/10 22:41:19 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -551,6 +551,7 @@ extern void rm_imagelist_push(VALUE, VALUE);
 
 // rminfo.c
 ATTR_ACCESSOR(Info, antialias)
+ATTR_ACCESSOR(Info, authenticate)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)
 ATTR_ACCESSOR(Info, colorspace)
@@ -569,11 +570,13 @@ ATTR_ACCESSOR(Info, interlace)
 ATTR_ACCESSOR(Info, matte_color)
 ATTR_ACCESSOR(Info, monochrome)
 ATTR_ACCESSOR(Info, number_scenes)
+ATTR_ACCESSOR(Info, orientation)
 ATTR_ACCESSOR(Info, page)
 ATTR_ACCESSOR(Info, pen)
 // ATTR_ACCESSOR(Info, ping) obsolete
 ATTR_ACCESSOR(Info, pointsize)
 ATTR_ACCESSOR(Info, quality)
+ATTR_ACCESSOR(Info, sampling_factor)
 ATTR_ACCESSOR(Info, scene)
 ATTR_ACCESSOR(Info, server_name)
 ATTR_ACCESSOR(Info, subimage)

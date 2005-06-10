@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.29 2005/06/09 23:17:54 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.30 2005/06/10 22:41:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -149,6 +149,51 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
     rm_not_implemented();
     return (VALUE)0;
 #endif
+}
+
+
+VALUE
+Info_authenticate(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    if (info->authenticate)
+    {
+        return rb_str_new2(info->authenticate);
+    }
+    else
+    {
+        return Qnil;
+    }
+}
+
+
+VALUE
+Info_authenticate_eq(VALUE self, VALUE passwd)
+{
+    Info *info;
+    char *passwd_p;
+    long passwd_len = 0;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (!NIL_P(passwd))
+    {
+        passwd_p = STRING_PTR_LEN(passwd, passwd_len);
+    }
+
+    if (info->authenticate)
+    {
+        magick_free(info->authenticate);
+        info->authenticate = NULL;
+    }
+    if (passwd_len > 0)
+    {
+        magick_clone_string(&info->authenticate, passwd_p);
+    }
+
+    return self;
 }
 
 
@@ -811,6 +856,45 @@ Info_number_scenes_eq(VALUE self, VALUE nscenes)
 }
 #endif
 
+/*
+    Method:     Info#orientation
+    Purpose:    Return the orientation attribute as an OrientationType enum value.
+*/
+VALUE
+Info_orientation(VALUE self)
+{
+#if defined(HAVE_IMAGE_ORIENTATION)
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return OrientationType_new(info->orientation);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Info#Orientation=
+    Purpose:    Set the Orientation type
+    Raises:     ArgumentError
+*/
+VALUE
+Info_orientation_eq(VALUE self, VALUE inter)
+{
+#if defined(HAVE_IMAGE_ORIENTATION)
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    VALUE_TO_ENUM(inter, info->orientation, OrientationType);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 DEF_ATTR_READER(Info, page, str)
 
 /*
@@ -844,8 +928,56 @@ Info_page_eq(VALUE self, VALUE page_arg)
     return self;
 }
 
-DEF_ATTR_ACCESSOR(Info, pointsize, dbl) 
+DEF_ATTR_ACCESSOR(Info, pointsize, dbl)
 DEF_ATTR_ACCESSOR(Info, quality, long)
+
+/*
+    Method:     Info#sampling_factor, #sampling_factor=
+    Purpose:    get/set sampling factors used by JPEG or MPEG-2 encoder
+                and YUV decoder/encoder
+*/
+VALUE
+Info_sampling_factor(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    if (info->sampling_factor)
+    {
+        return rb_str_new2(info->sampling_factor);
+    }
+    else
+    {
+        return Qnil;
+    }
+}
+
+VALUE
+Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
+{
+    Info *info;
+    char *sampling_factor_p;
+    long sampling_factor_len = 0;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (!NIL_P(sampling_factor))
+    {
+        sampling_factor_p = STRING_PTR_LEN(sampling_factor, sampling_factor_len);
+    }
+
+    if (info->sampling_factor)
+    {
+        magick_free(info->sampling_factor);
+        info->sampling_factor = NULL;
+    }
+    if (sampling_factor_len > 0)
+    {
+        magick_clone_string(&info->sampling_factor, sampling_factor_p);
+    }
+
+    return self;
+}
 
 #ifdef HAVE_IMAGEINFO_NUMBER_SCENES
 

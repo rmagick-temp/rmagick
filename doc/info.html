@@ -75,6 +75,8 @@
       <ul>
         <li><a href="#antialias">antialias</a></li>
 
+        <li><a href="#authenticate">authenticate</a></li>
+
         <li><a href="#background_color">background_color</a></li>
 
         <li><a href="#border_color">border_color</a></li>
@@ -90,13 +92,13 @@
         <li><a href="#dither">dither</a></li>
 
         <li><a href="#extract">extract</a></li>
+
+        <li><a href="#filename">filename</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#filename">filename</a></li>
-
         <li><a href="#font">font</a></li>
 
         <li><a href="#format">format</a></li>
@@ -112,14 +114,18 @@
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#number_scenes">number_scenes</a></li>
+
+        <li><a href="#page">page</a></li>
+
+        <li><a href="#pointsize">pointsize</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#page">page</a></li>
-
         <li><a href="#quality">quality</a></li>
+
+        <li><a href="#sampling_factor">sampling_factor</a></li>
 
         <li><a href="#scene">scene</a></li>
 
@@ -372,6 +378,23 @@ self.undefine("tiff", "bits-per-sample")
     <p><span class="imquote">Control antialiasing of rendered
     Postscript and Postscript or TrueType fonts.</span> The default
     is <code>true</code>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="authenticate">authenticate</h3>
+
+    <p><span class="arg">self.</span>authenticate= <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Decrypt an image with this password.</p>
+
+    <p>This attribute can be used to specify the password to be
+    used when reading an image or image sequence that is in an
+    encrypted format, such as PDF.</p>
   </div>
 
   <div class="sig">
@@ -895,6 +918,20 @@ self.undefine("tiff", "bits-per-sample")
   </div>
 
   <div class="sig">
+    <h3 id="pointsize">pointsize</h3>
+
+    <p><span class="arg">self.</span>pointsize= <span class=
+    "arg">aNumeric</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set the font size in points. Useful when creating "caption:"
+    format images, for example.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="quality">quality</h3>
 
     <p><span class="arg">self.</span>quality= <span class=
@@ -910,6 +947,32 @@ self.undefine("tiff", "bits-per-sample")
     the least compression. The default is 75. See <em><a href=
     "comtasks.html#compressing">Compressing image
     files</a></em>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sampling_factor">sampling_factor</h3>
+
+    <p><span class="arg">self.</span>sampling_factor= <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">sampling factors used by JPEG or MPEG-2
+    encoder and YUV decoder/encoder.</p>
+
+    <p class="imquote">This attribute specifies the sampling
+    factors to be used by the JPEG encoder for chroma downsampling.
+    If this attribute is omitted, the JPEG library will use its own
+    default values. When reading or writing the YUV format and when
+    writing the M2V (MPEG-2) format, use sampling-factor="2x1" to
+    specify the 4:2:2 downsampling method.</p>
+
+    <h4>Argument</h4>
+
+    <p>A string in the form
+    "<em>horizontal-factor</em><strong>x</strong><em>vertical-factor</em>"</p>
   </div>
 
   <div class="sig">

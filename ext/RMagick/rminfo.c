@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.31 2005/06/12 18:38:39 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.32 2005/06/12 21:07:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -840,6 +840,37 @@ Info_filename_eq(VALUE self, VALUE filename)
     }
     return self;
 }
+
+
+/*
+    Method:     Info#fill
+    Purpose:    return the fill (a.k.a pen) color as a String
+    Note:       Compare with Image#fill!
+*/
+VALUE
+Info_fill(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return PixelPacket_to_Color_Name_Info(info, &info->pen);
+}
+
+/*
+    Method:     Info#fill=<aString>
+    Purpose:    set the fill (a.k.a. pen) color
+    Raises:     ArgumentError
+*/
+VALUE
+Info_fill_eq(VALUE self, VALUE color)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    Color_to_PixelPacket(&info->pen, color);
+    return self;
+}
+
 
 /*
     Methods:    aString=Info#font

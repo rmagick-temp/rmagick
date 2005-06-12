@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.86 2005/06/12 18:38:39 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.87 2005/06/12 21:07:56 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -587,6 +587,7 @@ ATTR_ACCESSOR(Info, dispose)
 ATTR_ACCESSOR(Info, dither)
 ATTR_ACCESSOR(Info, extract)
 ATTR_ACCESSOR(Info, filename)
+ATTR_ACCESSOR(Info, fill)
 ATTR_ACCESSOR(Info, font)
 ATTR_ACCESSOR(Info, format)
 ATTR_ACCESSOR(Info, fuzz)

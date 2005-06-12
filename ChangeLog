@@ -1,3 +1,7 @@
+RMagick 1.8.3
+    o Added comment, delay, dispose, fill, gravity, and label attributes to
+      Image::Info
+
 RMagick 1.8.2
     o Fix bug #1983, potential buffer overflow in version_constants
     o Added feature #2015, support the pointsize, authenticate,

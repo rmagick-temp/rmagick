@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: ImageMagick/GraphicsMagick Conventions</title>
   <meta http-equiv="Content-Type" content=
@@ -99,7 +99,7 @@
   <h2 id="formats">Image formats and filenames</h2>
 
   <p>&times;Magick supports over 90 major <a href=
-  "http://www.imagemagick.org/www/formats.html">image
+  "http://www.imagemagick.org/script/formats.php">image
   formats</a>.</p>
 
   <p>&times;Magick determines the format (GIF, PNG, JPEG, etc.) of
@@ -223,8 +223,9 @@
   <p><em>Hint:</em> You can specify the transparent color as
   "none", "transparent", or "#000000ff".</p>
 
-  <p><a href="http://www.imagemagick.org/www/color.html">This</a>
-  is ImageMagick's page about color names.</p>
+  <p><a href=
+  "http://www.imagemagick.org/script/command-line-options.php#fill">
+  This</a> is ImageMagick's page about color names.</p>
 
   <h2 id="geometry">The geometry string</h2>
 
@@ -240,8 +241,9 @@
 </pre>
 
   <p><a href=
-  "http://www.imagemagick.org/www/utilities.html">This</a> is the
-  ImageMagick description of the geometry string:</p>
+  "http://www.imagemagick.org/script/command-line-options.php#geometry">
+  This</a> is the ImageMagick description of the geometry
+  string:</p>
 
   <div class="imquote">
     <p>By default, the width and height are maximum values. That
@@ -334,6 +336,35 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
   more examples of reading built-in formats.</p>
 
   <div id="bi_format_list">
+    <h4>caption<sup>*</sup></h4>
+
+    <p>The caption format is used to create an image from a text
+    string. Ex: "caption:My caption text".</p>
+
+    <p>If you specify only the width in the <code>size</code>
+    argument, &times;Magick will wrap the text and compute the
+    necessary height. In addition to <code>size</code> (which is
+    required) you can use the following <a href=
+    "info.html">optional arguments</a>:</p>
+
+    <ul>
+      <li>antialias</li>
+
+      <li>background_color</li>
+
+      <li>border_color</li>
+
+      <li>density</li>
+
+      <li>fill</li>
+
+      <li>font</li>
+
+      <li>gravity</li>
+
+      <li>pointsize</li>
+    </ul>
+
     <h4>gradient<sup>*</sup></h4>
 
     <p>Gradient filenames have the form
@@ -369,7 +400,7 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
     may be referenced by specifying the pattern name. For example,
     <code>pattern:checkerboard</code>. For a list of acceptable
     patterns, see <a href=
-    "http://www.imagemagick.org/www/formats.html">this
+    "http://www.imagemagick.org/script/formats.php">this
     page.</a></p>
 
     <h4>plasma<sup>*</sup></h4>
@@ -392,7 +423,7 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
     an image.</p>
   </div>
 
-  <p class="spacer"> </p>
+  <p class="spacer">&nbsp;</p>
 
   <div class="nav">
     &laquo; <a href="usage.html">Prev</a> | <a href=

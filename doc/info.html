@@ -83,46 +83,58 @@
 
         <li><a href="#colorspace">colorspace</a></li>
 
+        <li><a href="#comment">comment</a></li>
+
         <li><a href="#compression">compression</a></li>
+
+        <li><a href="#delay">delay</a></li>
 
         <li><a href="#density">density</a></li>
 
         <li><a href="#depth">depth</a></li>
 
+        <li><a href="#dispose">dispose</a></li>
+
         <li><a href="#dither">dither</a></li>
 
         <li><a href="#extract">extract</a></li>
-
-        <li><a href="#filename">filename</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#filename">filename</a></li>
+
+        <li><a href="#fill">fill</a></li>
+
         <li><a href="#font">font</a></li>
 
         <li><a href="#format">format</a></li>
 
         <li><a href="#fuzz">fuzz</a></li>
 
+        <li><a href="#gravity">gravity</a></li>
+
         <li><a href="#image_type">image_type</a></li>
 
         <li><a href="#interlace">interlace</a></li>
+
+        <li><a href="#label">label</a></li>
 
         <li><a href="#matte_color">matte_color</a></li>
 
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#number_scenes">number_scenes</a></li>
-
-        <li><a href="#page">page</a></li>
-
-        <li><a href="#pointsize">pointsize</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#page">page</a></li>
+
+        <li><a href="#pointsize">pointsize</a></li>
+
         <li><a href="#quality">quality</a></li>
 
         <li><a href="#sampling_factor">sampling_factor</a></li>
@@ -401,7 +413,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="background_color">background_color</h3>
 
     <p><span class="arg">self.</span>background_color= <span class=
-    "arg">aPixel</span> or <em>aPixel</em></p>
+    "arg">aString</span> or <span class="arg">aPixel</span></p>
   </div>
 
   <div class="desc">
@@ -447,6 +459,28 @@ self.undefine("tiff", "bits-per-sample")
 
     <h4>Arguments</h4>A <a href=
     "constants.html#ColorspaceType">ColorspaceType</a> constant.
+  </div>
+
+  <div class="sig">
+    <h3 id="comment">comment</h3>
+
+    <p><span class="arg">self.</span>comment= <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Use this option to assign a specific comment
+    to the image, when writing to an image format that supports
+    comments.</p>
+
+    <h4>Arguments</h4>
+
+    <p class="imquote">You can include the image filename, type,
+    width, height, or other image attribute by embedding special
+    format characters listed under the <a href=
+    "draw.html#annotate">annotate</a> method.</p>
   </div>
 
   <div class="sig">
@@ -656,6 +690,23 @@ self.undefine("tiff", "bits-per-sample")
   </div>
 
   <div class="sig">
+    <h3 id="delay">delay</h3>
+
+    <p><span class="arg">self.</span>delay= <span class=
+    "arg">anInteger</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">This attribute is useful for regulating the
+    animation of image sequences. <em>delay</em>/100 seconds must
+    expire before the display of the next image. The default is no
+    delay between each showing of the image sequence. The maximum
+    delay is 65535.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="depth">depth</h3>
 
     <p><span class="arg">self.</span>depth= <span class=
@@ -676,6 +727,25 @@ self.undefine("tiff", "bits-per-sample")
     <p>Use <code>depth</code> to specify the depth of CMYK, GRAY,
     RGB, RGBA, MAP, and XC format images. See also <a href=
     "#size"><code>size</code></a>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="dispose">dispose</h3>
+
+    <p><span class="arg">self.</span>dispose= <span class=
+    "arg">aDisposeType</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">The argument indicates the way in which the
+    graphic is to be treated after being displayed.</p>
+
+    <h4>Argument</h4>
+
+    <p>A <a href="constants.html#DisposeType">DisposeType</a>
+    constant.</p>
   </div>
 
   <div class="sig">
@@ -740,6 +810,26 @@ self.undefine("tiff", "bits-per-sample")
   </div>
 
   <div class="sig">
+    <h3 id="fill">fill</h3>
+
+    <p><span class="arg">self.</span>fill= <span class=
+    "arg">aString</span> or <span class="arg">aPixel</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In the <code>Image::Info</code> class, the <code>fill</code>
+    attribute specifies the fill color to use when creating an
+    image with the "caption:" format..</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#color_names">color name</a> or a
+    <a href="struct.html#Pixel">aPixel</a>.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="font">font</h3>
 
     <p><span class="arg">self.</span>font= <span class=
@@ -798,6 +888,34 @@ self.undefine("tiff", "bits-per-sample")
   </div>
 
   <div class="sig">
+    <h3 id="gravity">gravity</h3>
+
+    <p><span class="arg">self.</span>gravity= <span class=
+    "arg">aGravityType</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">The direction text gravitates to when
+    annotating the image.</p>
+
+    <p class="imquote">The direction you choose specifies where to
+    position the text when annotating the image. For example, a
+    gravity of <code>CenterGravity</code> forces the text to be
+    centered within the image. By default, the image gravity is
+    <code>NorthWestGravity</code>.</p>
+
+    <p>This attribute can be used to position the text when
+    creating an image with the "caption:" format.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="constants.html#GravityType">GravityType</a>
+    constant.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="image_type">image_type</h3>
 
     <p><span class="arg">self.</span>image_type= <span class=
@@ -837,8 +955,29 @@ self.undefine("tiff", "bits-per-sample")
     interlaced GIF or progressive JPEG image.</span> The default is
     NoInterlace.</p>
 
-    <h4>Arguments</h4>An <a href=
-    "constants.html#InterlaceType">InterlaceType</a> constant.
+    <h4>Arguments</h4>
+
+    <p>An <a href="constants.html#InterlaceType">InterlaceType</a>
+    constant.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="label">label</h3>
+
+    <p><span class="arg">self.</span>label= <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Use this option to assign a specific
+    label to the image, when writing to an image format that
+    supports labels, such as TIFF, PNG, MIFF, or PostScript. You
+    can include the the image filename, type, width, height, or
+    other image attribute by embedding special format
+    characters.</span> See <a href=
+    "draw.html#annotate">annotate</a> for details.</p>
   </div>
 
   <div class="sig">

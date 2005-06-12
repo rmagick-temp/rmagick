@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.87 2005/06/10 22:41:19 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.88 2005/06/12 18:38:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -937,17 +937,22 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
     DCL_ATTR_ACCESSOR(Info, colorspace)
+    DCL_ATTR_ACCESSOR(Info, comment)        // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, compression)
+    DCL_ATTR_ACCESSOR(Info, delay)          // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, density)
     DCL_ATTR_ACCESSOR(Info, depth)
+    DCL_ATTR_ACCESSOR(Info, dispose)        // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, dither)
     DCL_ATTR_ACCESSOR(Info, extract)    // new in 5.5.6, replaces tile
     DCL_ATTR_ACCESSOR(Info, filename)
     DCL_ATTR_ACCESSOR(Info, font)
     DCL_ATTR_ACCESSOR(Info, format)
     DCL_ATTR_ACCESSOR(Info, fuzz)
+    DCL_ATTR_ACCESSOR(Info, gravity)
     DCL_ATTR_ACCESSOR(Info, group)
     DCL_ATTR_ACCESSOR(Info, interlace)
+    DCL_ATTR_ACCESSOR(Info, label)          // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, matte_color)
     DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
@@ -1252,6 +1257,13 @@ Init_RMagick(void)
 
     // GravityType constants
     DEF_ENUM(GravityType)
+#if defined(HAVE_UNDEFINEDGRAVITY)
+        ENUMERATOR(UndefinedGravity)
+#else
+        // Provide this enumerator in older (pre 6.0.0) versions of ImageMagick
+        _enum = rm_enum_new(_cls, ID2SYM(rb_intern("UndefinedGravity")), INT2FIX(0));\
+        rb_define_const(Module_Magick, "UndefinedGravity", _enum);
+#endif
         ENUMERATOR(ForgetGravity)
         ENUMERATOR(NorthWestGravity)
         ENUMERATOR(NorthGravity)
@@ -1518,7 +1530,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/06/10 22:41:19 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/06/12 18:38:39 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

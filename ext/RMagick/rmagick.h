@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.85 2005/06/10 22:41:19 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.86 2005/06/12 18:38:39 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -190,6 +190,10 @@ typedef size_t magick_uint64_t;
 
 #if !defined(HAVE_MAGICKBOOLEANTYPE)
 typedef unsigned int MagickBooleanType;
+#endif
+
+#if !defined(HAVE_UNDEFINEDGRAVITY)
+#define UndefinedGravity 0
 #endif
 
 // This implements the "omitted storage class model" for external variables.
@@ -404,6 +408,25 @@ EXTERN ID ID_y;                 // "y"
     ATTR_WRITER(class, attr)
 
 /*
+ *  Define functions to get/set attributes in Image::Info that
+ *  use the Get/SetImageOption API.
+*/
+#define OPTION_ATTR_READER(opt, key) \
+    VALUE Info_##opt(VALUE self)\
+    {\
+        return get_option(self, #key);\
+    }
+#define OPTION_ATTR_WRITER(opt, key) \
+    VALUE Info_##opt##_eq(VALUE self, VALUE string)\
+    {\
+        return set_option(self, #key, string);\
+    }
+#define OPTION_ATTR_ACCESSOR(opt, key)\
+    OPTION_ATTR_READER(opt, key)\
+    OPTION_ATTR_WRITER(opt, key)
+
+
+/*
  *  Declare Pixel channel attribute writers
 */
 #define DEF_PIXEL_CHANNEL_WRITER(_channel_) \
@@ -555,18 +578,23 @@ ATTR_ACCESSOR(Info, authenticate)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)
 ATTR_ACCESSOR(Info, colorspace)
+ATTR_ACCESSOR(Info, comment)
 ATTR_ACCESSOR(Info, compression)
+ATTR_ACCESSOR(Info, delay)
 ATTR_ACCESSOR(Info, density)
 ATTR_ACCESSOR(Info, depth)
+ATTR_ACCESSOR(Info, dispose)
 ATTR_ACCESSOR(Info, dither)
 ATTR_ACCESSOR(Info, extract)
 ATTR_ACCESSOR(Info, filename)
 ATTR_ACCESSOR(Info, font)
 ATTR_ACCESSOR(Info, format)
 ATTR_ACCESSOR(Info, fuzz)
+ATTR_ACCESSOR(Info, gravity)
 ATTR_ACCESSOR(Info, group)
 ATTR_ACCESSOR(Info, image_type)
 ATTR_ACCESSOR(Info, interlace)
+ATTR_ACCESSOR(Info, label)
 ATTR_ACCESSOR(Info, matte_color)
 ATTR_ACCESSOR(Info, monochrome)
 ATTR_ACCESSOR(Info, number_scenes)

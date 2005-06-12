@@ -392,6 +392,21 @@ if test "$rm_cv_enum_jpeg2000compression" = yes; then
   AC_DEFINE(HAVE_JPEG2000COMPRESSION)
 fi
 
+AC_CACHE_CHECK(for UndefinedGravity enum value, rm_cv_enum_undefinedgravity,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [GravityType x; x = UndefinedGravity],
+     rm_cv_enum_undefinedgravity='yes',
+     rm_cv_enum_undefinedgravity='no')])
+
+if test "$rm_cv_enum_undefinedgravity" = yes; then
+  AC_DEFINE(HAVE_UNDEFINEDGRAVITY)
+fi
+
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
    AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,

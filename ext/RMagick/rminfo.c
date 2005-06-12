@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.30 2005/06/10 22:41:19 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.31 2005/06/12 18:38:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -7,6 +7,10 @@
 \============================================================================*/
 
 #include "rmagick.h"
+
+static VALUE get_option(VALUE, char *);
+static VALUE set_option(VALUE, char *, VALUE);
+
 
 DEF_ATTR_ACCESSOR(Info, antialias, bool)
 
@@ -283,6 +287,8 @@ Info_colorspace_eq(VALUE self, VALUE colorspace)
     return self;
 }
 
+OPTION_ATTR_ACCESSOR(comment, Comment)
+
 /*
     Method:  Info#compression
     Purpose: Get the compression type
@@ -417,6 +423,91 @@ Info_define(int argc, VALUE *argv, VALUE self)
 #endif
 }
 
+/*
+    Method:     Info#delay
+    Purpose:    Get the delay attribute
+    Notes:      Convert from string to numeric
+*/
+VALUE
+Info_delay(VALUE self)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *delay;
+    char *p;
+    long d;
+
+    Data_Get_Struct(self, Info, info);
+
+    delay = GetImageOption(info, "delay");
+    if (delay)
+    {
+        d = strtol(delay, &p, 10);
+        if (*p != '\0')
+        {
+            rb_raise(rb_eRangeError, "failed to convert %s to Numeric", delay);
+        }
+        return LONG2NUM(d);
+    }
+    return Qnil;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+ * Will raise an exception if `arg' can't be converted to an int.
+*/
+#if defined(HAVE_SETIMAGEOPTION)
+static VALUE
+arg_is_integer(VALUE arg)
+{
+    double d;
+    d = NUM2INT(arg);
+    d = d;      // satisfy icc
+    return arg;
+}
+#endif
+
+/*
+    Method:     Info#delay=
+    Purpose:    Set the delay attribute
+    Notes:      Convert from numeric value to string.
+*/
+VALUE
+Info_delay_eq(VALUE self, VALUE string)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    int delay;
+    int not_num;
+    char dstr[20];
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(string))
+    {
+        (void) RemoveImageOption(info, "delay");
+    }
+    else
+    {
+        not_num = 0;
+        rb_protect(arg_is_integer, string, &not_num);
+        if (not_num)
+        {
+            rb_raise(rb_eTypeError, "failed to convert %s into Integer", rb_class2name(CLASS_OF(string)));
+        }
+        delay = NUM2INT(string);
+        sprintf(dstr, "%d", delay);
+        (void) SetImageOption(info, "delay", dstr);
+    }
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
 
 DEF_ATTR_READER(Info, density, str)
 
@@ -485,6 +576,107 @@ Info_depth_eq(VALUE self, VALUE depth)
 
     info->depth = d;
     return self;
+}
+
+/*
+    Method:     Info#dispose
+    Purpose:    Retrieve a dispose option string and convert it to
+                a DisposeType enumerator
+*/
+#if defined(HAVE_SETIMAGEOPTION)
+static struct
+{
+    char *string;
+    char *enum_name;
+    DisposeType enumerator;
+} Dispose_Option[] = {
+    { "Background", "BackgroundDispose", BackgroundDispose },
+    { "None",       "NoneDispose",       NoneDispose },
+    { "Previous",   "PreviousDispose",   PreviousDispose },
+    { "Undefined",  "UndefinedDispose",  UndefinedDispose },
+    { "0",          "UndefinedDispose",  UndefinedDispose },
+    { "1",          "NoneDispose",       NoneDispose },
+    { "2",          "BackgroundDispose", BackgroundDispose },
+    { "3",          "PreviousDispose",   PreviousDispose },
+    };
+#define N_DISPOSE_OPTIONS (sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
+#endif
+
+VALUE
+Info_dispose(VALUE self)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    int x;
+    ID dispose_id;
+    const char *dispose;
+
+    Data_Get_Struct(self, Info, info);
+
+    dispose_id = rb_intern("UndefinedDispose");
+
+    // Map the dispose option string to a DisposeType enumerator.
+    dispose=GetImageOption(info, "dispose");
+    if (dispose)
+    {
+        for (x = 0; x < N_DISPOSE_OPTIONS; x++)
+        {
+            if (strcmp(dispose, Dispose_Option[x].string) == 0)
+            {
+                dispose_id = rb_intern(Dispose_Option[x].enum_name);
+                break;
+            }
+        }
+    }
+
+    return rb_const_get(Module_Magick, dispose_id);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+    Method:     Info#dispose=
+    Purpose:    Convert a DisposeType enumerator into the equivalent
+                dispose option string
+*/
+VALUE
+Info_dispose_eq(VALUE self, VALUE disp)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    DisposeType dispose;
+    char *option;
+    int x;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(disp))
+    {
+        (void) RemoveImageOption(info, "dispose");
+        return self;
+    }
+
+    VALUE_TO_ENUM(disp, dispose, DisposeType);
+    option = "Undefined";
+
+    for(x = 0; x < N_DISPOSE_OPTIONS; x++)
+    {
+        if (dispose == Dispose_Option[x].enumerator)
+        {
+            option = Dispose_Option[x].string;
+            break;
+        }
+    }
+
+    (void) SetImageOption(info, "dispose", option);
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 DEF_ATTR_ACCESSOR(Info, dither, bool)
@@ -742,6 +934,112 @@ VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
     return self;
 }
 
+/*
+    Method:     Info#gravity
+    Purpose:    Return the value of the gravity option as a GravityType enumerator
+*/
+
+#if defined(HAVE_SETIMAGEOPTION)
+static struct
+{
+    char *string;
+    char *enum_name;
+    GravityType enumerator;
+} Gravity_Option[] = {
+    { "Undefined",  "UndefinedGravity", UndefinedGravity },
+    { "None",       "UndefinedGravity", UndefinedGravity },
+    { "Center",     "CenterGravity",    CenterGravity },
+    { "East",       "EastGravity",      EastGravity},
+    { "Forget",     "ForgetGravity",    ForgetGravity },
+    { "NorthEast",  "NorthEastGravity", NorthEastGravity },
+    { "North",      "NorthGravity",     NorthGravity },
+    { "NorthWest",  "NorthWestGravity", NorthWestGravity },
+    { "SouthEast",  "SouthEastGravity", SouthEastGravity },
+    { "South",      "SouthGravity",     SouthGravity },
+    { "SouthWest",  "SouthWestGravity", SouthWestGravity },
+    { "West",       "WestGravity",      WestGravity },
+    { "Static",     "StaticGravity",    StaticGravity }
+    };
+#define N_GRAVITY_OPTIONS (sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
+#endif
+
+VALUE Info_gravity(VALUE self)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *gravity;
+    int x;
+    ID gravity_id;
+
+    Data_Get_Struct(self, Info, info);
+
+    gravity_id = rb_intern("UndefinedGravity");
+
+    // Map the gravity option string to a GravityType enumerator.
+    gravity=GetImageOption(info, "gravity");
+    if (gravity)
+    {
+        for (x = 0; x < N_GRAVITY_OPTIONS; x++)
+        {
+            if (strcmp(gravity, Gravity_Option[x].string) == 0)
+            {
+                gravity_id = rb_intern(Gravity_Option[x].enum_name);
+                break;
+            }
+        }
+    }
+
+    return rb_const_get(Module_Magick, gravity_id);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+    Method:     Info#gravity=
+    Purpose:    Convert a GravityType enum to a gravity option name and
+                store in the Info structure
+*/
+VALUE
+Info_gravity_eq(VALUE self, VALUE grav)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    GravityType gravity;
+    char *option;
+    int x;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(grav))
+    {
+        (void) RemoveImageOption(info, "gravity");
+        return self;
+    }
+
+    VALUE_TO_ENUM(grav, gravity, GravityType);
+    option = "Undefined";
+
+    for(x = 0; x < N_GRAVITY_OPTIONS; x++)
+    {
+        if (gravity == Gravity_Option[x].enumerator)
+        {
+            option = Gravity_Option[x].string;
+            break;
+        }
+    }
+
+    (void) SetImageOption(info, "gravity", option);
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 DEF_ATTR_ACCESSOR(Info, group, long)
 
@@ -802,6 +1100,8 @@ Info_interlace_eq(VALUE self, VALUE inter)
     VALUE_TO_ENUM(inter, info->interlace, InterlaceType);
     return self;
 }
+
+OPTION_ATTR_ACCESSOR(label, Label)
 
 /*
     Method:     Info#matte_color
@@ -895,7 +1195,22 @@ Info_orientation_eq(VALUE self, VALUE inter)
 #endif
 }
 
-DEF_ATTR_READER(Info, page, str)
+VALUE
+Info_page(VALUE self)
+{
+    Info *info;
+    const char *page;
+
+    Data_Get_Struct(self, Info, info);
+#if defined(HAVE_SETIMAGEOPTION)
+
+    page = GetImageOption(info, "page");
+#else
+    page = (const char *)info->page;
+#endif
+    return page ? rb_str_new2(page) : Qnil;
+
+}
 
 /*
     Method:     Info#page=<aString> or <aGeometry>
@@ -916,7 +1231,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     geom_str = rb_funcall(page_arg, ID_to_s, 0);
-    geometry=PostscriptGeometry(STRING_PTR(geom_str));
+    geometry=GetPageGeometry(STRING_PTR(geom_str));
     if (*geometry == '\0')
     {
         magick_free(info->page);
@@ -924,6 +1239,9 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     magick_clone_string(&info->page, geometry);
+#if defined(HAVE_SETIMAGEOPTION)
+    (void) SetImageOption(info, "page", STRING_PTR(geom_str));
+#endif
 
     return self;
 }
@@ -1319,3 +1637,60 @@ Info_initialize(VALUE self)
     }
     return self;
 }
+
+
+/*
+    Method:     Info#get_option
+    Purpose:    Return the value of the specified option
+*/
+static VALUE
+get_option(VALUE self, char *key)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *value;
+
+    Data_Get_Struct(self, Info, info);
+
+    value = GetImageOption(info, key);
+    if (value)
+    {
+        return rb_str_new2(value);
+    }
+    return Qnil;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+    Method:     Info#set_option
+    Purpose:    Set the specified option to this value.
+                If the value is nil just unset any current value
+*/
+static VALUE
+set_option(VALUE self, char *key, VALUE string)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    char *value;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(string))
+    {
+        (void) RemoveImageOption(info, key);
+    }
+    else
+    {
+        value = STRING_PTR(string);
+        (void) SetImageOption(info, key, value);
+    }
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+

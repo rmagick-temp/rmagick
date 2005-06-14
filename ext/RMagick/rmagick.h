@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.87 2005/06/12 21:07:56 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.88 2005/06/14 22:41:02 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -19,6 +19,14 @@
 #include "ruby.h"
 #include "intern.h"
 #include "rubyio.h"
+
+
+// Undef Ruby's versions of these symbols
+#undef PACKAGE_VERSION
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_TARNAME
 #include "magick/api.h"
 
 

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: class Image (attribute methods)</title>
   <meta http-equiv="Content-Type" content=
@@ -121,6 +121,8 @@
           "#mean_error_per_pixel">mean_error_per_pixel</a></li>
 
           <li><a href="#mime_type">mime_type</a></li>
+
+          <li><a href="#monitor">monitor</a></li>
         </ul>
       </div>
 
@@ -981,6 +983,95 @@
     <p><span class="imquote">Returns the officially registered (or
     de facto) MIME media-type.</span> If there is no registered
     media-type, returns "image/x-magick". Get-only.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="monitor">monitor</h3>
+
+    <p><span class="arg">image.</span>monitor = <em>aProc</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Establish a progress monitor. Most <code>Image</code> and
+    <code>ImageList</code> methods will periodically call the
+    monitor with arguments indicating the progress of the method.
+    The argument is a Proc object that accepts the three arguments
+    listed here:</p>
+
+    <dl>
+      <dt>text</dt>
+
+      <dd>A string that identifies the monitored method.</dd>
+
+      <dt>quantum</dt>
+
+      <dd>A number between 0 and <span class="arg">span</span> that
+      identifies how much of the operation has been completed (or,
+      in some cases, remains to be completed).</dd>
+
+      <dt>span</dt>
+
+      <dd>The number of quanta needed to complete the
+      operation.</dd>
+    </dl>
+
+    <p>If the monitor proc returns <code>nil</code> or
+    <code>false</code> the operation will be immediately
+    terminated. To stop monitoring, set <code>monitor</code> to
+    <code>nil</code>. Available in ImageMagick 6.1.0 and later,
+    this attribute supercedes <a href=
+    "magick.html#set_monitor">Magick.set_monitor</a>. Set-only.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Any object that can respond to</p>
+    <pre>
+    obj.call(text, quantum, span)
+</pre>
+
+    <p>With very large images it is possible, though not very
+    likely, for the <span class="arg">quantum</span> and
+    <span class="arg">span</span> arguments to be
+    <code>Bignum</code> objects.</p>
+
+    <h4>Example</h4>
+    <pre>
+img.monitor = Proc.new do |process, offset, span|
+    printf("%s is %3.0f%% complete.\n", process, (offset.to_f/span)*100)
+    true
+    end
+
+img.blur_image(0,20)
+</pre>
+
+    <p><em>produces:</em></p>
+    <pre>
+Blur/Image is   0% complete.
+Blur/Image is   0% complete.
+Blur/Image is   0% complete.
+Blur/Image is   1% complete.
+Blur/Image is   2% complete.
+Blur/Image is   4% complete.
+Blur/Image is   7% complete.
+Blur/Image is  14% complete.
+Blur/Image is  28% complete.
+Blur/Image is  56% complete.
+Blur/Image is  56% complete.
+Blur/Image is  56% complete.
+Blur/Image is  56% complete.
+Blur/Image is  57% complete.
+Blur/Image is  59% complete.
+Blur/Image is  63% complete.
+Blur/Image is  70% complete.
+Blur/Image is  84% complete.
+Blur/Image is 100% complete.
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="info.html#monitor">Image::Info#monitor=</a></p>
   </div>
 
   <div class="sig">

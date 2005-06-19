@@ -123,6 +123,8 @@
 
         <li><a href="#matte_color">matte_color</a></li>
 
+        <li><a href="#monitor">monitor</a></li>
+
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#number_scenes">number_scenes</a></li>
@@ -997,6 +999,33 @@ self.undefine("tiff", "bits-per-sample")
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
     <a href="struct.html#Pixel">aPixel</a>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="monitor">monitor</h3>
+
+    <p><span class="arg">self.</span>monitor= <span class=
+    "arg">aProc</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set a <code>Proc</code> object as a progress monitor. This
+    proc can be used to monitor the progress of methods that accept
+    optional arguments such as <code>read</code> and
+    <code>write</code>. To stop monitoring, set the monitor to
+    <code>nil</code>. See <a href=
+    "imageattrs.html#monitor">Image#monitor</a> for more informat
+    about the proc. This attribute is set-only.</p>
+
+    <p>If you assign a monitor to an image with
+    <code>self.monitor=</code> when the image is created, the image
+    object inherits the monitor. Any methods applied to the new
+    image will be monitored as well.</p>
+
+    <p>Available in ImageMagick 6.1.0 and later. This method
+    supercedes the <code>Magick.set_monitor</code> method.</p>
   </div>
 
   <div class="sig">

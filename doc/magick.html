@@ -4,22 +4,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: module Magick</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
-  <meta name="Copyright" content="Copyright (C) 2005 by Timothy P. Hunter" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2005 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <style type="text/css">
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -354,6 +355,11 @@ Magick.set_cache_threshold(10)
 
   <div class="desc">
     <h4>Description</h4>
+
+    <p><strong>Note:</strong> <em>This method is deprecated with
+    ImageMagick 6.1.0 and later versions. Use <a href=
+    "imageattrs.html#monitor">Image#monitor=</a> and <a href=
+    "info.html#monitor">Image::Info#monitor=</a> instead.</em></p>
 
     <p>Establish a monitor exit block. Some (see <a href=
     "#monitor_notes">below</a>) RMagick methods will call the

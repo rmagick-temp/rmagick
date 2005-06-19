@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.88 2005/06/14 22:41:02 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.89 2005/06/19 20:26:34 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -283,8 +283,8 @@ EXTERN VALUE Class_OrientationType;
 *   Commonly-used IDs
 */
 EXTERN ID ID__dummy_img_;       // "_dummy_img_"
-EXTERN ID ID_changed;           // "changed"
 EXTERN ID ID_call;              // "call"
+EXTERN ID ID_changed;           // "changed"
 EXTERN ID ID_cur_image;         // "cur_image"
 EXTERN ID ID_dup;               // "dup"
 EXTERN ID ID_enumerators;       // "enumerators"
@@ -605,6 +605,7 @@ ATTR_ACCESSOR(Info, image_type)
 ATTR_ACCESSOR(Info, interlace)
 ATTR_ACCESSOR(Info, label)
 ATTR_ACCESSOR(Info, matte_color)
+ATTR_WRITER(Info, monitor)
 ATTR_ACCESSOR(Info, monochrome)
 ATTR_ACCESSOR(Info, number_scenes)
 ATTR_ACCESSOR(Info, orientation)
@@ -676,6 +677,7 @@ ATTR_ACCESSOR(Image, matte)
 ATTR_ACCESSOR(Image, matte_color)
 ATTR_READER(Image, mean_error_per_pixel)
 ATTR_READER(Image, mime_type)
+ATTR_WRITER(Image, monitor)
 ATTR_ACCESSOR(Image, montage)
 ATTR_READER(Image, normalized_mean_error)
 ATTR_READER(Image, normalized_maximum_error)
@@ -991,6 +993,10 @@ extern void   rm_handle_all_errors(Image *);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
 extern void   rm_split(Image *);
+
+#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
+extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
+#endif
 
 #endif
 

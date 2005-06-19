@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.32 2005/06/12 21:07:56 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.33 2005/06/19 20:26:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1162,6 +1162,39 @@ Info_matte_color_eq(VALUE self, VALUE matte_arg)
     Color_to_PixelPacket(&info->matte_color, matte_arg);
     return self;
 }
+
+/*
+    Method:     Info#monitor=
+    Purpose:    Establish a progress monitor
+    Notes:      See Image_monitor_eq
+*/
+VALUE
+Info_monitor_eq(VALUE self, VALUE monitor)
+{
+#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(monitor))
+    {
+        info->progress_monitor = NULL;
+    }
+    else
+    {
+        (void) SetImageInfoProgressMonitor(info, rm_progress_monitor, (void *)monitor);
+    }
+
+
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+
 
 DEF_ATTR_ACCESSOR(Info, monochrome, bool)
 

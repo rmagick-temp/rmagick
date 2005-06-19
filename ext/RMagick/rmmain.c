@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.89 2005/06/12 21:07:56 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.90 2005/06/19 20:26:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -386,7 +386,11 @@ Magick_set_monitor(VALUE class, VALUE monitor)
     {
         Magick_Monitor = rb_intern(MAGICK_MONITOR_CVAR);
         rb_define_class_variable(Module_Magick, MAGICK_MONITOR_CVAR, monitor);
-        ID_call = rb_intern("call");
+
+#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
+        rb_warning("Magick.set_monitor is deprecated; use Image#monitor= or Image::Info#monitor= instead.");
+#endif
+
     }
 
     // If nil, turn off monitoring.
@@ -498,6 +502,7 @@ Init_RMagick(void)
     /*-----------------------------------------------------------------------*/
 
     ID__dummy_img_      = rb_intern("_dummy_img_");
+    ID_call             = rb_intern("call");
     ID_changed          = rb_intern("changed");
     ID_cur_image        = rb_intern("cur_image");
     ID_dup              = rb_intern("dup");
@@ -594,6 +599,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, matte_color)
     DCL_ATTR_READER(Image, mean_error_per_pixel)
     DCL_ATTR_READER(Image, mime_type)
+    DCL_ATTR_WRITER(Image, monitor)
     DCL_ATTR_ACCESSOR(Image, montage)
     DCL_ATTR_READER(Image, normalized_mean_error)
     DCL_ATTR_READER(Image, normalized_maximum_error)
@@ -955,6 +961,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, interlace)
     DCL_ATTR_ACCESSOR(Info, label)          // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, matte_color)
+    DCL_ATTR_WRITER(Info, monitor)
     DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
     DCL_ATTR_ACCESSOR(Info, orientation)    // new in 6.0.0
@@ -1531,7 +1538,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/06/12 21:07:56 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/06/19 20:26:34 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

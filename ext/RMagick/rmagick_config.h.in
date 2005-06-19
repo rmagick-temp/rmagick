@@ -150,6 +150,8 @@
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_SETIMAGECHANNELDEPTH
 #undef HAVE_SETIMAGEOPTION
+/* Introduced in IM 6.1.0 */
+#undef HAVE_SETIMAGEPROGRESSMONITOR
 #undef HAVE_SETLOGFORMAT
 /* Introduced in IM 6.1.7 */
 #undef HAVE_SHADOWIMAGE

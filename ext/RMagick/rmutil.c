@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.51 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.52 2005/06/19 20:26:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2760,9 +2760,39 @@ void rm_handle_all_errors(Image *seq)
     }
 }
 
+/*
+    Extern:     rm_progress_monitor
+    Purpose:    SetImage(Info)ProgressMonitor exit
+*/
+#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
+MagickBooleanType rm_progress_monitor(
+    const char *tag,
+    const MagickOffsetType of,
+    const MagickSizeType sp,
+    void *client_data)
+{
+    volatile VALUE rval;
+    volatile VALUE process, offset, span;
+
+#if defined(HAVE_LONG_LONG)     // defined in Ruby's defines.h
+    offset = rb_ll2inum(of);
+    span = rb_ull2inum(sp);
+#else
+    offset = rb_int2big((long)of);
+    span = rb_uint2big((unsigned long)sp);
+#endif
+
+    process = rb_str_new2(tag);
+
+    rval = rb_funcall((VALUE)client_data, ID_call, 3, process, offset, span);
+
+    return RTEST(rval) ? MagickTrue : MagickFalse;
+}
+#endif
+
 
 /*
-    Extern:     unseq
+    Extern:     rm_split
     Purpose:    Remove the ImageMagick links between images in an scene
                 sequence.
     Notes:      The images remain grouped via the ImageList

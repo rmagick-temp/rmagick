@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.98 2005/05/06 00:28:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.99 2005/06/19 20:26:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4553,6 +4553,42 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
 }
+
+/*
+    Method:     Image#monitor= proc
+    Purpose:    Establish a progress monitor
+    Notes:      A progress monitor is a callable object. Save the monitor proc
+                as the client_data and establish `progress_monitor' as the
+                monitor exit. When `progress_monitor' is called, retrieve
+                the proc and call it.
+*/
+VALUE
+Image_monitor_eq(VALUE self, VALUE monitor)
+{
+#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (NIL_P(monitor))
+    {
+        image->progress_monitor = NULL;
+    }
+    else
+    {
+        (void) SetImageProgressMonitor(image, rm_progress_monitor, (void *)monitor);
+    }
+
+
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+
 
 /*
     Method:     Image#monochrome?

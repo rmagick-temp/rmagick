@@ -19,6 +19,7 @@ begin
     # Embed the watermark starting at offset 91.
     puts 'Embedding watermark...'
     stegano = img.stegano(watermark, 91)
+    puts 'Watermark embedded'
 
     # Write the watermarked image in MIFF format. Note that
     # the format must be lossless - Image#stegano doesn't work
@@ -29,14 +30,29 @@ begin
     # attribute describes the size and offset of the watermark.
 
     # This can take some time. Keep track of how far along we are.
-    monitor = Proc.new { |text, quantum, span|
-        printf("%s %3.0f%% complete\n", text, ((1.0-(quantum/span.to_f))*100.0))
-        }
-    Magick.set_monitor(monitor)
-    stegano = Magick::Image.read('stegano:img.miff') {
+    # We have to be careful, though. Recent versions of ImageMagick support the
+    # Info#monitor= method and deprecate Magick.set_monitor, so don't use
+    # Magick.set_monitor if Info#monitor= is supported.
+
+    monitor = Proc.new do |text, quantum, span|
+        printf("Extracting watermark...%3.0f%% complete\n", ((1.0-(quantum/span.to_f))*100.0))
+        true
+        end
+
+    stegano = Magick::Image.read('stegano:img.miff') do
         self.size = Magick::Geometry.new(wmcols, wmrows, 91)
-    }
-    Magick.set_monitor(nil)
+        begin
+            self.monitor = monitor
+        rescue NotImplementedError
+            Magick.set_monitor(monitor)
+        end
+    end
+
+    begin
+        stegano[0].monitor = nil
+    rescue NotImplementedError
+        Magick.set_monitor(nil)
+    end
 
     # We don't need this any more.
     File.delete('img.miff')

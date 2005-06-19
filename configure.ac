@@ -143,7 +143,7 @@ AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
 AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel ShadowImage])
-AC_CHECK_FUNCS([SepiaToneImage SigmoidalContrastImageChannel])
+AC_CHECK_FUNCS([SepiaToneImage SigmoidalContrastImageChannel SetImageProgressMonitor])
 
 # What typedefs?
 

@@ -1001,9 +1001,9 @@
     listed here:</p>
 
     <dl>
-      <dt>text</dt>
+      <dt>method_name</dt>
 
-      <dd>A string that identifies the monitored method.</dd>
+      <dd>The name of the monitored method.</dd>
 
       <dt>quantum</dt>
 
@@ -1024,11 +1024,11 @@
     this attribute supercedes <a href=
     "magick.html#set_monitor">Magick.set_monitor</a>. Set-only.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>Any object that can respond to</p>
     <pre>
-    obj.call(text, quantum, span)
+    obj.call(method_name, quantum, span)
 </pre>
 
     <p>With very large images it is possible, though not very
@@ -1038,8 +1038,8 @@
 
     <h4>Example</h4>
     <pre>
-img.monitor = Proc.new do |process, offset, span|
-    printf("%s is %3.0f%% complete.\n", process, (offset.to_f/span)*100)
+img.monitor = Proc.new do |method, offset, span|
+    printf("%s is %3.0f%% complete.\n", method, (offset.to_f/span)*100)
     true
     end
 
@@ -1048,25 +1048,25 @@ img.blur_image(0,20)
 
     <p><em>produces:</em></p>
     <pre>
-Blur/Image is   0% complete.
-Blur/Image is   0% complete.
-Blur/Image is   0% complete.
-Blur/Image is   1% complete.
-Blur/Image is   2% complete.
-Blur/Image is   4% complete.
-Blur/Image is   7% complete.
-Blur/Image is  14% complete.
-Blur/Image is  28% complete.
-Blur/Image is  56% complete.
-Blur/Image is  56% complete.
-Blur/Image is  56% complete.
-Blur/Image is  56% complete.
-Blur/Image is  57% complete.
-Blur/Image is  59% complete.
-Blur/Image is  63% complete.
-Blur/Image is  70% complete.
-Blur/Image is  84% complete.
-Blur/Image is 100% complete.
+blur_image is   0% complete.
+blur_image is   0% complete.
+blur_image is   0% complete.
+blur_image is   1% complete.
+blur_image is   2% complete.
+blur_image is   4% complete.
+blur_image is   7% complete.
+blur_image is  14% complete.
+blur_image is  28% complete.
+blur_image is  56% complete.
+blur_image is  56% complete.
+blur_image is  56% complete.
+blur_image is  56% complete.
+blur_image is  57% complete.
+blur_image is  59% complete.
+blur_image is  63% complete.
+blur_image is  70% complete.
+blur_image is  84% complete.
+blur_image is 100% complete.
 </pre>
 
     <h4>See also</h4>

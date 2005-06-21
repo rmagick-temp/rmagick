@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.52 2005/06/19 20:26:34 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.53 2005/06/21 22:55:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2763,6 +2763,7 @@ void rm_handle_all_errors(Image *seq)
 /*
     Extern:     rm_progress_monitor
     Purpose:    SetImage(Info)ProgressMonitor exit
+    Notes:      ImageMagick's "tag" argument is unused. We pass along the method name instead.
 */
 #if defined(HAVE_SETIMAGEPROGRESSMONITOR)
 MagickBooleanType rm_progress_monitor(
@@ -2772,7 +2773,7 @@ MagickBooleanType rm_progress_monitor(
     void *client_data)
 {
     volatile VALUE rval;
-    volatile VALUE process, offset, span;
+    volatile VALUE method, offset, span;
 
 #if defined(HAVE_LONG_LONG)     // defined in Ruby's defines.h
     offset = rb_ll2inum(of);
@@ -2782,9 +2783,9 @@ MagickBooleanType rm_progress_monitor(
     span = rb_uint2big((unsigned long)sp);
 #endif
 
-    process = rb_str_new2(tag);
+    method = rb_str_new2(rb_id2name(rb_frame_last_func()));
 
-    rval = rb_funcall((VALUE)client_data, ID_call, 3, process, offset, span);
+    rval = rb_funcall((VALUE)client_data, ID_call, 3, method, offset, span);
 
     return RTEST(rval) ? MagickTrue : MagickFalse;
 }

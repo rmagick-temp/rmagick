@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.22 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.23 2005/06/24 22:31:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1287,11 +1287,16 @@ get_type_metrics(
              break;
          case 2:
              Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
-             text = STRING_PTR(argv[1]);
+             text = STRING_PTR_LEN(argv[1], text_l);
              break;                  // okay
          default:
              rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
              break;
+     }
+
+     if (text_l == 0)
+     {
+         rb_raise(rb_eArgError, "no text to measure");
      }
 
      Data_Get_Struct(self, Draw, draw);
@@ -1301,8 +1306,8 @@ get_type_metrics(
 
      if (!okay)
      {
-         rb_warning("RMagick: get_type_metrics failed");
-         return Qnil;
+         rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "
+                  "Check the ImageMagick/GraphicsMagick 'type.xml' configuration file.");
      }
      return TypeMetric_from_TypeMetric(&metrics);
 }

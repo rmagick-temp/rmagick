@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -2529,15 +2529,15 @@ draw.stroke_opacity('40%')
     <a href="#spec_chars_table">special character sequences</a> in
     the text string.</p>
 
-    <p>If the text string contains an embedded blank, quote, or
-    apostrophe, surround the entire text string using a character
-    that is not in the text. &times;Magick uses these characters to
-    delimit the string but will strip them off before drawing the
-    text. You can use quotes, apostrophes, or braces ("{}"). You
-    can also escape a blank, quote, or apostrophe by preceding it
-    with a backslash ("\"). To include a backslash in the text, use
-    two consecutive backslashes. To include a '%' in the text, use
-    '%%'. See the examples below.</p>
+    <p>Generally it is a good idea to surround the text string with
+    quotes (""), apostrophes (''), or braces ({}). If the text
+    string starts with a digit or contains an embedded blank,
+    quote, or apostrophe, you must do this. &times;Magick removes
+    these characters before drawing the text. You can also escape a
+    blank, quote, or apostrophe by preceding it with a backslash
+    ("\"). To include a backslash in the text, use two consecutive
+    backslashes. To include a '%' in the text, use '%%'. See the
+    examples below.</p>
 
     <h4>Arguments</h4>
 

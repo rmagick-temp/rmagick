@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.5 2005/05/22 22:31:30 rmagick Exp $
+# $Id: misc.rb,v 1.6 2005/07/04 23:11:04 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -95,8 +95,8 @@ module Magick::RVG::Utility
             end
 
             # escape existing braces, surround with braces
-            text.gsub!(/([\{}])/) { |b| '\\' + b }
-            return '{' +  @text + '}'
+            text.gsub!(/([}])/) { |b| '\\' + b }
+            return '{' +  text + '}'
         end
 
         def glyph_metrics(glyph_orientation, glyph)

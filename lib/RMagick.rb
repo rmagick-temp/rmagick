@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.23 2005/03/05 16:19:10 rmagick Exp $
+# $Id: RMagick.rb,v 1.24 2005/07/04 23:11:04 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -163,6 +163,17 @@ class Draw
         ObliqueStyle.to_i => 'oblique',
         AnyStyle.to_i => 'all'
         }
+        
+  private
+    def enquote(str)
+        if str.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(str)
+        	return str
+        else
+        	return '"' + str + '"'
+        end
+    end
+
+  public
 
     # Apply coordinate transformations to support scaling (s), rotation (r),
     # and translation (t). Angles are specified in radians.
@@ -227,7 +238,7 @@ class Draw
         if ( DECORATION_TYPE_NAMES.has_key?(decoration.to_i) )
             primitive "decorate #{DECORATION_TYPE_NAMES[decoration.to_i]}"
         else
-            primitive "decorate #{decoration}"
+            primitive "decorate #{enquote(decoration)}"
         end
     end
 
@@ -263,7 +274,7 @@ class Draw
 
     # Specify object fill, a color name or pattern name
     def fill(colorspec)
-        primitive "fill #{colorspec}"
+        primitive "fill #{enquote(colorspec)}"
     end
     alias fill_color fill
     alias fill_pattern fill
@@ -463,7 +474,7 @@ class Draw
 
     # Specify the object stroke, a color name or pattern name.
     def stroke(colorspec)
-        primitive "stroke #{colorspec}"
+        primitive "stroke #{enquote(colorspec)}"
     end
     alias stroke_color stroke
     alias stroke_pattern stroke
@@ -525,13 +536,24 @@ class Draw
         primitive "stroke-width #{pixels}"
     end
 
-    # Draw text at position x,y. Generally it's best to surround the text with
-    # quotes. For example,
-    #      gc.text(100, 100, "'embedded blanks'")
+    # Draw text at position x,y. Add quotes to text that is not already quoted.
     def text(x, y, text)
         if text.to_s.empty?
             raise ArgumentError, "missing text argument"
-        end
+        end		
+		if text.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(text)
+			; # text already quoted
+		elsif !text['\'']
+			text = '\''+text+'\''
+		elsif !text['"']
+			text = '"'+text+'"'
+		elsif !(text['{'] || text['}'])
+			text = '{'+text+'}'
+		else
+			# escape existing braces, surround with braces
+			text.gsub!(/([}])/) { |b| '\\' + b }
+			text = '{' +  text + '}'
+		end
         primitive "text #{x},#{y} #{text}"
     end
 
@@ -559,7 +581,7 @@ class Draw
 
     # Specify color underneath text
     def text_undercolor(color)
-        primitive "text-undercolor #{color}"
+        primitive "text-undercolor #{enquote(color)}"
     end
 
     # Specify center of coordinate space to use for subsequent drawing

@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.6 2005/07/04 23:11:04 rmagick Exp $
+# $Id: misc.rb,v 1.7 2005/07/12 23:34:04 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -95,7 +95,7 @@ module Magick::RVG::Utility
             end
 
             # escape existing braces, surround with braces
-            text.gsub!(/([}])/) { |b| '\\' + b }
+			text.gsub!(/[}]/) { |b| '\\' + b }
             return '{' +  text + '}'
         end
 

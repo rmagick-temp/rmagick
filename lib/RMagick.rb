@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.24 2005/07/04 23:11:04 rmagick Exp $
+# $Id: RMagick.rb,v 1.25 2005/07/12 23:34:04 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -550,9 +550,8 @@ class Draw
 		elsif !(text['{'] || text['}'])
 			text = '{'+text+'}'
 		else
-			# escape existing braces, surround with braces
-			text.gsub!(/([}])/) { |b| '\\' + b }
-			text = '{' +  text + '}'
+			# escape existing braces, surround with braces			
+			text = '{' +  text.gsub(/[}]/) { |b| '\\' + b } + '}'
 		end
         primitive "text #{x},#{y} #{text}"
     end

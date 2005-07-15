@@ -1,5 +1,7 @@
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.
+    o Fixed bug #2070, support color names with embedded spaces
+    o Fixed bug #2109, properly scope Magick constants in RVG
 
 RMagick 1.8.3
     o Tested with ImageMagick 6.2.3-2

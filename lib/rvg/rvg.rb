@@ -1,5 +1,5 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.4 2005/07/15 20:48:50 rmagick Exp $
+# $Id: rvg.rb,v 1.5 2005/07/15 21:11:38 rmagick Exp $
 #
 #                    Copyright (C) 2005 by Timothy P. Hunter
 #
@@ -78,15 +78,15 @@ class Magick::RVG
                     when :scaled
                         @background_image.resize(@width, @height)
                     when :tiled
-                        ::Magick::Image.new(@width, @height, TextureFill.new(@background_image))
+                        Magick::Image.new(@width, @height, Magick::TextureFill.new(@background_image))
                     when :fit
                         width, height = @width, @height
                         bgcolor = bgfill()
-                        @background_image.change_geometry(Geometry.new(width, height)) do |new_cols, new_rows|
+                        @background_image.change_geometry(Magick::Geometry.new(width, height)) do |new_cols, new_rows|
                             bg_image = @background_image.resize(new_cols, new_rows)
                             if bg_image.columns != width || bg_image.rows != height
                                 bg = Magick::Image.new(width, height) { self.background_color = bgcolor }
-                                bg_image = bg.composite!(bg_image, CenterGravity, OverCompositeOp)
+                                bg_image = bg.composite!(bg_image, Magick::CenterGravity, Magick::OverCompositeOp)
                             end
                             bg_image
                         end
@@ -96,7 +96,7 @@ class Magick::RVG
             end
         else
             bgcolor = bgfill()
-            canvas = ::Magick::Image.new(Integer(@width), Integer(@height)) { self.background_color = bgcolor }
+            canvas = Magick::Image.new(Integer(@width), Integer(@height)) { self.background_color = bgcolor }
         end
         canvas[:desc] = @desc if @desc
         canvas[:title] = @title if @title
@@ -139,7 +139,7 @@ class Magick::RVG
     # Sets an image to use as the canvas background. See background_position= for layout options.
     def background_image=(bg_image)
         warn "background_image= has no effect in nested RVG objects" if @nested
-        if bg_image && ! bg_image.kind_of?(::Magick::Image)
+        if bg_image && ! bg_image.kind_of?(Magick::Image)
             raise ArgumentError, "background image must be an Image (got #{bg_image.class})"
         end
         @background_image = bg_image
@@ -247,7 +247,7 @@ class Magick::RVG
         @height = rh if rh
     end
 
-    # Used by ::Magick::Embellishable.rvg to set non-0 x- and y-coordinates
+    # Used by Magick::Embellishable.rvg to set non-0 x- and y-coordinates
     def corner(x, y)        #:nodoc:
         @nested = true
         @x, @y = Float(x), Float(y)

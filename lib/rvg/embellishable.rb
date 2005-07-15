@@ -1,5 +1,5 @@
 #--
-# $Id: embellishable.rb,v 1.4 2005/05/22 22:31:30 rmagick Exp $
+# $Id: embellishable.rb,v 1.5 2005/07/15 20:48:50 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 
@@ -28,7 +28,7 @@ class Magick::RVG
         # Use the RVG::ShapeConstructors#circle method to create Circle objects in a container.
         def initialize(r, cx=0, cy=0)
             super()
-            r, cx, cy = RVG.convert_to_float(r, cx, cy)
+            r, cx, cy = Magick::RVG.convert_to_float(r, cx, cy)
             if r < 0
                 raise ArgumentError, "radius must be >= 0 (#{r} given)"
             end
@@ -46,7 +46,7 @@ class Magick::RVG
         # Use the RVG::ShapeConstructors#ellipse method to create Ellipse objects in a container.
         def initialize(rx, ry, cx=0, cy=0)
             super()
-            rx, ry, cx, cy = RVG.convert_to_float(rx, ry, cx, cy)
+            rx, ry, cx, cy = Magick::RVG.convert_to_float(rx, ry, cx, cy)
             if rx < 0 || ry < 0
                 raise ArgumentError, "radii must be >= 0 (#{rx}, #{ry} given)"
             end
@@ -89,7 +89,7 @@ class Magick::RVG
         # Use the RVG::ShapeConstructors#rect method to create Rect objects in a container.
         def initialize(width, height, x=0, y=0)
             super()
-            width, height, x, y = RVG.convert_to_float(width, height, x, y)
+            width, height, x, y = Magick::RVG.convert_to_float(width, height, x, y)
             if width < 0 || height < 0
                 raise ArgumentError, "width, height must be >= 0 (#{width}, #{height} given)"
             end
@@ -100,7 +100,7 @@ class Magick::RVG
         # Specify optional rounded corners for a rectangle. The arguments
         # are the x- and y-axis radii. If y is omitted it defaults to x.
         def round(rx, ry=nil)
-            rx, ry = RVG.convert_to_float(rx, ry || rx)
+            rx, ry = Magick::RVG.convert_to_float(rx, ry || rx)
             if rx < 0 || ry < 0
                 raise ArgumentError, "rx, ry must be >= 0 (#{rx}, #{ry} given)"
             end
@@ -133,7 +133,7 @@ class Magick::RVG
             if n < 4 || n % 2 != 0
                 raise ArgumentError, "insufficient/odd number of points specified: #{n}"
             end
-            return RVG.convert_to_float(*points)
+            return Magick::RVG.convert_to_float(*points)
         end
 
     end     # class PolyShape
@@ -164,7 +164,7 @@ class Magick::RVG
             super()
             points = polypoints(points)
             @primitive = :polyline
-            @args = RVG.convert_to_float(*points)
+            @args = Magick::RVG.convert_to_float(*points)
         end
 
     end     # class Polyline
@@ -236,7 +236,7 @@ class Magick::RVG
         def initialize(image, width=nil, height=nil, x=0, y=0)
             super()             # run module initializers
             @image = image.copy # use a copy of the image in case app. re-uses the argument
-            @x, @y, @width, @height = RVG.convert_to_float(x, y, width || @image.columns, height || @image.rows)
+            @x, @y, @width, @height = Magick::RVG.convert_to_float(x, y, width || @image.columns, height || @image.rows)
             if @width < 0 || @height < 0
                 raise ArgumentError, "width, height must be >= 0"
             end
@@ -353,7 +353,7 @@ class Magick::RVG
         # contained within, unless overridden by an inner container or
         # the contained object itself.
         def rvg(cols, rows, x=0, y=0, &block)
-            rvg = RVG.new(cols, rows, &block)
+            rvg = Magick::RVG.new(cols, rows, &block)
             begin
                 x, y = Float(x), Float(y)
             rescue ArgumentError

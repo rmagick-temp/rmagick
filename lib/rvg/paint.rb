@@ -1,5 +1,5 @@
 #--
-# $Id: paint.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
+# $Id: paint.rb,v 1.2 2005/07/15 20:48:50 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 # Defines paint server classes.
@@ -28,7 +28,7 @@ class Magick::RVG
         # referring to them with #use.
         def initialize(width=0, height=0, x=0, y=0)
             super()
-            @width, @height, @x, @y = RVG.convert_to_float(width, height, x, y)
+            @width, @height, @x, @y = Magick::RVG.convert_to_float(width, height, x, y)
             @content = Content.new
             yield(self) if block_given?
         end

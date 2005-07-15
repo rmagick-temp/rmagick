@@ -1,5 +1,5 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.3 2005/04/19 23:27:01 rmagick Exp $
+# $Id: rvg.rb,v 1.4 2005/07/15 20:48:50 rmagick Exp $
 #
 #                    Copyright (C) 2005 by Timothy P. Hunter
 #
@@ -61,17 +61,17 @@ class Magick::RVG
     # else, combine it with the background_fill_opacity.
     def bgfill()
         if @background_fill.nil?
-            color = Pixel.new(0,0,0,TransparentOpacity)
+            color = Magick::Pixel.new(0,0,0,Magick::TransparentOpacity)
         else
             color = @background_fill
-            color.opacity = (1.0 - @background_fill_opacity) * ::Magick::TransparentOpacity
+            color.opacity = (1.0 - @background_fill_opacity) * Magick::TransparentOpacity
         end
         return color
     end
 
     def new_canvas
         if @background_pattern
-            canvas = ::Magick::Image.new(@width, @height, @background_pattern)
+            canvas = Magick::Image.new(@width, @height, @background_pattern)
         elsif @background_image
             if @width != @background_image.columns || @height != @background_image.rows
                 canvas = case @background_position
@@ -85,7 +85,7 @@ class Magick::RVG
                         @background_image.change_geometry(Geometry.new(width, height)) do |new_cols, new_rows|
                             bg_image = @background_image.resize(new_cols, new_rows)
                             if bg_image.columns != width || bg_image.rows != height
-                                bg = ::Magick::Image.new(width, height) { self.background_color = bgcolor }
+                                bg = Magick::Image.new(width, height) { self.background_color = bgcolor }
                                 bg_image = bg.composite!(bg_image, CenterGravity, OverCompositeOp)
                             end
                             bg_image
@@ -172,9 +172,9 @@ class Magick::RVG
     # The default fill is "none", that is, transparent black.
     def background_fill=(color)
         warn "background_fill= has no effect in nested RVG objects" if @nested
-        if ! color.kind_of?(Pixel)
+        if ! color.kind_of?(Magick::Pixel)
             begin
-                @background_fill = Pixel.from_color(color)
+                @background_fill = Magick::Pixel.from_color(color)
             rescue Magick::ImageMagickError
                 raise ArgumentError, "unknown color `#{color}'"
             rescue TypeError

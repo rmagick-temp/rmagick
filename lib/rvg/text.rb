@@ -1,5 +1,5 @@
 #--
-# $Id: text.rb,v 1.2 2005/04/23 15:29:47 rmagick Exp $
+# $Id: text.rb,v 1.3 2005/07/15 20:48:50 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 #++
 # Text-related classes
@@ -36,14 +36,14 @@ class Magick::RVG
 
         # Add <tt>x</tt> and <tt>y</tt> to the current text position.
         def d(x, y=0)
-            @dx, @dy = RVG.convert_to_float(x, y)
+            @dx, @dy = Magick::RVG.convert_to_float(x, y)
             yield(self) if block_given?
             self
         end
 
         # Rotate the text about the current text position.
         def rotate(degrees)
-            @rotation = RVG.convert_to_float(degrees)[0]
+            @rotation = Magick::RVG.convert_to_float(degrees)[0]
             yield(self) if block_given?
             self
         end
@@ -106,7 +106,7 @@ class Magick::RVG
         include TextLink
 
         def initialize(obj, x, y, parent)
-            @x, @y = RVG.convert_to_float(x, y, :allow_nil)
+            @x, @y = Magick::RVG.convert_to_float(x, y, :allow_nil)
             super(nil)
             @tspans << obj
             @parent = parent
@@ -125,7 +125,7 @@ class Magick::RVG
         #
         # Tspan objects can contain Tspan objects.
         def initialize(text=nil, x=nil, y=nil, &block)
-            @x, @y = RVG.convert_to_float(x, y, :allow_nil)
+            @x, @y = Magick::RVG.convert_to_float(x, y, :allow_nil)
             super(text, &block)
         end
 
@@ -147,7 +147,7 @@ class Magick::RVG
         #     t.tspan("Blue text").styles(:fill=>'blue')
         #  end
         def initialize(x=0, y=0, text=nil, &block)
-            @cx, @cy = RVG.convert_to_float(x, y)
+            @cx, @cy = Magick::RVG.convert_to_float(x, y)
             super(text, &block)
         end
 

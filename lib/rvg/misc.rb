@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.7 2005/07/12 23:34:04 rmagick Exp $
+# $Id: misc.rb,v 1.8 2005/07/15 20:48:50 rmagick Exp $
 # Copyright (C) 2005 Timothy P. Hunter
 class Magick::RVG
 
@@ -343,7 +343,7 @@ module Magick::RVG::Utility
 
         def initialize()
             @affine = Array.new
-            @affine << AffineMatrix.new(1, 0, 0, 1, 0, 0)
+            @affine << Magick::AffineMatrix.new(1, 0, 0, 1, 0, 0)
             @baseline_shift = Array.new
             @baseline_shift << :baseline
             @glyph_orientation_horizontal = Array.new
@@ -526,9 +526,9 @@ module Magick::RVG::Utility
         attr_reader :gc, :text_attrs
 
         def initialize()
-            @gc = Draw.new
+            @gc = Magick::Draw.new
             @shadow = Array.new
-            @shadow << Draw.new
+            @shadow << Magick::Draw.new
             @text_attrs = TextAttributes.new
             init_matrix()
         end
@@ -538,7 +538,7 @@ module Magick::RVG::Utility
         end
 
         def affine(sx, rx, ry, sy, tx, ty)
-            sx, rx, ry, sy, tx, ty = RVG.convert_to_float(sx, rx, ry, sy, tx, ty)
+            sx, rx, ry, sy, tx, ty = Magick::RVG.convert_to_float(sx, rx, ry, sy, tx, ty)
             @gc.affine(sx, rx, ry, sy, tx, ty)
             @text_attrs.set_affine(sx, rx, ry, sy, tx, ty)
             nil
@@ -597,13 +597,13 @@ module Magick::RVG::Utility
         end
 
         def glyph_orientation_horizontal(deg)
-            deg = RVG.convert_one_to_float(deg)
+            deg = Magick::RVG.convert_one_to_float(deg)
             @text_attrs.glyph_orientation_horizontal = (deg % 360) / 90 * 90
             nil
         end
 
         def glyph_orientation_vertical(deg)
-            deg = RVG.convert_one_to_float(deg)
+            deg = Magick::RVG.convert_one_to_float(deg)
             @text_attrs.glyph_orientation_vertical = (deg % 360) / 90 * 90
             nil
         end
@@ -613,7 +613,7 @@ module Magick::RVG::Utility
         end
 
         def letter_spacing(value)
-            @text_attrs.letter_spacing = RVG.convert_one_to_float(value)
+            @text_attrs.letter_spacing = Magick::RVG.convert_one_to_float(value)
             nil
         end
 
@@ -632,7 +632,7 @@ module Magick::RVG::Utility
         end
 
         def rotate(degrees)
-            degrees = RVG.convert_one_to_float(degrees)
+            degrees = Magick::RVG.convert_one_to_float(degrees)
             @gc.rotate(degrees)
             @sx =  Math.cos(GraphicContext.degrees_to_radians(degrees))
             @rx =  Math.sin(GraphicContext.degrees_to_radians(degrees))
@@ -643,7 +643,7 @@ module Magick::RVG::Utility
         end
 
         def scale(sx, sy)
-            sx, sy = RVG.convert_to_float(sx, sy)
+            sx, sy = Magick::RVG.convert_to_float(sx, sy)
             @gc.scale(sx, sy)
             @sx, @sy = sx, sy
             concat_matrix()
@@ -655,7 +655,7 @@ module Magick::RVG::Utility
         end
 
         def skewX(degrees)
-            degrees = RVG.convert_one_to_float(degrees)
+            degrees = Magick::RVG.convert_one_to_float(degrees)
             @gc.skewX(degrees)
             @ry = Math.tan(GraphicContext.degrees_to_radians(degrees))
             concat_matrix()
@@ -663,7 +663,7 @@ module Magick::RVG::Utility
         end
 
         def skewY(degrees)
-            degrees = RVG.convert_one_to_float(degrees)
+            degrees = Magick::RVG.convert_one_to_float(degrees)
             @gc.skewY(degrees)
             @rx = Math.tan(GraphicContext.degrees_to_radians(degrees))
             concat_matrix()
@@ -671,7 +671,7 @@ module Magick::RVG::Utility
         end
 
         def stroke_width(width)
-            width = RVG.convert_one_to_float(width)
+            width = Magick::RVG.convert_one_to_float(width)
             @gc.stroke_width(width)
             @shadow[-1].stroke_width = width
             nil
@@ -706,7 +706,7 @@ module Magick::RVG::Utility
         end
 
         def translate(tx, ty)
-            tx, ty = RVG.convert_to_float(tx, ty)
+            tx, ty = Magick::RVG.convert_to_float(tx, ty)
             @gc.translate(tx, ty)
             @tx, @ty = tx, ty
             concat_matrix()
@@ -714,7 +714,7 @@ module Magick::RVG::Utility
         end
 
         def word_spacing(value)
-            @text_attrs.word_spacing = RVG.convert_one_to_float(value)
+            @text_attrs.word_spacing = Magick::RVG.convert_one_to_float(value)
             nil
         end
 

@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(400, 120) do |canvas|
+rvg = Magick::RVG.new(400, 120) do |canvas|
     canvas.desc = 'Example Skew - Show effects of skewX and skewY'
     canvas.background_fill = 'white'
 

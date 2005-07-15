@@ -1,9 +1,8 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
-rvg = RVG.new(12.cm, 4.cm) do |canvas|
+rvg = Magick::RVG.new(12.cm, 4.cm) do |canvas|
     canvas.viewbox(0, 0, 1200, 400)
     canvas.background_fill = 'white'
     canvas.desc = "Example rect02 - rounded rectangles"

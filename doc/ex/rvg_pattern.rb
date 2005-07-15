@@ -1,9 +1,8 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(300, 300) do |canvas|
+rvg = Magick::RVG.new(300, 300) do |canvas|
     canvas.background_fill = 'white'
-    triangles = RVG::Pattern.new(16, 16).viewbox(0,0, 50,50) do |pat|
+    triangles = Magick::RVG::Pattern.new(16, 16).viewbox(0,0, 50,50) do |pat|
         pat.rect(50, 50).styles(:fill=>'darkblue')
         pat.polygon(0,0, 25,50, 50,0, 0,0).styles(:fill=>'yellow', :stroke=>'red')
     end
@@ -12,7 +11,7 @@ rvg = RVG.new(300, 300) do |canvas|
 
     hat = Magick::Image.read('images/Flower_Hat.jpg').first
 
-    hats = RVG::Pattern.new(hat.columns/4.0, hat.rows/4.0) do |pat|
+    hats = Magick::RVG::Pattern.new(hat.columns/4.0, hat.rows/4.0) do |pat|
         pat.image(hat, hat.columns/4.0, hat.rows/4.0)
     end
 

@@ -1,8 +1,7 @@
 require 'rvg/rvg'
-include Magick
 
 def example(cols, rows)
-    rvg = RVG.new(cols, rows) do |canvas|
+    rvg = Magick::RVG.new(cols, rows) do |canvas|
         canvas.background_fill = 'white'
         canvas.desc = <<-'END_DESC'
             Example ViewBox - uses the viewBox attribute to automatically create an

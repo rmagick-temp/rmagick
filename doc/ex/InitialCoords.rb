@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(300, 100) do |canvas|
+rvg = Magick::RVG.new(300, 100) do |canvas|
     canvas.desc = "Example InitialCoords - SVG's initial coordinate system"
     canvas.background_fill = 'white'
     canvas.g.styles(:fill=>'none', :stroke=>'black', :stroke_width=>3) do |grp|

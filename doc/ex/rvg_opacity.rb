@@ -1,10 +1,9 @@
 #! /usr/local/bin/ruby -w
 require 'rvg/rvg'
-include Magick
 
 FONT_STYLES = {:font_size=>20, :font_weight=>'bold', :fill=>'white'}
 
-rvg = RVG.new(450, 150) do |canvas|
+rvg = Magick::RVG.new(450, 150) do |canvas|
     canvas.background_fill = 'white'
     canvas.rect(400, 50, 25, 50)
     canvas.circle(40, 100, 75).styles(:opacity=>0.25, :stroke=>'blue', :fill=>'#00ff00',:stroke_width=>8)

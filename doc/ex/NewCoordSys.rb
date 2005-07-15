@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(400, 150) do |canvas|
+rvg = Magick::RVG.new(400, 150) do |canvas|
     canvas.background_fill = 'white'
     canvas.desc = 'Example NewCoordSys - New user coordinate system'
     canvas.g.styles(:fill=>'none', :stroke=>'black', :stroke_width=>3) do |grp|

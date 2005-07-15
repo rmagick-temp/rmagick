@@ -1,14 +1,13 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(450, 300) do |canvas|
+rvg = Magick::RVG.new(450, 300) do |canvas|
     canvas.desc = 'Example Preserve Aspect Ratio'
     canvas.background_fill = 'white'
 
     canvas.rect(448, 298, 1, 1).styles(:fill=>'none', :stroke=>'blue')
 
     # Define the smiley-face
-    smile = RVG::Group.new do |grp|
+    smile = Magick::RVG::Group.new do |grp|
         grp.translate(0, 5)
         grp.circle(10, 15, 15).styles(:fill=>'yellow', :stroke=>'none')
         grp.circle(1.5, 12, 12).styles(:fill=>'black', :stroke=>'none')
@@ -16,11 +15,11 @@ rvg = RVG.new(450, 300) do |canvas|
         grp.path("M10 19 A 8 8 0 0 0 20 19").styles(:stroke=>'black', :stroke_width=>2)
     end
 
-    viewport1 = RVG::Group.new do |grp|
+    viewport1 = Magick::RVG::Group.new do |grp|
         grp.rect(49, 29, 0.5, 0.5).styles(:fill => 'none', :stroke => 'blue')
     end
 
-    viewport2 = RVG::Group.new do |grp|
+    viewport2 = Magick::RVG::Group.new do |grp|
         grp.rect(29, 39, 0.5, 0.5).styles(:fill=>'black', :stroke=>'red')
     end
 

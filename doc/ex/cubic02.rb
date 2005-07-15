@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
 Border       = { :fill=>'none', :stroke=>'blue', :stroke_width=>1 }
 Connect      = { :fill=>'none', :stroke=>'#888888', :stroke_width=>2 }
@@ -11,7 +10,7 @@ CtlPoint     = { :fill=>'#888888', :stroke=>'none' }
 AutoCtlPoint = { :fill=>'none', :stroke=>'blue', :stroke_width=>4 }
 Label        = { :text_anchor=>'middle', :font_size=>22, :font_family=>'Verdana' }
 
-rvg = RVG.new(10.cm, 10.cm).viewbox(0, 0, 1000, 1000) do |canvas|
+rvg = Magick::RVG.new(10.cm, 10.cm).viewbox(0, 0, 1000, 1000) do |canvas|
     canvas.title = 'Example cubic02 - cubic Bezier commands in path data'
     canvas.desc = <<-END_DESC
         Picture showing examples of "C" and "S" commands,

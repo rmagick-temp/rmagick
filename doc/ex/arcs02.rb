@@ -1,12 +1,11 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
 PathStyles = {:fill=>'none', :stroke=>'red', :stroke_width=>6}
 BaseEllipsesStyles = {:font_size=>20, :font_family=>'Verdana',:fill=>'none', :stroke=>'#888', :stroke_width=>2}
 
-rvg = RVG.new(12.cm, (5.25).cm).viewbox(0, 0, 1200, 525) do |canvas|
+rvg = Magick::RVG.new(12.cm, (5.25).cm).viewbox(0, 0, 1200, 525) do |canvas|
     canvas.title = "Example arcs02 - arc options in paths"
     canvas.desc = <<-END_DESC
         Pictures showing the result of setting
@@ -15,7 +14,7 @@ rvg = RVG.new(12.cm, (5.25).cm).viewbox(0, 0, 1200, 525) do |canvas|
     END_DESC
     canvas.background_fill = 'white'
 
-    base_ellipses = RVG::Group.new.styles(BaseEllipsesStyles) do |base|
+    base_ellipses = Magick::RVG::Group.new.styles(BaseEllipsesStyles) do |base|
         base.ellipse(100, 50, 125, 125)
         base.ellipse(100, 50, 225, 75)
         base.text(35, 70, "Arc start")

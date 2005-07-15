@@ -1,9 +1,8 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
-rvg = RVG.new(4.cm, 4.cm).viewbox(0, 0, 400, 400) do |canvas|
+rvg = Magick::RVG.new(4.cm, 4.cm).viewbox(0, 0, 400, 400) do |canvas|
     canvas.title = "Example triangle01 - simple example of a 'path'"
     canvas.desc = 'A path that draws a triangle'
 

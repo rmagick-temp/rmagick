@@ -1,12 +1,11 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
-rvg = RVG.new(10.cm, 3.5.cm).viewbox(0, 0, 100, 35) do |canvas|
+rvg = Magick::RVG.new(10.cm, 3.5.cm).viewbox(0, 0, 100, 35) do |canvas|
     canvas.background_fill = 'white'
     canvas.desc = "Example Use02 - Chain 'styles' to 'use'"
-    r = RVG::Group.new do |grp|
+    r = Magick::RVG::Group.new do |grp|
             grp.rect(60, 10).styles(:fill=>'yellow')
         end
     canvas.rect(99.6, 34.6, 0.1, 0.1).styles(:fill=>'none', :stroke=>'blue', :stroke_width=>0.2)

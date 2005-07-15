@@ -1,9 +1,8 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
-rvg = RVG.new(12.cm, 6.cm).viewbox(0, 0, 1200, 600) do |canvas|
+rvg = Magick::RVG.new(12.cm, 6.cm).viewbox(0, 0, 1200, 600) do |canvas|
     canvas.title = "Example quad01 - quadratic Bezier commands in path data"
     canvas.desc = <<-END_DESC
         Picture showing a "Q" a "T" command, along with annotations showing the

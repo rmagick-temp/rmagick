@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(400, 150) do |canvas|
+rvg = Magick::RVG.new(400, 150) do |canvas|
     canvas.desc = "Example OrigCoordSys - Simple transformations: original picture"
     canvas.background_fill = 'white'
 

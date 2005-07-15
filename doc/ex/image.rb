@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(525, 270) do |canvas|
+rvg = Magick::RVG.new(525, 270) do |canvas|
     canvas.background_fill = 'white'
     canvas.rect(524, 269).styles(:fill=>'none', :stroke=>'blue', :stroke_width=>1)
 

@@ -1,16 +1,15 @@
 #! /usr/local/bin/ruby -w
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
-rvg = RVG.new(12.cm, 4.cm).viewbox(0, 0, 1200, 400) do |canvas|
+rvg = Magick::RVG.new(12.cm, 4.cm).viewbox(0, 0, 1200, 400) do |canvas|
     canvas.background_fill = 'white'
     canvas.desc = "Example fillrule - nonzero - demonstrates fill_rule=>'nonzero'"
 
     canvas.rect(1195, 393, 1, 1).styles(:fill=>'none', :stroke=>'blue')
 
-    triangle = RVG::Group.new do |defs|
+    triangle = Magick::RVG::Group.new do |defs|
         defs.path("M 16,0 L -8,9 v-18 z").styles(:fill=>'black', :stroke=>'none')
     end
 

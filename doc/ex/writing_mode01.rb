@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
 TEXT_STYLES = {:writing_mode=>'tb',
                :glyph_orientation_vertical=>0,
@@ -15,7 +14,7 @@ TEXT_STYLES2 = {:writing_mode=>'tb',
                :font_weight=>'bold',
                :font_size=>16}
 
-rvg = RVG.new(1.25.in, 7.in).viewbox(0,0,125,700) do |canvas|
+rvg = Magick::RVG.new(1.25.in, 7.in).viewbox(0,0,125,700) do |canvas|
     canvas.background_fill = 'white'
 
     canvas.text(40, 15, ":glyph_orientation_vertical=0").styles(TEXT_STYLES)

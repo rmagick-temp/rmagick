@@ -1,7 +1,6 @@
 require 'rvg/rvg'
-include Magick
 
-rvg = RVG.new(150, 100) do |canvas|
+rvg = Magick::RVG.new(150, 100) do |canvas|
     canvas.background_fill = 'white'
     canvas.text(40, 35).styles(:font_weight=>'bold', :font_size=>28) do |txt|
         txt.tspan('H')

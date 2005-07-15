@@ -1,8 +1,7 @@
 #! /usr/local/bin/ruby -w
 require 'rvg/rvg'
-include Magick
 
-RVG.dpi = 90
+Magick::RVG.dpi = 90
 
 BUTT   = {:stroke=>'black', :stroke_width=>70, :stroke_linecap=>'butt'}
 ROUND  = {:stroke=>'black', :stroke_width=>70, :stroke_linecap=>'round'}
@@ -11,7 +10,7 @@ THIN   = {:stroke=>'#ffcccc', :stroke_width=>5}
 TEXT   = {:text_anchor=>'middle', :font_size=>50, :font_family=>'Verdana'}
 CIRCLE = {:fill=>'#ffcccc', :stroke=>'none'}
 
-rvg = RVG.new(12.cm, 2.cm).viewbox(0, 0, 1200, 200) do |canvas|
+rvg = Magick::RVG.new(12.cm, 2.cm).viewbox(0, 0, 1200, 200) do |canvas|
     canvas.background_fill = 'white'
     canvas.desc = "Example linecap - demonstrates three stroke-linecap values"
 

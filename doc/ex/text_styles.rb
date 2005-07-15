@@ -1,9 +1,8 @@
 #! /usr/local/bin/ruby -w
 require 'rvg/rvg'
-include Magick
 
 
-rvg = RVG.new(200, 100) do |canvas|
+rvg = Magick::RVG.new(200, 100) do |canvas|
     canvas.background_fill = 'white'
 
     canvas.g.styles(:font_size=>16) do |grp|

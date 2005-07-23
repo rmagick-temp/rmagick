@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.99 2005/06/19 20:26:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.100 2005/07/23 23:46:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -261,6 +261,18 @@ Image_properties(VALUE self)
     if (rb_block_given_p())
     {
         volatile VALUE ary = rb_ary_new2(2);
+
+#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)        
+        ResetImageAttributeIterator(image);      
+        attr = GetNextImageAttribute(image);
+        while (attr)
+        {
+            rb_ary_store(ary, 0, rb_str_new2(attr->key));
+            rb_ary_store(ary, 1, rb_str_new2(attr->value));
+            rb_yield(ary);
+            attr = GetNextImageAttribute(image);
+        }  
+#else        
         for (attr = image->attributes; attr; attr = Next_Attribute)
         {
             // Store the next ptr where Image#aset can see it.
@@ -270,7 +282,7 @@ Image_properties(VALUE self)
             rb_ary_store(ary, 1, rb_str_new2(attr->value));
             rb_yield(ary);
         }
-
+#endif
         return self;
     }
 
@@ -278,10 +290,20 @@ Image_properties(VALUE self)
     else
     {
         attr_hash = rb_hash_new();
+#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
+        ResetImageAttributeIterator(image);      
+        attr = GetNextImageAttribute(image);
+        while (attr)
+        {
+            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
+            attr = GetNextImageAttribute(image);            
+        }
+#else
         for (attr = image->attributes; attr; attr = attr->next)
         {
             rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
         }
+#endif
         return attr_hash;
     }
 }
@@ -1651,7 +1673,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     return PixelPacket_to_Color_Name(image, &color);
 }
 
-DEF_ATTR_READER(Image, colors, int)
+DEF_ATTR_READER(Image, colors, ulong)
 
 /*
     Method:     Image#colorspace
@@ -2608,8 +2630,32 @@ VALUE Image_display(VALUE self)
     return self;
 }
 
-DEF_ATTR_ACCESSOR(Image, dispose, ulong)
+/*
+    Method:     Image#dispose
+    Purpose:    Return the dispose attribute as a DisposeType enum
+*/
+VALUE
+Image_dispose(VALUE self)
+{
+    Image *image;
+    
+    Data_Get_Struct(self, Image, image);
+    return DisposeType_new(image->dispose);
+}
 
+/*
+    Method:     Image#dispose=
+    Purpose:    Set the dispose attribute
+*/
+VALUE
+Image_dispose_eq(VALUE self, VALUE dispose)
+{
+    Image *image;
+    
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(dispose, image->dispose, DisposeType);    
+    return self;
+}
 
 /*
     Method:     Image#_dump(aDepth)
@@ -3782,7 +3828,11 @@ Image_inspect(VALUE self)
     // Print current filename.
     x += sprintf(buffer+x, "%s", image->filename);
     // Print scene number.
+#if defined(HAVE_GETNEXTIMAGEINLIST)
+    if ((GetPreviousImageInList(image) != NULL) && (GetNextImageInList(image) != NULL) && image->scene > 0)
+#else    
     if ((image->previous || image->next) && image->scene > 0)
+#endif
     {
         x += sprintf(buffer+x, "[%lu]", image->scene);
     }
@@ -4996,14 +5046,14 @@ Image_number_colors(VALUE self)
 {
     Image *image;
     ExceptionInfo exception;
-    unsigned int n = 0;
+    unsigned long n = 0;
 
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    n = GetNumberColors(image, NULL, &exception);
+    n = (unsigned long) GetNumberColors(image, NULL, &exception);
     HANDLE_ERROR
-    return INT2FIX(n);
+    return ULONG2NUM(n);
 }
 
 DEF_ATTR_ACCESSOR(Image, offset, long)
@@ -7570,7 +7620,17 @@ Image_to_color(VALUE self, VALUE pixel_arg)
 
 }
 
-DEF_ATTR_READER(Image, total_colors, ulong)
+/*
+    Method:     Image#total_colors
+    Purpose:    alias for Image#number_colors
+    Notes:      This used to be a direct reference to the `total_colors' field in Image
+                but that field is not reliable.
+*/
+VALUE
+Image_total_colors(VALUE self)
+{
+    return Image_number_colors(self);
+}
 
 /*
     Method:     Image#transparent(color-name<, opacity>)

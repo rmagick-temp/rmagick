@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.53 2005/06/21 22:55:01 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.54 2005/07/23 23:41:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1122,7 +1122,36 @@ CompressionType_new(CompressionType ct)
 }
 
 /*
-    External:  FilterTypes#new
+    External:   DisposeType.new
+    Purpose:    Construct a DisposeType enum object for the specified value..new
+*/
+VALUE
+DisposeType_new(DisposeType type)
+{
+    const char *name;
+    
+    switch(type)
+    {
+        default:
+        case UndefinedDispose:
+            name = "UndefinedDispose";
+            break;
+        case BackgroundDispose:
+            name = "BackgroundDispose";
+            break;
+        case NoneDispose:
+            name = "NoneDispose";
+            break;
+        case PreviousDispose:
+            name = "PreviousDispose";
+            break;
+    }
+
+    return rm_enum_new(Class_DisposeType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+/*
+    External:  FilterTypes.new
     Purpose: Construct an FilterTypes enum object for the specified value
 */
 VALUE
@@ -1189,7 +1218,7 @@ FilterTypes_new(FilterTypes type)
 
 
 /*
-    External:   EndianType#new
+    External:   EndianType.new
     Purpose:    Construct an EndianType enum object
 */
 VALUE
@@ -1216,7 +1245,7 @@ EndianType_new(EndianType type)
 
 
 /*
-    External:   ImageType#new
+    External:   ImageType.new
     Purpose:    Construct an ImageType enum object for the specified value
 */
 VALUE

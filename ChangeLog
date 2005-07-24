@@ -1,3 +1,11 @@
+RMagick 1.9.1
+    o Fixed bug #2157, Image#total_colors is an alias of Image#number_colors
+    o Fixed bug #2155, Image#dispose= accepts a DisposeType enum, #dispose    
+      returns a DisposeType enum.
+    o Fixed bug #2156, Image#properties no longer returns garbage for the property 
+       name and value.
+    o Featurn #2159, add GrayChannel ChannelType enum value
+
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.
     o Fixed bug #2070, support color names with embedded spaces

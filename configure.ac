@@ -362,6 +362,21 @@ if test "$rm_cv_enum_indexchannel" = yes; then
   AC_DEFINE(HAVE_INDEXCHANNEL)
 fi
 
+AC_CACHE_CHECK(for GrayChannel enum value, rm_cv_enum_graychannel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = GrayChannel],
+     rm_cv_enum_graychannel='yes',
+     rm_cv_enum_graychannel='no')])
+
+if test "$rm_cv_enum_graychannel" = yes; then
+  AC_DEFINE(HAVE_GRAYCHANNEL)
+fi
+
 AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
   [AC_TRY_COMPILE(
 [#include <stdio.h>

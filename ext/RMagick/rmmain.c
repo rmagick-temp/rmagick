@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.90 2005/06/19 20:26:34 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.91 2005/07/24 20:06:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1077,6 +1077,9 @@ Init_RMagick(void)
 #if defined(HAVE_INDEXCHANNEL)
         ENUMERATOR(IndexChannel)    // 5.5.8
 #endif
+#if defined(HAVE_GRAYCHANNEL)
+        ENUMERATOR(GrayChannel)
+#endif
 #if defined(HAVE_ALLCHANNELS)
         ENUMERATOR(AllChannels)
 #endif
@@ -1538,7 +1541,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/06/19 20:26:34 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/07/24 20:06:58 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.100 2005/07/23 23:46:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.101 2005/07/26 22:49:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8025,6 +8025,9 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
                 or
                     gravity, x, y, width, height
                 If the 2nd or 3rd, compute new x, y values.
+                
+                The argument list can have a trailing true, false, or nil argument.
+                If present and true, after cropping reset the page fields in the image.
 
                 Call xform_image to do the cropping.
 */
@@ -8034,9 +8037,27 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     volatile VALUE x, y, width, height;
     unsigned long nx = 0, ny = 0;
     unsigned long columns, rows;
+    int reset_page = 0;
     GravityType gravity;
     MagickEnum *magick_enum;
     Image *image;
+    VALUE cropped;
+    
+    // Check for a "reset page" trailing argument.
+    if (argc >= 1)
+    {
+        switch (TYPE(argv[argc-1]))
+        {
+            case T_TRUE:
+                reset_page = 1;
+                // fall thru
+            case T_FALSE:
+            case T_NIL:
+                argc -= 1;
+            default:
+                break;
+        }
+    }
 
     switch (argc)
     {
@@ -8143,11 +8164,25 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             y = ULONG2NUM(ny);
             break;
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
+            if (reset_page)
+            {
+                rb_raise(rb_eArgError, "wrong number of arguments (%d for 4, 5, or 6)", argc);                
+            }
+            else
+            {
+                rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);                
+            }
             break;
     }
 
-    return xform_image(bang, self, x, y, width, height, CropImage);
+    cropped = xform_image(bang, self, x, y, width, height, CropImage);
+    if (reset_page)
+    {
+        Data_Get_Struct(cropped, Image, image);
+        image->page.x = image->page.y = 0L;
+        image->page.width = image->page.height = 0UL;
+    }
+    return cropped;
 }
 
 

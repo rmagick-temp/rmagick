@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image (class and instance methods, part
   1)</title>
@@ -17,34 +17,33 @@
 <script type="text/javascript" src="scripts/doc.js">
 </script>
 <script type="text/javascript">
-  //<![CDATA[
-    <!-- Pre-load this image so that the browser knows how big it is. -->
-    flower_hat = new Image();
-    flower_hat.src = "ex/images/Flower_Hat.jpg";
-
-    function show_noise(type)
-    {
-      if (type == null)
-      {
-        document.getElementById("add_noise_example").src = "ex/images/Flower_Hat.jpg";
-      }
-      else
-      {
-         document.getElementById("add_noise_example").src = "ex/add_noise_" + type + ".jpg";
-      }
-    }
-  //]]>
+//<![CDATA[
+<!-- Pre-load this image so that the browser knows how big it is. -->
+flower_hat = new Image();
+flower_hat.src = "ex/images/Flower_Hat.jpg";
+function show_noise(type)
+{
+if (type == null)
+{
+document.getElementById("add_noise_example").src = "ex/images/Flower_Hat.jpg";
+}
+else
+{
+document.getElementById("add_noise_example").src = "ex/add_noise_" + type + ".jpg";
+}
+}
+//]]>
 </script>
 <style type="text/css">
-  /*<![CDATA[*/
-    .noise_example_wrapper img {
-      float: left;
-     }
-    .noise_example_wrapper p, .noise_example_wrapper ul {
-      margin-left: 4px;
-      float: left;
-    }
-  /*]]>*/
+/*<![CDATA[*/
+.noise_example_wrapper img {
+float: left;
+}
+.noise_example_wrapper p, .noise_example_wrapper ul {
+margin-left: 4px;
+float: left;
+}
+/*]]>*/
 </style>
 </head>
 
@@ -285,8 +284,8 @@
     <h4>Example</h4>
     <pre>
 img = Magick::Image.capture {
-    self.filename = "root"
-    }
+ self.filename = "root"
+ }
 </pre>
   </div>
 
@@ -433,8 +432,8 @@ img = Magick::Image.capture {
     <h4>Example</h4>
     <pre>
 img = Magick::Image.new(256, 64) {
-  self.background_color = 'red'
-  }
+ self.background_color = 'red'
+ }
 </pre>
 
     <h4>See also</h4>
@@ -478,8 +477,8 @@ img = Magick::Image.new(256, 64) {
     <h4>Example</h4>
     <pre>
 cheetah = Magick::Image.ping("Cheetah.jpg") &raquo;
-      [Cheetah.jpg JPEG 1024x768 DirectClass 8-bit 101684b]
-p cheetah[0].rows    &raquo; 768
+ [Cheetah.jpg JPEG 1024x768 DirectClass 8-bit 101684b]
+p cheetah[0].rows &raquo; 768
 p cheetah[0].columns &raquo; 1024
 </pre>
 
@@ -608,7 +607,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Example</h4>
     <pre>
-  mom['Label'] = 'My Mother'
+ mom['Label'] = 'My Mother'
 </pre>
 
     <h4>See also</h4>
@@ -790,7 +789,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-      name="add_noise_example" /></a>
+      /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -817,7 +816,7 @@ img = Magick::Image.read_inline(content)
       </ul>
     </div>
 
-    <div style="clear:both"></div>
+    <div style="clear: both;"></div>
 
     <h4>Magick API</h4>
 
@@ -863,7 +862,7 @@ img = Magick::Image.read_inline(content)
     onmouseout="this.src='ex/affine_transform.jpg'" src=
     "ex/affine_transform.jpg" alt="affine_transform example" title=
     "Click to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left:237px;"
+    "ex/images/spin.gif" alt="" class="spin" style="left: 237px;"
     title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -1136,15 +1135,15 @@ img = Magick::Image.read_inline(content)
 
     <p class="rollover"><a href=
     "javascript:popup('border.rb.html')"><img style=
-    "padding:10px; display:none" id="borderless" onmouseout=
+    "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" name="borderless" /> <img id=
+    "Click to see the example script" /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
-    "ex/border.jpg" alt="border example" name="bordered" /></a>
-    <img src="ex/images/spin.gif" alt="" class="spin" style=
-    "left: 224px;" title=
+    "ex/border.jpg" alt="border example" /></a><img 
+    src="ex/images/spin.gif" alt="" class=
+    "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -1214,8 +1213,8 @@ img = Magick::Image.read_inline(content)
     <pre>
 mona = Magick::Image.read('MonaLisa.jpg').first
 mona.change_geometry!('320x240') { |cols, rows, img|
-  img.resize!(cols, rows)
-  }
+ img.resize!(cols, rows)
+ }
 </pre>
 
     <h4>Magick API</h4>
@@ -1447,7 +1446,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     "ex/channel_threshold_after.jpg" alt=
     "channel_threshold example" title=
     "Click the image to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left: 446px"
+    "ex/images/spin.gif" alt="" class="spin" style="left: 446px;"
     title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -1966,8 +1965,9 @@ f.color_reset!(red)
         The desired distortion metric. One of the following
         constants:
 
-        <ul style="list-style: none">
-          <li>MeanAbsoluteErrorMetric</li>
+        <ul style=
+        "list-style-type: none; list-style-image: none; list-style-position: outside;">
+        <li>MeanAbsoluteErrorMetric</li>
 
           <li>MeanSquaredErrorMetric</li>
 
@@ -2038,7 +2038,7 @@ f.color_reset!(red)
     <p>The composite method can be called three different ways:</p>
 
     <dl>
-      <dt style="font-style:normal">1.&nbsp;Without a gravity
+      <dt style="font-style: normal;">1.&nbsp;Without a gravity
       argument:</dt>
 
       <dd>
@@ -2061,7 +2061,7 @@ f.color_reset!(red)
         </dl>
       </dd>
 
-      <dt style="font-style:normal">2.&nbsp;With a gravity
+      <dt style="font-style: normal;">2.&nbsp;With a gravity
       argument, without x and y arguments:</dt>
 
       <dd>
@@ -2134,8 +2134,8 @@ f.color_reset!(red)
         </dl>
       </dd>
 
-      <dt style="font-style:normal">3.&nbsp;With gravity, x, and y
-      arguments:</dt>
+      <dt style="font-style: normal;">3.&nbsp;With gravity, x, and
+      y arguments:</dt>
 
       <dd>
         <dl>
@@ -2277,10 +2277,10 @@ f.color_reset!(red)
     <h4>Example</h4>
     <pre>
 f = Magick::Image.read('cbezier1.gif').first &raquo;
-         cbezier1.gif GIF 500x350+0+0 PseudoClass 128c 8-bit 177503b
+ cbezier1.gif GIF 500x350+0+0 PseudoClass 128c 8-bit 177503b
 f.colors &raquo; 128
 f.compress_colormap! &raquo;
-         cbezier1.gif GIF 500x350+0+0 PseudoClass 108c 8-bit 177503b
+ cbezier1.gif GIF 500x350+0+0 PseudoClass 108c 8-bit 177503b
 f.colors &raquo; 108
 </pre>
 
@@ -2475,15 +2475,16 @@ f2 = f.copy
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Extracts the specified rectangle from the
-    image.
+    <h4>Description</h4>
+
+    <p>Extracts the specified rectangle from the image.</p>
 
     <h4>Arguments</h4>
 
     <p>The crop method can be called three different ways:</p>
 
     <dl>
-      <dt style="font-style:normal">1.&nbsp;Without a
+      <dt style="font-style: normal;">1.&nbsp;Without a
       <em>gravity</em> argument:</dt>
 
       <dd>
@@ -2500,9 +2501,9 @@ f2 = f.copy
         </dl>
       </dd>
 
-      <dt style="font-style:normal">2.&nbsp;With a <em>gravity</em>
-      argument, but without <em>x</em> and <em>y</em>
-      arguments:</dt>
+      <dt style="font-style: normal;">2.&nbsp;With a
+      <em>gravity</em> argument, but without <em>x</em> and
+      <em>y</em> arguments:</dt>
 
       <dd>
         <dl>
@@ -2566,8 +2567,8 @@ f2 = f.copy
         </dl>
       </dd>
 
-      <dt style="font-style:normal">3.&nbsp;With <em>gravity</em>,
-      <em>x</em>, and <em>y</em> arguments:</dt>
+      <dt style="font-style: normal;">3.&nbsp;With
+      <em>gravity</em>, <em>x</em>, and <em>y</em> arguments:</dt>
 
       <dd>
         <dl>
@@ -2597,6 +2598,20 @@ f2 = f.copy
       </dd>
     </dl>
 
+    <h4>Notes</h4>The <code>crop</code> method retains the offset
+    information in the cropped image. This may cause the image to
+    appear to be surrounded by blank or black space when viewed
+    with an external viewer. This only occurs when the image is
+    saved in a format (such as GIF) that saves offset information.
+    To reset the offset data, add <code>true</code> as the last
+    argument to <code>crop</code>. For example,
+    <pre>
+cropped = img.crop(x, y, width, height, true)
+</pre>
+
+    <p>You can add <code>true</code> as the last argument with any
+    of the three argument list formats described above.</p>
+
     <h4>Returns</h4>
 
     <p>A new image</p>
@@ -2622,23 +2637,6 @@ f2 = f.copy
     <h4>See also</h4>
 
     <p><a href="#crop_bang">crop!</a>, <a href="#chop">chop</a></p>
-
-    <h4>Notes</h4>
-
-    <p>In very recent versions of ImageMagick (6.1.x and later) the
-    image retains the <em>x-</em> and <em>y-</em>offsets in its
-    <a href="imageattrs.html#page">page</a> attribute after
-    cropping. This may cause the cropped image to be displayed by
-    external viewers (the GIMP, for example) with invisible left
-    and top borders. You can set the <em>x-</em> and
-    <em>y-</em>offsets to 0 by changing the <code>page</code>
-    attribute to a new <a href=
-    "struct.html#Rectangle">rectangle</a>. For example:</p>
-    <pre>
-    img.crop!(x, y, width, height)
-    img.page = Rectangle.new(width, height, 0, 0)
-
-</pre>
 
     <h4>Magick API</h4>
 
@@ -2704,7 +2702,7 @@ f2 = f.copy
     "ex/images/Hot_Air_Balloons.jpg" alt="cycle_colormap example"
     title=
     "Click the image to see the example script" /></a><img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left: 191px"
+    "ex/images/spin.gif" alt="" class="spin" style="left: 191px;"
     title="Mouse over the example to see the animation" /></p>
 
     <h4>Magick API</h4>
@@ -2854,13 +2852,13 @@ pixels = f.dispatch(0,0,f.columns,f.rows,"RGB")
 # Write the pixels to a file, to be included
 # in the constitute.rb example.
 File.open('pixels-array', 'w') { |txt|
-    txt.puts("Width = #{f.columns}")
-    txt.puts("Height = #{f.rows}")
-    txt.print('Pixels = [')
-    pixels = pixels.join(',')
-    pixels.gsub!(/(\d+,){1,25}/) { "#{$&amp;}\n" }
-    txt.print(pixels)
-    txt.puts(']')
+ txt.puts("Width = #{f.columns}")
+ txt.puts("Height = #{f.rows}")
+ txt.print('Pixels = [')
+ pixels = pixels.join(',')
+ pixels.gsub!(/(\d+,){1,25}/) { "#{$&amp;}\n" }
+ txt.print(pixels)
+ txt.puts(']')
 }
 exit
 </pre>

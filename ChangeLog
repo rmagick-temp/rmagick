@@ -4,7 +4,9 @@ RMagick 1.9.1
       returns a DisposeType enum.
     o Fixed bug #2156, Image#properties no longer returns garbage for the property 
        name and value.
-    o Featurn #2159, add GrayChannel ChannelType enum value
+    o Feature #2159, add GrayChannel ChannelType enum value
+    o Feature #2172, add optional argument to crop and crop! to reset the saved
+      page offsets after cropping
 
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.

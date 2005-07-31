@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.91 2005/07/24 20:06:58 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.92 2005/07/31 15:00:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1198,6 +1198,8 @@ Init_RMagick(void)
         ENUMERATOR(XorCompositeOp)
 
 #if defined(HAVE_COLORDODGECOMPOSITEOP)
+        ENUMERATOR(BlendCompositeOp)
+        ENUMERATOR(ColorBurnCompositeOp)
         ENUMERATOR(ColorDodgeCompositeOp)
         ENUMERATOR(ExclusionCompositeOp)
         ENUMERATOR(HardLightCompositeOp)
@@ -1218,7 +1220,8 @@ Init_RMagick(void)
 #endif
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
-        ENUMERATOR(RunlengthEncodedCompression)
+        ENUMERATOR(RLECompression)              // preferred
+        ENUMERATOR(RunlengthEncodedCompression) // deprecated
         ENUMERATOR(ZipCompression)
     END_ENUM
 
@@ -1541,7 +1544,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/07/24 20:06:58 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/07/31 15:00:31 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

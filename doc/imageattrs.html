@@ -673,7 +673,7 @@
 
     <p>Specify a rectangle within an image, or retrieve the
     rectangle specified when the image was constituted. See
-    <a href="info.html#Info.extract_eq">extract=</a>.</p>
+    <a href="info.html#extract">extract=</a>.</p>
 
     <h4>Arguments</h4>
 
@@ -851,9 +851,7 @@
     <h3 id="image_type">image_type</h3>
 
     <p><span class="arg">image.</span>image_type -&gt;
-    <em>anImageType</em><br />
-    <span class="arg">image.</span>image_type = <span class=
-    "arg">anImageType</span></p>
+    <em>anImageType</em></p>
   </div>
 
   <div class="desc">
@@ -863,15 +861,10 @@
     Don't confuse this attribute with the <a href=
     "#format">format</a>, that is "GIF" or "JPG".</p>
 
-    <h4>Arguments</h4>
-
-    <p>An <a href="constants.html#ImageType">ImageType</a>
-    constant.</p>
-
     <h4>Returns</h4>
 
     <p>An <a href="constants.html#ImageType">ImageType</a>
-    constant.</p>
+    value.</p>
   </div>
 
   <div class="sig">
@@ -964,7 +957,7 @@
 
     <p><span class="imquote">The mean error per pixel computed when
     a image is color reduced.</span> This parameter is only valid
-    if the verbose argument to <code>quantize</code><a href=
+    if the <code>measure_error</code> argument to <code>quantize</code><a href=
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> is set to <code>true</code>.
     Get-only.</p>
@@ -1109,7 +1102,7 @@ blur_image is 100% complete.
 
     <p><span class="imquote">The normalized mean error computed
     when an image is color reduced.</span> This parameter is only
-    valid if the verbose argument to <code>quantize</code><a href=
+    valid if the <code>measure_error</code> argument to <code>quantize</code><a href=
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> is set to <code>true</code>.
     Get-only.</p>
@@ -1128,7 +1121,7 @@ blur_image is 100% complete.
 
     <p><span class="imquote">The normalized mean error per pixel
     computed when an image is color reduced.</span> This parameter
-    is only valid if the verbose argument to
+    is only valid if the <code>measure_error</code> argument to
     <code>quantize</code><a href=
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> is set to <code>true</code>.
@@ -1404,7 +1397,7 @@ blur_image is 100% complete.
     <p>The number of colors in the image after quantization. Set by
     <code>quantize</code> <a href=
     "ilist.html#quantize">[ImageList]</a><a href=
-    "image3.html#quantize">[Image]</a> if the <code>verbose</code>
+    "image3.html#quantize">[Image]</a> if the <code>measure_error</code>
     argument is <code>true</code>. Get-only.</p>
   </div>
 

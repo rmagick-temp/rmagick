@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.54 2005/07/23 23:41:53 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.55 2005/07/31 15:01:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -191,7 +191,7 @@ arg_is_number(VALUE arg)
 static VALUE
 rescue_not_str(VALUE arg)
 {
-    rb_raise(rb_eArgError, "argument must be a number or a string in the form 'NN%' (%s given)",
+    rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%' (%s given)",
             rb_class2name(CLASS_OF(arg)));
 }
 
@@ -1074,6 +1074,193 @@ ComplianceType_new(ComplianceType compliance)
     return rm_enum_new(Class_ComplianceType, ID2SYM(rb_intern(name)), INT2FIX(compliance));
 }
 
+
+/*
+   External:    CompositeOperator_new
+   Purpose:     Construct a CompositeOperator enum object for the specified value
+*/
+VALUE
+CompositeOperator_new(CompositeOperator op)
+{
+    const char *name;
+
+    switch (op)
+    {
+        default:
+        case UndefinedCompositeOp:
+            name = "UndefinedCompositeOp";
+            break;
+        case NoCompositeOp:
+            name = "NoCompositeOp";
+            break;
+        case AddCompositeOp:
+            name = "AddCompositeOp";
+            break;
+        case AtopCompositeOp:
+            name = "AtopCompositeOp";
+            break;
+        case BumpmapCompositeOp:
+            name = "BumpmapCompositeOp";
+            break;
+        case ClearCompositeOp:
+            name = "ClearCompositeOp";
+            break;
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
+        case ColorBurnCompositeOp:
+            name = "ColorBurnCompositeOp";
+            break;
+        case BlendCompositeOp:
+            name = "BlendCompositeOp";
+            break;
+        case ColorDodgeCompositeOp:
+            name = "ColorDodgeCompositeOp";
+            break;
+        case ExclusionCompositeOp:
+            name = "ExclusionCompositeOp";
+            break;
+        case HardLightCompositeOp:
+            name = "HardLightCompositeOp";
+            break;
+        case SoftLightCompositeOp:
+            name = "SoftLightCompositeOp";
+            break;
+#endif
+        case ColorizeCompositeOp:
+            name = "ColorizeCompositeOp";
+            break;
+        case CopyBlueCompositeOp:
+            name = "CopyBlueCompositeOp";
+            break;
+        case CopyCompositeOp:
+            name = "CopyCompositeOp";
+            break;
+#if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
+        case CopyCyanCompositeOp:
+            name = "CopyCyanCompositeOp";
+            break;
+        case CopyMagentaCompositeOp:
+            name = "CopyMagentaCompositeOp";
+            break;
+        case CopyYellowCompositeOp:
+            name = "CopyYellowCompositeOp";
+            break;
+        case CopyBlackCompositeOp:
+            name = "CopyBlackCompositeOp";
+            break;
+#endif
+        case CopyGreenCompositeOp:
+            name = "CopyGreenCompositeOp";
+            break;
+        case CopyOpacityCompositeOp:
+            name = "CopyOpacityCompositeOp";
+            break;
+        case CopyRedCompositeOp:
+            name = "CopyRedCompositeOp";
+            break;
+        case DarkenCompositeOp:
+            name = "DarkenCompositeOp";
+            break;
+#if defined(HAVE_DSTCOMPOSITEOP)
+        case DstAtopCompositeOp:
+            name = "DstAtopCompositeOp";
+            break;
+        case DstCompositeOp:
+            name = "DstCompositeOp";
+            break;
+        case DstInCompositeOp:
+            name = "DstInCompositeOp";
+            break;
+        case DstOutCompositeOp:
+            name = "DstOutCompositeOp";
+            break;
+        case DstOverCompositeOp:
+            name = "DstOverCompositeOp";
+            break;
+#endif
+        case DifferenceCompositeOp:
+            name = "DifferenceCompositeOp";
+            break;
+        case DisplaceCompositeOp:
+            name = "DisplaceCompositeOp";
+            break;
+        case DissolveCompositeOp:
+            name = "DissolveCompositeOp";
+            break;
+        case HueCompositeOp:
+            name = "HueCompositeOp";
+            break;
+        case InCompositeOp:
+            name = "InCompositeOp";
+            break;
+        case LightenCompositeOp:
+            name = "LightenCompositeOp";
+            break;
+        case LuminizeCompositeOp:
+            name = "LuminizeCompositeOp";
+            break;
+        case MinusCompositeOp:
+            name = "MinusCompositeOp";
+            break;
+        case ModulateCompositeOp:
+            name = "ModulateCompositeOp";
+            break;
+        case MultiplyCompositeOp:
+            name = "MultiplyCompositeOp";
+            break;
+        case OutCompositeOp:
+            name = "OutCompositeOp";
+            break;
+        case OverCompositeOp:
+            name = "OverCompositeOp";
+            break;
+        case OverlayCompositeOp:
+            name = "OverlayCompositeOp";
+            break;
+        case PlusCompositeOp:
+            name = "PlusCompositeOp";
+            break;
+#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
+        case ReplaceCompositeOp:
+            name = "ReplaceCompositeOp";
+            break;
+#endif
+        case SaturateCompositeOp:
+            name = "SaturateCompositeOp";
+            break;
+        case ScreenCompositeOp:
+            name = "ScreenCompositeOp";
+            break;
+#if defined(HAVE_DSTCOMPOSITEOP)
+        case SrcAtopCompositeOp:
+            name = "SrcAtopCompositeOp";
+            break;
+        case SrcCompositeOp:
+            name = "SrcCompositeOp";
+            break;
+        case SrcInCompositeOp:
+            name = "SrcInCompositeOp";
+            break;
+        case SrcOutCompositeOp:
+            name = "SrcOutCompositeOp";
+            break;
+        case SrcOverCompositeOp:
+            name = "SrcOverCompositeOp";
+            break;
+#endif
+        case SubtractCompositeOp:
+            name = "SubtractCompositeOp";
+            break;
+        case ThresholdCompositeOp:
+            name = "ThresholdCompositeOp";
+            break;
+        case XorCompositeOp:
+            name = "XorCompositeOp";
+            break;
+    }
+
+    return rm_enum_new(Class_CompositeOperator, ID2SYM(rb_intern(name)), INT2FIX(op));
+}
+
 /*
  * External:    CompressionType_new
    Purpose:     Construct a CompressionTYpe enum object for the specified value
@@ -1129,7 +1316,7 @@ VALUE
 DisposeType_new(DisposeType type)
 {
     const char *name;
-    
+
     switch(type)
     {
         default:

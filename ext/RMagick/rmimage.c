@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.101 2005/07/26 22:49:58 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.102 2005/07/31 15:04:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -262,8 +262,8 @@ Image_properties(VALUE self)
     {
         volatile VALUE ary = rb_ary_new2(2);
 
-#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)        
-        ResetImageAttributeIterator(image);      
+#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
+        ResetImageAttributeIterator(image);
         attr = GetNextImageAttribute(image);
         while (attr)
         {
@@ -271,8 +271,8 @@ Image_properties(VALUE self)
             rb_ary_store(ary, 1, rb_str_new2(attr->value));
             rb_yield(ary);
             attr = GetNextImageAttribute(image);
-        }  
-#else        
+        }
+#else
         for (attr = image->attributes; attr; attr = Next_Attribute)
         {
             // Store the next ptr where Image#aset can see it.
@@ -291,12 +291,12 @@ Image_properties(VALUE self)
     {
         attr_hash = rb_hash_new();
 #if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
-        ResetImageAttributeIterator(image);      
+        ResetImageAttributeIterator(image);
         attr = GetNextImageAttribute(image);
         while (attr)
         {
             rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
-            attr = GetNextImageAttribute(image);            
+            attr = GetNextImageAttribute(image);
         }
 #else
         for (attr = image->attributes; attr; attr = attr->next)
@@ -1748,7 +1748,20 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
 }
 
 DEF_ATTR_READER(Image, columns, int)
-DEF_ATTR_READER(Image, compose, int)
+
+/*
+    Method:     Image#compose -> composite_op
+    Purpose:    Return the composite operator attribute
+*/
+VALUE Image_compose(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+
+    return CompositeOperator_new(image->compose);
+}
+
 
 /*
     Method:     Image#compose=composite_op
@@ -1795,11 +1808,11 @@ static VALUE composite(
     long y_offset;
 
     Data_Get_Struct(self, Image, image);
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
 
     switch (argc)
     {
         case 3:                 // argv[1] is gravity, argv[2] is composite_op
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             VALUE_TO_ENUM(argv[1], gravity, GravityType);
             VALUE_TO_ENUM(argv[2], operator, CompositeOperator);
 
@@ -1850,12 +1863,14 @@ static VALUE composite(
 
         case 4:                 // argv[1], argv[2] is x_off, y_off,
                                 // argv[3] is composite_op
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
             VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
             break;
 
         case 5:
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             VALUE_TO_ENUM(argv[1], gravity, GravityType);
             x_offset = NUM2LONG(argv[2]);
             y_offset = NUM2LONG(argv[3]);
@@ -2638,7 +2653,7 @@ VALUE
 Image_dispose(VALUE self)
 {
     Image *image;
-    
+
     Data_Get_Struct(self, Image, image);
     return DisposeType_new(image->dispose);
 }
@@ -2651,9 +2666,10 @@ VALUE
 Image_dispose_eq(VALUE self, VALUE dispose)
 {
     Image *image;
-    
+
+    rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(dispose, image->dispose, DisposeType);    
+    VALUE_TO_ENUM(dispose, image->dispose, DisposeType);
     return self;
 }
 
@@ -3521,7 +3537,7 @@ Image_geometry_eq(
     geom = STRING_PTR(geom_str);
     if (!IsGeometry(geom))
     {
-        rb_raise(rb_eArgError, "invalid geometry: %s", geom);
+        rb_raise(rb_eTypeError, "invalid geometry: %s", geom);
     }
     magick_clone_string(&image->geometry, geom);
     return self;
@@ -3830,7 +3846,7 @@ Image_inspect(VALUE self)
     // Print scene number.
 #if defined(HAVE_GETNEXTIMAGEINLIST)
     if ((GetPreviousImageInList(image) != NULL) && (GetNextImageInList(image) != NULL) && image->scene > 0)
-#else    
+#else
     if ((image->previous || image->next) && image->scene > 0)
 #endif
     {
@@ -4618,6 +4634,7 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 #if defined(HAVE_SETIMAGEPROGRESSMONITOR)
     Image *image;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (NIL_P(monitor))
@@ -7734,6 +7751,8 @@ Image_trim_bang(VALUE self)
     Method:     Image#image_type=(type)
     Purpose:    Call SetImageType to set the type of the image
     Note:       Can't use type & type= b/c of Object#type.
+                This setter is useless. Leave for backward compatibility
+                but don't document it.
 */
 VALUE Image_image_type_eq(VALUE self, VALUE type)
 {
@@ -8025,7 +8044,7 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
                 or
                     gravity, x, y, width, height
                 If the 2nd or 3rd, compute new x, y values.
-                
+
                 The argument list can have a trailing true, false, or nil argument.
                 If present and true, after cropping reset the page fields in the image.
 
@@ -8042,7 +8061,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     MagickEnum *magick_enum;
     Image *image;
     VALUE cropped;
-    
+
     // Check for a "reset page" trailing argument.
     if (argc >= 1)
     {
@@ -8166,11 +8185,11 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
         default:
             if (reset_page)
             {
-                rb_raise(rb_eArgError, "wrong number of arguments (%d for 4, 5, or 6)", argc);                
+                rb_raise(rb_eArgError, "wrong number of arguments (%d for 4, 5, or 6)", argc);
             }
             else
             {
-                rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);                
+                rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
             }
             break;
     }

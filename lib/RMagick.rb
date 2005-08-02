@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.25 2005/07/12 23:34:04 rmagick Exp $
+# $Id: RMagick.rb,v 1.26 2005/08/02 23:14:43 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -163,13 +163,13 @@ class Draw
         ObliqueStyle.to_i => 'oblique',
         AnyStyle.to_i => 'all'
         }
-        
+
   private
     def enquote(str)
         if str.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(str)
-        	return str
+            return str
         else
-        	return '"' + str + '"'
+            return '"' + str + '"'
         end
     end
 
@@ -540,19 +540,19 @@ class Draw
     def text(x, y, text)
         if text.to_s.empty?
             raise ArgumentError, "missing text argument"
-        end		
-		if text.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(text)
-			; # text already quoted
-		elsif !text['\'']
-			text = '\''+text+'\''
-		elsif !text['"']
-			text = '"'+text+'"'
-		elsif !(text['{'] || text['}'])
-			text = '{'+text+'}'
-		else
-			# escape existing braces, surround with braces			
-			text = '{' +  text.gsub(/[}]/) { |b| '\\' + b } + '}'
-		end
+        end
+        if text.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(text)
+            ; # text already quoted
+        elsif !text['\'']
+            text = '\''+text+'\''
+        elsif !text['"']
+            text = '"'+text+'"'
+        elsif !(text['{'] || text['}'])
+            text = '{'+text+'}'
+        else
+            # escape existing braces, surround with braces
+            text = '{' +  text.gsub(/[}]/) { |b| '\\' + b } + '}'
+        end
         primitive "text #{x},#{y} #{text}"
     end
 
@@ -1009,11 +1009,16 @@ protected
         unless obj.kind_of? Magick::Image
             raise ArgumentError, "Magick::Image required (#{obj.class} given)"
         end
+        true
     end
 
     # Ensure array is always an array of Magick::Image objects
     def is_a_image_array(ary)
+        unless ary.respond_to? :each
+            raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{ary.class} given)"
+        end
         ary.each { |obj| is_a_image obj }
+        true
     end
 
     # Find old current image, update @scene
@@ -1041,12 +1046,20 @@ public
 
     # Allow scene to be set to nil
     def scene=(n)
-        if (length == 0 && n != nil) || (length > 0 && n == nil)
-            raise IndexError, "scene number out of bounds"
-        elsif (length == 0) || (Integer(n) < 0) || (Integer(n) > length - 1)
+        if n.nil?
+            raise IndexError, "scene number out of bounds" unless length == 0
+            @scene = nil
+            return @scene
+        elsif length == 0
             raise IndexError, "scene number out of bounds"
         end
-        @scene = Integer(n)
+
+        n = Integer(n)
+        if n < 0 || n > length - 1
+            raise IndexError, "scene number out of bounds"
+        end
+        @scene = n
+        return @scene
     end
 
     def [](*args)
@@ -1059,15 +1072,17 @@ public
 
     def []=(*args)
         if args.length == 3             # f[start,length] = [f1,f2...]
-            is_a_image_array args[2]
+            args[2].kind_of?(Magick::Image) || is_a_image_array(args[2])
             super
-            if args[1] > 0
-                @scene = args[0] + args[1] - 1
-            else                        # inserts elements if length == 0
+            args[0] = args[0] + length if (args[0] < 0)
+            args[1] = length - args[0] if (args[0] + args[1] > length)
+            if args[2].kind_of?(Magick::Image)
+                @scene = args[0]
+            else
                 @scene = args[0] + args[2].length - 1
             end
         elsif args[0].kind_of? Range    # f[first..last] = [f1,f2...]
-            is_a_image_array args[1]
+            args[1].kind_of?(Magick::Image) || is_a_image_array(args[1])
             super
             @scene = args[0].end
         else                            # f[index] = f1
@@ -1413,6 +1428,7 @@ public
 
     # Set the number of iterations of an animated GIF
     def iterations=(n)
+        n = Integer(n)
         if n < 0 || n > 65535
             raise ArgumentError, "iterations must be between 0 and 65535"
         end
@@ -1431,8 +1447,8 @@ public
             else
                 super
             end
-        rescue NameError
-          raise NameError, "undefined method `#{methID.id2name}' for #{self.class}"
+        rescue NoMethodError
+          raise NoMethodError, "undefined method `#{methID.id2name}' for #{self.class}"
         rescue Exception
             $@.delete_if { |s| /:in `send'$/.match(s) || /:in `method_missing'$/.match(s) }
             raise

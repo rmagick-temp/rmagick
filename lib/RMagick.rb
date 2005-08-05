@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.26 2005/08/02 23:14:43 rmagick Exp $
+# $Id: RMagick.rb,v 1.27 2005/08/05 23:43:09 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1202,49 +1202,61 @@ public
         return a
     end
 
-    def fill(obj, *args)
-        is_a_image obj
+    def fill(*args, &block)
+        is_a_image args[0] unless block_given?
+        cfid = self[@scene].__id__ rescue nil
+        super
+        is_a_image_array self
+        set_cf cfid
+        return self
+    end
+
+    def find_all(&block)
         cfid = self[@scene].__id__ rescue nil
         a = super
-        set_cf cfid
+        a.set_cf cfid
         return a
     end
 
-    if Array.instance_methods(false).include? 'fetch' then
-        def fetch(*args,&block)
-            super
-        end
-    end
-
-    if Array.instance_methods(false).include? 'insert' then
+    if self.superclass.instance_methods.include? 'insert' then
         def insert(*args)
+            raise(ArgumentError, "can't insert nil") unless args.length > 1
+            is_a_image_array args[1,args.length-1]
             cfid = self[@scene].__id__ rescue nil
-            a = self.class.new.replace super
-            a.set_cf cfid
-            return a
+            super
+            set_cf cfid
+            return self
         end
     end
 
-    # __map__ is a synonym for Array#map. We've used an alias
-    # so it doesn't conflict with our own map method.
-    if Array.instance_methods(false).include? '__map__' then
-        def __map__(&block)
-            cfid = self[@scene].__id__ rescue nil
-            a = self.class.new.replace super
-            a.set_cf cfid
-            return a
+    # Enumerable (or Array) has a #map method that conflicts with our
+    # own #map method. RMagick.so has defined a synonym for that #map
+    # called Array#__ary_map__. Here, we define Magick::ImageList#__map__
+    # to allow the use of the Enumerable/Array#map method on ImageList objects.
+    def __map__(&block)
+        cfid = self[@scene].__id__ rescue nil
+        ensure_image = Proc.new do |img|
+            rv = block.call(img)
+            is_a_image rv
+            return rv
         end
+        a = self.class.new.replace __ary_map__(&ensure_image)
+        a.set_cf cfid
+        return a
     end
 
     def map!(&block)
-        super
-        is_a_image_array self
-        self
+        ensure_image = Proc.new do |img|
+            rv = block.call(img)
+            is_a_image rv
+            return rv
+        end
+        super(&ensure_image)
     end
 
     def pop
         cfid = self[@scene].__id__ rescue nil
-        a = super
+        a = super       # can return nil
         set_cf cfid
         return a
     end
@@ -1256,18 +1268,16 @@ public
         self
     end
 
-    if Array.instance_methods(false).include? 'reject' then
-        def reject(&block)
-            cfid = self[@scene].__id__ rescue nil
-            a = super
-            set_cf cfid
-            return a
-        end
+    def reject(&block)
+        cfid = self[@scene].__id__ rescue nil
+        a = self.class.new.replace super
+        a.set_cf cfid
+        return a
     end
 
     def reject!(&block)
         cfid = self[@scene].__id__ rescue nil
-        a = super
+        a = super       # can return nil
         set_cf cfid
         return a
     end
@@ -1281,6 +1291,9 @@ public
             cfid = self[@scene].__id__ rescue nil
         end
         super
+        # set_cf will fail if the new list has fewer images
+        # than the scene number indicates.
+        @scene = self.length == 0 ? nil : 0
         set_cf cfid
         self
     end
@@ -1299,13 +1312,11 @@ public
         return a
     end
 
-    if Array.instance_methods(false).include? 'select' then
-        def select(*args,&block)
-            cfid = self[@scene].__id__ rescue nil
-            a = super
-            a.set_cf cfid
-            return a
-        end
+    def select(&block)
+        cfid = self[@scene].__id__ rescue nil
+        a = super
+        a.set_cf cfid
+        return a
     end
 
     def shift

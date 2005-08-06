@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.28 2005/08/06 18:56:29 rmagick Exp $
+# $Id: RMagick.rb,v 1.29 2005/08/06 20:42:47 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1377,9 +1377,28 @@ public
             r = self[x] <=> other[x]
             return r unless r == 0
         end
+        if self.scene.nil?
+            if other.scene.nil?
+                return 0
+            else
+                raise TypeError, "cannot convert nil into #{other.scene.class}"
+            end
+        else
+            if other.scene.nil?
+                raise TypeError, "cannot convert nil into #{self.scene.class}"
+            else
+                return 0
+            end
+        end
         r = self.scene <=> other.scene
         return r unless r == 0
         return self.length <=> other.length
+    end
+
+    def clone
+        ditto = dup
+        ditto.freeze if frozen?
+        return ditto
     end
 
     # Make a deep copy
@@ -1405,6 +1424,14 @@ public
             raise ArgumentError, "delay must be greater than 0"
         end
         each { |f| f.delay = Integer(d) }
+    end
+
+    def dup
+        ditto = self.class.new
+        each {|img| ditto << img}
+        ditto.scene = @scene
+        ditto.taint if tainted?
+        return ditto
     end
 
     def from_blob(*blobs, &block)

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.29 2005/08/06 20:42:47 rmagick Exp $
+# $Id: RMagick.rb,v 1.30 2005/08/06 23:57:23 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1377,18 +1377,12 @@ public
             r = self[x] <=> other[x]
             return r unless r == 0
         end
-        if self.scene.nil?
-            if other.scene.nil?
-                return 0
-            else
-                raise TypeError, "cannot convert nil into #{other.scene.class}"
-            end
-        else
-            if other.scene.nil?
-                raise TypeError, "cannot convert nil into #{self.scene.class}"
-            else
-                return 0
-            end
+        if @scene.nil? && other.scene.nil?
+            return 0
+        elsif @scene.nil? && ! other.scene.nil?
+            raise TypeError, "cannot convert nil into #{other.scene.class}"
+        elsif ! @scene.nil? && other.scene.nil?
+            raise TypeError, "cannot convert nil into #{self.scene.class}"
         end
         r = self.scene <=> other.scene
         return r unless r == 0

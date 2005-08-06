@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.92 2005/07/31 15:00:31 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.93 2005/08/06 18:55:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -784,7 +784,7 @@ Init_RMagick(void)
     rb_define_alias(Class_ImageList, "__display__", "display");
 
     // Define an alias for Array's "map" method.
-    rb_define_alias(Class_ImageList, "__map__", "map");
+    rb_define_alias(Class_ImageList, "__ary_map__", "map");
 
     rb_define_method(Class_ImageList, "animate", ImageList_animate, -1);
     rb_define_method(Class_ImageList, "append", ImageList_append, 1);
@@ -1544,7 +1544,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/07/31 15:00:31 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/08/06 18:55:08 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

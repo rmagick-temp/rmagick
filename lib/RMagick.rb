@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.27 2005/08/05 23:43:09 rmagick Exp $
+# $Id: RMagick.rb,v 1.28 2005/08/06 18:56:29 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1314,7 +1314,7 @@ public
 
     def select(&block)
         cfid = self[@scene].__id__ rescue nil
-        a = super
+        a = self.class.new.replace super
         a.set_cf cfid
         return a
     end

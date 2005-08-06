@@ -798,14 +798,17 @@ imagelist2 = imagelist1.copy
 
     <h4>Arguments</h4>
 
-    <p>One or more of the strings produced by <a href=
-    "#to_blob">to_blob</a>. Control the format of the created
-    image(s) by setting additional <a href=
+    <p>A <em>blob</em> can be a string containing an image file
+    such as a JPEG or GIF. The string can contain a multi-image file such
+    as an animated GIF or a Photoshop image with multiple layers. A blob
+    can also be one of the strings produced by <a href=
+    "#to_blob">to_blob</a>. Control how the image(s) are created
+    by setting additional <a href=
     "info.html">Image::Info</a> attributes in the optional block
     argument. Useful attributes include <a href=
-    "info.html#Info.format">format</a>, <a href=
-    "info.html#Info.size">size</a>, and <a href=
-    "info.html#Info.depth">depth</a>.</p>
+    "info.html#scene">scene</a>, <a href=
+    "info.html#number_scenes">number_scenes</a>, and
+    <a href="info.html#extract">extract</a>.</p>
 
     <h4>Returns</h4>
 
@@ -815,12 +818,14 @@ imagelist2 = imagelist1.copy
 
     <h4>Example</h4>
     <pre>
-imagelist = Magick::ImageList.new
-imagelist.from_blob(blob) {
-   self.format = "GIF"
-   self.size = "120x120"
-   self.depth = Magick::QuantumDepth
-   }
+require 'RMagick'
+
+f = File.open('Cheetah.jpg')
+blob = f.read
+
+ilist = Magick::ImageList.new
+ilist.from_blob(blob)
+ilist.display
 </pre>
 
     <h4>See also</h4><a href="#to_blob">to_blob</a>, <a href=

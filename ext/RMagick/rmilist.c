@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.22 2005/03/05 16:18:39 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.23 2005/08/07 18:05:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -285,8 +285,8 @@ ImageList_montage(VALUE self)
 
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
-    HANDLE_ERROR
     rm_split(image_list);
+    HANDLE_ERROR
 
     return rm_imagelist_from_images(montage_seq);
 }

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.23 2005/08/07 18:05:51 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.24 2005/08/07 21:03:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -304,13 +304,15 @@ ImageList_morph(VALUE self, VALUE nimages)
 {
     Image *images, *new_images;
     ExceptionInfo exception;
-    unsigned long number_images;
+    long number_images;
 
     if (rm_imagelist_length(self) < 1)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
-    number_images = NUM2ULONG(nimages);
+
+    // Use a signed long so we can test for a negative argument.
+    number_images = NUM2LONG(nimages);
     if (number_images <= 0)
     {
         rb_raise(rb_eArgError, "number of intervening images must be > 0");
@@ -318,7 +320,7 @@ ImageList_morph(VALUE self, VALUE nimages)
 
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
-    new_images = MorphImages(images, number_images, &exception);
+    new_images = MorphImages(images, (unsigned long)number_images, &exception);
     HANDLE_ERROR
 
     return rm_imagelist_from_images(new_images);

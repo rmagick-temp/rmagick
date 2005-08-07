@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.24 2005/08/07 21:03:36 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.25 2005/08/07 21:21:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -75,8 +75,8 @@ ImageList_append(VALUE self, VALUE stack_arg)
 
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_image_new(result);
 }
@@ -122,8 +122,8 @@ ImageList_coalesce(VALUE self)
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_imagelist_from_images(results);
 }
@@ -145,8 +145,8 @@ ImageList_deconstruct(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = DeconstructImages(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_imagelist_from_images(new_images);
 }
@@ -195,8 +195,8 @@ ImageList_flatten_images(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_image_new(new_image);
 }
@@ -228,8 +228,8 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     clone_images = CloneImageList(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
@@ -340,8 +340,8 @@ ImageList_mosaic(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_image_new(new_image);
 }
@@ -525,8 +525,8 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     images = rm_images_from_imagelist(self);
     new_images = CloneImageList(images, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     QuantizeImages(&quantize_info, new_images);
 
@@ -585,8 +585,8 @@ ImageList_to_blob(VALUE self)
     info->adjoin = True;
     GetExceptionInfo(&exception);
     blob = ImageToBlob(info, images, &length, &exception);
-    HANDLE_ERROR
     rm_split(images);
+    HANDLE_ERROR
 
     return (blob && length) ? rb_str_new(blob, length) : Qnil;
 }
@@ -675,6 +675,7 @@ ImageList_write(VALUE self, VALUE file)
     for (img = images; img; img = GET_NEXT_IMAGE(img))
     {
         (void) WriteImage(info, img);
+        // images will be split before raising an exception
         rm_handle_all_errors(images);
         if (info->adjoin)
         {

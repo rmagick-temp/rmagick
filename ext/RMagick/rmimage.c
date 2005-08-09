@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.102 2005/07/31 15:04:53 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.103 2005/08/09 23:23:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6866,6 +6866,7 @@ Image_spaceship(VALUE self, VALUE other)
     }
 
     res = memcmp(sigA->value, sigB->value, 64);
+    res = res > 0 ? 1 : (res < 0 ? -1 :  0);    // reduce to 1, -1, 0
 
     return INT2FIX(res);
 }

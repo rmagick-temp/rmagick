@@ -371,8 +371,12 @@ img = Magick::Image.capture {
 
     <h4>Arguments</h4>
 
-    <p>A string produced by the <a href="#to_blob">to_blob</a>
-    method. Control the format of the created image(s) by setting
+    <p>A blob can be a string containing an image file such as 
+    a JPEG or GIF. The string can contain a multi-image file 
+    such as an animated GIF or a Photoshop image with multiple 
+    layers. A blob can also be one of the strings produced by 
+    <a href="image3.html" target="to_blob">to_blob</a>. Control 
+    the format of the created image(s) by setting
     additional <a href="info.html">Image::Info</a> attributes in
     the optional block argument.</p>
 
@@ -613,7 +617,7 @@ img = Magick::Image.read_inline(content)
     <h4>See also</h4>
 
     <p><a href="#aset"><code>[ ]=</code></a>, <a href=
-    "image2.html#properties"><code>properties</code></a></p>
+    "image3.html#properties"><code>properties</code></a></p>
 
     <h4>Magick API</h4>
 
@@ -652,7 +656,7 @@ img = Magick::Image.read_inline(content)
     <h4>See also</h4>
 
     <p><a href="#aref">[<code>&nbsp;]</code></a>, <a href=
-    "image2.html#properties"><code>properties</code></a></p>
+    "image3.html#properties"><code>properties</code></a></p>
 
     <h4>Magick API</h4>
 

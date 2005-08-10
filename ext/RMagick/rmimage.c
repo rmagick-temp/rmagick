@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.103 2005/08/09 23:23:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.104 2005/08/10 23:55:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -396,9 +396,13 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 
     channels = extract_channels(&argc, argv);
 
+    if (argc > 1)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
     if (argc == 0)
     {
-        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+        rb_raise(rb_eArgError, "no threshold specified");
     }
 
     GetExceptionInfo(&exception);

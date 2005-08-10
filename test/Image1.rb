@@ -133,6 +133,66 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.affine_transform(0) }
     end
     
+    def test_bilevel_channel
+        assert_raise(ArgumentError) { @img.bilevel_channel }
+        assert_nothing_raised { @img.bilevel_channel(100) }
+        assert_nothing_raised { @img.bilevel_channel(100, Magick::RedChannel) }
+        assert_nothing_raised { @img.bilevel_channel(100, Magick::RedChannel, Magick::BlueChannel, Magick::GreenChannel, Magick::OpacityChannel) }
+        assert_nothing_raised { @img.bilevel_channel(100, Magick::CyanChannel, Magick::MagentaChannel, Magick::YellowChannel, Magick::BlackChannel) }
+        assert_nothing_raised { @img.bilevel_channel(100, Magick::GrayChannel) }
+        assert_nothing_raised { @img.bilevel_channel(100, Magick::AllChannels) }
+        assert_raise(ArgumentError) { @img.bilevel_channel(100, 2) }
+    end
+    
+    def test_blur_channel
+        assert_nothing_raised { @img.blur_channel }
+        assert_nothing_raised { @img.blur_channel(1) }
+        assert_nothing_raised { @img.blur_channel(1,2) }
+        assert_nothing_raised { @img.blur_channel(1,2, Magick::RedChannel) }
+        assert_nothing_raised { @img.blur_channel(1,2, Magick::RedChannel, Magick::BlueChannel, Magick::GreenChannel, Magick::OpacityChannel) }
+        assert_nothing_raised { @img.blur_channel(1,2, Magick::CyanChannel, Magick::MagentaChannel, Magick::YellowChannel, Magick::BlackChannel) }
+        assert_nothing_raised { @img.blur_channel(1,2, Magick::GrayChannel) }
+        assert_nothing_raised { @img.blur_channel(1,2, Magick::AllChannels) }
+        assert_raise(ArgumentError) { @img.blur_channel(1,2,2) }
+    end
+    
+    def test_blur_image
+        assert_nothing_raised { @img.blur_image }
+        assert_nothing_raised { @img.blur_image(1) }
+        assert_nothing_raised { @img.blur_image(1,2) }
+        assert_raise(ArgumentError) { @img.blur_image(1,2,3) }
+    end
+
+    def test_black_threshold
+        assert_raise(ArgumentError) { @img.black_threshold }
+        assert_nothing_raised { @img.black_threshold(50) }
+        assert_nothing_raised { @img.black_threshold(50, 50) }
+        assert_nothing_raised { @img.black_threshold(50, 50, 50) }
+        assert_nothing_raised { @img.black_threshold(50, 50, 50, 50) }
+        assert_raise(ArgumentError) { @img.black_threshold(50, 50, 50, 50, 50) }
+    end
+    
+    def test_border
+        assert_nothing_raised { @img.border(2, 2, 'red') }
+        assert_nothing_raised { @img.border!(2, 2, 'red') }
+    end
+    
+    def test_change_geometry
+        assert_raise(ArgumentError) { @img.change_geometry("sss") }
+        assert_raise(LocalJumpError) { @img.change_geometry("100x100") }
+        assert_nothing_raised do
+            res = @img.change_geometry("100x100") { 1 }
+            assert_equal(1, res)
+        end
+        assert_raise(ArgumentError) { @img.change_geometry([]) }
+    end
+    
+    def test_changed?
+        assert_block { !@img.changed? }
+        @img.pixel_color(0,0,'red')
+        assert_block { @img.changed? }
+    end        
+        
 end
 
 if __FILE__ == $0

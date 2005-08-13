@@ -129,9 +129,6 @@ float: left;
 
           <li><a href="#channel_mean">channel_mean</a></li>
 
-          <li><a href=
-          "#channel_threshold">channel_threshold</a></li>
-
           <li><a href="#charcoal">charcoal</a></li>
 
           <li><a href="#chop">chop</a></li>
@@ -754,8 +751,8 @@ img = Magick::Image.read_inline(content)
 
     <h4>See also</h4>
 
-    <p><a href="#channel_threshold">channel_threshold</a>, <a href=
-    "image3.html#random_channel_threshold">random_channel_threshold</a>,
+    <p><a href="#bilevel_channel">bilevel_channel</a>, <a href=
+    "image3.html#random_threshold_channel">random_threshold_channel</a>,
     <a href="image3.html#threshold">threshold</a></p>
 
     <h4>Magick API</h4>
@@ -1092,7 +1089,7 @@ img = Magick::Image.read_inline(content)
     <h4>See also</h4>
 
     <p><a href="image3.html#white_threshold">white_threshold</a>,
-    <a href="#channel_threshold">channel_threshold</a></p>
+    <a href="#bilevel_channel">bilevel_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1411,59 +1408,6 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <p>GetImageChannelMean (available in ImageMagick 6.0.0),
     GetImageStatistics (available in GraphicsMagick 1.1)</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="channel_threshold">channel_threshold</h3>
-
-    <p><span class=
-    "arg">image</span>.channel_threshold(<span class="arg">red_channel</span>,
-    [<span class="arg">green_channel</span>[, <span class=
-    "arg">blue_channel</span>[, <span class=
-    "arg">opacity_channel</span>]]]) -&gt; <em>anImage</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Creates a high-contrast image by changing the pixels based
-    on the intensity of each pixel channel.</p>
-
-    <h4>Arguments</h4>Each channel argument is a number between 0
-    and MaxRGB. All arguments except the first may be omitted. If
-    the <span class="arg">green_channel</span> or <span class=
-    "arg">blue_channel</span> argument is omitted, the default
-    value is the <span class="arg">red_channel</span> value. If the
-    <span class="arg">opacity_channel</span> argument is omitted,
-    the default value is <a href=
-    "constants.html#Opacity">OpaqueOpacity</a>.
-
-    <h4>Returns</h4>
-
-    <p>A new image</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('channel_threshold.rb.html')"><img onmouseover="this.src='ex/channel_threshold_before.jpg'"
-    onmouseout="this.src='ex/channel_threshold_after.jpg'" src=
-    "ex/channel_threshold_after.jpg" alt=
-    "channel_threshold example" title=
-    "Click the image to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left: 446px;"
-    title="Mouse over the example to see the original image" /></p>
-
-    <h4>See also</h4>
-
-    <p><a href="#adaptive_threshold">adaptive_threshold</a>,
-    <a href="#black_threshold">black_threshold</a>, <a href=
-    "image3.html#random_channel_threshold">random_channel_threshold</a>,
-    <a href="image3.html#threshold">threshold</a>, <a href=
-    "image3.html#white_threshold">white_threshold</a></p>
-
-    <h4>Magick API</h4>
-
-    <p>ThresholdImageChannel</p>
   </div>
 
   <div class="sig">

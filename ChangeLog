@@ -11,6 +11,7 @@ RMagick 1.9.1
       enum value, deprecate RunlengthCompression
     o Feature #2172, added optional argument to crop and crop! to reset the saved
       page offsets after cropping
+    o Deprecated Image#channel_threshold. This method is deprecated in ImageMagick.
 
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.

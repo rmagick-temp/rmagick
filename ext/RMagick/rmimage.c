@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.104 2005/08/10 23:55:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.105 2005/08/13 23:03:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1116,7 +1116,9 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 */
 VALUE
 Image_channel_threshold(int argc, VALUE *argv, VALUE self)
-{
+{    
+    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
+               ". Use bilevel_channel instead.");
     return threshold_image(argc, argv, self,
 #if defined(HAVE_THRESHOLDIMAGECHANNEL)
                          ThresholdImageChannel

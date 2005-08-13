@@ -34,9 +34,12 @@ end
 ### end compat.rb
 ### begin config.rb
 
-if i = ARGV.index(/\A--rbconfig=/) then
+i = ARGV.detect { |arg| arg =~ /\A--rbconfig=/ }
+
+if i then
+  i =~ /\A--rbconfig=/
   file = $'
-  ARGV.delete_at(i)
+  ARGV.delete_if { |arg| arg == i } 
   require file
 else
   require 'rbconfig'

@@ -131,6 +131,8 @@ class Image1_UT < Test::Unit::TestCase
         affine = Magick::AffineMatrix.new(1, Math::PI/6, Math::PI/6, 1, 0, 0)
         assert_nothing_raised { @img.affine_transform(affine) }
         assert_raise(TypeError) { @img.affine_transform(0) }
+        res = @img.affine_transform(affine)
+        assert_instance_of(Magick::Image,  res)
     end
     
     def test_bilevel_channel
@@ -142,6 +144,8 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.bilevel_channel(100, Magick::GrayChannel) }
         assert_nothing_raised { @img.bilevel_channel(100, Magick::AllChannels) }
         assert_raise(ArgumentError) { @img.bilevel_channel(100, 2) }
+        res = @img.bilevel_channel(100)
+        assert_instance_of(Magick::Image,  res)
     end
     
     def test_blur_channel
@@ -154,6 +158,8 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.blur_channel(1,2, Magick::GrayChannel) }
         assert_nothing_raised { @img.blur_channel(1,2, Magick::AllChannels) }
         assert_raise(ArgumentError) { @img.blur_channel(1,2,2) }
+        res = @img.blur_channel
+        assert_instance_of(Magick::Image,  res)
     end
     
     def test_blur_image
@@ -161,6 +167,8 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.blur_image(1) }
         assert_nothing_raised { @img.blur_image(1,2) }
         assert_raise(ArgumentError) { @img.blur_image(1,2,3) }
+        res = @img.blur_image
+        assert_instance_of(Magick::Image,  res)
     end
 
     def test_black_threshold
@@ -170,11 +178,15 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.black_threshold(50, 50, 50) }
         assert_nothing_raised { @img.black_threshold(50, 50, 50, 50) }
         assert_raise(ArgumentError) { @img.black_threshold(50, 50, 50, 50, 50) }
+        res = @img.black_threshold(50)
+        assert_instance_of(Magick::Image,  res)
     end
     
     def test_border
         assert_nothing_raised { @img.border(2, 2, 'red') }
         assert_nothing_raised { @img.border!(2, 2, 'red') }
+        res = @img.border(2,2, 'red')
+        assert_instance_of(Magick::Image,  res)
     end
     
     def test_change_geometry
@@ -191,7 +203,34 @@ class Image1_UT < Test::Unit::TestCase
         assert_block { !@img.changed? }
         @img.pixel_color(0,0,'red')
         assert_block { @img.changed? }
-    end        
+    end
+    
+    def test_channel
+        assert_nothing_raised { @img.channel(Magick::RedChannel) }
+        assert_nothing_raised { @img.channel(Magick::BlueChannel) }
+        assert_nothing_raised { @img.channel(Magick::GreenChannel) }
+        assert_nothing_raised { @img.channel(Magick::OpacityChannel) }
+        assert_nothing_raised { @img.channel(Magick::MagentaChannel) }
+        assert_nothing_raised { @img.channel(Magick::CyanChannel) }
+        assert_nothing_raised { @img.channel(Magick::YellowChannel) }
+        assert_nothing_raised { @img.channel(Magick::BlackChannel) }
+        assert_nothing_raised { @img.channel(Magick::GrayChannel) }
+        assert_instance_of(Magick::Image, @img.channel(Magick::RedChannel)) 
+        assert_raise(TypeError) { @img.channel(2) }
+    end
+    
+    def test_channel_depth
+        assert_nothing_raised { @img.channel_depth }
+        assert_nothing_raised { @img.channel_depth(Magick::RedChannel) }
+        assert_nothing_raised { @img.channel_depth(Magick::RedChannel, Magick::BlueChannel) }
+        assert_nothing_raised { @img.channel_depth(Magick::GreenChannel, Magick::OpacityChannel) }
+        assert_nothing_raised { @img.channel_depth(Magick::MagentaChannel, Magick::CyanChannel) }
+        assert_nothing_raised { @img.channel_depth(Magick::CyanChannel, Magick::BlackChannel) }
+        assert_nothing_raised { @img.channel_depth(Magick::GrayChannel) }
+        assert_instance_of(Fixnum, @img.channel_depth(Magick::RedChannel))
+    end
+    
+        
         
 end
 

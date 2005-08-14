@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.105 2005/08/13 23:03:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.106 2005/08/14 20:27:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -789,7 +789,7 @@ VALUE Image_compare_channel(
     ExceptionInfo exception;
 
     channels = extract_channels(&argc, argv);
-    if (argc < 2)
+    if (argc != 2)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }

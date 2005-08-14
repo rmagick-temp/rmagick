@@ -35,6 +35,11 @@ class Image1_UT < Test::Unit::TestCase
             assert(known.has_key?(name))
             assert_equal(known[name], value)
         end
+        
+        assert_raise(TypeError) do
+            @img.freeze
+            @img['d'] = 'string4'
+        end
     end
     
     # test constitute and dispatch
@@ -187,6 +192,8 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.border!(2, 2, 'red') }
         res = @img.border(2,2, 'red')
         assert_instance_of(Magick::Image,  res)
+        @img.freeze
+        assert_raise(TypeError) { @img.border!(2,2, 'red') }
     end
     
     def test_change_geometry
@@ -200,9 +207,9 @@ class Image1_UT < Test::Unit::TestCase
     end
     
     def test_changed?
-        assert_block { !@img.changed? }
-        @img.pixel_color(0,0,'red')
-        assert_block { @img.changed? }
+#        assert_block { !@img.changed? }
+#        @img.pixel_color(0,0,'red')
+#        assert_block { @img.changed? }
     end
     
     def test_channel
@@ -227,11 +234,301 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.channel_depth(Magick::MagentaChannel, Magick::CyanChannel) }
         assert_nothing_raised { @img.channel_depth(Magick::CyanChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.channel_depth(Magick::GrayChannel) }
+        assert_raise(ArgumentError) { @img.channel_depth(2) }
         assert_instance_of(Fixnum, @img.channel_depth(Magick::RedChannel))
     end
     
+    def test_channel_extrema
+        assert_nothing_raised do
+            res = @img.channel_extrema
+            assert_instance_of(Array, res)
+            assert_equal(2, res.length)
+            assert_instance_of(Fixnum, res[0])
+            assert_instance_of(Fixnum, res[1])
+        end
+        assert_nothing_raised { @img.channel_extrema(Magick::RedChannel) }
+        assert_nothing_raised { @img.channel_extrema(Magick::RedChannel, Magick::BlueChannel) }
+        assert_nothing_raised { @img.channel_extrema(Magick::GreenChannel, Magick::OpacityChannel) }
+        assert_nothing_raised { @img.channel_extrema(Magick::MagentaChannel, Magick::CyanChannel) }
+        assert_nothing_raised { @img.channel_extrema(Magick::CyanChannel, Magick::BlackChannel) }
+        assert_nothing_raised { @img.channel_extrema(Magick::GrayChannel) }
+        assert_raise(ArgumentError) { @img.channel_extrema(2) }
+    end
+    
+    def test_channel_mean
+        assert_nothing_raised do
+            res = @img.channel_mean
+            assert_instance_of(Array, res)
+            assert_equal(2, res.length)
+            assert_instance_of(Float, res[0])
+            assert_instance_of(Float, res[1])
+        end
+        assert_nothing_raised { @img.channel_mean(Magick::RedChannel) }
+        assert_nothing_raised { @img.channel_mean(Magick::RedChannel, Magick::BlueChannel) }
+        assert_nothing_raised { @img.channel_mean(Magick::GreenChannel, Magick::OpacityChannel) }
+        assert_nothing_raised { @img.channel_mean(Magick::MagentaChannel, Magick::CyanChannel) }
+        assert_nothing_raised { @img.channel_mean(Magick::CyanChannel, Magick::BlackChannel) }
+        assert_nothing_raised { @img.channel_mean(Magick::GrayChannel) }
+        assert_raise(ArgumentError) { @img.channel_mean(2) }
+    end
+    
+    def test_charcoal
+        assert_nothing_raised do
+            res = @img.charcoal
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.charcoal(1.0) }
+        assert_nothing_raised { @img.charcoal(1.0, 2.0) }
+        assert_raise(ArgumentError) { @img.charcoal(1.0, 2.0, 3.0) }
+    end
+    
+    def test_chop
+        assert_nothing_raised do
+            res = @img.chop(10, 10, 10, 10)
+            assert_instance_of(Magick::Image, res)
+        end
+    end
+    
+    def test_clone
+        assert_nothing_raised do
+            res = @img.clone
+            assert_instance_of(Magick::Image, res)
+            assert_equal(res, @img)
+        end
+        res = @img.clone
+        assert_equal(res.frozen?, @img.frozen?)
+        @img.freeze
+        res = @img.clone
+        assert_equal(res.frozen?, @img.frozen?)
+    end
+    
+    def test_color_fill_to_border
+        assert_raise(ArgumentError) { @img.color_fill_to_border(-1, 1, 'red') }
+        assert_raise(ArgumentError) { @img.color_fill_to_border(1, 100, 'red') }
+        assert_nothing_raised do
+            res = @img.color_fill_to_border(@img.columns/2, @img.rows/2, 'red')
+            assert_instance_of(Magick::Image, res)
+        end
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.color_fill_to_border(@img.columns/2, @img.rows/2, pixel) }
+    end
+    
+    def test_color_floodfill
+        assert_raise(ArgumentError) { @img.color_floodfill(-1, 1, 'red') }
+        assert_raise(ArgumentError) { @img.color_floodfill(1, 100, 'red') }
+        assert_nothing_raised do
+            res = @img.color_floodfill(@img.columns/2, @img.rows/2, 'red')
+            assert_instance_of(Magick::Image, res)
+        end
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.color_floodfill(@img.columns/2, @img.rows/2, pixel) }
+    end
+    
+    def test_color_histogram
+        assert_nothing_raised do
+            res = @img.color_histogram
+            assert_instance_of(Hash, res)
+        end
+    end
+    
+    def test_colorize
+        assert_nothing_raised do
+            res = @img.colorize(0.25, 0.25, 0.25, 'red')
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, 0.25, 'red') }
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, pixel) }
+        assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, 0.25, pixel) }
+        assert_raise(ArgumentError) { @img.colorize }
+        assert_raise(ArgumentError) { @img.colorize(0.25) }
+        assert_raise(ArgumentError) { @img.colorize(0.25, 0.25) }
+        assert_raise(ArgumentError) { @img.colorize(0.25, 0.25, 0.25) }
+        assert_raise(ArgumentError) { @img.colorize(0.25, 0.25, 0.25, 'X') }
+        # last argument must be a color name or pixel
+        assert_raise(TypeError) { @img.colorize(0.25, 0.25, 0.25, 0.25) }
+        assert_raise(ArgumentError) { @img.colorize(0.25, 0.25, 0.25, 0.25, 'X') }
+        assert_raise(TypeError) { @img.colorize(0.25, 0.25, 0.25, 0.25, [2]) }
+    end
+    
+    def test_colormap
+        # IndexError b/c @img is DirectClass
+        assert_raise(IndexError) { @img.colormap(0) }
+        # Read PseudoClass image
+        pc_img = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
+        assert_nothing_raised { pc_img.colormap(0) }
+        ncolors = pc_img.colors
+        assert_raise(IndexError) { pc_img.colormap(ncolors+1) }
+        assert_raise(IndexError) { pc_img.colormap(-1) }
+        assert_nothing_raised { pc_img.colormap(ncolors-1) }
+        res = pc_img.colormap(0)
+        assert_instance_of(String, res)
         
+        #test 'set' operation
+        assert_nothing_raised do
+            old_color = pc_img.colormap(0)
+            res = pc_img.colormap(0, 'red')
+            assert_equal(old_color, res)
+            res = pc_img.colormap(0)
+            assert_equal('red', res)
+        end
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { pc_img.colormap(0, pixel) }
+        assert_raise(TypeError) { pc_img.colormap(0, [2]) }
+        pc_img.freeze
+        assert_raise(TypeError) { pc_img.colormap(0, 'red') }
+    end
+    
+    def test_color_point
+        assert_nothing_raised do
+            res = @img.color_point(0, 0, 'red')
+            assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
+        end
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.color_point(0, 0, pixel) }
+    end
+    
+    def test_color_reset!
+        assert_nothing_raised do
+            res = @img.color_reset!('red')
+            assert_same(@img, res)
+        end
+        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.color_reset!(pixel) }
+        assert_raise(TypeError) { @img.color_reset!([2]) }
+        assert_raise(ArgumentError)  { @img.color_reset!('x') }
+        @img.freeze
+        assert_raise(TypeError) { @img.color_reset!('red') }
+    end
+    
+    def test_compare_channel
+        img1 = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
+        img2 = Magick::Image.read(IMAGES_DIR+'/Button_1.gif').first
+        assert_nothing_raised { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric) }
+        assert_nothing_raised { img1.compare_channel(img2, Magick::MeanSquaredErrorMetric) }
+        assert_nothing_raised { img1.compare_channel(img2, Magick::PeakAbsoluteErrorMetric) }
+        assert_nothing_raised { img1.compare_channel(img2, Magick::PeakSignalToNoiseRatioMetric) }
+        assert_nothing_raised { img1.compare_channel(img2, Magick::RootMeanSquaredErrorMetric) }
+        assert_raise(TypeError) { img1.compare_channel(img2, 2) }
+        assert_raise(ArgumentError) { img1.compare_channel }
         
+        ilist = Magick::ImageList.new
+        ilist << img2
+        assert_nothing_raised { img1.compare_channel(ilist, Magick::MeanAbsoluteErrorMetric) }        
+        
+        assert_nothing_raised { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel) }
+        assert_nothing_raised { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(ArgumentError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, 2) }
+        assert_raise(ArgumentError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel, 2) }
+        
+        res = img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric)
+        assert_instance_of(Array, res)
+        assert_instance_of(Magick::Image, res[0])
+        assert_instance_of(Float, res[1])
+    end
+    
+    def test_composite
+        img1 = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
+        img2 = Magick::Image.read(IMAGES_DIR+'/Button_1.gif').first
+        
+        assert_raise(ArgumentError) { img1.composite }
+        assert_raise(ArgumentError) { img1.composite(img2) }
+        assert_raise(ArgumentError) { img1.composite(img2, Magick::NorthWestGravity) }
+        assert_raise(ArgumentError) { img1.composite(2) }
+        assert_raise(ArgumentError) { img1.composite(img2, 2) }
+        
+        composite_ops = [
+                Magick::UndefinedCompositeOp,
+                Magick::NoCompositeOp,
+                Magick::AddCompositeOp,
+                Magick::AtopCompositeOp,
+                Magick::BumpmapCompositeOp,
+                Magick::ClearCompositeOp,
+                Magick::ColorizeCompositeOp,
+                Magick::CopyBlueCompositeOp,
+                Magick::CopyCompositeOp,
+                Magick::CopyGreenCompositeOp,
+                Magick::CopyOpacityCompositeOp,
+                Magick::CopyRedCompositeOp,
+                Magick::CopyCyanCompositeOp,
+                Magick::CopyMagentaCompositeOp,
+                Magick::CopyYellowCompositeOp,
+                Magick::CopyBlackCompositeOp,
+                Magick::DarkenCompositeOp,
+                Magick::DifferenceCompositeOp,
+                Magick::DisplaceCompositeOp,
+                Magick::DissolveCompositeOp,
+                Magick::DstAtopCompositeOp, 
+                Magick::DstCompositeOp,
+                Magick::DstInCompositeOp,
+                Magick::DstOutCompositeOp,
+                Magick::DstOverCompositeOp,
+                Magick::HueCompositeOp,
+                Magick::InCompositeOp,
+                Magick::LightenCompositeOp,
+                Magick::LuminizeCompositeOp,
+                Magick::MinusCompositeOp,
+                Magick::ModulateCompositeOp,
+                Magick::MultiplyCompositeOp,
+                Magick::OutCompositeOp,
+                Magick::OverCompositeOp,
+                Magick::OverlayCompositeOp,
+                Magick::PlusCompositeOp,
+                Magick::ReplaceCompositeOp, 
+                Magick::SaturateCompositeOp,
+                Magick::ScreenCompositeOp,
+                Magick::SrcAtopCompositeOp,
+                Magick::SrcCompositeOp,
+                Magick::SrcInCompositeOp,
+                Magick::SrcOutCompositeOp,
+                Magick::SrcOverCompositeOp,
+                Magick::SubtractCompositeOp,
+                Magick::ThresholdCompositeOp,
+                Magick::XorCompositeOp,
+                Magick::BlendCompositeOp,
+                Magick::ColorBurnCompositeOp,
+                Magick::ColorDodgeCompositeOp,
+                Magick::ExclusionCompositeOp,
+                Magick::HardLightCompositeOp,
+                Magick::SoftLightCompositeOp]
+        gravity = [
+                Magick::NorthEastGravity,
+                Magick::EastGravity,
+                Magick::SouthWestGravity,
+                Magick::SouthGravity,
+                Magick::SouthEastGravity]
+        
+        # 4 argument form        
+        assert_nothing_raised { img1.composite(img2, 0, 0, Magick::OverCompositeOp) }        
+        # negative offsets are transformed to 0
+        assert_nothing_raised { img1.composite(img2, -10, -10, Magick::OverCompositeOp) }
+        # there's way too many CompositeOperators to test them all, so just try few representative ops
+        composite_ops.each do |op|
+            assert_nothing_raised { img1.composite(img2, 0, 0, op) }
+        end        
+        res = img1.composite(img2, 0, 0, Magick::OverCompositeOp)
+        assert_instance_of(Magick::Image, res)
+        assert_raise(TypeError) { img1.composite(img2, 0, 0, 2) }
+        
+        # 3 argument form
+        composite_ops.each do |op|
+            gravity.each do |grav|
+                assert_nothing_raised { img1.composite(img2, grav, op) }
+            end
+        end
+        assert_raise(TypeError) { img1.composite(img2, 2, Magick::OverCompositeOp) }
+        
+        # 5-argument form
+        composite_ops.each do |op|
+            gravity.each do |grav|
+                assert_nothing_raised { img1.composite(img2, grav, 0, 0, op) }
+                end
+        end
+        assert_raise(TypeError) { img1.composite(img2, 0, 0, 2, Magick::OverCompositeOp) }
+    end
+    
+    
 end
 
 if __FILE__ == $0

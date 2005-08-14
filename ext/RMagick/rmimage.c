@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.106 2005/08/14 20:27:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.107 2005/08/14 22:45:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1920,6 +1920,7 @@ static VALUE composite(
 
     if (bang)
     {
+        rm_check_frozen(self);
         (void) CompositeImage(image, operator, comp_image, x_offset, y_offset);
         HANDLE_ERROR_IMG(image)
         return self;

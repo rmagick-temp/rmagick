@@ -2218,7 +2218,9 @@ f.color_reset!(red)
 
     <p>Removes duplicate or unused entries in the colormap. Only
     <a href="constants.html#ClassType">PseudoClass</a> images have
-    a colormap.</p>
+    a colormap. If the image is <code>DirectClass</code> then
+    <code>compress_colormap!</code> converts it to <code>
+    PseudoClass</code>.</p>
 
     <h4>Returns</h4>self
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.107 2005/08/14 22:45:52 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.108 2005/08/15 21:56:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2260,6 +2260,10 @@ Image_convolve_channel(
     channels = extract_channels(&argc, argv);
 
     // There are 2 required arguments.
+    if (argc > 2)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
     if (argc != 2)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);

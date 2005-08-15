@@ -11,6 +11,7 @@ FLOWER_HAT = IMAGES_DIR+'/Flower_Hat.jpg'
 
 
 require 'Image1.rb'
+require 'Image2.rb'
 require 'ImageList1.rb'
 require 'ImageList2.rb'
 require 'Image_attributes.rb'

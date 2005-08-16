@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.109 2005/08/16 22:42:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.110 2005/08/16 23:32:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8313,12 +8313,12 @@ static ChannelType extract_channels(
 
 /*
     Static:     raise_ChannelType_error
-    Purpose:    raise ArgumentError when an non-ChannelType object
+    Purpose:    raise TypeError when an non-ChannelType object
                 is unexpectedly encountered
 */
 static void
 raise_ChannelType_error(VALUE arg)
 {
-    rb_raise(rb_eArgError, "argument needs to be a ChannelType (%s given)"
+    rb_raise(rb_eTypeError, "argument needs to be a ChannelType (%s given)"
             , rb_class2name(CLASS_OF(arg)));
 }

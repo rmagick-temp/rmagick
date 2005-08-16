@@ -148,7 +148,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.bilevel_channel(100, Magick::CyanChannel, Magick::MagentaChannel, Magick::YellowChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.bilevel_channel(100, Magick::GrayChannel) }
         assert_nothing_raised { @img.bilevel_channel(100, Magick::AllChannels) }
-        assert_raise(ArgumentError) { @img.bilevel_channel(100, 2) }
+        assert_raise(TypeError) { @img.bilevel_channel(100, 2) }
         res = @img.bilevel_channel(100)
         assert_instance_of(Magick::Image,  res)
     end
@@ -162,7 +162,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.blur_channel(1,2, Magick::CyanChannel, Magick::MagentaChannel, Magick::YellowChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.blur_channel(1,2, Magick::GrayChannel) }
         assert_nothing_raised { @img.blur_channel(1,2, Magick::AllChannels) }
-        assert_raise(ArgumentError) { @img.blur_channel(1,2,2) }
+        assert_raise(TypeError) { @img.blur_channel(1,2,2) }
         res = @img.blur_channel
         assert_instance_of(Magick::Image,  res)
     end
@@ -234,7 +234,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.channel_depth(Magick::MagentaChannel, Magick::CyanChannel) }
         assert_nothing_raised { @img.channel_depth(Magick::CyanChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.channel_depth(Magick::GrayChannel) }
-        assert_raise(ArgumentError) { @img.channel_depth(2) }
+        assert_raise(TypeError) { @img.channel_depth(2) }
         assert_instance_of(Fixnum, @img.channel_depth(Magick::RedChannel))
     end
     
@@ -252,7 +252,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.channel_extrema(Magick::MagentaChannel, Magick::CyanChannel) }
         assert_nothing_raised { @img.channel_extrema(Magick::CyanChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.channel_extrema(Magick::GrayChannel) }
-        assert_raise(ArgumentError) { @img.channel_extrema(2) }
+        assert_raise(TypeError) { @img.channel_extrema(2) }
     end
     
     def test_channel_mean
@@ -269,7 +269,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.channel_mean(Magick::MagentaChannel, Magick::CyanChannel) }
         assert_nothing_raised { @img.channel_mean(Magick::CyanChannel, Magick::BlackChannel) }
         assert_nothing_raised { @img.channel_mean(Magick::GrayChannel) }
-        assert_raise(ArgumentError) { @img.channel_mean(2) }
+        assert_raise(TypeError) { @img.channel_mean(2) }
     end
     
     def test_charcoal
@@ -419,8 +419,8 @@ class Image1_UT < Test::Unit::TestCase
         
         assert_nothing_raised { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel) }
         assert_nothing_raised { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel, Magick::BlueChannel) }
-        assert_raise(ArgumentError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, 2) }
-        assert_raise(ArgumentError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel, 2) }
+        assert_raise(TypeError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, 2) }
+        assert_raise(TypeError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric, Magick::RedChannel, 2) }
         
         res = img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric)
         assert_instance_of(Array, res)

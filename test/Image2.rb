@@ -76,7 +76,7 @@ class Image2_UT < Test::Unit::TestCase
         end
         
         assert_nothing_raised { @img.convolve_channel(order, kernel, Magick::RedChannel, Magick:: BlueChannel) }
-        assert_raise(ArgumentError) { @img.convolve_channel(order, kernel, Magick::RedChannel, 2) }
+        assert_raise(TypeError) { @img.convolve_channel(order, kernel, Magick::RedChannel, 2) }
     end
     
     def test_copy
@@ -208,7 +208,96 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.emboss('x', 1.0) }
     end
     
+    def test_enhance
+        assert_nothing_raised do
+            res = @img.enhance
+            assert_instance_of(Magick::Image, res)
+        end
+    end
     
+    
+    def test_equalize
+        assert_nothing_raised do
+            res = @img.equalize
+            assert_instance_of(Magick::Image, res)
+        end
+    end
+    
+    def test_erase!
+        assert_nothing_raised do
+            res = @img.erase!
+            assert_same(@img, res)
+        end
+    end
+    
+    def test_export_pixels
+        assert_nothing_raised do
+            res = @img.export_pixels(0, 0, @img.columns, 1, 'RGB')
+            assert_instance_of(Array, res)
+            assert_equal(@img.columns*3, res.length)
+            res.each do |p|
+                assert_instance_of(Fixnum, p)
+            end
+        end
+    end
+    
+    def test_flip
+        assert_nothing_raised do
+            res = @img.flip
+            assert_instance_of(Magick::Image, res)
+        end
+    end
+    
+    def test_flip!
+        assert_nothing_raised do
+            res = @img.flip!
+            assert_same(@img, res)
+        end
+    end
+    
+    def test_flop
+        assert_nothing_raised do
+            res = @img.flop
+            assert_instance_of(Magick::Image, res)
+        end
+    end
+    
+    def test_flop!
+        assert_nothing_raised do
+            res = @img.flop!
+            assert_same(@img, res)
+        end
+    end
+
+    def test_frame
+        assert_nothing_raised do
+            res = @img.frame
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.frame(50) }
+        assert_nothing_raised { @img.frame(50, 50) }
+        assert_nothing_raised { @img.frame(50, 50, 25) }
+        assert_nothing_raised { @img.frame(50, 50, 25, 25) }
+        assert_nothing_raised { @img.frame(50, 50, 25, 25, 6) }
+        assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6) }
+        assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6, 'red') }
+        red = Magick::Pixel.new(Magick::MaxRGB)
+        assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6, red) }
+        assert_raise(TypeError) { @img.frame(50, 50, 25, 25, 6, 6, 2) }
+    end 
+
+    def test_gamma_channel
+        assert_nothing_raised do
+            res = @img.gamma_channel(0.8)
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_raise(ArgumentError) { @img.gamma_channel }
+        assert_nothing_raised { @img.gamma_channel(0.8, Magick::RedChannel) }
+        assert_nothing_raised { @img.gamma_channel(0.8, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(TypeError) { @img.gamma_channel(0.8, Magick::RedChannel, 2) }
+    end
+    
+
 end
 
 if __FILE__ == $0

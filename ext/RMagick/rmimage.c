@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.111 2005/08/17 22:31:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.112 2005/08/19 23:32:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4745,9 +4745,9 @@ Image_motion_blur(
     sigma  = NUM2DBL(sigma_arg);
     angle  = NUM2DBL(angle_arg);
 
-    if (sigma <= 0.0)
+    if (sigma == 0.0)
     {
-        rb_raise(rb_eArgError, "sigma must be > 0.0");
+        rb_raise(rb_eArgError, "sigma must be != 0.0");
     }
 
     GetExceptionInfo(&exception);

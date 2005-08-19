@@ -4,6 +4,9 @@ require 'RMagick'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
+# TODO: improve exif tests - need a benchmark image with EXIF data
+
+
 class Image2_UT < Test::Unit::TestCase
     
     def setup
@@ -297,7 +300,297 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.gamma_channel(0.8, Magick::RedChannel, 2) }
     end
     
+    def test_gramma_correct
+        assert_raise(ArgumentError) { @img.gamma_correct }
+        # All 4 arguments can't default to 1.0
+        assert_raise(ArgumentError) { @img.gamma_correct(1.0) }
+        assert_nothing_raised do
+            res = @img.gamma_correct(0.8)
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.gamma_correct(0.8, 0.9) }
+        assert_nothing_raised { @img.gamma_correct(0.8, 0.9, 1.0) }
+        assert_nothing_raised { @img.gamma_correct(0.8, 0.9, 1.0, 1.1) }
+        # too many arguments
+        assert_raise(ArgumentError) { @img.gamma_correct(0.8, 0.9, 1.0, 1.1, 2) }
+    end
+    
+    def test_gaussian_blur
+        assert_nothing_raised do
+            res = @img.gaussian_blur
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.gaussian_blur(0.0) }
+        assert_nothing_raised { @img.gaussian_blur(0.0, 3.0) }
+        # sigma must be != 0.0
+        assert_raise(ArgumentError) { @img.gaussian_blur(1.0, 0.0) }
+        assert_raise(ArgumentError) { @img.gaussian_blur(1.0, 3.0, 2) }
+    end
+    
+    def test_gaussian_blur_channel
+        assert_nothing_raised do
+            res = @img.gaussian_blur_channel
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.gaussian_blur_channel(0.0) }
+        assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0) }
+        assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel) }
+        assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(TypeError) { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel, 2) }
+        # sigma must be != 0.0
+        assert_raise(Magick::ImageMagickError) { @img.gaussian_blur_channel(1.0, 0.0) }
+    end
+    
+    def test_get_exif_by_entry
+        assert_nothing_raised do
+            res = @img.get_exif_by_entry
+            assert_instance_of(Array, res)
+        end
+    end
+    
+    def test_get_exif_by_number
+        assert_nothing_raised do
+            res = @img.get_exif_by_number
+            assert_instance_of(Hash, res)
+        end
+    end
+    
+    def test_get_pixels
+        assert_nothing_raised do
+            pixels = @img.get_pixels(0, 0, @img.columns, 1)
+            assert_instance_of(Array, pixels)
+            assert_equal(@img.columns, pixels.length)
+            assert_block do
+                pixels.all? { |p| p.is_a? Magick::Pixel }
+            end
+        end
+        assert_raise(RangeError) { @img.get_pixels( 0,  0, -1, 1) }
+        assert_raise(RangeError) { @img.get_pixels( 0,  0, @img.columns, -1) }
+        assert_raise(RangeError) { @img.get_pixels( 0,  0, @img.columns+1, 1) }
+        assert_raise(RangeError) { @img.get_pixels( 0,  0, @img.columns, @img.rows+1) }
+    end
+    
+    def test_gray?
+        gray = Magick::Image.new(20, 20) { self.background_color = 'gray50' }
+        assert(gray.gray?)
+        red = Magick::Image.new(20, 20) { self.background_color = 'red' }
+        assert(!red.gray?)
+    end
+    
+    def test_grayscale_pseudo_class
+        # only supported on GraphicsMagick
+        begin
+            @img.grayscale_pseudo_class
+        rescue NotImplementedError
+            return
+        end
+        
+        assert_nothing_raised do
+            res = @img.grayscale_pseudo_class
+            assert_instance_of(Magick::Image, res)
+            assert_equal(Magick::PsuedoClass, res.class_type)
+        end
+        assert_nothing_raised { @img.grayscale_pseudo_class(false) }
+        assert_raise(ArgumentError) { @img.grayscale_pseudo_class(false, 2) }
+    end
+    
+    def test_implode
+        assert_nothing_raised do
+            res = @img.implode(0.5)
+            assert_instance_of(Magick::Image, res)
+        end
+    end
 
+    def test_import_pixels
+        pixels = @img.export_pixels(0, 0, @img.columns, 1, "RGB")
+        assert_nothing_raised do
+            res = @img.import_pixels(0, 0, @img.columns, 1, "RGB", pixels)
+            assert_same(@img, res)
+        end
+        assert_raise(ArgumentError) { @img.import_pixels(-1, 0, @img.columns, 1, "RGB", pixels) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, -1, @img.columns, 1, "RGB", pixels) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, -1, 1, "RGB", pixels) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, -1, "RGB", pixels) }
+        
+        # pixel array is too small
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 2, "RGB", pixels) }
+    end
+    
+    def test_level
+        assert_nothing_raised do
+            res = @img.level
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.level(0.0) }
+        assert_nothing_raised { @img.level(0.0, 1.0) }
+        assert_nothing_raised { @img.level(0.0, 1.0, Magick::MaxRGB) }
+        assert_raise(ArgumentError) { @img.level(0.0, 1.0, Magick::MaxRGB, 2) }
+        assert_raise(TypeError) { @img.level('x') }
+        assert_raise(TypeError) { @img.level(0.0, 'x') }
+        assert_raise(TypeError) { @img.level(0.0, 1.0, 'x') }
+    end
+    
+    def test_level_channel
+        assert_raise(ArgumentError) { @img.level_channel }
+        assert_nothing_raised do
+            res = @img.level_channel(Magick::RedChannel)
+            assert_instance_of(Magick::Image, res)
+        end
+        
+        assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0) }
+        assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0, 1.0) }
+        assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::MaxRGB) }
+    
+        assert_raise(ArgumentError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::MaxRGB, 2) }
+        assert_raise(TypeError) { @img.level_channel(2) }
+        assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 'x') }
+        assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 'x') }
+        assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, 'x') }
+    end
+    
+    def test_magnify
+    	assert_nothing_raised do
+    		res = @img.magnify
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	
+    	res = @img.magnify!
+    	assert_same(@img, res)
+    end
+    
+    def test_map
+    	map = Magick::Image.read("netscape:").first
+    	assert_nothing_raised do
+    		res = @img.map(map)
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.map(map, true) }
+    	assert_raise(NoMethodError) { @img.map(2) }
+    	assert_raise(ArgumentError) { @img.map(map, true, 2) }
+    	assert_raise(ArgumentError) { @img.map }
+    end
+    
+    def test_matte_fill_to_border
+    	assert_nothing_raised do
+    		res = @img.matte_fill_to_border(@img.columns/2, @img.rows/2)
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.matte_fill_to_border(@img.columns, @img.rows) }
+    	assert_raise(ArgumentError) { @img.matte_fill_to_border(@img.columns+1, @img.rows) }
+    	assert_raise(ArgumentError) { @img.matte_fill_to_border(@img.columns, @img.rows+1) }
+    end
+    		
+    def test_matte_floodfill
+    	assert_nothing_raised do
+    		res = @img.matte_floodfill(@img.columns/2, @img.rows/2)
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.matte_floodfill(@img.columns, @img.rows) }
+    	assert_raise(ArgumentError) { @img.matte_floodfill(@img.columns+1, @img.rows) }
+    	assert_raise(ArgumentError) { @img.matte_floodfill(@img.columns, @img.rows+1) }
+    end
+    		
+    def test_matte_replace
+    	assert_nothing_raised do
+    		res = @img.matte_replace(@img.columns/2, @img.rows/2)
+    		assert_instance_of(Magick::Image, res)
+    	end
+    end
+
+	def test_matte_reset!
+		assert_nothing_raised do
+			res = @img.matte_reset!
+			assert_same(@img, res)
+		end
+	end
+    
+    def test_median_filter
+    	assert_nothing_raised do
+    		res = @img.median_filter
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.median_filter(0.5) }
+    	assert_raise(ArgumentError) { @img.median_filter(0.5, 'x') }
+    	assert_raise(TypeError) { @img.median_filter('x') }
+    end
+    
+    def test_minify
+    	assert_nothing_raised do
+    		res = @img.minify
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	
+    	res = @img.minify!
+    	assert_same(@img, res)
+    end
+    
+    def test_modulate
+    	assert_nothing_raised do
+    		res = @img.modulate
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.modulate(0.5) }
+    	assert_nothing_raised { @img.modulate(0.5, 0.5) }
+    	assert_nothing_raised { @img.modulate(0.5, 0.5, 0.5) }
+    	assert_raise(ArgumentError) { @img.modulate(0.5, 0.5, 0.5, 0.5) }
+    	assert_raise(TypeError) { @img.modulate('x', 0.5, 0.5) }
+    	assert_raise(TypeError) { @img.modulate(0.5, 'x', 0.5) }
+    	assert_raise(TypeError) { @img.modulate(0.5, 0.5, 'x') }
+    end
+    
+    def test_monochrome?
+    	assert_block { @img.monochrome? }
+    	@img.pixel_color(0,0, 'red')
+    	assert_block { ! @img.monochrome? }
+    end
+    
+    def test_motion_blur
+    	assert_nothing_raised do
+    		res = @img.motion_blur(1.0, 7.0, 180)
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_raise(ArgumentError) { @img.motion_blur(1.0, 0.0, 180) }
+    	assert_nothing_raised { @img.motion_blur(1.0, -1.0, 180) }
+    end
+    
+    def test_negate
+    	assert_nothing_raised do
+    		res = @img.negate
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.negate(true) }
+    	assert_raise(ArgumentError) { @img.negate(true, 2) }
+    end
+
+	def test_negate_channel
+		assert_nothing_raised do
+			res = @img.negate_channel
+			assert_instance_of(Magick::Image, res)
+		end
+		assert_nothing_raised { @img.negate_channel(true) }
+		assert_nothing_raised { @img.negate_channel(true, Magick::RedChannel) }
+		assert_nothing_raised { @img.negate_channel(true, Magick::RedChannel, Magick::BlueChannel) }
+		assert_raise(TypeError) { @img.negate_channel(true, Magick::RedChannel, 2) }
+	end
+	
+	def test_normalize
+		assert_nothing_raised do
+			res = @img.normalize
+			assert_instance_of(Magick::Image, res)
+			assert_not_same(@img, res)
+		end
+	end
+	
+	def test_normalize_channel
+		assert_nothing_raised do
+			res = @img.normalize_channel
+			assert_instance_of(Magick::Image, res)
+		end
+		assert_nothing_raised { @img.normalize_channel(Magick::RedChannel) }
+		assert_nothing_raised { @img.normalize_channel(Magick::RedChannel, Magick::BlueChannel) }
+		assert_raise(TypeError) { @img.normalize_channel(Magick::RedChannel, 2) }
+	end
+    
 end
 
 if __FILE__ == $0

@@ -310,8 +310,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <h4>Magick API</h4>
 
-    <p>ExportImagePixels (available in ImageMagick 5.5.7 and
-    GraphicsMagick 1.1)</p>
+    <p>ExportImagePixels</p>
 
     <h4>Note</h4>
 
@@ -544,7 +543,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <h4>Magick API</h4>
 
-    <p>GammaImageChannel (available in ImageMagick 6.0.0)</p>
+    <p>GammaImageChannel</p>
   </div>
 
   <div class="sig">
@@ -879,8 +878,8 @@ image.get_exif_by_number() &raquo;
 
     <p><span class="imquote">Converts an image to a PseudoClass
     grayscale representation with an optionally compressed and
-    sorted colormap..</span> This method is available in
-    GraphicsMagick 1.1.</p>
+    sorted colormap..</span> This method is only available in
+    GraphicsMagick 1.1 and later.</p>
 
     <h4>Arguments</h4>
 
@@ -1020,8 +1019,7 @@ img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
 
     <h4>Magick API</h4>
 
-    <p>ImportImagePixels (available in ImageMagick 5.5.7 and
-    GraphicsMagick 1.1)</p>
+    <p>ImportImagePixels</p>
 
     <h4>Note</h4>
 
@@ -1214,7 +1212,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Magick API</h4>
 
-    <p>LevelImageChannel (available in ImageMagick 5.5.3)</p>
+    <p>LevelImageChannel</p>
   </div>
 
   <div class="sig">
@@ -1496,7 +1494,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h3 id="matte_reset_bang">matte_reset!</h3>
 
     <p><span class="arg">image</span>.matte_reset! -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1506,7 +1504,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Returns</h4>
 
-    <p>A new image</p>
+    <p>self</p>
 
     <h4>See also</h4>
 
@@ -1821,7 +1819,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Magick API</h4>
 
-    <p>NegateImageChannel (available in ImageMagick 6.0.0)</p>
+    <p>NegateImageChannel</p>
   </div>
 
   <div class="sig">
@@ -2155,7 +2153,7 @@ old = image.pixel_color(20,40,"white")
 
     <h4>Magick API</h4>
 
-    <p>PosterizeImage (available in ImageMagick 6.0.0)</p>
+    <p>PosterizeImage</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

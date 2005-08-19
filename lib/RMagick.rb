@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.30 2005/08/06 23:57:23 rmagick Exp $
+# $Id: RMagick.rb,v 1.31 2005/08/19 22:40:57 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -686,6 +686,7 @@ class Image
     # Make all pixels transparent.
     def matte_reset!
         self.opacity = Magick::TransparentOpacity
+        self
     end
 
     # Replace matching neighboring pixels with texture pixels

@@ -591,6 +591,123 @@ class Image2_UT < Test::Unit::TestCase
 		assert_raise(TypeError) { @img.normalize_channel(Magick::RedChannel, 2) }
 	end
     
+    def test_oil_paint
+    	assert_nothing_raised do
+    		res = @img.oil_paint
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	assert_nothing_raised { @img.oil_paint(2.0) }
+    	assert_raise(ArgumentError) { @img.oil_paint(2.0, 1.0) }
+    end
+    
+    def test_opaque
+    	assert_nothing_raised do
+    		res = @img.opaque('white', 'red')
+    		assert_instance_of(Magick::Image, res)
+    	end
+    	red = Magick::Pixel.new(Magick::MaxRGB)
+    	blue = Magick::Pixel.new(0, 0, Magick::MaxRGB)
+    	assert_nothing_raised { @img.opaque(red, blue) }
+    	assert_raise(TypeError) { @img.opaque(red, 2) }
+    	assert_raise(TypeError) { @img.opaque(2, blue) }
+    end
+    
+    def test_opaque?
+    	assert_nothing_raised do
+    		assert_block { @img.opaque? }
+    	end
+    	@img.opacity = Magick::TransparentOpacity
+    	assert_block { ! @img.opaque? }
+    end
+    
+    def test_ordered_dither
+    	assert_nothing_raised do
+    		res = @img.ordered_dither
+    		assert_instance_of(Magick::Image, res)
+    	end
+    end
+    
+    def test_palette?
+    	img = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
+    	assert_nothing_raised do
+  			assert_block { ! img.palette? }
+  		end
+  		img = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
+  		assert_block { img.palette? }
+  	end
+  	
+  	def test_pixel_color
+  		assert_nothing_raised do
+  			res = @img.pixel_color(0,0) 
+  			assert_instance_of(Magick::Pixel, res)
+  		end
+  		res = @img.pixel_color(0,0)
+  		assert_equal(@img.background_color, res.to_color)
+  		res = @img.pixel_color(0, 0, 'red')
+  		assert_equal('white', res.to_color)
+  		res = @img.pixel_color(0, 0)
+  		assert_equal('red', res.to_color)
+  		
+  		blue = Magick::Pixel.new(0, 0, Magick::MaxRGB)
+  		assert_nothing_raised { @img.pixel_color(0,0, blue) }
+  		# If args are out-of-bounds return the background color
+  		img = Magick::Image.new(10, 10) { self.background_color = 'blue' }
+  		assert_equal('blue', img.pixel_color(50, 50).to_color)  		
+  	end
+  	
+  	def test_posterize
+  		assert_nothing_raised do
+  			res = @img.posterize
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.posterize(5) }
+  		assert_nothing_raised { @img.posterize(5, true) }
+  		assert_raise(ArgumentError) { @img.posterize(5, true, 'x') }
+  	end
+  	
+  	def test_preview
+  		preview_types = [
+		  Magick::RotatePreview,
+		#  Magick::ShearPreview,
+		  Magick::RollPreview,
+		  Magick::HuePreview,
+		  Magick::SaturationPreview,
+		  Magick::BrightnessPreview,
+		  Magick::GammaPreview,
+		  Magick::SpiffPreview,
+		  Magick::DullPreview,
+		  Magick::GrayscalePreview,
+		  Magick::QuantizePreview,
+		  Magick::DespecklePreview,
+		  Magick::ReduceNoisePreview,
+		  Magick::AddNoisePreview,
+		  Magick::SharpenPreview,
+		  Magick::BlurPreview,
+		  Magick::ThresholdPreview,
+		  Magick::EdgeDetectPreview,  
+		  Magick::SpreadPreview,
+		  Magick::SolarizePreview,
+		  Magick::ShadePreview,
+		  Magick::RaisePreview,
+		  Magick::SegmentPreview,
+		  Magick::SwirlPreview,
+		  Magick::ImplodePreview,
+		  Magick::WavePreview,
+		  Magick::OilPaintPreview,
+		  Magick::CharcoalDrawingPreview,
+		  Magick::JPEGPreview ]
+  		
+  		hat = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
+  		assert_nothing_raised do
+  			prev = hat.preview(Magick::RotatePreview)
+  			assert_instance_of(Magick::Image, prev)
+  		end
+  		preview_types.each do |type|  			puts type
+  			assert_nothing_raised { prev = hat.preview(type) }
+  		end
+  		assert_raise(TypeError) { @img.preview(2) }
+  	end
+  			
 end
 
 if __FILE__ == $0

@@ -5,6 +5,28 @@ require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
 
+ColorspaceTypes = [
+  Magick::RGBColorspace,
+  Magick::GRAYColorspace,
+  Magick::TransparentColorspace,
+  Magick::OHTAColorspace,
+# Magick::LABColorspace,
+  Magick::XYZColorspace,
+  Magick::YCbCrColorspace,
+  Magick::YCCColorspace,
+  Magick::YIQColorspace,
+  Magick::YPbPrColorspace,
+  Magick::YUVColorspace,
+  Magick::CMYKColorspace,
+  Magick::SRGBColorspace,
+  Magick::HSBColorspace,
+  Magick::HSLColorspace,
+  Magick::HWBColorspace,
+# Magick::Rec601LumaColorspace,
+# Magick::Recc709LumaColorspace,
+# LogColorspace
+]
+
 class Image3_UT < Test::Unit::TestCase
     
     def setup
@@ -31,30 +53,8 @@ class Image3_UT < Test::Unit::TestCase
     		res = @img.quantize
     		assert_instance_of(Magick::Image, res)
     	end
-    	
-    	colorspace_types = [
-		  Magick::RGBColorspace,
-		  Magick::GRAYColorspace,
-		  Magick::TransparentColorspace,
-		  Magick::OHTAColorspace,
-		# Magick::LABColorspace,
-		  Magick::XYZColorspace,
-		  Magick::YCbCrColorspace,
-		  Magick::YCCColorspace,
-		  Magick::YIQColorspace,
-		  Magick::YPbPrColorspace,
-		  Magick::YUVColorspace,
-		  Magick::CMYKColorspace,
-		  Magick::SRGBColorspace,
-		  Magick::HSBColorspace,
-		  Magick::HSLColorspace,
-		  Magick::HWBColorspace,
-		# Magick::Rec601LumaColorspace,
-		# Magick::Recc709LumaColorspace,
-		# LogColorspace
-		]
-		  
-		colorspace_types.each do |cs|
+    			  
+		ColorspaceTypes.each do |cs|
 			assert_nothing_raised { @img.quantize(256, cs) }
 		end
 		assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, false) }
@@ -242,6 +242,157 @@ class Image3_UT < Test::Unit::TestCase
 		assert_raise(TypeError) { @img.scale!(0.50) }
 	end
   	
+  	def test_segment
+  		assert_nothing_raised do
+  			res = @img.segment
+  			assert_instance_of(Magick::Image, res)
+  		end
+
+		ColorspaceTypes.each do |cs|
+			assert_nothing_raised { @img.segment(cs) }
+		end
+		
+		assert_nothing_raised { @img.segment(Magick::RGBColorspace, 2.0) }
+		assert_nothing_raised { @img.segment(Magick::RGBColorspace, 2.0, 2.0) }
+		assert_nothing_raised { @img.segment(Magick::RGBColorspace,  2.0, 2.0, false) }
+		
+		assert_raise(ArgumentError) { @img.segment(Magick::RGBColorspace, 2.0, 2.0, false, 2) }
+		assert_raise(TypeError) { @img.segment(2) }
+		assert_raise(TypeError) { @img.segment(Magick::RGBColorspace, 'x') }
+		assert_raise(TypeError) { @img.segment(Magick::RGBColorspace, 2.0, 'x') }
+  	end
+  	
+  	def test_sepiatone
+   		assert_nothing_raised do
+   			res = @img.sepiatone
+   			assert_instance_of(Magick::Image, res)
+   		end
+   		assert_nothing_raised { @img.sepiatone(Magick::MaxRGB*0.80) }
+   		assert_raise(ArgumentError) { @img.sepiatone(Magick::MaxRGB, 2) }
+   		assert_raise(TypeError) { @img.sepiatone('x') }
+  	end
+  	
+  	def test_set_channel_depth
+  		channels = [
+			  Magick::RedChannel,
+			  Magick::GrayChannel,
+			  Magick::CyanChannel,
+			  Magick::GreenChannel,
+			  Magick::MagentaChannel,
+			  Magick::BlueChannel,
+			  Magick::YellowChannel,
+		#     Magick::AlphaChannel,
+			  Magick::OpacityChannel,
+			  Magick::MatteChannel,  
+			  Magick::BlackChannel,
+			  Magick::IndexChannel,
+			  Magick::AllChannels] 
+  		
+  		channels.each do |ch|
+  			assert_nothing_raised {@img.set_channel_depth(ch, 8) }
+  		end
+  	end
+  	
+  	def test_shade
+  		assert_nothing_raised do
+  			res = @img.shade
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.shade(true) }
+  		assert_nothing_raised { @img.shade(true, 30) }
+  		assert_nothing_raised { @img.shade(true, 30, 30) }
+  		assert_raise(ArgumentError) { @img.shade(true, 30, 30, 2) }
+  		assert_raise(TypeError) { @img.shade(true, 'x') }
+  		assert_raise(TypeError) { @img.shade(true, 30, 'x') }
+  	end
+  	
+  	def test_shadow
+  		assert_nothing_raised do
+  			res = @img.shadow
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.shadow(5) }
+  		assert_nothing_raised { @img.shadow(5, 5) }
+  		assert_nothing_raised { @img.shadow(5, 5, 3.0) }
+  		assert_nothing_raised { @img.shadow(5, 5, 3.0, 0.50) }
+  		assert_nothing_raised { @img.shadow(5, 5, 3.0, '50%') }
+  		assert_raise(ArgumentError) { @img.shadow(5, 5, 3.0, 0.50, 2) }
+  		assert_raise(TypeError) { @img.shadow('x') }
+  		assert_raise(TypeError) { @img.shadow(5, 'x') }
+  		assert_raise(TypeError) { @img.shadow(5, 5, 'x') }
+  		assert_raise(ArgumentError) { @img.shadow(5, 5, 3.0, 'x') }
+  	end
+  	
+  	def test_sharpen
+  		assert_nothing_raised do
+  			res = @img.sharpen
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.sharpen(2.0) }
+  		assert_nothing_raised { @img.sharpen(2.0, 1.0) }
+  		assert_raise(ArgumentError) { @img.sharpen(2.0, 1.0, 2) }
+  		assert_raise(TypeError) { @img.sharpen('x') }
+  		assert_raise(TypeError) { @img.sharpen(2.0, 'x') }
+  	end
+  	
+  	def test_sharpen_channel
+  		assert_nothing_raised do
+  			res = @img.sharpen_channel
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.sharpen_channel(2.0) }
+  		assert_nothing_raised { @img.sharpen_channel(2.0, 1.0) }
+  		assert_nothing_raised { @img.sharpen_channel(2.0, 1.0, Magick::RedChannel) }
+  		assert_nothing_raised { @img.sharpen_channel(2.0, 1.0, Magick::RedChannel, Magick::BlueChannel) }
+  		assert_raise(TypeError) { @img.sharpen_channel(2.0, 1.0, Magick::RedChannel, 2) }
+  		assert_raise(TypeError) { @img.sharpen_channel('x') }
+  		assert_raise(TypeError) { @img.sharpen_channel(2.0, 'x') }
+  	end
+  	
+  	def test_shave
+  		assert_nothing_raised do
+  			res = @img.shave(5,5)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised do
+  			res = @img.shave!(5,5)
+  			assert_same(@img, res)
+  		end
+  		@img.freeze
+  		assert_raise(TypeError) { @img.shave!(2,2) }
+  	end
+  	
+  	def test_shear
+  		assert_nothing_raised do
+  			res = @img.shear(30, 30)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  	end
+  	
+  	def test_sigmoidal_contrast_channel
+  		assert_nothing_raised do
+  			res = @img.sigmoidal_contrast_channel
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.sigmoidal_contrast_channel(3.0) }
+  		assert_nothing_raised { @img.sigmoidal_contrast_channel(3.0, 50.0) }
+  		assert_nothing_raised { @img.sigmoidal_contrast_channel(3.0, 50.0, true) }
+  		assert_nothing_raised { @img.sigmoidal_contrast_channel(3.0, 50.0, true, Magick::RedChannel) }
+  		assert_nothing_raised { @img.sigmoidal_contrast_channel(3.0, 50.0, true, Magick::RedChannel, Magick::BlueChannel) }
+  		assert_raise(TypeError) { @img.sigmoidal_contrast_channel(3.0, 50.0, true, Magick::RedChannel, 2) }
+  		assert_raise(TypeError) { @img.sigmoidal_contrast_channel('x') }
+  		assert_raise(TypeError) { @img.sigmoidal_contrast_channel(3.0, 'x') }
+  	end
+  	
+  	def test_signature
+  		assert_nothing_raised do
+  			res = @img.signature
+  			assert_instance_of(String, res)
+  		end
+  	end
+  	
+  	
+	  	
 end
 
 if __FILE__ == $0

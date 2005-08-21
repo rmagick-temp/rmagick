@@ -702,7 +702,7 @@ class Image2_UT < Test::Unit::TestCase
   			prev = hat.preview(Magick::RotatePreview)
   			assert_instance_of(Magick::Image, prev)
   		end
-  		preview_types.each do |type|  			puts type
+  		preview_types.each do |type|
   			assert_nothing_raised { prev = hat.preview(type) }
   		end
   		assert_raise(TypeError) { @img.preview(2) }

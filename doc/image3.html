@@ -352,10 +352,8 @@
     <p>&times;Magick does not automatically remove profiles when
     resizing images. If you are trying to make your JPEG thumbnail
     images as small as possible, use <code>profile!</code> to
-    remove any profiles from the image as well. See <a href=
-    "http://www.imagemagick.org/www/FAQ.html#C31"><cite>Why are my
-    JPEG files larger than expected?</cite></a> in the
-    &times;Magick FAQ.</p>
+    remove any profiles from the image as well. Also see
+    <a href="#strip_bang">strip!</a></p>
   </div>
 
   <div class="sig">
@@ -533,7 +531,7 @@
 
       <dt>rvalue</dt>
 
-      <dd>the operation rvalue. A <code>Float</code>.</dd>
+      <dd>a <code>Numeric</code> operation rvalue.</dd>
 
       <dt>channel</dt>
 
@@ -550,11 +548,18 @@
     <p>Divide the red component of all the pixels in the image by
     2:</p>
     <pre>
-img.quantum_operator(DivideQuantumOp, 2, RedChannel)
+img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
 </pre>
 
+    <h4>See also</h4>
+    
+    <p>The <a href="struct.html#view">Image:View</a> class supports
+    operations on individual pixels and collections of pixels, as 
+    well as operations on channels within pixels. See <a href="#view">
+    view</a>,  below.</p>
+
     <h4>Magick API</h4>QuantumOperatorRegionImage (GraphicsMagick
-    1.1), EvaluateImageChannel (ImageMagick 6.0.0)
+    1.1), EvaluateImageChannel (ImageMagick)
   </div>
 
   <div class="sig">

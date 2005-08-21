@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.112 2005/08/19 23:32:44 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.113 2005/08/21 15:07:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5519,6 +5519,12 @@ Image_profile_bang(
 }
 
 
+#if defined(HAVE_IMAGE_QUALITY)
+DEF_ATTR_READER(Image, quality, ulong)
+#endif
+
+
+
 /*
     Method:     Image#quantum_depth -> 8, 16, or 32
     Purpose:    Return image depth to nearest quantum
@@ -5724,38 +5730,6 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 }
 
 
-
-/*
-    Method:     Image#radial_blur(angle)
-    Purpose:    Call RadialBlurImage
-    Notes:      Angle is in degrees
-*/
-VALUE
-Image_radial_blur(VALUE self, VALUE angle)
-{
-#if defined(HAVE_RADIALBLURIMAGE)
-    Image *image, *new_image;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    new_image = RadialBlurImage(image, NUM2DBL(angle), &exception);
-    HANDLE_ERROR
-
-    return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-}
-
-
-#if defined(HAVE_IMAGE_QUALITY)
-DEF_ATTR_READER(Image, quality, ulong)
-#endif
-
-
 /*
     Method:     Image#quantize(<number_colors<, colorspace<, dither<, tree_depth<, measure_error>>>>>)
                 defaults: 256, Magick::RGBColorspace, true, 0, false
@@ -5795,6 +5769,33 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
     HANDLE_ERROR
     QuantizeImage(&quantize_info, new_image);
     return rm_image_new(new_image);
+}
+
+
+
+/*
+    Method:     Image#radial_blur(angle)
+    Purpose:    Call RadialBlurImage
+    Notes:      Angle is in degrees
+*/
+VALUE
+Image_radial_blur(VALUE self, VALUE angle)
+{
+#if defined(HAVE_RADIALBLURIMAGE)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = RadialBlurImage(image, NUM2DBL(angle), &exception);
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

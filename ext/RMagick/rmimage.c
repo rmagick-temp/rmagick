@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.113 2005/08/21 15:07:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.114 2005/08/21 23:17:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -239,74 +239,6 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     return self;
 }
 
-/*
-    Method:     Image#properties [{ |k,v| block }]
-    Purpose:    Traverse the attributes and yield to the block.
-                If no block, return a hash of all the attribute
-                keys & values
-    Notes:      I use the word "properties" to distinguish between
-                these "user-added" attribute strings and Image
-                object attributes.
-*/
-VALUE
-Image_properties(VALUE self)
-{
-    Image *image;
-    const ImageAttribute *attr;
-    volatile VALUE attr_hash;
-
-    Data_Get_Struct(self, Image, image);
-
-    // If block, iterate over attributes
-    if (rb_block_given_p())
-    {
-        volatile VALUE ary = rb_ary_new2(2);
-
-#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
-        ResetImageAttributeIterator(image);
-        attr = GetNextImageAttribute(image);
-        while (attr)
-        {
-            rb_ary_store(ary, 0, rb_str_new2(attr->key));
-            rb_ary_store(ary, 1, rb_str_new2(attr->value));
-            rb_yield(ary);
-            attr = GetNextImageAttribute(image);
-        }
-#else
-        for (attr = image->attributes; attr; attr = Next_Attribute)
-        {
-            // Store the next ptr where Image#aset can see it.
-            // The app may decide to delete that attribute.
-            Next_Attribute = attr->next;
-            rb_ary_store(ary, 0, rb_str_new2(attr->key));
-            rb_ary_store(ary, 1, rb_str_new2(attr->value));
-            rb_yield(ary);
-        }
-#endif
-        return self;
-    }
-
-    // otherwise return properties hash
-    else
-    {
-        attr_hash = rb_hash_new();
-#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
-        ResetImageAttributeIterator(image);
-        attr = GetNextImageAttribute(image);
-        while (attr)
-        {
-            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
-            attr = GetNextImageAttribute(image);
-        }
-#else
-        for (attr = image->attributes; attr; attr = attr->next)
-        {
-            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
-        }
-#endif
-        return attr_hash;
-    }
-}
 
 /*
     Method:     Image#background_color
@@ -422,32 +354,21 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#border_color
-    Purpose:    Return the name of the border color as a String.
+ *  Method:     Image#black_threshold(red_channel [, green_channel
+ *                                    [, blue_channel [, opacity_channel]]]);
+ *  Purpose:    Call BlackThresholdImage
 */
 VALUE
-Image_border_color(VALUE self)
+Image_black_threshold(int argc, VALUE *argv, VALUE self)
 {
-    Image *image;
-
-    Data_Get_Struct(self, Image, image);
-    return PixelPacket_to_Color_Name(image, &image->border_color);
+#if defined(HAVE_BLACKTHRESHOLDIMAGE)
+    return threshold_image(argc, argv, self, BlackThresholdImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
-/*
-    Method:     Image#border_color=
-    Purpose:    Set the the border color
-*/
-VALUE
-Image_border_color_eq(VALUE self, VALUE color)
-{
-    Image *image;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-    Color_to_PixelPacket(&image->border_color, color);
-    return self;
-}
 
 DEF_ATTR_ACCESSOR(Image, blur, dbl)
 
@@ -493,6 +414,7 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
 #endif
 }
 
+
 /*
     Method:     Image#blur_image(radius=0.0, sigma=1.0)
     Purpose:    Blur the image
@@ -503,6 +425,7 @@ Image_blur_image(int argc, VALUE *argv, VALUE self)
 {
     return effect_image(self, argc, argv, BlurImage);
 }
+
 
 /*
     Method:     Image#border(width, height, color)
@@ -569,6 +492,36 @@ Image_border(
     return border(False, self, width, height, color);
 }
 
+
+/*
+    Method:     Image#border_color
+    Purpose:    Return the name of the border color as a String.
+*/
+VALUE
+Image_border_color(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return PixelPacket_to_Color_Name(image, &image->border_color);
+}
+
+/*
+    Method:     Image#border_color=
+    Purpose:    Set the the border color
+*/
+VALUE
+Image_border_color_eq(VALUE self, VALUE color)
+{
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    Color_to_PixelPacket(&image->border_color, color);
+    return self;
+}
+
+
 /*
     Method:     Image#bounding_box
     Purpose:    returns the bounding box of an image canvas
@@ -585,6 +538,7 @@ VALUE Image_bounding_box(VALUE self)
     HANDLE_ERROR
     return Rectangle_from_RectangleInfo(&box);
 }
+
 
 /*
     Method:     Image.capture(silent=false,
@@ -715,6 +669,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 #endif
 }
 
+
 /*
     Method:     Image#changed?
     Purpose:    Return true if any pixel in the image has been altered since
@@ -756,70 +711,6 @@ Image_channel(VALUE self, VALUE channel_arg)
 #endif
     HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
-}
-
-
-/*
-    Method:     Image#compare_channel(ref_image, metric [, channel...])
-    Purpose:    compares one or more channels in two images and returns
-                the specified distortion metric and a comparison image.
-    Notes:      If no channels are specified, the default is AllChannels.
-                That case is the equivalent of the CompareImages method in
-                ImageMagick.
-
-                Originally this method was called channel_compare, but
-                that doesn't match the general naming convention that
-                methods which accept multiple optional ChannelType
-                arguments have names that end in _channel.  So I renamed
-                the method to compare_channel but kept channel_compare as
-                an alias.
-*/
-VALUE Image_compare_channel(
-    int argc,
-    VALUE *argv,
-    VALUE self)
-{
-#if defined(HAVE_COMPAREIMAGECHANNELS)
-
-    Image *image, *r_image, *difference_image;
-    double distortion;
-    volatile VALUE ary;
-    MetricType metric_type;
-    ChannelType channels;
-    ExceptionInfo exception;
-
-    channels = extract_channels(&argc, argv);
-    if (argc > 2)
-    {
-        raise_ChannelType_error(argv[argc-1]);
-    }        
-    if (argc != 2)
-    {
-        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
-    }
-
-    Data_Get_Struct(self, Image, image);
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
-    VALUE_TO_ENUM(argv[1], metric_type, MetricType);
-
-    GetExceptionInfo(&exception);
-    difference_image = CompareImageChannels(image
-                                    , r_image
-                                    , channels
-                                    , metric_type
-                                    , &distortion
-                                    , &exception);
-    HANDLE_ERROR
-
-    ary = rb_ary_new2(2);
-    rb_ary_store(ary, 0, rm_image_new(difference_image));
-    rb_ary_store(ary, 1, rb_float_new(distortion));
-
-    return ary;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1088,22 +979,6 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     return ary;
 
 
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-}
-
-/*
- *  Method:     Image#black_threshold(red_channel [, green_channel
- *                                    [, blue_channel [, opacity_channel]]]);
- *  Purpose:    Call BlackThresholdImage
-*/
-VALUE
-Image_black_threshold(int argc, VALUE *argv, VALUE self)
-{
-#if defined(HAVE_BLACKTHRESHOLDIMAGE)
-    return threshold_image(argc, argv, self, BlackThresholdImage);
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -1757,7 +1632,73 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     return self;
 }
 
+
 DEF_ATTR_READER(Image, columns, int)
+
+
+/*
+    Method:     Image#compare_channel(ref_image, metric [, channel...])
+    Purpose:    compares one or more channels in two images and returns
+                the specified distortion metric and a comparison image.
+    Notes:      If no channels are specified, the default is AllChannels.
+                That case is the equivalent of the CompareImages method in
+                ImageMagick.
+
+                Originally this method was called channel_compare, but
+                that doesn't match the general naming convention that
+                methods which accept multiple optional ChannelType
+                arguments have names that end in _channel.  So I renamed
+                the method to compare_channel but kept channel_compare as
+                an alias.
+*/
+VALUE Image_compare_channel(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+#if defined(HAVE_COMPAREIMAGECHANNELS)
+
+    Image *image, *r_image, *difference_image;
+    double distortion;
+    volatile VALUE ary;
+    MetricType metric_type;
+    ChannelType channels;
+    ExceptionInfo exception;
+
+    channels = extract_channels(&argc, argv);
+    if (argc > 2)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }        
+    if (argc != 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
+    }
+
+    Data_Get_Struct(self, Image, image);
+    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
+    VALUE_TO_ENUM(argv[1], metric_type, MetricType);
+
+    GetExceptionInfo(&exception);
+    difference_image = CompareImageChannels(image
+                                    , r_image
+                                    , channels
+                                    , metric_type
+                                    , &distortion
+                                    , &exception);
+    HANDLE_ERROR
+
+    ary = rb_ary_new2(2);
+    rb_ary_store(ary, 0, rm_image_new(difference_image));
+    rb_ary_store(ary, 1, rb_float_new(distortion));
+
+    return ary;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#compose -> composite_op
@@ -2532,7 +2473,9 @@ VALUE Image_difference(VALUE self, VALUE other)
     return rb_ary_new3(3, mean, nmean, nmax);
 }
 
+
 DEF_ATTR_READER(Image, directory, str)
+
 
 /*
     Method:     Image#dispatch(x, y, columns, rows, map <, float>)
@@ -3084,6 +3027,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 
 DEF_ATTR_READER(Image, filename, str)
 
+
 /*
     Method:     Image#filesize
     Purpose:    Return the image filesize
@@ -3095,6 +3039,7 @@ VALUE Image_filesize(VALUE self)
     Data_Get_Struct(self, Image, image);
     return INT2FIX(GetBlobSize(image));
 }
+
 
 /*
     Method:     Image#filter, filter=
@@ -3119,6 +3064,7 @@ Image_filter_eq(VALUE self, VALUE filter)
     VALUE_TO_ENUM(filter, image->filter, FilterTypes);
     return self;
 }
+
 
 /*
     Method:     Image#flip
@@ -3361,6 +3307,7 @@ VALUE Image_fuzz_eq(VALUE self, VALUE fuzz)
     image->fuzz = rm_fuzz_to_dbl(fuzz);
     return self;
 }
+
 
 DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 
@@ -6526,6 +6473,77 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
     return self;
 }
 
+
+/*
+    Method:     Image#properties [{ |k,v| block }]
+    Purpose:    Traverse the attributes and yield to the block.
+                If no block, return a hash of all the attribute
+                keys & values
+    Notes:      I use the word "properties" to distinguish between
+                these "user-added" attribute strings and Image
+                object attributes.
+*/
+VALUE
+Image_properties(VALUE self)
+{
+    Image *image;
+    const ImageAttribute *attr;
+    volatile VALUE attr_hash;
+
+    Data_Get_Struct(self, Image, image);
+
+    // If block, iterate over attributes
+    if (rb_block_given_p())
+    {
+        volatile VALUE ary = rb_ary_new2(2);
+
+#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
+        ResetImageAttributeIterator(image);
+        attr = GetNextImageAttribute(image);
+        while (attr)
+        {
+            rb_ary_store(ary, 0, rb_str_new2(attr->key));
+            rb_ary_store(ary, 1, rb_str_new2(attr->value));
+            rb_yield(ary);
+            attr = GetNextImageAttribute(image);
+        }
+#else
+        for (attr = image->attributes; attr; attr = Next_Attribute)
+        {
+            // Store the next ptr where Image#aset can see it.
+            // The app may decide to delete that attribute.
+            Next_Attribute = attr->next;
+            rb_ary_store(ary, 0, rb_str_new2(attr->key));
+            rb_ary_store(ary, 1, rb_str_new2(attr->value));
+            rb_yield(ary);
+        }
+#endif
+        return self;
+    }
+
+    // otherwise return properties hash
+    else
+    {
+        attr_hash = rb_hash_new();
+#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
+        ResetImageAttributeIterator(image);
+        attr = GetNextImageAttribute(image);
+        while (attr)
+        {
+            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
+            attr = GetNextImageAttribute(image);
+        }
+#else
+        for (attr = image->attributes; attr; attr = attr->next)
+        {
+            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
+        }
+#endif
+        return attr_hash;
+    }
+}
+
+
 /*
     Method:     Image#shade(shading=false, azimuth=30, elevation=30)
     Purpose:    shines a distant light on an image to create a three-dimensional
@@ -6629,33 +6647,6 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
 }
 
 /*
-    Method:     Image#shave(width, height)
-                Image#shave!(width, height)
-    Purpose:    shaves pixels from the image edges, leaving a rectangle
-                of the specified width & height in the center
-    Returns:    shave: a new image
-                shave!: self, shaved
-*/
-VALUE
-Image_shave(
-    VALUE self,
-    VALUE width,
-    VALUE height)
-{
-    return xform_image(False, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
-}
-
-VALUE
-Image_shave_bang(
-    VALUE self,
-    VALUE width,
-    VALUE height)
-{
-    rm_check_frozen(self);
-    return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
-}
-
-/*
     Method:     Image#sharpen(radius=0, sigma=1)
     Purpose:    sharpens an image
     Returns:    a new image
@@ -6712,6 +6703,36 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
     return (VALUE)0;
 #endif
 }
+
+
+/*
+    Method:     Image#shave(width, height)
+                Image#shave!(width, height)
+    Purpose:    shaves pixels from the image edges, leaving a rectangle
+                of the specified width & height in the center
+    Returns:    shave: a new image
+                shave!: self, shaved
+*/
+VALUE
+Image_shave(
+    VALUE self,
+    VALUE width,
+    VALUE height)
+{
+    return xform_image(False, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
+}
+
+
+VALUE
+Image_shave_bang(
+    VALUE self,
+    VALUE width,
+    VALUE height)
+{
+    rm_check_frozen(self);
+    return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
+}
+
 
 /*
     Method:     Image#shear(x_shear, y_shear)

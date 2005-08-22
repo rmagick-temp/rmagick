@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.114 2005/08/21 23:17:37 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.115 2005/08/22 23:07:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7178,6 +7178,9 @@ Image_store_pixels(
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , cols, rows, x, y);
     }
+    
+    size = cols * rows;
+    rm_check_ary_len(new_pixels, size);
 
     SetImageType(image, TrueColorType);
 
@@ -7186,7 +7189,6 @@ Image_store_pixels(
     pixels = GetImagePixels(image, x, y, cols, rows);
     if (pixels)
     {
-        size = cols * rows;
         for (n = 0; n < size; n++)
         {
             new_pixel = rb_ary_entry(new_pixels, n);

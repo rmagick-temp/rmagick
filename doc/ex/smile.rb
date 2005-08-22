@@ -108,12 +108,13 @@ SmileBits = [
         q << Magick::Pixel.new(0,0,0,0)
     end
 
+	n = 0
     SmileHeight.times do |y|                # Store pixels a row at a time
         SmileWidth.times do |x|             # Build a row of pixels
-            q[x].red   = MaxRGB * SmileBits.first
-            q[x].green = MaxRGB * SmileBits.first
-            q[x].blue  = MaxRGB * SmileBits.first
-            SmileBits.shift
+            q[x].red   = MaxRGB * SmileBits[n]
+            q[x].green = MaxRGB * SmileBits[n]
+            q[x].blue  = MaxRGB * SmileBits[n]
+			n += 1
         end
                                             # Store the row of pixels
         img.store_pixels(0, y, SmileWidth, 1, q)

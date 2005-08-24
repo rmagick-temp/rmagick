@@ -4,6 +4,7 @@ require 'RMagick'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
+# TODO: fill in test_statistics for GraphicsMagick
 
 ColorspaceTypes = [
   Magick::RGBColorspace,
@@ -391,7 +392,157 @@ class Image3_UT < Test::Unit::TestCase
   		end
   	end
   	
+  	def test_solarize
+  		assert_nothing_raised do
+  			res = @img.solarize
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.solarize(100) }
+  		assert_raise(ArgumentError) { @img.solarize(100, 2) }
+  		assert_raise(TypeError) { @img.solarize('x') }
+  	end
   	
+  	def test_splice
+  		assert_nothing_raised do
+  			res = @img.splice(0, 0, 2, 2)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.splice(0, 0, 2, 2, 'red') }
+  		red = Magick::Pixel.new(Magick::MaxRGB)
+  		assert_nothing_raised { @img.splice(0, 0, 2, 2, red) }
+  		assert_raise(ArgumentError) { @img.splice(0,0, 2, 2, red, 'x') }
+  		assert_raise(TypeError) { @img.splice([], 0, 2, 2, red) }
+  		assert_raise(TypeError) { @img.splice(0, 'x', 2, 2, red) }
+  		assert_raise(TypeError) { @img.splice(0, 0, 'x', 2, red) }
+  		assert_raise(TypeError) { @img.splice(0, 0, 2, [], red) }
+  		assert_raise(TypeError) { @img.splice(0, 0, 2, 2, /m/) }
+  	end
+  	
+  	def test_spread
+  		assert_nothing_raised do
+  			res = @img.spread
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_nothing_raised { @img.spread(3.0) }
+  		assert_raise(ArgumentError) { @img.spread(3.0, 2) }
+  		assert_raise(TypeError) { @img.spread('x') }
+  	end
+  	
+  	def test_statistics
+  		begin 
+  			@img.statistics
+  		rescue NotImplementedError
+  			return
+  		end
+  	end
+  	
+  	def test_stegano
+  		img = Magick::Image.new(100, 100) { self.background_color = 'black' }
+  		watermark = Magick::Image.new(10, 10) { self.background_color = 'white' }
+  		assert_nothing_raised do
+  			res = @img.stegano(watermark, 0)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  	end
+  	
+  	def test_stereo
+  		assert_nothing_raised do
+  			res = @img.stereo(@img)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  	end
+  	
+  	def test_store_pixels
+  		pixels = @img.get_pixels(0, 0, @img.columns, 1)
+  		assert_nothing_raised do
+  			res = @img.store_pixels(0, 0, @img.columns, 1, pixels)
+  			assert_same(@img, res)
+  		end
+  		
+  		pixels[0] = 'x'
+  		assert_raise(TypeError) { @img.store_pixels(0, 0, @img.columns, 1, pixels) }
+  		assert_raise(RangeError) { @img.store_pixels(-1, 0, @img.columns, 1, pixels) }
+  		assert_raise(RangeError) { @img.store_pixels(0, -1, @img.columns, 1, pixels) }
+  		assert_raise(RangeError) { @img.store_pixels(0, 0, 1+@img.columns, 1, pixels) }
+  		assert_raise(RangeError) { @img.store_pixels(-1, 0, 1, 1+@img.rows, pixels) }
+  	    assert_raise(IndexError) { @img.store_pixels(0, 0, @img.columns, 1, ['x']) }
+  	end
+  	
+  	def test_strip!
+  		assert_nothing_raised do
+  			res = @img.strip!
+  			assert_same(@img, res)
+  		end
+  	end
+  	
+  	def test_swirl
+  		assert_nothing_raised do
+  			res = @img.swirl(30)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  	end
+  	
+  	def test_texture_fill_to_border
+  		texture = Magick::Image.read('granite:').first
+  		assert_nothing_raised do
+  			res = @img.texture_fill_to_border(@img.columns/2, @img.rows/2, texture)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_raise(NoMethodError) { @img.texture_fill_to_border(@img.columns/2, @img.rows/2, 'x') }
+  	end
+  	
+  	def test_texture_floodfill
+  		texture = Magick::Image.read('granite:').first
+  		assert_nothing_raised do
+  			res = @img.texture_floodfill(@img.columns/2, @img.rows/2, texture)
+  			assert_instance_of(Magick::Image, res)
+  		end
+  		assert_raise(NoMethodError) { @img.texture_floodfill(@img.columns/2, @img.rows/2, 'x') }
+  	end
+	  	
+	def test_threshold
+		assert_nothing_raised do
+			res = @img.threshold(100)
+			assert_instance_of(Magick::Image, res)
+		end
+	end
+	
+	def test_thumbnail
+		assert_nothing_raised do
+			res = @img.thumbnail(10, 10)
+			assert_instance_of(Magick::Image, res)
+		end
+		assert_nothing_raised { @img.thumbnail(2) }
+		assert_raise(ArgumentError) { @img.thumbnail }
+		assert_raise(ArgumentError) { @img.thumbnail(25, 25, 25) }
+		assert_raise(TypeError) { @img.thumbnail('x') }
+		assert_raise(TypeError) { @img.thumbnail(10, 'x') }
+	end
+	
+	def test_thumbnail!
+		assert_nothing_raised do
+			res = @img.thumbnail!(2)
+			assert_same(@img, res)
+		end
+		@img.freeze
+		assert_raise(TypeError) { @img.thumbnail!(0.50) }
+	end
+	
+	def test_to_blob
+		res = nil
+		assert_nothing_raised { res = @img.to_blob { self.format = 'miff' } }
+		assert_instance_of(String, res)
+		restored = Magick::Image.from_blob(res)
+		assert_equal(@img, restored[0])
+	end
+	
+	def test_to_color
+		red = Magick::Pixel.new(Magick::MaxRGB)
+		assert_nothing_raised do
+			res = @img.to_color(red)
+			assert_equal('red', res)
+		end
+	end
 	  	
 end
 

@@ -3,6 +3,7 @@
 require 'RMagick'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
+require 'fileutils'
 
 # TODO: fill in test_statistics for GraphicsMagick
 
@@ -543,6 +544,118 @@ class Image3_UT < Test::Unit::TestCase
 			assert_equal('red', res)
 		end
 	end
+	
+	def test_transparent
+		assert_nothing_raised do
+			res = @img.transparent('white')
+			assert_instance_of(Magick::Image, res)
+		end
+		pixel = Magick::Pixel.new
+		assert_nothing_raised { @img.transparent(pixel) }
+		assert_nothing_raised { @img.transparent('white', Magick::TransparentOpacity) }
+		assert_raise(ArgumentError) { @img.transparent('white', Magick::TransparentOpacity, 2) }
+		assert_nothing_raised { @img.transparent('white', Magick::MaxRGB/2) }
+		assert_raise(TypeError) { @img.transparent(2) }
+	end
+	
+	def test_trim
+		# Can't use the default image because it's a solid color
+		hat = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
+		assert_nothing_raised do
+			res = hat.trim
+			assert_instance_of(Magick::Image, res)
+		end
+		assert_nothing_raised do
+			res = hat.trim!
+			assert_same(hat, res)
+		end
+	end
+	
+	def test_unsharp_mask
+		assert_nothing_raised do
+			res = @img.unsharp_mask
+			assert_instance_of(Magick::Image, res)
+		end
+		
+		assert_nothing_raised { @img.unsharp_mask(2.0) }
+		assert_nothing_raised { @img.unsharp_mask(2.0, 1.0) }
+		assert_nothing_raised { @img.unsharp_mask(2.0, 1.0, 0.50) }
+		assert_nothing_raised { @img.unsharp_mask(2.0, 1.0, 0.50, 0.10) }
+		assert_raise(ArgumentError) { @img.unsharp_mask(2.0, 1.0, 0.50, 0.10, 2) }
+		assert_raise(TypeError) { @img.unsharp_mask('x') }
+		assert_raise(TypeError) { @img.unsharp_mask(2.0, 'x') }
+		assert_raise(TypeError) { @img.unsharp_mask(2.0, 1.0, 'x') }
+		assert_raise(TypeError) { @img.unsharp_mask(2.0, 1.0, 0.50, 'x') }
+	end
+	
+	def test_unsharp_mask_channel
+		assert_nothing_raised do
+			res = @img.unsharp_mask_channel
+			assert_instance_of(Magick::Image, res)
+		end
+		
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0) }
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0, 1.0) }
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0, 1.0, 0.50) }
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 0.10) }
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 0.10, Magick::RedChannel) }
+		assert_nothing_raised { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 0.10, Magick::RedChannel, Magick::BlueChannel) }
+		assert_raise(TypeError) { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 0.10, Magick::RedChannel, 2) }
+		assert_raise(TypeError) { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 0.10, 2) }
+		assert_raise(TypeError) { @img.unsharp_mask_channel('x') }
+		assert_raise(TypeError) { @img.unsharp_mask_channel(2.0, 'x') }
+		assert_raise(TypeError) { @img.unsharp_mask_channel(2.0, 1.0, 'x') }
+		assert_raise(TypeError) { @img.unsharp_mask_channel(2.0, 1.0, 0.50, 'x') }
+	end
+	
+	def test_view
+		assert_nothing_raised do
+			res = @img.view(0, 0, 5, 5)
+			assert_instance_of(Magick::Image::View, res)
+		end
+		assert_nothing_raised do 
+			@img.view(0, 0, 5, 5) { |v| assert_instance_of(Magick::Image::View, v) }
+		end
+		assert_raise(RangeError) { @img.view(-1, 0, 5, 5) }
+		assert_raise(RangeError) { @img.view(0, -1, 5, 5) }
+		assert_raise(RangeError) { @img.view(1, 0, @img.columns, 5) }
+		assert_raise(RangeError) { @img.view(0, 1, 5, @img.rows) }
+		assert_raise(ArgumentError) { @img.view(0, 0, 0, 1) }
+		assert_raise(ArgumentError) { @img.view(0, 0, 1, 0) }
+	end
+	
+	def test_wave
+		assert_nothing_raised do
+			res = @img.wave
+			assert_instance_of(Magick::Image, res)
+		end
+		assert_nothing_raised { @img.wave(25) }
+		assert_nothing_raised { @img.wave(25, 200) }
+		assert_raise(ArgumentError) { @img.wave(25, 200, 2) }
+		assert_raise(TypeError) { @img.wave('x') }
+		assert_raise(TypeError) { @img.wave(25, 'x') }
+	end
+	
+    def test_white_threshold
+        assert_raise(ArgumentError) { @img.white_threshold }
+        assert_nothing_raised { @img.white_threshold(50) }
+        assert_nothing_raised { @img.white_threshold(50, 50) }
+        assert_nothing_raised { @img.white_threshold(50, 50, 50) }
+        assert_nothing_raised { @img.white_threshold(50, 50, 50, 50) }
+        assert_raise(ArgumentError) { @img.white_threshold(50, 50, 50, 50, 50) }
+        res = @img.white_threshold(50)
+        assert_instance_of(Magick::Image,  res)
+    end
+
+    # I'm not going to spend a lot of time testing this
+    # since so many other tests rely on it working.
+    def test_write
+        assert_nothing_raised do
+            @img.write('temp.gif')
+            FileUtils.rm('temp.gif')            
+        end
+    end
+	
 	  	
 end
 

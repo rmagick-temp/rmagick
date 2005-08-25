@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.31 2005/08/19 22:40:57 rmagick Exp $
+# $Id: RMagick.rb,v 1.32 2005/08/25 23:32:17 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -764,6 +764,12 @@ class Image
         attr_accessor :dirty
 
         def initialize(img, x, y, width, height)
+        	if width <= 0 || height <= 0
+        		raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
+        	end
+        	if x < 0 || y < 0 || (x+width) > img.columns || (y+height) > img.rows
+        		raise RangeError, "geometry (#{width}x#{height}+#{x}+#{y}) exceeds image boundary"
+        	end
             @view = img.get_pixels(x, y, width, height)
             @img = img
             @x = x

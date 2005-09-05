@@ -3,7 +3,7 @@ RMagick 1.9.1
     o Fixed bug #2155, Image#dispose= now accepts a DisposeType enum, #dispose
       now returns a DisposeType enum.
     o Fixed bug #2156, Image#properties no longer returns garbage for the property
-       name and value.
+      name and value.
     o Fixed bug #2190, Image#compose now returns a CompositeOperator
     o Fixed bug #2191, Image#composite no longer abends when called with 0 arguments
     o Feature #2159, added GrayChannel ChannelType enum value, BlendCompositeOp and
@@ -12,6 +12,8 @@ RMagick 1.9.1
     o Feature #2172, added optional argument to crop and crop! to reset the saved
       page offsets after cropping
     o Deprecated Image#channel_threshold. This method is deprecated in ImageMagick.
+    o Feature #2373, change Image#import_pixels to accept a pixel data buffer as well
+      as a pixel data array. (Thanks to Ara T. Howard for this suggestion!)
 
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.

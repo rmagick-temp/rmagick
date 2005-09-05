@@ -407,6 +407,17 @@ class Image2_UT < Test::Unit::TestCase
             res = @img.import_pixels(0, 0, @img.columns, 1, "RGB", pixels)
             assert_same(@img, res)
         end
+        assert_raise(ArgumentError) { @img.import_pixels }
+        assert_raise(ArgumentError) { @img.import_pixels(0) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 1) }
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 1, "RGB") }
+        assert_raise(TypeError) { @img.import_pixels('x', 0, @img.columns, 1, "RGB", pixels) }
+        assert_raise(TypeError) { @img.import_pixels(0, 'x', @img.columns, 1, "RGB", pixels) }
+        assert_raise(TypeError) { @img.import_pixels(0, 0, 'x', 1, "RGB", pixels) }
+        assert_raise(TypeError) { @img.import_pixels(0, 0, @img.columns, 'x', "RGB", pixels) }
+        assert_raise(TypeError) { @img.import_pixels(0, 0, @img.columns, 1, [2], pixels) }
         assert_raise(ArgumentError) { @img.import_pixels(-1, 0, @img.columns, 1, "RGB", pixels) }
         assert_raise(ArgumentError) { @img.import_pixels(0, -1, @img.columns, 1, "RGB", pixels) }
         assert_raise(ArgumentError) { @img.import_pixels(0, 0, -1, 1, "RGB", pixels) }
@@ -414,7 +425,60 @@ class Image2_UT < Test::Unit::TestCase
         
         # pixel array is too small
         assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 2, "RGB", pixels) }
+        # pixel array doesn't contain a multiple of the map length
+        pixels.shift
+        assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 1, "RGB", pixels) }
     end
+    
+    def test_import_pixels_string
+        # accept string as pixel argument
+        pixels = @img.export_pixels(0, 0, @img.columns, @img.rows, "RGB")
+        p = pixels.pack("C*")
+        img = Magick::Image.new(@img.columns, @img.rows)
+        assert_nothing_raised do
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::CharPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_nothing_raised do
+        	spixels = pixels.collect {|p| p*257}
+        	sp = spixels.pack("S*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", sp, Magick::ShortPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_nothing_raised do
+        	ipixels = pixels.collect {|p| p * 16843009}
+        	ip = ipixels.pack("I*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", ip, Magick::IntegerPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_nothing_raised do
+        	lpixels = pixels.collect {|p| p * 16843009}			
+        	lp = lpixels.pack("L*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", lp, Magick::LongPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_nothing_raised do
+        	assert_equal(255, Magick::MaxRGB)	# test depend on an 8-bit pixel
+        	qp = pixels.pack("C*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::QuantumPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_raise(TypeError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, 2) }
+        assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::DoublePixel) }
+        
+        # pixel buffer too small
+        assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", "xxxx") }
+
+		# pixel buffer doesn't contain a multiple of the map length
+		p = pixels[0..(pixels.length-2)]
+		assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::CharPixel) }
+    end
+    
     
     def test_level
         assert_nothing_raised do

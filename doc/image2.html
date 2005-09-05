@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 2)</title>
   <meta http-equiv="Content-Type" content=
@@ -142,7 +142,8 @@
 
           <li><a href="#normalize">normalize</a></li>
 
-          <li><a href="#normalize_channel">normalize_channel</a></li>
+          <li><a href=
+          "#normalize_channel">normalize_channel</a></li>
 
           <li><a href="#oil_paint">oil_paint</a></li>
 
@@ -191,9 +192,10 @@
     "ex/enhance.jpg" alt="enhance example" title=
     "Click to see the example script" /></a></p>
 
-    <h4>See also</h4><p><a href=
-    "image2.html#median_filter">median_filter</a>, <a href=
-    "image2.html#reduce_noise">reduce_noise</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="image2.html#median_filter">median_filter</a>,
+    <a href="image2.html#reduce_noise">reduce_noise</a>, <a href=
     "image3.html#unsharp_mask">unsharp_mask</a></p>
 
     <h4>Magick API</h4>
@@ -249,8 +251,9 @@
 
     <h4>Returns</h4>self
 
-    <h4>See also</h4><p><a href=
-    "image1.html#color_reset_bang">color_reset!</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#color_reset_bang">color_reset!</a></p>
 
     <h4>Magick API</h4>
 
@@ -304,8 +307,10 @@
 scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 </pre>
 
-    <h4>See also</h4><p><a href="image1.html#dispatch">dispatch</a>,
-    <a href="#import_pixels">import_pixels</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="image1.html#dispatch">dispatch</a>, <a href=
+    "#import_pixels">import_pixels</a>, <a href=
     "#get_pixels">get_pixels</a></p>
 
     <h4>Magick API</h4>
@@ -483,17 +488,19 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img class="hide"
     id="framed" onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example"  /></a>
+    "ex/frame.jpg" alt="frame example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="image1.html#border">border</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#border">border</a></p>
 
     <h4>Magick API</h4>
 
@@ -537,9 +544,10 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p>A new image</p>
 
-    <h4>See also</h4><p>The older <a href=
-    "#gamma_correct">gamma_correct</a> method is implemented in
-    terms of <code>gamma_channel</code>.</p>
+    <h4>See also</h4>
+
+    <p>The older <a href="#gamma_correct">gamma_correct</a> method
+    is implemented in terms of <code>gamma_channel</code>.</p>
 
     <h4>Magick API</h4>
 
@@ -573,7 +581,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p>A new image</p>
 
-    <h4>See also</h4><p><a href="#gamma_channel">gamma_channel</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#gamma_channel">gamma_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -628,10 +638,11 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href=
-    "image1.html#blur_image">blur_image</a>, <a href=
-    "#motion_blur">motion_blur</a>,
-    <a href="image3.html#radial_blur">radial_blur</a></p>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#blur_image">blur_image</a>, <a href=
+    "#motion_blur">motion_blur</a>, <a href=
+    "image3.html#radial_blur">radial_blur</a></p>
 
     <h4>Magick API</h4>
 
@@ -960,16 +971,21 @@ image.get_exif_by_number() &raquo;
     <p><span class="arg">image</span>.import_pixels(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">columns</span>, <span class="arg">rows</span>,
-    <span class="arg">map</span>, <span class="arg">pixels</span>)
-    -&gt; <em>image</em></p>
+    <span class="arg">map</span>, <span class="arg">pixels</span>,
+    <span class="arg">type</span>=Magick::CharPixel) -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Replaces the pixels in the specified rectangle with pixel
-    data from the supplied array. This method is the reverse of
-    <code>export_pixels</code>.</p>
+    data from the supplied array or string. When the <span class=
+    "arg">pixels</span> argument is an array of pixel data, this
+    method is the reverse of <code>export_pixels</code>. When the
+    <span class="arg">pixels</span> argument is a string,
+    <code>import_pixels</code> is ideal for loading very large
+    amounts of binary pixel data.</p>
 
     <h4>Arguments</h4>
 
@@ -993,11 +1009,64 @@ image.get_exif_by_number() &raquo;
 
       <dt>pixels</dt>
 
-      <dd>The pixel data. The pixel data in the array must be
-      stored in scanline order, left-to-right and top-to-bottom.
-      The elements in the array must be <code>Numeric</code> values
-      in the range [0..MaxRGB]. The easiest way to obtain such an
-      array is by using the <code>export_pixels</code> method.</dd>
+      <dd>
+        The pixel data. Pixel data can be supplied as an array or
+        as a string.
+
+        <dl>
+          <dt>If <span class="arg">pixels</span> responds to
+          <code>:to_str</code></dt>
+
+          <dd><code>import_pixels</code> assumes that <span class=
+          "arg">pixels</span> can be converted to a string by
+          <code>to_str</code> and that the result is a C array of
+          the type specified by <span class="arg">type</span>
+          containing binary pixel data in the order specified by
+          <span class="arg">map</span>. The elements in the buffer
+          must be in the range specified by <span class=
+          "arg">type</span>.</dd>
+
+          <dt>Otherwise</dt>
+
+          <dd><code>import_pixels</code> assumes that <span class=
+          "arg">pixels</span> is an array or an object that can be
+          converted to an array by the <code>Kernel::Array</code>
+          method. The elements in the array must be
+          <code>Numeric</code> values in the range [0..MaxRGB]. In
+          either case, the pixel data must be stored in scanline
+          order: left-to-right and top-to-bottom.</dd>
+        </dl>
+      </dd>
+
+      <dt>type</dt>
+
+      <dd>
+        Specifies the type and range of the pixel data when
+        <span class="arg">pixels</span> is a string. One of the
+        following constants:
+
+        <dl>
+          <dt>CharPixel</dt>
+
+          <dd>type <code>unsigned char</code>, range 0-255</dd>
+
+          <dt>ShortPixel</dt>
+
+          <dd>type <code>unsigned short</code>, range 0-65535</dd>
+
+          <dt>LongPixel, IntegerPixel</dt>
+
+          <dd>type <code>unsigned long</code>, range
+          0-4294967295</dd>
+
+          <dt>QuantumPixel</dt>
+
+          <dd>the Quantum type used by &times;Magick (depends on
+          how &times;Magick is configured) range 0-MaxRGB</dd>
+        </dl>The default is <code>Magick::CharPixel</code>. This
+        argument is ignored when <span class="arg">pixels</span> is
+        an array.
+      </dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1009,6 +1078,22 @@ image.get_exif_by_number() &raquo;
 # Replace the r'th scanline of the image using
 # pixel data stored in red-green-blue order.
 img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
+</pre>
+
+    <h4>Example</h4>
+
+    <p>This example is contrived since there's no need to convert
+    the <code>pixels</code> array into a string by calling
+    <code>pack</code>, but it does demonstrate the use of a string
+    <span class="arg">pixels</span> argument. Note that this
+    example assumes that &times;Magick is configured with
+    QuantumDepth=8.</p>
+    <pre>
+hat = Magick::Image.read("Flower_Hat.jpg").first
+pixels = hat.export_pixels(0, 0, hat.columns, hat.rows, "RGB")
+char_buffer = pixels.pack("C*")
+img = Magick::Image.new(hat.columns, hat.rows)
+img.import_pixels(0, 0, hat.columns, hat.rows, "RGB", char_buffer, Magick::CharPixel)
 </pre>
 
     <h4>See also</h4>
@@ -1149,7 +1234,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <img src="ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the image to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#level_channel">level_channel</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#level_channel">level_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1208,7 +1295,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#level">level</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#level">level</a></p>
 
     <h4>Magick API</h4>
 
@@ -1440,7 +1529,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p>A new image</p>
 
-    <h4>See also</h4><p><a href="draw.html#Draw.matte">Draw#matte</a></p>
+    <h4>See also</h4>
+
+    <p><a href="draw.html#Draw.matte">Draw#matte</a></p>
   </div>
 
   <div class="sig">
@@ -1481,8 +1572,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the image to see the original image" /></p>
 
-    <h4>See also</h4><p><a href=
-    "image3.html#transparent">transparent</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="image3.html#transparent">transparent</a>, <a href=
     "draw.html#matte">Draw#matte</a></p>
 
     <h4>Magick API</h4>
@@ -1547,7 +1639,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "javascript:popup('median_filter.rb.html')"><img src=
     "ex/median_filter.jpg" alt="median_filter example" /></a>
 
-    <h4>See also</h4><p><a href="#enhance">enhance</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="#enhance">enhance</a>, <a href=
     "image3.html#reduce_noise">reduce_noise</a>, <a href=
     "image3.html#unsharp_mask">unsharp_mask</a></p>
 
@@ -1573,7 +1667,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p>A new image</p>
 
-    <h4>See also</h4><p><a href="#minify_bang">minify!</a> <a href=
+    <h4>See also</h4>
+
+    <p><a href="#minify_bang">minify!</a> <a href=
     "#magnify">magnify</a>, <a href=
     "image3.html#resize">resize</a>, <a href=
     "image3.html#sample">sample</a>, <a href=
@@ -1760,7 +1856,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#negate_channel">negate_channel</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#negate_channel">negate_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1815,7 +1913,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#negate">negate</a></p>.
+    <h4>See also</h4>
+
+    <p><a href="#negate">negate</a></p>.
 
     <h4>Magick API</h4>
 
@@ -1854,22 +1954,31 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Magick API</h4>
 
     <p>NormalizeImage</p>
+
     <h4>See also</h4>
+
     <p><a href="#normalize_channel">normalize_channel</a></p>
   </div>
 
   <div class="sig">
     <h3 id="normalize_channel">normalize_channel</h3>
-      <p><span class="arg">image</span>.normalize_channel([<span class="arg">channel</span>[,
-    <span class="arg">channel</span>...]]) = <em>anImage</em></p>
+
+    <p><span class=
+    "arg">image</span>.normalize_channel([<span class=
+    "arg">channel</span>[, <span class="arg">channel</span>...]]) =
+    <em>anImage</em></p>
   </div>
 
+  <div class="desc">
+    <h4>Description</h4>
 
-<div class="desc">
-<h4>Description</h4>
-<p><span class="imquote">Enhances the contrast of a color image by adjusting the pixel color to span the entire range of colors available.</span> Only the specified channels are normalized.</p>
+    <p><span class="imquote">Enhances the contrast of a color image
+    by adjusting the pixel color to span the entire range of colors
+    available.</span> Only the specified channels are
+    normalized.</p>
 
-<h4>Arguments</h4>
+    <h4>Arguments</h4>
+
     <dl>
       <dt>channel...</dt>
 
@@ -1880,13 +1989,18 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       <code>normalize</code> method, above.</dd>
     </dl>
 
-<h4>Returns</h4>
-<p>A new image</p>
-<h4>Magick API</h4>
-<p>NormalizeImageChannel (available in ImageMagick 6.1.0)</p>
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>NormalizeImageChannel (available in ImageMagick 6.1.0)</p>
+
     <h4>See also</h4>
+
     <p><a href="#normalize">normalize</a></p>
-</div>
+  </div>
 
   <div class="sig">
     <h3 id="oil_paint">oil_paint</h3>
@@ -2030,7 +2144,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#posterize">posterize</a>, <a href=
+    <h4>See also</h4>
+
+    <p><a href="#posterize">posterize</a>, <a href=
     "image3.html#quantize">quantize</a></p>
 
     <h4>Magick API</h4>
@@ -2075,10 +2191,10 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <p>Returns the color of the pixel at <span class=
     "arg">x</span>, <span class="arg">y</span>. Optionally, changes
     the color of the pixel to a new color.</p>
-    
-    <p>If <code>new_color</code> is specified, <code>pixel_color
-    </code> changes the image type to <code>DirectClass</code> 
-    if necessary.</p>
+
+    <p>If <code>new_color</code> is specified,
+    <code>pixel_color</code> changes the image type to
+    <code>DirectClass</code> if necessary.</p>
 
     <h4>Arguments</h4>
 
@@ -2152,8 +2268,10 @@ old = image.pixel_color(20,40,"white")
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
-    <h4>See also</h4><p><a href="#ordered_dither">ordered_dither</a>,
-    <a href="image3.html#quantize">quantize</a></p>
+    <h4>See also</h4>
+
+    <p><a href="#ordered_dither">ordered_dither</a>, <a href=
+    "image3.html#quantize">quantize</a></p>
 
     <h4>Magick API</h4>
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.91 2005/07/31 15:01:17 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.92 2005/09/05 20:27:27 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -272,6 +272,7 @@ EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
 EXTERN VALUE Class_ResolutionType;
+EXTERN VALUE Class_StorageType;
 EXTERN VALUE Class_StretchType;
 EXTERN VALUE Class_StyleType;
 EXTERN VALUE Class_WeightType;
@@ -774,7 +775,7 @@ extern VALUE Image_get_pixels(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_gray_q(VALUE);
 extern VALUE Image_grayscale_pseudo_class(int, VALUE *, VALUE);
 extern VALUE Image_implode(int, VALUE *, VALUE);
-extern VALUE Image_import_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_import_pixels(int, VALUE *, VALUE);
 extern VALUE Image_init_copy(VALUE, VALUE);
 extern VALUE Image_inspect(VALUE);
 extern VALUE Image_level(int, VALUE *, VALUE);
@@ -957,6 +958,7 @@ extern VALUE  Statistics_new(ImageStatistics *);
 #if defined(HAVE_IMAGE_ORIENTATION)
 extern VALUE   OrientationType_new(OrientationType);
 #endif
+extern const char *StorageType_name(StorageType);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  Enum_alloc(VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.55 2005/07/31 15:01:17 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.56 2005/09/05 20:27:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -11,7 +11,7 @@
 
 static const char *Compliance_Const_Name(ComplianceType *);
 static const char *StyleType_Const_Name(StyleType);
-static const char *StretchType_Const_Name(StretchType);
+static const char *StretchType_name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
 static VALUE Enum_type_inspect(VALUE);
@@ -2004,7 +2004,7 @@ StretchType_new(StretchType stretch)
 {
     const char *name;
 
-    name = StretchType_Const_Name(stretch);
+    name = StretchType_name(stretch);
     return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2FIX(stretch));
 }
 
@@ -2151,7 +2151,7 @@ Font_to_s(VALUE self)
                   ti.description,
                   ti.family,
                   StyleType_Const_Name(ti.style),
-                  StretchType_Const_Name(ti.stretch),
+                  StretchType_name(ti.stretch),
                   weight,
                   ti.encoding ? ti.encoding : "",
                   ti.foundry ? ti.foundry : "",
@@ -2581,13 +2581,47 @@ Statistics_new(ImageStatistics *stats)
 }
 #endif  // HAVE_GETIMAGESTATISTICS
 
+/*
+    Extern:     StorageType_name
+    Purpose:    Return the string representation of a StorageType value
+*/
+const char *
+StorageType_name(StorageType type)
+{
+    const char *name;
+    
+    switch (type)
+    {
+        default:
+        case UndefinedPixel:
+            name = "UndefinedPixel";
+            break;        case CharPixel:
+            name = "CharPixel";
+            break;        case DoublePixel:
+            name = "DoublePixel";
+            break;        case FloatPixel:
+            name = "FloatPixel";
+            break;
+        case IntegerPixel:
+            name = "IntegerPixel";
+            break;        case LongPixel:
+            name = "LongPixel";
+            break;        case QuantumPixel:
+            name = "QuantumPixel";
+            break;        case ShortPixel:
+            name = "ShortPixel";
+            break;
+    }
+    
+    return name;
+}
 
 /*
-    Static:     StretchType_Const_Name
+    Static:     StretchType_name
     Purpose:    Return the string representation of a StretchType value
 */
 static const char *
-StretchType_Const_Name(StretchType stretch)
+StretchType_name(StretchType stretch)
 {
     switch (stretch)
     {

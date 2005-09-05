@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.115 2005/08/22 23:07:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.116 2005/09/05 20:27:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3689,77 +3689,143 @@ Image_implode(int argc, VALUE *argv, VALUE self)
     Notes:      See Image#export_pixels
 */
 VALUE
-Image_import_pixels(
-    VALUE self,
-    VALUE x_arg,
-    VALUE y_arg,
-    VALUE cols_arg,
-    VALUE rows_arg,
-    VALUE map_arg,
-    VALUE pixel_ary)
+Image_import_pixels(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_IMPORTIMAGEPIXELS)
     Image *image, *clone_image;
     long x_off, y_off;
     unsigned long cols, rows;
     unsigned long npixels;
-    long n;
+    long n, buffer_l;
     char *map;
-    volatile int *pixels;
+    volatile VALUE pixel_arg, pixel_ary;
+    StorageType stg_type = CharPixel;
+    size_t type_sz, map_l;
+    volatile int *pixels = NULL;
+    volatile void *buffer;
     unsigned int okay;
     ExceptionInfo exception;
 
     rm_check_frozen(self);
+    
+    switch (argc)
+    {
+        case 7:
+            VALUE_TO_ENUM(argv[6], stg_type, StorageType);            
+        case 6:
+            x_off = NUM2LONG(argv[0]);
+            y_off = NUM2LONG(argv[1]);
+            cols = NUM2ULONG(argv[2]);
+            rows = NUM2ULONG(argv[3]);
+            map = STRING_PTR(argv[4]);
+            pixel_arg = argv[5];
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 6 or 7)", argc);
+            break;
+    }
+   
     Data_Get_Struct(self, Image, image);
-
-    map   = STRING_PTR(map_arg);
-    x_off = NUM2LONG(x_arg);
-    y_off = NUM2LONG(y_arg);
-    cols  = NUM2ULONG(cols_arg);
-    rows  = NUM2ULONG(rows_arg);
 
     if (x_off < 0 || y_off < 0 || cols <= 0 || rows <= 0)
     {
         rb_raise(rb_eArgError, "invalid import geometry");
     }
 
-    npixels = cols * rows * strlen(map);
+    map_l = strlen(map);
+    npixels = cols * rows * map_l;
 
-    // rb_Array converts objects that are not Arrays to Arrays if possible,
-    // and raises TypeError if it can't.
-    pixel_ary = rb_Array(pixel_ary);
-
-    if (RARRAY(pixel_ary)->len < npixels)
+    // Assume that any object that responds to :to_str is a string buffer containing
+    // binary pixel data.
+    if (rb_respond_to(pixel_arg, rb_intern("to_str")))
     {
-        rb_raise(rb_eArgError, "pixel array too small (need %lu, got %ld)"
-               , npixels, RARRAY(pixel_ary)->len);
+        buffer = (void *)STRING_PTR_LEN(pixel_arg, buffer_l);
+        switch (stg_type)
+        {
+            case CharPixel:
+                type_sz = 1;
+                break;
+            case ShortPixel:
+                type_sz = sizeof(unsigned short);
+                break;
+            case IntegerPixel:
+                type_sz = sizeof(unsigned int);
+                break;
+            case LongPixel:
+                type_sz = sizeof(unsigned long);
+                break;
+            case QuantumPixel:
+                type_sz = sizeof(Quantum);
+                break;
+            default:
+                rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
+                break;
+        }
+        
+        if (buffer_l % type_sz != 0)
+        {
+            rb_raise(rb_eArgError, "pixel buffer must be an exact multiple of the storage type size");
+        }
+        if ((buffer_l / type_sz) % map_l != 0)
+        {
+            rb_raise(rb_eArgError, "pixel buffer must contain an exact multiple of the map length");
+        }
+        if (buffer_l/type_sz < npixels)
+        {
+            rb_raise(rb_eArgError, "pixel buffer too small (need %lu channel values, got %ld)"
+                   , npixels, buffer_l/type_sz);
+        }
+    }
+    // Otherwise convert the argument to an array and convert the array elements
+    // to binary pixel data.
+    else
+    {
+        // rb_Array converts an object that is not an array to an array if possible,
+        // and raises TypeError if it can't. It usually is possible.
+        pixel_ary = rb_Array(pixel_arg);
+    
+        if (RARRAY(pixel_ary)->len % map_l != 0)
+        {
+            rb_raise(rb_eArgError, "pixel array must contain an exact multiple of the map length");
+        }
+        if (RARRAY(pixel_ary)->len < npixels)
+        {
+            rb_raise(rb_eArgError, "pixel array too small (need %lu elements, got %ld)"
+                   , npixels, RARRAY(pixel_ary)->len);
+        }
+    
+        // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
+        // in case of an exception.
+        pixels = ALLOC_N(int, npixels);
+        if (!pixels)        // app recovered from exception...
+        {
+            return self;
+        }
+    
+        for (n = 0; n < npixels; n++)
+        {
+            volatile VALUE p = rb_ary_entry(pixel_ary, n);
+            long q = ScaleQuantumToLong(NUM2LONG(p));
+            pixels[n] = (int) q;
+        }
+        buffer = (void *) pixels;
+        stg_type = IntegerPixel;
     }
 
-    // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
-    // in case of an exception.
-    pixels = ALLOC_N(int, npixels);
-    if (!pixels)        // app recovered from exception...
-    {
-        return self;
-    }
-
-    for (n = 0; n < npixels; n++)
-    {
-        volatile VALUE p = rb_ary_entry(pixel_ary, n);
-        long q = ScaleQuantumToLong(NUM2LONG(p));
-        pixels[n] = (int) q;
-    }
 
     // Import into a clone - ImportImagePixels destroys the input image if an error occurs.
     GetExceptionInfo(&exception);
     clone_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
 
-    okay = ImportImagePixels(clone_image, x_off, y_off, cols, rows, map, IntegerPixel, (void *)pixels);
+    okay = ImportImagePixels(clone_image, x_off, y_off, cols, rows, map, stg_type, (const void *)buffer);
 
     // Free pixel array before checking for errors. If an error occurred, ImportImagePixels
     // destroyed the clone image, so we don't have to.
-    xfree((void *)pixels);
+    if (pixels)
+    {
+        xfree((void *)pixels);
+    }
 
     if (!okay)
     {

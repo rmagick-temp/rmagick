@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.93 2005/08/06 18:55:08 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.94 2005/09/05 20:27:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -691,7 +691,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "grey?", Image_gray_q, 0);
     rb_define_method(Class_Image, "grayscale_pseudo_class", Image_grayscale_pseudo_class, -1);
     rb_define_method(Class_Image, "implode", Image_implode, -1);
-    rb_define_method(Class_Image, "import_pixels", Image_import_pixels, 6);
+    rb_define_method(Class_Image, "import_pixels", Image_import_pixels, -1);
     rb_define_method(Class_Image, "initialize_copy", Image_init_copy, 1);
     rb_define_method(Class_Image, "inspect", Image_inspect, 0);
     rb_define_method(Class_Image, "level", Image_level, -1);
@@ -1424,6 +1424,18 @@ Init_RMagick(void)
         ENUMERATOR(PixelsPerInchResolution)
         ENUMERATOR(PixelsPerCentimeterResolution)
     END_ENUM
+    
+    // StorageType
+    DEF_ENUM(StorageType)
+        ENUMERATOR(UndefinedPixel)
+        ENUMERATOR(CharPixel)
+        ENUMERATOR(DoublePixel)
+        ENUMERATOR(FloatPixel)
+        ENUMERATOR(IntegerPixel)
+        ENUMERATOR(LongPixel)
+        ENUMERATOR(QuantumPixel)
+        ENUMERATOR(ShortPixel)
+    END_ENUM
 
     // StretchType constants
     DEF_ENUM(StretchType)
@@ -1544,7 +1556,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/08/06 18:55:08 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/09/05 20:27:27 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

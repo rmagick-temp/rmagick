@@ -6,6 +6,8 @@ RMagick 1.9.1
       name and value.
     o Fixed bug #2190, Image#compose now returns a CompositeOperator
     o Fixed bug #2191, Image#composite no longer abends when called with 0 arguments
+    o Fixed bug #2213, ImageList#montage method no longer leaves the imagelist corrupt
+      after raising an ImageMagickError
     o Feature #2159, added GrayChannel ChannelType enum value, BlendCompositeOp and
       ColorBurnCompositeOp CompositeOperator enum values, RLECompression CompressionType
       enum value, deprecate RunlengthCompression

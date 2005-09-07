@@ -14,6 +14,7 @@ RMagick 1.9.1
     o Deprecated Image#channel_threshold. This method is deprecated in ImageMagick.
     o Feature #2373, change Image#import_pixels to accept a pixel data buffer as well
       as a pixel data array. (Thanks to Ara T. Howard for this suggestion!)
+    o Fixed to compile without errors with ImageMagick 6.2.4-4.
 
 RMagick 1.9.0
     o Added Image#monitor=, Image::Info#monitor=. Deprecated Magick.set_monitor.

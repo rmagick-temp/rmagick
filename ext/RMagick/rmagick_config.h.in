@@ -106,6 +106,7 @@
 #undef HAVE_IMAGE_QUALITY
 /* Introduced in IM 6.0.0 */
 #undef HAVE_IMAGE_ORIENTATION
+#undef HAVE_IMAGE_STORAGE_CLASS
 /* Introduced in IM 5.5.6 */
 #undef HAVE_IMAGEINFO_NUMBER_SCENES
 /* Introduced in IM 5.5.7, GM 1.1 */

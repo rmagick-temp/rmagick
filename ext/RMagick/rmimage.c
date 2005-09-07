@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.117 2005/09/07 00:07:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.118 2005/09/07 21:51:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -995,7 +995,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 */
 VALUE
 Image_channel_threshold(int argc, VALUE *argv, VALUE self)
-{    
+{
     rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
                ". Use bilevel_channel instead.");
     return threshold_image(argc, argv, self,
@@ -1669,7 +1669,7 @@ VALUE Image_compare_channel(
     if (argc > 2)
     {
         raise_ChannelType_error(argv[argc-1]);
-    }        
+    }
     if (argc != 2)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
@@ -3707,11 +3707,11 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
     rm_check_frozen(self);
-    
+
     switch (argc)
     {
         case 7:
-            VALUE_TO_ENUM(argv[6], stg_type, StorageType);            
+            VALUE_TO_ENUM(argv[6], stg_type, StorageType);
         case 6:
             x_off = NUM2LONG(argv[0]);
             y_off = NUM2LONG(argv[1]);
@@ -3724,7 +3724,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 6 or 7)", argc);
             break;
     }
-   
+
     Data_Get_Struct(self, Image, image);
 
     if (x_off < 0 || y_off < 0 || cols <= 0 || rows <= 0)
@@ -3754,14 +3754,16 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case LongPixel:
                 type_sz = sizeof(unsigned long);
                 break;
+#if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
                 break;
+#endif
             default:
                 rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
                 break;
         }
-        
+
         if (buffer_l % type_sz != 0)
         {
             rb_raise(rb_eArgError, "pixel buffer must be an exact multiple of the storage type size");
@@ -3783,7 +3785,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         // rb_Array converts an object that is not an array to an array if possible,
         // and raises TypeError if it can't. It usually is possible.
         pixel_ary = rb_Array(pixel_arg);
-    
+
         if (RARRAY(pixel_ary)->len % map_l != 0)
         {
             rb_raise(rb_eArgError, "pixel array must contain an exact multiple of the map length");
@@ -3793,7 +3795,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "pixel array too small (need %lu elements, got %ld)"
                    , npixels, RARRAY(pixel_ary)->len);
         }
-    
+
         // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
         // in case of an exception.
         pixels = ALLOC_N(int, npixels);
@@ -3801,7 +3803,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         {
             return self;
         }
-    
+
         for (n = 0; n < npixels; n++)
         {
             volatile VALUE p = rb_ary_entry(pixel_ary, n);
@@ -5335,9 +5337,9 @@ Image_pixel_color(
         // PseudoClass
 #if defined(HAVE_IMAGE_STORAGE_CLASS)
         if (image->storage_class == PseudoClass)
-#else        
+#else
         if (image->class == PseudoClass)
-#endif        
+#endif
         {
             IndexPacket *indexes = GetIndexes(image);
             old_color = image->colormap[*indexes];
@@ -5360,9 +5362,9 @@ Image_pixel_color(
     // Convert to DirectClass
 #if defined(HAVE_IMAGE_STORAGE_CLASS)
     if (image->storage_class == PseudoClass)
-#else        
+#else
     if (image->class == PseudoClass)
-#endif        
+#endif
     {
         SyncImage(image);
         magick_free(image->colormap);
@@ -5370,8 +5372,8 @@ Image_pixel_color(
 #if defined(HAVE_IMAGE_STORAGE_CLASS)
         image->storage_class = DirectClass;
 #else
-		image->class = DirectClass;
-#endif		
+        image->class = DirectClass;
+#endif
     }
 
     pixel = GetImagePixels(image, x, y, 1, 1);
@@ -7186,10 +7188,10 @@ Image_class_type(VALUE self)
     Data_Get_Struct(self, Image, image);
 
 #if defined(HAVE_IMAGE_STORAGE_CLASS)
-	return ClassType_new(image->storage_class);
-#else	
+    return ClassType_new(image->storage_class);
+#else
     return ClassType_new(image->class);
-#endif    
+#endif
 }
 
 /*
@@ -7222,7 +7224,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     else if (image->storage_class == DirectClass && class_type == PseudoClass)
 #else
     else if (image->class == DirectClass && class_type == PseudoClass)
-#endif    
+#endif
     {
         GetQuantizeInfo(&qinfo);
         qinfo.number_colors = MaxRGB+1;
@@ -7230,8 +7232,8 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     }
 
 #if defined(HAVE_IMAGE_STORAGE_CLASS)
-	image->storage_class = class_type;
-#else	
+    image->storage_class = class_type;
+#else
     image->class = class_type;
 #endif
     return self;
@@ -7272,7 +7274,7 @@ Image_store_pixels(
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , cols, rows, x, y);
     }
-    
+
     size = cols * rows;
     rm_check_ary_len(new_pixels, size);
 

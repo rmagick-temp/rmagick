@@ -429,6 +429,21 @@ if test "$rm_cv_enum_undefinedgravity" = yes; then
   AC_DEFINE(HAVE_UNDEFINEDGRAVITY)
 fi
 
+AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [GravityType x; x = QuantumPixel],
+     rm_cv_enum_quantumpixel='yes',
+     rm_cv_enum_quantumpixel='no')])
+
+if test "$rm_cv_enum_quantumpixel" = yes; then
+  AC_DEFINE(HAVE_QUANTUMPIXEL)
+fi
+
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
    AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.94 2005/09/05 20:27:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.95 2005/09/07 21:51:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1424,7 +1424,7 @@ Init_RMagick(void)
         ENUMERATOR(PixelsPerInchResolution)
         ENUMERATOR(PixelsPerCentimeterResolution)
     END_ENUM
-    
+
     // StorageType
     DEF_ENUM(StorageType)
         ENUMERATOR(UndefinedPixel)
@@ -1433,7 +1433,9 @@ Init_RMagick(void)
         ENUMERATOR(FloatPixel)
         ENUMERATOR(IntegerPixel)
         ENUMERATOR(LongPixel)
+#if defined(HAVE_QUANTUMPIXEL)
         ENUMERATOR(QuantumPixel)
+#endif
         ENUMERATOR(ShortPixel)
     END_ENUM
 
@@ -1556,7 +1558,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/09/05 20:27:27 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/09/07 21:51:45 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

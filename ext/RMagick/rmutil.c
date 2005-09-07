@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.56 2005/09/05 20:27:27 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.57 2005/09/07 21:51:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2589,30 +2589,38 @@ const char *
 StorageType_name(StorageType type)
 {
     const char *name;
-    
+
     switch (type)
     {
         default:
         case UndefinedPixel:
             name = "UndefinedPixel";
-            break;        case CharPixel:
+            break;
+        case CharPixel:
             name = "CharPixel";
-            break;        case DoublePixel:
+            break;
+        case DoublePixel:
             name = "DoublePixel";
-            break;        case FloatPixel:
+            break;
+        case FloatPixel:
             name = "FloatPixel";
             break;
         case IntegerPixel:
             name = "IntegerPixel";
-            break;        case LongPixel:
+            break;
+        case LongPixel:
             name = "LongPixel";
-            break;        case QuantumPixel:
+            break;
+#if defined(HAVE_QUANTUMPIXEL)
+        case QuantumPixel:
             name = "QuantumPixel";
-            break;        case ShortPixel:
+            break;
+#endif
+        case ShortPixel:
             name = "ShortPixel";
             break;
     }
-    
+
     return name;
 }
 

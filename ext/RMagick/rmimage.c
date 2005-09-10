@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.118 2005/09/07 21:51:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.119 2005/09/10 15:24:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5335,11 +5335,7 @@ Image_pixel_color(
         HANDLE_ERROR
 
         // PseudoClass
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
         if (image->storage_class == PseudoClass)
-#else
-        if (image->class == PseudoClass)
-#endif
         {
             IndexPacket *indexes = GetIndexes(image);
             old_color = image->colormap[*indexes];
@@ -5360,20 +5356,12 @@ Image_pixel_color(
 
     // Set the color of a pixel. Return previous color.
     // Convert to DirectClass
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
     if (image->storage_class == PseudoClass)
-#else
-    if (image->class == PseudoClass)
-#endif
     {
         SyncImage(image);
         magick_free(image->colormap);
         image->colormap = NULL;
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
         image->storage_class = DirectClass;
-#else
-        image->class = DirectClass;
-#endif
     }
 
     pixel = GetImagePixels(image, x, y, 1, 1);
@@ -7187,11 +7175,7 @@ Image_class_type(VALUE self)
     Image *image;
     Data_Get_Struct(self, Image, image);
 
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
     return ClassType_new(image->storage_class);
-#else
-    return ClassType_new(image->class);
-#endif
 }
 
 /*
@@ -7210,32 +7194,20 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(new_class_type, class_type, ClassType);
 
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
     if (image->storage_class == PseudoClass && class_type == DirectClass)
-#else
-    if (image->class == PseudoClass && class_type == DirectClass)
-#endif
     {
         SyncImage(image);
         magick_free(image->colormap);
         image->colormap = NULL;
     }
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
     else if (image->storage_class == DirectClass && class_type == PseudoClass)
-#else
-    else if (image->class == DirectClass && class_type == PseudoClass)
-#endif
     {
         GetQuantizeInfo(&qinfo);
         qinfo.number_colors = MaxRGB+1;
         QuantizeImage(&qinfo, image);
     }
 
-#if defined(HAVE_IMAGE_STORAGE_CLASS)
     image->storage_class = class_type;
-#else
-    image->class = class_type;
-#endif
     return self;
 }
 

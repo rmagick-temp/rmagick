@@ -592,6 +592,18 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.units = 2 }
     end
 
+    def test_virtual_pixel_method
+        assert_nothing_raised { @img.virtual_pixel_method }
+        assert_equal(Magick::UndefinedVirtualPixelMethod, @img.virtual_pixel_method)
+        assert_nothing_raised { @img.virtual_pixel_method = Magick::EdgeVirtualPixelMethod }
+        assert_equal(Magick::EdgeVirtualPixelMethod, @img.virtual_pixel_method)
+        assert_nothing_raised { @img.virtual_pixel_method = Magick::MirrorVirtualPixelMethod }
+        assert_nothing_raised { @img.virtual_pixel_method = Magick::TileVirtualPixelMethod }
+        assert_nothing_raised { @img.virtual_pixel_method = Magick::TransparentVirtualPixelMethod }
+        assert_nothing_raised { @img.virtual_pixel_method = Magick::BackgroundVirtualPixelMethod }
+        assert_raise(TypeError) { @img.virtual_pixel_method = 2 }
+    end
+
     def test_x_resolution
         assert_nothing_raised { @img.x_resolution }
         assert_equal(72.0, @img.x_resolution)

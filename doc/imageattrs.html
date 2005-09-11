@@ -80,13 +80,13 @@
           <li><a href="#delay">delay</a></li>
 
           <li><a href="#density">density</a></li>
+
+          <li><a href="#depth">depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#depth">depth</a></li>
-
           <li><a href="#directory">directory</a></li>
 
           <li><a href="#dispose">dispose</a></li>
@@ -123,13 +123,13 @@
           <li><a href="#mime_type">mime_type</a></li>
 
           <li><a href="#monitor">monitor</a></li>
+
+          <li><a href="#montage">montage</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#montage">montage</a></li>
-
           <li><a href=
           "#normalized_mean_error">normalized_mean_error</a></li>
 
@@ -163,6 +163,9 @@
           <li><a href="#total_colors">total_colors</a></li>
 
           <li><a href="#units">units</a></li>
+
+          <li><a href=
+          "#virtual_pixel_method">virtual_pixel_method</a></li>
 
           <li><a href="#x_resolution">x_resolution</a></li>
 
@@ -957,7 +960,8 @@
 
     <p><span class="imquote">The mean error per pixel computed when
     a image is color reduced.</span> This attribute is only valid
-    if the <code>measure_error</code> argument to <code>quantize</code><a href=
+    if the <code>measure_error</code> argument to
+    <code>quantize</code><a href=
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> is set to <code>true</code>.
     Get-only.</p>
@@ -1102,7 +1106,8 @@ blur_image is 100% complete.
 
     <p><span class="imquote">The normalized mean error computed
     when an image is color reduced.</span> This attribute is only
-    valid if the <code>measure_error</code> argument to <code>quantize</code><a href=
+    valid if the <code>measure_error</code> argument to
+    <code>quantize</code><a href=
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> is set to <code>true</code>.
     Get-only.</p>
@@ -1397,8 +1402,9 @@ blur_image is 100% complete.
     <p>The number of colors in the image after quantization. Set by
     <code>quantize</code> <a href=
     "ilist.html#quantize">[ImageList]</a><a href=
-    "image3.html#quantize">[Image]</a> if the <code>measure_error</code>
-    argument is <code>true</code>. Get-only.</p>
+    "image3.html#quantize">[Image]</a> if the
+    <code>measure_error</code> argument is <code>true</code>.
+    Get-only.</p>
   </div>
 
   <div class="sig">
@@ -1429,6 +1435,68 @@ blur_image is 100% complete.
 
     <p><a href="#x_resolution">x_resolution</a>, <a href=
     "y_resolution">y_resolution</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="virtual_pixel_method">virtual_pixel_method</h3>
+
+    <p><span class="arg">image</span>.virtual_pixel_method -&gt;
+    <em>aVirtualPixelMethod</em><br />
+    <span class="arg">image</span>.virtual_pixel_method =
+    <span class="arg">aVirtualPixelMethod</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify how "virtual pixels" behave. Virtual pixels are
+    pixels that are outside the boundaries of the image. Methods
+    such as <a href="image1.html#blur_image">blur_image</a>,
+    <a href="image3.html#sharpen">sharpen</a>, and <a href=
+    "image3.html#wave">wave</a> use virtual pixels.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The virtual pixel method can be any one of the following
+    <code>VirtualPixelMethod</code> constants:</p>
+
+    <dl>
+      <dt>EdgeVirtualPixelMethod</dt>
+
+      <dd>Extend the edge pixel toward infinity. This is the
+      default.</dd>
+
+      <dt>MirrorVirtualPixelMethod</dt>
+
+      <dd>Mirror the image.</dd>
+
+      <dt>TileVirtualPixelMethod</dt>
+
+      <dd>Tile the image.</dd>
+
+      <dt>BackgroundVirtualPixelMethod</dt>
+
+      <dd>The area surrounding the image is the background
+      color.</dd>
+
+      <dt>TransparentVirtualPixelMethod</dt>
+
+      <dd>The area surrounding the image is transparent
+      blackness.</dd>
+    </dl>
+
+    <p><code>BackgroundVirtualPixelMethod</code> and
+    <code>TransparentVirtualPixelMethod</code> are available only
+    in ImageMagick 6.2.4 and later.</p>
+
+    <h4>Returns</h4>
+
+    <p>A <code>VirtualPixelMethod</code> constant.</p>
+
+    <h4>Example</h4>
+    <pre>
+  img.virtual_pixel_method = Magick::TransparentVirtualPixelMethod
+</pre>
   </div>
 
   <div class="sig">

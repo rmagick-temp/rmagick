@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: class Image (class and instance methods, part
   1)</title>
@@ -368,14 +368,14 @@ img = Magick::Image.capture {
 
     <h4>Arguments</h4>
 
-    <p>A blob can be a string containing an image file such as 
-    a JPEG or GIF. The string can contain a multi-image file 
-    such as an animated GIF or a Photoshop image with multiple 
-    layers. A blob can also be one of the strings produced by 
-    <a href="image3.html" target="to_blob">to_blob</a>. Control 
-    the format of the created image(s) by setting
-    additional <a href="info.html">Image::Info</a> attributes in
-    the optional block argument.</p>
+    <p>A blob can be a string containing an image file such as a
+    JPEG or GIF. The string can contain a multi-image file such as
+    an animated GIF or a Photoshop image with multiple layers. A
+    blob can also be one of the strings produced by <a href=
+    "image3.html#to_blob">to_blob</a>. Control the format of the
+    created image(s) by setting additional <a href=
+    "info.html">Image::Info</a> attributes in the optional block
+    argument.</p>
 
     <h4>Returns</h4>
 
@@ -788,8 +788,8 @@ img = Magick::Image.read_inline(content)
     <div class="noise_example_wrapper">
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
-      "add_noise_example" title="Click to see the example script"
-      /></a>
+      "add_noise_example" title=
+      "Click to see the example script" /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -948,12 +948,10 @@ img = Magick::Image.read_inline(content)
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
-    
+
     <p><a href="#adaptive_threshold">adaptive_threshold</a>,
-    <a href="image3.html#random_threshold_channel">
-    random_threshold_channel</a></p>
-    
-    
+    <a href=
+    "image3.html#random_threshold_channel">random_threshold_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1054,7 +1052,8 @@ img = Magick::Image.read_inline(content)
     <h4>See also</h4>
 
     <p><a href="image2.html#gaussian_blur">gaussian_blur</a>,
-    <a href="image2.html#motion_blur">motion_blur</a></p>
+    <a href="image2.html#motion_blur">motion_blur</a>, <a href=
+    "imageattrs.html#virtual_pixel_method">virtual_pixel_method</a></p>
 
     <h4>Magick API</h4>
 
@@ -1145,13 +1144,12 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
-    "bordered" onmouseover=
+    "Click to see the example script" /> <img id="bordered"
+    onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
-    "ex/border.jpg" alt="border example" /></a><img 
-    src="ex/images/spin.gif" alt="" class=
-    "spin" style="left: 224px;" title=
-    "Mouse over the example to see the original image" /></p>
+    "ex/border.jpg" alt="border example" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left: 224px;"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
 
@@ -2225,8 +2223,8 @@ f.color_reset!(red)
     <p>Removes duplicate or unused entries in the colormap. Only
     <a href="constants.html#ClassType">PseudoClass</a> images have
     a colormap. If the image is <code>DirectClass</code> then
-    <code>compress_colormap!</code> converts it to <code>
-    PseudoClass</code>.</p>
+    <code>compress_colormap!</code> converts it to
+    <code>PseudoClass</code>.</p>
 
     <h4>Returns</h4>self
 
@@ -2637,9 +2635,9 @@ cropped = img.crop(x, y, width, height, true)
     <p class="imquote">Displaces the colormap by a given number of
     positions. If you cycle the colormap a number of times you can
     produce a psychedelic effect.</p>
-    
-    <p>The returned image is always a <code>PseudoClass</code> image,
-    regardless of the type of the original image.</p>
+
+    <p>The returned image is always a <code>PseudoClass</code>
+    image, regardless of the type of the original image.</p>
 
     <h4>Arguments</h4>
 
@@ -2911,7 +2909,9 @@ exit
 
     <h4>Returns</h4>the last value returned by the block
 
-    <h4>Magick API</h4><p>GetNextImageProfile</p>
+    <h4>Magick API</h4>
+
+    <p>GetNextImageProfile</p>
   </div>
 
   <div class="sig">

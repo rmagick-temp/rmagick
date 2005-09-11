@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.92 2005/09/05 20:27:27 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.93 2005/09/11 00:09:23 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -268,6 +268,9 @@ EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
 EXTERN VALUE Class_NoiseType;
+#if defined(HAVE_IMAGE_ORIENTATION)
+EXTERN VALUE Class_OrientationType;
+#endif
 EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
@@ -276,9 +279,7 @@ EXTERN VALUE Class_StorageType;
 EXTERN VALUE Class_StretchType;
 EXTERN VALUE Class_StyleType;
 EXTERN VALUE Class_WeightType;
-#if defined(HAVE_IMAGE_ORIENTATION)
-EXTERN VALUE Class_OrientationType;
-#endif
+EXTERN VALUE Class_VirtualPixelMethod;
 
 /*
 *   Commonly-used IDs
@@ -482,6 +483,7 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
    e = (type)(magick_enum->val);\
    } while(0)
 
+#define ENUM_TO_NAME(_enum) case _enum: return #_enum;
 
 
 // Method, external function declarations. These declarations are
@@ -697,6 +699,7 @@ ATTR_ACCESSOR(Image, class_type)
 ATTR_ACCESSOR(Image, tile_info)
 ATTR_READER(Image, total_colors)
 ATTR_ACCESSOR(Image, units)
+ATTR_ACCESSOR(Image, virtual_pixel_method)
 ATTR_ACCESSOR(Image, x_resolution)
 ATTR_ACCESSOR(Image, y_resolution)
 
@@ -959,6 +962,7 @@ extern VALUE  Statistics_new(ImageStatistics *);
 extern VALUE   OrientationType_new(OrientationType);
 #endif
 extern const char *StorageType_name(StorageType);
+extern VALUE   VirtualPixelMethod_new(VirtualPixelMethod);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  Enum_alloc(VALUE);

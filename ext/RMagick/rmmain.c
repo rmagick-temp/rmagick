@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.95 2005/09/07 21:51:45 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.96 2005/09/11 00:09:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -620,6 +620,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, tile_info)
     DCL_ATTR_READER(Image, total_colors)
     DCL_ATTR_ACCESSOR(Image, units)
+    DCL_ATTR_ACCESSOR(Image, virtual_pixel_method)
     DCL_ATTR_ACCESSOR(Image, x_resolution)
     DCL_ATTR_ACCESSOR(Image, y_resolution)
 
@@ -1461,6 +1462,18 @@ Init_RMagick(void)
         ENUMERATOR(AnyStyle)
     END_ENUM
 
+    // VirtualPixelMethod
+    DEF_ENUM(VirtualPixelMethod)
+        ENUMERATOR(UndefinedVirtualPixelMethod)
+        ENUMERATOR(EdgeVirtualPixelMethod)
+        ENUMERATOR(MirrorVirtualPixelMethod)
+        ENUMERATOR(TileVirtualPixelMethod)
+#if defined(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
+        ENUMERATOR(BackgroundVirtualPixelMethod)
+        ENUMERATOR(TransparentVirtualPixelMethod)
+#endif
+    END_ENUM
+
     // WeightType constants
     DEF_ENUM(WeightType)
         ENUMERATOR(AnyWeight)
@@ -1558,7 +1571,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/09/07 21:51:45 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/09/11 00:09:23 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.119 2005/09/10 15:24:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.120 2005/09/11 00:09:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8026,6 +8026,41 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
     rm_not_implemented();
     return (VALUE)0;
 #endif
+}
+
+
+/*
+  Method:   Image#virtual_pixel_method
+  Purpose:  get the VirtualPixelMethod for the image
+*/
+VALUE
+Image_virtual_pixel_method(VALUE self)
+{
+    Image *image;
+    VirtualPixelMethod vpm;
+
+    Data_Get_Struct(self, Image, image);
+    vpm = GetImageVirtualPixelMethod(image);
+
+    return VirtualPixelMethod_new(vpm);
+}
+
+
+/*
+  Method:   Image#virtual_pixel_method=
+  Purpose:  set the virtual pixel method for the image
+*/
+VALUE
+Image_virtual_pixel_method_eq(VALUE self, VALUE method)
+{
+    Image *image;
+    VirtualPixelMethod vpm;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(method, vpm, VirtualPixelMethod);
+    (void) SetImageVirtualPixelMethod(image, vpm);
+    return self;
 }
 
 /*

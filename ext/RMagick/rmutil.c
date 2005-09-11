@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.57 2005/09/07 21:51:45 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.58 2005/09/11 00:09:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -9,8 +9,8 @@
 #include "rmagick.h"
 #include <errno.h>
 
-static const char *Compliance_Const_Name(ComplianceType *);
-static const char *StyleType_Const_Name(StyleType);
+static const char *Compliance_name(ComplianceType *);
+static const char *StyleType_name(StyleType);
 static const char *StretchType_name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
@@ -1070,10 +1070,86 @@ ComplianceType_new(ComplianceType compliance)
 
     // Turn off undefined bits
     compliance &= (SVGCompliance|X11Compliance|XPMCompliance);
-    name = Compliance_Const_Name(&compliance);
+    name = Compliance_name(&compliance);
     return rm_enum_new(Class_ComplianceType, ID2SYM(rb_intern(name)), INT2FIX(compliance));
 }
 
+
+/*
+    Static:     CompositeOperator_new
+    Purpose:    return the name of a CompositeOperator enum as a string
+*/
+static const char *
+CompositeOperator_name(CompositeOperator op)
+{
+    switch (op)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedCompositeOp)
+        ENUM_TO_NAME(NoCompositeOp)
+        ENUM_TO_NAME(AddCompositeOp)
+        ENUM_TO_NAME(AtopCompositeOp)
+        ENUM_TO_NAME(BumpmapCompositeOp)
+        ENUM_TO_NAME(ClearCompositeOp)
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
+        ENUM_TO_NAME(ColorBurnCompositeOp)
+        ENUM_TO_NAME(BlendCompositeOp)
+        ENUM_TO_NAME(ColorDodgeCompositeOp)
+        ENUM_TO_NAME(ExclusionCompositeOp)
+        ENUM_TO_NAME(HardLightCompositeOp)
+        ENUM_TO_NAME(SoftLightCompositeOp)
+#endif
+        ENUM_TO_NAME(ColorizeCompositeOp)
+        ENUM_TO_NAME(CopyBlueCompositeOp)
+        ENUM_TO_NAME(CopyCompositeOp)
+#if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
+        ENUM_TO_NAME(CopyCyanCompositeOp)
+        ENUM_TO_NAME(CopyMagentaCompositeOp)
+        ENUM_TO_NAME(CopyYellowCompositeOp)
+        ENUM_TO_NAME(CopyBlackCompositeOp)
+#endif
+        ENUM_TO_NAME(CopyGreenCompositeOp)
+        ENUM_TO_NAME(CopyOpacityCompositeOp)
+        ENUM_TO_NAME(CopyRedCompositeOp)
+        ENUM_TO_NAME(DarkenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
+        ENUM_TO_NAME(DstAtopCompositeOp)
+        ENUM_TO_NAME(DstCompositeOp)
+        ENUM_TO_NAME(DstInCompositeOp)
+        ENUM_TO_NAME(DstOutCompositeOp)
+        ENUM_TO_NAME(DstOverCompositeOp)
+#endif
+        ENUM_TO_NAME(DifferenceCompositeOp)
+        ENUM_TO_NAME(DisplaceCompositeOp)
+        ENUM_TO_NAME(DissolveCompositeOp)
+        ENUM_TO_NAME(HueCompositeOp)
+        ENUM_TO_NAME(InCompositeOp)
+        ENUM_TO_NAME(LightenCompositeOp)
+        ENUM_TO_NAME(LuminizeCompositeOp)
+        ENUM_TO_NAME(MinusCompositeOp)
+        ENUM_TO_NAME(ModulateCompositeOp)
+        ENUM_TO_NAME(MultiplyCompositeOp)
+        ENUM_TO_NAME(OutCompositeOp)
+        ENUM_TO_NAME(OverCompositeOp)
+        ENUM_TO_NAME(OverlayCompositeOp)
+        ENUM_TO_NAME(PlusCompositeOp)
+#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
+        ENUM_TO_NAME(ReplaceCompositeOp)
+#endif
+        ENUM_TO_NAME(SaturateCompositeOp)
+        ENUM_TO_NAME(ScreenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
+        ENUM_TO_NAME(SrcAtopCompositeOp)
+        ENUM_TO_NAME(SrcCompositeOp)
+        ENUM_TO_NAME(SrcInCompositeOp)
+        ENUM_TO_NAME(SrcOutCompositeOp)
+        ENUM_TO_NAME(SrcOverCompositeOp)
+#endif
+        ENUM_TO_NAME(SubtractCompositeOp)
+        ENUM_TO_NAME(ThresholdCompositeOp)
+        ENUM_TO_NAME(XorCompositeOp)
+    }
+}
 
 /*
    External:    CompositeOperator_new
@@ -1084,229 +1160,66 @@ CompositeOperator_new(CompositeOperator op)
 {
     const char *name;
 
-    switch (op)
-    {
-        default:
-        case UndefinedCompositeOp:
-            name = "UndefinedCompositeOp";
-            break;
-        case NoCompositeOp:
-            name = "NoCompositeOp";
-            break;
-        case AddCompositeOp:
-            name = "AddCompositeOp";
-            break;
-        case AtopCompositeOp:
-            name = "AtopCompositeOp";
-            break;
-        case BumpmapCompositeOp:
-            name = "BumpmapCompositeOp";
-            break;
-        case ClearCompositeOp:
-            name = "ClearCompositeOp";
-            break;
-#if defined(HAVE_COLORDODGECOMPOSITEOP)
-        case ColorBurnCompositeOp:
-            name = "ColorBurnCompositeOp";
-            break;
-        case BlendCompositeOp:
-            name = "BlendCompositeOp";
-            break;
-        case ColorDodgeCompositeOp:
-            name = "ColorDodgeCompositeOp";
-            break;
-        case ExclusionCompositeOp:
-            name = "ExclusionCompositeOp";
-            break;
-        case HardLightCompositeOp:
-            name = "HardLightCompositeOp";
-            break;
-        case SoftLightCompositeOp:
-            name = "SoftLightCompositeOp";
-            break;
-#endif
-        case ColorizeCompositeOp:
-            name = "ColorizeCompositeOp";
-            break;
-        case CopyBlueCompositeOp:
-            name = "CopyBlueCompositeOp";
-            break;
-        case CopyCompositeOp:
-            name = "CopyCompositeOp";
-            break;
-#if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
-        case CopyCyanCompositeOp:
-            name = "CopyCyanCompositeOp";
-            break;
-        case CopyMagentaCompositeOp:
-            name = "CopyMagentaCompositeOp";
-            break;
-        case CopyYellowCompositeOp:
-            name = "CopyYellowCompositeOp";
-            break;
-        case CopyBlackCompositeOp:
-            name = "CopyBlackCompositeOp";
-            break;
-#endif
-        case CopyGreenCompositeOp:
-            name = "CopyGreenCompositeOp";
-            break;
-        case CopyOpacityCompositeOp:
-            name = "CopyOpacityCompositeOp";
-            break;
-        case CopyRedCompositeOp:
-            name = "CopyRedCompositeOp";
-            break;
-        case DarkenCompositeOp:
-            name = "DarkenCompositeOp";
-            break;
-#if defined(HAVE_DSTCOMPOSITEOP)
-        case DstAtopCompositeOp:
-            name = "DstAtopCompositeOp";
-            break;
-        case DstCompositeOp:
-            name = "DstCompositeOp";
-            break;
-        case DstInCompositeOp:
-            name = "DstInCompositeOp";
-            break;
-        case DstOutCompositeOp:
-            name = "DstOutCompositeOp";
-            break;
-        case DstOverCompositeOp:
-            name = "DstOverCompositeOp";
-            break;
-#endif
-        case DifferenceCompositeOp:
-            name = "DifferenceCompositeOp";
-            break;
-        case DisplaceCompositeOp:
-            name = "DisplaceCompositeOp";
-            break;
-        case DissolveCompositeOp:
-            name = "DissolveCompositeOp";
-            break;
-        case HueCompositeOp:
-            name = "HueCompositeOp";
-            break;
-        case InCompositeOp:
-            name = "InCompositeOp";
-            break;
-        case LightenCompositeOp:
-            name = "LightenCompositeOp";
-            break;
-        case LuminizeCompositeOp:
-            name = "LuminizeCompositeOp";
-            break;
-        case MinusCompositeOp:
-            name = "MinusCompositeOp";
-            break;
-        case ModulateCompositeOp:
-            name = "ModulateCompositeOp";
-            break;
-        case MultiplyCompositeOp:
-            name = "MultiplyCompositeOp";
-            break;
-        case OutCompositeOp:
-            name = "OutCompositeOp";
-            break;
-        case OverCompositeOp:
-            name = "OverCompositeOp";
-            break;
-        case OverlayCompositeOp:
-            name = "OverlayCompositeOp";
-            break;
-        case PlusCompositeOp:
-            name = "PlusCompositeOp";
-            break;
-#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
-        case ReplaceCompositeOp:
-            name = "ReplaceCompositeOp";
-            break;
-#endif
-        case SaturateCompositeOp:
-            name = "SaturateCompositeOp";
-            break;
-        case ScreenCompositeOp:
-            name = "ScreenCompositeOp";
-            break;
-#if defined(HAVE_DSTCOMPOSITEOP)
-        case SrcAtopCompositeOp:
-            name = "SrcAtopCompositeOp";
-            break;
-        case SrcCompositeOp:
-            name = "SrcCompositeOp";
-            break;
-        case SrcInCompositeOp:
-            name = "SrcInCompositeOp";
-            break;
-        case SrcOutCompositeOp:
-            name = "SrcOutCompositeOp";
-            break;
-        case SrcOverCompositeOp:
-            name = "SrcOverCompositeOp";
-            break;
-#endif
-        case SubtractCompositeOp:
-            name = "SubtractCompositeOp";
-            break;
-        case ThresholdCompositeOp:
-            name = "ThresholdCompositeOp";
-            break;
-        case XorCompositeOp:
-            name = "XorCompositeOp";
-            break;
-    }
-
+    name = CompositeOperator_name(op);
     return rm_enum_new(Class_CompositeOperator, ID2SYM(rb_intern(name)), INT2FIX(op));
 }
 
+
+/*
+    Static:     CompressionType_name
+    Purpose:    Return the name of a CompressionType enum as a string
+*/
+static const char *
+CompressionType_name(CompressionType ct)
+{
+    switch (ct)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedCompression)
+        ENUM_TO_NAME(NoCompression)
+        ENUM_TO_NAME(BZipCompression)
+        ENUM_TO_NAME(FaxCompression)
+        ENUM_TO_NAME(Group4Compression)
+        ENUM_TO_NAME(JPEGCompression)
+        ENUM_TO_NAME(LosslessJPEGCompression)
+        ENUM_TO_NAME(LZWCompression)
+        ENUM_TO_NAME(RLECompression)
+        ENUM_TO_NAME(ZipCompression)
+    }
+}
+
+
 /*
  * External:    CompressionType_new
-   Purpose:     Construct a CompressionTYpe enum object for the specified value
+   Purpose:     Construct a CompressionType enum object for the specified value
 */
 VALUE
 CompressionType_new(CompressionType ct)
 {
     const char *name;
 
-    switch (ct)
-    {
-        default:
-        case UndefinedCompression:
-            name = "UndefinedCompression";
-            break;
-        case NoCompression:
-            name = "NoCompression";
-            break;
-        case BZipCompression:
-            name = "BZipCompression";
-            break;
-        case FaxCompression:
-            name = "FaxCompression";
-            break;
-        case Group4Compression:
-            name = "Group4Compression";
-            break;
-        case JPEGCompression:
-            name = "JPEGCompression";
-            break;
-        case LosslessJPEGCompression:
-            name = "LosslessJPEGCompression";
-            break;
-        case LZWCompression:
-            name = "LZWCompression";
-            break;
-        case RLECompression:
-            name = "RLECompression";
-            break;
-        case ZipCompression:
-            name = "ZipCompression";
-            break;
-    }
-
+    name = CompressionType_name(ct);
     return rm_enum_new(Class_CompressionType, ID2SYM(rb_intern(name)), INT2FIX(ct));
 }
+
+
+/*
+    Static:     DisposeType_name
+    Purpose:    Return the name of a DisposeType enum as a string
+*/
+static const char *
+DisposeType_name(type)
+{
+    switch(type)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedDispose)
+        ENUM_TO_NAME(BackgroundDispose)
+        ENUM_TO_NAME(NoneDispose)
+        ENUM_TO_NAME(PreviousDispose)
+    }
+}
+
 
 /*
     External:   DisposeType.new
@@ -1317,25 +1230,40 @@ DisposeType_new(DisposeType type)
 {
     const char *name;
 
+    name = DisposeType_name(type);
+    return rm_enum_new(Class_DisposeType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+
+/*
+    Static:     FilterTypes_name
+    Purpose:    Return the name of a FilterTypes enum as a string
+*/
+static const char *
+FilterTypes_name(FilterTypes type)
+{
     switch(type)
     {
         default:
-        case UndefinedDispose:
-            name = "UndefinedDispose";
-            break;
-        case BackgroundDispose:
-            name = "BackgroundDispose";
-            break;
-        case NoneDispose:
-            name = "NoneDispose";
-            break;
-        case PreviousDispose:
-            name = "PreviousDispose";
-            break;
+        ENUM_TO_NAME(UndefinedFilter)
+        ENUM_TO_NAME(PointFilter)
+        ENUM_TO_NAME(BoxFilter)
+        ENUM_TO_NAME(TriangleFilter)
+        ENUM_TO_NAME(HermiteFilter)
+        ENUM_TO_NAME(HanningFilter)
+        ENUM_TO_NAME(HammingFilter)
+        ENUM_TO_NAME(BlackmanFilter)
+        ENUM_TO_NAME(GaussianFilter)
+        ENUM_TO_NAME(QuadraticFilter)
+        ENUM_TO_NAME(CubicFilter)
+        ENUM_TO_NAME(CatromFilter)
+        ENUM_TO_NAME(MitchellFilter)
+        ENUM_TO_NAME(LanczosFilter)
+        ENUM_TO_NAME(BesselFilter)
+        ENUM_TO_NAME(SincFilter)
     }
-
-    return rm_enum_new(Class_DisposeType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
+
 
 /*
     External:  FilterTypes.new
@@ -1346,63 +1274,27 @@ FilterTypes_new(FilterTypes type)
 {
     const char *name;
 
-    switch(type)
-    {
-        default:
-        case UndefinedFilter:
-            name = "UndefinedFilter";
-            break;
-        case PointFilter:
-            name = "PointFilter";
-            break;
-        case BoxFilter:
-            name = "BoxFilter";
-            break;
-        case TriangleFilter:
-            name = "TriangleFilter";
-            break;
-        case HermiteFilter:
-            name = "HermiteFilter";
-            break;
-        case HanningFilter:
-            name = "HanningFilter";
-            break;
-        case HammingFilter:
-            name = "HammingFilter";
-            break;
-        case BlackmanFilter:
-            name = "BlackmanFilter";
-            break;
-        case GaussianFilter:
-            name = "GaussianFilter";
-            break;
-        case QuadraticFilter:
-            name = "QuadraticFilter";
-            break;
-        case CubicFilter:
-            name = "CubicFilter";
-            break;
-        case CatromFilter:
-            name = "CatromFilter";
-            break;
-        case MitchellFilter:
-            name = "MitchellFilter";
-            break;
-        case LanczosFilter:
-            name = "LanczosFilter";
-            break;
-        case BesselFilter:
-            name = "BesselFilter";
-            break;
-        case SincFilter:
-            name = "SincFilter";
-            break;
-
-    }
+    name = FilterTypes_name(type);
     return rm_enum_new(Class_FilterTypes, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
 
+
+/*
+    Static:     EndianType_name
+    Purpose:    Return the name of a EndianType enum as a string
+*/
+static const char *
+EndianType_name(type)
+{
+    switch(type)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedEndian)
+        ENUM_TO_NAME(LSBEndian)
+        ENUM_TO_NAME(MSBEndian)
+    }
+}
 
 /*
     External:   EndianType.new
@@ -1413,21 +1305,34 @@ EndianType_new(EndianType type)
 {
     const char *name;
 
-    switch(type)
+    name = EndianType_name(type);
+    return rm_enum_new(Class_EndianType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+
+
+/*
+    Static:     ImageType_name
+    Purpose:    Return the name of a ImageType enum as a string
+*/
+static char *
+ImageType_name(type)
+{    switch(type)
     {
         default:
-        case UndefinedEndian:
-            name = "UndefinedEndian";
-            break;
-        case LSBEndian:
-            name = "LSBEndian";
-            break;
-        case MSBEndian:
-            name = "MSBEndian";
-            break;
+        ENUM_TO_NAME(UndefinedType)
+        ENUM_TO_NAME(BilevelType)
+        ENUM_TO_NAME(GrayscaleType)
+        ENUM_TO_NAME(GrayscaleMatteType)
+        ENUM_TO_NAME(PaletteType)
+        ENUM_TO_NAME(PaletteMatteType)
+        ENUM_TO_NAME(TrueColorType)
+        ENUM_TO_NAME(TrueColorMatteType)
+        ENUM_TO_NAME(ColorSeparationType)
+        ENUM_TO_NAME(ColorSeparationMatteType)
+        ENUM_TO_NAME(OptimizeType)
     }
 
-    return rm_enum_new(Class_EndianType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
 
@@ -1440,46 +1345,29 @@ ImageType_new(ImageType type)
 {
     const char *name;
 
-    switch(type)
-    {
-        default:
-        case UndefinedType:
-            name = "UndefinedType";
-            break;
-        case BilevelType:
-            name = "BilevelType";
-            break;
-        case GrayscaleType:
-            name = "GrayscaleType";
-            break;
-        case GrayscaleMatteType:
-            name = "GrayscaleMatteType";
-            break;
-        case PaletteType:
-            name = "PaletteType";
-            break;
-        case PaletteMatteType:
-            name = "PaletteMatteType";
-            break;
-        case TrueColorType:
-            name = "TrueColorType";
-            break;
-        case TrueColorMatteType:
-            name = "TrueColorMatteType";
-            break;
-        case ColorSeparationType:
-            name = "ColorSeparationType";
-            break;
-        case ColorSeparationMatteType:
-            name = "ColorSeparationMatteType";
-            break;
-        case OptimizeType:
-            name = "OptimizeType";
-            break;
-    }
-
+    name = ImageType_name(type);
     return rm_enum_new(Class_ImageType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
+
+
+/*
+    Static:     InterlaceType_name
+    Purpose:    Return the name of a InterlaceType enum as a string
+*/
+static const char *
+InterlaceType_name(interlace)
+{
+    switch(interlace)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedInterlace)
+        ENUM_TO_NAME(NoInterlace)
+        ENUM_TO_NAME(LineInterlace)
+        ENUM_TO_NAME(PlaneInterlace)
+        ENUM_TO_NAME(PartitionInterlace)
+    }
+}
+
 
 /*
     External:   InterlaceType_new
@@ -1490,28 +1378,32 @@ InterlaceType_new(InterlaceType interlace)
 {
     const char *name;
 
-    switch(interlace)
-    {
-        default:
-        case UndefinedInterlace:
-            name = "UndefinedInterlace";
-            break;
-        case NoInterlace:
-            name = "NoInterlace";
-            break;
-        case LineInterlace:
-            name = "LineInterlace";
-            break;
-        case PlaneInterlace:
-            name = "PlaneInterlace";
-            break;
-        case PartitionInterlace:
-            name = "PartitionInterlace";
-            break;
-    }
-
+    name = InterlaceType_name(interlace);
     return rm_enum_new(Class_InterlaceType, ID2SYM(rb_intern(name)), INT2FIX(interlace));
 }
+
+
+
+/*
+    Static:     RenderingIntent_name
+    Purpose:    Return the name of a RenderingIntent enum as a string
+*/
+static const char *
+RenderingIntent_name(intent)
+{
+    switch(intent)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedIntent)
+        ENUM_TO_NAME(SaturationIntent)
+        ENUM_TO_NAME(PerceptualIntent)
+        ENUM_TO_NAME(AbsoluteIntent)
+        ENUM_TO_NAME(RelativeIntent)
+    }
+
+}
+
+
 
 /*
     External:   RenderingIntent_new
@@ -1522,28 +1414,28 @@ RenderingIntent_new(RenderingIntent intent)
 {
     const char *name;
 
-    switch(intent)
-    {
-        default:
-        case UndefinedIntent:
-            name = "UndefinedIntent";
-            break;
-        case SaturationIntent:
-            name = "SaturationIntent";
-            break;
-        case PerceptualIntent:
-            name = "PerceptualIntent";
-            break;
-        case AbsoluteIntent:
-            name = "AbsoluteIntent";
-            break;
-        case RelativeIntent:
-            name = "RelativeIntent";
-            break;
-    }
-
+    name = RenderingIntent_name(intent);
     return rm_enum_new(Class_RenderingIntent, ID2SYM(rb_intern(name)), INT2FIX(intent));
 }
+
+
+/*
+    Static:     ResolutionType_name
+    Purpose:    Return the name of a ResolutionType enum as a string
+*/
+static const char *
+ResolutionType_name(type)
+{
+    switch(type)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedResolution)
+        ENUM_TO_NAME(PixelsPerInchResolution)
+        ENUM_TO_NAME(PixelsPerCentimeterResolution)
+    }
+
+}
+
 
 /*
     External:   ResolutionType_new
@@ -1554,66 +1446,51 @@ ResolutionType_new(ResolutionType type)
 {
     const char *name;
 
+    name = ResolutionType_name(type);
+    return rm_enum_new(Class_ResolutionType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+
+
+#if defined(HAVE_IMAGE_ORIENTATION)
+/*
+    Static:     OrientationType_name
+    Purpose:    Return the name of a OrientationType enum as a string
+*/
+static const char *
+OrientationType_name(type)
+{
     switch(type)
     {
         default:
-        case UndefinedResolution:
-            name = "UndefinedResolution";
-            break;
-        case PixelsPerInchResolution:
-            name = "PixelsPerInchResolution";
-            break;
-        case PixelsPerCentimeterResolution:
-            name = "PixelsPerCentimeterResolution";
-            break;
+        ENUM_TO_NAME(UndefinedOrientation)
+        ENUM_TO_NAME(TopLeftOrientation)
+        ENUM_TO_NAME(TopRightOrientation)
+        ENUM_TO_NAME(BottomRightOrientation)
+        ENUM_TO_NAME(BottomLeftOrientation)
+        ENUM_TO_NAME(LeftTopOrientation)
+        ENUM_TO_NAME(RightTopOrientation)
+        ENUM_TO_NAME(RightBottomOrientation)
+        ENUM_TO_NAME(LeftBottomOrientation)
     }
-    return rm_enum_new(Class_ResolutionType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
+
 
 /*
     External:   OrientationType_new
     Purpose:    Construct an OrientationType enum object for the specified value.
 */
-#if defined(HAVE_IMAGE_ORIENTATION)
 VALUE
 OrientationType_new(OrientationType type)
 {
     const char *name;
 
-    switch(type)
-    {
-        default:
-        case UndefinedOrientation:
-            name = "UndefinedOrientation";
-            break;
-        case TopLeftOrientation:
-            name = "TopLeftOrientation";
-            break;
-        case TopRightOrientation:
-            name = "TopRightOrientation";
-            break;
-        case BottomRightOrientation:
-            name = "BottomRightOrientation";
-            break;
-        case BottomLeftOrientation:
-            name = "BottomLeftOrientation";
-            break;
-        case LeftTopOrientation:
-            name = "LeftTopOrientation";
-            break;
-        case RightTopOrientation:
-            name = "RightTopOrientation";
-            break;
-        case RightBottomOrientation:
-            name = "RightBottomOrientation";
-            break;
-        case LeftBottomOrientation:
-            name = "LeftBottomOrientation";
-            break;
-    }
+    name = OrientationType_name(type);
     return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 #endif
+
+
 /*
     External:   Color_from_ColorInfo
     Purpose:    Convert a ColorInfo structure to a Magick::Color
@@ -1700,7 +1577,7 @@ Color_to_s(VALUE self)
     sprintf(buff, "name=%s, compliance=%s, "
                   "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
                   ci.name,
-                  Compliance_Const_Name(&ci.compliance),
+                  Compliance_name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
 
     destroy_ColorInfo(&ci);
@@ -2018,7 +1895,7 @@ StyleType_new(StyleType style)
 {
     const char *name;
 
-    name = StyleType_Const_Name(style);
+    name = StyleType_name(style);
     return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
 
@@ -2150,7 +2027,7 @@ Font_to_s(VALUE self)
                   ti.name,
                   ti.description,
                   ti.family,
-                  StyleType_Const_Name(ti.style),
+                  StyleType_name(ti.style),
                   StretchType_name(ti.stretch),
                   weight,
                   ti.encoding ? ti.encoding : "",
@@ -2250,6 +2127,43 @@ TypeMetric_to_s(VALUE self)
                   tm.bounds.x1, tm.bounds.y1, tm.bounds.x2, tm.bounds.y2,
                   tm.underline_position, tm.underline_thickness);
     return rb_str_new2(buff);
+}
+
+
+
+/*
+    Static:     VirtualPixelMethod_name
+    Purpose:    Return the string representation of a VirtualPixelMethod value
+*/
+static const char *
+VirtualPixelMethod_name(VirtualPixelMethod method)
+{
+    switch (method)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedVirtualPixelMethod)
+        ENUM_TO_NAME(EdgeVirtualPixelMethod)
+        ENUM_TO_NAME(MirrorVirtualPixelMethod)
+        ENUM_TO_NAME(TileVirtualPixelMethod)
+#if defined(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(TransparentVirtualPixelMethod)
+        ENUM_TO_NAME(BackgroundVirtualPixelMethod)
+#endif
+    }
+}
+
+
+/*
+    Static:     VirtualPixelMethod_new
+    Purpose:    Construct a VirtualPixelMethod enum for a specified VirtualPixelMethod value
+*/
+VALUE
+VirtualPixelMethod_new(VirtualPixelMethod style)
+{
+    const char *name;
+
+    name = VirtualPixelMethod_name(style);
+    return rm_enum_new(Class_VirtualPixelMethod, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
 
 
@@ -2483,14 +2397,14 @@ static VALUE Enum_type_values(VALUE class)
 
 
 /*
-    Static:     Compliance_Const_Name
+    Static:     Compliance_name
     Purpose:    Return the string representation of a ComplianceType value
     Notes:      xMagick will OR multiple compliance types so we have to
                 arbitrarily pick one name. Set the compliance argument
                 to the selected value.
 */
 static const char *
-Compliance_Const_Name(ComplianceType *c)
+Compliance_name(ComplianceType *c)
 {
     if ((*c & (SVGCompliance|X11Compliance|XPMCompliance))
         == (SVGCompliance|X11Compliance|XPMCompliance))
@@ -2588,40 +2502,20 @@ Statistics_new(ImageStatistics *stats)
 const char *
 StorageType_name(StorageType type)
 {
-    const char *name;
-
     switch (type)
     {
         default:
-        case UndefinedPixel:
-            name = "UndefinedPixel";
-            break;
-        case CharPixel:
-            name = "CharPixel";
-            break;
-        case DoublePixel:
-            name = "DoublePixel";
-            break;
-        case FloatPixel:
-            name = "FloatPixel";
-            break;
-        case IntegerPixel:
-            name = "IntegerPixel";
-            break;
-        case LongPixel:
-            name = "LongPixel";
-            break;
+        ENUM_TO_NAME(UndefinedPixel)
+        ENUM_TO_NAME(CharPixel)
+        ENUM_TO_NAME(DoublePixel)
+        ENUM_TO_NAME(FloatPixel)
+        ENUM_TO_NAME(IntegerPixel)
+        ENUM_TO_NAME(LongPixel)
 #if defined(HAVE_QUANTUMPIXEL)
-        case QuantumPixel:
-            name = "QuantumPixel";
-            break;
+        ENUM_TO_NAME(QuantumPixel)
 #endif
-        case ShortPixel:
-            name = "ShortPixel";
-            break;
+        ENUM_TO_NAME(ShortPixel)
     }
-
-    return name;
 }
 
 /*
@@ -2633,51 +2527,37 @@ StretchType_name(StretchType stretch)
 {
     switch (stretch)
     {
-        case NormalStretch:
-            return "NormalStretch";
-        case UltraCondensedStretch:
-            return "UltraCondensedStretch";
-        case ExtraCondensedStretch:
-            return "ExtraCondensedStretch";
-        case CondensedStretch:
-            return "CondensedStretch";
-        case SemiCondensedStretch:
-            return "SemiCondensedStretch";
-        case SemiExpandedStretch:
-            return "SemiExpandedStretch";
-        case ExpandedStretch:
-            return "ExpandedStretch";
-        case ExtraExpandedStretch:
-            return "ExtraExpandedStretch";
-        case UltraExpandedStretch:
-            return "UltraExpandedStretch";
-        case AnyStretch:
-            return "AnyStretch";
         default:
-            return "unknown";
+        ENUM_TO_NAME(UndefinedStretch)
+        ENUM_TO_NAME(NormalStretch)
+        ENUM_TO_NAME(UltraCondensedStretch)
+        ENUM_TO_NAME(ExtraCondensedStretch)
+        ENUM_TO_NAME(CondensedStretch)
+        ENUM_TO_NAME(SemiCondensedStretch)
+        ENUM_TO_NAME(SemiExpandedStretch)
+        ENUM_TO_NAME(ExpandedStretch)
+        ENUM_TO_NAME(ExtraExpandedStretch)
+        ENUM_TO_NAME(UltraExpandedStretch)
+        ENUM_TO_NAME(AnyStretch)
     }
 }
 
 
 /*
-    Static:     StyleType_Const_Name
+    Static:     StyleType_name
     Purpose:    Return the string representation of a StyleType value
 */
 static const char *
-StyleType_Const_Name(StyleType style)
+StyleType_name(StyleType style)
 {
     switch (style)
     {
-        case NormalStyle:
-            return "NormalStyle";
-        case ItalicStyle:
-            return "ItalicStyle";
-        case ObliqueStyle:
-            return "ObliqueStyle";
-        case AnyStyle:
-            return "AnyStyle";
+        ENUM_TO_NAME(NormalStyle)
+        ENUM_TO_NAME(ItalicStyle)
+        ENUM_TO_NAME(ObliqueStyle)
+        ENUM_TO_NAME(AnyStyle)
         default:
-            return "unknown";
+        ENUM_TO_NAME(UndefinedStyle)
     }
 }
 

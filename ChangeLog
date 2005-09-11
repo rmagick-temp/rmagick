@@ -1,3 +1,7 @@
+RMagick 1.9.2
+    o Feature 2412, add the virtual_pixel_method attribute and the VirtualPixelMethod
+      enumeration
+
 RMagick 1.9.1
     o Fixed bug #2157, Image#total_colors is now an alias of Image#number_colors
     o Fixed bug #2155, Image#dispose= now accepts a DisposeType enum, #dispose

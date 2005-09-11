@@ -429,13 +429,29 @@ AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
 #include <sys/types.h>
 #endif
 #include "magick/api.h"],
-     [GravityType x; x = QuantumPixel],
+     [StorageType x; x = QuantumPixel],
      rm_cv_enum_quantumpixel='yes',
      rm_cv_enum_quantumpixel='no')])
 
 if test "$rm_cv_enum_quantumpixel" = yes; then
   AC_DEFINE(HAVE_QUANTUMPIXEL)
 fi
+
+AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [VirtualPixelMethod x; x = TransparentVirtualPixelMethod],
+     rm_cv_enum_transparentvirtualpixelmethod='yes',
+     rm_cv_enum_transparentvirtualpixelmethod='no')])
+
+if test "$rm_cv_enum_transparentvirtualpixelmethod" = yes; then
+  AC_DEFINE(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
+fi
+
 
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.

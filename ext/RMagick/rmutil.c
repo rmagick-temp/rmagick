@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.58 2005/09/11 00:09:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.59 2005/09/11 16:41:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2820,12 +2820,12 @@ rm_handle_error(ExceptionInfo *ex)
     if (ex->reason)
     {
         strncpy(reason, ex->reason, RM_MAX_ERROR_CLAUSE);
-        reason[250] = '\0';
+        reason[RM_MAX_ERROR_CLAUSE] = '\0';
     }
     if (ex->description)
     {
         strncpy(desc, ex->description, RM_MAX_ERROR_CLAUSE);
-        desc[250] = '\0';
+        desc[RM_MAX_ERROR_CLAUSE] = '\0';
     }
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
@@ -2835,12 +2835,12 @@ rm_handle_error(ExceptionInfo *ex)
     if (ex->module)
     {
         strncpy(module, ex->module, RM_MAX_ERROR_CLAUSE);
-        module[250] = '\0';
+        module[RM_MAX_ERROR_CLAUSE] = '\0';
     }
     if (ex->function)
     {
         strncpy(function, ex->function, RM_MAX_ERROR_CLAUSE);
-        function[250] = '\0';
+        function[RM_MAX_ERROR_CLAUSE] = '\0';
     }
     line = ex->line;
 #endif

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.32 2005/08/25 23:32:17 rmagick Exp $
+# $Id: RMagick.rb,v 1.33 2005/09/13 23:37:21 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -764,12 +764,12 @@ class Image
         attr_accessor :dirty
 
         def initialize(img, x, y, width, height)
-        	if width <= 0 || height <= 0
-        		raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
-        	end
-        	if x < 0 || y < 0 || (x+width) > img.columns || (y+height) > img.rows
-        		raise RangeError, "geometry (#{width}x#{height}+#{x}+#{y}) exceeds image boundary"
-        	end
+            if width <= 0 || height <= 0
+                raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
+            end
+            if x < 0 || y < 0 || (x+width) > img.columns || (y+height) > img.rows
+                raise RangeError, "geometry (#{width}x#{height}+#{x}+#{y}) exceeds image boundary"
+            end
             @view = img.get_pixels(x, y, width, height)
             @img = img
             @x = x
@@ -1422,9 +1422,16 @@ public
     # Set same delay for all images
     def delay=(d)
         if Integer(d) < 0
-            raise ArgumentError, "delay must be greater than 0"
+            raise ArgumentError, "delay must be greater than or equal to 0"
         end
         each { |f| f.delay = Integer(d) }
+    end
+
+    def ticks_per_second=(t)
+        if Integer(t) < 0
+            raise ArgumentError, "ticks_per_second must be greater than or equal to 0"
+        end
+        each { |f| f.ticks_per_second = Integer(t) }
     end
 
     def dup

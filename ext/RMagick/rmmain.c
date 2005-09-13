@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.96 2005/09/11 00:09:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.97 2005/09/13 23:37:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -617,6 +617,7 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, scene)
     DCL_ATTR_ACCESSOR(Image, start_loop)
     DCL_ATTR_ACCESSOR(Image, class_type)
+    DCL_ATTR_ACCESSOR(Image, ticks_per_second)
     DCL_ATTR_ACCESSOR(Image, tile_info)
     DCL_ATTR_READER(Image, total_colors)
     DCL_ATTR_ACCESSOR(Image, units)
@@ -1571,7 +1572,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/09/11 00:09:23 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/09/13 23:37:21 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

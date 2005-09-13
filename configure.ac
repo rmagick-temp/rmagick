@@ -197,6 +197,13 @@ AC_CHECK_MEMBERS([Image.quality],,,
                  #endif
                  #include "magick/api.h"])
 
+AC_CHECK_MEMBERS([Image.ticks_per_second],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
 # Don't use AC_CHECK_MEMBERS!
 AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
   AC_TRY_COMPILE([

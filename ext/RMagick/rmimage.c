@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.120 2005/09/11 00:09:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.121 2005/09/13 23:37:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7539,6 +7539,43 @@ Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
     rm_check_frozen(self);
     return thumbnail(True, argc, argv, self);
 }
+
+
+/*
+    Method:     Image#ticks_per_second, ticks_per_second=
+    Purpose:    the ticks_per_second attribute accessors
+*/
+VALUE
+Image_ticks_per_second(VALUE self)
+{
+#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return INT2FIX(image->ticks_per_second);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+VALUE
+Image_ticks_per_second_eq(VALUE self, VALUE tps)
+{
+#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    image->ticks_per_second = NUM2INT(tps);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#tile_info, tile_info=

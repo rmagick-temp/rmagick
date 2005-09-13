@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: class ImageList</title>
   <meta http-equiv="Content-Type" content=
@@ -66,6 +66,8 @@
       <li><a href="#length">length</a></li>
 
       <li><a href="#scene">scene, scene=</a></li>
+
+      <li><a href="#ticks_per_second_eq">ticks_per_second=</a></li>
     </ul>
 
     <h3>instance methods</h3>
@@ -182,8 +184,9 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Sets the length of time that each image in the imagelist
-    will be displayed when the sequence is animated. The
+    <p>In conjunction with <a href=
+    "#ticks_per_second_eq">ticks_per_second</a> sets the length of
+    time between each image in an animation. The
     <code>delay=</code> attribute assigns the same delay to all the
     images in the imagelist. Use <a href=
     "imageattrs.html#Image.delay">Image#delay=</a> to set different
@@ -191,8 +194,8 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
 
     <h4>Arguments</h4>
 
-    <p>An integer value representing the number of 100ths of a
-    second to display each image.</p>
+    <p>An integer value representing the number of ticks that must
+    elapse between each image in an animation.</p>
 
     <h4>Returns</h4>
 
@@ -278,6 +281,30 @@ i.length &raquo; 2
     <pre>
 imagelist.scene = 10
 imagelist.scene &raquo; 10
+</pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="ticks_per_second_eq">ticks_per_second=</h3>
+
+    <p><span class="arg">imagelist</span>.ticks_per_second =
+    <em>anInteger</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Used in conjunction with <a href="#delay_eq">delay</a> to
+    establish the elapsed time between frames in an animation. By
+    default the number of ticks per second is 100.</p>
+
+    <p>This attribute is available only in ImageMagick 6.2.4 and
+    later. Prior to this release the number of ticks per second is
+    fixed at 100.</p>
+
+    <h4>Example</h4>
+    <pre>
+imagelist.ticks_per_second = 1000
 </pre>
   </div>
 
@@ -519,17 +546,15 @@ imagelist.animate { self.server_name = "other:0.0" }
      <img style="display:none" id="notaveraged" onmouseout=
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
-    "ex/average_before.gif" alt="average example" name=
-    "notaveraged" /><!--
+    "ex/average_before.gif" alt="average example" /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
-    src="ex/average_after.gif" alt="average example" name=
-    "averaged" /></a> <img src="ex/images/spin.gif" alt="" class=
-    "spin" style="left:131px; display:" id="averagedspin" title=
-    "Mouse over the example to see the 3 original images" name=
-    "averagedspin" /></p>
+    src="ex/average_after.gif" alt="average example" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" style=
+    "left:131px; display:" id="averagedspin" title=
+    "Mouse over the example to see the 3 original images" /></p>
 
     <h4>Magick API</h4>
 
@@ -799,16 +824,16 @@ imagelist2 = imagelist1.copy
     <h4>Arguments</h4>
 
     <p>A <em>blob</em> can be a string containing an image file
-    such as a JPEG or GIF. The string can contain a multi-image file such
-    as an animated GIF or a Photoshop image with multiple layers. A blob
-    can also be one of the strings produced by <a href=
-    "#to_blob">to_blob</a>. Control how the image(s) are created
-    by setting additional <a href=
+    such as a JPEG or GIF. The string can contain a multi-image
+    file such as an animated GIF or a Photoshop image with multiple
+    layers. A blob can also be one of the strings produced by
+    <a href="#to_blob">to_blob</a>. Control how the image(s) are
+    created by setting additional <a href=
     "info.html">Image::Info</a> attributes in the optional block
     argument. Useful attributes include <a href=
     "info.html#scene">scene</a>, <a href=
-    "info.html#number_scenes">number_scenes</a>, and
-    <a href="info.html#extract">extract</a>.</p>
+    "info.html#number_scenes">number_scenes</a>, and <a href=
+    "info.html#extract">extract</a>.</p>
 
     <h4>Returns</h4>
 

@@ -158,6 +158,8 @@
 
           <li><a href="#start_loop">start_loop</a></li>
 
+          <li><a href="#ticks_per_second">ticks_per_second</a></li>
+
           <li><a href="#tile_info">tile_info</a></li>
 
           <li><a href="#total_colors">total_colors</a></li>
@@ -529,9 +531,11 @@
   <div class="desc">
     <h4>Description</h4>
 
-    <p><span class="imquote">Time in 1/100ths of a second which
-    must expire before displaying the next image in an animated
-    sequence.</span> The default is 0.</p>
+    <p>Number of ticks which must expire before displaying the next
+    image in an animated sequence. The default number of ticks is
+    0. By default there are 100 ticks per second but this number
+    can be changed via the <a href=
+    "#ticks_per_second">ticks_per_second</a> attribute.</p>
 
     <h4>Arguments</h4>An integer value between 0 and 65535,
     inclusive.
@@ -1358,6 +1362,28 @@ blur_image is 100% complete.
     <h4>Description</h4>
 
     <p>Indicates the first image in an animation.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="ticks_per_second">ticks_per_second</h3>
+
+    <p><span class="arg">image.</span>ticks_per_second -&gt;
+    <em>aNumeric</em><br />
+    <span class="arg">iamge.</span>ticks_per_second = <span class=
+    "arg">aNumeric</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This attribute is used in conjunction with the <a href=
+    "#delay">delay</a> attribute. Get/set the number of ticks per
+    second. The default is 100. Note that the GIF image format only
+    accepts 100 ticks per second regardless of the value of this
+    attribute.</p>
+
+    <p>Available in ImageMagick 6.2.4 and later. Prior to this
+    release the number of ticks per second was fixed at 100.</p>
   </div>
 
   <div class="sig">

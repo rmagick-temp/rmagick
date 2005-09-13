@@ -183,7 +183,7 @@ class ImageList2_UT < Test::Unit::TestCase
             assert_equal(@ilist, ilist)
         end
         assert_raise(Magick::ImageMagickError) do
-            montage = ilist.montage { self.frame = 2 }
+            montage = ilist.montage { self.frame = 'z' }
             assert_equal(@ilist, ilist)
         end
         assert_raise(TypeError) do
@@ -275,7 +275,7 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_equal(4, @ilist.length)
         assert_equal(3, @ilist.scene)
     end
-    
+
     def test_to_blob
         @ilist.read(IMAGES_DIR+'/Button_0.gif')
         blob = nil
@@ -291,10 +291,10 @@ class ImageList2_UT < Test::Unit::TestCase
         @ilist.read(IMAGES_DIR+'/Button_0.gif')
         assert_nothing_raised do
             @ilist.write('temp.gif')
-            FileUtils.rm('temp.gif')            
+            FileUtils.rm('temp.gif')
         end
     end
-    
+
 end
 
 

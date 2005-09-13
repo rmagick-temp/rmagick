@@ -24,6 +24,14 @@ class ImageList1_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @list.delay = 'x' }
     end
 
+    def test_ticks_per_second
+        assert_nothing_raised { @list.ticks_per_second }
+        assert_equal(100, @list.ticks_per_second)
+        assert_nothing_raised { @list.ticks_per_second = 1000 }
+        assert_equal(1000, @list.ticks_per_second)
+        assert_raise(ArgumentError) { @list.ticks_per_second = 'x' }
+    end
+
     def test_iterations
         assert_nothing_raised { @list.iterations }
         assert_equal(1, @list.iterations)

@@ -557,6 +557,14 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert(@img.start_loop)
     end
 
+    def test_ticks_per_second
+        assert_nothing_raised { @img.ticks_per_second }
+        assert_equal(100, @img.ticks_per_second)
+        assert_nothing_raised { @img.ticks_per_second = 1000 }
+        assert_equal(1000, @img.ticks_per_second)
+        assert_raise(TypeError) { @img.ticks_per_second = 'x' }
+    end
+
     def test_tile_info
         v = $VERBOSE
         $VERBOSE = nil

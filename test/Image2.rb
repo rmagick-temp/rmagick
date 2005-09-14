@@ -732,7 +732,7 @@ class Image2_UT < Test::Unit::TestCase
     def test_preview
         preview_types = [
           Magick::RotatePreview,
-        #  Magick::ShearPreview,
+         Magick::ShearPreview,
           Magick::RollPreview,
           Magick::HuePreview,
           Magick::SaturationPreview,

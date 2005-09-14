@@ -664,6 +664,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.page = Magick::Rectangle.new(1,2,3,4) }
         assert_raise(TypeError) { @img.rendering_intent = Magick::SaturationIntent }
         assert_raise(TypeError) { @img.start_loop = true }
+        assert_raise(TypeError) { @img.ticks_per_second = 1000 }
         v = $VERBOSE
         $VERBOSE = nil
         assert_raise(TypeError) { @img.tile_info = Magick::Rectangle.new(1,2,3,4) }

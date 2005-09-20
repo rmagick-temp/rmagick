@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2004), see www.w3.org" />
+  "HTML Tidy for Mac OS X (vers 1 July 2005), see www.w3.org" />
 
   <title>RMagick: Common Tasks</title>
   <meta http-equiv="Content-Type" content=
@@ -44,7 +44,7 @@
   <div id="toc">
     <h2>Table of Contents</h2>
 
-    <ul style="margin-left: 15px; padding-top: 1em">
+    <ul style="margin-left: 15px; padding-top: 1em;">
       <li><a href="#info">Getting information about an
       image</a></li>
 
@@ -56,13 +56,15 @@
       <li><a href="#resizing">Resizing to a maximum (or minimum)
       size</a></li>
 
+      <li><a href="#blob">Writing to or reading from a string
+      instead of a file</a></li>
+
       <li><a href="#gray">Converting a color image to
       grayscale</a></li>
 
       <li><a href="#compressing">Compressing image files</a></li>
 
       <li><a href="#shadow">Making a drop shadow</a></li>
-
     </ul>
   </div>
 
@@ -175,6 +177,23 @@ thumb.write "thumb.gif"
   value from the block. The <code>change_geometry</code> method
   then returns that value to its caller.</p>
 
+  <h2><a id="blob" name="blob">Writing to or reading from a string
+  instead of a file</a></h2>
+
+  <p>Use the <a href="image1.html#from_blob">Image.from_blob</a>
+  method to construct an Image object from a string. Use the
+  <a href="image3.html#to_blob">Image#to_blob</a> method to convert
+  an image to a string. A blob is simply an in-memory version of an
+  image file. That is, you could use <code>File.read</code> to read
+  an JPEG file into a string, then create an image by using that
+  string as an argument to <code>from_blob</code>. Similarly, if
+  you create a string version of an image with
+  <code>to_blob</code>, then write the string to a file, any image
+  viewer will be able to display it just as if you had written the
+  image directly to a file. Blobs are very useful in web
+  applications when you want to modify an image and then stream it
+  back to the client.</p>
+
   <h2 id="gray">Converting a color image to grayscale</h2>
 
   <p>Use the <a href=
@@ -227,10 +246,9 @@ img.write("myimage.jpg") { self.quality = 50 }
     "ex/drop_shadow.gif" title="Click to see the example script"
     alt="drop shadow example" /></a>
   </div>
-
   <hr />
 
-  <p class="spacer"> </p>
+  <p class="spacer">&nbsp;</p>
 
   <div class="nav">
     &laquo; <a href="imusage.html">Prev</a> | <a href=

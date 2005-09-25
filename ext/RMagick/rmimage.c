@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.121 2005/09/13 23:37:21 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.122 2005/09/25 21:24:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1142,7 +1142,7 @@ Image_color_histogram(VALUE self)
     for (x = 0; x < colors; x++)
     {
         pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
+        rb_hash_aset(hash, pixel, ULONG2NUM(histogram[x].count));
     }
 
     /*
@@ -1155,7 +1155,7 @@ Image_color_histogram(VALUE self)
 
 
 #elif defined(HAVE_GETIMAGEHISTOGRAM)
-    Image *image;
+    Image *image, *dc_copy = NULL;
     volatile VALUE hash, pixel;
     unsigned long x, colors;
     ColorPacket *histogram;
@@ -1164,20 +1164,45 @@ Image_color_histogram(VALUE self)
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
+    // If image not DirectClass make a DirectClass copy.
+    if (image->storage_class != DirectClass)
+    {
+        dc_copy = CloneImage(image, 0, 0, True, &exception);
+        HANDLE_ERROR
+        SyncImage(dc_copy);
+        magick_free(dc_copy->colormap);
+        dc_copy->colormap = NULL;
+        dc_copy->storage_class = DirectClass;
+        image = dc_copy;
+    }
+
     histogram = GetImageHistogram(image, &colors, &exception);
+    if (dc_copy && (!histogram || exception.severity >= ErrorException))
+    {
+        DestroyImage(dc_copy);
+    }
+    if (!histogram)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
     HANDLE_ERROR
 
     hash = rb_hash_new();
     for (x = 0; x < colors; x++)
     {
         pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, INT2NUM(histogram[x].count));
+        rb_hash_aset(hash, pixel, ULONG2NUM((unsigned long)histogram[x].count));
     }
 
     /*
         Christy evidently didn't agree with Bob's memory management.
     */
     RelinquishMagickMemory(histogram);
+
+    if (dc_copy)
+    {
+        DestroyImage(dc_copy);
+    }
 
     return hash;
 #else
@@ -3652,6 +3677,7 @@ Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
 
 }
 
+
 /*
     Method:     Image#implode(amount=0.50)
     Purpose:    implode the image by the specified percentage
@@ -3838,7 +3864,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
 
     // Everything worked. Replace the image with the clone and destroy the original.
     DATA_PTR(self) = clone_image;
-    DestroyImage(image);
+            DestroyImage(image);
 
     return self;
 

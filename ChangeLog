@@ -1,3 +1,6 @@
+RMagick 1.10.0
+    o Feature 2521, add Image#distortion_channel method
+
 RMagick 1.9.2
     o Feature 2412, add the virtual_pixel_method attribute and the VirtualPixelMethod
       enumeration

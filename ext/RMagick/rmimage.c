@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.122 2005/09/25 21:24:27 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.123 2005/09/26 23:37:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2654,6 +2654,48 @@ Image_dispose_eq(VALUE self, VALUE dispose)
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(dispose, image->dispose, DisposeType);
     return self;
+}
+
+
+/*
+ *  Method:     Image#distortion_channel(reconstructed_image, metric[, channel...])
+ *  Purpose:    Call GetImageChannelDistortion
+*/
+VALUE
+Image_distortion_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GETIMAGECHANNELDISTORTION)
+    Image *image, *reconstruct;
+    ChannelType channels;
+    ExceptionInfo exception;
+    MetricType metric;
+    double distortion;
+
+    Data_Get_Struct(self, Image, image);
+
+    channels = extract_channels(&argc, argv);
+    if (argc > 2)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+    if (argc < 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
+    }
+
+    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, reconstruct);
+    VALUE_TO_ENUM(argv[1], metric, MetricType);
+    GetExceptionInfo(&exception);
+    (void) GetImageChannelDistortion(image, reconstruct, channels
+                                   , metric, &distortion, &exception);
+    HANDLE_ERROR_IMG(image)
+    HANDLE_ERROR
+
+    return rb_float_new(distortion);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

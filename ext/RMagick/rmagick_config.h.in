@@ -59,6 +59,8 @@
 #undef HAVE_GETIMAGECHANNELEXTREMA
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGECHANNELMEAN
+/* Introduced in IM 6.2.0 */
+#undef HAVE_GETIMAGECHANNELDISTORTION
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGEHISTOGRAM
 /* Introduced in IM 6.0.0, GM 1.1 */

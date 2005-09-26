@@ -155,13 +155,13 @@ float: left;
           <li><a href="#composite">composite</a></li>
 
           <li><a href="#composite_bang">composite!</a></li>
+
+          <li><a href="#composite_affine">composite_affine</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#composite_affine">composite_affine</a></li>
-
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
 
@@ -186,6 +186,8 @@ float: left;
           <li><a href="#dispatch">dispatch</a></li>
 
           <li><a href="#display">display</a></li>
+
+          <li><a href="#distortion_channel">distortion_channel</a></li>
 
           <li><a href="#dup">dup</a></li>
 
@@ -903,8 +905,7 @@ img = Magick::Image.read_inline(content)
     <h3 id="bilevel_channel">bilevel_channel</h3>
 
     <p><span class="arg">image</span>.bilevel_channel(<span class=
-    "arg">threshold</span>, [<span class="arg">channel</span>[,
-    <span class="arg">channel</span>...]] = <em>aNewImage</em></p>
+    "arg">threshold</span> [,<span class="arg">channel...</span>]) = <em>aNewImage</em></p>
   </div>
 
   <div class="desc">
@@ -963,8 +964,7 @@ img = Magick::Image.read_inline(content)
 
     <p><span class="arg">image</span>.blur_channel(<span class=
     "arg">radius=0.0</span>, <span class=
-    "arg">sigma=1.0</span><span class="arg">[, channel[,
-    channel...]]</span>) -&gt; <em>anImage</em></p>
+    "arg">sigma=1.0</span><span class="arg">[, channel...]]</span>) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1294,7 +1294,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h3 id="channel_depth">channel_depth</h3>
 
     <p><span class="arg">image</span>.channel_depth([<span class=
-    "arg">channel</span> [, <span class="arg">channel</span>]...])
+    "arg">channel</span>...])
     -&gt; <em>aNumeric</em></p>
   </div>
 
@@ -1307,7 +1307,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Arguments</h4>
 
     <dl>
-      <dt>[channel [, channel...]]</dt>
+      <dt>channel...</dt>
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> constants. If no
@@ -1332,7 +1332,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h3 id="channel_extrema">channel_extrema</h3>
 
     <p><span class="arg">image</span>.channel_extrema([<span class=
-    "arg">channel</span> [, <span class="arg">channel</span>]...])
+    "arg">channel</span>...])
     -&gt; <em>[aNumeric, aNumeric]</em></p>
   </div>
 
@@ -1345,7 +1345,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Arguments</h4>
 
     <dl>
-      <dt>[channel [, channel...]]</dt>
+      <dt>channel...</dt>
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
@@ -1375,7 +1375,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h3 id="channel_mean">channel_mean</h3>
 
     <p><span class="arg">image</span>.channel_mean([<span class=
-    "arg">channel</span> [, <span class="arg">channel</span>]...])
+    "arg">channel</span>...])
     -&gt; <em>[aNumeric, aNumeric]</em></p>
   </div>
 
@@ -1388,7 +1388,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Arguments</h4>
 
     <dl>
-      <dt>[channel [, channel...]]</dt>
+      <dt>channel...</dt>
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
@@ -1914,24 +1914,10 @@ f.color_reset!(red)
       <dt>metric</dt>
 
       <dd>
-        The desired distortion metric. One of the following
-        constants:
-
-        <ul style=
-        "list-style-type: none; list-style-image: none; list-style-position: outside;">
-        <li>MeanAbsoluteErrorMetric</li>
-
-          <li>MeanSquaredErrorMetric</li>
-
-          <li>PeakAbsoluteErrorMetric</li>
-
-          <li>PeakSignalToNoiseRatioMetric</li>
-
-          <li>RootMeanSquaredErrorMetric</li>
-        </ul>
+        The desired distortion metric. A <a href="constants.html#MetricType">MetricType</a> value.
       </dd>
 
-      <dt>[channel [, channel...]]</dt>
+      <dt>channel...</dt>
 
       <dd>Zero or more <a href=
       "constants.html##ChannelType">ChannelType</a> values. All the
@@ -1949,7 +1935,8 @@ f.color_reset!(red)
     <h4>See also</h4>
 
     <p><a href="#difference">difference</a>, <a href=
-    "#spaceship">&lt;=&gt;</a></p>
+    "#spaceship">&lt;=&gt;</a>,
+    <a href="#distortion_channel">distortion_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -2342,9 +2329,8 @@ f.colors &raquo; 108
     <h3 id="convolve_channel">convolve_channel</h3>
 
     <p><span class="arg">image</span>.convolve_channel(<span class=
-    "arg">order</span>, <span class="arg">kernel</span>[,
-    <span class="arg">channel</span>[, <span class=
-    "arg">channel</span>...]]) -&gt; <em>anImage</em></p>
+    "arg">order</span>, <span class="arg">kernel</span> [,
+    <span class="arg">channel</span>...]) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -2871,6 +2857,42 @@ exit
     <h4>Magick API</h4>
 
     <p>DisplayImages</p>
+  </div>
+
+  <div class="sig">
+      <h3 id="distortion_channel">distortion_channel</h3>
+    <p><span class="arg">image</span>.distortion_channel(<span class="arg">reconstructed_image</span>, <span class="arg">metric</span>[, <span class="arg">channel</span>...]) -&gt; <em>aFloat</em></p>
+  </div>
+
+  <div class="desc">
+      <h4>Description</h4>
+    <p class="imquote">(C)ompares one or more image channels of an image to a reconstructed image and returns the specified distortion metric.</p>
+    <h4>Arguments</h4>
+    <dl>
+    <dt>reconstructed_image</dt>
+      <dd>Either an imagelist or an image. If an imagelist, uses
+      the current image.</dd>
+
+      <dt>metric</dt>
+
+      <dd>
+        The desired distortion metric. A <a href="constants.html#MetricType">MetricType</a> value.
+      </dd>
+
+      <dt>channel...</dt>
+
+      <dd>Zero or more <a href=
+      "constants.html##ChannelType">ChannelType</a> values. All the
+      specified channels contribute to the comparison and the
+      distortion value. If no channels are specified, compares all
+      channels.</dd>
+    </dl>
+    <h4>Returns</h4>
+    <h4>Magick API</h4>
+    <p>GetImageChannelDistortion (available in ImageMagick 6.2.0)</p>
+    <h4>See also</h4>
+    <p><a href="#compare_channel">compare_channel</a>,
+    <a href="#difference">difference</a></p>
   </div>
 
   <div class="sig">

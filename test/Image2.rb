@@ -167,6 +167,23 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(NoMethodError) { img1.difference(2) }
     end
 
+    def test_distortion_channel
+        assert_nothing_raised do
+            metric = @img.distortion_channel(@img, Magick::MeanAbsoluteErrorMetric)
+            assert_instance_of(Float, metric)
+            assert_equal(0.0, metric)
+        end
+        assert_nothing_raised { @img.distortion_channel(@img, Magick::MeanSquaredErrorMetric) }
+        assert_nothing_raised { @img.distortion_channel(@img, Magick::PeakAbsoluteErrorMetric) }
+        assert_nothing_raised { @img.distortion_channel(@img, Magick::PeakSignalToNoiseRatioMetric) }
+        assert_nothing_raised { @img.distortion_channel(@img, Magick::RootMeanSquaredErrorMetric) }
+        assert_nothing_raised { @img.distortion_channel(@img, Magick::MeanSquaredErrorMetric, Magick::RedChannel, Magick:: BlueChannel) }
+        assert_raise(TypeError) { @img.distortion_channel(@img, 2) }
+        assert_raise(TypeError) { @img.distortion_channel(@img, Magick::RootMeanSquaredErrorMetric, 2) }
+        assert_raise(ArgumentError) { @img.distortion_channel }
+        assert_raise(ArgumentError) { @img.distortion_channel(@img) }
+    end
+
     def test_dup
         assert_nothing_raised do
             ditto = @img.dup
@@ -732,7 +749,7 @@ class Image2_UT < Test::Unit::TestCase
     def test_preview
         preview_types = [
           Magick::RotatePreview,
-         Magick::ShearPreview,
+          Magick::ShearPreview,
           Magick::RollPreview,
           Magick::HuePreview,
           Magick::SaturationPreview,
@@ -766,7 +783,9 @@ class Image2_UT < Test::Unit::TestCase
             prev = hat.preview(Magick::RotatePreview)
             assert_instance_of(Magick::Image, prev)
         end
+        puts "\n"
         preview_types.each do |type|
+            puts "testing #{type.to_s}..."
             assert_nothing_raised { prev = hat.preview(type) }
         end
         assert_raise(TypeError) { @img.preview(2) }

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.25 2005/08/07 21:21:08 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.26 2005/10/01 14:23:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -584,7 +584,7 @@ ImageList_to_blob(VALUE self)
     // doesn't support multi-image files.
     info->adjoin = True;
     GetExceptionInfo(&exception);
-    blob = ImageToBlob(info, images, &length, &exception);
+    blob = ImagesToBlob(info, images, &length, &exception);
     rm_split(images);
     HANDLE_ERROR
 

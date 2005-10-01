@@ -1,10 +1,11 @@
 RMagick 1.10.0
-    o Feature 2521, add Image#distortion_channel method
+    o Feature #2521, add Image#distortion_channel method
+    o Fixed bug #2546, ImageList#to_blob now correctly builds multi-image blobs
 
 RMagick 1.9.2
-    o Feature 2412, add the virtual_pixel_method attribute and the VirtualPixelMethod
+    o Feature #2412, add the virtual_pixel_method attribute and the VirtualPixelMethod
       enumeration
-    o Feature 2462, add the ticks_per_second attribute
+    o Feature #2462, add the ticks_per_second attribute
 
 RMagick 1.9.1
     o Fixed bug #2157, Image#total_colors is now an alias of Image#number_colors

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.98 2005/09/26 23:37:04 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.99 2005/10/13 23:01:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1430,7 +1430,9 @@ Init_RMagick(void)
 
     // StorageType
     DEF_ENUM(StorageType)
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
         ENUMERATOR(UndefinedPixel)
+#endif
         ENUMERATOR(CharPixel)
         ENUMERATOR(DoublePixel)
         ENUMERATOR(FloatPixel)
@@ -1573,7 +1575,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/09/26 23:37:04 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/10/13 23:01:29 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

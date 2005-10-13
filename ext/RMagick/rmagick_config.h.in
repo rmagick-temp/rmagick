@@ -63,6 +63,8 @@
 #undef HAVE_GETIMAGECHANNELDISTORTION
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGEHISTOGRAM
+/* Introduced in IM 6.1.5 */
+#undef HAVE_IMAGESTOBLOB
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGEPROFILE
 /* Introduced in IM 6.0.0 */

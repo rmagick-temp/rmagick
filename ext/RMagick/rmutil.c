@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.59 2005/09/11 16:41:40 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.60 2005/10/13 23:01:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2504,8 +2504,6 @@ StorageType_name(StorageType type)
 {
     switch (type)
     {
-        default:
-        ENUM_TO_NAME(UndefinedPixel)
         ENUM_TO_NAME(CharPixel)
         ENUM_TO_NAME(DoublePixel)
         ENUM_TO_NAME(FloatPixel)
@@ -2515,6 +2513,12 @@ StorageType_name(StorageType type)
         ENUM_TO_NAME(QuantumPixel)
 #endif
         ENUM_TO_NAME(ShortPixel)
+        default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
+        ENUM_TO_NAME(UndefinedPixel)
+#else
+        return "UndefinedPixel";
+#endif
     }
 }
 
@@ -2527,8 +2531,6 @@ StretchType_name(StretchType stretch)
 {
     switch (stretch)
     {
-        default:
-        ENUM_TO_NAME(UndefinedStretch)
         ENUM_TO_NAME(NormalStretch)
         ENUM_TO_NAME(UltraCondensedStretch)
         ENUM_TO_NAME(ExtraCondensedStretch)
@@ -2539,6 +2541,12 @@ StretchType_name(StretchType stretch)
         ENUM_TO_NAME(ExtraExpandedStretch)
         ENUM_TO_NAME(UltraExpandedStretch)
         ENUM_TO_NAME(AnyStretch)
+        default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStretch were both introduced in IM 6.0.0
+        ENUM_TO_NAME(UndefinedStretch)
+#else
+        return "UndefinedStretch";
+#endif
     }
 }
 
@@ -2557,7 +2565,11 @@ StyleType_name(StyleType style)
         ENUM_TO_NAME(ObliqueStyle)
         ENUM_TO_NAME(AnyStyle)
         default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStyle were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedStyle)
+#else
+        return "UndefinedStyle";
+#endif
     }
 }
 

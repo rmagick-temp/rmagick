@@ -144,7 +144,7 @@ AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
 AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
 AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel ShadowImage])
 AC_CHECK_FUNCS([SepiaToneImage SigmoidalContrastImageChannel SetImageProgressMonitor])
-AC_CHECK_FUNCS([GetImageChannelDistortion])
+AC_CHECK_FUNCS([GetImageChannelDistortion ImagesToBlob])
 
 # What typedefs?
 
@@ -440,10 +440,6 @@ AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
      [StorageType x; x = QuantumPixel],
      rm_cv_enum_quantumpixel='yes',
      rm_cv_enum_quantumpixel='no')])
-
-if test "$rm_cv_enum_quantumpixel" = yes; then
-  AC_DEFINE(HAVE_QUANTUMPIXEL)
-fi
 
 AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
   [AC_TRY_COMPILE(

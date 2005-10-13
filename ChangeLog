@@ -1,6 +1,8 @@
-RMagick 1.10.0
+RMagick 1.9.3
     o Feature #2521, add Image#distortion_channel method
-    o Fixed bug #2546, ImageList#to_blob now correctly builds multi-image blobs
+    o Fixed bug #2546, ImageList#to_blob builds multi-image blobs again. (ImageMagick 6.2.0
+      silently broke the ImageToBlob method.) Thanks to Tom Werner for reporting this bug.
+    o Test with GraphicsMagick 1.1.7
 
 RMagick 1.9.2
     o Feature #2412, add the virtual_pixel_method attribute and the VirtualPixelMethod

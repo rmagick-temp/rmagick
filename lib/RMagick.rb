@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.33 2005/09/13 23:37:21 rmagick Exp $
+# $Id: RMagick.rb,v 1.34 2005/10/17 22:17:38 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2005 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1225,7 +1225,7 @@ public
         return a
     end
 
-    if self.superclass.instance_methods.include? 'insert' then
+    if self.superclass.instance_methods(true).include? 'insert' then
         def insert(*args)
             raise(ArgumentError, "can't insert nil") unless args.length > 1
             is_a_image_array args[1,args.length-1]

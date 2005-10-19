@@ -42,6 +42,11 @@ else
             Magick-config )
                 MAGICKNAME=ImageMagick
                 MAGICKLIB=Magick
+                MAGICKVERS=`${MAGICKCONFIG} --version | tr -d .`
+                if test $MAGICKVERS -lt 600; then
+                   MAGICKVERS=`${MAGICKCONFIG} --version`
+                   AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.0.0 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
+                fi
                 ;;
             GraphicsMagick-config )
                 MAGICKNAME=GraphicsMagick

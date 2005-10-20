@@ -1,6 +1,7 @@
 RMagick 1.9.4
     o Fixed bug #2688, Image#annotate, Draw#get_multiline_type_metrics handle
       newline characters properly.
+    o Added cyan, magenta, yellow, and black attribute accessors to the Pixel class.
 
 RMagick 1.9.3
     o Feature #2521, add Image#distortion_channel method

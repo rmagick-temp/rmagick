@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st July 2003), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick: Miscellaneous classes</title>
   <meta http-equiv="Content-Type" content=
@@ -13,17 +13,17 @@
   <meta name="Copyright" content=
   "Copyright (C) 2005 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-  <link rel="stylesheet" type="text/css" href="css/ref.css"/>
-  <script type="text/javascript" src="scripts/doc.js">
-  </script>
-  <style type="text/css">
+  <link rel="stylesheet" type="text/css" href="css/ref.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<style type="text/css">
   /*<![CDATA[*/
 
   /* Styles local to this page. */
 
 
   /*]]>*/
-  </style>
+</style>
 </head>
 
 <body>
@@ -633,6 +633,12 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
         <dd>The opacity level. Higher intensities are more
         transparent. If the colorspace is CMYKColorspace, this
         attribute is interpreted as the black intensity.</dd>
+
+        <dt>cyan, magenta, yellow, black</dt>
+
+        <dd>These attributes are aliases for <code>red</code>,
+        <code>green</code>, <code>blue</code>, and
+        <code>opacity</code>, respectively.</dd>
       </dl>
     </div>
 
@@ -662,8 +668,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="desc">
       <h5>Description</h5>
 
-      <p>Constructs a pixel object from the specified array
-      of 3 values: hue, saturation, and luminosity.</p>
+      <p>Constructs a pixel object from the specified array of 3
+      values: hue, saturation, and luminosity.</p>
     </div>
 
     <div class="sig">
@@ -1229,8 +1235,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
       <p><a href=
       "javascript:popup('texturefill.rb.html')"><img src="ex/texturefill.gif"
-           alt="TextureFill example" title=
-           "Click to see the example script" /></a></p>
+      alt="TextureFill example" title=
+      "Click to see the example script" /></a></p>
     </div>
   </div>
 

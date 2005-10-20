@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.23 2005/06/24 22:31:33 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.24 2005/10/20 18:53:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -412,8 +412,8 @@ VALUE Draw_annotate(
     rm_check_frozen(ImageList_cur_image(image_arg));
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
-    // Copy text to Draw structure
-    magick_clone_string(&draw->info->text, STRING_PTR(text));
+    // Translate & store in Draw structure
+    draw->info->text = TranslateText(NULL, image, STRING_PTR(text));
 
     // Create geometry string, copy to Draw structure, overriding
     // any previously existing value.
@@ -1300,7 +1300,7 @@ get_type_metrics(
      }
 
      Data_Get_Struct(self, Draw, draw);
-     magick_clone_string(&draw->info->text, text);
+     draw->info->text = TranslateText(NULL, image, text);
 
      okay = (*getter)(image, draw->info, &metrics);
 

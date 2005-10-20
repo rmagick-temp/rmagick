@@ -38,7 +38,7 @@ __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 <h2 id="prereq">Prerequisites</h2>
 
-__O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, MS Windows 98 and later.
+__O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, OS X.
 
 __Ruby__ 1.6.7 or later. You can get Ruby from <http://www.ruby-lang.org>.
 
@@ -212,9 +212,9 @@ When make is running the examples, if you get a message like this:
 
 you probably do not have the directory in which the ImageMagick or GraphicsMagick
 library is installed in your load path. An easy way to fix this is to define the
-directory in the LD_LIBRARY_PATH environment variable. For example, suppose you
+directory in the LD\_LIBRARY\_PATH environment variable. For example, suppose you
 installed the GraphicsMagick library libGraphicsMagick.so in /usr/local/lib.
-(By default this is where it is installed.) Create the LD_LIBRARY_PATH variable
+(By default this is where it is installed.) Create the LD\_LIBRARY\_PATH variable
 like this:
 
     export LD_LIBRARY_PATH=/usr/local/lib

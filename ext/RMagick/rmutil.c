@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.60 2005/10/13 23:01:29 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.61 2005/10/20 22:08:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -621,6 +621,20 @@ DEF_PIXEL_CHANNEL_WRITER(red)
 DEF_PIXEL_CHANNEL_WRITER(green)
 DEF_PIXEL_CHANNEL_WRITER(blue)
 DEF_PIXEL_CHANNEL_WRITER(opacity)
+
+
+/*
+    Methods:    Pixel CMYK attribute accessors
+    Purpose:    Get/set Pixel attributes
+    Note:       Pixel is Observable. Setters call changed, notify_observers
+    Note:       Setters return their argument values for backward compatibility
+                to when Pixel was a Struct class.
+*/
+DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(cyan, red)
+DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(magenta, green)
+DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(yellow, blue)
+DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(black, opacity)
+
 
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.99 2005/10/13 23:01:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.100 2005/10/20 22:08:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -875,6 +875,13 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Pixel, blue)
     DCL_ATTR_ACCESSOR(Pixel, opacity)
 
+    // Define the CMYK attributes
+    DCL_ATTR_ACCESSOR(Pixel, cyan)
+    DCL_ATTR_ACCESSOR(Pixel, magenta)
+    DCL_ATTR_ACCESSOR(Pixel, yellow)
+    DCL_ATTR_ACCESSOR(Pixel, black)
+
+
     // Define the instance methods
     rb_define_method(Class_Pixel, "<=>", Pixel_spaceship, 1);
     rb_define_method(Class_Pixel, "===", Pixel_case_eq, 1);
@@ -1575,7 +1582,7 @@ static void version_constants(void)
 
     rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
     sprintf(long_version,
-        "This is %s ($Date: 2005/10/13 23:01:29 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/10/20 22:08:52 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

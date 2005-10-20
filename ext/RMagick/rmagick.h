@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.95 2005/09/26 23:37:04 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.96 2005/10/20 22:08:52 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -451,6 +451,33 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
     rb_funcall(self, ID_changed, 0); \
     rb_funcall(self, ID_notify_observers, 1, self); \
     return INT2NUM(pixel->_channel_); \
+}
+
+
+/*
+ *  Declare Pixel CMYK channel attribute accessors
+*/
+#define DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(_cmyk_channel_, _rgb_channel_) \
+extern VALUE \
+Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
+{ \
+    Pixel *pixel; \
+ \
+    rm_check_frozen(self); \
+    Data_Get_Struct(self, Pixel, pixel); \
+    pixel->_rgb_channel_ = (Quantum) NUM2UINT(v); \
+    rb_funcall(self, ID_changed, 0); \
+    rb_funcall(self, ID_notify_observers, 1, self); \
+    return INT2NUM(pixel->_rgb_channel_); \
+} \
+ \
+extern VALUE \
+Pixel_##_cmyk_channel_(VALUE self) \
+{ \
+    Pixel *pixel; \
+ \
+    Data_Get_Struct(self, Pixel, pixel); \
+    return INT2NUM(pixel->_rgb_channel_); \
 }
 
 
@@ -919,6 +946,10 @@ ATTR_ACCESSOR(Pixel, red)
 ATTR_ACCESSOR(Pixel, green)
 ATTR_ACCESSOR(Pixel, blue)
 ATTR_ACCESSOR(Pixel, opacity)
+ATTR_ACCESSOR(Pixel, cyan)
+ATTR_ACCESSOR(Pixel, magenta)
+ATTR_ACCESSOR(Pixel, yellow)
+ATTR_ACCESSOR(Pixel, black)
 extern VALUE  Pixel_case_eq(VALUE, VALUE);
 extern VALUE  Pixel_clone(VALUE);
 extern VALUE  Pixel_dup(VALUE);

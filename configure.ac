@@ -445,6 +445,9 @@ AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
      [StorageType x; x = QuantumPixel],
      rm_cv_enum_quantumpixel='yes',
      rm_cv_enum_quantumpixel='no')])
+if test "$rm_cv_enum_quantumpixel" = yes; then
+  AC_DEFINE(HAVE_QUANTUMPIXEL)
+fi
 
 AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
   [AC_TRY_COMPILE(

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.24 2005/10/20 18:53:52 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.25 2005/11/16 23:56:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -414,6 +414,10 @@ VALUE Draw_annotate(
 
     // Translate & store in Draw structure
     draw->info->text = TranslateText(NULL, image, STRING_PTR(text));
+    if (!draw->info->text)
+    {
+    	   rb_raise(rb_eArgError, "no text");
+    }
 
     // Create geometry string, copy to Draw structure, overriding
     // any previously existing value.
@@ -1301,6 +1305,10 @@ get_type_metrics(
 
      Data_Get_Struct(self, Draw, draw);
      draw->info->text = TranslateText(NULL, image, text);
+     if (!draw->info->text)
+     {
+         rb_raise(rb_eArgError, "no text to measure");
+     }
 
      okay = (*getter)(image, draw->info, &metrics);
 

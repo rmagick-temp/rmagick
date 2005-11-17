@@ -10,6 +10,7 @@ module Magick
       private
         HISTOGRAM_COLS = 256
         HISTOGRAM_ROWS = 200
+        MAX_QUANTUM = 255
         AIR_FACTOR = 1.025
 
         # The alpha frequencies are shown as white dots.
@@ -59,16 +60,16 @@ module Magick
 
                     yf = Float(y)
                     if yf >= HISTOGRAM_ROWS - (red[x] * scale)
-                        red_column[y].red = MaxRGB
-                        rgb_column[y].red = MaxRGB
+                        red_column[y].red = MAX_QUANTUM
+                        rgb_column[y].red = MAX_QUANTUM
                     end
                     if yf >= HISTOGRAM_ROWS - (green[x] * scale)
-                        green_column[y].green = MaxRGB
-                        rgb_column[y].green = MaxRGB
+                        green_column[y].green = MAX_QUANTUM
+                        rgb_column[y].green = MAX_QUANTUM
                     end
                     if yf >= HISTOGRAM_ROWS - (blue[x] * scale)
-                        blue_column[y].blue = MaxRGB
-                        rgb_column[y].blue = MaxRGB
+                        blue_column[y].blue = MAX_QUANTUM
+                        rgb_column[y].blue = MAX_QUANTUM
                     end
                     if yf >= HISTOGRAM_ROWS - (int[x] * scale)
                         int_column[y].opacity = TransparentOpacity
@@ -159,9 +160,9 @@ Colors: #{number_colors}
             return int_histogram
         end
 
-        # Returns a value between 0 and 255. Same as the PixelIntensity macro.
+        # Returns a value between 0 and MAX_QUANTUM. Same as the PixelIntensity macro.
         def pixel_intensity(pixel)
-            (306*pixel.red + 601*pixel.green + 117*pixel.blue)/1024
+            (306*(pixel.red & MAX_QUANTUM) + 601*(pixel.green & MAX_QUANTUM) + 117*(pixel.blue & MAX_QUANTUM))/1024
         end
 
       public
@@ -177,13 +178,13 @@ Colors: #{number_colors}
             rows.times do |row|
                 pixels = get_pixels(0, row, columns, 1)
                 pixels.each do |pixel|
-                    red[pixel.red] += 1
-                    green[pixel.green] += 1
-                    blue[pixel.blue] += 1
+                    red[pixel.red & MAX_QUANTUM] += 1
+                    green[pixel.green & MAX_QUANTUM] += 1
+                    blue[pixel.blue & MAX_QUANTUM] += 1
 
                     # Only count opacity channel if some pixels are not opaque.
                     if !opaque?
-                        alpha[pixel.opacity] += 1
+                        alpha[pixel.opacity & MAX_QUANTUM] += 1
                     end
                     v = pixel_intensity(pixel)
                     int[v] += 1

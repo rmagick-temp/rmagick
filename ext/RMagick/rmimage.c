@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.123 2005/09/26 23:37:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.124 2005/11/17 22:59:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7772,6 +7772,7 @@ Image_to_blob(VALUE self)
 {
     Image *image;
     Info *info;
+    const MagickInfo *magick_info;
     volatile VALUE info_obj;
     volatile VALUE blob_str;
     void *blob = NULL;
@@ -7805,6 +7806,20 @@ Image_to_blob(VALUE self)
             return Qnil;
         }
         strncpy(image->magick, info->magick, sizeof(info->magick)-1);
+    }
+
+    // Fix #2844 - libjpeg exits when image is 0x0
+    magick_info = GetMagickInfo(image->magick, &exception);
+    HANDLE_ERROR
+    if (magick_info)
+    {
+        if (  (!rm_strcasecmp(magick_info->name, "JPEG")
+            || !rm_strcasecmp(magick_info->name, "JPG"))
+            && (image->rows == 0 || image->columns == 0))
+        {
+            rb_raise(rb_eRuntimeError, "Can't convert %lux%lu %4s image to a blob"
+                   , magick_info->name, image->columns, image->rows);
+        }
     }
 
     blob = ImageToBlob(info, image, &length, &exception);

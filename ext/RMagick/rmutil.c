@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.61 2005/10/20 22:08:52 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.62 2005/11/17 23:01:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -128,6 +128,28 @@ char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
     *len = RSTRING(v)->len;
     return str;
 }
+
+
+/*
+ *  Extern:     rm_strcasecmp(s1, s2)
+ *  Purpose:    compare s1 and s2 ignoring case
+ *  Returns:    same as strcmp(3)
+*/
+int
+rm_strcasecmp(const char *s1, const char *s2)
+{
+    while (*s1 && *s2)
+    {
+        if (toupper(*s1) != toupper(*s2))
+        {
+            break;
+        }
+        s1 += 1;
+        s2 += 1;
+    }
+    return (int)(*s1 - *s2);
+}
+
 
 
 /*

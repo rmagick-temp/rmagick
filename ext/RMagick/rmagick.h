@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.96 2005/10/20 22:08:52 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.97 2005/11/17 23:01:10 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1021,6 +1021,7 @@ extern VALUE  rm_no_freeze(VALUE);
 extern char  *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
+extern int    rm_strcasecmp(const char *, const char *);
 extern void   rm_check_ary_len(VALUE, int);
 extern void   rm_check_frozen(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);

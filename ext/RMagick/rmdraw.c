@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.25 2005/11/16 23:56:23 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.26 2005/11/17 23:51:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1315,7 +1315,7 @@ get_type_metrics(
      if (!okay)
      {
          rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "
-                  "Check the ImageMagick/GraphicsMagick 'type.xml' configuration file.");
+                  "Is the FreeType library installed?");
      }
      return TypeMetric_from_TypeMetric(&metrics);
 }

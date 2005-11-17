@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.124 2005/11/17 22:59:02 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.125 2005/11/17 23:06:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7817,8 +7817,8 @@ Image_to_blob(VALUE self)
             || !rm_strcasecmp(magick_info->name, "JPG"))
             && (image->rows == 0 || image->columns == 0))
         {
-            rb_raise(rb_eRuntimeError, "Can't convert %lux%lu %4s image to a blob"
-                   , magick_info->name, image->columns, image->rows);
+            rb_raise(rb_eRuntimeError, "Can't convert %lux%lu %.4s image to a blob"
+                   , image->columns, image->rows, magick_info->name);
         }
     }
 

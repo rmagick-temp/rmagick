@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<!-- $Id: rvgtut.html,v 1.6 2005/06/03 23:18:53 rmagick Exp $ -->
+<!-- $Id: rvgtut.html,v 1.7 2005/11/26 15:03:05 rmagick Exp $ -->
 
 <head>
   <meta name="generator" content=
@@ -62,43 +62,44 @@
     </div>
   </div>
   <pre class="example">
- 1   require 'rvg/rvg'
- 2   include Magick
+ 1  require 'rvg/rvg'
+ 2  include magick
  3
- 4   RVG::dpi = 72
+ 4  RVG::dpi = 72
  5
- 6   rvg = RVG.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
- 7       canvas.background_fill = 'white'
+ 6  rvg = rvg.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
+ 7      canvas.background_fill = 'white'
  8
- 9       canvas.g.translate(100, 150).rotate(-30).styles(:fill=&gt;'yellow',
-10                                     :stroke=&gt;'black', :stroke_width=&gt;2) do |body|
+ 9      canvas.g.translate(100, 150).rotate(-30) do |body|
+10          body.styles(:fill=&gt;'yellow', :stroke=&gt;'black', :stroke_width=&gt;2)
 11          body.ellipse(50, 30)
-12          body.rect(45, 20, -20, -10).skewX(-35)
+12          body.rect(45, 20, -20, -10).skewx(-35)
 13      end
 14
-15      canvas.g.translate(130, 83).styles(:stroke=&gt;'black', :stroke_width=&gt;2) do |head|
-16          head.circle(30).styles(:fill=&gt;'yellow')
-17          head.circle(5, 10, -5).styles(:fill=&gt;'black')
-18          head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=&gt;'orange')
-19       end
-20
-21       foot = RVG::Group.new do |_foot|
-22           _foot.path('M0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
-23                 styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
-24       end
-25       canvas.use(foot).translate(75, 188).rotate(15)
-26       canvas.use(foot).translate(100, 185).rotate(-15)
-27
-28       canvas.text(125, 30) do |title|
-29           title.tspan("duck|").styles(:text_anchor=&gt;'end', :font_size=&gt;20,
-30                                     :font_family=&gt;'Helvetica', :fill=&gt;'black')
-31           title.tspan("type").styles(:font_size=&gt;22,
-32                     :font_family=&gt;'Times', :font_style=&gt;'italic', :fill=&gt;'red')
-33       end
-34       canvas.rect(249,249).styles(:stroke=&gt;'blue', :fill=&gt;'none')
-35   end
-36
-37   rvg.draw.write('duck.gif')
+15      canvas.g.translate(130, 83) do |head|
+16          head.styles(:stroke=&gt;'black', :stroke_width=&gt;2)
+17          head.circle(30).styles(:fill=&gt;'yellow')
+18          head.circle(5, 10, -5).styles(:fill=&gt;'black')
+19          head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=&gt;'orange')
+20      end
+21
+22      foot = rvg::group.new do |_foot|
+23          _foot.path('m0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
+24                styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
+25      end
+26      canvas.use(foot).translate(75, 188).rotate(15)
+27      canvas.use(foot).translate(100, 185).rotate(-15)
+28
+29      canvas.text(125, 30) do |title|
+30          title.tspan("duck|").styles(:text_anchor=&gt;'end', :font_size=&gt;20,
+31                         :font_family=&gt;'helvetica', :fill=&gt;'black')
+32          title.tspan("type").styles(:font_size=&gt;22,
+33                 :font_family=&gt;'times', :font_style=&gt;'italic', :fill=&gt;'red')
+34      end
+35      canvas.rect(249,249).styles(:stroke=&gt;'blue', :fill=&gt;'none')
+36  end
+37
+38  rvg.draw.write('duck.gif')
 </pre>
 
   <h2>Summary</h2>
@@ -207,11 +208,11 @@
 
   <h2>Lines 9-13</h2>
   <pre class="example">
- 9       canvas.g.translate(100, 150).rotate(-30).styles(:fill=&gt;'yellow',
-10                                     :stroke=&gt;'black', :stroke_width=&gt;2) do |body|
-11           body.ellipse(50, 30)
-12           body.rect(45, 20, -20, -10).skewX(-35)
-13       end
+ 9      canvas.g.translate(100, 150).rotate(-30) do |body|
+10          body.styles(:fill=&gt;'yellow', :stroke=&gt;'black', :stroke_width=&gt;2)
+11          body.ellipse(50, 30)
+12          body.rect(45, 20, -20, -10).skewx(-35)
+13      end
 </pre>
 
   <p>There's a lot going on in these few lines - seven method calls
@@ -227,15 +228,14 @@
   <code>g</code> method yields if a block is present. In this
   example, there is no block associated with <code>g</code>, so
   <code>g</code> returns the new group. The <code>g</code> method
-  adds the group to the content of the container, so when the
-  container is drawn the graphic objects in the group will be drawn
-  as well. The three methods chained to <code>g</code> -
-  <code>translate</code>, <code>rotate</code>, and
-  <code>styles</code> - modify the group by adding <em>coordinate
-  system transforms</em> and by modifying the default
-  <em>styles</em>.</p>
+  adds the group to the content of its container. In this example,
+  the group's container is the canvas object created in line 6. The
+  graphic objects in the group are drawn as part of drawing the
+  container. The <code>translate</code> and <code>rotate</code>
+  chained to <code>g</code> modify the group by adding
+  <em>coordinate system transforms</em>.</p>
 
-  <p>(Okay, there <em>is</em> a block, but there are 3 method calls
+  <p>(Okay, there <em>is</em> a block, but there are 2 method calls
   between <code>g</code> and the block. I'll explain more
   later.)</p>
 
@@ -267,7 +267,7 @@
     "duck body" /></p>
 
     <div style="position:absolute; left:200px;top:0">
-      <p><strong>The other transform methods</strong></p>
+      <p><strong>The transform methods</strong></p>
 
       <p>There are six transform methods. In addition to
       <code>translate</code> and <code>rotate</code>, there's
@@ -286,10 +286,13 @@
   values are, well, style values. In this example there are three
   style names. The :fill style sets the fill color to 'yellow'. The
   :stroke style sets the outline color to 'black'. The
-  :stroke_width style sets the width of the outline to 2. The
-  <code>styles</code> method is a real workhorse. It's defined in
-  almost every class in RVG and there are many other style names in
-  addition to these three..</p>
+  :stroke_width style sets the width of the outline to 2. I want
+  the styles to apply to all objects within the group so in line 10
+  I call <code>styles</code> on the new group object.</p>
+
+  <p>The <code>styles</code> method is a real workhorse. It's
+  defined in almost every class in RVG and there are many other
+  style names in addition to these three..</p>
 
   <h3>Basic shapes</h3>
 
@@ -309,8 +312,22 @@
   centered on the origin. The upper-left corner of the rectangle is
   slightly up and to the left of the origin.</p>
 
-  <p><img src="ex/images/duck3.gif" alt="default coordinate system"
-  width="180" height="180" /></p>
+  <div style="position:relative">
+    <p><img src="ex/images/duck3.gif" alt=
+    "default coordinate system" width="180" height="180" /></p>
+
+    <div style="position:absolute; left:200px;top:0">
+      <p><strong>The shape methods</strong></p>
+
+      <p>There are 7 shape methods. In addition to
+      <code>ellipse</code> and <code>rect</code>, there's
+      <code>circle</code>, <code>line</code>, <code>path</code>,
+      <code>polygon</code>, and <code>polyline</code>. You can also
+      think of text as a shape. Shapes are stroked and filled, and
+      can be modified by the transform methods and the
+      <code>styles</code> method.</p>
+    </div>
+  </div>
 
   <h3>SkewX</h3>
 
@@ -330,27 +347,27 @@
   <p><img src="ex/images/duck4.gif" width="180" height="180" alt=
   "duck wing" /></p>
 
-  <p>That's it for the body. Let's tie up one loose end before I
-  move on. I said earlier that container constructors (such as
+  <p>That's it for the body. Let's tie up one loose end before
+  moving on. I said earlier that container constructors (such as
   <code>g</code>) yield to a block if present. In this case,
-  though, there are three intervening method calls -
-  <code>translate</code>, <code>rotate</code>, and
-  <code>styles</code> - between <code>g</code> and the block. The
-  <code>style</code> method and the transform methods will all
-  yield when there is an associated block, so I can easily chain
-  them to a container constructor and still use a block argument to
-  define the graphic objects in the group. Method chaining is a
-  common RVG idiom. You'll see it a lot in the examples.</p>
+  though, the <code>translate</code> and <code>rotate</code>
+  methods intervene between <code>g</code> and the block. All the
+  transform methods yield when there is an associated block, so I
+  can easily chain them to a container constructor and still use a
+  block argument to define the graphic objects in the group. Method
+  chaining is a common RVG idiom. You'll see it a lot in the
+  examples.</p>
 
   <p>The next group draws the head.</p>
 
-  <h2>Lines 15-19</h2>
+  <h2>Lines 15-20</h2>
   <pre class="example">
-15       canvas.g.translate(130, 83).styles(:stroke=&gt;'black', :stroke_width=&gt;2) do |head|
-16           head.circle(30).styles(:fill=&gt;'yellow')
-17           head.circle(5, 10, -5).styles(:fill=&gt;'black')
-18           head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=&gt;'orange')
-19       end
+15      canvas.g.translate(130, 83) do |head|
+16          head.styles(:stroke=&gt;'black', :stroke_width=&gt;2)
+17          head.circle(30).styles(:fill=&gt;'yellow')
+18          head.circle(5, 10, -5).styles(:fill=&gt;'black')
+19          head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=&gt;'orange')
+20      end
 </pre>
 
   <p>This section is very similar to the previous one. I'm defining
@@ -361,14 +378,16 @@
   <p><img src="ex/images/duck6.gif" width="180" height="180" alt=
   "duck head" /></p>
 
-  <p>Notice that I can use <code>styles</code> on shapes as well as
-  containers. In this group each shape has its own fill color. (The
-  styles defined on the group propogate to the contained shapes,
-  unless you override them.) The yellow circle forms the head. The
-  <code>circle</code> method takes 3 parameters. The first
-  parameter is the radius of the circle. The other two parameters
-  are the (x,y) coordinate of the center. If omitted, as here, they
-  default to (0,0). I use a small black circle for the eye.</p>
+  <p>In line 16 I define the <code>stroke</code> and
+  <code>stroke_width</code> styles on the group. Styles defined on
+  the group propogate to shapes within the group unless you
+  override them. To do that, call <code>styles</code> on the
+  shapes. In this group each shape has its own fill color. The
+  yellow circle forms the head. The <code>circle</code> method
+  takes 3 parameters. The first parameter is the radius of the
+  circle. The other two parameters are the (x,y) coordinate of the
+  center. If omitted, as here, they default to (0,0). I use a small
+  black circle for the eye.</p>
 
   <p>Last, I use the <code>polygon</code> method to draw the beak.
   This method draws a polygon from a series of (x,y) coordinates.
@@ -380,28 +399,27 @@
   <p><img src="ex/images/duck8.gif" width="180" height="180" alt=
   "duck head final" /></p>
 
-  <h2>Lines 21-24</h2>
+  <h2>Lines 22-25</h2>
   <pre class="example">
-21       foot = RVG::Group.new do |_foot|
-22           _foot.path('M0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
-23                 styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
-24       end
+22      foot = rvg::group.new do |_foot|
+23          _foot.path('m0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
+24                styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
+25      end
 </pre>
 
   <p>Here I create a group by directly calling <code>new</code>
-  instead of calling the <code>g</code> method on a container. The
-  graphic objects within the group are not (yet) contained within
-  the canvas and so will not be drawn when the canvas is drawn. You
-  might think of the foot as not being attached to anything, like
-  this:</p>
+  instead of calling the <code>g</code> method on a container. This
+  creates a group object that is not contained within the canvas.
+  You might think of the foot as not being attached to anything,
+  like this:</p>
 
   <p><img src="ex/images/duck9.gif" width="180" height="180" alt=
   "duck foot" /></p>
 
-  <h2>Lines 25-26</h2>
+  <h2>Lines 26-27</h2>
   <pre class="example">
-25       canvas.use(foot).translate(75, 188).rotate(15)
-26       canvas.use(foot).translate(100, 185).rotate(-15)
+26       canvas.use(foot).translate(75, 188).rotate(15)
+27       canvas.use(foot).translate(100, 185).rotate(-15)
 </pre>
 
   <p>To add the group to the canvas I use the <code>use</code>
@@ -428,14 +446,14 @@
   <p><img src="ex/images/duck12.gif" width="180" height="180" alt=
   "final duck foot" /></p>
 
-  <h2>Lines 28-33</h2>
+  <h2>Lines 29-34</h2>
   <pre class="example">
-28       canvas.text(125, 30) do |title|
-29           title.tspan("duck|").styles(:text_anchor=&gt;'end', :font_size=&gt;20,
-30                                   :font_family=&gt;'Helvetica', :fill=&gt;'black')
-31           title.tspan("type").styles(:font_size=&gt;22,
-32                   :font_family=&gt;'Times', :font_style=&gt;'italic', :fill=&gt;'red')
-33       end
+29      canvas.text(125, 30) do |title|
+30          title.tspan("duck|").styles(:text_anchor=&gt;'end', :font_size=&gt;20,
+31                         :font_family=&gt;'helvetica', :fill=&gt;'black')
+32          title.tspan("type").styles(:font_size=&gt;22,
+33                 :font_family=&gt;'times', :font_style=&gt;'italic', :fill=&gt;'red')
+34      end
 </pre>
 
   <p>All I need now is a title for the picture. Text in RVG is a
@@ -461,9 +479,9 @@
   <p><img src="ex/images/duck14.gif" width="180" height="180" alt=
   "duck title" /></p>
 
-  <h2>Line 34</h2>
+  <h2>Line 35</h2>
   <pre class="example">
-34       canvas.rect(249,249).styles(:stroke=&gt;'blue', :fill=&gt;'none')
+35       canvas.rect(249,249).styles(:stroke=&gt;'blue', :fill=&gt;'none')
 </pre>
 
   <p>I'm almost done. All I need to do it add a blue border. (I'm
@@ -473,9 +491,9 @@
   <p><img src="ex/images/duck15.gif" width="180" height="180" alt=
   "duck with border" /></p>
 
-  <h2>Line 37</h2>
+  <h2>Line 38</h2>
   <pre class="example">
-37   rvg.draw.write('duck.gif')
+38   rvg.draw.write('duck.gif')
 </pre>
 
   <p>The <code>draw</code> method call doesn't occupy a lot of

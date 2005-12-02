@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.125 2005/11/17 23:06:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.126 2005/12/02 23:25:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3760,7 +3760,7 @@ VALUE
 Image_import_pixels(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_IMPORTIMAGEPIXELS)
-    Image *image, *clone_image;
+    Image *image;
     long x_off, y_off;
     unsigned long cols, rows;
     unsigned long npixels;
@@ -3772,7 +3772,6 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile int *pixels = NULL;
     volatile void *buffer;
     unsigned int okay;
-    ExceptionInfo exception;
 
     rm_check_frozen(self);
 
@@ -3883,15 +3882,9 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     }
 
 
-    // Import into a clone - ImportImagePixels destroys the input image if an error occurs.
-    GetExceptionInfo(&exception);
-    clone_image = CloneImage(image, 0, 0, True, &exception);
-    HANDLE_ERROR
+    okay = ImportImagePixels(image, x_off, y_off, cols, rows, map, stg_type, (const void *)buffer);
 
-    okay = ImportImagePixels(clone_image, x_off, y_off, cols, rows, map, stg_type, (const void *)buffer);
-
-    // Free pixel array before checking for errors. If an error occurred, ImportImagePixels
-    // destroyed the clone image, so we don't have to.
+    // Free pixel array before checking for errors.
     if (pixels)
     {
         xfree((void *)pixels);
@@ -3899,14 +3892,10 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
 
     if (!okay)
     {
-        HANDLE_ERROR_IMG(clone_image)
+        HANDLE_ERROR_IMG(image)
         // Shouldn't get here...
         rb_raise(rb_eStandardError, "ImportImagePixels failed with no explanation.");
     }
-
-    // Everything worked. Replace the image with the clone and destroy the original.
-    DATA_PTR(self) = clone_image;
-            DestroyImage(image);
 
     return self;
 

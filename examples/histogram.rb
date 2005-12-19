@@ -60,21 +60,22 @@ module Magick
 
                     yf = Float(y)
                     if yf >= HISTOGRAM_ROWS - (red[x] * scale)
-                        red_column[y].red = MAX_QUANTUM
-                        rgb_column[y].red = MAX_QUANTUM
+                        red_column[y].red = MaxRGB
+                        rgb_column[y].red = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (green[x] * scale)
-                        green_column[y].green = MAX_QUANTUM
-                        rgb_column[y].green = MAX_QUANTUM
+                        green_column[y].green = MaxRGB
+                        rgb_column[y].green = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (blue[x] * scale)
-                        blue_column[y].blue = MAX_QUANTUM
-                        rgb_column[y].blue = MAX_QUANTUM
+                        blue_column[y].blue = MaxRGB
+                        rgb_column[y].blue = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (int[x] * scale)
                         int_column[y].opacity = TransparentOpacity
                     end
                 end
+    
                 rgb_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, rgb_column)
                 red_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, red_column)
                 green_histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS, green_column)
@@ -194,6 +195,7 @@ Colors: #{number_colors}
             # Scale to chart size. When computing the scale, add some "air" between
             # the max frequency and the top of the histogram. This makes a prettier chart.
             # The RGBA and intensity histograms are all drawn to the same scale.
+            
             max = [red.max, green.max, blue.max, alpha.max, int.max].max
             scale = HISTOGRAM_ROWS / (max*AIR_FACTOR)
 
@@ -269,14 +271,14 @@ image = image.first
 name = File.basename(filename).sub(/\..*?$/,'')
 $defout.sync = true
 printf "Creating #{name}_Histogram.miff"
-
+=begin
 timer = Thread.new do
     loop do
         sleep(1)
         printf "."
     end
 end
-
+=end
 # Generate the histograms
 histogram = image.histogram
 

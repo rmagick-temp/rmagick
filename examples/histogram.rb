@@ -4,7 +4,28 @@
 
 require 'RMagick'
 
+class PixelColumn < Array
+    def initialize(size)
+        super
+        fill {Magick::Pixel.new}
+    end
+    
+    def reset(bg)
+        each {|pixel| pixel.reset(bg)}
+    end
+end
+
 module Magick
+    
+    class Pixel
+        def reset(bg)
+            self.red = bg.red
+            self.green = bg.green
+            self.blue = bg.blue
+            self.opacity = bg.opacity
+        end
+    end
+    
     class Image
 
       private
@@ -50,25 +71,32 @@ module Magick
             int_histogram['Label'] = 'Intensity'
             int_histogram.matte = true
 
+            rgb_column   = PixelColumn.new(HISTOGRAM_ROWS)
+            red_column   = PixelColumn.new(HISTOGRAM_ROWS)
+            green_column = PixelColumn.new(HISTOGRAM_ROWS)
+            blue_column  = PixelColumn.new(HISTOGRAM_ROWS)
+            int_column   = PixelColumn.new(HISTOGRAM_ROWS)
+
             HISTOGRAM_COLS.times do |x|
-                rgb_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
-                red_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
-                green_column = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
-                blue_column  = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
-                int_column   = Array.new(HISTOGRAM_ROWS).fill {Pixel.new}
                 HISTOGRAM_ROWS.times do |y|
 
                     yf = Float(y)
                     if yf >= HISTOGRAM_ROWS - (red[x] * scale)
                         red_column[y].red = MaxRGB
+                        red_column[y].green = 0
+                        red_column[y].blue = 0
                         rgb_column[y].red = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (green[x] * scale)
                         green_column[y].green = MaxRGB
+                        green_column[y].red = 0
+                        green_column[y].blue = 0
                         rgb_column[y].green = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (blue[x] * scale)
                         blue_column[y].blue = MaxRGB
+                        blue_column[y].red = 0
+                        blue_column[y].green = 0
                         rgb_column[y].blue = MaxRGB
                     end
                     if yf >= HISTOGRAM_ROWS - (int[x] * scale)
@@ -81,6 +109,11 @@ module Magick
                 green_histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS, green_column)
                 blue_histogram.store_pixels( x, 0, 1, HISTOGRAM_ROWS, blue_column)
                 int_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, int_column)
+                rgb_column.reset(bg)
+                red_column.reset(bg)
+                green_column.reset(bg)
+                blue_column.reset(bg)
+                int_column.reset(bg)
             end
 
            return red_histogram, green_histogram, blue_histogram, rgb_histogram, int_histogram
@@ -271,16 +304,16 @@ image = image.first
 name = File.basename(filename).sub(/\..*?$/,'')
 $defout.sync = true
 printf "Creating #{name}_Histogram.miff"
-=begin
+
 timer = Thread.new do
     loop do
         sleep(1)
         printf "."
     end
 end
-=end
+
 # Generate the histograms
-histogram = image.histogram
+histogram = image.histogram(Magick::Pixel.from_color('white'), Magick::Pixel.from_color('black'))
 
 # Write output file
 histogram.compression = Magick::ZipCompression

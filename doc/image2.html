@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Image (instance methods, part 2)</title>
   <meta http-equiv="Content-Type" content=
@@ -488,13 +488,14 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script" name="frameless" /><!--
                                                           This img tag displays the framed image when the mouse is not over
-                                                          --><img class="hide"
-    id="framed" onmouseover=
+                                                          --><img id="framed"
+    onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example" /></a> <img src=
-    "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
+    "ex/frame.jpg" alt="frame example" name="framed" /></a>
+    <img src="ex/images/spin.gif" alt="" style=
+    "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>

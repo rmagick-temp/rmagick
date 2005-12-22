@@ -1,6 +1,8 @@
 RMagick 1.9.4
     o Fixed bug #2688, Image#annotate, Draw#get_multiline_type_metrics handle
       newline characters properly.
+    o Added crop_resize method to the Image class (thanks to Jerret Taylor for
+      the suggestion and original code)
     o Added cyan, magenta, yellow, and black attribute accessors to the Pixel class.
     o Fixed bug #2844, Image#to_blob exits if the image is a 0x0 JPEG.
 

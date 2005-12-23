@@ -796,7 +796,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-      name="add_noise_example" /></a>
+       /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1151,11 +1151,11 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" name="borderless" /> <img id=
+    "Click to see the example script"  /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
-    "ex/border.jpg" alt="border example" name=
-    "bordered" /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/border.jpg" alt="border example"
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2628,19 +2628,20 @@ cropped = img.crop(x, y, width, height, true)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Use this method to produce a thumbnail image with an exact
-    size.</p>
-
     <p>Creates an image with the size specified by <span class=
     "arg">width</span> and <span class="arg">height</span> having
-    the same aspect ratio as the target image. This method first
-    resizes (if necessary) the image such that its smaller
-    dimension exactly fills the rectangle specified by <span class=
-    "arg">width</span> and <span class="arg">height</span>. If the
-    resulting image exceeds the target size in the larger
-    dimension, <code>crop_resized</code> crops the image to exactly
-    <span class="arg">width</span> and <span class=
-    "arg">height</span>.</p>
+    the same aspect ratio as the target image. Use
+    <code>crop_resized</code> to produce a thumbnail image with an
+    exact size.</p>
+
+    <p>If necessary, <code>crop_resized</code> resizes the image
+    such that its smaller dimension exactly fits the rectangle
+    specified by <span class="arg">width</span> and <span class=
+    "arg">height</span>. If the resulting image exceeds the
+    rectangle's size in the image's larger dimension,
+    <code>crop_resized</code> crops the image to fit the rectangle
+    exactly. Use <span class="arg">gravity</span> to specify which
+    portion of the image to crop.</p>
 
     <h4>Arguments</h4>
 
@@ -2655,14 +2656,12 @@ cropped = img.crop(x, y, width, height, true)
 
       <dt>gravity</dt>
 
-      <dd>If the image must be cropped to fit the rectangle
-      specified by <span class="arg">width</span> and <span class=
-      "arg">height</span>, use this argument to specify which
-      portion of the image to retain. The value can be any <a href=
+      <dd>Use this argument to specify which portion of the image
+      to retain when cropping. The value can be any <a href=
       "constants.html#GravityType">GravityType</a> value. The
-      effect is the same as in the <a href=
-      "#crop"><code>crop</code></a> method. The default is
-      <code>CenterGravity</code>.</dd>
+      effect is the same as the <span class="arg">gravity</span>
+      argument to the <a href="#crop"><code>crop</code></a> method.
+      The default is <code>CenterGravity</code>.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2681,13 +2680,13 @@ cropped = img.crop(x, y, width, height, true)
      <img id="cropless" style="display: none" onmouseout=
     "this.style.display='none';cropped.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script" name="cropless" /> 
+    "Click to see the example script"  />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example" name="cropped" /></a>
+    "ex/crop_resized.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.126 2005/12/02 23:25:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.127 2005/12/24 00:57:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -26,7 +26,7 @@ typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *
 
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
 static VALUE rd_image(VALUE, VALUE, reader_t);
-static VALUE scale_image(int, int, VALUE *, VALUE, scaler_t *);
+static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
@@ -6247,7 +6247,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
     double scale;
     FilterTypes filter;
     unsigned long rows, columns;
-    double blur;
+    double blur, drows, dcols;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -6267,11 +6267,25 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
         case 2:
             rows = NUM2ULONG(argv[1]);
             columns = NUM2ULONG(argv[0]);
+            if (columns == 0 || rows == 0)
+            {
+                rb_raise(rb_eArgError, "invalid result dimension (%lu, %lu given)", columns, rows);
+            }
             break;
         case 1:
             scale = NUM2DBL(argv[0]);
-            rows = scale * image->rows;
-            columns = scale * image->columns;
+			if (scale < 0.0)
+			{
+                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+			}
+            drows = scale * image->rows + 0.5;
+            dcols = scale * image->columns + 0.5;
+			if (drows > ULONG_MAX || dcols > ULONG_MAX)
+			{
+				rb_raise(rb_eRangeError, "resulting image too big");
+			}
+			rows = (unsigned long) drows;
+			columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
@@ -6375,14 +6389,14 @@ DEF_ATTR_READER(Image, rows, int)
 VALUE
 Image_sample(int argc, VALUE *argv, VALUE self)
 {
-    return scale_image(False, argc, argv, self, SampleImage);
+    return scale(False, argc, argv, self, SampleImage);
 }
 
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
     rm_check_frozen(self);
-    return scale_image(True, argc, argv, self, SampleImage);
+    return scale(True, argc, argv, self, SampleImage);
 }
 
 /*
@@ -6395,28 +6409,28 @@ Image_sample_bang(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_scale(int argc, VALUE *argv, VALUE self)
 {
-    return scale_image(False, argc, argv, self, ScaleImage);
+    return scale(False, argc, argv, self, ScaleImage);
 }
 
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
     rm_check_frozen(self);
-    return scale_image(True, argc, argv, self, ScaleImage);
+    return scale(True, argc, argv, self, ScaleImage);
 }
 
 /*
-    Static:     scale_image
+    Static:     scale
     Purpose:    Call ScaleImage or SampleImage
     Arguments:  if 1 argument > 0, multiply current size by this much
                 if 2 arguments, (cols, rows)
 */
 static VALUE
-scale_image(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
+scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
 {
     Image *image, *new_image;
     unsigned long columns, rows;
-    double scale;
+    double scale, drows, dcols;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -6426,9 +6440,9 @@ scale_image(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
         case 2:
             columns = NUM2ULONG(argv[0]);
             rows    = NUM2ULONG(argv[1]);
-            if (columns <= 0 || rows <= 0)
+            if (columns == 0 || rows == 0)
             {
-                rb_raise(rb_eArgError, "invalid scale given (%dl, %dl given)", columns, rows);
+                rb_raise(rb_eArgError, "invalid result dimension (%lu, %lu given)", columns, rows);
             }
             break;
         case 1:
@@ -6437,8 +6451,14 @@ scale_image(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
             {
                 rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
             }
-            rows = image->rows * scale;
-            columns = image->columns * scale;
+            drows = scale * image->rows + 0.5;
+            dcols = scale * image->columns + 0.5;
+			if (drows > ULONG_MAX || dcols > ULONG_MAX)
+			{
+				rb_raise(rb_eRangeError, "resulting image too big");
+			}
+			rows = (unsigned long) drows;
+			columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
@@ -7545,7 +7565,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 #ifdef HAVE_THUMBNAILIMAGE
     Image *image, *new_image;
     unsigned long columns, rows;
-    double scale;
+    double scale, drows, dcols;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -7555,11 +7575,25 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
         case 2:
             columns = NUM2ULONG(argv[0]);
             rows = NUM2ULONG(argv[1]);
+            if (columns == 0 || rows == 0)
+            {
+                rb_raise(rb_eArgError, "invalid result dimension (%lu, %lu given)", columns, rows);
+            }
             break;
         case 1:
             scale = NUM2DBL(argv[0]);
-            rows = scale * image->rows;
-            columns = scale * image->columns;
+			if (scale < 0.0)
+			{
+                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+			}
+            drows = scale * image->rows + 0.5;
+            dcols = scale * image->columns + 0.5;
+			if (drows > ULONG_MAX || dcols > ULONG_MAX)
+			{
+				rb_raise(rb_eRangeError, "resulting image too big");
+			}
+			rows = (unsigned long) drows;
+			columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);

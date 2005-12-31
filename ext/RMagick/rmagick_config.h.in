@@ -117,6 +117,8 @@
 /* Introduced in IM 5.5.7, GM 1.1 */
 #undef HAVE_IMPORTIMAGEPIXELS
 #undef HAVE_INTTYPES_H
+/* Introduced in IM 6.2.5 */
+#undef HAVE_ISCOLORSIMILAR
 /* Introduced in IM 6.2.2 */
 #undef HAVE_JPEG2000COMPRESSION
 /* Introduced in IM 5.5.3, GM 1.0 */

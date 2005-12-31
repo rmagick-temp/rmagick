@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.63 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.64 2005/12/31 15:23:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -545,8 +545,6 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 /*
     Method:  Pixel#fcmp(other[, fuzz[, colorspace]])
     Purpose: Compare pixel values for equality
-    Notes:   The colorspace value is ignored < 5.5.5
-             and > 5.5.7.
 */
 VALUE
 Pixel_fcmp(int argc, VALUE *argv, VALUE self)
@@ -578,7 +576,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Pixel, this);
     Data_Get_Struct(argv[0], Pixel, that);
 
-#if defined(HAVE_FUZZYCOLORCOMPARE)
+#if defined(HAVE_FUZZYCOLORCOMPARE) || defined(HAVE_ISCOLORSIMILAR)
     // The FuzzyColorCompare function expects to get the
     // colorspace and fuzz parameters from an Image structure.
 
@@ -598,7 +596,11 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     image->colorspace = colorspace;
     image->fuzz = fuzz;
 
+#if defined(HAVE_ISCOLORSIMILAR)
+    equal = IsColorSimilar(image, this, that);
+#else
     equal = FuzzyColorCompare(image, this, that);
+#endif
     DestroyImage(image);
 
 #else

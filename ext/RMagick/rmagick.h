@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.98 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.99 2005/12/31 14:49:51 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -51,8 +51,13 @@
 #define RUBY16(d) d
 #endif
 
+// Backport these definitions to Ruby 1.6.7
 #if !defined(ULONG2NUM)
 #define ULONG2NUM(v) UINT2NUM(v)
+#endif
+
+#if !defined(LONG2NUM)
+#define LONG2NUM(v) INT2NUM(v)
 #endif
 
 

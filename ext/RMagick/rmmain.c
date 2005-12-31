@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.100 2005/10/20 22:08:52 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.101 2005/12/31 14:35:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2005 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1575,19 +1575,29 @@ Init_RMagick(void)
 static void version_constants(void)
 {
     const char *mgk_version;
+    volatile VALUE str;
     char long_version[1000];
 
     mgk_version = GetMagickVersion(NULL);
-    rb_define_const(Module_Magick, "Magick_version", rb_str_new2(mgk_version));
 
-    rb_define_const(Module_Magick, "Version", rb_str_new2(PACKAGE_STRING));
+    str = rb_str_new2(mgk_version);
+    rb_obj_freeze(str);
+    rb_define_const(Module_Magick, "Magick_version", str);
+
+    str = rb_str_new2(PACKAGE_STRING);
+    rb_obj_freeze(str);
+    rb_define_const(Module_Magick, "Version", str);
+
     sprintf(long_version,
-        "This is %s ($Date: 2005/10/20 22:08:52 $) Copyright (C) 2005 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2005/12/31 14:35:59 $) Copyright (C) 2005 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"
         "Email: rmagick@rubyforge.org\n",
         PACKAGE_STRING, mgk_version, RUBY_VERSION_STRING);
-    rb_define_const(Module_Magick, "Long_version", rb_str_new2(long_version));
+
+    str = rb_str_new2(long_version);
+    rb_obj_freeze(str);
+    rb_define_const(Module_Magick, "Long_version", str);
 
 }

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.129 2005/12/31 14:50:35 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.130 2005/12/31 20:25:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2113,7 +2113,11 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     }
     image->columns = width;
     image->rows = height;
+#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
+    SetImageBackgroundColor(image);
+#else
     SetImage(image, OpaqueOpacity);
+#endif
     okay = ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
     if (!okay)
     {
@@ -2977,7 +2981,12 @@ Image_erase_bang(VALUE self)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
+
+#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
+    SetImageBackgroundColor(image);
+#else
     SetImage(image, OpaqueOpacity);
+#endif
 
     return self;
 }
@@ -4974,7 +4983,11 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
     // specifying it when creating the Info parm block.
     if (!fill)
     {
+#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
+        SetImageBackgroundColor(image);
+#else
         SetImage(image, OpaqueOpacity);
+#endif
     }
     // fillobj.fill(self)
     else

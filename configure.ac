@@ -87,16 +87,7 @@ AC_CHECK_FUNCS([snprintf])
 LIBS="${LIBS} `${MAGICKCONFIG} --libs`"
 
 # What ImageMagick/GraphicsMagick functions?
-AC_CHECK_FUNCS([AdaptiveThresholdImage AppendImageToList LevelImageChannel])
-AC_CHECK_FUNCS([ThumbnailImage RemoveFirstImageFromList GetNextImageInList])
-AC_CHECK_FUNCS([SetLogFormat XImportImage ExportImagePixels ImportImagePixels])
-AC_CHECK_FUNCS([ThresholdImageChannel RandomChannelThresholdImage StripImage])
-AC_CHECK_FUNCS([AcquireMagickMemory BlackThresholdImage WhiteThresholdImage])
-AC_CHECK_FUNCS([GetMagickInfoArray GetColorInfoArray GetLocaleExceptionMessage])
-AC_CHECK_FUNCS([GetMagickGeometry ParseSizeGeometry TintImage GetColorHistogram])
-AC_CHECK_FUNCS([GetImageHistogram FuzzyColorCompare GetImageProfile GetNextImageProfile])
-AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelExtrema GetImageChannelMean])
-AC_CHECK_FUNCS([CompareImageChannels PreviewImage SetImageColorspace GetNextImageAttribute])
+AC_CHECK_FUNCS([AcquireMagickMemory])
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.
@@ -107,19 +98,11 @@ if test "$rm_have_acquirestringinfo" = yes; then
    AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
 fi
 
-# We need to be able to query this later in the configure script, so set a shell variable here
-# as well as defining a symbol.
-AC_CHECK_FUNC(GetImageQuantumDepth,
-              rm_have_getimagequantumdepth=yes,
-              rm_have_getimagequantumdepth=no)
-if test "$rm_have_getimagequantumdepth" = yes; then
-   AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
-fi
-
-AC_CHECK_FUNCS([BilevelImageChannel GammaImageChannel NegateImageChannel])
-AC_CHECK_FUNCS([SetImageOption AddDefinitions GrayscalePseudoClassImage])
-AC_CHECK_FUNCS([RadialBlurImage RandomThresholdImageChannel SeparateImageChannel])
-AC_CHECK_FUNCS([QuantumOperatorRegionImage GetImageStatistics])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AppendImageToList])
+AC_CHECK_FUNCS([BilevelImageChannel BlackThresholdImage BlurImageChannel CompareImageChannels ConvolveImageChannel])
+AC_CHECK_FUNCS([EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
+AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])
+AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])
 
 # We need to be able to query these symbols later in the configure script, so set a shell
 # variable here as well as defining symbols.
@@ -130,12 +113,21 @@ if test "$rm_have_getcolorinfolist" = yes; then
    AC_DEFINE(HAVE_GETCOLORINFOLIST)
 fi
 
-AC_CHECK_FUNC(GetTypeInfoList,
-              rm_have_gettypeinfolist=yes,
-              rm_have_gettypeinfolist=no)
-if test "$rm_have_gettypeinfolist" = yes; then
-   AC_DEFINE(HAVE_GETTYPEINFOLIST)
+AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
+AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean])
+AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])
+
+# We need to be able to query this later in the configure script, so set a shell variable here
+# as well as defining a symbol.
+AC_CHECK_FUNC(GetImageQuantumDepth,
+              rm_have_getimagequantumdepth=yes,
+              rm_have_getimagequantumdepth=no)
+if test "$rm_have_getimagequantumdepth" = yes; then
+   AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
 fi
+
+AC_CHECK_FUNCS([GetImageStatistics GetLocaleExceptionMessage GetMagickGeometry])
+AC_CHECK_FUNCS([GetMagickInfoArray])
 
 AC_CHECK_FUNC(GetMagickInfoList,
               rm_have_getmagickinfolist=yes,
@@ -144,12 +136,25 @@ if test "$rm_have_getmagickinfolist" = yes; then
    AC_DEFINE(HAVE_GETMAGICKINFOLIST)
 fi
 
-AC_CHECK_FUNCS([EvaluateImageChannel PosterizeImage GaussianBlurImageChannel])
-AC_CHECK_FUNCS([ConvolveImageChannel SpliceImage SharpenImageChannel])
-AC_CHECK_FUNCS([SetImageChannelDepth BlurImageChannel GetMultilineTypeMetrics])
-AC_CHECK_FUNCS([NormalizeImageChannel UnsharpMaskImageChannel ShadowImage])
-AC_CHECK_FUNCS([SepiaToneImage SigmoidalContrastImageChannel SetImageProgressMonitor])
-AC_CHECK_FUNCS([GetImageChannelDistortion ImagesToBlob IsColorSimilar])
+AC_CHECK_FUNCS([GetMultilineTypeMetrics])
+AC_CHECK_FUNCS([GetNextImageAttribute GetNextImageInList GetNextImageProfile])
+
+AC_CHECK_FUNC(GetTypeInfoList,
+              rm_have_gettypeinfolist=yes,
+              rm_have_gettypeinfolist=no)
+if test "$rm_have_gettypeinfolist" = yes; then
+   AC_DEFINE(HAVE_GETTYPEINFOLIST)
+fi
+
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels IsColorSimilar])
+AC_CHECK_FUNCS([LevelImageChannel NegateImageChannel NormalizeImageChannel])
+AC_CHECK_FUNCS([ParseSizeGeometry PosterizeImage PreviewImage QuantumOperatorRegionImage RadialBlurImage])
+AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
+AC_CHECK_FUNCS([RemoveFirstImageFromList SeparateImageChannel SepiaToneImage])
+AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageOption])
+AC_CHECK_FUNCS([SetImageProgressMonitor SetLogFormat ShadowImage SharpenImageChannel])
+AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage ThresholdImageChannel ThumbnailImage TintImage])
+AC_CHECK_FUNCS([UnsharpMaskImageChannel WhiteThresholdImage XImportImage])
 
 # What typedefs?
 

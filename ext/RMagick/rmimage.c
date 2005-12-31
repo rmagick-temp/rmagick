@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.128 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.129 2005/12/31 14:50:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6164,6 +6164,7 @@ static VALUE array_from_images(Image *images)
 
      image_ary = rb_ary_new();
  #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
+     next = NULL;
      next = next;        // defeat "never referenced" message from icc
      while (images)
      {

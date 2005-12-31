@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.34 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.35 2005/12/31 14:50:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -177,7 +177,7 @@ VALUE
 Info_authenticate_eq(VALUE self, VALUE passwd)
 {
     Info *info;
-    char *passwd_p;
+    char *passwd_p = NULL;
     long passwd_len = 0;
 
     Data_Get_Struct(self, Info, info);
@@ -1338,7 +1338,7 @@ VALUE
 Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
 {
     Info *info;
-    char *sampling_factor_p;
+    char *sampling_factor_p = NULL;
     long sampling_factor_len = 0;
 
     Data_Get_Struct(self, Info, info);

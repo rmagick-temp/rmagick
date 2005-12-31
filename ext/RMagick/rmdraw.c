@@ -1,6 +1,6 @@
-/* $Id: rmdraw.c,v 1.26 2005/11/17 23:51:56 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.27 2005/12/31 14:40:50 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2005 by Timothy P. Hunter
+|                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
 | Author:   Tim Hunter
 | Purpose:  Contains Draw class methods.
@@ -416,7 +416,7 @@ VALUE Draw_annotate(
     draw->info->text = TranslateText(NULL, image, STRING_PTR(text));
     if (!draw->info->text)
     {
-    	   rb_raise(rb_eArgError, "no text");
+           rb_raise(rb_eArgError, "no text");
     }
 
     // Create geometry string, copy to Draw structure, overriding

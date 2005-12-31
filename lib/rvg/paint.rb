@@ -1,6 +1,6 @@
 #--
-# $Id: paint.rb,v 1.2 2005/07/15 20:48:50 rmagick Exp $
-# Copyright (C) 2005 Timothy P. Hunter
+# $Id: paint.rb,v 1.3 2005/12/31 14:41:04 rmagick Exp $
+# Copyright (C) 2006 Timothy P. Hunter
 #++
 # Defines paint server classes.
 # Eventually this will include gradients.

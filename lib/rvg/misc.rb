@@ -1,5 +1,5 @@
-# $Id: misc.rb,v 1.8 2005/07/15 20:48:50 rmagick Exp $
-# Copyright (C) 2005 Timothy P. Hunter
+# $Id: misc.rb,v 1.9 2005/12/31 14:41:04 rmagick Exp $
+# Copyright (C) 2006 Timothy P. Hunter
 class Magick::RVG
 
     # This is a standard deep_copy method that is used in most classes.
@@ -95,7 +95,7 @@ module Magick::RVG::Utility
             end
 
             # escape existing braces, surround with braces
-			text.gsub!(/[}]/) { |b| '\\' + b }
+            text.gsub!(/[}]/) { |b| '\\' + b }
             return '{' +  text + '}'
         end
 

@@ -1,6 +1,6 @@
-/* $Id: rmimage.c,v 1.127 2005/12/24 00:57:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.128 2005/12/31 14:40:50 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2005 by Timothy P. Hunter
+|                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
 | Author:   Tim Hunter
 | Purpose:  Image class method definitions for RMagick
@@ -6274,18 +6274,18 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
             break;
         case 1:
             scale = NUM2DBL(argv[0]);
-			if (scale < 0.0)
-			{
+            if (scale < 0.0)
+            {
                 rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
-			}
+            }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-			if (drows > ULONG_MAX || dcols > ULONG_MAX)
-			{
-				rb_raise(rb_eRangeError, "resulting image too big");
-			}
-			rows = (unsigned long) drows;
-			columns = (unsigned long) dcols;
+            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            {
+                rb_raise(rb_eRangeError, "resulting image too big");
+            }
+            rows = (unsigned long) drows;
+            columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
@@ -6453,12 +6453,12 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
             }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-			if (drows > ULONG_MAX || dcols > ULONG_MAX)
-			{
-				rb_raise(rb_eRangeError, "resulting image too big");
-			}
-			rows = (unsigned long) drows;
-			columns = (unsigned long) dcols;
+            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            {
+                rb_raise(rb_eRangeError, "resulting image too big");
+            }
+            rows = (unsigned long) drows;
+            columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
@@ -7582,18 +7582,18 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
             break;
         case 1:
             scale = NUM2DBL(argv[0]);
-			if (scale < 0.0)
-			{
+            if (scale < 0.0)
+            {
                 rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
-			}
+            }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-			if (drows > ULONG_MAX || dcols > ULONG_MAX)
-			{
-				rb_raise(rb_eRangeError, "resulting image too big");
-			}
-			rows = (unsigned long) drows;
-			columns = (unsigned long) dcols;
+            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            {
+                rb_raise(rb_eRangeError, "resulting image too big");
+            }
+            rows = (unsigned long) drows;
+            columns = (unsigned long) dcols;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);

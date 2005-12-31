@@ -1,6 +1,6 @@
 #--
-# $Id: container.rb,v 1.1 2005/03/12 17:02:00 rmagick Exp $
-# Copyright (C) 2005 Timothy P. Hunter
+# $Id: container.rb,v 1.2 2005/12/31 14:41:04 rmagick Exp $
+# Copyright (C) 2006 Timothy P. Hunter
 #++
 
 class Magick::RVG

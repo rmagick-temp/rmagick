@@ -1,6 +1,6 @@
-# $Id: RMagick.rb,v 1.35 2005/12/22 16:11:11 rmagick Exp $
+# $Id: RMagick.rb,v 1.36 2005/12/31 14:41:04 rmagick Exp $
 #==============================================================================
-#                  Copyright (C) 2005 by Timothy P. Hunter
+#                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
 #   Author:     Tim Hunter
 #   Purpose:    Extend Ruby to interface with ImageMagick.
@@ -637,20 +637,20 @@ class Image
         self
     end
 
-	# Force an image to exact dimensions without changing the aspect ratio.
-	# Resize and crop if necessary. (Thanks to Jerett Taylor!)
-	def crop_resized(ncols, nrows, gravity=CenterGravity)
+    # Force an image to exact dimensions without changing the aspect ratio.
+    # Resize and crop if necessary. (Thanks to Jerett Taylor!)
+    def crop_resized(ncols, nrows, gravity=CenterGravity)
         copy.crop_resized!(ncols, nrows, gravity)
     end
 
-	def crop_resized!(ncols, nrows, gravity=CenterGravity)
-		if ncols != columns || nrows != rows
-		    scale = [ncols/columns.to_f, nrows/rows.to_f].max
-			resize!(scale*(columns+0.5), scale*(rows+0.5))
-		end
-	    crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
-	    self
-	end
+    def crop_resized!(ncols, nrows, gravity=CenterGravity)
+        if ncols != columns || nrows != rows
+            scale = [ncols/columns.to_f, nrows/rows.to_f].max
+            resize!(scale*(columns+0.5), scale*(rows+0.5))
+        end
+        crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
+        self
+    end
 
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image

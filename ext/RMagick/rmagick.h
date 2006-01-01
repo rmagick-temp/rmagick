@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.99 2005/12/31 14:49:51 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.100 2006/01/01 23:25:12 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -177,28 +177,30 @@ typedef enum _QuantumExpressionOperator
     ImageMagick used simply size_t and off_t in 5.5.1, then defined the
     Extended(Un)SignedIntegralType from 5.5.2 thru 5.5.7. The 5.5.8 release
     deprecates these types and uses Magick(Un)SignedType instead.
-    GraphicsMagick 1.1. introduced the magick_(u)int64_t type.
+    Prior to 1.1, GraphicsMagick defined the Extended(Un)SignedIntegralType(s).
+    GraphicsMagick 1.1. introduced the magick_(u)int64_t types.
 
-    Here, if we don't already have magick_(u)int64_t, define them.
+    Here, if we don't already have magick_(u)int64_t, define them in terms
+    of whatever other types are defined.
 */
 #if !defined(HAVE_MAGICK_INT64_T)
-#if defined(HAVE_MAGICKOFFSETTYPE)
-typedef MagickOffsetType magick_int64_t;
-#elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
-typedef ExtendedSignedIntegralType magick_int64_t;
-#else
-typedef off_t magick_int64_t;
-#endif
+    #if defined(HAVE_MAGICKOFFSETTYPE)
+        typedef MagickOffsetType magick_int64_t;
+    #elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
+        typedef ExtendedSignedIntegralType magick_int64_t;
+    #else
+        typedef off_t magick_int64_t;
+    #endif
 #endif
 
 #if !defined(HAVE_MAGICK_UINT64_T)
-#if defined(HAVE_MAGICKSIZETYPE)
-typedef MagickSizeType magick_uint64_t;
-#elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
-typedef ExtendedUnsignedIntegralType magick_uint64_t;
-#else
-typedef size_t magick_uint64_t;
-#endif
+    #if defined(HAVE_MAGICKSIZETYPE)
+        typedef MagickSizeType magick_uint64_t;
+    #elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
+        typedef ExtendedUnsignedIntegralType magick_uint64_t;
+    #else
+        typedef size_t magick_uint64_t;
+    #endif
 #endif
 
 #if !defined(HAVE_MAGICKBOOLEANTYPE)
@@ -312,19 +314,6 @@ EXTERN ID ID_values;            // "values"
 EXTERN ID ID_width;             // "width"
 EXTERN ID ID_x;                 // "x"
 EXTERN ID ID_y;                 // "y"
-
-
-#if defined(HAVE_GETNEXTIMAGEINLIST)
-#define GET_NEXT_IMAGE(a) GetNextImageInList(a)
-#else
-#define GET_NEXT_IMAGE(a) (a)->next
-#endif
-
-#if defined(HAVE_GETLOCALEEXCEPTIONMESSAGE)
-#define GET_MSG(s,t) GetLocaleExceptionMessage((s), (t))
-#else
-#define GET_MSG(s,t) t
-#endif
 
 
 #define min(a,b) ((a)<(b)?(a):(b))

@@ -98,8 +98,8 @@ if test "$rm_have_acquirestringinfo" = yes; then
    AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
 fi
 
-AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AppendImageToList])
-AC_CHECK_FUNCS([BilevelImageChannel BlackThresholdImage BlurImageChannel CompareImageChannels ConvolveImageChannel])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions BilevelImageChannel])
+AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels ConvolveImageChannel])
 AC_CHECK_FUNCS([EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
 AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])
 AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])
@@ -126,8 +126,7 @@ if test "$rm_have_getimagequantumdepth" = yes; then
    AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
 fi
 
-AC_CHECK_FUNCS([GetImageStatistics GetLocaleExceptionMessage GetMagickGeometry])
-AC_CHECK_FUNCS([GetMagickInfoArray])
+AC_CHECK_FUNCS([GetImageStatistics GetMagickInfoArray])
 
 AC_CHECK_FUNC(GetMagickInfoList,
               rm_have_getmagickinfolist=yes,
@@ -136,8 +135,7 @@ if test "$rm_have_getmagickinfolist" = yes; then
    AC_DEFINE(HAVE_GETMAGICKINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GetMultilineTypeMetrics])
-AC_CHECK_FUNCS([GetNextImageAttribute GetNextImageInList GetNextImageProfile])
+AC_CHECK_FUNCS([GetMultilineTypeMetrics GetNextImageAttribute GetNextImageProfile])
 
 AC_CHECK_FUNC(GetTypeInfoList,
               rm_have_gettypeinfolist=yes,
@@ -146,14 +144,15 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels IsColorSimilar])
-AC_CHECK_FUNCS([LevelImageChannel NegateImageChannel NormalizeImageChannel])
-AC_CHECK_FUNCS([ParseSizeGeometry PosterizeImage PreviewImage QuantumOperatorRegionImage RadialBlurImage])
-AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
-AC_CHECK_FUNCS([RemoveFirstImageFromList SeparateImageChannel SepiaToneImage])
-AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageOption])
-AC_CHECK_FUNCS([SetImageProgressMonitor SetLogFormat ShadowImage SharpenImageChannel])
-AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage ThresholdImageChannel ThumbnailImage TintImage])
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([IsColorSimilar NegateImageChannel NormalizeImageChannel])
+AC_CHECK_FUNCS([ParseSizeGeometry PosterizeImage PreviewImage QuantumOperatorRegionImage])
+AC_CHECK_FUNCS([RadialBlurImage RandomChannelThresholdImage RandomThresholdImageChannel])
+AC_CHECK_FUNCS([SeparateImageChannel SepiaToneImage SetImageBackgroundColor])
+AC_CHECK_FUNCS([SetImageChannelDepth SetImageColorspace SetImageOption])
+AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
+AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage])
+AC_CHECK_FUNCS([ThresholdImageChannel TintImage])
 AC_CHECK_FUNCS([UnsharpMaskImageChannel WhiteThresholdImage XImportImage])
 
 # What typedefs?
@@ -171,8 +170,7 @@ if test "$rm_have_magickbooleantype" = yes; then
    AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
 fi
 
-AC_CHECK_TYPES([DisposeType,
-                magick_int64_t,
+AC_CHECK_TYPES([magick_int64_t,
                 magick_uint64_t,
                 ExtendedSignedIntegralType,
                 ExtendedUnsignedIntegralType,
@@ -228,65 +226,6 @@ AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
     rm_cv_member_Image_extract_info=no))
 if test "$rm_cv_member_Image_extract_info" = yes; then
   AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
-fi
-
-AC_CACHE_CHECK(for ImageInfo.number_scenes, rm_cv_member_ImageInfo_number_scenes,
-  AC_TRY_COMPILE([
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include <stdio.h>
-#include "magick/api.h"],
-    [ImageInfo i; i.number_scenes = 0;],
-    rm_cv_member_ImageInfo_number_scenes=yes,
-    rm_cv_member_ImageInfo_number_scenes=no))
-if test "$rm_cv_member_ImageInfo_number_scenes" = yes; then
-  AC_DEFINE(HAVE_IMAGEINFO_NUMBER_SCENES)
-fi
-
-AC_CACHE_CHECK(for NoCompliance enum value, rm_cv_enum_nocompliance,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ComplianceType x; x = NoCompliance],
-     rm_cv_enum_nocompliance='yes',
-     rm_cv_enum_nocompliance='no')])
-
-if test "$rm_cv_enum_nocompliance" = yes; then
-  AC_DEFINE(HAVE_NOCOMPLIANCE)
-fi
-
-AC_CACHE_CHECK(for HSLColorspace enum value, rm_cv_enum_hslcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HSLColorspace],
-     rm_cv_enum_hslcolorspace='yes',
-     rm_cv_enum_hslcolorspace='no')])
-
-if test "$rm_cv_enum_hslcolorspace" = yes; then
-  AC_DEFINE(HAVE_HSLCOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for HWBColorspace enum value, rm_cv_enum_hwbcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HWBColorspace],
-     rm_cv_enum_hwbcolorspace='yes',
-     rm_cv_enum_hwbcolorspace='no')])
-
-if test "$rm_cv_enum_hwbcolorspace" = yes; then
-  AC_DEFINE(HAVE_HWBCOLORSPACE)
 fi
 
 AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,

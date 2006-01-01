@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.102 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.103 2006/01/01 23:25:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -406,7 +406,7 @@ Magick_set_monitor(VALUE class, VALUE monitor)
         // available, use the 3-parm version of rb_cvar_set.
         RUBY18(rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);)
         RUBY16(rb_cvar_set(Module_Magick, Magick_Monitor, monitor);)
-        (void) SetMonitorHandler(&monitor_handler);
+        (void) SetMonitorHandler((MonitorHandler)&monitor_handler);
     }
 
     return class;
@@ -470,13 +470,8 @@ Magick_set_log_event_mask(int argc, VALUE *argv, VALUE class)
 static VALUE
 Magick_set_log_format(VALUE class, VALUE format)
 {
-#ifdef HAVE_SETLOGFORMAT
     SetLogFormat(STRING_PTR(format));
     return class;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1120,12 +1115,8 @@ Init_RMagick(void)
                       , rm_enum_new(Class_ColorspaceType
                       , ID2SYM(rb_intern("SRGBColorspace"))
                       , INT2FIX(sRGBColorspace)));
-#if defined(HAVE_HSLCOLORSPACE)
-        ENUMERATOR(HSLColorspace)       // 5.5.7
-#endif
-#if defined(HAVE_HWBCOLORSPACE)
-        ENUMERATOR(HWBColorspace)       // 5.5.7
-#endif
+        ENUMERATOR(HSLColorspace)
+        ENUMERATOR(HWBColorspace)
 #if defined(HAVE_HSBCOLORSPACE)
         ENUMERATOR(HSBColorspace)       // 6.0.0
 #endif
@@ -1141,9 +1132,7 @@ Init_RMagick(void)
                   , ID2SYM(rb_intern("AllCompliance"))
                   , INT2FIX(SVGCompliance|X11Compliance|XPMCompliance)));
 
-#if defined(HAVE_NOCOMPLIANCE)
         ENUMERATOR(NoCompliance)
-#endif
         ENUMERATOR(SVGCompliance)
         ENUMERATOR(X11Compliance)
         ENUMERATOR(XPMCompliance)
@@ -1243,15 +1232,13 @@ Init_RMagick(void)
         ENUMERATOR(LineThroughDecoration)
     END_ENUM
 
-#if defined(HAVE_DISPOSETYPE)
-    // DisposeType constants (5.5.1)
+    // DisposeType constants
     DEF_ENUM(DisposeType)
         ENUMERATOR(UndefinedDispose)
         ENUMERATOR(BackgroundDispose)
         ENUMERATOR(NoneDispose)
         ENUMERATOR(PreviousDispose)
     END_ENUM
-#endif
 
     DEF_ENUM(EndianType)
         ENUMERATOR(UndefinedEndian)
@@ -1589,7 +1576,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2005/12/31 14:40:50 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/01/01 23:25:12 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

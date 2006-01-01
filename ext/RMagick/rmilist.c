@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.28 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.29 2006/01/01 23:25:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -36,7 +36,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
         unsigned int delay;
 
         delay = NUM2UINT(argv[0]);
-        for (img = images; img; img = GET_NEXT_IMAGE(img))
+        for (img = images; img; img = GetNextImageInList(img))
         {
             img->delay = delay;
         }
@@ -275,7 +275,7 @@ ImageList_montage(VALUE self)
     if (montage->compose != UndefinedCompositeOp)
     {
         Image *i;
-        for (i = image_list; i; i = GET_NEXT_IMAGE(i))
+        for (i = image_list; i; i = GetNextImageInList(i))
         {
             i->compose = montage->compose;
         }
@@ -368,7 +368,6 @@ VALUE
 rm_imagelist_from_images(Image *images)
 {
      volatile VALUE new_imagelist;
-#if defined(HAVE_REMOVEFIRSTIMAGEFROMLIST)
      Image *image;
 
      new_imagelist = rm_imagelist_new();
@@ -378,18 +377,6 @@ rm_imagelist_from_images(Image *images)
           image = RemoveFirstImageFromList(&images);
           rm_imagelist_push(new_imagelist, rm_image_new(image));
      }
-#else
-     Image *image, *next;
-
-     new_imagelist = rm_imagelist_new();
-
-     for (image = images; image; image = next)
-     {
-          next = GET_NEXT_IMAGE(image);
-          image->previous = image->next = NULL;
-          rm_imagelist_push(new_imagelist, rm_image_new(image));
-     }
-#endif
 
      rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
      return new_imagelist;
@@ -407,9 +394,6 @@ rm_images_from_imagelist(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
-#if !defined(HAVE_APPENDIMAGETOLIST)
-    Image *tail = NULL;
-#endif
 
     Check_Type(imagelist, T_ARRAY);
     len = rm_imagelist_length(imagelist);
@@ -423,20 +407,7 @@ rm_images_from_imagelist(VALUE imagelist)
         Image *image;
 
         Data_Get_Struct(rb_ary_entry(imagelist, x), Image, image);
-#if defined(HAVE_APPENDIMAGETOLIST)
         AppendImageToList(&head, image);
-#else
-        if (!head)
-        {
-            head = image;
-        }
-        else
-        {
-            image->previous = tail;
-            tail->next = image;
-        }
-        tail = image;
-#endif
     }
 
     return head;
@@ -573,7 +544,7 @@ ImageList_to_blob(VALUE self)
     if (*info->magick != '\0')
     {
         Image *img;
-        for (img = images; img; img = GET_NEXT_IMAGE(img))
+        for (img = images; img; img = GetNextImageInList(img))
         {
             strncpy(img->magick, info->magick, sizeof(info->magick)-1);
         }
@@ -657,7 +628,7 @@ ImageList_write(VALUE self, VALUE file)
 
     // Copy the filename into each images. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c
-    for (scene = 0, img = images; img; img = GET_NEXT_IMAGE(img))
+    for (scene = 0, img = images; img; img = GetNextImageInList(img))
     {
         img->scene = scene++;
         strcpy(img->filename, info->filename);
@@ -676,7 +647,7 @@ ImageList_write(VALUE self, VALUE file)
         info->adjoin = True;
     }
 
-    for (img = images; img; img = GET_NEXT_IMAGE(img))
+    for (img = images; img; img = GetNextImageInList(img))
     {
         (void) WriteImage(info, img);
         // images will be split before raising an exception

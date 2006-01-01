@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.130 2005/12/31 20:25:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.131 2006/01/01 23:25:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -47,7 +47,6 @@ static ImageAttribute *Next_Attribute;
 VALUE
 Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
 {
-#ifdef HAVE_ADAPTIVETHRESHOLDIMAGE
     Image *image, *new_image;
     unsigned long width = 3, height = 3, offset = 0;
     ExceptionInfo exception;
@@ -72,10 +71,6 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     new_image = AdaptiveThresholdImage(image, width, height, offset, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -634,7 +629,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 
     return rb_yield(ary);
 
-#elif defined(HAVE_GETMAGICKGEOMETRY)
+#else
     Image *image;
     char *geometry;
     unsigned int flags;
@@ -663,9 +658,6 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 
     return rb_yield(ary);
 
-#else
-    rm_not_implemented();
-    return (VALUE)0;
 #endif
 }
 
@@ -1246,7 +1238,7 @@ Image_color_profile(VALUE self)
     }
 
 #else               /* !defined(HAVE_ACQUIRESTRINGINFO) */
-    const char *str;
+    const unsigned char *str;
     size_t length;
 
     Data_Get_Struct(self, Image, image);
@@ -1256,7 +1248,7 @@ Image_color_profile(VALUE self)
     str = GetImageProfile(image, "icc", &length);
     if (str)
     {
-        profile = rb_str_new(str, length);
+        profile = rb_str_new((char *)str, length);
     }
 
 #endif
@@ -1355,7 +1347,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     }
     else
     {
-        prof = STRING_PTR_LEN(profile, prof_l);
+        prof = (unsigned char *)STRING_PTR_LEN(profile, prof_l);
         (void) SetImageProfile(image, "icc", prof, (size_t)prof_l);
     }
 #endif          /*  defined(HAVE_SETIMAGEPROFILE)   */
@@ -3940,11 +3932,7 @@ Image_inspect(VALUE self)
     // Print current filename.
     x += sprintf(buffer+x, "%s", image->filename);
     // Print scene number.
-#if defined(HAVE_GETNEXTIMAGEINLIST)
     if ((GetPreviousImageInList(image) != NULL) && (GetNextImageInList(image) != NULL) && image->scene > 0)
-#else
-    if ((image->previous || image->next) && image->scene > 0)
-#endif
     {
         x += sprintf(buffer+x, "[%lu]", image->scene);
     }
@@ -4121,7 +4109,7 @@ Image_iptc_profile(VALUE self)
     prof = GetImageProfile(image, "iptc", &length);
     if (prof)
     {
-        profile = rb_str_new(prof, (long) length);
+        profile = rb_str_new((char *)prof, (long) length);
     }
 #endif
 
@@ -4218,7 +4206,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     }
     else
     {
-        prof = STRING_PTR_LEN(profile, prof_l);
+        prof = (unsigned char *)STRING_PTR_LEN(profile, prof_l);
         (void) SetImageProfile(image, "iptc", prof, (size_t)prof_l);
     }
 #endif
@@ -4309,7 +4297,6 @@ Image_level(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_level_channel(int argc, VALUE *argv, VALUE self)
 {
-#ifdef HAVE_LEVELIMAGECHANNEL
     Image *image, *new_image;
     double black_point = 0.0, mid_point = 1.0, white_point = (double)MaxRGB;
     ChannelType channel;
@@ -4351,10 +4338,6 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
                            , white_point);
     HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -6176,19 +6159,11 @@ static VALUE array_from_images(Image *images)
      // Orphan the image, create an Image object, add it to the array.
 
      image_ary = rb_ary_new();
- #ifdef HAVE_REMOVEFIRSTIMAGEFROMLIST
      next = NULL;
      next = next;        // defeat "never referenced" message from icc
      while (images)
      {
          image = RemoveFirstImageFromList(&images);
-
- #else
-     for (image = images; image; image = next)
-     {
-         next = images->next;
-         image->next = image->previous = NULL;
- #endif
          image_obj = rm_image_new(image);
          rb_ary_push(image_ary, image_obj);
      }
@@ -7576,7 +7551,6 @@ VALUE threshold_image(
 static VALUE
 thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 {
-#ifdef HAVE_THUMBNAILIMAGE
     Image *image, *new_image;
     unsigned long columns, rows;
     double scale, drows, dcols;
@@ -7626,10 +7600,6 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
     }
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 VALUE

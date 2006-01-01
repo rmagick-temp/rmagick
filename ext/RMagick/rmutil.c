@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.64 2005/12/31 15:23:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.65 2006/01/01 23:25:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1081,14 +1081,15 @@ ColorspaceType_new(ColorspaceType cs)
         case sRGBColorspace:
             name = "sRGBColorspace";
             break;
-#if defined(HAVE_HSLCOLORSPACE)
         case HSLColorspace:
             name = "HSLColorspace";
             break;
-#endif
-#if defined(HAVE_HWBCOLORSPACE)
         case HWBColorspace:
             name = "HWBColorspace";
+            break;
+#if defined(HAVE_HSBCOLORSPACE)
+        case HSBColorspace:
+            name = "HSBColorspace";
             break;
 #endif
     }
@@ -2464,27 +2465,16 @@ Compliance_name(ComplianceType *c)
         *c = XPMCompliance;
         return "XPMCompliance";
     }
-#if defined(HAVE_NOCOMPLIANCE)
-    else if (*c != NoCompliance)
-    {
-        return "unknown";
-    }
-    else
+    else if (*c == NoCompliance)
     {
         *c = NoCompliance;
         return "NoCompliance";
     }
-#else
-    else if (*c != UnknownCompliance)
-    {
-        return "unknown";
-    }
     else
     {
-        *c = UnknownCompliance;
-        return "UnknownCompliance";
+        *c = UndefinedCompliance;
+        return "UndefinedCompliance";
     }
-#endif
 }
 
 
@@ -2801,9 +2791,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "%s%s%s",
-            GET_MSG(severity, reason),
+            GetLocaleExceptionMessage(severity, reason),
             description ? ": " : "",
-            description ? GET_MSG(severity, description) : "");
+            description ? GetLocaleExceptionMessage(severity, description) : "");
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
         {
@@ -2828,9 +2818,9 @@ magick_error_handler(
         sprintf(msg,
 #endif
                      "RMagick: %s%s%s",
-            GET_MSG(severity, reason),
+            GetLocaleExceptionMessage(severity, reason),
             description ? ": " : "",
-            description ? GET_MSG(severity, description) : "");
+            description ? GetLocaleExceptionMessage(severity, description) : "");
         rb_warning(msg);
     }
 }
@@ -2935,7 +2925,7 @@ void rm_handle_all_errors(Image *seq)
                 badboy = image;
             }
         }
-        image = GET_NEXT_IMAGE(image);
+        image = GetNextImageInList(image);
     }
 
     if (badboy)
@@ -2996,14 +2986,6 @@ rm_split(Image *image)
     }
     while (image)
     {
-#if HAVE_REMOVEFIRSTIMAGEFROMLIST
         (void) RemoveFirstImageFromList(&image);
-#else
-        Image *next;
-
-        next = GET_NEXT_IMAGE(image);
-        image->previous = image->next = NULL;
-        image = next;
-#endif
     }
 }

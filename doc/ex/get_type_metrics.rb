@@ -27,10 +27,11 @@ end     # class Draw
 
 
 Origin_x = 110
-Origin_y = 220
+Origin_y = 280
 Glyph = 'g'
+Face = ARGV[0] ? ARGV[0] : "Times"
 
-canvas = Image.new(410,300,HatchFill.new('white', 'lightcyan2'))
+canvas = Image.new(410,370,HatchFill.new('white', 'lightcyan2'))
 
 # Draw a big lowercase 'g' on the canvas. Leave room on all sides for
 # the labels. Use 'undercolor' to set off the glyph.
@@ -39,7 +40,7 @@ glyph.annotate(canvas, 0, 0, Origin_x, Origin_y, Glyph) do |opts|
     opts.pointsize = 124
     opts.stroke = 'none'
     opts.fill = 'black'
-    opts.font_family = 'Times'
+    opts.font_family = Face
     opts.undercolor = '#ffff00c0'
 end
 
@@ -63,7 +64,7 @@ gc.fill('none')
 gc.line(Origin_x-10, Origin_y, Origin_x+metrics.width+20, Origin_y)
 
 # a vertical line through the origin
-gc.line(Origin_x, 30, Origin_x, 270)
+gc.line(Origin_x, Origin_y-metrics.height-10, Origin_x, Origin_y+50)
 
 # descent
 gc.line(Origin_x-10, Origin_y-metrics.descent, Origin_x+metrics.width+20, Origin_y-metrics.descent)
@@ -75,11 +76,11 @@ gc.line(Origin_x-10, Origin_y-metrics.ascent, Origin_x+metrics.width+20, Origin_
 gc.line(Origin_x-10, Origin_y-metrics.height, Origin_x+metrics.width+10, Origin_y-metrics.height)
 
 # width
-gc.line(Origin_x+metrics.width, 30, Origin_x+metrics.width, 270)
+gc.line(Origin_x+metrics.width, Origin_y-metrics.height-10, Origin_x+metrics.width, Origin_y+50)
 
 # max_advance
-gc.line(Origin_x+metrics.max_advance, Origin_y-metrics.descent-10,
-        Origin_x+metrics.max_advance, 270)
+gc.line(Origin_x+metrics.max_advance, Origin_y,
+        Origin_x+metrics.max_advance, Origin_y+50)
 
 gc.draw(canvas)
 
@@ -113,14 +114,14 @@ gc.pop
 
 # between origin and width
 gc.push
-gc.translate(Origin_x+metrics.width, 27.0)
+gc.translate(Origin_x+metrics.width, Origin_y-metrics.height-10-3)
 gc.rotate(-90)
 gc.brace(10, metrics.width)
 gc.pop
 
 # between origin and max_advance
 gc.push
-gc.translate(Origin_x, Origin_y-metrics.descent+14)
+gc.translate(Origin_x, Origin_y+50)
 gc.rotate(90)
 gc.brace(10, metrics.max_advance)
 gc.pop
@@ -131,8 +132,8 @@ gc.fill('black')
 gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.ascent/2)+4, 'ascent')
 gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.descent/2)+4, 'descent')
 gc.text(Origin_x-60, Origin_y-metrics.height/2+4, 'height')
-gc.text(Origin_x+(metrics.width/2)-15, 15, 'width')
-gc.text(Origin_x+(metrics.max_advance)/2-38, 290, "max_advance")
+gc.text(Origin_x+(metrics.width/2)-15, Origin_y-metrics.height-25, 'width')
+gc.text(Origin_x+(metrics.max_advance)/2-38, 360, "max_advance")
 
 gc.draw(canvas)
 canvas.border!(1,1,'blue')

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.131 2006/01/01 23:25:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.132 2006/01/03 17:19:48 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5239,23 +5239,54 @@ Image_opaque_q(VALUE self)
 }
 
 /*
-    Method:     Image#ordered_dither
-    Purpose:    call OrderedDitherImage
+    Method:     Image#ordered_dither(order=2)
+    Purpose:    perform ordered dither on image
+    Notes:      order must be 2, 3, or 4
+                I don't call OrderedDitherImages anymore. Sometime after
+                IM 6.0.0 it quit working. IM and GM use the routines I use
+                below to implement the "ordered-dither" option.
 */
 VALUE
-Image_ordered_dither(VALUE self)
+Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
+    int order;
+    const char *thresholds = "2x2";
     ExceptionInfo exception;
+
+    if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+    }
+    if (argc == 1)
+    {
+        order = NUM2INT(argv[0]);
+        if (order == 3)
+        {
+            thresholds = "3x3";
+        }
+        else if (order == 4)
+        {
+            thresholds = "4x4";
+        }
+        else if (order != 2)
+        {
+            rb_raise(rb_eArgError, "order must be 2, 3, or 4 (%d given)", order);
+        }
+    }
+
 
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
     new_image = CloneImage(image, 0, 0, True, &exception);
     HANDLE_ERROR
-
-    (void) OrderedDitherImage(new_image);
-    HANDLE_ERROR_IMG(new_image)
+#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
+    (void) RandomThresholdImageChannel(new_image, AllChannels, thresholds, &exception);
+#else
+    (void) RandomChannelThresholdImage(new_image, "all", thresholds, &exception);
+#endif
+    HANDLE_ERROR
     return rm_image_new(new_image);
 }
 

@@ -11,7 +11,7 @@
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
   <meta name="Copyright" content=
-  "Copyright (C) 2005 by Timothy P. Hunter" />
+  "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
 <script type="text/javascript" src="scripts/doc.js">
 </script>
@@ -488,12 +488,12 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" name="frameless" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img id="framed"
     onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example" name="framed" /></a>
+    "ex/frame.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2116,8 +2116,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
   <div class="sig">
     <h3 id="ordered_dither">ordered_dither</h3>
 
-    <p><span class="arg">image</span>.ordered_dither -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">image</span>.ordered_dither(<span class=
+    "arg">order</span>=2) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -2126,6 +2126,15 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <p class="imquote">Uses the ordered dithering technique of
     reducing color images to monochrome using positional
     information to retain as much information as possible.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>order</dt>
+
+      <dd>The dither order. Must be one of the integers 2, 3, or
+      4.</dd>
+    </dl>
 
     <h4>Returns</h4>
 
@@ -2149,7 +2158,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Magick API</h4>
 
-    <p>OrderedDitherImage</p>
+    <p>RandomThresholdImageChannel</p>
   </div>
 
   <div class="sig">

@@ -3,6 +3,7 @@ RMagick 1.10.0
       newline characters properly
     o Added crop_resize method to the Image class (thanks to Jerret Taylor for
       the suggestion and original code)
+    o Added "order" option to the Image#ordered_dither method.
     o Added cyan, magenta, yellow, and black attribute accessors to the Pixel class
     o Fixed bug #2844, Image#to_blob exits if the image is a 0x0 JPEG
     o Removed support for all versions of ImageMagick prior to 6.0.0

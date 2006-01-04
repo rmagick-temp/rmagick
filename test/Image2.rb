@@ -143,14 +143,14 @@ class Image2_UT < Test::Unit::TestCase
         assert_equal(@img.rows, changed.rows)
         assert_not_same(changed, @img)
     end
-    
+
     def test_crop_resized_1
         @img = Magick::Image.new(200, 250)
         @img.crop_resized!(100,100)
         assert_equal(100, @img.columns)
         assert_equal(100, @img.rows)
     end
-    
+
     def test_crop_resized_2
         @img = Magick::Image.new(200, 250)
         changed = @img.crop_resized(300,100)
@@ -751,7 +751,13 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.ordered_dither
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img. res)
         end
+        assert_nothing_raised { @img.ordered_dither(2) }
+        assert_nothing_raised { @img.ordered_dither(3) }
+        assert_nothing_raised { @img.ordered_dither(4) }
+        assert_raise(ArgumentError) { @img.ordered_dither(5) }
+        assert_raise(ArgumentError) { @img.ordered_dither(2, 1) }
     end
 
     def test_palette?

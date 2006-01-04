@@ -48,11 +48,12 @@ end
 metrics = glyph.get_type_metrics(canvas, Glyph)
 
 gc = Draw.new
+gc.translate(Origin_x, Origin_y)
 
 # Draw the origin as a big red dot.
 gc.stroke('red')
 gc.fill('red')
-gc.circle(Origin_x, Origin_y, Origin_x, Origin_y+2)
+gc.circle(0, 0, 0, 2)
 
 # All our lines will be medium-gray, dashed, and thin.
 gc.stroke('gray50')
@@ -61,29 +62,27 @@ gc.stroke_width(1)
 gc.fill('none')
 
 # baseline
-gc.line(Origin_x-10, Origin_y, Origin_x+metrics.width+20, Origin_y)
+gc.line(-10, 0, metrics.width+20, 0)
 
 # a vertical line through the origin
-gc.line(Origin_x, Origin_y-metrics.descent-metrics.height-10,
-        Origin_x, Origin_y-metrics.descent+15)
+gc.line(0, -metrics.descent-metrics.height-10, 0, -metrics.descent+15)
 
 # descent
-gc.line(Origin_x-10, Origin_y-metrics.descent, Origin_x+metrics.width+20, Origin_y-metrics.descent)
+gc.line(-10, -metrics.descent, metrics.width+20, -metrics.descent)
 
 # ascent
-gc.line(Origin_x-10, Origin_y-metrics.ascent, Origin_x+metrics.width+20, Origin_y-metrics.ascent)
+gc.line(-10, -metrics.ascent, metrics.width+20, -metrics.ascent)
 
 # height
-gc.line(Origin_x-10, Origin_y-metrics.descent-metrics.height,
-        Origin_x+metrics.width+10, Origin_y-metrics.descent-metrics.height)
+gc.line(-10, -metrics.descent-metrics.height,
+        metrics.width+10, -metrics.descent-metrics.height)
 
 # width
-gc.line(Origin_x+metrics.width, Origin_y-metrics.descent-metrics.height-10,
-        Origin_x+metrics.width, Origin_y-metrics.descent+20)
+gc.line(metrics.width, -metrics.descent-metrics.height-10,
+        metrics.width, -metrics.descent+20)
 
 # max_advance
-gc.line(Origin_x+metrics.max_advance, Origin_y-10,
-        Origin_x+metrics.max_advance, Origin_y-metrics.descent+20)
+gc.line(metrics.max_advance, -10, metrics.max_advance, -metrics.descent+20)
 
 gc.draw(canvas)
 
@@ -95,36 +94,37 @@ gc.pointsize(13)
 gc.fill('none')
 gc.stroke('black')
 gc.stroke_width(1)
+gc.translate(Origin_x, Origin_y)
 
 # between origin and descent
 gc.push
-gc.translate(Origin_x+metrics.width+23, Origin_y)
+gc.translate(metrics.width+23, 0)
 gc.brace(10, metrics.descent)
 gc.pop
 
 # between origin and ascent
 gc.push
-gc.translate(Origin_x+metrics.width+23, Origin_y)
+gc.translate(metrics.width+23, 0)
 gc.brace(10, metrics.ascent)
 gc.pop
 
 # between origin and height
 gc.push
-gc.translate(Origin_x-13, Origin_y-metrics.descent-metrics.height)
+gc.translate(-13, -metrics.descent-metrics.height)
 gc.rotate(180)
 gc.brace(10, metrics.height)
 gc.pop
 
 # between origin and width
 gc.push
-gc.translate(Origin_x+metrics.width, Origin_y-metrics.descent-metrics.height-10-3)
+gc.translate(metrics.width, -metrics.descent-metrics.height-10-3)
 gc.rotate(-90)
 gc.brace(10, metrics.width)
 gc.pop
 
 # between origin and max_advance
 gc.push
-gc.translate(Origin_x, Origin_y-metrics.descent+15)
+gc.translate(0, -metrics.descent+15)
 gc.rotate(90)
 gc.brace(10, metrics.max_advance)
 gc.pop
@@ -132,11 +132,11 @@ gc.pop
 # Add labels
 gc.stroke('none')
 gc.fill('black')
-gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.ascent/2)+4, 'ascent')
-gc.text(Origin_x+metrics.width+40, Origin_y-(metrics.descent/2)+4, 'descent')
-gc.text(Origin_x-60, Origin_y-metrics.descent-metrics.height/2+4, 'height')
-gc.text(Origin_x+(metrics.width/2)-15, Origin_y-metrics.descent-metrics.height-25, 'width')
-gc.text(Origin_x+(metrics.max_advance)/2-38, Origin_y-metrics.descent+35, "max_advance")
+gc.text(metrics.width+40, -(metrics.ascent/2)+4, 'ascent')
+gc.text(metrics.width+40, -(metrics.descent/2)+4, 'descent')
+gc.text(-60, -metrics.descent-metrics.height/2+4, 'height')
+gc.text((metrics.width/2)-15, -metrics.descent-metrics.height-25, 'width')
+gc.text((metrics.max_advance)/2-38, -metrics.descent+35, "max_advance")
 
 gc.draw(canvas)
 canvas.border!(1,1,'blue')

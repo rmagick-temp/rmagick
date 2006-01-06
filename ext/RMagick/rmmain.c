@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.104 2006/01/03 17:20:32 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.105 2006/01/06 23:57:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -10,12 +10,14 @@
 
 #define MAIN                        // Define external variables
 #include "rmagick.h"
+#include "magick/version.h"
 
 /*----------------------------------------------------------------------------\
 | External declarations
 \----------------------------------------------------------------------------*/
 void Init_RMagick(void);
 
+static void test_Magick_version(void);
 static void version_constants(void);
 
 
@@ -489,6 +491,7 @@ Init_RMagick(void)
     volatile VALUE observable;
 
     InitializeMagick("RMagick");
+    test_Magick_version();
 
     Module_Magick = rb_define_module("Magick");
 
@@ -1555,6 +1558,56 @@ Init_RMagick(void)
 
 }
 
+
+
+
+/*
+ *  Static:     test_Magick_version
+ *  Purpose:    Ensure the version of ImageMagick we're running with matches
+ *              the version we were compiled with.
+*/
+static void test_Magick_version(void)
+{
+    unsigned long version_number;
+    const char *version_str;
+    const char *web_site =
+#if defined(MagickHomeURL)
+        MagickHomeURL
+#else
+        MagickWebSite
+#endif
+        ;
+    int x, n;
+
+    version_str = GetMagickVersion(&version_number);
+    if (version_number != MagickLibVersion)
+    {
+        // Extract the string "ImageMagick X.Y.Z"
+        n = 0;
+        for (x = 0; version_str[x] != '\0'; x++)
+        {
+            if (version_str[x] == ' ' && ++n == 2)
+            {
+                break;
+            }
+        }
+
+        rb_raise(rb_eRuntimeError,
+            "This version of RMagick was created to run with %s %s\n"
+            "but %.*s is installed on this system. You should either\n"
+            "   1) refer to the RMagick README file to learn how to create\n"
+            "      a version of RMagick for %.*s, or\n"
+            "   2) download %s %s from %s and install it." ,
+            MagickPackageName, MagickLibVersionText, x, version_str, x, version_str,
+            MagickPackageName, MagickLibVersionText, web_site);
+    }
+
+}
+
+
+
+
+
 /*
     Static:     version_constants
     Purpose:    create Version, Magick_version, and Version_long constants.
@@ -1576,7 +1629,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/01/03 17:20:32 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/01/06 23:57:08 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

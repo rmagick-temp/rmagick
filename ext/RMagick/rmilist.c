@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.29 2006/01/01 23:25:12 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.30 2006/01/06 23:55:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -321,6 +321,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
+    rm_split(images);
     HANDLE_ERROR
 
     return rm_imagelist_from_images(new_images);

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.105 2006/01/06 23:57:08 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.106 2006/01/07 00:14:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1577,7 +1577,14 @@ static void test_Magick_version(void)
         MagickWebSite
 #endif
         ;
+    volatile VALUE no_check;
     int x, n;
+
+    no_check = rb_gv_get("$RMagick_bypass_version_test_");
+    if (RTEST(no_check))
+    {
+        return;
+    }
 
     version_str = GetMagickVersion(&version_number);
     if (version_number != MagickLibVersion)
@@ -1629,7 +1636,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/01/06 23:57:08 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/01/07 00:14:31 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

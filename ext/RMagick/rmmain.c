@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.106 2006/01/07 00:14:31 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.107 2006/01/07 23:22:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -677,7 +677,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "enhance", Image_enhance, 0);
     rb_define_method(Class_Image, "equalize", Image_equalize, 0);
     rb_define_method(Class_Image, "erase!", Image_erase_bang, 0);
-    rb_define_method(Class_Image, "export_pixels", Image_export_pixels, 5);
+    rb_define_method(Class_Image, "export_pixels", Image_export_pixels, -1);
+    rb_define_method(Class_Image, "export_pixels_to_str", Image_export_pixels_to_str, -1);
     rb_define_method(Class_Image, "flip", Image_flip, 0);
     rb_define_method(Class_Image, "flip!", Image_flip_bang, 0);
     rb_define_method(Class_Image, "flop", Image_flop, 0);
@@ -1565,6 +1566,8 @@ Init_RMagick(void)
  *  Static:     test_Magick_version
  *  Purpose:    Ensure the version of ImageMagick we're running with matches
  *              the version we were compiled with.
+ *  Notes:      Bypass the test by defining the constant RMAGICK_BYPASS_VERSION_TEST
+ *              to 'true' at the top level, before requiring 'RMagick'
 */
 static void test_Magick_version(void)
 {
@@ -1577,11 +1580,10 @@ static void test_Magick_version(void)
         MagickWebSite
 #endif
         ;
-    volatile VALUE no_check;
     int x, n;
+    ID bypass = rb_intern("RMAGICK_BYPASS_VERSION_TEST");
 
-    no_check = rb_gv_get("$RMagick_bypass_version_test_");
-    if (RTEST(no_check))
+    if (RTEST(rb_const_defined(rb_cObject, bypass)) && RTEST(rb_const_get(rb_cObject, bypass)))
     {
         return;
     }
@@ -1636,7 +1638,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/01/07 00:14:31 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/01/07 23:22:21 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

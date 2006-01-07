@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.132 2006/01/03 17:19:48 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.133 2006/01/07 23:22:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2984,35 +2984,46 @@ Image_erase_bang(VALUE self)
 }
 
 /*
-    Method:     Image#export_pixels
+    Method:     Image#export_pixels(x=0, y=0, cols=self.columns, rows=self.rows, map="RGB")
     Purpose:    extract image pixels in the form of an array
 */
 VALUE
-Image_export_pixels(
-    VALUE self,
-    VALUE x_arg,
-    VALUE y_arg,
-    VALUE cols_arg,
-    VALUE rows_arg,
-    VALUE map_arg)
+Image_export_pixels(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_EXPORTIMAGEPIXELS)
     Image *image;
-    long x_off, y_off;
+    long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
     unsigned long n, npixels;
     unsigned int okay;
-    char *map;
+    char *map = "RGB";
     volatile unsigned int *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
 
     Data_Get_Struct(self, Image, image);
-    x_off = NUM2LONG(x_arg);
-    y_off = NUM2LONG(y_arg);
-    cols  = NUM2ULONG(cols_arg);
-    rows  = NUM2ULONG(rows_arg);
+    cols = image->columns;
+    rows = image->rows;
+
+    switch (argc)
+    {
+        case 5:
+            map   = STRING_PTR(argv[4]);
+        case 4:
+            rows  = NUM2ULONG(argv[3]);
+        case 3:
+            cols  = NUM2ULONG(argv[2]);
+        case 2:
+            y_off = NUM2LONG(argv[1]);
+        case 1:
+            x_off = NUM2LONG(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 5)", argc);
+            break;
+    }
 
     if (   x_off < 0 || x_off > image->columns
         || y_off < 0 || y_off > image->rows
@@ -3021,7 +3032,6 @@ Image_export_pixels(
         rb_raise(rb_eArgError, "invalid extract geometry");
     }
 
-    map = STRING_PTR(map_arg);
 
     npixels = cols * rows * strlen(map);
     pixels = ALLOC_N(unsigned int, npixels);
@@ -3051,6 +3061,118 @@ Image_export_pixels(
     xfree((unsigned int *)pixels);
 
     return ary;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+    Method:     Image#export_pixels_to_str(x=0, y=0, cols=self.columns,
+                       rows=self.rows, map="RGB", type=Magick::CharPixel)
+    Purpose:    extract image pixels to a Ruby string
+*/
+VALUE
+Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_EXPORTIMAGEPIXELS)
+    Image *image;
+    long x_off = 0L, y_off = 0L;
+    unsigned long cols, rows;
+    unsigned long npixels;
+    size_t sz;
+    unsigned int okay;
+    char *map = "RGB";
+    StorageType type = CharPixel;
+    volatile VALUE string;
+    char *str;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    cols = image->columns;
+    rows = image->rows;
+
+    switch (argc)
+    {
+        case 6:
+            VALUE_TO_ENUM(argv[5], type, StorageType);
+        case 5:
+            map   = STRING_PTR(argv[4]);
+        case 4:
+            rows  = NUM2ULONG(argv[3]);
+        case 3:
+            cols  = NUM2ULONG(argv[2]);
+        case 2:
+            y_off = NUM2LONG(argv[1]);
+        case 1:
+            x_off = NUM2LONG(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 6)", argc);
+            break;
+    }
+
+    if (   x_off < 0 || x_off > image->columns
+        || y_off < 0 || y_off > image->rows
+        || cols == 0 || rows == 0)
+    {
+        rb_raise(rb_eArgError, "invalid extract geometry");
+    }
+
+
+    npixels = cols * rows * strlen(map);
+    switch (type)
+    {
+        case CharPixel:
+            sz = sizeof(unsigned char);
+            break;
+        case ShortPixel:
+            sz = sizeof(unsigned short);
+            break;
+        case DoublePixel:
+            sz = sizeof(double);
+            break;
+        case FloatPixel:
+            sz = sizeof(float);
+            break;
+        case IntegerPixel:
+            sz = sizeof(unsigned int);
+            break;
+        case LongPixel:
+            sz = sizeof(unsigned long);
+            break;
+#if defined(HAVE_QUANTUMPIXEL)
+        case QuantumPixel:
+            sz = sizeof(Quantum);
+            break;
+#endif
+        case UndefinedPixel:
+        default:
+            rb_raise(rb_eArgError, "undefined storage type");
+            break;
+    }
+
+    // Allocate a string long enough to hold the exported pixel data.
+    // Get a pointer to the buffer.
+    string = rb_str_new2("");
+    rb_str_resize(string, (long)(sz * npixels));
+    str = STRING_PTR(string);
+
+    GetExceptionInfo(&exception);
+
+    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, type, (void *)str, &exception);
+    if (!okay)
+    {
+        // Let GC have the string buffer.
+        rb_str_resize(string, 0);
+        HANDLE_ERROR
+        // Should never get here...
+        rb_raise(rb_eStandardError, "ExportImagePixels failed with no explanation.");
+    }
+
+    return string;
 
 #else
     rm_not_implemented();

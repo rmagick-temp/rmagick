@@ -298,13 +298,80 @@ class Image2_UT < Test::Unit::TestCase
 
     def test_export_pixels
         assert_nothing_raised do
-            res = @img.export_pixels(0, 0, @img.columns, 1, 'RGB')
+            res = @img.export_pixels
             assert_instance_of(Array, res)
-            assert_equal(@img.columns*3, res.length)
+            assert_equal(@img.columns*@img.rows*"RGB".length, res.length)
             res.each do |p|
                 assert_instance_of(Fixnum, p)
             end
         end
+        assert_nothing_raised { res = @img.export_pixels(0) }
+        assert_nothing_raised { res = @img.export_pixels(0, 0) }
+        assert_nothing_raised { res = @img.export_pixels(0, 0, 10) }
+        assert_nothing_raised { res = @img.export_pixels(0, 0, 10, 10) }
+        assert_nothing_raised do
+            res = @img.export_pixels(0, 0, 10, 10, 'RGBA')
+            assert_equal(10*10*"RGBA".length, res.length)
+       end
+       assert_nothing_raised do
+            res = @img.export_pixels(0, 0, 10, 10, 'I')
+            assert_equal(10*10*"I".length, res.length)
+       end
+
+       # too many arguments
+       assert_raise(ArgumentError) { @img.export_pixels(0, 0, 10, 10, 'I', 2) }
+
+    end
+
+    def test_export_pixels_to_str
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str
+            assert_instance_of(String, res)
+            assert_equal(@img.columns*@img.rows*"RGB".length, res.length)
+        end
+        assert_nothing_raised { @img.export_pixels_to_str(0) }
+        assert_nothing_raised { @img.export_pixels_to_str(0, 0) }
+        assert_nothing_raised { @img.export_pixels_to_str(0, 0, 10) }
+        assert_nothing_raised { @img.export_pixels_to_str(0, 0, 10, 10) }
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "RGBA")
+            assert_equal(10*10*"RGBA".length, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I")
+            assert_equal(10*10*"I".length, res.length)
+        end
+
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::CharPixel)
+            assert_equal(10*10*1, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::ShortPixel)
+            assert_equal(10*10*2, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::IntegerPixel)
+            assert_equal(10*10*4, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::LongPixel)
+            assert_equal(10*10*4, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::FloatPixel)
+            assert_equal(10*10*4, res.length)
+        end
+        assert_nothing_raised do
+            res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::DoublePixel)
+            assert_equal(10*10*8, res.length)
+        end
+        assert_nothing_raised { @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::QuantumPixel) }
+
+        # too many arguments
+        assert_raise(ArgumentError) { @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::QuantumPixel, 1) }
+        # last arg s/b StorageType
+        assert_raise(TypeError) { @img.export_pixels_to_str(0, 0, 10, 10, "I", 2) }
     end
 
     def test_flip
@@ -751,7 +818,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.ordered_dither
             assert_instance_of(Magick::Image, res)
-            assert_not_same(@img. res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.ordered_dither(2) }
         assert_nothing_raised { @img.ordered_dither(3) }

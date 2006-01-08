@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.134 2006/01/08 15:37:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.135 2006/01/08 23:29:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8332,10 +8332,6 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
     {
         case 4:
             sigma = NUM2DBL(argv[3]);
-            if (sigma == 0.0)
-            {
-                rb_raise(rb_eArgError, "sigma must be non-zero");
-            }
         case 3:
             radius = NUM2DBL(argv[2]);
         case 2:
@@ -8352,11 +8348,11 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
 
     new_image = VignetteImage(image, radius, sigma, horz_radius, vert_radius, &exception);
+    HANDLE_ERROR
     if (!new_image)
     {
-        rb_raise(rb_eNoMemError, "not enough memory to create vignette");
+        rb_raise(rb_eRuntimeError, "VignetteImage failed");
     }
-    HANDLE_ERROR
 
     return rm_image_new(new_image);
 

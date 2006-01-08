@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.133 2006/01/07 23:22:21 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.134 2006/01/08 15:37:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8302,6 +8302,64 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
                                       , threshold, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+  Method:   Image#vignette(horz_radius, vert_radius, radius, sigma);
+  Purpose:  soften the edges of an image
+  Notes:    The outer edges of the image are replaced by the background color.
+*/
+VALUE
+Image_vignette(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_VIGNETTEIMAGE)
+    Image *image, *new_image;
+    long horz_radius, vert_radius;
+    double radius = 0.0, sigma = 10.0;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    horz_radius = image->columns * 0.10 + 0.5;
+    vert_radius = image->rows * 0.10 + 0.5;
+
+    switch (argc)
+    {
+        case 4:
+            sigma = NUM2DBL(argv[3]);
+            if (sigma == 0.0)
+            {
+                rb_raise(rb_eArgError, "sigma must be non-zero");
+            }
+        case 3:
+            radius = NUM2DBL(argv[2]);
+        case 2:
+            vert_radius = NUM2INT(argv[1]);
+        case 1:
+            horz_radius = NUM2INT(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 4)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+
+    new_image = VignetteImage(image, radius, sigma, horz_radius, vert_radius, &exception);
+    if (!new_image)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to create vignette");
+    }
+    HANDLE_ERROR
+
+    return rm_image_new(new_image);
+
 #else
     rm_not_implemented();
     return (VALUE)0;

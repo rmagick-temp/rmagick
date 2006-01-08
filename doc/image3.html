@@ -149,13 +149,13 @@
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
+
+          <li><a href="#store_pixels">store_pixels</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#store_pixels">store_pixels</a></li>
-
           <li><a href="#strip_bang">strip!</a></li>
 
           <li><a href="#swirl">swirl</a></li>
@@ -188,6 +188,8 @@
           "#unsharp_mask_channel">unsharp_mask_channel</a></li>
 
           <li><a href="#view">view</a></li>
+
+          <li><a href="#vignette">vignette</a></li>
 
           <li><a href="#wave">wave</a></li>
 
@@ -1636,7 +1638,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2899,6 +2901,82 @@ end
     thousand to a few hundred thousand, depending on your patience
     and the speed of your computer) and you need this degree of
     control.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="vignette">vignette</h3>
+
+    <p>image.vignette(<span class="arg">x</span>, <span class=
+    "arg">y</span>, <span class="arg">radius</span>=0.0,
+    <span class="arg">sigma</span>=10.0) -&gt; <span class=
+    "arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Gradually shades the edges of the image by transforming the
+    pixels into the background color.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x</dt>
+
+      <dd>Influences the amount of background color in the
+      horizontal dimension. Larger values of <span class=
+      "arg">x</span> make the vignette narrower. This argument
+      should be positive and less than image.columns / 2. This
+      argument is optional. If omitted, the default value is 0.10 *
+      <span class="arg">image</span>.columns.</dd>
+
+      <dt>y</dt>
+
+      <dd>Influences the amount of background color in the vertical
+      dimension. Larger values of <span class="arg">y</span> make
+      the vignette shorter. This argument should be positive and
+      less than image.rows / 2. This argument is optional. If
+      omitted, the default value is 0.10 * <span class=
+      "arg">image</span>.rows.</dd>
+
+      <dt>radius, sigma</dt>
+
+      <dd>Controls the amount of blurring. Larger values of
+      <span class="arg">sigma</span> increase the blurring at the
+      expense of increased execution time. In general, <span class=
+      "arg">radius</span> should be larger than <span class=
+      "arg">sigma</span>, although if <span class=
+      "arg">radius</span> is 0 then &times;Magick will choose a
+      suitable value. <span class="arg">Sigma</span> must be
+      non-zero. Choose a very small value for <span class=
+     "arg">sigma</span> to produce a "hard" edge.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('vignette.rb.html')"><img src=
+    "ex/vignette.jpg" alt="vignette example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/vignette.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>VignetteImage (available in ImageMagick 6.2.6)</p>
+
+    <h4>Notes</h4>
+
+    <p>The image produced by <code>vignette</code> is very similar
+    to the image produced by RMagick's vignette.rb example script.
+    However, the example script gives you more control over the
+    size, shape, and background color of the vignette.</p>
   </div>
 
   <div class="sig">

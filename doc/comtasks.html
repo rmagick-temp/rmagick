@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: Common Tasks</title>
   <meta http-equiv="Content-Type" content=
@@ -194,6 +194,14 @@ thumb.write "thumb.gif"
   applications when you want to modify an image and then stream it
   back to the client.</p>
 
+  <p>Use <a href=
+  "image2.html#import_pixels">Image#import_pixels</a> to load pixel
+  data from a string buffer into an image. The pixel data must be
+  in scanline order, right-to-left and top-to-bottom. The data can
+  be packed as 8-bit bytes, 16-bit halfwords, 32-bit fullwords, or
+  as C floats or doubles. The reciprocal method is <a href=
+  "image3.html#export_pixels_to_str">Image#export_pixels_to_str</a>.</p>
+
   <h2 id="gray">Converting a color image to grayscale</h2>
 
   <p>Use the <a href=
@@ -248,7 +256,7 @@ img.write("myimage.jpg") { self.quality = 50 }
   </div>
   <hr />
 
-  <p class="spacer">&nbsp;</p>
+  <p class="spacer"> </p>
 
   <div class="nav">
     &laquo; <a href="imusage.html">Prev</a> | <a href=

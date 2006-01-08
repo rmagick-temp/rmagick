@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: Constants</title>
   <meta http-equiv="Content-Type" content=
@@ -131,6 +131,8 @@
 
         <li><a href="#StretchType">StretchType</a></li>
 
+        <li><a href="#StorageType">StorageType</a></li>
+
         <li><a href="#StyleType">StyleType</a></li>
 
         <li><a href="#WeightType">WeightType</a></li>
@@ -148,7 +150,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.4.0 ($Date: 2006/01/03 17:17:12 $)
+    <code>This is RMagick 1.4.0 ($Date: 2006/01/08 00:21:58 $)
     Copyright (C) 2005 by Timothy P. Hunter<br />
     Built with ImageMagick 6.0.0 02/25/04 Q8
     http://www.imagemagick.org<br />
@@ -1176,6 +1178,47 @@
     <dt>UltraExpandedStretch</dt>
 
     <dt>AnyStretch</dt>
+  </dl>
+
+  <h3 class="const" id="StorageType">StorageType</h3>
+
+  <p>See <a href="image2.html#import_pixels">import_pixels</a> and
+  <a href=
+  "image2.html#export_pixels_to_str">export_pixels_to_str</a>.</p>
+
+  <dl>
+    <dt>CharPixel</dt>
+
+    <dd>corresponds to a C <code>unsigned char</code>, range
+    0-255.</dd>
+
+    <dt>ShortPixel</dt>
+
+    <dd>corresponds to a C <code>unsigned short</code>, range
+    0-65535.</dd>
+
+    <dt>IntegerPixel</dt>
+
+    <dd>corresponds to a C <code>unsigned int</code>, range
+    0-4294967295.</dd>
+
+    <dt>LongPixel</dt>
+
+    <dd>corresponds to a C <code>unsigned long</code>, range
+    0-4294967295 (for 32-bit longs).</dd>
+
+    <dt>FloatPixel</dt>
+
+    <dd>corresponds to a C <code>float</code>, range 0.0-1.0.</dd>
+
+    <dt>DoublePixel</dt>
+
+    <dd>corresponds to a C <code>double</code>, range 0.0-1.0.</dd>
+
+    <dt>QuantumPixel</dt>
+
+    <dd>corresponds to the Quantum type used by &times;Magick,
+    range 0-MaxRGB.</dd>
   </dl>
 
   <h3 class="const" id="StyleType">StyleType</h3>

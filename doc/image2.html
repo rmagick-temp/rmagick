@@ -55,6 +55,9 @@
 
           <li><a href="#export_pixels">export_pixels</a></li>
 
+          <li><a href=
+          "#export_pixels_to_str">export_pixels_to_str</a></li>
+
           <li><a href="#flip">flip</a></li>
 
           <li><a href="#flip_bang">flip!</a></li>
@@ -79,13 +82,13 @@
 
           <li><a href=
           "#get_exif_by_number">get_exif_by_number</a></li>
-
-          <li><a href="#get_pixels">get_pixels</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#get_pixels">get_pixels</a></li>
+
           <li><a href="#gray_q">gray?</a></li>
 
           <li><a href=
@@ -264,9 +267,11 @@
     <h3 id="export_pixels">export_pixels</h3>
 
     <p><span class="arg">image</span>.export_pixels(<span class=
-    "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">columns</span>, <span class="arg">rows</span>,
-    <span class="arg">map</span>) -&gt; <em>anArray</em></p>
+    "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
+    "arg">columns</span>=<span class="arg">image</span>.columns,
+    <span class="arg">rows</span>=<span class=
+    "arg">image</span>.rows, <span class="arg">map</span>="RGB")
+    -&gt; <em>anArray</em></p>
   </div>
 
   <div class="desc">
@@ -292,11 +297,12 @@
 
       <dt>map</dt>
 
-      <dd>A <code>String</code> reflecting the order of the pixel
-      data. <span class="imquote">It can be any combination or
-      order of R = red, G = green, B = blue, A = alpha, C = cyan, Y
-      = yellow, M = magenta, K = black, or I = intensity (for
-      grayscale).</span></dd>
+      <dd>A string that describes which pixel channel data is
+      desired and the order in which it should be stored.
+      <span class="imquote">It can be any combination or order of R
+      = red, G = green, B = blue, A = alpha, C = cyan, Y = yellow,
+      M = magenta, K = black, I = intensity (for grayscale), or P =
+      pad.</span></dd>
     </dl>
 
     <h4>Returns</h4>An array
@@ -310,6 +316,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>See also</h4>
 
     <p><a href="image1.html#dispatch">dispatch</a>, <a href=
+    "#export_pixels_to_str">export_pixels_to_str</a>, <a href=
     "#import_pixels">import_pixels</a>, <a href=
     "#get_pixels">get_pixels</a></p>
 
@@ -320,6 +327,81 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Note</h4>
 
     <p>This method replaces the <code>dispatch</code> method.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="export_pixels_to_str">export_pixels_to_str</h3>
+
+    <p><span class=
+    "arg">image</span>.export_pixels_to_str(<span class=
+    "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
+    "arg">columns</span>=<span class="arg">image</span>.columns,
+    <span class="arg">rows</span>=<span class=
+    "arg">image</span>.rows, <span class="arg">map</span>="RGB",
+    <span class="arg">type</span>=<code>Magick::CharPixel</code>)
+    -&gt; <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Extracts the pixel data from the specified rectangle and
+    returns it as a string. If you need to get the pixel data in a
+    memory buffer (as input to another application, for example),
+    this method is much, much faster than <a href=
+    "#export_pixels">export_pixels</a> or <a href=
+    "#get_pixels">get_pixels</a>.</p>
+
+    <p>The string returned by <code>export_pixels_to_str</code> is
+    suitable for use as an argument to
+    <code>import_pixels</code>.</p>
+
+    <p><strong>Note:</strong> You can also use <a href=
+    "image3.html#to_blob">to_blob</a> to convert an image into a
+    string.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The offset of the rectangle from the upper-left corner of
+      the image.</dd>
+
+      <dt>columns, rows</dt>
+
+      <dd>The width and height of the rectangle.</dd>
+
+      <dt>map</dt>
+
+      <dd>A string that describes which pixel channel data is
+      desired and the order in which it should be stored.
+      <span class="imquote">It can be any combination or order of R
+      = red, G = green, B = blue, A = alpha, C = cyan, Y = yellow,
+      M = magenta, K = black, I = intensity (for grayscale), or P =
+      pad.</span></dd>
+
+      <dt>type</dt>
+
+      <dd>A <a href="constants.html#StorageType">StorageType</a>
+      value that specifies the C datatype to which the pixel data
+      will be converted. The default is <code>CharPixel</code>,
+      which means that the pixel values will be stored as C
+      <code>unsigned char</code>s.</dd>
+    </dl>
+
+    <h4>Returns</h4>A string
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#dispatch">dispatch</a>, <a href=
+    "#export_pixels">export_pixels</a>, <a href=
+    "#import_pixels">import_pixels</a>, <a href=
+    "#get_pixels">get_pixels</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>ExportImagePixels</p>
   </div>
 
   <div class="sig">
@@ -1040,33 +1122,9 @@ image.get_exif_by_number() &raquo;
 
       <dt>type</dt>
 
-      <dd>
-        Specifies the type and range of the pixel data when
-        <span class="arg">pixels</span> is a string. One of the
-        following constants:
-
-        <dl>
-          <dt>CharPixel</dt>
-
-          <dd>type <code>unsigned char</code>, range 0-255</dd>
-
-          <dt>ShortPixel</dt>
-
-          <dd>type <code>unsigned short</code>, range 0-65535</dd>
-
-          <dt>LongPixel, IntegerPixel</dt>
-
-          <dd>type <code>unsigned long</code>, range
-          0-4294967295</dd>
-
-          <dt>QuantumPixel</dt>
-
-          <dd>the Quantum type used by &times;Magick (depends on
-          how &times;Magick is configured) range 0-MaxRGB</dd>
-        </dl>The default is <code>Magick::CharPixel</code>. This
-        argument is ignored when <span class="arg">pixels</span> is
-        an array.
-      </dd>
+      <dd>A <a href="constants.html#StorageType">StorageType</a>
+      value that specifies the type and range of the pixel data
+      when <span class="arg">pixels</span> is a string.</dd>
     </dl>
 
     <h4>Returns</h4>

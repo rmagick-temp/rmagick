@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.135 2006/01/08 23:29:54 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.136 2006/01/10 23:58:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8158,8 +8158,8 @@ VALUE Image_image_type_eq(VALUE self, VALUE type)
 /*
     Method:     Image#image_type
     Purpose:    Call GetImageType to get the image type
-*/
 VALUE Image_image_type(VALUE self)
+*/
 {
     Image *image;
     ImageType type;

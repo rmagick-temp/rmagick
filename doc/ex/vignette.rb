@@ -7,7 +7,12 @@ require 'RMagick'
 
 img = Magick::Image.read('images/Flower_Hat.jpg').first
 
-vignette = img.vignette
+begin
+    vignette = img.vignette
+rescue NotImplementedError
+    vignette = Magick::Image.read('images/notimplemented.gif').first
+    vignette.resize!(img.columns, img.rows)
+end
 
 vignette.write('vignette.jpg')
 

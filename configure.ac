@@ -98,7 +98,7 @@ if test "$rm_have_acquirestringinfo" = yes; then
    AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
 fi
 
-AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions BilevelImageChannel])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AddNoiseImageChannel BilevelImageChannel])
 AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels ConvolveImageChannel])
 AC_CHECK_FUNCS([EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
 AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])

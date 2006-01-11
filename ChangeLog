@@ -1,5 +1,6 @@
 RMagick 1.10.0
-    o Added vignette method to the Image class
+    o Added add_noise_channel method to Image class (available with ImageMagick 6.2.5)
+    o Added vignette method to the Image class (available with ImageMagick 6.2.6)
     o Added crop_resize method to the Image class (thanks to Jerret Taylor for
       the suggestion and original code)
     o Added export_pixels_to_str method to the Image class

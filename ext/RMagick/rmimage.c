@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.136 2006/01/10 23:58:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.137 2006/01/11 23:53:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -82,14 +82,50 @@ VALUE
 Image_add_noise(VALUE self, VALUE noise)
 {
     Image *image, *new_image;
-    NoiseType nt;
+    NoiseType noise_type;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
 
-    VALUE_TO_ENUM(noise, nt, NoiseType);
-    new_image = AddNoiseImage(image, nt, &exception);
+    GetExceptionInfo(&exception);
+    VALUE_TO_ENUM(noise, noise_type, NoiseType);
+
+    new_image = AddNoiseImage(image, noise_type, &exception);
+    HANDLE_ERROR
+    return rm_image_new(new_image);
+}
+
+/*
+    Method:     Image#add_noise_channel(noise_type[,channel...])
+    Purpose:    add random noise to a copy of the image
+    Returns:    a new image
+*/
+VALUE
+Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *new_image;
+    NoiseType noise_type;
+    ExceptionInfo exception;
+    ChannelType channels;
+
+    channels = extract_channels(&argc, argv);
+
+    // There must be 1 remaining argument.
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "missing noise type argument");
+    }
+    else if (argc > 1)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+    VALUE_TO_ENUM(argv[0], noise_type, NoiseType);
+    channels &= ~OpacityChannel;
+
+    new_image = AddNoiseImageChannel(image, channels, noise_type, &exception);
     HANDLE_ERROR
     return rm_image_new(new_image);
 }
@@ -8761,12 +8797,14 @@ static ChannelType extract_channels(
         *argc -= 1;
     }
 
-#if defined(HAVE_ALLCHANNELS)
     if (channels == 0)
     {
+#if defined(HAVE_ALLCHANNELS)
         channels = AllChannels;
-    }
+#else
+        channels = 0xff;
 #endif
+    }
 
     return channels;
 }

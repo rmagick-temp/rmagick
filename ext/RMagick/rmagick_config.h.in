@@ -5,6 +5,8 @@
 #undef HAVE_ACQUIRESTRINGINFO
 /* GraphicsMagick only */
 #undef HAVE_ADDDEFINITIONS
+/* Introduced in IM 6.2.5 */
+#undef HAVE_ADDNOISEIMAGECHANNEL
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_ALLCHANNELS
 /* Introduced in IM 6.0.0 */

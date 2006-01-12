@@ -97,6 +97,9 @@ float: left;
 
           <li><a href="#add_noise">add_noise</a></li>
 
+          <li><a href=
+          "#add_noise_channel">add_noise_channel</a></li>
+
           <li><a href="#affine_transform">affine_transform</a></li>
 
           <li><a href="#annotate">annotate</a></li>
@@ -118,13 +121,13 @@ float: left;
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
-
-          <li><a href="#channel_depth">channel_depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#channel_depth">channel_depth</a></li>
+
           <li><a href="#channel_extrema">channel_extrema</a></li>
 
           <li><a href="#channel_mean">channel_mean</a></li>
@@ -771,7 +774,7 @@ img = Magick::Image.read_inline(content)
     <h3 id="add_noise">add_noise</h3>
 
     <p><span class="arg">image</span>.add_noise(<span class=
-    "arg">aNoiseType</span>) -&gt; <em>anImage</em></p>
+    "arg">noise_type</span>) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -784,7 +787,7 @@ img = Magick::Image.read_inline(content)
     <h4>Arguments</h4>
 
     <p>A <a href="constants.html#NoiseType">NoiseType</a>
-    constant.</p>
+    value.</p>
 
     <h4>Returns</h4>
 
@@ -828,6 +831,54 @@ img = Magick::Image.read_inline(content)
     <h4>Magick API</h4>
 
     <p>AddNoiseImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#add_noise_channel">add_noise_channel</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="add_noise_channel">add_noise_channel</h3>
+
+    <p>image.add_noise_channel(<span class="arg">noise_type</span>
+    [,<span class="arg">channel</span>...]) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Adds random noise to the specified channel or channels in
+    the image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>noise_type</dt>
+
+      <dd>A <a href="constants.html#NoiseType">NoiseType</a>
+      value.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, adds noise to all the channels.
+      Specifying no channel arguments has the same effect as the
+      <code>add_noise</code> method, above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>AddNoiseImageChannel (available in ImageMagick 6.2.5)</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#add_noise">add_noise</a></p>
   </div>
 
   <div class="sig">
@@ -1155,7 +1206,7 @@ img = Magick::Image.read_inline(content)
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1273,7 +1324,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Arguments</h4>
 
     <p>A <a href="constants.html#ChannelType">ChannelType</a>
-    constant.</p>
+    value.</p>
 
     <h4>Returns</h4>
 
@@ -1317,7 +1368,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>channel...</dt>
 
       <dd>Zero or more <a href=
-      "constants.html#ChannelType">ChannelType</a> constants. If no
+      "constants.html#ChannelType">ChannelType</a> values. If no
       arguments are specified, the default is all channels.</dd>
     </dl>
 
@@ -2002,7 +2053,7 @@ f.color_reset!(red)
 
           <dd>A <a href=
           "constants.html#CompositeOperator">CompositeOperator</a>
-          constant.</dd>
+          value.</dd>
         </dl>
       </dd>
 
@@ -2020,7 +2071,7 @@ f.color_reset!(red)
 
           <dd>
             A <a href="constants.html#GravityType">GravityType</a>
-            constant that specifies the location of <em>img</em> on
+            value that specifies the location of <em>img</em> on
             <em>image</em>:
 
             <dl>
@@ -2075,7 +2126,7 @@ f.color_reset!(red)
 
           <dd>A <a href=
           "constants.html#CompositeOperator">CompositeOperator</a>
-          constant.</dd>
+          value.</dd>
         </dl>
       </dd>
 
@@ -2092,7 +2143,7 @@ f.color_reset!(red)
           <dt>gravity</dt>
 
           <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> constant. If
+          "constants.html#GravityType">GravityType</a> value. If
           the argument is NorthEastGravity, EastGravity, or
           SouthEastGravity, the x-offset is measured from the right
           side of the image. If the argument is SouthEastGravity,
@@ -2110,7 +2161,7 @@ f.color_reset!(red)
 
           <dd>A <a href=
           "constants.html#CompositeOperator">CompositeOperator</a>
-          constant.</dd>
+          value.</dd>
         </dl>
       </dd>
     </dl>
@@ -2458,7 +2509,7 @@ f2 = f.copy
 
           <dd>
             A <a href="constants.html#GravityType">GravityType</a>
-            constant specifying the position of the rectangle.
+            value specifying the position of the rectangle.
 
             <dl>
               <dt>NorthWestGravity</dt>
@@ -2522,7 +2573,7 @@ f2 = f.copy
           <dt>gravity</dt>
 
           <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> constant. If
+          "constants.html#GravityType">GravityType</a> value. If
           the argument is NorthEastGravity, EastGravity, or
           SouthEastGravity, the <em>x-</em>offset is measured from
           the right side of the image. If the argument is

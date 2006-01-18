@@ -199,6 +199,13 @@ AC_CHECK_MEMBERS([Image.orientation],,,
                  #endif
                  #include "magick/api.h"])
 
+AC_CHECK_MEMBERS([ImageInfo.orientation],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
 AC_CHECK_MEMBERS([Image.quality],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H

@@ -97,6 +97,7 @@
 #undef HAVE_IMAGE_QUALITY
 /* Introduced in IM 6.0.0 */
 #undef HAVE_IMAGE_ORIENTATION
+#undef HAVE_IMAGEINFO_ORIENTATION
 /* Introduced in IM 6.2.4 */
 #undef HAVE_IMAGE_TICKS_PER_SECOND
 /* Introduced in IM 5.5.7, GM 1.1 */

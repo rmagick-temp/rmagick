@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.35 2005/12/31 14:50:35 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.36 2006/01/18 00:23:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1227,7 +1227,7 @@ Info_number_scenes_eq(VALUE self, VALUE nscenes)
 VALUE
 Info_orientation(VALUE self)
 {
-#if defined(HAVE_IMAGE_ORIENTATION)
+#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
@@ -1247,7 +1247,7 @@ Info_orientation(VALUE self)
 VALUE
 Info_orientation_eq(VALUE self, VALUE inter)
 {
-#if defined(HAVE_IMAGE_ORIENTATION)
+#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);

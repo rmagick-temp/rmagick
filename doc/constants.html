@@ -94,13 +94,13 @@
         <li><a href="#CompositeOperator">CompositeOperator</a></li>
 
         <li><a href="#CompressionType">CompressionType</a></li>
+
+        <li><a href="#DecorationType">DecorationType</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#DecorationType">DecorationType</a></li>
-
         <li><a href="#DisposeType">DisposeType</a></li>
 
         <li><a href="#EndianType">EndianType</a></li>
@@ -114,14 +114,16 @@
         <li><a href="#InterlaceType">InterlaceType</a></li>
 
         <li><a href="#MetricType">MetricType</a></li>
+
+        <li><a href="#NoiseType">NoiseType</a></li>
+
+        <li><a href="#Opacity">Opacity</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#NoiseType">NoiseType</a></li>
-
-        <li><a href="#Opacity">Opacity</a></li>
+        <li><a href="#OrientationType">OrientationType</a></li>
 
         <li><a href="#PaintMethod">PaintMethod</a></li>
 
@@ -150,11 +152,11 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.4.0 ($Date: 2006/01/08 00:21:58 $)
-    Copyright (C) 2005 by Timothy P. Hunter<br />
-    Built with ImageMagick 6.0.0 02/25/04 Q8
-    http://www.imagemagick.org<br />
-    Built for ruby 1.8.1 (2003-12-25) [i686-linux]<br />
+    <code>This is RMagick 1.10.0 ($Date: 2006/01/19 00:13:56 $)
+    Copyright (C) 2006 by Timothy P. Hunter<br />
+    Built with GraphicsMagick 1.2 unreleased Q16
+    http://www.GraphicsMagick.org/<br />
+    Built for ruby 1.8.4 (2005-12-24) [i686-linux]<br />
     Web page: http://rmagick.rubyforge.org<br />
     Email: rmagick@rubyforge.org</code></dd>
 
@@ -164,7 +166,7 @@
     <code>@(#)ImageMagick X.Y.Z MM/DD/YY Q:16
     http://www.imagemagick.org</code><br />
     or<br />
-    <code>GraphicsMagick 1.0 05/05/03 Q8
+    <code>GraphicsMagick X.Y.Z MM/DD/YY Q8
     http://www.GraphicsMagick.org/</code></dd>
 
     <dt>MaxRGB</dt>
@@ -1051,6 +1053,34 @@
     <dt>OpaqueOpacity</dt>
 
     <dd>The maximum amount of opacity.</dd>
+  </dl>
+
+  <h3 class="const" id="OrientationType">OrientationType</h3>
+
+  <p>Specify the orientation of the image pixels. See <a href=
+  "imageattrs.html#orientation">Image#orientation</a> and <a href=
+  "info.html#orientation">Info#orientation</a>. See <a href=
+  "http://jpegclub.org/exif_orientation.html">http://jpegclub.org/exif_orientation.html</a>
+  for an explanation of these values.</p>
+
+  <dl>
+    <dt>UndefinedOrientation</dt>
+
+    <dt>TopLeftOrientation</dt>
+
+    <dt>TopRightOrientation</dt>
+
+    <dt>BottomRightOrientation</dt>
+
+    <dt>BottomLeftOrientation</dt>
+
+    <dt>LeftTopOrientation</dt>
+
+    <dt>RightTopOrientation</dt>
+
+    <dt>RightBottomOrientation</dt>
+
+    <dt>LeftBottomOrientation</dt>
   </dl>
 
   <h3 class="const" id="PaintMethod">PaintMethod</h3>

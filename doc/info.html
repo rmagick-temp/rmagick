@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Image::Info - Optional method
   arguments</title>
@@ -133,6 +133,8 @@
 
     <div class="toccol">
       <ul>
+        <li><a href="#orientation">orientation</a></li>
+
         <li><a href="#page">page</a></li>
 
         <li><a href="#pointsize">pointsize</a></li>
@@ -1064,6 +1066,24 @@ self.undefine("tiff", "bits-per-sample")
     If <code>number_scenes</code> is used with a version of
     ImageMagick prior to 5.5.6, it is a synonym for the
     <code>subrange</code> attribute.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="orientation">orientation</h3>
+
+    <p><span class="arg">self</span>.orientation=<span class=
+    "arg">anOrientationType</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the orientation of the image pixels.</p>
+
+    <h4>Argument</h4>
+
+    <p>An <a href=
+    "constants.html#OrientationType">OrientationType</a> value.</p>
   </div>
 
   <div class="sig">

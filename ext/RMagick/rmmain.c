@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.109 2006/01/11 23:53:06 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.110 2006/01/20 23:59:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1124,7 +1124,28 @@ Init_RMagick(void)
         ENUMERATOR(HSLColorspace)
         ENUMERATOR(HWBColorspace)
 #if defined(HAVE_HSBCOLORSPACE)
-        ENUMERATOR(HSBColorspace)       // 6.0.0
+        ENUMERATOR(HSBColorspace)           // IM 6.0.0
+#endif
+#if defined(HAVE_CINEONLOGRGBCOLORSPACE)
+        ENUMERATOR(CineonLogRGBColorspace)  // GM 1.2
+#endif
+#if defined(HAVE_LABCOLORSPACE)
+        ENUMERATOR(LABColorspace)           // GM 1.2
+#endif
+#if defined(HAVE_REC601LUMACOLORSPACE)
+        ENUMERATOR(Rec601LumaColorspace)    // GM 1.2 && IM 6.2.2
+#endif
+#if defined(HAVE_REC601YCBCRCOLORSPACE)
+        ENUMERATOR(Rec601YCbCrColorspace)   // GM 1.2 && IM 6.2.2
+#endif
+#if defined(HAVE_REC709LUMACOLORSPACE)
+        ENUMERATOR(Rec709LumaColorspace)    // GM 1.2 && IM 6.2.2
+#endif
+#if defined(HAVE_REC709YCBCRCOLORSPACE)
+        ENUMERATOR(Rec709YCbCrColorspace)   // GM 1.2 && IM 6.2.2
+#endif
+#if defined(HAVE_LOGCOLORSPACE)
+        ENUMERATOR(LogColorspace)           // IM 6.2.3
 #endif
     END_ENUM
 
@@ -1640,7 +1661,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/01/11 23:53:06 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/01/20 23:59:46 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -250,6 +250,112 @@ if test "$rm_cv_enum_hsbcolorspace" = yes; then
   AC_DEFINE(HAVE_HSBCOLORSPACE)
 fi
 
+AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = CineonLogRGBColorspace],
+     rm_cv_enum_cineonlogrgbcolorspace='yes',
+     rm_cv_enum_cineonlogrgbcolorspace='no')])
+
+if test "$rm_cv_enum_cineonlogrgbcolorspace" = yes; then
+  AC_DEFINE(HAVE_CINEONLOGRGBCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = LABColorspace],
+     rm_cv_enum_labcolorspace='yes',
+     rm_cv_enum_labcolorspace='no')])
+
+if test "$rm_cv_enum_labcolorspace" = yes; then
+  AC_DEFINE(HAVE_LABCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for Rec601LumaColorspace enum value, rm_cv_enum_rec601lumacolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = Rec601LumaColorspace],
+     rm_cv_enum_rec601lumacolorspace='yes',
+     rm_cv_enum_rec601lumacolorspace='no')])
+
+if test "$rm_cv_enum_rec601lumacolorspace" = yes; then
+  AC_DEFINE(HAVE_REC601LUMACOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for Rec601YCbCrColorspace enum value, rm_cv_enum_rec601ycbcrcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = Rec601YCbCrColorspace],
+     rm_cv_enum_rec601ycbcrcolorspace='yes',
+     rm_cv_enum_rec601ycbcrcolorspace='no')])
+
+if test "$rm_cv_enum_rec601ycbcrcolorspace" = yes; then
+  AC_DEFINE(HAVE_REC601YCBCRCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for Rec709LumaColorspace enum value, rm_cv_enum_rec709lumacolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = Rec709LumaColorspace],
+     rm_cv_enum_rec709lumacolorspace='yes',
+     rm_cv_enum_rec709lumacolorspace='no')])
+
+if test "$rm_cv_enum_rec709lumacolorspace" = yes; then
+  AC_DEFINE(HAVE_REC709LUMACOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for Rec709YCbCrColorspace enum value, rm_cv_enum_rec709ycbcrcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = Rec709YCbCrColorspace],
+     rm_cv_enum_rec709ycbcrcolorspace='yes',
+     rm_cv_enum_rec709ycbcrcolorspace='no')])
+
+if test "$rm_cv_enum_rec709ycbcrcolorspace" = yes; then
+  AC_DEFINE(HAVE_REC709YCBCRCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for LogColorspace enum value, rm_cv_enum_logcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = LogColorspace],
+     rm_cv_enum_logcolorspace='yes',
+     rm_cv_enum_logcolorspace='no')])
+
+if test "$rm_cv_enum_logcolorspace" = yes; then
+  AC_DEFINE(HAVE_LOGCOLORSPACE)
+fi
+
+
 AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
   [AC_TRY_COMPILE(
 [#include <stdio.h>

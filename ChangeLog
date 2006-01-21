@@ -5,8 +5,11 @@ RMagick 1.10.0
       the suggestion and original code)
     o Added export_pixels_to_str method to the Image class
     o Provided default arguments to Image#export_pixels
-    o Added "order" option to the Image#ordered_dither method.
+    o Added "order" option to Image#ordered_dither
     o Added cyan, magenta, yellow, and black attribute accessors to the Pixel class
+    o Added CineonLogRGBColorspace, LABColorspace, Rec601LumaColorspace,
+      Rec601YCbCrColorspace, Rec709LumaColorspace, Rec709YCbCrColorspace,
+      LogColorspace enumerators to the ColorspaceType enumeration class.
     o Fixed bug #2844, Image#to_blob exits if the image is a 0x0 JPEG
     o Fixed bug #2688, Image#annotate, Draw#get_multiline_type_metrics handle
       newline characters properly

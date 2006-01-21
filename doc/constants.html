@@ -152,7 +152,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.10.0 ($Date: 2006/01/19 00:13:56 $)
+    <code>This is RMagick 1.10.0 ($Date: 2006/01/21 15:27:19 $)
     Copyright (C) 2006 by Timothy P. Hunter<br />
     Built with GraphicsMagick 1.2 unreleased Q16
     http://www.GraphicsMagick.org/<br />
@@ -306,6 +306,13 @@
   files.</span> See <a href=
   "imageattrs.html#colorspace">colorspace</a>.</p>
 
+  <p>Each version of ImageMagick and GraphicsMagick defines a
+  subset of the colorspaces listed below. To list the subset
+  supported by your version, issue the command:</p>
+  <pre class="example">
+ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
+</pre>
+
   <dl>
     <dt>UndefinedColorspace</dt>
 
@@ -317,7 +324,7 @@
 
     <dt>GRAYColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>Full-range grayscale</dd>
 
     <dt>TransparentColorspace</dt>
 
@@ -331,19 +338,23 @@
 
     <dt>XYZColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>CIE XYZ</dd>
+
+    <dt>YCCColorspace</dt>
+
+    <dd>Kodak PhotoCD PhotoYCC</dd>
 
     <dt>YCbCrColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>&nbsp; </dd>
 
     <dt>YIQColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>&nbsp; </dd>
 
     <dt>YPbPrColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>&nbsp; </dd>
 
     <dt>YUVColorspace</dt>
 
@@ -360,17 +371,56 @@
 
     <dt>SRGBColorspace</dt>
 
-    <dd>In &times;Magick, this constant is named sRGBColorspace,
-    but since Ruby constants must start with an uppercase letter, I
-    had to change it.</dd>
+    <dd>Kodak PhotoCD sRGB. In &times;Magick, this constant is
+    named sRGBColorspace, but since Ruby constants must start with
+    an uppercase letter, I had to change it.</dd>
 
     <dt>HSLColorspace</dt>
 
-    <dd>Available in ImageMagick 5.5.7.</dd>
+    <dd>Hue, saturation, luminosity</dd>
 
     <dt>HWBColorspace</dt>
 
-    <dd>Available in ImageMagick 5.5.7.</dd>
+    <dd>Hue, whiteness, blackness</dd>
+
+    <dt>HSBColorspace</dt>
+
+    <dd>&nbsp; </dd>
+
+    <dt>LogColorspace</dt>
+
+    <dd>&nbsp; </dd>
+
+    <dt>LABColorspace</dt>
+
+    <dd>&nbsp; </dd>
+  </dl>
+
+  <p>The colorspaces in this group are typically associated with the DPX
+  and Cineon image formats used in the motion picture industry.</p>
+
+  <dl>
+    <dt>CineonLogRGBColorspace</dt>
+
+    <dd>A logarithmic RGB space based on Kodak's Cineon log
+    definition. RGB data with Cineon Log scaling, 2.048 density
+    range.</dd>
+
+    <dt>Rec601LumaColorspace</dt>
+
+    <dd>Luma (Y) according to ITU-R 601</dd>
+
+    <dt>Rec601YCbCrColorspace</dt>
+
+    <dd>YCbCr according to ITU-R 601</dd>
+
+    <dt>Rec709LumaColorspace</dt>
+
+    <dd>Luma (Y) according to ITU-R 709</dd>
+
+    <dt>Rec709YCbCrColorspace</dt>
+
+    <dd>YCbCr according to ITU-R 709</dd>
   </dl>
 
   <h3 class="const" id="ComplianceType">ComplianceType</h3>
@@ -451,10 +501,9 @@
 
     <dt>PlusCompositeOp</dt>
 
-    <dd class="imquote">The result is just the sum of
-    the&nbsp;image data. Output values are cropped to 255 (no
-    overflow). This operation is independent of the matte
-    channels.</dd>
+    <dd class="imquote">The result is just the sum of the image
+    data. Output values are cropped to 255 (no overflow). This
+    operation is independent of the matte channels.</dd>
 
     <dt>MinusCompositeOp</dt>
 
@@ -533,7 +582,7 @@
 
     <dt>DissolveCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DisplaceCompositeOp</dt>
 
@@ -544,15 +593,15 @@
 
     <dt>ModulateCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>ThresholdCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>NoCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DarkenCompositeOp</dt>
 
@@ -597,7 +646,7 @@
 
     <dt>OverlayCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>CopyCyanCompositeOp</dt>
 
@@ -698,8 +747,8 @@
     <dt>BZipCompression</dt>
 
     <dd class="imquote">BZip (Burrows-Wheeler block-sorting text
-    compression algorithm and Huffman coding)&nbsp; as used by
-    bzip2 utilities</dd>
+    compression algorithm and Huffman coding)  as used by bzip2
+    utilities</dd>
 
     <dt>FaxCompression</dt>
 
@@ -952,11 +1001,11 @@
 
     <dt>ColorSeparationMatteType</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>OptimizeType</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
   </dl>
 
   <h3 class="const" id="InterlaceType">InterlaceType</h3>
@@ -1293,12 +1342,12 @@
     <dd>Decreases weight by 100</dd>
   </dl>
 
-  <p class="spacer">&nbsp;</p>
+  <p class="spacer"> </p>
 
   <div class="nav">
-    &laquo;&nbsp;<a href="info.html">Prev</a> | <a href=
-    "index.html">Contents</a> | <a href=
-    "rvgtut.html">Next</a>&nbsp;&raquo;
+    &laquo; <a href="info.html">Prev</a> | <a href=
+    "index.html">Contents</a> | <a href="rvgtut.html">Next</a>
+    &raquo;
   </div>
 </body>
 </html>

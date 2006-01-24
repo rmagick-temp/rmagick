@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: ImageMagick/GraphicsMagick Conventions</title>
   <meta http-equiv="Content-Type" content=
@@ -133,13 +133,13 @@
     "http://www.w3.org/TR/SVG/types.html#ColorKeywords">SVG color
     name</a> (similar to the X color names), or</li>
 
-    <li>a hex digit string in one of the formats shown in the
-    following table.</li>
+    <li>a string in one of the formats shown in the following
+    table.</li>
   </ol>
 
-  <table id="rgbfmts" summary="RGB formats">
+  <table id="rgbfmts" summary="color name formats">
     <caption>
-      RGB color name formats
+      Color name formats
     </caption>
 
     <tr class="oddrow">
@@ -191,16 +191,46 @@
     </tr>
 
     <tr class="oddrow">
+      <td>cmyk(c,m,y,k)</td>
+
+      <td>CMYK functional notation. c, m, y, and k are either 4
+      integers 0-MaxRGB or 4 percentages 0%-100%.</td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>cmyka(c,m,y,a)</td>
+
+      <td>CMYK functional notation plus the alpha channel.</td>
+    </tr>
+
+    <tr class="oddrow">
       <td>rgb(r,g,b)</td>
 
-      <td>SVG functional notation. r, g, and b are either three
-      integers 0-255 or 3 percentanges 0%-100%.</td>
+      <td>SVG functional notation. r, g, and b are either 3
+      integers 0-MaxRGB or 3 percentages 0%-100%.</td>
     </tr>
 
     <tr class="evenrow">
       <td>rgb(r,g,b,a)</td>
 
       <td>SVG functional notation plus the alpha channel.</td>
+    </tr>
+
+    <tr class="oddrow">
+      <td>hsl(h,s,l)</td>
+
+      <td>Hue, saturation, lightness. The <em>hue</em> value (h)
+      should be a number in the range 0 &lt;= n &lt; 360. The
+      <em>saturation</em> (s) and <em>lightness</em> (l) values
+      should be numbers in the range 0 &lt;= n &lt;= 100.
+      <em>(Available in ImageMagick 6.2.6)</em></td>
+    </tr>
+
+    <tr class="evenrow">
+      <td>hsla(h,s,l,a)</td>
+
+      <td>Hue, saturation, lightness, plus the alpha channel.
+      <em>(Available in ImageMagick 6.2.6)</em></td>
     </tr>
   </table>
 
@@ -423,7 +453,7 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
     an image.</p>
   </div>
 
-  <p class="spacer">&nbsp;</p>
+  <p class="spacer"> </p>
 
   <div class="nav">
     &laquo; <a href="usage.html">Prev</a> | <a href=

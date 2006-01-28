@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<!-- $Id: rvgtut.html,v 1.8 2006/01/28 21:01:10 rmagick Exp $ -->
+<!-- $Id: rvgtut.html,v 1.9 2006/01/28 23:40:31 rmagick Exp $ -->
 
 <head>
   <meta name="generator" content=
@@ -83,7 +83,7 @@
 19          head.polygon(30,0, 70,5, 30,10, 62,25, 23,20).styles(:fill=&gt;'orange')
 20      end
 21
-22      foot = rvg::group.new do |_foot|
+22      foot = RVG::Group.new do |_foot|
 23          _foot.path('m0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
 24                styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
 25      end
@@ -211,7 +211,7 @@
  9      canvas.g.translate(100, 150).rotate(-30) do |body|
 10          body.styles(:fill=&gt;'yellow', :stroke=&gt;'black', :stroke_width=&gt;2)
 11          body.ellipse(50, 30)
-12          body.rect(45, 20, -20, -10).skewx(-35)
+12          body.rect(45, 20, -20, -10).skewX(-35)
 13      end
 </pre>
 

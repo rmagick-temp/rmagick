@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<!-- $Id: rvgtut.html,v 1.7 2005/11/26 15:03:05 rmagick Exp $ -->
+<!-- $Id: rvgtut.html,v 1.8 2006/01/28 21:01:10 rmagick Exp $ -->
 
 <head>
   <meta name="generator" content=
@@ -63,17 +63,17 @@
   </div>
   <pre class="example">
  1  require 'rvg/rvg'
- 2  include magick
+ 2  include Magick
  3
  4  RVG::dpi = 72
  5
- 6  rvg = rvg.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
+ 6  rvg = RVG.new(2.5.in, 2.5.in).viewbox(0,0,250,250) do |canvas|
  7      canvas.background_fill = 'white'
  8
  9      canvas.g.translate(100, 150).rotate(-30) do |body|
 10          body.styles(:fill=&gt;'yellow', :stroke=&gt;'black', :stroke_width=&gt;2)
 11          body.ellipse(50, 30)
-12          body.rect(45, 20, -20, -10).skewx(-35)
+12          body.rect(45, 20, -20, -10).skewX(-35)
 13      end
 14
 15      canvas.g.translate(130, 83) do |head|
@@ -401,7 +401,7 @@
 
   <h2>Lines 22-25</h2>
   <pre class="example">
-22      foot = rvg::group.new do |_foot|
+22      foot = RVG::Group.new do |_foot|
 23          _foot.path('m0,0 v30 l30,10 l5,-10, l-5,-10 l-30,10z').
 24                styles(:stroke_width=&gt;2, :fill=&gt;'orange', :stroke=&gt;'black')
 25      end

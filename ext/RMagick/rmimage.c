@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.139 2006/01/18 00:22:33 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.140 2006/01/29 20:25:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1814,8 +1814,8 @@ static VALUE composite(
     GravityType gravity;
     MagickEnum *magick_enum;
     ExceptionInfo exception;
-    long x_offset;
-    long y_offset;
+    signed long x_offset;
+    signed long y_offset;
 
     Data_Get_Struct(self, Image, image);
 
@@ -1835,38 +1835,38 @@ static VALUE composite(
                     y_offset = 0;
                 break;
                 case NorthGravity:
-                    x_offset = (image->columns - comp_image->columns) / 2;
+                    x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
                     y_offset = 0;
                 break;
                 case NorthEastGravity:
-                    x_offset = image->columns - comp_image->columns;
+                    x_offset = (long)(image->columns) - (long)(comp_image->columns);
                     y_offset = 0;
                 break;
                 case WestGravity:
                     x_offset = 0;
-                    y_offset = (image->rows - comp_image->rows) / 2;
+                    y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
                 break;
                 case StaticGravity:
                 case CenterGravity:
                 default:
-                    x_offset = (image->columns - comp_image->columns) / 2;
-                    y_offset = (image->rows - comp_image->rows) / 2;
+                    x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
+                    y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
                 break;
                 case EastGravity:
-                    x_offset = image->columns - comp_image->columns;
-                    y_offset = (image->rows - comp_image->rows) / 2;
+                    x_offset = (long)(image->columns) - (long)(comp_image->columns);
+                    y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
                 break;
                 case SouthWestGravity:
                     x_offset = 0;
-                    y_offset = image->rows - comp_image->rows;
+                    y_offset = (long)(image->rows) - (long)(comp_image->rows);
                 break;
                 case SouthGravity:
-                    x_offset = (image->columns - comp_image->columns) / 2;
-                    y_offset = image->rows - comp_image->rows;
+                    x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
+                    y_offset = (long)(image->rows) - (long)(comp_image->rows);
                 break;
                 case SouthEastGravity:
-                    x_offset = image->columns - comp_image->columns;
-                    y_offset = image->rows - comp_image->rows;
+                    x_offset = (long)(image->columns) - (long)(comp_image->columns);
+                    y_offset = (long)(image->rows) - (long)(comp_image->rows);
                 break;
             }
             break;
@@ -1890,15 +1890,15 @@ static VALUE composite(
             {
                 case NorthEastGravity:
                 case EastGravity:
-                    x_offset = image->columns - comp_image->columns - x_offset;
+                    x_offset = (long)(image->columns) - (long)(comp_image->columns) - x_offset;
                     break;
                 case SouthWestGravity:
                 case SouthGravity:
-                    y_offset = image->rows - comp_image->rows - y_offset;
+                    y_offset = (long)(image->rows) - (long)(comp_image->rows) - y_offset;
                     break;
                 case SouthEastGravity:
-                    x_offset = image->columns - comp_image->columns - x_offset;
-                    y_offset = image->rows - comp_image->rows - y_offset;
+                    x_offset = (long)(image->columns) - (long)(comp_image->columns) - x_offset;
+                    y_offset = (long)(image->rows) - (long)(comp_image->rows) - y_offset;
                     break;
                 default:
                     Data_Get_Struct(argv[1], MagickEnum, magick_enum);
@@ -1910,16 +1910,6 @@ static VALUE composite(
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
             break;
-    }
-
-    // CompositeImage doesn't react well to negative offsets!
-    if (x_offset < 0)
-    {
-        x_offset = 0;
-    }
-    if (y_offset < 0)
-    {
-        y_offset = 0;
     }
 
     if (bang)

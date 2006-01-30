@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.140 2006/01/29 20:25:13 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.141 2006/01/30 23:08:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1267,7 +1267,7 @@ Image_color_profile(VALUE self)
 
     Data_Get_Struct(self, Image, image);
 
-    str_info = GetImageProfile(image, "icc");
+    str_info = (StringInfo *)GetImageProfile(image, "icc");
     if (!str_info)
     {
         profile = Qnil;
@@ -2816,7 +2816,7 @@ Image_each_profile(VALUE self)
     {
         rb_ary_store(ary, 0, rb_str_new2(name));
 
-        str_info = GetImageProfile(image, name);
+        str_info = (StringInfo *)GetImageProfile(image, name);
         if (str_info)
         {
             str = StringInfoToString(str_info);
@@ -4244,7 +4244,7 @@ Image_iptc_profile(VALUE self)
 
     profile = Qnil;
 
-    str_info = GetImageProfile(image, "iptc");
+    str_info = (StringInfo *)GetImageProfile(image, "iptc");
     if (str_info)
     {
         str = StringInfoToString(str_info);

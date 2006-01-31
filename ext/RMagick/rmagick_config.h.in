@@ -104,6 +104,8 @@
 #undef HAVE_IMAGE_TICKS_PER_SECOND
 /* Introduced in IM 5.5.7, GM 1.1 */
 #undef HAVE_IMPORTIMAGEPIXELS
+/* Introduced in IM 6.2.6-1 */
+#undef HAVE_INTERPRETIMAGEATTRIBUTES
 #undef HAVE_INTTYPES_H
 /* Introduced in IM 6.2.5 */
 #undef HAVE_ISCOLORSIMILAR

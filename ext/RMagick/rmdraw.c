@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.27 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.28 2006/01/31 23:04:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -413,7 +413,11 @@ VALUE Draw_annotate(
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Translate & store in Draw structure
+#if defined(HAVE_INTERPRETIMAGEATTRIBUTES)
+    draw->info->text = InterpretImageAttributes(NULL, image, STRING_PTR(text));
+#else
     draw->info->text = TranslateText(NULL, image, STRING_PTR(text));
+#endif
     if (!draw->info->text)
     {
            rb_raise(rb_eArgError, "no text");
@@ -1252,7 +1256,7 @@ get_type_metrics(
      VALUE self,
      get_type_metrics_func_t *getter)
 {
-     static char attrs[] = "bcdefghiklmnopqrstuwxyz";
+     static char attrs[] = "OPbcdefghiklmnopqrstuwxyz[@#%";
  #define ATTRS_L (sizeof(attrs)-1)
      Image *image;
      Draw *draw;
@@ -1304,7 +1308,11 @@ get_type_metrics(
      }
 
      Data_Get_Struct(self, Draw, draw);
+#if defined(HAVE_INTERPRETIMAGEATTRIBUTES)
+     draw->info->text = InterpretImageAttributes(NULL, image, text);
+#else
      draw->info->text = TranslateText(NULL, image, text);
+#endif
      if (!draw->info->text)
      {
          rb_raise(rb_eArgError, "no text to measure");

@@ -144,7 +144,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels InterpretImageAttributes])
 AC_CHECK_FUNCS([IsColorSimilar NegateImageChannel NormalizeImageChannel])
 AC_CHECK_FUNCS([ParseSizeGeometry PosterizeImage PreviewImage QuantumOperatorRegionImage])
 AC_CHECK_FUNCS([RadialBlurImage RandomChannelThresholdImage RandomThresholdImageChannel])

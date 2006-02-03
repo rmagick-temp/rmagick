@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.30 2006/01/06 23:55:53 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.31 2006/02/03 23:26:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -529,6 +529,7 @@ ImageList_to_blob(VALUE self)
     Image *images;
     Info *info;
     volatile VALUE info_obj;
+	volatile VALUE blob_str;
     void *blob = NULL;
     size_t length = 0;
     ExceptionInfo exception;
@@ -564,7 +565,15 @@ ImageList_to_blob(VALUE self)
     rm_split(images);
     HANDLE_ERROR
 
-    return (blob && length) ? rb_str_new(blob, length) : Qnil;
+    if (length == 0 || !blob)
+    {
+        return Qnil;
+    }
+
+    blob_str = rb_str_new(blob, length);
+ 	magick_free((void*)blob);
+
+    return blob_str;
 }
 
 

@@ -13,7 +13,6 @@ DESCRIPTION
   s.homepage = %q{http://rubyforge.org/projects/rmagick}
   s.files = Dir.glob('**/*')
   s.require_paths = %w{lib .}
-  s.autorequire = %q{RMagick}
   s.rubyforge_project = %q{rmagick}
   s.extensions = %w{configure}
   s.has_rdoc = false

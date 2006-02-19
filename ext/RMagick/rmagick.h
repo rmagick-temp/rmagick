@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.104 2006/01/11 23:53:06 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.105 2006/02/19 17:12:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -517,6 +517,7 @@ Pixel_##_cmyk_channel_(VALUE self) \
 // rmdraw.c
 ATTR_WRITER(Draw, affine)
 ATTR_WRITER(Draw, align)
+ATTR_WRITER(Draw, border_color)
 ATTR_WRITER(Draw, decorate)
 ATTR_WRITER(Draw, density)
 ATTR_WRITER(Draw, encoding)

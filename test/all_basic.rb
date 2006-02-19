@@ -3,6 +3,20 @@ require 'RMagick'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
+
+module Test
+	module Unit
+		class TestCase
+			alias :_old_run_ :run
+			def run(result, &blk)
+				puts "Running #{@method_name}"
+				_old_run_(result, &blk)
+			end
+		end
+	end
+end
+
+
 $:.push('.')
 
 IMAGES_DIR = '../doc/ex/images'

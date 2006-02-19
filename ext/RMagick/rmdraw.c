@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.28 2006/01/31 23:04:14 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.29 2006/02/19 17:12:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -45,6 +45,21 @@ Draw_align_eq(VALUE self, VALUE align)
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(align, draw->info->align, AlignType);
+    return self;
+}
+
+/*
+    Method:     Draw#border_color=
+    Purpose:    border_color attribute writer
+*/
+VALUE
+Draw_border_color_eq(VALUE self, VALUE border_color)
+{
+    Draw *draw;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+    Color_to_PixelPacket(&draw->info->border_color, border_color);
     return self;
 }
 

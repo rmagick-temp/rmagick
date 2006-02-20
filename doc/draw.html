@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Mac OS X (vers 1st September 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -1135,7 +1135,10 @@ draw.inspect &raquo;
     <h4>Arguments</h4>
 
     <p>A <a href="constants.html#PaintMethod">PaintMethod</a>
-    constant.</p>
+    constant. If you use the <code>FillToBorderMethod</code>,
+    assign the border color with the
+    <code>Draw#border_color=</code> attribute before calling
+    <a href="#draw">draw</a>.</p>
 
     <h4>Returns</h4>
 
@@ -1143,8 +1146,13 @@ draw.inspect &raquo;
 
     <h4>Example</h4>
     <pre>
-  draw.color(x, y, Magick::ReplaceMethod)
+  draw.border_color = 'black'
+  draw.color(x, y, Magick::FillToBorderMethod)
 </pre>
+
+    <h4>See Also</h4>
+
+    <p><a href="#matte">matte</a></p>
   </div>
 
   <div class="sig">
@@ -1686,7 +1694,9 @@ draw.decorate(Magick::LineThroughDecoration)
 
           <dd>Make all the pixels surrounding the pixel at
           <em>(x,y)</em> transparent, until encountering pixels
-          that match the border color.</dd>
+          that match the border color. Assign the border color with
+          the <code>Draw#border_color=</code> attribute before
+          calling <a href="#draw">draw</a>.</dd>
 
           <dt>ResetMethod</dt>
 
@@ -1699,7 +1709,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p>self</p>
 
-    <h4>See also</h4><a href=
+    <h4>See also</h4><a href="#color">color</a><a href=
     "image2.html#matte_point">matte_point</a>, <a href=
     "image2.html#matte_replace">matte_replace</a>, <a href=
     "image2.html#matte_floodfill">matte_floodfill</a>, <a href=

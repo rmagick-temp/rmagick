@@ -349,23 +349,47 @@
 
     <p>ProfileImage</p>
 
-    <h4>Note</h4>
+    <h4>Notes</h4>
 
-    <p>&times;Magick does not automatically remove profiles when
-    resizing images. If you are trying to make your JPEG thumbnail
-    images as small as possible, use <code>profile!</code> to
-    remove any profiles from the image as well. Also see <a href=
-    "#strip_bang">strip!</a></p>
+    <ol>
+      <li>To extract a profile from an image, simply convert the
+      image, specifying the profile name (APP1, 8BIM, ICM, IPTC,
+      etc.) as the format of the output image. There are at least
+      two ways to do this.
+
+        <ol style="list-style-type: lower-alpha">
+          <li>Write the image to a file using the profile name as
+          the filename extension ("myimage.app1", for example).
+            <pre>
+img.write("myimage.app1")
+</pre>
+          </li>
+
+          <li>To capture the profile information in a string,
+          assign the profile name to the <a href=
+          "imageattrs.html#format">format=</a> attribute and call
+          <a href="image3.html#to_blob">to_blob.</a>
+            <pre>
+img.format = 'iptc'
+profile_str = img.to_blob
+</pre>
+          </li>
+        </ol>
+      </li>
+
+      <li>&times;Magick does not automatically remove profiles when
+      resizing images. If you are trying to make your JPEG
+      thumbnail images as small as possible, use
+      <code>profile!</code> to remove any profiles from the image
+      as well. Also see <a href="#strip_bang">strip!</a></li>
+    </ol>
   </div>
 
   <div class="sig">
     <h3 id="properties">properties</h3>
 
     <p><span class="arg">image</span>.properties <span class=
-    "arg">[ {|name,value| block} ]</span> -&gt;
-    <em>image</em><br />
-    <span class="arg">image</span>.properties -&gt;
-    <em>aHash</em></p>
+    "arg">[ {|name,value| block} ]</span> -&gt; <em>aHash</em></p>
   </div>
 
   <div class="desc">
@@ -1168,8 +1192,8 @@ random_threshold_channel(geom, RedChannel)
 
       <dd>A <a href=
       "constants.html#ColorspaceType"><code>ColorspaceType</code></a>
-      value. <span class="imquote">Empirical evidence suggests
-      that distances in YUV or YIQ correspond to perceptual color
+      value. <span class="imquote">Empirical evidence suggests that
+      distances in YUV or YIQ correspond to perceptual color
       differences more closely than do distances in RGB space. The
       image is then returned to RGB colorspace after color
       reduction.</span></dd>
@@ -1420,7 +1444,7 @@ random_threshold_channel(geom, RedChannel)
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-    /></a> <img src="ex/images/spin.gif" alt="" style=
+     /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2949,7 +2973,7 @@ end
       "arg">radius</span> is 0 then &times;Magick will choose a
       suitable value. <span class="arg">Sigma</span> must be
       non-zero. Choose a very small value for <span class=
-     "arg">sigma</span> to produce a "hard" edge.</dd>
+      "arg">sigma</span> to produce a "hard" edge.</dd>
     </dl>
 
     <h4>Returns</h4>

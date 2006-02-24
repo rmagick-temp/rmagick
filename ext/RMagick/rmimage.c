@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.141 2006/01/30 23:08:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.142 2006/02/24 00:15:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2560,7 +2560,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     union
     {
         volatile Quantum *i;
-        volatile float *f;
+        volatile double *f;
         volatile void *v;
     } pixels;
 
@@ -2576,13 +2576,13 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     map     = STRING_PTR_LEN(argv[4], mapL);
     if (argc == 6)
     {
-        stg_type = RTEST(argv[5]) ? FloatPixel : FIX_STG_TYPE;
+        stg_type = RTEST(argv[5]) ? DoublePixel : FIX_STG_TYPE;
     }
 
     // Compute the size of the pixel array and allocate the memory.
     npixels = columns * rows * mapL;
     pixels.v = stg_type == FIX_STG_TYPE ? (void *) ALLOC_N(Quantum, npixels)
-                                        : (void *) ALLOC_N(float, npixels);
+                                        : (void *) ALLOC_N(double, npixels);
 
     // Create the Ruby array for the pixels. Return this even if DispatchImage fails.
     pixels_ary = rb_ary_new();
@@ -2617,9 +2617,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     {
         for (n = 0; n < npixels; n++)
         {
-            // The ImageMagick doc for DispatchImage says that the returned pixel data
-            // is normalized, but it isn't, so we have to normalize it here.
-            rb_ary_push(pixels_ary, rb_float_new((double)pixels.f[n]/((double)MaxRGB)));
+            rb_ary_push(pixels_ary, rb_float_new((double)pixels.f[n]));
         }
     }
 
@@ -3925,6 +3923,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     StorageType stg_type = CharPixel;
     size_t type_sz, map_l;
     volatile int *pixels = NULL;
+    volatile double *fpixels = NULL;
     volatile void *buffer;
     unsigned int okay;
 
@@ -3976,6 +3975,12 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case LongPixel:
                 type_sz = sizeof(unsigned long);
                 break;
+            case DoublePixel:
+                type_sz = sizeof(double);
+                break;
+            case FloatPixel:
+                type_sz = sizeof(float);
+                break;
 #if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
@@ -3994,7 +3999,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         {
             rb_raise(rb_eArgError, "pixel buffer must contain an exact multiple of the map length");
         }
-        if (buffer_l/type_sz < npixels)
+        if (buffer_l / type_sz < npixels)
         {
             rb_raise(rb_eArgError, "pixel buffer too small (need %lu channel values, got %ld)"
                    , npixels, buffer_l/type_sz);
@@ -4018,22 +4023,32 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
                    , npixels, RARRAY(pixel_ary)->len);
         }
 
-        // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
-        // in case of an exception.
-        pixels = ALLOC_N(int, npixels);
-        if (!pixels)        // app recovered from exception...
+        if (stg_type == DoublePixel || stg_type == FloatPixel)
         {
-            return self;
+            // Get an array for double pixels. Use Ruby's memory so GC will clean up after
+            // us in case of an exception.
+            fpixels = ALLOC_N(double, npixels);
+            for (n = 0; n < npixels; n++)
+            {
+                fpixels[n] = NUM2DBL(rb_ary_entry(pixel_ary, n));
+            }
+            buffer = (void *) fpixels;
+            stg_type = DoublePixel;
         }
-
-        for (n = 0; n < npixels; n++)
+        else
         {
-            volatile VALUE p = rb_ary_entry(pixel_ary, n);
-            long q = ScaleQuantumToLong(NUM2LONG(p));
-            pixels[n] = (int) q;
+            // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
+            // in case of an exception.
+            pixels = ALLOC_N(int, npixels);
+            for (n = 0; n < npixels; n++)
+            {
+                volatile VALUE p = rb_ary_entry(pixel_ary, n);
+                long q = ScaleQuantumToLong(NUM2LONG(p));
+                pixels[n] = (int) q;
+            }
+            buffer = (void *) pixels;
+            stg_type = IntegerPixel;
         }
-        buffer = (void *) pixels;
-        stg_type = IntegerPixel;
     }
 
 
@@ -4043,6 +4058,10 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     if (pixels)
     {
         xfree((void *)pixels);
+    }
+    if (fpixels)
+    {
+        xfree((void *)fpixels);
     }
 
     if (!okay)

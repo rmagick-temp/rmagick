@@ -1,8 +1,10 @@
 RMagick 1.10.1
-	o Fix bug #3437, memory leak in ImageList#to_blob
-	o Fix bug #3363, Image#composite doesn't work when the source image
-	  is bigger than the destination
-	o Feature #3597, add border_color attribute to the Draw class
+    o Fix bug #3437, memory leak in ImageList#to_blob
+    o Fix bug #3363, Image#composite doesn't work when the source image
+      is bigger than the destination
+    o Fix bug #3635, Image#import_pixels doesn't accept FloatPixel or DoublePixel
+      storage types
+    o Feature #3597, add border_color attribute to the Draw class
 RMagick 1.10.0
     o Added add_noise_channel method to Image class (available with ImageMagick 6.2.5)
     o Added vignette method to the Image class (available with ImageMagick 6.2.6)

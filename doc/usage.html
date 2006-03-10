@@ -80,6 +80,10 @@
   #footnotes h5 {
     display: none;
   }
+  .sup {
+    vertical-align: super;
+    font-size: x-small;
+}
 
   /*]]>*/
 </style>
@@ -123,8 +127,8 @@
 
   <p>Let's look at the RMagick equivalent of "Hello, world". This
   program reads an image file named "Cheetah.jpg" and
-  displays<sup><a href="#display">1</a></sup> it on your
-  monitor.</p>
+  displays<span class="sup"><a href="#display">1</a></span> it on
+  your monitor</p>
   <pre class="example">
 1. require 'RMagick'
 2. include Magick
@@ -140,7 +144,8 @@
   work on native MS Windows. You must use an external viewer to
   view the images you create.</p>
 
-  <p>Line 1 requires the RMagick.rb file, which defines the
+  <p>Line 1 requires <span class="sup"><a href=
+  "#rubygems">2</a></span> the RMagick.rb file, which defines the
   <b>Magick</b> module. The Magick module contains 3 major classes,
   <b>ImageList</b>, <b>Image</b>, and <b>Draw</b>. This section -
   <em>Basic Comcepts</em> - describes the ImageList and Image
@@ -1163,7 +1168,7 @@ exit
       extends to the right. The y axis extends downward. The units
       are pixels. 0&deg; is at 3 o'clock and rotation is clockwise.
       The units of rotation are usually degrees.<sup><a href=
-      "#degrees">2</a></sup></p>
+      "#degrees">3</a></sup></p>
 
       <p>You can change the default coordinate system by specifying
       a <em>scaling</em>, <em>rotation</em>, or
@@ -1346,13 +1351,32 @@ exit
   <div>
     <h5 id="footnotes">Footnotes</h5>
 
-    <p id="display"><sup>1</sup>The <code>display</code> and
-    <code>animate</code> methods do not work on MS Windows. You
-    will have to write the image to a file and view it with a
-    separate image viewer.</p>
+    <p id="display"><span class="sup">1</span>The
+    <code>display</code> and <code>animate</code> methods do not
+    work on MS Windows. You will have to write the image to a file
+    and view it with a separate image viewer.</p>
 
-    <p id="degrees"><sup>2</sup>The rotation attributes
-    <code>rx</code> and <code>ry</code> in the <a href=
+    <p id="rubygems"><span class="sup">2</span>If you installed
+    RMagick using <a href="http://docs.rubygems.org/">Rubygems</a>
+    you must set up the RubyGems environment before using RMagick.
+    You can do one of</p>
+
+    <ol>
+      <li>add the <code>require 'rubygems'</code> statement to your
+      program</li>
+
+      <li>use the -rubygems command line option</li>
+
+      <li>add <code>rubygems</code> to the RUBYOPT environment
+      variable</li>
+    </ol>
+
+    <p>See the RubyGems <a href=
+    "http://docs.rubygems.org/read/chapter/3#page70">doc</a> for
+    more information.</p>
+
+    <p id="degrees"><span class="sup">3</span>The rotation
+    attributes <code>rx</code> and <code>ry</code> in the <a href=
     "struct.html#AffineMatrix"><code>AffineMatrix</code></a> class
     use radians instead of degrees.</p>
   </div>

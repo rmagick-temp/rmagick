@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.38 2006/03/11 00:02:25 rmagick Exp $
+# $Id: RMagick.rb,v 1.39 2006/03/11 15:28:06 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -652,23 +652,50 @@ class Image
         self
     end
 
-    # Convenience method to resize retaining the aspect ratio.
-    # (Thanks to Robert Manni!)
-    def resize_to_fit(cols, rows)
-        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
-            resize(ncols, nrows)
-        end
-    end
-
-    def resize_to_fit!(cols, rows)
-        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
-            resize!(ncols, nrows)
-        end
-    end
-
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image
         self
+    end
+
+    # Retrieve EXIF data by entry or all. If one or more entry names specified,
+    # return the values associated with the entries. If no entries specified,
+    # return all entries and values. The return value is an array of [name,value]
+    # arrays.
+    def get_exif_by_entry(*entry)
+        ary = Array.new
+        if entry.length == 0
+            exif_data = self['EXIF:*']
+            if exif_data
+                exif_data.split("\n").each { |exif| ary.push(exif.split('=')) }
+            end
+        else
+            entry.each do |name|
+                rval = self["EXIF:#{name}"]
+                ary.push([name, rval])
+            end
+        end
+        return ary
+    end
+
+    # Retrieve EXIF data by tag number or all tag/value pairs. The return value is a hash.
+    def get_exif_by_number(*tag)
+        hash = Hash.new
+        if tag.length == 0
+            exif_data = self['EXIF:!']
+            if exif_data
+                exif_data.split("\n").each do |exif|
+                    tag, value = exif.split('=')
+                    tag = tag[1,4].hex
+                    hash[tag] = value
+                end
+            end
+        else
+            tag.each do |num|
+                rval = self["EXIF:#{'#%04X' % num}"]
+                hash[num] = rval == 'unknown' ? nil : rval
+            end
+        end
+        return hash
     end
 
     # These four methods are equivalent to the Draw#matte
@@ -718,6 +745,20 @@ class Image
         self
     end
 
+    # Convenience method to resize retaining the aspect ratio.
+    # (Thanks to Robert Manni!)
+    def resize_to_fit(cols, rows)
+        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
+            resize(ncols, nrows)
+        end
+    end
+
+    def resize_to_fit!(cols, rows)
+        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
+            resize!(ncols, nrows)
+        end
+    end
+
     # Replace matching neighboring pixels with texture pixels
     def texture_floodfill(x, y, texture)
         target = pixel_color(x, y)
@@ -727,47 +768,6 @@ class Image
     # Replace neighboring pixels to border color with texture pixels
     def texture_fill_to_border(x, y, texture)
         texture_flood_fill(border_color, texture, x, y, FillToBorderMethod)
-    end
-
-    # Retrieve EXIF data by entry or all. If one or more entry names specified,
-    # return the values associated with the entries. If no entries specified,
-    # return all entries and values. The return value is an array of [name,value]
-    # arrays.
-    def get_exif_by_entry(*entry)
-        ary = Array.new
-        if entry.length == 0
-            exif_data = self['EXIF:*']
-            if exif_data
-                exif_data.split("\n").each { |exif| ary.push(exif.split('=')) }
-            end
-        else
-            entry.each do |name|
-                rval = self["EXIF:#{name}"]
-                ary.push([name, rval])
-            end
-        end
-        return ary
-    end
-
-    # Retrieve EXIF data by tag number or all tag/value pairs. The return value is a hash.
-    def get_exif_by_number(*tag)
-        hash = Hash.new
-        if tag.length == 0
-            exif_data = self['EXIF:!']
-            if exif_data
-                exif_data.split("\n").each do |exif|
-                    tag, value = exif.split('=')
-                    tag = tag[1,4].hex
-                    hash[tag] = value
-                end
-            end
-        else
-            tag.each do |num|
-                rval = self["EXIF:#{'#%04X' % num}"]
-                hash[num] = rval == 'unknown' ? nil : rval
-            end
-        end
-        return hash
     end
 
     # Construct a view. If a block is present, yield and pass the view

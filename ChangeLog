@@ -1,3 +1,6 @@
+RMagick 1.10.2
+    o Feature #3705, add resize_to_fit (thanks to Robert Manni for the code)
+
 RMagick 1.10.1
     o Fix bug #3437, memory leak in ImageList#to_blob
     o Fix bug #3363, Image#composite doesn't work when the source image

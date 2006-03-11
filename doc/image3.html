@@ -94,6 +94,10 @@
 
           <li><a href="#resize_bang">resize!</a></li>
 
+          <li><a href="#resize_to_fit">resize_to_fit</a></li>
+
+          <li><a href="#resize_to_fit_bang">resize_to_fit!</a></li>
+
           <li><a href="#roll">roll</a></li>
 
           <li><a href="#rotate">rotate</a></li>
@@ -875,7 +879,7 @@ random_threshold_channel(geom, RedChannel)
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#change_geometry">change_geometry</a>
+    <p><a href="image1.html#change_geometry">change_geometry</a>,
     <a href="#resize_bang">resize!</a>, <a href=
     "image2.html#magnify">magnify</a>, <a href=
     "image2.html#minify">minify</a>, <a href="#sample">sample</a>,
@@ -901,7 +905,59 @@ random_threshold_channel(geom, RedChannel)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="#Image.resize">resize</a>.</p>
+    <p>In-place form of <a href="#resize">resize</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="resize_to_fit">resize_to_fit</h3>
+
+    <p><em>image</em>.resize_to_fit(<em>new_width</em>,
+    <em>new_height</em>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A convenience method. Resize the image to fit within the
+    specified dimensions while retaining the original aspect
+    ratio.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>new_width, new_height</dt>
+
+      <dd>The maximum width and height of the resized image. In
+      order to retain the aspect ratio of the input image, the
+      actual dimensions of the resized image may be different but
+      will not be larger than the specified values.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4><a href=
+    "image1.html#change_geometry">change_geometry</a>, <a href=
+    "#resize">resize</a>
+  </div>
+
+  <div class="sig">
+    <h3 id="resize_to_fit_bang">resize_to_fit!</h3>
+
+    <p><em>image</em>.resize_to_fit!(<em>new_width</em>,
+    <em>new_height</em>) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href=
+    "#resize_to_fit">resize_to_fit</a>.</p>
 
     <h4>Returns</h4>
 
@@ -1445,7 +1501,7 @@ random_threshold_channel(geom, RedChannel)
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-    /></a> <img src="ex/images/spin.gif" alt="" style=
+     /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1663,7 +1719,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 

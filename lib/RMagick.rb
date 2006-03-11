@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.37 2005/12/31 15:33:43 rmagick Exp $
+# $Id: RMagick.rb,v 1.38 2006/03/11 00:02:25 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -643,14 +643,28 @@ class Image
         copy.crop_resized!(ncols, nrows, gravity)
     end
 
-	def crop_resized!(ncols, nrows, gravity=CenterGravity)
-		if ncols != columns || nrows != rows
-		    scale = [ncols/columns.to_f, nrows/rows.to_f].max
-			resize!(scale*columns+0.5, scale*rows+0.5)
-		end
-	    crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
-	    self
-	end
+    def crop_resized!(ncols, nrows, gravity=CenterGravity)
+        if ncols != columns || nrows != rows
+            scale = [ncols/columns.to_f, nrows/rows.to_f].max
+            resize!(scale*columns+0.5, scale*rows+0.5)
+        end
+        crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
+        self
+    end
+
+    # Convenience method to resize retaining the aspect ratio.
+    # (Thanks to Robert Manni!)
+    def resize_to_fit(cols, rows)
+        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
+            resize(ncols, nrows)
+        end
+    end
+
+    def resize_to_fit!(cols, rows)
+        change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
+            resize!(ncols, nrows)
+        end
+    end
 
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image

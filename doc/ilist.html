@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: class ImageList</title>
   <meta http-equiv="Content-Type" content=
@@ -108,6 +108,8 @@
 
         <li><a href="#inspect">inspect</a></li>
 
+        <li><a href="#layers">layers</a></li>
+
         <li><a href="#map">map</a></li>
 
         <li><a href="#montage">montage</a></li>
@@ -189,8 +191,8 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
     time between each image in an animation. The
     <code>delay=</code> attribute assigns the same delay to all the
     images in the imagelist. Use <a href=
-    "imageattrs.html#Image.delay">Image#delay=</a> to set different
-    delay values on individual images.</p>
+    "imageattrs.html#delay">Image#delay=</a> to set different delay
+    values on individual images.</p>
 
     <h4>Arguments</h4>
 
@@ -208,7 +210,7 @@ imagelist.delay = 20 # delay 1/5 of a second between images.
 
     <h4>See also</h4>
 
-    <p><a href="imageattrs.html#Image.delay">Image#delay=</a></p>
+    <p><a href="imageattrs.html#delay">Image#delay=</a></p>
   </div>
 
   <div class="sig">
@@ -546,15 +548,17 @@ imagelist.animate { self.server_name = "other:0.0" }
      <img style="display:none" id="notaveraged" onmouseout=
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
-    "ex/average_before.gif" alt="average example" /><!--
+    "ex/average_before.gif" alt="average example"
+     /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
-    src="ex/average_after.gif" alt="average example" /></a>
-    <img src="ex/images/spin.gif" alt="" class="spin" style=
-    "left:131px; display:" id="averagedspin" title=
-    "Mouse over the example to see the 3 original images" /></p>
+    src="ex/average_after.gif" alt="average example"
+    /></a> <img src="ex/images/spin.gif" alt="" class=
+    "spin" style="left:131px; display:" id="averagedspin" title=
+    "Mouse over the example to see the 3 original images"
+     /></p>
 
     <h4>Magick API</h4>
 
@@ -598,11 +602,11 @@ imagelist.animate { self.server_name = "other:0.0" }
     previous images.</p>
 
     <p>The length of time between images in the new image is
-    specified by the <a href=
-    "imageattrs.html#Image.delay">delay</a> attribute of the input
-    image. The position of the image on the merged images is
-    specified by the <a href="imageattrs.html#Image.page">page</a>
-    attribute of the input image.</p>
+    specified by the <a href="imageattrs.html#delay">delay</a>
+    attribute of the input image. The position of the image on the
+    merged images is specified by the <a href=
+    "imageattrs.html#page">page</a> attribute of the input
+    image.</p>
 
     <h4>Returns</h4>
 
@@ -894,13 +898,83 @@ scene=1
     <h4>See also</h4>
 
     <p><a href="image2.html#inspect">Image#inspect</a></p>
+  </div>
 
+  <div class="sig">
+    <h3 id="layers">layers</h3>
+
+    <p><span class="arg">imagelist</span>.layers(<span class=
+    "arg">layer_method</span>) -&gt; <em>anImageList</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Optimizes or compares the images in the list. Equivalent to
+    the <code>-layers</code> option in ImageMagick's
+    <code>mogrify</code> command.</p>
+
+    <p>With all arguments except <code>OptimizeLayer</code>,
+    <span class="imquote">compares each image with the next in a
+    sequence and returns the minimum bounding region of all the
+    pixel differences (of the <code>LayerMethod</code> specified)
+    it discovers.</span></p>
+
+    <p class="imquote">The images in the list <span class=
+    "imquote">do NOT have to be the same size, though it is best
+    that all the images are fully 'coalesced' (images are all the
+    same size, on a flattened canvas, and represent how an specific
+    frame should look is animatated)</span></p>
+
+    <p class="imquote">If images are not the same size as the page
+    canvas size of first image, then it is alpha composed using
+    'Copy' onto the previous frame compared. That is the
+    differences only within the overlay area are looked at.</p>
+
+    <p class="imquote">No dispose methods are applied, though this
+    does not matter for animations which are a fully coalesced
+    sequence of images.</p>
+
+    <p>With the OptimizeLayer argument, <span class=
+    "imquote">compares each image the GIF disposed forms of the
+    previous image in the sequence. From this it attempts to select
+    the smallest cropped image to replace each frame, while
+    preserving the results of the animation.</span></p>
+
+    <h4>Arguments</h4>
+
+    <p>One of the following <code>LayerMethod</code> values:</p>
+
+    <ul>
+      <li>CompareAnyLayer</li>
+
+      <li>CompareClearLayer</li>
+
+      <li>CompareOverlayLayer</li>
+
+      <li>OptimizeLayer</li>
+    </ul>
+
+    <h4>Returns</h4>
+
+    <p>A new imagelist</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#deconstruct">deconstruct</a> is an alias for
+    <code>layers</code> with the <code>CompareAnyLayer</code>
+    argument.</p>
+
+    <h4>Magick API</h4>
+
+    <p>OptimizeImageLayers, CompareImageLayers (available in
+    ImageMagick 6.2.6)</p>
   </div>
 
   <div class="sig">
     <h3 id="map">map</h3>
 
-    <p><span class="arg">imagelist.map</span>(<span class=
+    <p><span class="arg">imagelist</span>.map(<span class=
     "arg">reference</span>, <span class="arg">dither</span>) -&gt;
     <em>anImageList</em></p>
   </div>
@@ -1007,7 +1081,7 @@ scene=1
 
       <dd><em>Hint:</em> You can use a different composite operator
       for each tile by setting each image's <a href=
-      "imageattrs.html#Image.compose">compose=</a> attribute to the
+      "imageattrs.html#compose">compose=</a> attribute to the
       desired operator. In the optional arguments block, set
       <code>compose</code> to UndefinedCompositeOp.</dd>
 
@@ -1223,7 +1297,7 @@ img[2]['Label'] = "Mom's Birthday"
 
     <p>Composites all the images into a single new image. The
     location of each image is determined by the value of its
-    <a href="imageattrs.html#Image.page">page</a> attribute.</p>
+    <a href="imageattrs.html#page">page</a> attribute.</p>
 
     <h4>Returns</h4>
 
@@ -1248,9 +1322,9 @@ img[2]['Label'] = "Mom's Birthday"
     <h3 id="new_image">new_image</h3>
 
     <p><span class="arg">imagelist.</span>new_image(<span class=
-    "arg">columns</span>, <span class="arg">rows</span><span class=
-    "arg">[, fill]</span>) <span class="arg">[&nbsp;{ optional
-    arguments }&nbsp;]</span> -&gt; <em>self</em></p>
+    "arg">columns</span>, <span class="arg">rows[, fill]</span>)
+    <span class="arg">[&nbsp;{ optional arguments }&nbsp;]</span>
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1392,14 +1466,13 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
       <dd><span class="imquote">Calculate quantization errors when
       quantizing the image.</span> Stores the results for each
       image in the imagelist <a href=
-      "imageattrs.html#Image.mean_error_per_pixel">mean_error_per_pixel</a>,
+      "imageattrs.html#mean_error_per_pixel">mean_error_per_pixel</a>,
       <a href=
-      "imageattrs.html#Image.normalized_maximum_error">normalized_maximum_error</a>,
+      "imageattrs.html#normalized_maximum_error">normalized_maximum_error</a>,
       and <a href=
-      "imageattrs.html#Image.normalized_mean_error">normalized_mean_error</a>
+      "imageattrs.html#normalized_mean_error">normalized_mean_error</a>
       attributes. Stores the number of colors used for the image in
-      the <a href=
-      "imageattrs.html#Image.total_colors">total_colors</a>
+      the <a href="imageattrs.html#total_colors">total_colors</a>
       attribute.</dd>
     </dl>
 

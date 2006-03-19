@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.111 2006/02/19 17:12:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.112 2006/03/19 19:56:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -797,6 +797,7 @@ Init_RMagick(void)
     rb_define_method(Class_ImageList, "deconstruct", ImageList_deconstruct, 0);
     rb_define_method(Class_ImageList, "display", ImageList_display, 0);
     rb_define_method(Class_ImageList, "flatten_images", ImageList_flatten_images, 0);
+    rb_define_method(Class_ImageList, "layers", ImageList_layers, 1);
     rb_define_method(Class_ImageList, "map", ImageList_map, 2);
     rb_define_method(Class_ImageList, "montage", ImageList_montage, 0);
     rb_define_method(Class_ImageList, "morph", ImageList_morph, 1);
@@ -818,7 +819,7 @@ Init_RMagick(void)
 
     DCL_ATTR_WRITER(Draw, affine)
     DCL_ATTR_WRITER(Draw, align)
-	DCL_ATTR_WRITER(Draw, border_color)
+    DCL_ATTR_WRITER(Draw, border_color)
     DCL_ATTR_WRITER(Draw, decorate)
     DCL_ATTR_WRITER(Draw, density)
     DCL_ATTR_WRITER(Draw, encoding)
@@ -1340,6 +1341,16 @@ Init_RMagick(void)
         ENUMERATOR(PartitionInterlace)
     END_ENUM
 
+#if defined(HAVE_COMPAREIMAGELAYERS)
+    DEF_ENUM(MagickLayerMethod)
+        ENUMERATOR(UndefinedLayer)
+        ENUMERATOR(CompareAnyLayer)
+        ENUMERATOR(CompareClearLayer)
+        ENUMERATOR(CompareOverlayLayer)
+        ENUMERATOR(OptimizeLayer)
+    END_ENUM
+#endif
+
 #if defined(HAVE_COMPAREIMAGECHANNELS)
     DEF_ENUM(MetricType)
         ENUMERATOR(UndefinedMetric)
@@ -1662,7 +1673,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/02/19 17:12:20 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/03/19 19:56:33 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

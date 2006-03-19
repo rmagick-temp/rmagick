@@ -99,8 +99,8 @@ if test "$rm_have_acquirestringinfo" = yes; then
 fi
 
 AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AddNoiseImageChannel BilevelImageChannel])
-AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels ConvolveImageChannel])
-AC_CHECK_FUNCS([EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
+AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels CompareImageLayers])
+AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
 AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])
 AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])
 
@@ -144,12 +144,12 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels InterpretImageAttributes])
-AC_CHECK_FUNCS([IsColorSimilar NegateImageChannel NormalizeImageChannel])
-AC_CHECK_FUNCS([ParseSizeGeometry PosterizeImage PreviewImage QuantumOperatorRegionImage])
-AC_CHECK_FUNCS([RadialBlurImage RandomChannelThresholdImage RandomThresholdImageChannel])
-AC_CHECK_FUNCS([SeparateImageChannel SepiaToneImage SetImageBackgroundColor])
-AC_CHECK_FUNCS([SetImageChannelDepth SetImageColorspace SetImageOption])
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([InterpretImageAttributes IsColorSimilar NegateImageChannel])
+AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
+AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RandomChannelThresholdImage])
+AC_CHECK_FUNCS([RandomThresholdImageChannel SeparateImageChannel SepiaToneImage])
+AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageOption])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
 AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage])
 AC_CHECK_FUNCS([ThresholdImageChannel TintImage])

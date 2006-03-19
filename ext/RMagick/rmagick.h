@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.105 2006/02/19 17:12:20 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.106 2006/03/19 19:56:33 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -274,6 +274,9 @@ EXTERN VALUE Class_FilterTypes;
 EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
+#if defined(HAVE_COMPAREIMAGELAYERS)
+EXTERN VALUE Class_MagickLayerMethod;
+#endif
 EXTERN VALUE Class_NoiseType;
 #if defined(HAVE_IMAGE_ORIENTATION)
 EXTERN VALUE Class_OrientationType;
@@ -589,6 +592,7 @@ extern VALUE ImageList_coalesce(VALUE);
 extern VALUE ImageList_deconstruct(VALUE);
 extern VALUE ImageList_display(VALUE);
 extern VALUE ImageList_flatten_images(VALUE);
+extern VALUE ImageList_layers(VALUE, VALUE);
 extern VALUE ImageList_map(VALUE, VALUE, VALUE);
 extern VALUE ImageList_montage(VALUE);
 extern VALUE ImageList_morph(VALUE, VALUE);

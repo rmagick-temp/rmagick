@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.66 2006/01/20 23:59:46 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.67 2006/03/25 00:26:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -9,7 +9,7 @@
 #include "rmagick.h"
 #include <errno.h>
 
-static const char *Compliance_name(ComplianceType *);
+static const char *ComplianceType_name(ComplianceType *);
 static const char *StyleType_name(StyleType);
 static const char *StretchType_name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
@@ -1152,7 +1152,7 @@ ComplianceType_new(ComplianceType compliance)
 
     // Turn off undefined bits
     compliance &= (SVGCompliance|X11Compliance|XPMCompliance);
-    name = Compliance_name(&compliance);
+    name = ComplianceType_name(&compliance);
     return rm_enum_new(Class_ComplianceType, ID2SYM(rb_intern(name)), INT2FIX(compliance));
 }
 
@@ -1290,7 +1290,7 @@ CompressionType_new(CompressionType ct)
     Purpose:    Return the name of a DisposeType enum as a string
 */
 static const char *
-DisposeType_name(type)
+DisposeType_name(DisposeType type)
 {
     switch(type)
     {
@@ -1367,7 +1367,7 @@ FilterTypes_new(FilterTypes type)
     Purpose:    Return the name of a EndianType enum as a string
 */
 static const char *
-EndianType_name(type)
+EndianType_name(EndianType type)
 {
     switch(type)
     {
@@ -1398,7 +1398,7 @@ EndianType_new(EndianType type)
     Purpose:    Return the name of a ImageType enum as a string
 */
 static char *
-ImageType_name(type)
+ImageType_name(ImageType type)
 {    switch(type)
     {
         default:
@@ -1437,7 +1437,7 @@ ImageType_new(ImageType type)
     Purpose:    Return the name of a InterlaceType enum as a string
 */
 static const char *
-InterlaceType_name(interlace)
+InterlaceType_name(InterlaceType interlace)
 {
     switch(interlace)
     {
@@ -1465,13 +1465,42 @@ InterlaceType_new(InterlaceType interlace)
 }
 
 
+/*
+    External:   MagickLayerMethod_new
+    Purpose:    Construct an MagickLayerMethod enum object for the specified value.
+*/
+static const char *
+MagickLayerMethod_name(MagickLayerMethod method)
+{
+    switch(method)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedLayer)
+        ENUM_TO_NAME(CompareAnyLayer)
+        ENUM_TO_NAME(CompareClearLayer)
+        ENUM_TO_NAME(CompareOverlayLayer)
+        ENUM_TO_NAME(OptimizeLayer)
+        ENUM_TO_NAME(OptimizePlusLayer)
+    }
+}
+
+
+VALUE
+MagickLayerMethod_new(MagickLayerMethod method)
+{
+    const char *name;
+
+    name = MagickLayerMethod_name(method);
+    return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
+}
+
 
 /*
     Static:     RenderingIntent_name
     Purpose:    Return the name of a RenderingIntent enum as a string
 */
 static const char *
-RenderingIntent_name(intent)
+RenderingIntent_name(RenderingIntent intent)
 {
     switch(intent)
     {
@@ -1506,7 +1535,7 @@ RenderingIntent_new(RenderingIntent intent)
     Purpose:    Return the name of a ResolutionType enum as a string
 */
 static const char *
-ResolutionType_name(type)
+ResolutionType_name(ResolutionType type)
 {
     switch(type)
     {
@@ -1540,7 +1569,7 @@ ResolutionType_new(ResolutionType type)
     Purpose:    Return the name of a OrientationType enum as a string
 */
 static const char *
-OrientationType_name(type)
+OrientationType_name(OrientationType type)
 {
     switch(type)
     {
@@ -1659,7 +1688,7 @@ Color_to_s(VALUE self)
     sprintf(buff, "name=%s, compliance=%s, "
                   "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
                   ci.name,
-                  Compliance_name(&ci.compliance),
+                  ComplianceType_name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
 
     destroy_ColorInfo(&ci);
@@ -2479,14 +2508,14 @@ static VALUE Enum_type_values(VALUE class)
 
 
 /*
-    Static:     Compliance_name
+    Static:     ComplianceType_name
     Purpose:    Return the string representation of a ComplianceType value
     Notes:      xMagick will OR multiple compliance types so we have to
                 arbitrarily pick one name. Set the compliance argument
                 to the selected value.
 */
 static const char *
-Compliance_name(ComplianceType *c)
+ComplianceType_name(ComplianceType *c)
 {
     if ((*c & (SVGCompliance|X11Compliance|XPMCompliance))
         == (SVGCompliance|X11Compliance|XPMCompliance))

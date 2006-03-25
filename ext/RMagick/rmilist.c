@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.32 2006/03/19 19:56:33 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.33 2006/03/25 00:25:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -228,7 +228,7 @@ ImageList_layers(VALUE self, VALUE method)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
-    if (mthd == OptimizeLayer)
+    if (mthd == OptimizeLayer || mthd == OptimizePlusLayer)
     {
         new_images = OptimizeImageLayers(images, &exception);
     }

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.67 2006/03/25 00:26:08 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.68 2006/03/26 22:05:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2317,8 +2317,11 @@ VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 VALUE Enum_alloc(VALUE class)
 {
    MagickEnum *magick_enum;
+   volatile VALUE enumr;
 
-   return Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
+   enumr = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
+   OBJ_FREEZE(enumr);
+   return enumr;
 }
 
 
@@ -2340,7 +2343,7 @@ VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
 {
     volatile VALUE new_enum;
-    VALUE argv[2];
+    volatile VALUE argv[2];
     MagickEnum *magick_enum;
 
     new_enum = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
@@ -2348,6 +2351,7 @@ VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
     argv[1] = val;
 
     rb_obj_call_init(new_enum, 2, argv);
+    OBJ_FREEZE(new_enum);
     return new_enum;
 }
 
@@ -2487,23 +2491,63 @@ static VALUE Enum_type_inspect(VALUE self)
 
 
 /*
- *  Method:     xxx.each
- *  Purpose:    singleton iterator over enumerators list
+ *  Method:     xxx.values
+ *  Purpose:    Behaves like #each if a block is present, otherwise like #to_a.
  *  Notes:      defined for each Enum subclass
 */
 static VALUE Enum_type_values(VALUE class)
 {
-    volatile VALUE enumerators;
+    volatile VALUE enumerators, copy;
+    volatile VALUE rv;
     int x;
 
     enumerators = rb_cvar_get(class, ID_enumerators);
 
-    for (x = 0; x < RARRAY(enumerators)->len; x++)
+    if (rb_block_given_p())
     {
-        rb_yield(rb_ary_entry(enumerators, x));
+        for (x = 0; x < RARRAY(enumerators)->len; x++)
+        {
+            rb_yield(rb_ary_entry(enumerators, x));
+        }
+        rv = class;
+    }
+    else
+    {
+        copy = rb_ary_new2(RARRAY(enumerators)->len);
+        for (x = 0; x < RARRAY(enumerators)->len; x++)
+        {
+            rb_ary_push(copy, rb_ary_entry(enumerators, x));
+        }
+        OBJ_FREEZE(copy);
+        rv = copy;
     }
 
-    return class;
+    return rv;
+}
+
+
+/*
+ *  Method:     xxx.to_a
+ *  Purpose:    return an array of enumerators for this enumeration
+ *  Notes:      defined for each Enum subclass. Return a copy of
+ *              the enumerators array so that modification can't
+ *              hurt it.
+*/
+static VALUE Enum_type_to_a(VALUE class)
+{
+    volatile VALUE enumerators, copy;
+    int x;
+
+    enumerators = rb_cvar_get(class, ID_enumerators);
+    copy = rb_ary_new();
+
+    for (x = 0; x < RARRAY(enumerators)->len; x++)
+    {
+        rb_ary_push(copy, rb_ary_entry(enumerators, x));
+    }
+
+    OBJ_FREEZE(copy);
+    return copy;
 }
 
 

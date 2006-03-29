@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: module Magick</title>
   <meta http-equiv="Content-Type" content=
@@ -45,6 +45,8 @@
       <li><a href="#fonts">fonts</a></li>
 
       <li><a href="#formats">formats</a></li>
+
+      <li><a href="#limit_resource">limit_resource</a></li>
 
       <li><a href=
       "#set_cache_threshold">set_cache_threshold</a></li>
@@ -323,6 +325,59 @@ p Magick.formats &raquo;
   </div>
 
   <div class="sig">
+    <h3 id="limit_resource">limit_resource</h3>
+
+    <p>Magick.limit_resource(<span class="arg">resource_type</span>
+    [, <span class="arg">limit</span>]) -&gt; <span class=
+    "arg">old_limit</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Sets a limit to the amount of a resource, or gets the
+    current limit for the resource. <span class="imquote">When the
+    limit is reached, &times;Magick will fail in some fashion or
+    take compensating actions if possible.</span> The default
+    limits vary according to the platform. See the &times;Magick
+    documentation for the <em>-limit</em> option for more
+    information.</p>
+
+    <h4>Arguments</h4>This method may be called with one or two
+    arguments. The first argument identifies the resource. If
+    specified, the second argument is the limit.
+
+    <dl>
+      <dt>resource_type</dt>
+
+      <dd>One of the symbols <code>:disk</code>,
+      <code>:file</code>, <code>:map</code>, or
+      <code>:memory</code>. You may use a string instead of a
+      symbol.</dd>
+
+      <dt>limit</dt>
+
+      <dd>If present, the limit for the resource. This argument is
+      always an integer number. If the resource_type is
+      <code>:file</code>, the limit is the number of open files. If
+      <code>:memory</code> or <code>:map</code>, the limit is
+      measured megabytes. If <code>:disk</code>, the limit is
+      measured in gigabytes. If this argument is omitted the limit is not
+      changed.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>The current resource limit. If a new limit is specified this
+    is the limit <em>before</em> the change.</p>
+
+    <h4>Notes</h4>
+
+    <p>This method supercedes <a href=
+    "#set_cache_threshold">set_cache_threshold</a>.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="set_cache_threshold">set_cache_threshold</h3>
 
     <p>Magick.set_cache_threshold(<span class="arg">n</span>)</p>
@@ -344,6 +399,20 @@ p Magick.formats &raquo;
     <pre>
 # set the cache threshold to 10Mb
 Magick.set_cache_threshold(10)
+</pre>
+
+    <h4>Notes</h4>
+
+    <p>This method is obsolete. Use <a href=
+    "#limit_resource">limit_resource</a> instead. The code:</p>
+    <pre>
+Magick.limit_resource(:memory, n)
+Magick.imit_resource(:map, 2*n)
+</pre>
+
+    <p>is equivalent to</p>
+    <pre>
+Magick.set_cache_threshold(n)
 </pre>
   </div>
 

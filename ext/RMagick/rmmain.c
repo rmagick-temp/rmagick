@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.113 2006/03/25 00:25:00 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.114 2006/03/29 21:19:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -342,6 +342,93 @@ Magick_init_formats(VALUE class)
 #endif
 }
 
+
+/*
+  Method:   Magick.limit_resource(resource[, limit])
+  Purpose:  Get/set resource limits. If a limit is specified the old limit
+            is set to the new value. Either way the current/new limit is returned.
+  Notes:    Don't support "AreaLimit" because GraphicsMagick doesn't support it.
+*/
+static VALUE
+Magick_limit_resource(int argc, VALUE *argv, VALUE class)
+{
+    volatile VALUE resource, limit;
+    ResourceType res = UndefinedResource;
+    char *str;
+    ID id;
+    unsigned long cur_limit;
+
+    rb_scan_args(argc, argv, "11", &resource, &limit);
+
+    switch (TYPE(resource))
+    {
+        case T_NIL:
+            return class;
+
+        case T_SYMBOL:
+            id = SYM2ID(resource);
+            if (id == rb_intern("memory"))
+            {
+                res = MemoryResource;
+            }
+            else if (id == rb_intern("map"))
+            {
+                res = MapResource;
+            }
+            else if (id == rb_intern("disk"))
+            {
+                res = DiskResource;
+            }
+            else if (id == rb_intern("file"))
+            {
+                res = FileResource;
+            }
+            else
+            {
+                rb_raise(rb_eArgError, "unknown resource: `:%s'", rb_id2name(id));
+            }
+            break;
+
+        default:
+            str = STRING_PTR(resource);
+            if (*str == '\0')
+            {
+                return class;
+            }
+            else if (rm_strcasecmp("memory", str) == 0)
+            {
+                res = MemoryResource;
+            }
+            else if (rm_strcasecmp("map", str) == 0)
+            {
+                res = MapResource;
+            }
+            else if (rm_strcasecmp("disk", str) == 0)
+            {
+                res = DiskResource;
+            }
+            else if (rm_strcasecmp("file", str) == 0)
+            {
+                res = FileResource;
+            }
+            else
+            {
+                rb_raise(rb_eArgError, "unknown resource: `%s'", str);
+            }
+            break;
+    }
+
+    cur_limit = GetMagickResourceLimit(res);
+
+    if (argc > 1)
+    {
+        SetMagickResourceLimit(res, NUM2ULONG(limit));
+    }
+
+    return ULONG2NUM(cur_limit);
+}
+
+
 /*
     This is the exit known to ImageMagick. Retrieve the monitor
     proc and call it, passing the 3 exit arguments.
@@ -530,6 +617,7 @@ Init_RMagick(void)
     rb_define_module_function(Module_Magick, "colors", Magick_colors, 0);
     rb_define_module_function(Module_Magick, "fonts", Magick_fonts, 0);
     rb_define_module_function(Module_Magick, "init_formats", Magick_init_formats, 0);
+    rb_define_module_function(Module_Magick, "limit_resource", Magick_limit_resource, -1);
     rb_define_module_function(Module_Magick, "set_monitor", Magick_set_monitor, 1);
     rb_define_module_function(Module_Magick, "set_cache_threshold", Magick_set_cache_threshold, 1);
     rb_define_module_function(Module_Magick, "set_log_event_mask", Magick_set_log_event_mask, -1);
@@ -1674,7 +1762,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/03/25 00:25:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/03/29 21:19:40 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

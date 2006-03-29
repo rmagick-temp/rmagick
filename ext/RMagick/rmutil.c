@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.68 2006/03/26 22:05:24 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.69 2006/03/29 21:19:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2523,31 +2523,6 @@ static VALUE Enum_type_values(VALUE class)
     }
 
     return rv;
-}
-
-
-/*
- *  Method:     xxx.to_a
- *  Purpose:    return an array of enumerators for this enumeration
- *  Notes:      defined for each Enum subclass. Return a copy of
- *              the enumerators array so that modification can't
- *              hurt it.
-*/
-static VALUE Enum_type_to_a(VALUE class)
-{
-    volatile VALUE enumerators, copy;
-    int x;
-
-    enumerators = rb_cvar_get(class, ID_enumerators);
-    copy = rb_ary_new();
-
-    for (x = 0; x < RARRAY(enumerators)->len; x++)
-    {
-        rb_ary_push(copy, rb_ary_entry(enumerators, x));
-    }
-
-    OBJ_FREEZE(copy);
-    return copy;
 }
 
 

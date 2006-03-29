@@ -1,6 +1,7 @@
 RMagick 1.11.0
     o Feature #3705, add resize_to_fit (thanks to Robert Manni for the code)
-    o Added layers method to the ImageList class (available with ImageMagick 6.2.6)
+    o Added optimize_layers method to the ImageList class (available with
+      ImageMagick 6.2.6)
     o Added limit_resource method to the Magick module
 
 RMagick 1.10.1

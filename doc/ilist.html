@@ -108,21 +108,21 @@
 
         <li><a href="#inspect">inspect</a></li>
 
-        <li><a href="#layers">layers</a></li>
-
         <li><a href="#map">map</a></li>
 
         <li><a href="#montage">montage</a></li>
+
+        <li><a href="#morph">morph</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#morph">morph</a></li>
-
         <li><a href="#mosaic">mosaic</a></li>
 
         <li><a href="#new_image">new_image</a></li>
+
+        <li><a href="#optimize_layers">optimize_layers</a></li>
 
         <li><a href="#ping">ping</a></li>
 
@@ -555,7 +555,7 @@ imagelist.animate { self.server_name = "other:0.0" }
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
     src="ex/average_after.gif" alt="average example"
-    /></a> <img src="ex/images/spin.gif" alt="" class=
+     /></a> <img src="ex/images/spin.gif" alt="" class=
     "spin" style="left:131px; display:" id="averagedspin" title=
     "Mouse over the example to see the 3 original images"
      /></p>
@@ -717,6 +717,10 @@ imagelist2 = imagelist1.copy
     <h4>Magick API</h4>
 
     <p>DeconstructImages</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#optimize_layers">optimize_layers</a></p>
   </div>
 
   <div class="sig">
@@ -903,79 +907,6 @@ scene=1
     <h4>See also</h4>
 
     <p><a href="image2.html#inspect">Image#inspect</a></p>
-  </div>
-
-  <div class="sig">
-    <h3 id="layers">layers</h3>
-
-    <p><span class="arg">imagelist</span>.layers(<span class=
-    "arg">layer_method</span>) -&gt; <em>anImageList</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Optimizes or compares the images in the list. Equivalent to
-    the <code>-layers</code> option in ImageMagick's
-    <code>mogrify</code> command.</p>
-
-    <p>With all arguments except <code>OptimizeLayer</code>,
-    <span class="imquote">compares each image with the next in a
-    sequence and returns the minimum bounding region of all the
-    pixel differences (of the <code>LayerMethod</code> specified)
-    it discovers.</span></p>
-
-    <p class="imquote">The images in the list <span class=
-    "imquote">do NOT have to be the same size, though it is best
-    that all the images are fully 'coalesced' (images are all the
-    same size, on a flattened canvas, and represent how an specific
-    frame should look is animatated)</span></p>
-
-    <p class="imquote">If images are not the same size as the page
-    canvas size of first image, then it is alpha composed using
-    'Copy' onto the previous frame compared. That is the
-    differences only within the overlay area are looked at.</p>
-
-    <p class="imquote">No dispose methods are applied, though this
-    does not matter for animations which are a fully coalesced
-    sequence of images.</p>
-
-    <p>With the OptimizeLayer argument, <span class=
-    "imquote">compares each image the GIF disposed forms of the
-    previous image in the sequence. From this it attempts to select
-    the smallest cropped image to replace each frame, while
-    preserving the results of the animation.</span></p>
-
-    <h4>Arguments</h4>
-
-    <p>One of the following <code>LayerMethod</code> values:</p>
-
-    <ul>
-      <li>CompareAnyLayer</li>
-
-      <li>CompareClearLayer</li>
-
-      <li>CompareOverlayLayer</li>
-
-      <li>OptimizeLayer</li>
-
-      <li>OptimizePlusLayer</li>
-    </ul>
-
-    <h4>Returns</h4>
-
-    <p>A new imagelist</p>
-
-    <h4>See also</h4>
-
-    <p><a href="#deconstruct">deconstruct</a> is an alias for
-    <code>layers</code> with the <code>CompareAnyLayer</code>
-    argument.</p>
-
-    <h4>Magick API</h4>
-
-    <p>OptimizeImageLayers, CompareImageLayers (available in
-    ImageMagick 6.2.6)</p>
   </div>
 
   <div class="sig">
@@ -1367,6 +1298,81 @@ img[2]['Label'] = "Mom's Birthday"
 imagelist = Magick::ImageList.new
 imagelist.new_image(100, 100) { self.background_color = "red" }
 </pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="optimize_layers">optimize_layers</h3>
+
+    <p><span class=
+    "arg">imagelist</span>.optimize_layers(<span class=
+    "arg">layer_method</span>) -&gt; <em>anImageList</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Optimizes or compares the images in the list. Equivalent to
+    the <code>-layers</code> option in ImageMagick's
+    <code>mogrify</code> command.</p>
+
+    <p>With all arguments except <code>OptimizeLayer</code>,
+    <span class="imquote">compares each image with the next in a
+    sequence and returns the minimum bounding region of all the
+    pixel differences (of the <code>LayerMethod</code> specified)
+    it discovers.</span></p>
+
+    <p class="imquote">The images in the list <span class=
+    "imquote">do NOT have to be the same size, though it is best
+    that all the images are fully 'coalesced' (images are all the
+    same size, on a flattened canvas, and represent how an specific
+    frame should look is animatated)</span></p>
+
+    <p class="imquote">If images are not the same size as the page
+    canvas size of first image, then it is alpha composed using
+    'Copy' onto the previous frame compared. That is the
+    differences only within the overlay area are looked at.</p>
+
+    <p class="imquote">No dispose methods are applied, though this
+    does not matter for animations which are a fully coalesced
+    sequence of images.</p>
+
+    <p>With the OptimizeLayer argument, <span class=
+    "imquote">compares each image the GIF disposed forms of the
+    previous image in the sequence. From this it attempts to select
+    the smallest cropped image to replace each frame, while
+    preserving the results of the animation.</span></p>
+
+    <h4>Arguments</h4>
+
+    <p>One of the following <code>MagickLayerMethod</code>
+    values:</p>
+
+    <ul>
+      <li>CompareAnyLayer</li>
+
+      <li>CompareClearLayer</li>
+
+      <li>CompareOverlayLayer</li>
+
+      <li>OptimizeLayer</li>
+
+      <li>OptimizePlusLayer</li>
+    </ul>
+
+    <h4>Returns</h4>
+
+    <p>A new imagelist</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#deconstruct">deconstruct</a> is an alias for
+    <code>optimize_layers</code> with the
+    <code>CompareAnyLayer</code> argument.</p>
+
+    <h4>Magick API</h4>
+
+    <p>OptimizeImageLayers, CompareImageLayers (available in
+    ImageMagick 6.2.6)</p>
   </div>
 
   <div class="sig">

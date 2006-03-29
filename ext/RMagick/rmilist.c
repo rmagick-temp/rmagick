@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.33 2006/03/25 00:25:00 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.34 2006/03/29 23:38:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -212,46 +212,6 @@ ImageList_flatten_images(VALUE self)
 }
 
 
-/*
-    Method:     ImageList#layers
-    Purpose:    Equivalent to -layers option in 6.2.6
-    Returns:    a new imagelist
-*/
-VALUE
-ImageList_layers(VALUE self, VALUE method)
-{
-#if defined(HAVE_COMPAREIMAGELAYERS)
-    Image *images, *new_images;
-    MagickLayerMethod mthd;
-    ExceptionInfo exception;
-
-    images = rm_images_from_imagelist(self);
-    GetExceptionInfo(&exception);
-    VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
-    if (mthd == OptimizeLayer || mthd == OptimizePlusLayer)
-    {
-        new_images = OptimizeImageLayers(images, &exception);
-    }
-    else
-    {
-        new_images = CompareImageLayers(images, mthd, &exception);
-    }
-    rm_split(images);
-    HANDLE_ERROR
-
-    if (!new_images)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
-
-    return rm_imagelist_from_images(new_images);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-}
-
 
 /*
     Method:     ImageList#map
@@ -396,6 +356,47 @@ ImageList_mosaic(VALUE self)
     HANDLE_ERROR
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     ImageList#optimize_layers
+    Purpose:    Equivalent to -layers option in 6.2.6
+    Returns:    a new imagelist
+*/
+VALUE
+ImageList_optimize_layers(VALUE self, VALUE method)
+{
+#if defined(HAVE_COMPAREIMAGELAYERS)
+    Image *images, *new_images;
+    MagickLayerMethod mthd;
+    ExceptionInfo exception;
+
+    images = rm_images_from_imagelist(self);
+    GetExceptionInfo(&exception);
+    VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
+    if (mthd == OptimizeLayer || mthd == OptimizePlusLayer)
+    {
+        new_images = OptimizeImageLayers(images, &exception);
+    }
+    else
+    {
+        new_images = CompareImageLayers(images, mthd, &exception);
+    }
+    rm_split(images);
+    HANDLE_ERROR
+
+    if (!new_images)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    return rm_imagelist_from_images(new_images);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

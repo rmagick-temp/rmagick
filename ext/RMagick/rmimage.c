@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.142 2006/02/24 00:15:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.143 2006/03/30 23:28:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5242,6 +5242,10 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
 VALUE
 rm_image_new(Image *image)
 {
+    if (!image)
+    {
+        rb_bug("rm_image_new called with NULL argument");
+    }
     return Data_Wrap_Struct(Class_Image, NULL, DestroyImage, image);
 }
 

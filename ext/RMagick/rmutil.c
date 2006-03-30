@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.69 2006/03/29 21:19:40 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.70 2006/03/30 23:28:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3001,17 +3001,16 @@ void rm_handle_all_errors(Image *seq)
     Image *badboy = NULL;
     Image *image = seq;
 
+    // Find the image with the highest severity
     while (image)
     {
         if (image->exception.severity != UndefinedException)
         {
-            // Stop at the 1st image with an error
-            if (image->exception.severity > WarningException)
+            if (!badboy)
             {
                 badboy = image;
-                break;
             }
-            else if (!badboy)
+            else if (image->exception.severity > badboy->exception.severity)
             {
                 badboy = image;
             }

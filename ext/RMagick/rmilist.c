@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.34 2006/03/29 23:38:55 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.35 2006/03/30 23:29:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -75,6 +75,10 @@ ImageList_append(VALUE self, VALUE stack_arg)
 
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
+    if (!result)
+    {
+        rm_handle_all_errors(images);
+    }
     rm_split(images);
     HANDLE_ERROR
 
@@ -99,6 +103,7 @@ ImageList_average(VALUE self)
     result = AverageImages(images, &exception);
     rm_handle_all_errors(images);
     rm_split(images);
+    HANDLE_ERROR
 
     return rm_image_new(result);
 }
@@ -122,6 +127,7 @@ ImageList_coalesce(VALUE self)
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -150,6 +156,7 @@ ImageList_deconstruct(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = DeconstructImages(images, &exception);
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -180,11 +187,8 @@ ImageList_display(VALUE self)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    ok = DisplayImages(info, images);
-    if (!ok)
-    {
-        rm_handle_all_errors(images);
-    }
+    (void) DisplayImages(info, images);
+    rm_handle_all_errors(images);
     rm_split(images);
 
     return self;
@@ -205,6 +209,7 @@ ImageList_flatten_images(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -296,6 +301,7 @@ ImageList_montage(VALUE self)
 
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
+    rm_handle_all_errors(image_list);
     rm_split(image_list);
     HANDLE_ERROR
 
@@ -332,6 +338,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -352,6 +359,7 @@ ImageList_mosaic(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -383,6 +391,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     {
         new_images = CompareImageLayers(images, mthd, &exception);
     }
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 
@@ -423,6 +432,11 @@ rm_imagelist_from_images(Image *images)
 {
      volatile VALUE new_imagelist;
      Image *image;
+
+     if (!images)
+     {
+         rb_bug("rm_imagelist_from_images called with NULL argument");
+     }
 
      new_imagelist = rm_imagelist_new();
 
@@ -615,6 +629,7 @@ ImageList_to_blob(VALUE self)
 #else
     blob = ImageToBlob(info, images, &length, &exception);
 #endif
+    rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR
 

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.35 2006/03/30 23:29:24 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.36 2006/03/31 00:30:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -178,7 +178,6 @@ ImageList_display(VALUE self)
     Image *images;
     Info *info;
     volatile VALUE info_obj;
-    unsigned int ok;
 
     // Convert the images array to an images sequence.
     images = rm_images_from_imagelist(self);

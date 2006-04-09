@@ -19,7 +19,7 @@ fi
 
 # See if user prefers GraphicsMagick over ImageMagick
 AC_ARG_WITH(graphics-magick,
-    AC_HELP_STRING([--with-graphics-magick], [configure RMagick with GraphicsMagick]),
+    AS_HELP_STRING([--with-graphics-magick], [configure RMagick with GraphicsMagick]),
     [with_graphics_magick=$withval],
     [with_graphics_magick='no'])
 
@@ -632,57 +632,57 @@ if test `eval echo $datadir` != ${prefix}/share; then
   RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --data-dir=`eval echo $datadir`"
 fi
 
-AC_ARG_WITH(doc-dir,
-    AC_HELP_STRING([--with-doc-dir=DIR], [RMagick documentation directory [[PREFIX/share/RMagick]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --doc-dir=$withval"], )
-
-AC_ARG_WITH(std-ruby,
-    AC_HELP_STRING([--with-std-ruby=DIR], [the directory for standard ruby libraries [[PREFIX/lib/ruby/1.x]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --std-ruby=$withval"], )
-
-AC_ARG_WITH(site-ruby,
-    AC_HELP_STRING([--with-site-ruby=DIR], [the directory for non-standard ruby libraries [[PREFIX/lib/ruby/site_ruby/1.x]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --site-ruby=$withval"], )
-
-AC_ARG_WITH(site-ruby-common,
-    AC_HELP_STRING([--with-site-ruby-common=DIR], [the directory for version-independent non-standard ruby libraries [[PREFIX/lib/ruby/site_ruby]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --site-ruby-common=$withval"], )
-
-AC_ARG_WITH(rb-dir,
-    AC_HELP_STRING([--with-rb-dir=DIR], [the directory for ruby scripts [[PREFIX/lib/ruby/site_ruby/1.x]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --rb-dir=$withval"], )
-
-AC_ARG_WITH(so-dir,
-    AC_HELP_STRING([--with-so-dir=DIR], [the directory for ruby extensions]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --so-dir=$withval"], )
-
-AC_ARG_WITH(ruby-path,
-    AC_HELP_STRING([--with-ruby-path=DIR], [path to set to #! line [PREFIX/bin/ruby]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --ruby-path=$withval"], )
-
 AC_ARG_WITH(ruby-prog,
-    AC_HELP_STRING([--with-ruby-prog=NAME], [the ruby program used for installation [[PREFIX/bin/ruby]]]),
+    AS_HELP_STRING([--with-ruby-prog=NAME], [the ruby program used for installation [[PREFIX/bin/ruby]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --ruby-prog=$withval"
      RUBY=$withval], )
 
-AC_ARG_WITH(make-prog,
-    AC_HELP_STRING([--with-make-prog=NAME], [the make program to compile ruby extensions [[make]]]),
-    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --make-prog=$withval"], )
-
 AC_ARG_WITH(rbconfig,
-    AC_HELP_STRING([--with-rbconfig=PATH], [your rbconfig to load [[ruby's]]]),
+    AS_HELP_STRING([--with-rbconfig=PATH], [your rbconfig to load [[ruby's]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --rbconfig=$withval"], )
 
+AC_ARG_WITH(doc-dir,
+    AS_HELP_STRING([--with-doc-dir=DIR], [RMagick documentation directory [[PREFIX/share/RMagick]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --doc-dir=$withval"], )
+
+AC_ARG_WITH(std-ruby,
+    AS_HELP_STRING([--with-std-ruby=DIR], [the directory for standard ruby libraries [[PREFIX/lib/ruby/1.x]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --std-ruby=$withval"], )
+
+AC_ARG_WITH(site-ruby,
+    AS_HELP_STRING([--with-site-ruby=DIR], [the directory for non-standard ruby libraries [[PREFIX/lib/ruby/site_ruby/1.x]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --site-ruby=$withval"], )
+
+AC_ARG_WITH(site-ruby-common,
+    AS_HELP_STRING([--with-site-ruby-common=DIR], [the directory for version-independent non-standard ruby libraries [[PREFIX/lib/ruby/site_ruby]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --site-ruby-common=$withval"], )
+
+AC_ARG_WITH(rb-dir,
+    AS_HELP_STRING([--with-rb-dir=DIR], [the directory for ruby scripts [[PREFIX/lib/ruby/site_ruby/1.x]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --rb-dir=$withval"], )
+
+AC_ARG_WITH(so-dir,
+    AS_HELP_STRING([--with-so-dir=DIR], [the directory for ruby extensions]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --so-dir=$withval"], )
+
+AC_ARG_WITH(ruby-path,
+    AS_HELP_STRING([--with-ruby-path=DIR], [path to set to #! line [PREFIX/bin/ruby]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --ruby-path=$withval"], )
+
+AC_ARG_WITH(make-prog,
+    AS_HELP_STRING([--with-make-prog=NAME], [the make program to compile ruby extensions [[make]]]),
+    [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --make-prog=$withval"], )
+
 AC_ARG_ENABLE(without-ext,
-    AC_HELP_STRING([--enable-without-ext], [does not compile/install ruby extensions [[--disable-without-ext]]]),
+    AS_HELP_STRING([--enable-without-ext], [does not compile/install ruby extensions [[--disable-without-ext]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --without-ext"], )
 
 AC_ARG_ENABLE(no-harm,
-    AC_HELP_STRING([--enable-no-harm], [only display what to do if given [[--disable-no-harm]]]),
+    AS_HELP_STRING([--enable-no-harm], [only display what to do if given [[--disable-no-harm]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --no-harm"], )
 
 AC_ARG_ENABLE(allow-example-errors,
-    AC_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [--disable-allow-example-errors]]),
+    AS_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [--disable-allow-example-errors]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --allow-example-errors"], )
 
 

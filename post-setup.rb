@@ -109,7 +109,7 @@ class ExampleSet
   #
   def err(msg)
       $stderr.puts "#{$0}: #{msg}"
-      exit
+      exit 1
   end
 
 end

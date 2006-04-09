@@ -29,6 +29,7 @@ def rmdir(dir, no_check=false)
   end
 end
 
+
 # Load up default values
 rbconfig = 'rbconfig'
 
@@ -51,22 +52,22 @@ end
 
 require rbconfig                      # get specified/default rbconfig.rb
 
-version = ::Config::CONFIG['MAJOR'] + '.' + ::Config::CONFIG['MINOR']
+version = ::Config::CONFIG['ruby_version']
 arch    = ::Config::CONFIG['arch']
 
 prefix    ||= ::Config::CONFIG['prefix']
-site_ruby ||= prefix+'/lib/ruby/site_ruby/'+version
-so_dir    ||= prefix+'/lib/ruby/site_ruby/'+version+'/'+arch
-doc_dir   ||= prefix+'/share/RMagick'
+site_ruby ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version)
+so_dir    ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version, arch)
+doc_dir   ||= File.join(prefix, 'share', 'RMagick')
 
-File.safe_unlink("#{site_ruby}/RMagick.rb", true)
-File.safe_unlink("#{so_dir}/RMagick.so", true)
+File.safe_unlink File.join(site_ruby, 'RMagick.rb'), true
+File.safe_unlink File.join(so_dir, 'RMagick.so'), true
 
-rmdir("#{site_ruby}/rvg", true)
-rmdir(doc_dir+'/ex/images')
-rmdir(doc_dir+'/ex')
-rmdir(doc_dir+'/css')
-rmdir(doc_dir+'/scripts')
-rmdir(doc_dir)
+rmdir File.join(site_ruby, 'rvg'), true
+rmdir File.join(doc_dir, 'ex', 'images')
+rmdir File.join(doc_dir, 'ex')
+rmdir File.join(doc_dir, 'css')
+rmdir File.join(doc_dir, 'scripts')
+rmdir doc_dir
 
 exit

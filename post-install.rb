@@ -3,7 +3,7 @@
 require 'ftools'
 require 'find'
 
-if defined?(ToplevelInstaller) && self.class == ToplevelInstaller
+if defined?(Installer) && self.class == Installer
     $docdir = nil
 
     # Where to install the documentation

@@ -8,7 +8,7 @@ STD_URI_RE = /"#{STD_URI}/
 DONT_RUN   = ['fonts.rb']  # never run these examples
 ENTITY     = Hash['&' => '&amp;', '>' => '&gt;', '<' => '&lt;']
 
-if defined?(ToplevelInstaller) && self.class == ToplevelInstaller
+if defined?(Installer) && self.class == Installer
 
   RUBYPROG  = get_config('ruby-prog')
   SRCDIR    = srcdir()

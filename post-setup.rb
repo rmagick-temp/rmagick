@@ -11,7 +11,7 @@ ENTITY     = Hash['&' => '&amp;', '>' => '&gt;', '<' => '&lt;']
 if defined?(Installer) && self.class == Installer
 
   RUBYPROG  = get_config('ruby-prog')
-  SRCDIR    = srcdir()
+  SRCDIR    = curr_srcdir()
   ALLOW_EXAMPLE_ERRORS = get_config('allow-example-errors') == 'yes'
 
 else
@@ -198,7 +198,7 @@ def filetoHTML(file, html)
 
 end
 
-puts "install.rb: entering post-setup phase..."
+puts "setup.rb: entering post-setup phase..."
 
 #
 # Don't bother if we're in the sandbox

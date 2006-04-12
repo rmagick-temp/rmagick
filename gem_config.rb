@@ -1,5 +1,3 @@
-require 'English'
-
 #   gem_config.rb - This script is executed by the gem command
 #   to generate the RMagick Makefile. Ref: rmagick.gemspec
 
@@ -8,14 +6,19 @@ require 'English'
 args = []
 ARGV.each { |arg| args << arg if arg =~ /\A--/ }
 
-cmd = "sh configure #{args.join(' ')} 2>&1"
+cmd = "sh configure #{args.join(' ')}"
 puts "\n#{cmd}\n\n"
 
-IO.popen(cmd) { |pipe| while s = pipe.gets : puts s; end }
-
-code = $CHILD_STATUS ? $CHILD_STATUS.exitstatus : 0
+rc = system(cmd)
 
 #   The gem command wants some output on stdout. Tell gem what happened.
-puts "RMagick configure returned #{code}"
-exit code
+if rc
+    puts "RMagick configuration completed successfully"
+    rc = 0
+else
+    puts "RMagick configuration completed with status #{$?.exitstatus}"
+    rc = $?.exitstatus
+end
+
+exit rc
 

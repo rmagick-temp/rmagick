@@ -14,7 +14,7 @@ DESCRIPTION
   s.files = Dir.glob('**/*')
   s.require_paths = %w{lib .}
   s.rubyforge_project = %q{rmagick}
-  s.extensions = %w{configure}
+  s.extensions = %w{gem_config.rb}
   s.has_rdoc = false
   s.required_ruby_version = '>= 1.6.7'
   s.requirements << 'ImageMagick 6.0.0 or later, or GraphicsMagick 1.0.0 or later'

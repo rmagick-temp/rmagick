@@ -15,6 +15,8 @@
 #undef HAVE_BLACKTHRESHOLDIMAGE
 /* Introduced in IM 6.0.1 */
 #undef HAVE_BLURIMAGECHANNEL
+/* Introduced in IM 6.2.7 */
+#undef HAVE_COALESCELAYER
 /* Introduced in GM 1.2 */
 #undef HAVE_CINEONLOGRGBCOLORSPACE
 /* Introduced in IM 6.0.0 */
@@ -77,10 +79,12 @@
 #undef HAVE_GETMAGICKINFOARRAY
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETMAGICKINFOLIST
-/* Introduced in IM 6.1.5 */
-#undef HAVE_GETMULTILINETYPEMETRICS
 /* API changed in IM 6.1.3 */
 #undef HAVE_OLD_GETMAGICKINFOLIST
+/* Introduced in IM 6.2.5 */
+#undef HAVE_GETMAGICKRESOURCELIMIT
+/* Introduced in IM 6.1.5 */
+#undef HAVE_GETMULTILINETYPEMETRICS
 /* Introduced in IM 6.2.1 */
 #undef HAVE_GETNEXTIMAGEATTRIBUTE
 /* Introduced in IM 6.0.0 */

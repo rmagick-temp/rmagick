@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.115 2006/03/29 23:38:55 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.116 2006/04/17 23:07:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -352,6 +352,7 @@ Magick_init_formats(VALUE class)
 static VALUE
 Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 {
+#if defined(HAVE_GETMAGICKRESOURCELIMIT)
     volatile VALUE resource, limit;
     ResourceType res = UndefinedResource;
     char *str;
@@ -426,6 +427,10 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
     }
 
     return ULONG2NUM(cur_limit);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1437,6 +1442,11 @@ Init_RMagick(void)
         ENUMERATOR(CompareOverlayLayer)
         ENUMERATOR(OptimizeLayer)
         ENUMERATOR(OptimizePlusLayer)
+#if defined(HAVE_COALESCELAYER)
+        // Introduced in IM 6.2.7-0
+        ENUMERATOR(CoalesceLayer)
+        ENUMERATOR(DisposeLayer)
+#endif
     END_ENUM
 #endif
 
@@ -1762,7 +1772,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/03/29 23:38:55 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/04/17 23:07:18 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

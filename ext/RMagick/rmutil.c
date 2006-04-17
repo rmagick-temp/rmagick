@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.70 2006/03/30 23:28:29 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.71 2006/04/17 23:07:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1469,6 +1469,7 @@ InterlaceType_new(InterlaceType interlace)
     External:   MagickLayerMethod_new
     Purpose:    Construct an MagickLayerMethod enum object for the specified value.
 */
+#if defined(HAVE_COMPAREIMAGELAYERS)
 static const char *
 MagickLayerMethod_name(MagickLayerMethod method)
 {
@@ -1481,8 +1482,13 @@ MagickLayerMethod_name(MagickLayerMethod method)
         ENUM_TO_NAME(CompareOverlayLayer)
         ENUM_TO_NAME(OptimizeLayer)
         ENUM_TO_NAME(OptimizePlusLayer)
+#if defined(HAVE_COALESCELAYER)
+        ENUM_TO_NAME(CoalesceLayer)
+        ENUM_TO_NAME(DisposeLayer)
+#endif
     }
 }
+#endif
 
 
 VALUE

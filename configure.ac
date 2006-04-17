@@ -144,7 +144,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([GetMagickResourceLimit GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
 AC_CHECK_FUNCS([InterpretImageAttributes IsColorSimilar NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RandomChannelThresholdImage])
@@ -235,21 +235,6 @@ if test "$rm_cv_member_Image_extract_info" = yes; then
   AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
 fi
 
-AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HSBColorspace],
-     rm_cv_enum_hsbcolorspace='yes',
-     rm_cv_enum_hsbcolorspace='no')])
-
-if test "$rm_cv_enum_hsbcolorspace" = yes; then
-  AC_DEFINE(HAVE_HSBCOLORSPACE)
-fi
-
 AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcolorspace,
   [AC_TRY_COMPILE(
 [#include <stdio.h>
@@ -263,6 +248,21 @@ AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcol
 
 if test "$rm_cv_enum_cineonlogrgbcolorspace" = yes; then
   AC_DEFINE(HAVE_CINEONLOGRGBCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = HSBColorspace],
+     rm_cv_enum_hsbcolorspace='yes',
+     rm_cv_enum_hsbcolorspace='no')])
+
+if test "$rm_cv_enum_hsbcolorspace" = yes; then
+  AC_DEFINE(HAVE_HSBCOLORSPACE)
 fi
 
 AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
@@ -354,7 +354,6 @@ AC_CACHE_CHECK(for LogColorspace enum value, rm_cv_enum_logcolorspace,
 if test "$rm_cv_enum_logcolorspace" = yes; then
   AC_DEFINE(HAVE_LOGCOLORSPACE)
 fi
-
 
 AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
   [AC_TRY_COMPILE(
@@ -521,6 +520,20 @@ if test "$rm_cv_enum_transparentvirtualpixelmethod" = yes; then
   AC_DEFINE(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
 fi
 
+AC_CACHE_CHECK(for CoalesceLayer enum value, rm_cv_enum_coalescelayer,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [MagickLayerMethod x; x = CoalesceLayer],
+     rm_cv_enum_coalescelayer='yes',
+     rm_cv_enum_coalescelayer='no')])
+
+if test "$rm_cv_enum_coalescelayer" = yes; then
+  AC_DEFINE(HAVE_COALESCELAYER)
+fi
 
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.

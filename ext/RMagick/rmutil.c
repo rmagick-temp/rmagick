@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.71 2006/04/17 23:07:18 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.72 2006/04/17 23:34:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2028,14 +2028,14 @@ Font_from_TypeInfo(TypeInfo *ti)
     volatile VALUE encoding, foundry, format;
 
     name        = rb_str_new2(ti->name);
-    description = rb_str_new2(ti->description);
     family      = rb_str_new2(ti->family);
     style       = StyleType_new(ti->style);
     stretch     = StretchType_new(ti->stretch);
     weight      = INT2NUM(ti->weight);
-    encoding    = ti->encoding ? rb_str_new2(ti->encoding) : Qnil;
-    foundry     = ti->foundry  ? rb_str_new2(ti->foundry)  : Qnil;
-    format      = ti->format   ? rb_str_new2(ti->format)   : Qnil;
+    description = ti->description ? rb_str_new2(ti->description) : Qnil;
+    encoding    = ti->encoding    ? rb_str_new2(ti->encoding) : Qnil;
+    foundry     = ti->foundry     ? rb_str_new2(ti->foundry)  : Qnil;
+    format      = ti->format      ? rb_str_new2(ti->format)   : Qnil;
 
     return rb_funcall(Class_Font, ID_new, 9
                     , name, description, family, style

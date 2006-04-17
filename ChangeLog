@@ -3,6 +3,8 @@ RMagick 1.11.0
     o Added optimize_layers method to the ImageList class (available with
       ImageMagick 6.2.6)
     o Added limit_resource method to the Magick module
+    o Replace install.rb with setup.rb
+    o Fix bug #4104, incorrect label on example (reported by Jason Lee)
 
 RMagick 1.10.1
     o Fix bug #3437, memory leak in ImageList#to_blob

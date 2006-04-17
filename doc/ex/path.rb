@@ -50,7 +50,7 @@ gc.text 330,125, "'320,120'"
 # Add control point labels
 gc.text  30, 25, "'20,20'"
 gc.text 180, 25, "'170,20'"
-gc.text 330,225, "'320,320'"
+gc.text 330,225, "'320,220'"
 
 # Add auto control point label
 gc.text 180,225, "'auto ctl point'"

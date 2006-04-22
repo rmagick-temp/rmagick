@@ -13,29 +13,29 @@ RUBYARCHDIR   = $(sitearchdir)$(target_prefix)
 
 
 all: .config
-    $(RUBY) setup.rb setup
+	$(RUBY) setup.rb setup
 
 install:
-    $(RUBY) setup.rb install
+	$(RUBY) setup.rb install
 
 clean: .config
-    $(RUBY) setup.rb clean
+	$(RUBY) setup.rb clean
 
 distclean: .config
-    $(RUBY) setup.rb clean
-    rm -f Makefile ext/RMagick/extconf.rb metaconfig
-    rm -f .config Makefile config.cache config.log
-    rm -rf autom4te.cache
+	$(RUBY) setup.rb clean
+	rm -f Makefile ext/RMagick/extconf.rb metaconfig
+	rm -f .config Makefile config.cache config.log
+	rm -rf autom4te.cache
 
 uninstall: .config
-    $(RUBY) uninstall.rb $(RUBY_CONFIG_OPTS)
+	$(RUBY) uninstall.rb $(RUBY_CONFIG_OPTS)
 
 .config: metaconfig
-    if test -n "$(RUBYLIBDIR)"; then \
-        RUBYLIBDIR=--rbdir="$(RUBYLIBDIR)"; \
-    fi; \
-    if test -n "$(RUBYARCHDIR)"; then \
-        RUBYARCHDIR=--sodir="$(RUBYARCHDIR)"; \
-    fi; \
-    $(RUBY) setup.rb config $$RUBYLIBDIR $$RUBYARCHDIR $(RUBY_CONFIG_OPTS)
+	if test -n "$(RUBYLIBDIR)"; then \
+		RUBYLIBDIR=--rbdir="$(RUBYLIBDIR)"; \
+	fi; \
+	if test -n "$(RUBYARCHDIR)"; then \
+		RUBYARCHDIR=--sodir="$(RUBYARCHDIR)"; \
+	fi; \
+	$(RUBY) setup.rb config $$RUBYLIBDIR $$RUBYARCHDIR $(RUBY_CONFIG_OPTS)
 

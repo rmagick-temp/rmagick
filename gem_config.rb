@@ -3,8 +3,13 @@
 
 #   The gem command calls us with some extra arguments we don't use.
 #   Filter out anything that doesn't look like a configure option.
+OPTIONS = %w{ bindir sbindir  libexecdir datadir sysconfdir sharedstatedir
+              localstatedir libdir includedir oldincludedir infodir mandir
+              disable enable with without help version quiet silent cache-file
+              config-cache no-create srcdir prefix exec-prefix}.join('|')
+
 args = []
-ARGV.each { |arg| args << arg if arg =~ /\A--/ }
+ARGV.each { |arg| args << arg if arg =~ /\A--(#{OPTIONS})/ }
 
 cmd = "sh configure #{args.join(' ')}"
 puts "\n#{cmd}\n\n"

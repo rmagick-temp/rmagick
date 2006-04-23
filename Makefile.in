@@ -24,7 +24,7 @@ clean: .config
 distclean: .config
 	$(RUBY) setup.rb clean
 	rm -f Makefile ext/RMagick/extconf.rb metaconfig
-	rm -f .config Makefile config.cache config.log
+	rm -f ext/RMagick/Makefile config.cache config.log
 	rm -rf autom4te.cache
 
 uninstall: .config

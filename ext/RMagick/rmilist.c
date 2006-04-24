@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.36 2006/03/31 00:30:29 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.37 2006/04/24 22:56:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -382,14 +382,28 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
-    if (mthd == OptimizeLayer || mthd == OptimizePlusLayer)
+
+    switch (mthd)
     {
+#if defined(HAVE_COALESCELAYER)
+      case CoalesceLayer:
+        new_images = CoalesceImages(images, &exception);
+        break;
+      case DisposeLayer:
+        new_images = DisposeImages(images, &exception);
+        break;
+#endif
+      case OptimizeLayer:
         new_images = OptimizeImageLayers(images, &exception);
-    }
-    else
-    {
+        break;
+      case OptimizePlusLayer:
+        new_images = OptimizePlusImageLayers(images, &exception);
+        break;
+      default:
         new_images = CompareImageLayers(images, mthd, &exception);
+        break;
     }
+
     rm_handle_all_errors(images);
     rm_split(images);
     HANDLE_ERROR

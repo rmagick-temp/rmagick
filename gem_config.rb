@@ -19,8 +19,15 @@ OPTIONS = %w{ --bindir=        --sbindir=
               --disable-htmldoc
               -h -V -q -C -n }.join('|')
 
+# Accept gem's --no-rdoc option as if --disable-htmldoc had been specified.
 args = []
-ARGV.each { |arg| args << arg if arg =~ /\A(#{OPTIONS})/ }
+ARGV.each do |arg|
+    if arg =~ /\A--no-rdoc\z/i
+        args << '--disable-htmldoc'
+    elsif arg =~ /\A(#{OPTIONS})/
+        args << arg
+    end
+end
 
 cmd = "sh configure #{args.join(' ')}"
 puts "\n#{cmd}\n\n"

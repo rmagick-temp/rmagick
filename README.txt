@@ -168,7 +168,7 @@ addition to the regular options, there are a few RMagick-specific options:
 
 * --disable-htmldoc (or --enable-htmldoc=no)
     >  By default the install process runs all the RMagick example programs
-    >  and generates HTML versions of all the examples. This options causes
+    >  and generates HTML versions of all the examples. This option causes
     >  the install process to skip this step. No documentation is installed.
 
 * --with-graphics-magick

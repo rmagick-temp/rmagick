@@ -166,6 +166,11 @@ addition to the regular options, there are a few RMagick-specific options:
     >  examples and will always complete. This option is useful if you're having
     >  trouble installing RMagick and you want to see all the failing examples.
 
+* --disable-htmldoc (or --enable-htmldoc=no)
+    >  By default the install process runs all the RMagick example programs
+    >  and generates HTML versions of all the examples. This options causes
+    >  the install process to skip this step. No documentation is installed.
+
 * --with-graphics-magick
     >  If you have both ImageMagick and GraphicsMagick installed, this option will
     >  force RMagick to be configured with GraphicsMagick.

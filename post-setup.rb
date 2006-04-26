@@ -13,12 +13,14 @@ if defined?(Installer) && self.class == Installer
   RUBYPROG  = get_config('ruby-prog')
   SRCDIR    = curr_srcdir()
   ALLOW_EXAMPLE_ERRORS = get_config('allow-example-errors') == 'yes'
+  BUILD_HTMLDOC = get_config('disable-htmldoc') != 'yes'
 
 else
 
   RUBYPROG  = 'ruby'
   SRCDIR    = '.'
   ALLOW_EXAMPLE_ERRORS = true
+  BUILD_HTMLDOC = true
 
 end
 
@@ -200,46 +202,54 @@ end
 
 puts "setup.rb: entering post-setup phase..."
 
-#
-# Don't bother if we're in the sandbox
-#
-if File.exists? 'CVS/Entries'
-  puts "post-setup.rb: in CVS sandbox - stopping..."
-  exit
-end
 
-puts "post-setup.rb: setting up documentation..."
+if BUILD_HTMLDOC
 
-
-# We're in the source directory. Process the doc in-place. The post-install.rb
-# script moves the generated documentation to the ultimate installation directories.
-
-
-cwd = Dir.getwd()
-Dir.chdir('doc')
-begin
-
-  # Step 1A: edit the shebang line in the examples
-  Dir.chdir('ex')
-  files = Dir['*.rb']
-  files.each do |file|
-    filter(file) { |line| line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ') }
-
-    # Step 1B: Make a copy of the example as HTML in the doc directory
-    filetoHTML(file, "../#{file}.html")
+  #
+  # Don't bother if we're in the sandbox
+  #
+  if File.exists? 'CVS/Entries'
+    puts "post-setup.rb: in CVS sandbox - stopping..."
+    exit
   end
 
-  # Step 2: run the examples
-  examples = Dir['*.rb'].sort
-  examples -= DONT_RUN
-  es = ExampleSet.new(examples.length)
+  puts "post-setup.rb: setting up documentation..."
+
+  # We're in the source directory. Process the doc in-place. The post-install.rb
+  # script moves the generated documentation to the ultimate installation directories.
+
+  cwd = Dir.getwd()
+  Dir.chdir('doc')          # need to work with 1.6.x, can't use block form
   begin
-    examples.each { |example| es.update(example) }
+
+    # Step 1A: edit the shebang line in the examples
+    Dir.chdir('ex')
+    files = Dir['*.rb']
+    files.each do |file|
+      filter(file) { |line| line.sub(/\A\#!\s*\S*ruby\s/, '#!'+RUBYPROG+' ') }
+
+      # Step 1B: Make a copy of the example as HTML in the doc directory
+      filetoHTML(file, "../#{file}.html")
+    end
+
+    # Step 2: run the examples
+    examples = Dir['*.rb'].sort
+    examples -= DONT_RUN
+    es = ExampleSet.new(examples.length)
+    begin
+      examples.each { |example| es.update(example) }
+    ensure
+      es.persist
+    end
+
   ensure
-    es.persist
+    Dir.chdir(cwd)
   end
 
-ensure
-  Dir.chdir(cwd)
+else
+
+  puts "post-setup.rb: --disable-htmldoc specified. No documentation will be set up."
+
 end
 
+exit

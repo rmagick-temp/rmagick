@@ -695,8 +695,14 @@ AC_ARG_ENABLE(no-harm,
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --no-harm"], )
 
 AC_ARG_ENABLE(allow-example-errors,
-    AS_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [--disable-allow-example-errors]]),
+    AS_HELP_STRING([--enable-allow-example-errors], [allow installation to proceed even if a lot of examples fail [[--disable-allow-example-errors]]]),
     [RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --allow-example-errors"], )
+
+AC_ARG_ENABLE(htmldoc,
+    AS_HELP_STRING([--disable-htmldoc], [skip creating the HTML documentation and examples [[--enable-htmldoc]]]),
+    [if test "$enable_htmldoc" = no; then
+        RUBY_CONFIG_OPTS="$RUBY_CONFIG_OPTS --disable-htmldoc"
+     fi], )
 
 
 RUBY_VERSION_STRING=`$RUBY --version`

@@ -296,8 +296,8 @@ class ConfigTable
     ALIASES.each do |ali, name|
       @table[ali] = @table[name]
     end
-    #@items.freeze
-    #@table.freeze
+    @items.freeze
+    @table.freeze
     @options_re = /\A--(#{@table.keys.join('|')})(?:=(.*))?\z/
   end
 
@@ -768,7 +768,6 @@ class ToplevelInstaller
     config = ConfigTable.new(load_rbconfig())
     config.load_standard_entries
     config.load_multipackage_entries if multipackage?
-    config.fixup
     klass = (multipackage?() ? ToplevelInstallerMulti : ToplevelInstaller)
     klass.new(File.dirname($0), config).invoke
   end
@@ -805,6 +804,7 @@ class ToplevelInstaller
 
   def invoke
     run_metaconfigs
+    @config.fixup
     case task = parsearg_global()
     when nil, 'all'
       parsearg_config

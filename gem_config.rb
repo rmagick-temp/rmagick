@@ -16,6 +16,7 @@ OPTIONS = %w{ --bindir=        --sbindir=
               --cache-file=    --config-cache
               --no-create      --srcdir=
               --prefix=        --exec-prefix=
+              --disable-htmldoc
               -h -V -q -C -n }.join('|')
 
 args = []

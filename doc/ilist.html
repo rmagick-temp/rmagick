@@ -15,23 +15,8 @@
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
 <script type="text/javascript" src="scripts/doc.js">
 </script>
-<script type="text/javascript">
-  //<![CDATA[
-    <!-- Pre-load these images -->
-    img = new Image();
-    img.src = "ex/average_before.gif";
-    img.src = "ex/coalesce_anim.gif";
-    img.src = "ex/map_before.jpg";
-    img.src = "ex/morph.gif";
-    img.src = "ex/quantize-m_before.jpg";
-  //]]>
+<script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
-
-  /* Styles local to this page. */
-  /*]]>*/
-</style>
 </head>
 
 <body>
@@ -548,17 +533,16 @@ imagelist.animate { self.server_name = "other:0.0" }
      <img style="display:none" id="notaveraged" onmouseout=
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
-    "ex/average_before.gif" alt="average example"
-     /><!--
+    "ex/average_before.gif" alt="average example"  /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
     src="ex/average_after.gif" alt="average example"
-     /></a> <img src="ex/images/spin.gif" alt="" class=
+    /></a> <img src="ex/images/spin.gif" alt="" class=
     "spin" style="left:131px; display:" id="averagedspin" title=
     "Mouse over the example to see the 3 original images"
-     /></p>
+    /></p>
 
     <h4>Magick API</h4>
 
@@ -1172,6 +1156,9 @@ img[2]['Label'] = "Mom's Birthday"
     <h4>Example</h4><a href=
     "javascript:popup('demo.rb.html')">demo.rb</a>
 
+    <h4>Example</h4><a href=
+    "javascript:popup('demo.rb.html')">demo.rb</a>
+
     <h4>Magick API</h4>
 
     <p>MontageImages</p>
@@ -1315,7 +1302,8 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     the <code>-layers</code> option in ImageMagick's
     <code>mogrify</code> command.</p>
 
-    <p>With all arguments except <code>OptimizeLayer</code>,
+    <p>With the CompareAnyLayer, CompareClearLayer, and
+    CompareOverlayLayer arguments, <code>optimize_layers</code>
     <span class="imquote">compares each image with the next in a
     sequence and returns the minimum bounding region of all the
     pixel differences (of the <code>LayerMethod</code> specified)
@@ -1336,11 +1324,23 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     does not matter for animations which are a fully coalesced
     sequence of images.</p>
 
-    <p>With the OptimizeLayer argument, <span class=
-    "imquote">compares each image the GIF disposed forms of the
-    previous image in the sequence. From this it attempts to select
-    the smallest cropped image to replace each frame, while
-    preserving the results of the animation.</span></p>
+    <p>With OptimizeLayer, <code>optimize_layers</code>
+    <span class="imquote">compares each image the GIF disposed
+    forms of the previous image in the sequence. From this it
+    attempts to select the smallest cropped image to replace each
+    frame, while preserving the results of the
+    animation.</span></p>
+
+    <p>OptimizePlusLayer is the same as OptimizeLayers,
+    <span class="imquote">but may also add or even remove extra
+    frames in the animation, if it improves the total number of
+    pixels in the resulting GIF animation.</span></p>
+
+    <p>With DisposeLayer, <code>optimize_layers</code> <span class=
+    "imquote">returns the coalesced frames of a GIF animation as it
+    would appear after the GIF dispose method of that frame has
+    been applied. That is it returns the appearance of each frame
+    before the next is overlaid.</span></p>
 
     <h4>Arguments</h4>
 
@@ -1348,11 +1348,15 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     values:</p>
 
     <ul>
+      <li>CoalesceLayer</li>
+
       <li>CompareAnyLayer</li>
 
       <li>CompareClearLayer</li>
 
       <li>CompareOverlayLayer</li>
+
+      <li>DisposeLayer</li>
 
       <li>OptimizeLayer</li>
 
@@ -1369,6 +1373,9 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     <code>optimize_layers</code> with the
     <code>CompareAnyLayer</code> argument.</p>
 
+    <p><a href="#coalesce">coalesce</a> is an alias for
+    <code>optimize_layers</code> with the
+    <code>CoalesceLayer</code> argument.</p>
     <h4>Magick API</h4>
 
     <p>OptimizeImageLayers, CompareImageLayers (available in

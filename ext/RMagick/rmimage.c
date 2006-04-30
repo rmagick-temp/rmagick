@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.143 2006/03/30 23:28:58 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.144 2006/04/30 22:38:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2193,6 +2193,86 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
     (void) ContrastImage(new_image, sharpen);
     HANDLE_ERROR_IMG(new_image)
     return rm_image_new(new_image);
+}
+
+/*
+    Method:     Image#contrast_stretch_channel(black_point <, white_point>)
+    Purpose:    Call ContrastStretchImageChannel
+    Notes:      If white_point is not specified then it is #pixels-black_point.
+                Both black_point and white_point can be specified as Floats
+                or as percentages, i.e. "10%"
+*/
+VALUE
+Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_CONTRASTSTRETCHIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channels;
+    ExceptionInfo exception;
+    double black_point, white_point;
+    unsigned long pixels;
+
+    channels = extract_channels(&argc, argv);
+    if (argc > 2)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    pixels = image->columns * image->rows;
+
+    switch (argc)
+    {
+        case 2:
+            if (rm_check_num2dbl(argv[0]))
+            {
+                black_point = NUM2DBL(argv[0]);
+            }
+            else
+            {
+                black_point = pixels * rm_str_to_pct(argv[0]);
+            }
+            if (rm_check_num2dbl(argv[1]))
+            {
+                white_point = NUM2DBL(argv[1]);
+            }
+            else
+            {
+                white_point = pixels * rm_str_to_pct(argv[1]);
+            }
+            break;
+
+        case 1:
+            if (rm_check_num2dbl(argv[0]))
+            {
+                black_point = NUM2DBL(argv[0]);
+            }
+            else
+            {
+                black_point = pixels * rm_str_to_pct(argv[0]);
+            }
+            white_point = (double) pixels - black_point;
+            break;
+
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = CloneImage(image, 0, 0, True, &exception);
+    HANDLE_ERROR
+
+    (void) ContrastStretchImageChannel(new_image, channels, black_point, white_point);
+    HANDLE_ERROR_IMG(new_image);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

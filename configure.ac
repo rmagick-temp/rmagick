@@ -99,7 +99,7 @@ if test "$rm_have_acquirestringinfo" = yes; then
 fi
 
 AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AddNoiseImageChannel BilevelImageChannel])
-AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels CompareImageLayers])
+AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels CompareImageLayers ContrastStretchImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
 AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])
 AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])

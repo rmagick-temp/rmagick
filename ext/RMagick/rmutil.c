@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.72 2006/04/17 23:34:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.73 2006/04/30 22:38:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -273,6 +273,71 @@ rm_percentage(VALUE arg)
     }
 
     return pct;
+}
+
+
+/*
+    Static:     check_num2dbl
+    Purpose:    return 0 if rb_num2dbl doesn't raise an exception
+ */
+static VALUE
+check_num2dbl(VALUE obj)
+{
+    rb_num2dbl(obj);
+    return INT2FIX(1);
+}
+
+
+/*
+    Static:     rescue_not_dbl
+    Purpose:    called if rb_num2dbl raises an exception
+ */
+static VALUE
+rescue_not_dbl(VALUE ignored)
+{
+    return INT2FIX(0);
+}
+
+
+/*
+    Extern:     rm_check_num2dbl
+    Purpose:    Return 1 if the object can be converted to a double, 0 otherwise.
+*/
+int rm_check_num2dbl(VALUE obj)
+{
+    return FIX2INT(rb_rescue(check_num2dbl, obj, rescue_not_dbl, (VALUE)0));
+}
+
+
+/*
+ *  Extern:     rm_str_to_pct
+ *  Purpose:    Given a string in the form NN% return the corresponding double.
+ *
+*/
+double rm_str_to_pct(VALUE str)
+{
+    long pct;
+    char *pct_str, *end;
+
+    str = rb_rescue(rb_str_to_str, str, rescue_not_str, str);
+    pct_str = STRING_PTR(str);
+    errno = 0;
+    pct = strtol(pct_str, &end, 10);
+
+    if (errno == ERANGE)
+    {
+        rb_raise(rb_eRangeError, "`%s' out of range", pct_str);
+    }
+    if (*end != '%')
+    {
+        rb_raise(rb_eArgError, "expected percentage, got `%s'", pct_str);
+    }
+    if (pct < 0L)
+    {
+        rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", pct_str);
+    }
+
+    return pct / 100.0;
 }
 
 
@@ -1494,10 +1559,14 @@ MagickLayerMethod_name(MagickLayerMethod method)
 VALUE
 MagickLayerMethod_new(MagickLayerMethod method)
 {
+#if defined(HAVE_COMPAREIMAGELAYERS)
     const char *name;
 
     name = MagickLayerMethod_name(method);
     return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
+#else
+    return (VALUE)0;
+#endif
 }
 
 

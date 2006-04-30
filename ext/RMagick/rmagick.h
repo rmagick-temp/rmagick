@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.107 2006/03/29 23:38:55 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.108 2006/04/30 22:38:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -773,6 +773,7 @@ extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
 extern VALUE Image_compress_colormap_bang(VALUE);
 extern VALUE Image_constitute(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_contrast(int, VALUE *, VALUE);
+extern VALUE Image_contrast_stretch_channel(int, VALUE *, VALUE);
 extern VALUE Image_convolve(VALUE, VALUE, VALUE);
 extern VALUE Image_convolve_channel(int, VALUE *, VALUE);
 extern VALUE Image_copy(VALUE);
@@ -1026,8 +1027,10 @@ extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
 extern void   rm_check_ary_len(VALUE, int);
 extern void   rm_check_frozen(VALUE);
+extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
 extern double rm_percentage(VALUE);
+extern double rm_str_to_pct(VALUE);
 extern VALUE  rm_define_enum_type(char *);
 extern void   rm_write_temp_image(Image *, char *);
 extern void   rm_delete_temp_image(char *);

@@ -1342,6 +1342,16 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     been applied. That is it returns the appearance of each frame
     before the next is overlaid.</span></p>
 
+    <p>The <code>optimize_layers</code> method corresponds to the
+    <code>-layers</code> option on ImageMagick's
+    <code>convert</code> and <code>mogrify</code> commands. Anthony
+    Thyssen's excellent <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6">Examples
+    of ImageMagick Usage</a> site has very detailed <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/anim_basics/#optimize">
+    information and examples</a> of the <code>-layers</code> option
+    and and the optimization methods .</p>
+
     <h4>Arguments</h4>
 
     <p>One of the following <code>MagickLayerMethod</code>
@@ -1376,6 +1386,7 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     <p><a href="#coalesce">coalesce</a> is an alias for
     <code>optimize_layers</code> with the
     <code>CoalesceLayer</code> argument.</p>
+
     <h4>Magick API</h4>
 
     <p>OptimizeImageLayers, CompareImageLayers (available in

@@ -121,13 +121,13 @@ float: left;
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
+
+          <li><a href="#channel_depth">channel_depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#channel_depth">channel_depth</a></li>
-
           <li><a href="#channel_extrema">channel_extrema</a></li>
 
           <li><a href="#channel_mean">channel_mean</a></li>
@@ -163,12 +163,15 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
+
+          <li><a href="#contrast">contrast</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#contrast">contrast</a></li>
+          <li><a href=
+          "#contrast_stretch_channel">contrast_stretch_channel</a></li>
 
           <li><a href="#convolve">convolve</a></li>
 
@@ -2321,6 +2324,8 @@ f.colors &raquo; 108
     <h4>See also</h4>
 
     <p><a href=
+    "#contrast_stretch_channel">contrast_stretch_channel</a>,
+    <a href=
     "image3.html#sigmoidal_contrast_channel">sigmoidal_contrast_channel</a></p>
 
     <h4>Magick API</h4>
@@ -2329,9 +2334,69 @@ f.colors &raquo; 108
   </div>
 
   <div class="sig">
+    <h3 id="contrast_stretch_channel">contrast_stretch_channel</h3>
+
+    <p><span class=
+    "arg">image</span>.contrast_stretch_channel(<span class=
+    "arg">black_point</span> [, <span class=
+    "arg">white_point</span>] [, <span class=
+    "arg">channel</span>...]) -&gt; <span class=
+    "arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This method <span class="imquote">is a simple image
+    enhancement technique that attempts to improve the contrast in
+    an image by `stretching' the range of intensity values it
+    contains to span a desired range of values. It differs from the
+    more sophisticated histogram equalization in that it can only
+    apply a linear scaling function to the image pixel values. As a
+    result the `enhancement' is less harsh.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>black_point</dt>
+
+      <dd>black out at most this many pixels. Specify an absolute
+      number of pixels as a numeric value, or a percentage as a
+      string in the form 'NN%'.</dd>
+
+      <dt>white_point</dt>
+
+      <dd>burn at most this many pixels. Specify an absolute number
+      of pixels as a numeric value, or a percentage as a string in
+      the form 'NN%'. This argument is optional. If not specified
+      the default is <code>all pixels - black_point
+      pixels</code>.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified all channels are included.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#contrast">contrast</a>, <a href=
+    "image2.html#equalize">equalize</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>ContrastStretchImage (available in ImageMagick 6.2.6)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="convolve">convolve</h3>
 
-    <p>&gt;<span class="arg">image</span>.convolve(<span class=
+    <p><span class="arg">image</span>.convolve(<span class=
     "arg">order</span>, <span class="arg">kernel</span>) -&gt;
     <em>anImage</em></p>
   </div>

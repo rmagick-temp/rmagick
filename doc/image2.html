@@ -1241,9 +1241,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p><span class="arg">image</span>.level(<span class=
     "arg">black_point</span>=<code>0.0</code>, <span class=
-    "arg">mid_point</span>=<code>1.0</code>, <span class=
-    "arg">white_point</span>=<code>MaxRGB</code>) -&gt;
-    <em>anImage</em></p>
+    "arg">white_point</span>=<code>MaxRGB</code>, <span class=
+    "arg">gamma</span>=<code>1.0</code>) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1254,10 +1253,10 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     the full available quantum range. The parameters provided
     represent the black, mid, and white points. The black point
     specifies the darkest color in the image. Colors darker than
-    the black point are set to zero. Mid point specifies a gamma
+    the black point are set to zero. Gamma specifies a gamma
     correction to apply to the image. White point specifies the
     lightest color in the image. Colors brighter than the white
-    point are set to the maximum quantum value.</p>
+    point are set to the maximum quantum value</p>
 
     <h4>Arguments</h4>
 
@@ -1268,12 +1267,13 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
       <dt>mid_point</dt>
 
-      <dd>The mid-point level. The default is 1.0.</dd>
-
-      <dt>white_point</dt>
-
       <dd>The white point level. The default is <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+      "constants.html#Miscellaneous_constants">MaxRGB</a> -
+      <span class="arg">black_point</span>.</dd>
+
+      <dt>gamma</dt>
+
+      <dd>The gamma correction. The default is 1.0.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1306,9 +1306,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p><span class="arg">image</span>.level_channel(<span class=
     "arg">channel</span>, <span class=
-    "arg">black_point</span>=<code>0.0</code>, <span class=
-    "arg">mid_point</span>=<code>1.0</code>, <span class=
-    "arg">white_point</span>=<code>MaxRGB</code>) -&gt;
+    "arg">black_point</span>=<code>0</code>, <span class=
+    "arg">white_point</span>=<code>MaxRGB</code>-<code>black_point</code>,
+    <span class="arg">gamma</span>=<code>1.0</code>) -&gt;
     <em>anImage</em></p>
   </div>
 
@@ -1330,12 +1330,13 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
       <dt>mid_point</dt>
 
-      <dd>The mid-point level. The default is 1.0.</dd>
-
-      <dt>white_point</dt>
-
       <dd>The white point level. The default is <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+      "constants.html#Miscellaneous_constants">MaxRGB</a> -
+      <span class="arg">black_point</span>.</dd>
+
+      <dt>gamma</dt>
+
+      <dd>The gamma correction. The default is 1.0.</dd>
     </dl>
 
     <h4>Returns</h4>

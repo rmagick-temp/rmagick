@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.29 2006/02/19 17:12:20 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.30 2006/05/07 21:41:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -467,7 +467,7 @@ VALUE Draw_annotate(
 
     draw->info->affine = keep;
 
-    HANDLE_ERROR_IMG(image)
+    rm_check_image_exception(image, RetainOnError);
 
     return self;
 }
@@ -640,7 +640,7 @@ Draw_draw(VALUE self, VALUE image_arg)
     magick_clone_string(&(draw->info->primitive), STRING_PTR(draw->primitives));
 
     (void) DrawImage(image, draw->info);
-    HANDLE_ERROR_IMG(image)
+    rm_check_image_exception(image, RetainOnError);
 
     magick_free(draw->info->primitive);
     draw->info->primitive = NULL;
@@ -761,6 +761,10 @@ Draw_initialize(VALUE self)
     // Use the Info structure to create the DrawInfo structure
     Data_Get_Struct(info_obj, Info, info);
     draw->info = CloneDrawInfo(info, NULL);
+    if (!draw->info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
 
     draw->primitives = (VALUE)0;
     draw->tmpfile_ary = NULL;

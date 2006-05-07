@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.73 2006/04/30 22:38:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.74 2006/05/07 21:41:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -15,6 +15,7 @@ static const char *StretchType_name(StretchType);
 static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
 static VALUE Enum_type_inspect(VALUE);
+static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
@@ -482,7 +483,7 @@ Pixel_from_color(VALUE class, VALUE name)
 
     GetExceptionInfo(&exception);
     okay = QueryColorDatabase(STRING_PTR(name), &pp, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
     if (!okay)
     {
         rb_raise(rb_eArgError, "invalid color name: %s", STRING_PTR(name));
@@ -551,7 +552,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     (void) QueryColorname(image, pixel, compliance, name, &exception);
     DestroyImage(image);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
 
     // Always return a string, even if it's ""
     return rb_str_new2(name);
@@ -977,7 +978,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
     GetExceptionInfo(&exception);
 
     (void) QueryColorname(image, color, X11Compliance, name, &exception);
-    HANDLE_ERROR_IMG(image)
+    CHECK_EXCEPTION()
 
     return rb_str_new2(name);
 }
@@ -1553,21 +1554,16 @@ MagickLayerMethod_name(MagickLayerMethod method)
 #endif
     }
 }
-#endif
-
 
 VALUE
 MagickLayerMethod_new(MagickLayerMethod method)
 {
-#if defined(HAVE_COMPAREIMAGELAYERS)
     const char *name;
 
     name = MagickLayerMethod_name(method);
     return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
-#else
-    return (VALUE)0;
-#endif
 }
+#endif
 
 
 /*
@@ -2785,7 +2781,7 @@ rm_write_temp_image(Image *image, char *tmpnam)
     {
         rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
     }
-    HANDLE_ERROR_IMG(image)
+    rm_check_image_exception(image, RetainOnError);
 
     sprintf(tmpnam, "mpri:%ld", registry_id);
 }
@@ -2929,179 +2925,25 @@ rm_get_geometry(
 
 
 /*
-    Static:     magick_error_handler
-    Purpose:    Build error or warning message string. If the error
-                is severe, raise the ImageMagickError exception,
-                otherwise print an optional warning.
-*/
-static void
-magick_error_handler(
-    ExceptionType severity,
-    const char *reason,
-    const char *description
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-    ,
-    const char *module,
-    const char *function,
-    unsigned long line
-#endif
-    )
+ *  Extern:     rm_clone_image
+ *  Purpose:    clone an image, handle errors
+ */
+Image *rm_clone_image(Image *image)
 {
-    char msg[1024];
+    Image *clone;
+    ExceptionInfo exception;
 
-    if (severity >= ErrorException)
+    GetExceptionInfo(&exception);
+    clone = CloneImage(image, 0, 0, True, &exception);
+    if (!clone)
     {
-#if defined(HAVE_SNPRINTF)
-        snprintf(msg, sizeof(msg)-1,
-#else
-        sprintf(msg,
-#endif
-                     "%s%s%s",
-            GetLocaleExceptionMessage(severity, reason),
-            description ? ": " : "",
-            description ? GetLocaleExceptionMessage(severity, description) : "");
-
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-        {
-        char extra[100];
-
-#if defined(HAVE_SNPRINTF)
-        snprintf(extra, sizeof(extra)-1, "%s at %s:%lu", function, module, line);
-#else
-        sprintf(extra, "%s at %s:%lu", function, module, line);
-#endif
-        raise_error(msg, extra);
-        }
-#else
-        raise_error(msg, NULL);
-#endif
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    else if (severity != UndefinedException)
-    {
-#if defined(HAVE_SNPRINTF)
-        snprintf(msg, sizeof(msg)-1,
-#else
-        sprintf(msg,
-#endif
-                     "RMagick: %s%s%s",
-            GetLocaleExceptionMessage(severity, reason),
-            description ? ": " : "",
-            description ? GetLocaleExceptionMessage(severity, description) : "");
-        rb_warning(msg);
-    }
+    rm_check_exception(&exception, clone, DestroyOnError);
+
+    return clone;
 }
 
-
-/*
-    Extern:     handle_error
-    Purpose:    Called from RMagick routines to issue warning messages
-                and raise the ImageMagickError exception.
-    Notes:      In order to free up memory before calling raise, this
-                routine copies the ExceptionInfo data to local storage
-                and then calls DestroyExceptionInfo before raising
-                the error.
-
-                If the exception is an error, DOES NOT RETURN!
-*/
-void
-rm_handle_error(ExceptionInfo *ex)
-{
-#define RM_MAX_ERROR_CLAUSE 250
-    ExceptionType sev = ex->severity;
-    char reason[RM_MAX_ERROR_CLAUSE+1];
-    char desc[RM_MAX_ERROR_CLAUSE+1];
-
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-    char module[RM_MAX_ERROR_CLAUSE+1], function[RM_MAX_ERROR_CLAUSE+1];
-    unsigned long line;
-#endif
-
-    reason[0] = '\0';
-    desc[0] = '\0';
-
-    if (sev == UndefinedException)
-    {
-        return;
-    }
-    if (ex->reason)
-    {
-        strncpy(reason, ex->reason, RM_MAX_ERROR_CLAUSE);
-        reason[RM_MAX_ERROR_CLAUSE] = '\0';
-    }
-    if (ex->description)
-    {
-        strncpy(desc, ex->description, RM_MAX_ERROR_CLAUSE);
-        desc[RM_MAX_ERROR_CLAUSE] = '\0';
-    }
-
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-    module[0] = '\0';
-    function[0] = '\0';
-
-    if (ex->module)
-    {
-        strncpy(module, ex->module, RM_MAX_ERROR_CLAUSE);
-        module[RM_MAX_ERROR_CLAUSE] = '\0';
-    }
-    if (ex->function)
-    {
-        strncpy(function, ex->function, RM_MAX_ERROR_CLAUSE);
-        function[RM_MAX_ERROR_CLAUSE] = '\0';
-    }
-    line = ex->line;
-#endif
-
-    // Let ImageMagick reclaim its storage
-    DestroyExceptionInfo(ex);
-    // Reset the severity. If the exception structure is in an
-    // Image and this exception is rescued and the Image reused,
-    // we need the Image to be pristine!
-    GetExceptionInfo(ex);
-
-#if !defined(HAVE_EXCEPTIONINFO_MODULE)
-    magick_error_handler(sev, reason, desc);
-#else
-    magick_error_handler(sev, reason, desc, module, function, line);
-#endif
-}
-
-/*
-    Extern:     handle_all_errors
-    Purpose:    Examine all the images in a sequence. If any
-                image has an error, raise an exception. Otherwise
-                if any image has a warning, issue a warning message.
-*/
-void rm_handle_all_errors(Image *seq)
-{
-    Image *badboy = NULL;
-    Image *image = seq;
-
-    // Find the image with the highest severity
-    while (image)
-    {
-        if (image->exception.severity != UndefinedException)
-        {
-            if (!badboy)
-            {
-                badboy = image;
-            }
-            else if (image->exception.severity > badboy->exception.severity)
-            {
-                badboy = image;
-            }
-        }
-        image = GetNextImageInList(image);
-    }
-
-    if (badboy)
-    {
-        if (badboy->exception.severity > WarningException)
-        {
-            rm_split(seq);
-        }
-        rm_handle_error(&badboy->exception);
-    }
-}
 
 /*
     Extern:     rm_progress_monitor
@@ -3154,3 +2996,302 @@ rm_split(Image *image)
         (void) RemoveFirstImageFromList(&image);
     }
 }
+
+
+
+/*
+ *  Static:     copy_exception
+ *              clear_exception
+ *  Purpose:    Define alternative implementations of ImageMagick's
+ *              InheritException and ClearMagickException.
+ *  Notes:      InheritException is ALWAYS defined in ImageMagick and
+ *              NEVER defined in GraphicsMagick. ClearMagickException
+ *              is defined in ImageMagick 6.2.6 and later and NEVER
+ *              defined in GraphicsMagick.
+ *
+ *              The purpose of InheritException is to copy the exception
+ *              information from a "related" exception to a destination
+ *              exception if the related exception is more severe than the
+ *              destination exception.
+ *
+ *              The purpose of ClearException is to reset the ExceptionInfo
+ *              structure to its initial format.
+ */
+
+#if defined(HAVE_INHERITEXCEPTION)
+
+    // This is ImageMagick - InheritException is always defined
+    static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
+    {
+        InheritException(exception, relative);
+    }
+
+    // ImageMagick < 6.2.6 had a different kind of ExceptionInfo struct
+    // and doesn't define ClearMagickException.
+    #if defined(HAVE_CLEARMAGICKEXCEPTION)
+        static void clear_exception(ExceptionInfo *exception)
+        {
+           ClearMagickException(exception);
+        }
+    #else
+
+        static void clear_exception(ExceptionInfo *exception)
+        {
+            DestroyExceptionInfo(exception);
+            GetExceptionInfo(exception);
+        }
+
+    #endif
+
+
+#else   // !defined(HAVE_INHERITEXCEPTION)
+
+    // This is GraphicsMagick. Very old versions don't support the
+    // module, function, and line fields in the ExceptionInfo struct.
+
+    static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
+    {
+        assert(exception != NULL);
+        assert(exception->signature == MagickSignature);
+        assert(relative != NULL);
+
+        if (relative->severity < exception->severity)
+        {
+          return;
+        }
+
+        DestroyExceptionInfo(exception);
+        GetExceptionInfo(exception);
+
+        exception->severity = relative->severity;
+        if (relative->reason)
+        {
+          magick_clone_string(&exception->reason, relative->reason);
+        }
+
+        if (relative->description)
+        {
+          magick_clone_string(&exception->description, relative->description);
+        }
+
+
+        #if defined(HAVE_EXCEPTIONINFO_MODULE)
+            if (relative->module)
+            {
+              magick_clone_string(&exception->module, relative->module);
+            }
+            if (relative->function)
+            {
+              magick_clone_string(&exception->function, relative->function);
+            }
+
+            exception->line = relative->line;
+        #endif
+    }
+
+
+    static void clear_exception(ExceptionInfo *exception)
+    {
+        DestroyExceptionInfo(exception);
+        GetExceptionInfo(exception);
+    }
+
+#endif
+
+
+/*
+    Extern:     rm_check_image_exception
+    Purpose:    If an ExceptionInfo struct in a list of images indicates a warning,
+                issue a warning message. If an ExceptionInfo struct indicates an
+                error, raise an exception and optionally destroy the images.
+ */
+void
+rm_check_image_exception(Image *imglist, ErrorRetention retention)
+{
+    ExceptionInfo exception;
+    Image *badboy = NULL;
+    Image *image;
+
+    if (imglist == NULL)
+    {
+        return;
+    }
+
+    GetExceptionInfo(&exception);
+
+    // Find the image with the highest severity
+    image = GetFirstImageInList(imglist);
+    while (image)
+    {
+        if (image->exception.severity != UndefinedException)
+        {
+            if (!badboy || image->exception.severity > badboy->exception.severity)
+            {
+                badboy = image;
+                copy_exception(&exception, &badboy->exception);
+            }
+
+            clear_exception(&image->exception);
+        }
+        image = GetNextImageInList(image);
+    }
+
+    if (badboy)
+    {
+        rm_check_exception(&exception, imglist, retention);
+    }
+}
+
+
+/*
+ *  Extern:     rm_check_exception
+ *  Purpose:    Call handle_exception if there is an exception to handle.
+ */
+void
+rm_check_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retention)
+{
+    if (exception->severity == UndefinedException)
+    {
+        return;
+    }
+
+    handle_exception(exception, imglist, retention);
+}
+
+
+/*
+ *  Static:     handle_exception
+ *  Purpose:    called when rm_check_exception determines that we need
+ *              to either issue a warning message or raise an exception.
+ *              This function allocates a bunch of stack so we don't call
+ *              it unless we have to.
+*/
+static void
+handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retention)
+{
+
+    char reason[500];
+    char desc[500];
+    char msg[sizeof(reason)+sizeof(desc)+20];
+
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    char module[200], function[200];
+    char extra[sizeof(module)+sizeof(function)+20];
+    unsigned long line;
+#endif
+
+
+
+    // Handle simple warning
+    if (exception->severity < ErrorException)
+    {
+#if defined(HAVE_SNPRINTF)
+        snprintf(msg, sizeof(msg)-1, "RMagick: %s%s%s",
+#else
+        sprintf(msg, "RMagick: %.500s%s%.500s",
+#endif
+            GetLocaleExceptionMessage(exception->severity, exception->reason),
+            exception->description ? ": " : "",
+            exception->description ? GetLocaleExceptionMessage(exception->severity, exception->description) : "");
+        msg[sizeof(msg)-1] = '\0';
+        rb_warning(msg);
+
+        DestroyExceptionInfo(exception);
+        return;
+    }
+
+    // Raise an exception. We're not coming back...
+
+
+    // Newly-created images should be destroyed, images that are part
+    // of image objects should be retained but split.
+    if (imglist)
+    {
+        if (retention == DestroyOnError)
+        {
+            (void) DestroyImageList(imglist);
+            imglist = NULL;
+        }
+        else
+        {
+            rm_split(imglist);
+        }
+    }
+
+
+    // Clone the ExceptionInfo with all arguments on the stack.
+    reason[0] = '\0';
+    desc[0] = '\0';
+
+    if (exception->reason)
+    {
+        strncpy(reason, exception->reason, sizeof(reason)-1);
+        reason[sizeof(reason)-1] = '\0';
+    }
+    if (exception->description)
+    {
+        strncpy(desc, exception->description, sizeof(desc)-1);
+        desc[sizeof(desc)-1] = '\0';
+    }
+
+
+#if defined(HAVE_SNPRINTF)
+        snprintf(msg, sizeof(msg)-1, "%s%s%s",
+            GetLocaleExceptionMessage(exception->severity, reason),
+            desc[0] ? ": " : "",
+            desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
+#else
+        sprintf(msg, "%.*s%s%.*s",
+            sizeof(reason)-1, GetLocaleExceptionMessage(exception->severity, reason),
+            desc[0] ? ": " : "",
+            sizeof(desc)-1, desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
+#endif
+        msg[sizeof(msg)-1] = '\0';
+
+
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    module[0] = '\0';
+    function[0] = '\0';
+
+    if (exception->module)
+    {
+        strncpy(module, exception->module, sizeof(module)-1);
+        module[sizeof(module)-1] = '\0';
+    }
+    if (exception->function)
+    {
+        strncpy(function, exception->function, sizeof(function)-1);
+        function[sizeof(function)-1] = '\0';
+    }
+    line = exception->line;
+
+#if defined(HAVE_SNPRINTF)
+     snprintf(extra, sizeof(extra)-1, "%s at %s:%lu", function, module, line);
+#else
+     sprintf(extra, "%.*s at %.*s:%lu", sizeof(function), function, sizeof(module), module, line);
+#endif
+     extra[sizeof(extra)-1] = '\0';
+
+     DestroyExceptionInfo(exception);
+     raise_error(msg, extra);
+
+#else
+     DestroyExceptionInfo(exception);
+     raise_error(msg, NULL);
+#endif
+
+}
+
+
+/*
+ *  Extern:     rm_ensure_result
+ *  Purpose:    RMagick expected a result. If it got NULL instead raise an exception.
+ */
+void rm_ensure_result(Image *image)
+{
+    if (!image)
+    {
+        rb_raise(rb_eRuntimeError, MagickPackageName " library function failed to return a result.");
+    }
+}
+

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.108 2006/04/30 22:38:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.109 2006/05/07 21:41:11 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -115,8 +115,7 @@ typedef enum
 {
     False = 0,
     True = 1
-}
-boolean;
+} boolean;
 
 typedef enum {
     AnyWeight,
@@ -327,14 +326,8 @@ EXTERN ID ID_y;                 // "y"
 
 /*
    Handle warnings & errors
-
-   For ExceptionInfo structures in auto storage. Destroys the
-   ExceptionInfo structure (releasing any IM storage) before
-   calling rb_raise.
 */
-#define HANDLE_ERROR rm_handle_error(&exception);
-// For ExceptionInfo structures in images.
-#define HANDLE_ERROR_IMG(img) rm_handle_error(&((img)->exception));
+#define CHECK_EXCEPTION() rm_check_exception(&exception, NULL, RetainOnError);
 
 /*
     Map the QuantumDepth to a StorageType.
@@ -1035,12 +1028,20 @@ extern VALUE  rm_define_enum_type(char *);
 extern void   rm_write_temp_image(Image *, char *);
 extern void   rm_delete_temp_image(char *);
 extern void   rm_not_implemented(void);
-extern void   rm_handle_error(ExceptionInfo *);
-extern void   rm_handle_all_errors(Image *);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
 extern void   rm_split(Image *);
 
+typedef enum
+{
+    RetainOnError = 0,
+    DestroyOnError = 1
+} ErrorRetention;
+
+extern void   rm_check_image_exception(Image *, ErrorRetention);
+extern void   rm_check_exception(ExceptionInfo *, Image *, ErrorRetention);
+extern void   rm_ensure_result(Image *);
+extern Image *rm_clone_image(Image *);
 #if defined(HAVE_SETIMAGEPROGRESSMONITOR)
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
 #endif

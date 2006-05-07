@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.36 2006/01/18 00:23:03 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.37 2006/05/07 21:41:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -140,7 +140,7 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
 
     GetExceptionInfo(&exception);
     okay = AddDefinitions(info, definitions, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
     if (!okay)
     {
         rb_warn("%.60s:%.1024s not defined - AddDefinitions failed.", format_p, key_p);
@@ -408,7 +408,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
     okay = AddDefinitions(info, definitions, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
     if (!okay)
     {
         rb_warn("%.*s not defined - AddDefinitions failed.", sizeof(definitions), definitions);
@@ -938,7 +938,7 @@ Info_format_eq(VALUE self, VALUE magick)
 
     mgk = STRING_PTR(magick);
     m = GetMagickInfo(mgk, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
 
     if (!m)
     {

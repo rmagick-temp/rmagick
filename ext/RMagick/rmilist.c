@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.37 2006/04/24 22:56:34 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.38 2006/05/07 21:41:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -48,7 +48,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     (void) AnimateImages(info, images);
-    rm_handle_all_errors(images);
+    rm_check_image_exception(images, RetainOnError);
     rm_split(images);
 
     return self;
@@ -75,12 +75,9 @@ ImageList_append(VALUE self, VALUE stack_arg)
 
     GetExceptionInfo(&exception);
     result = AppendImages(images, stack, &exception);
-    if (!result)
-    {
-        rm_handle_all_errors(images);
-    }
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, result, DestroyOnError);
+    rm_ensure_result(result);
 
     return rm_image_new(result);
 }
@@ -101,9 +98,9 @@ ImageList_average(VALUE self)
 
     GetExceptionInfo(&exception);
     result = AverageImages(images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, result, DestroyOnError);
+    rm_ensure_result(result);
 
     return rm_image_new(result);
 }
@@ -127,14 +124,9 @@ ImageList_coalesce(VALUE self)
 
     GetExceptionInfo(&exception);
     results = CoalesceImages(images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
-
-    if (!results)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
+    rm_check_exception(&exception, results, DestroyOnError);
+    rm_ensure_result(results);
 
     return rm_imagelist_from_images(results);
 }
@@ -156,14 +148,9 @@ ImageList_deconstruct(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = DeconstructImages(images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
-
-    if (!new_images)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
 }
@@ -187,8 +174,8 @@ ImageList_display(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     (void) DisplayImages(info, images);
-    rm_handle_all_errors(images);
     rm_split(images);
+    rm_check_image_exception(images, RetainOnError);
 
     return self;
 }
@@ -208,9 +195,9 @@ ImageList_flatten_images(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = FlattenImages(images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
 }
@@ -241,15 +228,17 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
 
     // Convert image array to image sequence, clone image sequence.
     images = rm_images_from_imagelist(self);
+
     GetExceptionInfo(&exception);
     clone_images = CloneImageList(images, &exception);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, clone_images, DestroyOnError);
+    rm_ensure_result(clone_images);
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
     (void) MapImages(clone_images, map, dither);
-    HANDLE_ERROR_IMG(clone_images)
+    rm_check_image_exception(clone_images, DestroyOnError);
 
     // Set @scene in new ImageList object to same value as in self.
     new_imagelist = rm_imagelist_from_images(clone_images);
@@ -300,9 +289,9 @@ ImageList_montage(VALUE self)
 
     // MontageImage can return more than one image.
     montage_seq = MontageImages(image_list, montage->info, &exception);
-    rm_handle_all_errors(image_list);
     rm_split(image_list);
-    HANDLE_ERROR
+    rm_check_exception(&exception, montage_seq, DestroyOnError);
+    rm_ensure_result(montage_seq);
 
     return rm_imagelist_from_images(montage_seq);
 }
@@ -337,9 +326,9 @@ ImageList_morph(VALUE self, VALUE nimages)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
 }
@@ -358,9 +347,9 @@ ImageList_mosaic(VALUE self)
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = MosaicImages(images, &exception);
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
 }
@@ -404,14 +393,9 @@ ImageList_optimize_layers(VALUE self, VALUE method)
         break;
     }
 
-    rm_handle_all_errors(images);
     rm_split(images);
-    HANDLE_ERROR
-
-    if (!new_images)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
 
@@ -578,9 +562,12 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     images = rm_images_from_imagelist(self);
     new_images = CloneImageList(images, &exception);
     rm_split(images);
-    HANDLE_ERROR
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
+
 
     QuantizeImages(&quantize_info, new_images);
+    rm_check_exception(&exception, new_images, DestroyOnError);
 
     // Create new ImageList object, convert mapped image sequence to images,
     // append to images array.
@@ -622,7 +609,8 @@ ImageList_to_blob(VALUE self)
 
     GetExceptionInfo(&exception);
     (void) SetImageInfo(info, True, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
+
     if (*info->magick != '\0')
     {
         Image *img;
@@ -642,9 +630,12 @@ ImageList_to_blob(VALUE self)
 #else
     blob = ImageToBlob(info, images, &length, &exception);
 #endif
-    rm_handle_all_errors(images);
+    if (exception.severity != UndefinedException)
+    {
+        magick_free((void*)blob);
+    }
+    CHECK_EXCEPTION()
     rm_split(images);
-    HANDLE_ERROR
 
     if (length == 0 || !blob)
     {
@@ -730,7 +721,7 @@ ImageList_write(VALUE self, VALUE file)
 
     // Find out if the format supports multi-images files.
     m = GetMagickInfo(info->magick, &exception);
-    HANDLE_ERROR
+    CHECK_EXCEPTION()
 
     // Tell WriteImage if we want a multi-images file.
     if (rm_imagelist_length(self) > 1 && m->adjoin)
@@ -742,7 +733,7 @@ ImageList_write(VALUE self, VALUE file)
     {
         (void) WriteImage(info, img);
         // images will be split before raising an exception
-        rm_handle_all_errors(images);
+        rm_check_image_exception(images, RetainOnError);
         if (info->adjoin)
         {
             break;

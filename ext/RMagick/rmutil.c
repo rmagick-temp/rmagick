@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.74 2006/05/07 21:41:12 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.75 2006/05/07 23:40:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3181,6 +3181,8 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 #endif
 
 
+    memset(msg, 0, sizeof(msg));
+
 
     // Handle simple warning
     if (exception->severity < ErrorException)
@@ -3220,8 +3222,8 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 
 
     // Clone the ExceptionInfo with all arguments on the stack.
-    reason[0] = '\0';
-    desc[0] = '\0';
+    memset(reason, 0, sizeof(reason));
+    memset(desc, 0, sizeof(desc));
 
     if (exception->reason)
     {
@@ -3236,22 +3238,25 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 
 
 #if defined(HAVE_SNPRINTF)
-        snprintf(msg, sizeof(msg)-1, "%s%s%s",
-            GetLocaleExceptionMessage(exception->severity, reason),
-            desc[0] ? ": " : "",
-            desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
+    snprintf(msg, sizeof(msg)-1, "%s%s%s",
+        GetLocaleExceptionMessage(exception->severity, reason),
+        desc[0] ? ": " : "",
+        desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
 #else
-        sprintf(msg, "%.*s%s%.*s",
-            sizeof(reason)-1, GetLocaleExceptionMessage(exception->severity, reason),
-            desc[0] ? ": " : "",
-            sizeof(desc)-1, desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
+    sprintf(msg, "%.*s%s%.*s",
+        sizeof(reason)-1, GetLocaleExceptionMessage(exception->severity, reason),
+        desc[0] ? ": " : "",
+        sizeof(desc)-1, desc[0] ? GetLocaleExceptionMessage(exception->severity, desc) : "");
 #endif
-        msg[sizeof(msg)-1] = '\0';
+
+    msg[sizeof(msg)-1] = '\0';
 
 
 #if defined(HAVE_EXCEPTIONINFO_MODULE)
-    module[0] = '\0';
-    function[0] = '\0';
+
+    memset(module, 0, sizeof(module));
+    memset(function, 0, sizeof(function));
+    memset(extra, 0, sizeof(extra));
 
     if (exception->module)
     {
@@ -3270,6 +3275,7 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 #else
      sprintf(extra, "%.*s at %.*s:%lu", sizeof(function), function, sizeof(module), module, line);
 #endif
+
      extra[sizeof(extra)-1] = '\0';
 
      DestroyExceptionInfo(exception);

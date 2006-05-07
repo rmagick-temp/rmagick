@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.31 2006/05/07 21:47:23 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.32 2006/05/07 21:58:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1341,7 +1341,7 @@ get_type_metrics(
 
      if (!okay)
      {
-         rm_handle_image_exception(image, RetainOnError);
+         rm_check_image_exception(image, RetainOnError);
 
          // Shouldn't get here...
          rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "

@@ -9,6 +9,9 @@ RMagick 1.11.0
     o Fix bug #4104, incorrect label on example (reported by Jason Lee)
     o Added contrast_stretch_channel to the Image class (available with
       ImageMagick 6.2.6)
+    o Improved Magick exception handling to eliminate memory leaks when an exception
+      is rescued and execution continues.
+    o Tested with ImageMagick 6.2.7
 
 RMagick 1.10.1
     o Fix bug #3437, memory leak in ImageList#to_blob

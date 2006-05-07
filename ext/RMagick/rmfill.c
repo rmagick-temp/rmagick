@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.13 2005/12/31 14:40:50 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.14 2006/05/07 23:46:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -131,7 +131,7 @@ point_fill(
 
         if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
         {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
+            rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
@@ -143,7 +143,7 @@ point_fill(
         }
         if (!SyncImagePixels(image))
         {
-            rb_raise(Class_ImageMagickError, "can't set image pixels");
+            rm_check_image_exception(image, RetainOnError);
         }
     }
 }
@@ -209,13 +209,13 @@ vertical_fill(
 
         if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
         {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
+            rm_check_image_exception(image, RetainOnError);
         }
 
         memcpy(row_pixels, (PixelPacket *)master, image->columns * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
-            rb_raise(Class_ImageMagickError, "can't set image pixels");
+            rm_check_image_exception(image, RetainOnError);
         }
     }
 
@@ -279,12 +279,12 @@ horizontal_fill(
 
         if (!(col_pixels = SetImagePixels(image, x, 0, 1, image->rows)))
         {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
+            rm_check_image_exception(image, RetainOnError);
         }
         memcpy(col_pixels, (PixelPacket *)master, image->rows * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
-            rb_raise(Class_ImageMagickError, "can't set image pixels");
+            rm_check_image_exception(image, RetainOnError);
         }
     }
 
@@ -353,7 +353,7 @@ v_diagonal_fill(
 
         if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
         {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
+            rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
@@ -365,7 +365,7 @@ v_diagonal_fill(
         }
         if (!SyncImagePixels(image))
         {
-            rb_raise(Class_ImageMagickError, "can't set image pixels");
+            rm_check_image_exception(image, RetainOnError);
         }
     }
 }
@@ -434,7 +434,7 @@ h_diagonal_fill(
 
         if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
         {
-            rb_raise(rb_eNoMemError, "not enough memory to continue");
+            rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
@@ -446,7 +446,7 @@ h_diagonal_fill(
         }
         if (!SyncImagePixels(image))
         {
-            rb_raise(Class_ImageMagickError, "can't set image pixels");
+            rm_check_image_exception(image, RetainOnError);
         }
     }
 }
@@ -605,5 +605,8 @@ TextureFill_fill(VALUE self, VALUE image_obj)
     Data_Get_Struct(self, TextureFill, fill);
 
     TextureImage(image, fill->texture);
+    rm_check_image_exception(image, RetainOnError);
+
     return self;
 }
+

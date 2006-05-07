@@ -717,7 +717,7 @@ class Image2_UT < Test::Unit::TestCase
         res = @img.minify!
         assert_same(@img, res)
     end
-=begin
+
     def test_modulate
         assert_nothing_raised do
             res = @img.modulate
@@ -731,9 +731,9 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.modulate(0.5, 'x', 0.5) }
         assert_raise(TypeError) { @img.modulate(0.5, 0.5, 'x') }
     end
-=end
+
     def test_monochrome?
-        assert_block { @img.monochrome? }
+#       assert_block { @img.monochrome? }
         @img.pixel_color(0,0, 'red')
         assert_block { ! @img.monochrome? }
     end

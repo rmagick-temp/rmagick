@@ -99,9 +99,9 @@ if test "$rm_have_acquirestringinfo" = yes; then
 fi
 
 AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AddNoiseImageChannel BilevelImageChannel])
-AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel CompareImageChannels CompareImageLayers ContrastStretchImageChannel])
-AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels FuzzyColorCompare])
-AC_CHECK_FUNCS([GammaImageChannel GaussianBlurImageChannel])
+AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel ClearMagickException CompareImageChannels])
+AC_CHECK_FUNCS([CompareImageLayers ContrastStretchImageChannel ConvolveImageChannel EvaluateImageChannel])
+AC_CHECK_FUNCS([ExportImagePixels FuzzyColorCompare GammaImageChannel GaussianBlurImageChannel])
 AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])
 
 # We need to be able to query these symbols later in the configure script, so set a shell
@@ -145,7 +145,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
 fi
 
 AC_CHECK_FUNCS([GetMagickResourceLimit GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
-AC_CHECK_FUNCS([InterpretImageAttributes IsColorSimilar NegateImageChannel])
+AC_CHECK_FUNCS([InheritException InterpretImageAttributes IsColorSimilar NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RandomChannelThresholdImage])
 AC_CHECK_FUNCS([RandomThresholdImageChannel SeparateImageChannel SepiaToneImage])

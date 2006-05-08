@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.38 2006/05/07 21:41:12 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.39 2006/05/08 22:45:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -62,7 +62,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
 VALUE
 ImageList_append(VALUE self, VALUE stack_arg)
 {
-    Image *images, *result;
+    Image *images, *new_image;
     unsigned int stack;
     ExceptionInfo exception;
 
@@ -74,12 +74,12 @@ ImageList_append(VALUE self, VALUE stack_arg)
     stack = RTEST(stack_arg);
 
     GetExceptionInfo(&exception);
-    result = AppendImages(images, stack, &exception);
+    new_image = AppendImages(images, stack, &exception);
     rm_split(images);
-    rm_check_exception(&exception, result, DestroyOnError);
-    rm_ensure_result(result);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    rm_ensure_result(new_image);
 
-    return rm_image_new(result);
+    return rm_image_new(new_image);
 }
 
 /*
@@ -90,19 +90,19 @@ ImageList_append(VALUE self, VALUE stack_arg)
 VALUE
 ImageList_average(VALUE self)
 {
-    Image *images, *result;
+    Image *images, *new_image;
     ExceptionInfo exception;
 
     // Convert the images array to an images sequence.
     images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
-    result = AverageImages(images, &exception);
+    new_image = AverageImages(images, &exception);
     rm_split(images);
-    rm_check_exception(&exception, result, DestroyOnError);
-    rm_ensure_result(result);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    rm_ensure_result(new_image);
 
-    return rm_image_new(result);
+    return rm_image_new(new_image);
 }
 
 /*
@@ -116,19 +116,19 @@ ImageList_average(VALUE self)
 VALUE
 ImageList_coalesce(VALUE self)
 {
-    Image *images, *results;
+    Image *images, *new_images;
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
     images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
-    results = CoalesceImages(images, &exception);
+    new_images = CoalesceImages(images, &exception);
     rm_split(images);
-    rm_check_exception(&exception, results, DestroyOnError);
-    rm_ensure_result(results);
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
-    return rm_imagelist_from_images(results);
+    return rm_imagelist_from_images(new_images);
 }
 
 
@@ -212,7 +212,7 @@ ImageList_flatten_images(VALUE self)
 VALUE
 ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
 {
-    Image *images, *clone_images = NULL;
+    Image *images, *new_images = NULL;
     Image *map;
     unsigned int dither;
     volatile VALUE image, scene, new_imagelist;
@@ -227,21 +227,21 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     }
 
     // Convert image array to image sequence, clone image sequence.
-    images = rm_images_from_imagelist(self);
-
     GetExceptionInfo(&exception);
-    clone_images = CloneImageList(images, &exception);
+
+    images = rm_images_from_imagelist(self);
+    new_images = CloneImageList(images, &exception);
     rm_split(images);
-    rm_check_exception(&exception, clone_images, DestroyOnError);
-    rm_ensure_result(clone_images);
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
     // Call ImageMagick
     dither = !(dither_arg == Qfalse || dither_arg == Qnil);
-    (void) MapImages(clone_images, map, dither);
-    rm_check_image_exception(clone_images, DestroyOnError);
+    (void) MapImages(new_images, map, dither);
+    rm_check_image_exception(new_images, DestroyOnError);
 
     // Set @scene in new ImageList object to same value as in self.
-    new_imagelist = rm_imagelist_from_images(clone_images);
+    new_imagelist = rm_imagelist_from_images(new_images);
     scene = rb_iv_get(self, "@scene");
     (void) rm_imagelist_scene_eq(new_imagelist, scene);
 
@@ -259,7 +259,7 @@ ImageList_montage(VALUE self)
 {
     volatile VALUE montage_obj;
     Montage *montage;
-    Image *montage_seq, *image_list;
+    Image *new_images, *images;
     ExceptionInfo exception;
 
     // Create a new instance of the Magick::Montage class
@@ -273,13 +273,13 @@ ImageList_montage(VALUE self)
 
     Data_Get_Struct(montage_obj, Montage, montage);
 
-    image_list = rm_images_from_imagelist(self);
+    images = rm_images_from_imagelist(self);
 
     // If app specified a non-default composition operator, use it for all images.
     if (montage->compose != UndefinedCompositeOp)
     {
         Image *i;
-        for (i = image_list; i; i = GetNextImageInList(i))
+        for (i = images; i; i = GetNextImageInList(i))
         {
             i->compose = montage->compose;
         }
@@ -288,12 +288,12 @@ ImageList_montage(VALUE self)
     GetExceptionInfo(&exception);
 
     // MontageImage can return more than one image.
-    montage_seq = MontageImages(image_list, montage->info, &exception);
-    rm_split(image_list);
-    rm_check_exception(&exception, montage_seq, DestroyOnError);
-    rm_ensure_result(montage_seq);
+    new_images = MontageImages(images, montage->info, &exception);
+    rm_split(images);
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    rm_ensure_result(new_images);
 
-    return rm_imagelist_from_images(montage_seq);
+    return rm_imagelist_from_images(new_images);
 }
 
 /*
@@ -634,8 +634,8 @@ ImageList_to_blob(VALUE self)
     {
         magick_free((void*)blob);
     }
-    CHECK_EXCEPTION()
     rm_split(images);
+    CHECK_EXCEPTION()
 
     if (length == 0 || !blob)
     {

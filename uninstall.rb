@@ -59,9 +59,10 @@ prefix    ||= ::Config::CONFIG['prefix']
 site_ruby ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version)
 so_dir    ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version, arch)
 doc_dir   ||= File.join(prefix, 'share', 'RMagick')
+dlext       = ::Config::CONFIG['DLEXT']
 
 File.safe_unlink File.join(site_ruby, 'RMagick.rb'), true
-File.safe_unlink File.join(so_dir, 'RMagick.so'), true
+File.safe_unlink File.join(so_dir, 'RMagick.' + dlext), true
 
 rmdir File.join(site_ruby, 'rvg'), true
 rmdir File.join(doc_dir, 'ex', 'images')

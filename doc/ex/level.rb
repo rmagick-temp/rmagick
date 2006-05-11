@@ -5,8 +5,7 @@ require 'RMagick'
 
 before = Magick::Image.read('images/Flower_Hat.jpg').first
 
-# Allow the white-point argument to default.
 # Brighten up the mid-tones a bit.
-after = before.level(0,1.50)
+after = before.level(0, Magick::MaxRGB, 1.50)
 after.write('level.jpg')
 exit

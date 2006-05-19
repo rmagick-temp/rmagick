@@ -17,5 +17,9 @@ end
 
 $LOCAL_LIBS = "@LOCAL_LIBS@"
 
+# Force re-compilation if the generated Makefile or
+# rmagick_config.h changed.
+$config_h = 'Makefile rmagick_config.h'
+
 create_makefile("RMagick")
 

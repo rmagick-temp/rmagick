@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.39 2006/05/08 22:45:27 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.40 2006/05/27 21:05:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -77,6 +77,8 @@ ImageList_append(VALUE self, VALUE stack_arg)
     new_image = AppendImages(images, stack, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -100,6 +102,8 @@ ImageList_average(VALUE self)
     new_image = AverageImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -126,6 +130,8 @@ ImageList_coalesce(VALUE self)
     new_images = CoalesceImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
@@ -150,6 +156,8 @@ ImageList_deconstruct(VALUE self)
     new_images = DeconstructImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
@@ -197,6 +205,8 @@ ImageList_flatten_images(VALUE self)
     new_image = FlattenImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -233,6 +243,8 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     // Call ImageMagick
@@ -291,6 +303,8 @@ ImageList_montage(VALUE self)
     new_images = MontageImages(images, montage->info, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
@@ -328,6 +342,8 @@ ImageList_morph(VALUE self, VALUE nimages)
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
@@ -349,6 +365,8 @@ ImageList_mosaic(VALUE self)
     new_image = MosaicImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -395,6 +413,8 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
@@ -563,6 +583,8 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
     rm_ensure_result(new_images);
 
 
@@ -624,7 +646,6 @@ ImageList_to_blob(VALUE self)
     // can happen is that there's only one image or the format
     // doesn't support multi-image files.
     info->adjoin = True;
-    GetExceptionInfo(&exception);
 #if defined(HAVE_IMAGESTOBLOB)
     blob = ImagesToBlob(info, images, &length, &exception);
 #else
@@ -636,6 +657,8 @@ ImageList_to_blob(VALUE self)
     }
     rm_split(images);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
 
     if (length == 0 || !blob)
     {
@@ -722,6 +745,7 @@ ImageList_write(VALUE self, VALUE file)
     // Find out if the format supports multi-images files.
     m = GetMagickInfo(info->magick, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
     // Tell WriteImage if we want a multi-images file.
     if (rm_imagelist_length(self) > 1 && m->adjoin)

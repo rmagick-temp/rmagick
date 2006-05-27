@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.118 2006/05/07 21:41:12 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.119 2006/05/27 21:05:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -44,6 +44,8 @@ Magick_colors(VALUE class)
 
     color_ary = GetColorInfoArray(&exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
 
     if (rb_block_given_p())
     {
@@ -87,6 +89,7 @@ Magick_colors(VALUE class)
 
     color_info_list = GetColorInfoList("*", &number_colors, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
 #endif
 
@@ -176,6 +179,7 @@ Magick_fonts(VALUE class)
     GetExceptionInfo(&exception);
     type_info = GetTypeInfoList("*", &number_types, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
 #endif
 
@@ -210,6 +214,7 @@ Magick_fonts(VALUE class)
 
     type_list = GetTypeInfo("*", &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
     // If block, iterate over fonts
     if (rb_block_given_p())
@@ -282,6 +287,9 @@ Magick_init_formats(VALUE class)
 
     GetExceptionInfo(&exception);
     magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
+    CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
     for(m = magick_info; m != NULL; m = m->next)
     {
         rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
@@ -310,6 +318,8 @@ Magick_init_formats(VALUE class)
     GetExceptionInfo(&exception);
     magick_info = GetMagickInfoList("*", &number_formats, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
 #endif
 
     for(x = 0; x < number_formats; x++)
@@ -333,6 +343,7 @@ Magick_init_formats(VALUE class)
     GetExceptionInfo(&exception);
     m = (MagickInfo *)GetMagickInfo("*", &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
     for ( ; m != NULL; m = m->next)
     {
@@ -1775,7 +1786,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/05/07 21:41:12 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/05/27 21:05:59 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.75 2006/05/07 23:40:14 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.76 2006/05/27 21:05:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -484,6 +484,8 @@ Pixel_from_color(VALUE class, VALUE name)
     GetExceptionInfo(&exception);
     okay = QueryColorDatabase(STRING_PTR(name), &pp, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
     if (!okay)
     {
         rb_raise(rb_eArgError, "invalid color name: %s", STRING_PTR(name));
@@ -553,6 +555,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     (void) QueryColorname(image, pixel, compliance, name, &exception);
     DestroyImage(image);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
     // Always return a string, even if it's ""
     return rb_str_new2(name);
@@ -979,6 +982,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
 
     (void) QueryColorname(image, color, X11Compliance, name, &exception);
     CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
 
     return rb_str_new2(name);
 }
@@ -2940,6 +2944,7 @@ Image *rm_clone_image(Image *image)
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     rm_check_exception(&exception, clone, DestroyOnError);
+    DestroyExceptionInfo(&exception);
 
     return clone;
 }
@@ -3140,6 +3145,8 @@ rm_check_image_exception(Image *imglist, ErrorRetention retention)
     {
         rm_check_exception(&exception, imglist, retention);
     }
+
+    DestroyExceptionInfo(&exception);
 }
 
 
@@ -3198,7 +3205,8 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
         msg[sizeof(msg)-1] = '\0';
         rb_warning(msg);
 
-        DestroyExceptionInfo(exception);
+        // Caller deletes ExceptionInfo...
+
         return;
     }
 

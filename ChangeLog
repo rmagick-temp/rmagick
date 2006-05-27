@@ -1,3 +1,8 @@
+RMagick 1.11.1
+    o Fix bug #4511, add Makefile, rmagick_config.h as dependencies
+      in the Makefile (bug report from Eric Hodel)
+    o Ensure ExceptionInfo structures are freed
+
 RMagick 1.11.0
     o Feature #3705, add resize_to_fit (thanks to Robert Manni for the code)
     o Added optimize_layers method to the ImageList class (available with

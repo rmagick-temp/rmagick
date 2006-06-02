@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.146 2006/05/27 21:05:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.147 2006/06/02 23:26:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4578,7 +4578,7 @@ DEF_ATTR_ACCESSOR(Image, iterations, int)
     Notes:      all three arguments are optional
 */
 VALUE
-Image_level(int argc, VALUE *argv, VALUE self)
+Image_level2(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double black_point = 0.0, gamma = 1.0, white_point = (double)MaxRGB;

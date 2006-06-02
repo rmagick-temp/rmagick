@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.109 2006/05/07 21:41:11 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.110 2006/06/02 23:26:53 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -805,7 +805,7 @@ extern VALUE Image_implode(int, VALUE *, VALUE);
 extern VALUE Image_import_pixels(int, VALUE *, VALUE);
 extern VALUE Image_init_copy(VALUE, VALUE);
 extern VALUE Image_inspect(VALUE);
-extern VALUE Image_level(int, VALUE *, VALUE);
+extern VALUE Image_level2(int, VALUE *, VALUE);
 extern VALUE Image_level_channel(int, VALUE *, VALUE);
 extern VALUE Image__load(VALUE, VALUE);
 extern VALUE Image_magnify(VALUE);

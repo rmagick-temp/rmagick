@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.39 2006/03/11 15:28:06 rmagick Exp $
+# $Id: RMagick.rb,v 1.40 2006/06/02 23:27:57 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -698,8 +698,33 @@ class Image
         return hash
     end
 
-    # These four methods are equivalent to the Draw#matte
-    # method with the "Point", "Replace", "Floodfill", "FilltoBorder", and
+    # Patches problematic change to the order of arguments in 1.11.0.
+    # Before this release, the order was
+    #       black_point, gamma, white_point
+    # RMagick 1.11.0 changed this to
+    #       black_point, white_point, gamma
+    # This fix tries to determine if the arguments are in the old order and
+    # if so, swaps the gamma and white_point arguments.  Then it calls
+    # level2, which simply accepts the arguments as given.
+
+    # Inspect the gamma and white point values and swap them if they
+    # look like they're in the old order.
+
+    # (Thanks to Al Evans for the suggestion.)
+    def level(*levels)
+        black_point = levels[0] || 0.0
+        white_point = levels[1] || Magick::MaxRGB - black_point
+        gamma       = levels[2] || 1.0
+
+        if gamma > 10.0 || white_point < 10.0 || white_point < gamma
+            gamma, white_point = white_point, gamma
+        end
+
+        return level2(black_point, white_point, gamma)
+    end
+
+    # These four methods are equivalent to the Draw#matte method
+    # with the "Point", "Replace", "Floodfill", "FilltoBorder", and
     # "Replace" arguments, respectively.
 
     # Make the pixel at (x,y) transparent.

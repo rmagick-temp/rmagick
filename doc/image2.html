@@ -572,10 +572,10 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
     "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
-                                                          --><img id="framed"
+                                                          --><img
     onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
-    "ex/frame.jpg" alt="frame example"  /></a>
+    "ex/frame.jpg" alt="frame example" name="framed" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -1263,17 +1263,20 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <dl>
       <dt>black_point</dt>
 
-      <dd>The black point level. The default is 0.0.</dd>
+      <dd>A black point level in the range 0-<a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>. The
+      default is 0.0.</dd>
 
       <dt>mid_point</dt>
 
-      <dd>The white point level. The default is <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a> -
+      <dd>A white point level in the range 0-MaxRGB. The default is
+      <a href="constants.html#Miscellaneous_constants">MaxRGB</a> -
       <span class="arg">black_point</span>.</dd>
 
       <dt>gamma</dt>
 
-      <dd>The gamma correction. The default is 1.0.</dd>
+      <dd>A gamma correction in the range 0.0-10.0 The default is
+      1.0.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1292,6 +1295,29 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <img src="ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the image to see the original image" /></p>
 
+    <h4>Compatibility notes</h4>
+
+    <p>Prior to version 1.11.0 RMagick defined the signature for
+    <code>level</code> incorrectly:</p>
+    <pre>
+img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
+</pre>
+
+    <p>That is, the <code>gamma</code> and <code>white_point</code>
+    arguments were swapped. In an effort to maintain compatiblity
+    with older scripts that expect that signature,
+    <code>level</code> inspects its arguments and will interchange
+    <code>white_point</code> and gamma if they "look" incorrect.
+    That is, if <code>gamma</code> is &gt; 10.0, or if
+    <code>white_point</code> is &lt; 10.0, or if <code>gamma</code>
+    &gt; <code>white_point</code>, then <code>level</code> will
+    swap them.</p>
+
+    <p>If you want to avoid this behavior, use the
+    <code>level2</code> method instead. The <code>level2</code>
+    method is exactly the same as <code>level</code> except that it
+    never swaps the arguments.</p>
+
     <h4>See also</h4>
 
     <p><a href="#level_channel">level_channel</a></p>
@@ -1305,16 +1331,14 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h3 id="level_channel">level_channel</h3>
 
     <p><span class="arg">image</span>.level_channel(<span class=
-    "arg">channel</span>, <span class=
-    "arg">black_point</span>=<code>0</code>, <span class=
-    "arg">white_point</span>=<code>MaxRGB</code>-<code>black_point</code>,
-    <span class="arg">gamma</span>=<code>1.0</code>) -&gt;
-    <em>anImage</em></p>
+    "arg">channel</span>, <span class="arg">black_point</span>=0,
+    <span class="arg">white_point</span>=MaxRGB - black_point,
+    <span class="arg">gamma</span>=1.0) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Same as <code>level</code> but operates
-    only on the specified channel.
+    <h4>Description</h4>Same as level but operates only on the
+    specified channel.
 
     <h4>Arguments</h4>
 
@@ -1326,17 +1350,20 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
       <dt>black_point</dt>
 
-      <dd>The black point level. The default is 0.0.</dd>
+      <dd>A black point level in the range 0-<a href=
+      "constants.html#Miscellaneous_constants">MaxRGB</a>. The
+      default is 0.0.</dd>
 
       <dt>mid_point</dt>
 
-      <dd>The white point level. The default is <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a> -
+      <dd>A white point level in the range 0-MaxRGB. The default is
+      <a href="constants.html#Miscellaneous_constants">MaxRGB</a> -
       <span class="arg">black_point</span>.</dd>
 
       <dt>gamma</dt>
 
-      <dd>The gamma correction. The default is 1.0.</dd>
+      <dd>A gamma correction in the range 0.0-10.0 The default is
+      1.0.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1384,9 +1411,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p><a href="#magnify_bang">magnify!</a>, <a href=
     "#minify">minify</a>, <a href="image3.html#resize">resize</a>,
-    <a href="image3.html#scale">scale</a>, <a href=
-    "image3.html#sample">sample</a>, <a href=
-    "image3.html#thumbnail">thumbnail</a></p>
+    <a href="image3.html#scale">scal</a></p>
 
     <h4>Magick API</h4>
 
@@ -1412,8 +1437,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h3 id="map">map</h3>
 
     <p><span class="arg">image</span>.map(<span class=
-    "arg">img</span>, <span class=
-    "arg">dither</span>=<code>false</code>) -&gt;
+    "arg">img</span>, <span class="arg">dither</span>=false) -&gt;
     <em>anImage</em></p>
   </div>
 
@@ -1429,11 +1453,11 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       <dt>img</dt>
 
       <dd>The reference image. May be either another image or an
-      <code>Image</code> object.</dd>
+      Image object.</dd>
 
       <dt>dither</dt>
 
-      <dd>If <code>true</code>, dithers the mapped image.</dd>
+      <dd>If true, dithers the mapped image.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1578,7 +1602,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <p>Makes the pixel at <span class="arg">x</span>, <span class=
     "arg">y</span> transparent. This method makes a copy of the
     image, just to make one pixel transparent. I recommend using
-    the <code>Draw#matte</code> method instead.</p>
+    the Draw#matte method instead.</p>
 
     <h4>Arguments</h4>
 
@@ -1617,10 +1641,10 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Example</h4>
 
     <p>In this example the target pixel is a black pixel in the
-    center of the uppermost circle. The <code>matte_replace</code>
-    method makes all the black pixels in the image transparent. The
-    resulting image has been composited over a plasma background,
-    which shows through the transparent pixels.</p>
+    center of the uppermost circle. The matte_replace method makes
+    all the black pixels in the image transparent. The resulting
+    image has been composited over a plasma background, which shows
+    through the transparent pixels.</p>
 
     <p class="rollover"><a href=
     "javascript:popup('matte_replace.rb.html')"><img onmouseover=
@@ -1692,9 +1716,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Example</h4>
 
     <p>The left side of the image has been modified by <a href=
-    "image1.html#add_noise"><code>add_noise</code></a>. The right
-    side has been filtered by
-    <code>median_filter(0.05).</code></p><a href=
+    "image1.html#add_noise">add_noise</a>. The right side has been
+    filtered by median_filter(0.05).</p><a href=
     "javascript:popup('median_filter.rb.html')"><img src=
     "ex/median_filter.jpg" alt="median_filter example" /></a>
 
@@ -1774,9 +1797,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Arguments</h4>
 
     <p>The percent change in the brightness, saturation, and hue,
-    represented as <code>Float</code> numbers. For example, 0.25
-    means "25%". All three arguments may be omitted. The default
-    value of each argument is 1.0, that is, 100%.</p>
+    represented as Float numbers. For example, 0.25 means "25%".
+    All three arguments may be omitted. The default value of each
+    argument is 1.0, that is, 100%.</p>
 
     <h4>Returns</h4>
 
@@ -1784,7 +1807,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Example</h4>
 
-    <p><code>modulate(0.85)</code></p>
+    <p>modulate(0.85)</p>
 
     <p class="rollover"><a href=
     "javascript:popup('modulate.rb.html')"><img src=
@@ -1803,16 +1826,16 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
   <div class="sig">
     <h3 id="monochrome_q">monochrome?</h3>
 
-    <p><span class="arg">image</span>.monochrome? -&gt;
-    <code>true</code> or <code>false</code></p>
+    <p><span class="arg">image</span>.monochrome? -&gt; true or
+    false</p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Returns <code>true</code> if all the pixels have the same
-    red, green, and blue values and the values are either 0 or
-    MaxRGB. That is, the image is black-and-white.</p>
+    <p>Returns true if all the pixels have the same red, green, and
+    blue values and the values are either 0 or MaxRGB. That is, the
+    image is black-and-white.</p>
 
     <h4>See also</h4>
 
@@ -1837,10 +1860,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <p class="imquote">Simulates motion blur. We convolve the image
     with a Gaussian operator of the given <span class=
     "arg">radius</span> and standard deviation (<span class=
-    "arg">sigma</span>). Use a radius of 0 and
-    <code>motion_blur</code> selects a suitable radius for you.
-    <span class="arg">Angle</span> gives the angle of the blurring
-    motion.</p>
+    "arg">sigma</span>). Use a radius of 0 and motion_blur selects
+    a suitable radius for you. <span class="arg">Angle</span> gives
+    the angle of the blurring motion.</p>
 
     <h4>Arguments</h4>
 
@@ -1888,8 +1910,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h3 id="negate">negate</h3>
 
     <p><span class="arg">image</span>.negate(<span class=
-    "arg">grayscale</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    "arg">grayscale</span>=false) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1928,7 +1949,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h3 id="negate_channel">negate_channel</h3>
 
     <p><span class="arg">image</span>.negate_channel(<span class=
-    "arg">grayscale</span>=<code>false</code>, [<span class=
+    "arg">grayscale</span>=false, [<span class=
     "arg">channel</span>...]) = <em>anImage</em></p>
   </div>
 
@@ -1942,8 +1963,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <dl>
       <dt>grayscale</dt>
 
-      <dd class="imquote">if <code>true</code>, only negate
-      grayscale pixels within the image</dd>
+      <dd class="imquote">if true, only negate grayscale pixels
+      within the image</dd>
 
       <dt>channel...</dt>
 
@@ -1951,7 +1972,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       "constants.html#ChannelType">ChannelType</a> arguments. If no
       channels are specified, all the channels are negated.
       Specifying no channel arguments has the same effect as the
-      <code>negate</code> method, above.</dd>
+      negate method, above.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1960,7 +1981,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <h4>Example</h4>
 
-    <p><code>negate_channel(false, GreenChannel)</code></p>
+    <p>negate_channel(false, GreenChannel)</p>
 
     <p class="rollover"><a href=
     "javascript:popup('negate_channel.rb.html')"><img src=
@@ -2043,7 +2064,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       "constants.html#ChannelType">ChannelType</a> arguments. If no
       channels are specified, all the channels are normalized.
       Specifying no channel arguments has the same effect as the
-      <code>normalize</code> method, above.</dd>
+      normalize method, above.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2113,12 +2134,12 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       <dt>target</dt>
 
       <dd>The color to be replaced. May be a color name or a
-      <code><a href="struct.html#Pixel">Pixel</a></code></dd>
+      <a href="struct.html#Pixel">Pixel</a></dd>
 
       <dt>fill</dt>
 
-      <dd>The replacement color. May be a color name or a
-      <code><a href="struct.html#Pixel">Pixel</a></code></dd>
+      <dd>The replacement color. May be a color name or a <a href=
+      "struct.html#Pixel">Pixel</a></dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2128,8 +2149,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <h4>Example</h4>
 
     <p>This example replaces white pixels with red pixels. Set the
-    <code>fuzz</code> attribute to specify how closely the target
-    pixels must match.</p>
+    fuzz attribute to specify how closely the target pixels must
+    match.</p>
 
     <p class="rollover"><a href=
     "javascript:popup('opaque.rb.html')"><img src="ex/opaque.jpg"
@@ -2152,20 +2173,20 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
   <div class="sig">
     <h3 id="opaque_q">opaque?</h3>
 
-    <p><span class="arg">image</span>.opaque? -&gt;
-    <code>true</code> or <code>false</code></p>
+    <p><span class="arg">image</span>.opaque? -&gt; true or
+    false</p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Returns <code>true</code> if all of the pixels in the
-    receiver have an opacity value of <a href=
+    <p>Returns true if all of the pixels in the receiver have an
+    opacity value of <a href=
     "constants.html#Opacity">OpaqueOpacity</a>.</p>
 
     <h4>Returns</h4>
 
-    <p><code>true</code> or <code>false</code></p>
+    <p>true or false</p>
 
     <h4>Magick API</h4>
 
@@ -2223,20 +2244,20 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
   <div class="sig">
     <h3 id="palette_q">palette?</h3>
 
-    <p><span class="arg">image</span>.palette? -&gt;
-    <code>true</code> or <code>false</code></p>
+    <p><span class="arg">image</span>.palette? -&gt; true or
+    false</p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p class="imquote">Returns true if the image is <a href=
-    "constants.html#ClassType"><code>PseudoClass</code></a> and has
-    256 unique colors or less.</p>
+    "constants.html#ClassType">PseudoClass</a> and has 256 unique
+    colors or less.</p>
 
     <h4>Returns</h4>
 
-    <p><code>true</code> or <code>false</code></p>
+    <p>true or false</p>
 
     <h4>Magick API</h4>
 
@@ -2258,9 +2279,8 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     "arg">x</span>, <span class="arg">y</span>. Optionally, changes
     the color of the pixel to a new color.</p>
 
-    <p>If <code>new_color</code> is specified,
-    <code>pixel_color</code> changes the image type to
-    <code>DirectClass</code> if necessary.</p>
+    <p>If new_color is specified, pixel_color changes the image
+    type to DirectClass if necessary.</p>
 
     <h4>Arguments</h4>
 
@@ -2293,9 +2313,8 @@ old = image.pixel_color(20,40,"white")
     <h3 id="posterize">posterize</h3>
 
     <p><span class="arg">image</span>.posterize(<span class=
-    "arg">levels</span>=4, <span class=
-    "arg">dither</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    "arg">levels</span>=4, <span class="arg">dither</span>=false)
+    -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -2315,8 +2334,7 @@ old = image.pixel_color(20,40,"white")
 
       <dt>dither</dt>
 
-      <dd>If <code>true</code>, dither the image. The default is
-      <code>false</code>.</dd>
+      <dd>If true, dither the image. The default is false.</dd>
     </dl>
 
     <h4>Returns</h4>

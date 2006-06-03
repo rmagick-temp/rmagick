@@ -1,6 +1,6 @@
 RMagick 1.12.0
     o Fix bug #4630, the new signature for #level is incompatible with
-      releases prior to 1.10.1
+      releases prior to 1.10.1 (bug report from Al Evans)
 
 RMagick 1.11.1
     o Fix bug #4511, add Makefile, rmagick_config.h as dependencies

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.41 2006/06/03 13:48:48 rmagick Exp $
+# $Id: RMagick.rb,v 1.42 2006/06/03 22:56:40 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -711,11 +711,16 @@ class Image
     # look like they're in the old order.
 
     # (Thanks to Al Evans for the suggestion.)
-    def level(black_point=0.0, white_point=nil, gamma=1.0)
+    def level(black_point=0.0, white_point=nil, gamma=nil)
         white_point ||= Magick::MaxRGB - black_point
+        gamma_arg = gamma
+        gamma ||= 1.0
 
         if gamma.abs > 10.0 || white_point.abs <= 10.0 || white_point.abs < gamma.abs
             gamma, white_point = white_point, gamma
+            unless gamma_arg
+                white_point = Magick::MaxRGB - black_point
+            end
         end
 
         return level2(black_point, white_point, gamma)

@@ -624,6 +624,17 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.level(0.0, 1.0, 'x') }
     end
 
+    # Ensure that #level properly swaps old-style arg list
+    def test_level2
+        img1 = @img.level(10, 2, 200)
+        img2 = @img.level(10, 200, 2)
+        assert_equal(img2, img1)
+
+        # Ensure that level2 uses new arg order
+        img1 = @img.level2(10, 200, 2)
+        assert_equal(img2, img1)
+    end
+
     def test_level_channel
         assert_raise(ArgumentError) { @img.level_channel }
         assert_nothing_raised do

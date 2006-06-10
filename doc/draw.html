@@ -270,7 +270,7 @@ gc = Draw.new
     <h3 id="annotate">annotate</h3>
 
     <p><span class="arg">draw.</span>annotate(<span class=
-    "arg">img, width, height, x, y, text</span>) <span class=
+    "arg">img, x_rotate, y_rotate, x, y, text</span>) <span class=
     "arg">[&nbsp;{ additional parameters }&nbsp;]</span> -&gt;
     <em>draw</em></p>
   </div>
@@ -279,15 +279,16 @@ gc = Draw.new
     <h4>Description</h4>
 
     <p>Annotates a image with text. The text is positioned
-    according to the <code>gravity</code> attribute around the
-    rectangle described by the x, y, width, and height arguments.
-    If either of the width or height arguments are omitted, uses
-    the image width - x and the image height - y to compute the
-    rectangle width and height. The attributes described in
-    <a href="#attributes">annotate attributes</a>, below, influence
-    the appearance and position of the text. These attributes may
-    be set in the Draw object before calling <code>annotate</code>,
-    or within <code>annotate</code>'s optional <span class=
+    according to the <code>gravity</code> attribute, starting
+    <span class="arg">x</span> pixels from the left and with its
+    baseline at <span class="arg">y</span>. The <span class=
+    "arg">x_rotate</span> and <span class="arg">y_rotate</span>
+    arguments specify a rotation in degrees on the x-axis and
+    y-axis, respectively. The attributes described in <a href=
+    "#attributes">annotate attributes</a>, below, influence the
+    appearance and position of the text. These attributes may be
+    set in the Draw object before calling <code>annotate</code>, or
+    within <code>annotate</code>'s optional <span class=
     "arg">additional parameters</span> block.</p>
 
     <p><em>Note</em>: all of the <code>annotate</code> attributes
@@ -300,15 +301,13 @@ gc = Draw.new
 
       <dd>the image or imagelist to be annotated</dd>
 
-      <dt>width</dt>
+      <dt>x-rotate</dt>
 
-      <dd>width of the rectangle within which the text is
-      positioned</dd>
+      <dd>rotation on the x-axis, in degrees</dd>
 
-      <dt>height</dt>
+      <dt>y-rotate</dt>
 
-      <dd>height of the rectangle within which the text is
-      positioned</dd>
+      <dd>rotation on the y-axis, in degrees</dd>
 
       <dt>x</dt>
 
@@ -360,8 +359,6 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
       </caption>
 
       <tr>
-        <th>Format</th>
-
         <th>Replaced by</th>
       </tr>
 

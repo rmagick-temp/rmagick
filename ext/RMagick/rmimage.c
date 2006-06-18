@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.147 2006/06/02 23:26:53 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.148 2006/06/18 23:26:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8367,10 +8367,67 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
 
 /*
+ *  Method:     Image#transpose
+ *  Purpose:    Call TransposeImage
+ */
+VALUE
+Image_transpose(VALUE self)
+{
+#if defined(HAVE_TRANSPOSEIMAGE)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = TransposeImage(image, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+ *  Method:     Image#transverse
+ *  Purpose:    Call TransverseImage
+ */
+VALUE
+Image_transverse(VALUE self)
+{
+#if defined(HAVE_TRANSVERSEIMAGE)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = TransverseImage(image, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
  *  Method:     Image#trim, Image#trim!
  *  Purpose:    convenience front-end to CropImage
  *  Notes:      respects fuzz attribute
-*/
+ */
 
 static VALUE
 trimmer(int bang, VALUE self)

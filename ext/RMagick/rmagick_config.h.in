@@ -192,6 +192,10 @@
 #undef HAVE_TINTIMAGE
 /* Introduced in IM 6.2.4 */
 #undef HAVE_TRANSPARENTVIRTUALPIXELMETHOD
+/* Introduced in IM 6.2.8 */
+#undef HAVE_TRANSPOSEIMAGE
+/* Introduced in IM 6.2.8 */
+#undef HAVE_TRANSVERSEIMAGE
 /* Introduced in IM 6.0.0 */
 #undef HAVE_UNDEFINEDGRAVITY
 #undef HAVE_UNISTD_H

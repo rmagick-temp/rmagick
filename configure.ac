@@ -152,7 +152,7 @@ AC_CHECK_FUNCS([RandomThresholdImageChannel SeparateImageChannel SepiaToneImage]
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageOption])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
 AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage])
-AC_CHECK_FUNCS([ThresholdImageChannel TintImage])
+AC_CHECK_FUNCS([ThresholdImageChannel TintImage TransposeImage TransverseImage])
 AC_CHECK_FUNCS([UnsharpMaskImageChannel VignetteImage WhiteThresholdImage XImportImage])
 
 # What typedefs?

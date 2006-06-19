@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.148 2006/06/18 23:26:20 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.149 2006/06/19 22:48:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8386,6 +8386,8 @@ Image_transpose(VALUE self)
 
     DestroyExceptionInfo(&exception);
 
+    rm_ensure_result(new_image);
+
     return rm_image_new(new_image);
 
 #else
@@ -8413,6 +8415,8 @@ Image_transverse(VALUE self)
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
 

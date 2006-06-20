@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.121 2006/06/18 23:26:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.122 2006/06/20 00:43:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -997,11 +997,13 @@ Init_RMagick(void)
     // Define the instance methods
     rb_define_method(Class_Pixel, "<=>", Pixel_spaceship, 1);
     rb_define_method(Class_Pixel, "===", Pixel_case_eq, 1);
+    rb_define_method(Class_Pixel, "eql?", Pixel_eql_q, 1);
     rb_define_method(Class_Pixel, "initialize", Pixel_initialize, -1);
     rb_define_method(Class_Pixel, "initialize_copy", Pixel_init_copy, 1);
     rb_define_method(Class_Pixel, "clone", Pixel_clone, 0);
     rb_define_method(Class_Pixel, "dup", Pixel_dup, 0);
     rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
+    rb_define_method(Class_Pixel, "hash", Pixel_hash, 0);
     rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
     rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
@@ -1788,7 +1790,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/06/18 23:26:20 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/06/20 00:43:19 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

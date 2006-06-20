@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.111 2006/06/18 23:26:20 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.112 2006/06/20 00:43:19 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -951,9 +951,11 @@ ATTR_ACCESSOR(Pixel, black)
 extern VALUE  Pixel_case_eq(VALUE, VALUE);
 extern VALUE  Pixel_clone(VALUE);
 extern VALUE  Pixel_dup(VALUE);
+extern VALUE  Pixel_eql_q(VALUE, VALUE);
 extern VALUE  Pixel_fcmp(int, VALUE *, VALUE);
 extern VALUE  Pixel_from_color(VALUE, VALUE);
 extern VALUE  Pixel_from_HSL(VALUE, VALUE);
+extern VALUE  Pixel_hash(VALUE);
 extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
 extern VALUE  Pixel_init_copy(VALUE, VALUE);
 extern VALUE  Pixel_intensity(VALUE);

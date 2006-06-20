@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.76 2006/05/27 21:05:59 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.77 2006/06/20 00:43:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -612,6 +612,16 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 }
 
 /*
+    Method:     Pixel#eql?
+    Purpose:    For use with Hash
+*/
+VALUE
+Pixel_eql_q(VALUE self, VALUE other)
+{
+    return NUM2INT(Pixel_spaceship(self, other)) == 0 ? Qtrue : Qfalse;
+}
+
+/*
     Method:  Pixel#fcmp(other[, fuzz[, colorspace]])
     Purpose: Compare pixel values for equality
 */
@@ -677,6 +687,30 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 #endif
 
     return equal ? Qtrue : Qfalse;
+}
+
+
+/*
+    Method:     Pixel#hash
+    Notes:      INT2FIX left-shifts 1 bit. Sacrifice 1 bit
+                from the opacity attribute to the FIXNUM_FLAG.
+*/
+VALUE
+Pixel_hash(VALUE self)
+{
+    Pixel *pixel;
+    unsigned int hash;
+
+    Data_Get_Struct(self, Pixel, pixel);
+
+    hash  = ScaleQuantumToChar(pixel->red)   << 24;
+    hash += ScaleQuantumToChar(pixel->green) << 16;
+    hash += ScaleQuantumToChar(pixel->blue)  << 8;
+    hash += ScaleQuantumToChar(pixel->opacity);
+    hash >>= 1;
+
+    return INT2FIX(hash);
+
 }
 
 /*

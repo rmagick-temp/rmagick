@@ -3,6 +3,8 @@ RMagick 1.12.1
     o Update the Draw#annotate documentation
     o Added transform, transpose methods to Image class (available with
       ImageMagick 6.2.8)
+    o Fix bug #4806, add hash, eql? methods to Pixel class (bug report from
+      Tim Pease)
 
 RMagick 1.12.0
     o Fix bug #4630, the new signature for #level is incompatible with

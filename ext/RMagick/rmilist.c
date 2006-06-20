@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.40 2006/05/27 21:05:59 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.41 2006/06/20 23:33:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -716,7 +716,7 @@ ImageList_write(VALUE self, VALUE file)
 
         // Ensure file is open - raise error if not
         GetOpenFile(file, fptr);
-        info->file = GetReadFile(fptr);
+        SetImageInfoFile(info, GetReadFile(fptr));
     }
     else
     {
@@ -728,7 +728,7 @@ ImageList_write(VALUE self, VALUE file)
         filenameL = min(filenameL, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filenameL);
         info->filename[filenameL] = '\0';
-        info->file = NULL;
+        SetImageInfoFile(info, NULL);
     }
 
     // Copy the filename into each images. Set a scene number to be used if

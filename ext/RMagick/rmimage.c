@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.149 2006/06/19 22:48:42 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.150 2006/06/20 23:33:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2156,13 +2156,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue.");
     }
-    image->columns = width;
-    image->rows = height;
-#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
+    SetImageExtent(image, width, height);
     SetImageBackgroundColor(image);
-#else
-    SetImage(image, OpaqueOpacity);
-#endif
+
     (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
     rm_check_image_exception(image, DestroyOnError);
 #else
@@ -3128,11 +3124,7 @@ Image_erase_bang(VALUE self)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
     SetImageBackgroundColor(image);
-#else
-    SetImage(image, OpaqueOpacity);
-#endif
 
     rm_check_image_exception(image, RetainOnError);
 
@@ -5287,10 +5279,10 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
 {
     Image *image;
     Info *info;
-    int cols, rows;
+    unsigned long cols, rows;
 
-    cols = NUM2INT(width);
-    rows = NUM2INT(height);
+    cols = NUM2ULONG(width);
+    rows = NUM2ULONG(height);
 
     if (cols <= 0 || rows <= 0)
     {
@@ -5299,19 +5291,15 @@ Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fi
 
     Data_Get_Struct(info_obj, Info, info);
     Data_Get_Struct(self, Image, image);
-    image->columns = cols;
-    image->rows = rows;
+
+    SetImageExtent(image, cols, rows);
 
     // If the caller did not supply a fill argument, call SetImage to fill the
     // image using the background color. The background color can be set by
     // specifying it when creating the Info parm block.
     if (!fill)
     {
-#if defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
         SetImageBackgroundColor(image);
-#else
-        SetImage(image, OpaqueOpacity);
-#endif
     }
     // fillobj.fill(self)
     else
@@ -5352,15 +5340,15 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     Info *info;
     volatile VALUE info_obj;
     Image *image;
-    int cols, rows;
+    unsigned long cols, rows;
 
     switch (argc)
     {
         case 3:
             fill = argv[2];
         case 2:
-            rows = NUM2INT(argv[1]);
-            cols = NUM2INT(argv[0]);
+            rows = NUM2ULONG(argv[1]);
+            cols = NUM2ULONG(argv[0]);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
@@ -5380,15 +5368,14 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     // NOW store a real image in the image object.
     DATA_PTR(self) = image;
 
-    image->columns = cols;
-    image->rows = rows;
+    SetImageExtent(image, cols, rows);
 
     // If the caller did not supply a fill argument, call SetImage to fill the
     // image using the background color. The background color can be set by
     // specifying it when creating the Info parm block.
     if (!fill)
     {
-        SetImage(image, OpaqueOpacity);
+        SetImageBackgroundColor(image);
     }
     // fillobj.fill(self)
     else
@@ -6451,7 +6438,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
         // Ensure file is open - raise error if not
         GetOpenFile(file, fptr);
         rb_io_check_readable(fptr);
-        info->file = GetReadFile(fptr);
+        SetImageInfoFile(info, GetReadFile(fptr));
     }
     else
     {
@@ -6462,7 +6449,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
         filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
-        info->file = NULL;      // Reset FILE *, if any
+        SetImageInfoFile(info, NULL);
     }
 
     GetExceptionInfo(&exception);
@@ -7704,7 +7691,11 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
         QuantizeImage(&qinfo, image);
     }
 
+#if defined(HAVE_SETIMAGESTORAGECLASS)
+    SetImageStorageClass(image, class_type);
+#else
     image->storage_class = class_type;
+#endif
     return self;
 }
 
@@ -8839,7 +8830,7 @@ Image_write(VALUE self, VALUE file)
         // Ensure file is open - raise error if not
         GetOpenFile(file, fptr);
         rb_io_check_writable(fptr);
-        info->file = GetWriteFile(fptr);
+        SetImageInfoFile(info, GetWriteFile(fptr));
     }
     else
     {
@@ -8865,7 +8856,7 @@ Image_write(VALUE self, VALUE file)
         {
             return Qnil;
         }
-        info->file = NULL;
+        SetImageInfoFile(info, NULL);
     }
 
     info->adjoin = False;

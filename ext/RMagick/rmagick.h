@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.112 2006/06/20 00:43:19 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.113 2006/06/20 23:33:05 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -208,6 +208,22 @@ typedef unsigned int MagickBooleanType;
 
 #if !defined(HAVE_UNDEFINEDGRAVITY)
 #define UndefinedGravity 0
+#endif
+
+
+#if !defined(HAVE_SETIMAGEINFOFILE)
+#define SetImageInfoFile(info, fptr) (info)->file = (fptr)
+#endif
+
+#if !defined(HAVE_SETIMAGEEXTENT)
+#define SetImageExtent(img, c, r) \
+    (img)->columns = (c); \
+    (img)->rows = (r)
+#endif
+
+
+#if !defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
+#define SetImageBackgroundColor(img) SetImage((img), OpaqueOpacity)
 #endif
 
 // This implements the "omitted storage class model" for external variables.

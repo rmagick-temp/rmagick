@@ -170,9 +170,15 @@
 #undef HAVE_SETIMAGECOLORSPACE
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_SETIMAGECHANNELDEPTH
+/* Introduced in IM 6.2.4 */
+#undef HAVE_SETIMAGEEXTENT
+/* Introduced in IM 6.2.1 */
+#undef HAVE_SETIMAGEINFOFILE
 #undef HAVE_SETIMAGEOPTION
 /* Introduced in IM 6.1.0 */
 #undef HAVE_SETIMAGEPROGRESSMONITOR
+/* Introduced in IM 6.2.6 */
+#undef HAVE_SETIMAGESTORAGECLASS
 /* Introduced in IM 6.1.7 */
 #undef HAVE_SHADOWIMAGE
 /* Introduced in IM 6.0.1 */

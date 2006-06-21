@@ -5,6 +5,7 @@ RMagick 1.12.1
       ImageMagick 6.2.8)
     o Fix bug #4806, add hash, eql? methods to Pixel class (bug report from
       Tim Pease)
+    o Fix bug #4821, correct doc for Image#rotate (bug report from Tim Pease)
 
 RMagick 1.12.0
     o Fix bug #4630, the new signature for #level is incompatible with

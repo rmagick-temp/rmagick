@@ -1,11 +1,17 @@
-RMagick 1.12.1
-    o Change extension filename to match RubyGems 0.9.0 expectations.
-    o Update the Draw#annotate documentation
-    o Added transform, transpose methods to Image class (available with
-      ImageMagick 6.2.8)
+RMagick 1.13.0
+    o Added transform, transform!, transpose, transpose! methods to Image class
+      (available with ImageMagick 6.2.8)
+    o Feature #4844, add auto_orient, auto_orient! methods to Image class
+      (suggestion from John Oordopjes, available with ImageMagick 6.2.8)
+    o Added adaptive_sharpen, adaptive_sharpen_channel methods to Image class
+      (available with ImageMagick 6.2.7)
+    o Added composite_image_channel, composite_image_channel! methods to Image
+      class (added in ImageMagick 6.2.6)
     o Fix bug #4806, add hash, eql? methods to Pixel class (bug report from
       Tim Pease)
+    o Change extension filename to match RubyGems 0.9.0 expectations.
     o Fix bug #4821, correct doc for Image#rotate (bug report from Tim Pease)
+    o Update the Draw#annotate documentation
 
 RMagick 1.12.0
     o Fix bug #4630, the new signature for #level is incompatible with

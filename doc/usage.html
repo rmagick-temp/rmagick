@@ -734,13 +734,26 @@ exit
       color</dd>
     </dl>
 
-    <h4>Rotate or shear</h4>
+    <h4>Rotate, flip, or shear</h4>
 
     <dl>
       <dt><a href=
       "image1.html#affine_transform">affine_transform</a></dt>
 
       <dd>Transform the image as dictated by an affine matrix</dd>
+
+      <dt><a href="image1.html#auto_orient">auto_orient</a></dt>
+
+      <dd>Rotate or flip the image using the EXIF orientation
+      tag</dd>
+
+      <dt><a href="image2.html#flip">flip</a></dt>
+
+      <dd>Create a vertical mirror image</dd>
+
+      <dt><a href="image2.html#flop">flop</a></dt>
+
+      <dd>Create a horizontal mirror image</dd>
 
       <dt><a href="image3.html#rotate">rotate</a></dt>
 
@@ -750,6 +763,14 @@ exit
 
       <dd>Shear the image along the X or Y axis, creating a
       parallelogram</dd>
+
+      <dt><a href="image3.html#transpose">transpose</a></dt>
+
+      <dd>Create a horizontal mirror image</dd>
+
+      <dt><a href="image3.html#transverse">transverse</a></dt>
+
+      <dd>Create a vertical mirror image</dd>
     </dl>
 
     <h4>Transform</h4>
@@ -807,14 +828,6 @@ exit
       <dd class="ilist">Merge all the images in the imagelist into
       a single image</dd>
 
-      <dt><a href="image2.html#flip">flip</a></dt>
-
-      <dd>Create a vertical mirror image</dd>
-
-      <dt><a href="image2.html#flop">flop</a></dt>
-
-      <dd>Create a horizontal mirror image</dd>
-
       <dt class="ilist"><a href="ilist.html#mosaic">mosaic</a></dt>
 
       <dd class="ilist">Inlay all the images in the imagelist into
@@ -832,14 +845,6 @@ exit
       <dt><a href="image3.html#shave">shave</a></dt>
 
       <dd>Shave regions from the edges of the image</dd>
-
-      <dt><a href="image3.html#transpose">transpose</a></dt>
-
-      <dd>Create a horizontal mirror image</dd>
-
-      <dt><a href="image3.html#transverse">transverse</a></dt>
-
-      <dd>Create a vertical mirror image</dd>
 
       <dt><a href="image3.html#trim">trim</a></dt>
 
@@ -914,7 +919,10 @@ exit
       <dd>Smooth the contours of an image while still preserving
       edge information</dd>
 
-      <dt><a href="image3.html#sharpen">sharpen</a>, <a href=
+      <dt><a href=
+      "image1.html#adaptive_sharpen">adaptive_sharpen</a>, <a href=
+      "image1.html#adaptive_sharpen_channel">adaptive_sharpen_channel</a>,
+      <a href="image3.html#sharpen">sharpen</a>, <a href=
       "image3.html#sharpen_channel">sharpen_channel</a>, <a href=
       "image3.html#unsharp_mask">unsharp_mask</a>, <a href=
       "image3.html#unsharp_mask_channel">unsharp_mask_channel</a></dt>

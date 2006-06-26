@@ -111,13 +111,13 @@
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
+
+          <li><a href="#segment">segment</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#segment">segment</a></li>
-
           <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
@@ -157,16 +157,16 @@
           <li><a href="#store_pixels">store_pixels</a></li>
 
           <li><a href="#strip_bang">strip!</a></li>
+
+          <li><a href="#swirl">swirl</a></li>
+
+          <li><a href=
+          "#texture_fill_to_border">texture_fill_to_border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#swirl">swirl</a></li>
-
-          <li><a href=
-          "#texture_fill_to_border">texture_fill_to_border</a></li>
-
           <li><a href=
           "#texture_floodfill">texture_floodfill</a></li>
 
@@ -184,7 +184,11 @@
 
           <li><a href="#transpose">transpose</a></li>
 
+          <li><a href="#transpose_bang">transpose!</a></li>
+
           <li><a href="#transverse">transverse</a></li>
+
+          <li><a href="#transverse_bang">transverse!</a></li>
 
           <li><a href="#trim">trim</a></li>
 
@@ -1505,7 +1509,7 @@ random_threshold_channel(geom, RedChannel)
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-     /></a> <img src="ex/images/spin.gif" alt="" style=
+    /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1723,7 +1727,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2717,7 +2721,25 @@ img.to_color(pixel)
     <p><a href="image2.html#flip">flip</a>, <a href=
     "image2.html#flop">flop</a>, <a href=
     "image3.html#rotate">rotate</a>, <a href=
+    "#transpose_bang">transpose!</a>, <a href=
     "image3.html#transverse">transverse</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="transpose_bang">transpose!</h3>
+
+    <p><span class="arg">image</span>.transpose! -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#transpose">transpose</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2754,7 +2776,25 @@ img.to_color(pixel)
     <p><a href="image2.html#flip">flip</a>, <a href=
     "image2.html#flop">flop</a>, <a href=
     "image3.html#rotate">rotate</a>, <a href=
-    "image3.html#transpose">transpose</a></p>
+    "image3.html#transpose">transpose</a>, <a href=
+    "#transverse_bang">transverse!</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="transverse_bang">transverse!</h3>
+
+    <p><span class="arg">image</span>.transverse! -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#transverse">transverse</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
   </div>
 
   <div class="sig">

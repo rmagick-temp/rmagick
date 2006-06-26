@@ -92,6 +92,11 @@ float: left;
 
           <li><a href="#spaceship">&lt;=&gt;</a></li>
 
+          <li><a href="#adaptive_sharpen">adaptive_sharpen</a></li>
+
+          <li><a href=
+          "#adaptive_sharpen_channel">adaptive_sharpen_channel</a></li>
+
           <li><a href=
           "#adaptive_threshold">adaptive_threshold</a></li>
 
@@ -103,6 +108,10 @@ float: left;
           <li><a href="#affine_transform">affine_transform</a></li>
 
           <li><a href="#annotate">annotate</a></li>
+
+          <li><a href="#auto_orient">auto_orient</a></li>
+
+          <li><a href="#auto_orient_bang">auto_orient!</a></li>
 
           <li><a href="#bilevel_channel">bilevel_channel</a></li>
 
@@ -119,15 +128,15 @@ float: left;
           <li><a href="#change_geometry">change_geometry</a></li>
 
           <li><a href="#changed_q">changed?</a></li>
-
-          <li><a href="#channel">channel</a></li>
-
-          <li><a href="#channel_depth">channel_depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#channel">channel</a></li>
+
+          <li><a href="#channel_depth">channel_depth</a></li>
+
           <li><a href="#channel_extrema">channel_extrema</a></li>
 
           <li><a href="#channel_mean">channel_mean</a></li>
@@ -163,13 +172,13 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
-
-          <li><a href="#contrast">contrast</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#contrast">contrast</a></li>
+
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
 
@@ -716,6 +725,112 @@ img = Magick::Image.read_inline(content)
   </div>
 
   <div class="sig">
+    <h3 id="adaptive_sharpen">adaptive_sharpen</h3>
+
+    <p><span class="arg">image</span>.adaptive_sharpen(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Adaptively sharpens the image by
+    sharpening more intensely near image edges and less intensely
+    far from edges.</span> The adaptive_sharpen method sharpens
+    <span class="imquote">the image with a Gaussian operator of the
+    given</span> <span class="arg">radius</span> <span class=
+    "imquote">and standard deviation</span> (<span class=
+    "arg">sigma</span>). <span class="imquote">For reasonable
+    results,</span> <span class="arg">radius</span> <span class=
+    "imquote">should be larger than</span> <span class=
+    "arg">sigma</span>. <span class="imquote">Use a</span>
+    <span class="arg">radius</span> <span class="imquote">of 0 and
+    adaptive_sharpen selects a suitable</span> <span class=
+    "arg">radius</span> <span class="imquote">for you.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd><span class="imquote">The radius of the Gaussian in
+      pixels, not counting the center pixel.</span> The default is
+      0.0.</dd>
+
+      <dt>sigma</dt>
+
+      <dd><span class="imquote">The standard deviation of the
+      Laplacian, in pixels.</span> The default is 1.0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "#adaptive_sharpen_channel">adaptive_sharpen_channel</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AdaptiveSharpenImage (available in ImageMagick 6.2.7)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="adaptive_sharpen_channel">adaptive_sharpen_channel</h3>
+
+    <p><span class="arg">image</span>.adaptive_sharpen(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0
+    [,<span class="arg">channel</span>...]) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The same as <code>adaptive_sharpen</code> except only the
+    specified channels are sharpened.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd><span class="imquote">The radius of the Gaussian in
+      pixels, not counting the center pixel.</span> The default is
+      0.0.</dd>
+
+      <dt>sigma</dt>
+
+      <dd><span class="imquote">The standard deviation of the
+      Laplacian, in pixels.</span> The default is 1.0.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, sharpens all the channels. Specifying
+      no channel arguments has the same effect as the
+      <code>adaptive_sharpen</code> method, above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#adaptive_sharpen">adaptive_sharpen</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AdaptiveSharpenImageChannel (available in ImageMagick
+    6.2.7)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="adaptive_threshold">adaptive_threshold</h3>
 
     <p><span class=
@@ -958,6 +1073,59 @@ img = Magick::Image.read_inline(content)
     <h4>Returns</h4>
 
     <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="auto_orient">auto_orient</h3>
+
+    <p><span class="arg">image</span>.auto_orient -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Rotates or flips the image based on the image's EXIF
+    orientation tag. Note that only some models of modern digital
+    cameras can tag an image with the orientation. If the image
+    does not have an orientation tag, or the image is already
+    properly oriented, then <code>auto_orient</code> returns an
+    exact copy of the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#auto_orient_bang">auto_orient!</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="auto_orient_bang">auto_orient!</h3>
+
+    <p><span class="arg">image</span>.auto_orient! -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Rotates or flips the image based on the image's EXIF
+    orientation tag. Note that only some models of modern digital
+    cameras can tag an image with the orientation. If the image
+    does not have an orientation tag, or the image is already
+    properly oriented, then <code>auto_orient!</code> returns
+    <code>nil</code>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self. or <code>nil</code> if the image is already properly
+    oriented</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#auto_orient">auto_orient</a></p>
   </div>
 
   <div class="sig">
@@ -1205,11 +1373,11 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script"  /> <img id=
+    "Click to see the example script" /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2796,13 +2964,13 @@ cropped = img.crop(x, y, width, height, true)
      <img id="cropless" style="display: none" onmouseout=
     "this.style.display='none';cropped.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script"  />
+    "Click to see the example script" />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example"  /></a>
+    "ex/crop_resized.jpg" alt="frame example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>

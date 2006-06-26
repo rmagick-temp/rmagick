@@ -98,10 +98,12 @@ if test "$rm_have_acquirestringinfo" = yes; then
    AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
 fi
 
-AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions AddNoiseImageChannel BilevelImageChannel])
-AC_CHECK_FUNCS([BlackThresholdImage BlurImageChannel ClearMagickException CompareImageChannels])
-AC_CHECK_FUNCS([CompareImageLayers ContrastStretchImageChannel ConvolveImageChannel EvaluateImageChannel])
-AC_CHECK_FUNCS([ExportImagePixels FuzzyColorCompare GammaImageChannel GaussianBlurImageChannel])
+AC_CHECK_FUNCS([AdaptiveSharpenImage AdaptiveThresholdImage AddDefinitions])
+AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
+AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
+AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
+AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
+AC_CHECK_FUNCS([FuzzyColorCompare GammaImageChannel GaussianBlurImageChannel])
 AC_CHECK_FUNCS([GetColorHistogram GetColorInfoArray])
 
 # We need to be able to query these symbols later in the configure script, so set a shell

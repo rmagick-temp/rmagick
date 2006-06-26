@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.122 2006/06/20 00:43:19 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.123 2006/06/26 22:40:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -710,7 +710,7 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, number_colors)
     DCL_ATTR_ACCESSOR(Image, offset)
     DCL_ATTR_WRITER(Image, opacity)
-    DCL_ATTR_READER(Image, orientation)
+    DCL_ATTR_ACCESSOR(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
 #if defined(HAVE_IMAGE_QUALITY)
     DCL_ATTR_READER(Image, quality)
@@ -729,12 +729,16 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, x_resolution)
     DCL_ATTR_ACCESSOR(Image, y_resolution)
 
+    rb_define_method(Class_Image, "adaptive_sharpen", Image_adaptive_sharpen, -1);
+    rb_define_method(Class_Image, "adaptive_sharpen_channel", Image_adaptive_sharpen_channel, -1);
     rb_define_method(Class_Image, "adaptive_threshold", Image_adaptive_threshold, -1);
     rb_define_method(Class_Image, "add_noise", Image_add_noise, 1);
     rb_define_method(Class_Image, "add_noise_channel", Image_add_noise_channel, -1);
     rb_define_method(Class_Image, "affine_transform", Image_affine_transform, 1);
     rb_define_method(Class_Image, "[]", Image_aref, 1);
     rb_define_method(Class_Image, "[]=", Image_aset, 2);
+    rb_define_method(Class_Image, "auto_orient", Image_auto_orient, 0);
+    rb_define_method(Class_Image, "auto_orient!", Image_auto_orient_bang, 0);
     rb_define_method(Class_Image, "properties", Image_properties, 0);
     rb_define_method(Class_Image, "bilevel_channel", Image_bilevel_channel, -1);
     rb_define_method(Class_Image, "black_threshold", Image_black_threshold, -1);
@@ -763,6 +767,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "composite", Image_composite, -1);
     rb_define_method(Class_Image, "composite!", Image_composite_bang, -1);
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
+    rb_define_method(Class_Image, "composite_channel", Image_composite_channel, -1);
+    rb_define_method(Class_Image, "composite_channel!", Image_composite_channel_bang, -1);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
     rb_define_method(Class_Image, "contrast", Image_contrast, -1);
     rb_define_method(Class_Image, "contrast_stretch_channel", Image_contrast_stretch_channel, -1);
@@ -877,7 +883,9 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "to_blob", Image_to_blob, 0);
     rb_define_method(Class_Image, "transparent", Image_transparent, -1);
     rb_define_method(Class_Image, "transpose", Image_transpose, 0);
+    rb_define_method(Class_Image, "transpose!", Image_transpose_bang, 0);
     rb_define_method(Class_Image, "transverse", Image_transverse, 0);
+    rb_define_method(Class_Image, "transverse!", Image_transverse_bang, 0);
     rb_define_method(Class_Image, "trim", Image_trim, 0);
     rb_define_method(Class_Image, "trim!", Image_trim_bang, 0);
     rb_define_method(Class_Image, "unsharp_mask", Image_unsharp_mask, -1);
@@ -1790,7 +1798,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/06/20 00:43:19 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/06/26 22:40:29 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

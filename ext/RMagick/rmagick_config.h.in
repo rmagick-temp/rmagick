@@ -1,6 +1,8 @@
 #undef GRAPHICSMAGICK
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_ACQUIREMAGICKMEMORY
+/* Introduced in IM 6.2.7 */
+#undef HAVE_ADAPTIVESHARPENIMAGE
 /* Introduced in IM 6.0.0 */
 #undef HAVE_ACQUIRESTRINGINFO
 /* GraphicsMagick only */
@@ -27,6 +29,8 @@
 #undef HAVE_COMPAREIMAGECHANNELS
 /* Introduced in IM 6.2.6 */
 #undef HAVE_COMPAREIMAGELAYERS
+/* Introduced in IM 6.2.6 */
+#undef HAVE_COMPOSITEIMAGECHANNEL
 /* Introduced in IM 6.2.6 */
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
 /* Introduced in IM 6.0.1 */

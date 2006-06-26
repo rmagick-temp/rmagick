@@ -1099,6 +1099,12 @@ img = Magick::Image.read_inline(content)
     <h4>See also</h4>
 
     <p><a href="#auto_orient_bang">auto_orient!</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>FlipImage, FlopImage, RotateImage, TransposeImage (available
+    in ImageMagick 6.2.8), TransverseImage (available in
+    ImageMagick 6.2.8)</p>
   </div>
 
   <div class="sig">
@@ -1373,11 +1379,11 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
+    "Click to see the example script"  /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2964,13 +2970,13 @@ cropped = img.crop(x, y, width, height, true)
      <img id="cropless" style="display: none" onmouseout=
     "this.style.display='none';cropped.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script" />
+    "Click to see the example script"  />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example" /></a>
+    "ex/crop_resized.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>

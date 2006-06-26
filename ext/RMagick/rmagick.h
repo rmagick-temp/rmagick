@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.113 2006/06/20 23:33:05 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.114 2006/06/26 22:44:57 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -723,7 +723,7 @@ ATTR_READER(Image, normalized_maximum_error)
 ATTR_READER(Image, number_colors)
 ATTR_ACCESSOR(Image, offset)
 ATTR_WRITER(Image, opacity)
-ATTR_READER(Image, orientation)
+ATTR_ACCESSOR(Image, orientation)
 ATTR_ACCESSOR(Image, page)
 ATTR_READER(Image, quality)
 ATTR_READER(Image, quantum_depth)
@@ -747,12 +747,16 @@ extern VALUE Image_new(int, VALUE *, VALUE);
 extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);
 #endif
 
+extern VALUE Image_adaptive_sharpen(int, VALUE *, VALUE);
+extern VALUE Image_adaptive_sharpen_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_threshold(int, VALUE *, VALUE);
 extern VALUE Image_add_noise(VALUE, VALUE);
 extern VALUE Image_add_noise_channel(int, VALUE *, VALUE);
 extern VALUE Image_affine_transform(VALUE, VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);
+extern VALUE Image_auto_orient(VALUE);
+extern VALUE Image_auto_orient_bang(VALUE);
 extern VALUE Image_properties(VALUE);
 extern VALUE Image_bilevel_channel(int, VALUE *, VALUE);
 extern VALUE Image_black_threshold(int, VALUE *, VALUE);
@@ -778,6 +782,8 @@ extern VALUE Image_colorize(int, VALUE *, VALUE);
 extern VALUE Image_colormap(int, VALUE *, VALUE);
 extern VALUE Image_composite(int, VALUE *, VALUE);
 extern VALUE Image_composite_bang(int, VALUE *, VALUE);
+extern VALUE Image_composite_channel(int, VALUE *, VALUE);
+extern VALUE Image_composite_channel_bang(int, VALUE *, VALUE);
 extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
 extern VALUE Image_compress_colormap_bang(VALUE);
 extern VALUE Image_constitute(VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -899,7 +905,9 @@ extern VALUE Image_to_blob(VALUE);
 extern VALUE Image_to_color(VALUE, VALUE);
 extern VALUE Image_transparent(int, VALUE *, VALUE);
 extern VALUE Image_transpose(VALUE);
+extern VALUE Image_transpose_bang(VALUE);
 extern VALUE Image_transverse(VALUE);
+extern VALUE Image_transverse_bang(VALUE);
 extern VALUE Image_trim(VALUE);
 extern VALUE Image_trim_bang(VALUE);
 extern VALUE Image_unsharp_mask(int, VALUE *, VALUE);

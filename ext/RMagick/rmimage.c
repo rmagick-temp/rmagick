@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.150 2006/06/20 23:33:20 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.151 2006/06/26 22:44:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -24,17 +24,120 @@ typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned lon
 typedef unsigned int (thresholder_t)(Image *, const char *);
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
-static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
-static VALUE rd_image(VALUE, VALUE, reader_t);
-static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE cropper(int, int, VALUE *, VALUE);
-static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
+static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
+static VALUE flipflop(int, VALUE, flipper_t);
+static VALUE rd_image(VALUE, VALUE, reader_t);
+static VALUE rotate(int, VALUE, VALUE);
+static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
+static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
 static ChannelType extract_channels(int *, VALUE *);
 static void raise_ChannelType_error(VALUE);
 
 static ImageAttribute *Next_Attribute;
+
+
+
+
+/*
+    Method:     Image#adaptive_sharpen(radius=0.0, sigma=1.0)
+    Purpose:    call AdaptiveSharpenImage
+*/
+VALUE
+Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVESHARPENIMAGE)
+    Image *image, *new_image;
+    double radius = 0.0;
+    double sigma = 1.0;
+    ExceptionInfo exception;
+
+    switch (argc)
+    {
+        case 2:
+            sigma = NUM2DBL(argv[1]);
+        case 1:
+            radius = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
+            break;
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    new_image = AdaptiveSharpenImage(image, radius, sigma, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
+#else
+
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Image#adaptive_sharpen_channel(radius=0.0, sigma=1.0[, channel...])
+    Purpose:    Call AdaptiveSharpenImageChannel
+*/
+VALUE
+Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVESHARPENIMAGE)
+
+    Image *image, *new_image;
+    double radius = 0.0;
+    double sigma = 1.0;
+    ExceptionInfo exception;
+    ChannelType channels;
+
+    channels = extract_channels(&argc, argv);
+
+    switch (argc)
+    {
+        case 2:
+            sigma = NUM2DBL(argv[1]);
+        case 1:
+            radius = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            raise_ChannelType_error(argv[argc-1]);
+            break;
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    new_image = AdaptiveSharpenImageChannel(image, channels, radius, sigma, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+#else
+
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 
 /*
     Method:     Image#adaptive_threshold(width=3, height=3, offset=0)
@@ -295,6 +398,124 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     }
     return self;
 }
+
+
+/*
+    Static:     crisscross
+    Purpose:    Handle #transverse, #transform methods
+*/
+#if defined(HAVE_TRANSPOSEIMAGE) || defined(HAVE_TRANSVERSEIMAGE)
+static VALUE
+crisscross(
+    int bang,
+    VALUE self,
+    Image *(fp)(const Image *, ExceptionInfo *))
+{
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = (fp)(image, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    if (bang)
+    {
+        DATA_PTR(self) = new_image;
+        DestroyImage(image);
+        return self;
+    }
+
+    return rm_image_new(new_image);
+
+}
+#endif
+
+
+/*
+    Method:     Image#auto_orient
+    Purpose:    Implement mogrify's -auto_orient option
+                automatically orient image based on EXIF orientation value
+    Notes:      See mogrify.c in ImageMagick 6.2.8.
+*/
+static VALUE auto_orient(int bang, VALUE self)
+{
+#if defined(HAVE_TRANSPOSEIMAGE) || defined(HAVE_TRANSVERSEIMAGE)
+    Image *image;
+    volatile VALUE new_image;
+
+    Data_Get_Struct(self, Image, image);
+
+    switch (image->orientation)
+    {
+        case TopRightOrientation:
+            new_image = flipflop(bang, self, FlopImage);
+            break;
+
+        case BottomRightOrientation:
+            new_image = rotate(bang, self, rb_float_new(180.0));
+            break;
+
+        case BottomLeftOrientation:
+            new_image = flipflop(bang, self, FlipImage);
+            break;
+
+        case LeftTopOrientation:
+            new_image = crisscross(bang, self, TransposeImage);
+            break;
+
+        case RightTopOrientation:
+            new_image = rotate(bang, self, rb_float_new(90.0));
+            break;
+
+        case RightBottomOrientation:
+            new_image = crisscross(bang, self, TransverseImage);
+            break;
+
+        case LeftBottomOrientation:
+            new_image = rotate(bang, self, rb_float_new(270.0));
+            break;
+
+        default:                // Return IMMEDIATELY
+            return bang ? Qnil : Image_copy(self);
+            break;
+    }
+
+
+    Data_Get_Struct(new_image, Image, image);
+    image->orientation = TopLeftOrientation;
+
+    return new_image;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+VALUE
+Image_auto_orient(VALUE self)
+{
+    return auto_orient(False, self);
+}
+
+/*
+    Returns nil if the image is already properly oriented
+*/
+VALUE
+Image_auto_orient_bang(VALUE self)
+{
+    rm_check_frozen(self);
+    return auto_orient(True, self);
+}
+
 
 
 /*
@@ -1831,7 +2052,8 @@ static VALUE composite(
     int bang,
     int argc,
     VALUE *argv,
-    VALUE self)
+    VALUE self,
+    ChannelType channels)
 {
     Image *image, *new_image;
     Image *comp_image;
@@ -1939,7 +2161,11 @@ static VALUE composite(
     if (bang)
     {
         rm_check_frozen(self);
+#if defined(HAVE_COMPOSITEIMAGECHANNEL)
+        (void) CompositeImageChannel(image, channels, operator, comp_image, x_offset, y_offset);
+#else
         (void) CompositeImage(image, operator, comp_image, x_offset, y_offset);
+#endif
         rm_check_image_exception(image, RetainOnError);
         return self;
     }
@@ -1947,7 +2173,11 @@ static VALUE composite(
     {
         new_image = rm_clone_image(image);
 
+#if defined(HAVE_COMPOSITEIMAGECHANNEL)
+        (void) CompositeImageChannel(new_image, channels, operator, comp_image, x_offset, y_offset);
+#else
         (void) CompositeImage(new_image, operator, comp_image, x_offset, y_offset);
+#endif
         rm_check_image_exception(new_image, DestroyOnError);
 
         return rm_image_new(new_image);
@@ -1960,7 +2190,8 @@ VALUE Image_composite_bang(
     VALUE *argv,
     VALUE self)
 {
-    return composite(True, argc, argv, self);
+    ChannelType channels = (AllChannels &~ OpacityChannel);
+    return composite(True, argc, argv, self, channels);
 }
 
 VALUE Image_composite(
@@ -1968,7 +2199,8 @@ VALUE Image_composite(
     VALUE *argv,
     VALUE self)
 {
-    return composite(False, argc, argv, self);
+    ChannelType channels = (AllChannels &~ OpacityChannel);
+    return composite(False, argc, argv, self, channels);
 }
 
 
@@ -1997,6 +2229,50 @@ Image_composite_affine(
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#composite_channel(src_image, geometry, composite_operator[, channel...])
+                Image#composite_channel!(src_image, geometry, composite_operator[, channel...])
+    Purpose:    Call CompositeImageChannel
+*/
+static VALUE
+composite_channel(int bang, int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_COMPOSITEIMAGECHANNEL)
+    ChannelType channels;
+
+    channels = extract_channels(&argc, argv);
+
+    // There must be 3, 4, or 5 remaining arguments.
+    if (argc < 3)
+    {
+        rb_raise(rb_eArgError, "composite operator not specified");
+    }
+    else if (argc > 5)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    return composite(bang, argc, argv, self, channels);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+VALUE Image_composite_channel(int argc, VALUE *argv, VALUE self)
+{
+    return composite_channel(False, argc, argv, self);
+}
+
+
+VALUE Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
+{
+    return composite_channel(True, argc, argv, self);
+}
+
 
 /*
     Method:     Image#compression
@@ -2416,6 +2692,7 @@ Image_init_copy(VALUE copy, VALUE orig)
 
     return copy;
 }
+
 
 /*
     Method:     Image#crop(x, y, width, height)
@@ -5626,6 +5903,7 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#orientation
     Purpose:    Return the orientation attribute as an OrientationType enum value.
@@ -5643,6 +5921,29 @@ Image_orientation(VALUE self)
     return (VALUE)0;
 #endif
 }
+
+
+/*
+    Method:     Image#orientation=
+    Purpose:    Set the orientation attribute
+*/
+VALUE
+Image_orientation_eq(VALUE self, VALUE orientation)
+{
+#if defined(HAVE_IMAGE_ORIENTATION)
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(orientation, image->orientation, OrientationType);
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#page
@@ -8359,28 +8660,27 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
 /*
  *  Method:     Image#transpose
+ *              Image#transpose!
  *  Purpose:    Call TransposeImage
  */
 VALUE
 Image_transpose(VALUE self)
 {
 #if defined(HAVE_TRANSPOSEIMAGE)
-    Image *image, *new_image;
-    ExceptionInfo exception;
+    return crisscross(False, self, TransposeImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
 
 
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    new_image = TransposeImage(image, &exception);
-    rm_check_exception(&exception, new_image, DestroyOnError);
-
-    DestroyExceptionInfo(&exception);
-
-    rm_ensure_result(new_image);
-
-    return rm_image_new(new_image);
-
+VALUE
+Image_transpose_bang(VALUE self)
+{
+#if defined(HAVE_TRANSPOSEIMAGE)
+    rm_check_frozen(self);
+    return crisscross(True, self, TransposeImage);
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -8390,27 +8690,26 @@ Image_transpose(VALUE self)
 
 /*
  *  Method:     Image#transverse
+ *              Image#transverse!
  *  Purpose:    Call TransverseImage
  */
 VALUE
 Image_transverse(VALUE self)
 {
 #if defined(HAVE_TRANSVERSEIMAGE)
-    Image *image, *new_image;
-    ExceptionInfo exception;
+    return crisscross(False, self, TransverseImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
 
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    new_image = TransverseImage(image, &exception);
-    rm_check_exception(&exception, new_image, DestroyOnError);
-
-    DestroyExceptionInfo(&exception);
-
-    rm_ensure_result(new_image);
-
-    return rm_image_new(new_image);
-
+VALUE
+Image_transverse_bang(VALUE self)
+{
+#if defined(HAVE_TRANSVERSEIMAGE)
+    rm_check_frozen(self);
+    return crisscross(True, self, TransverseImage);
 #else
     rm_not_implemented();
     return (VALUE)0;

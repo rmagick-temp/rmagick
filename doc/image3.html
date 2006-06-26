@@ -83,6 +83,9 @@
 
           <li><a href="#radial_blur">radial_blur</a></li>
 
+          <li><a href=
+          "#radial_blur_channel">radial_blur_channel</a></li>
+
           <li><a href="#raise">raise</a></li>
 
           <li><a href=
@@ -111,13 +114,13 @@
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
-
-          <li><a href="#segment">segment</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#segment">segment</a></li>
+
           <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
@@ -159,14 +162,14 @@
           <li><a href="#strip_bang">strip!</a></li>
 
           <li><a href="#swirl">swirl</a></li>
-
-          <li><a href=
-          "#texture_fill_to_border">texture_fill_to_border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#texture_fill_to_border">texture_fill_to_border</a></li>
+
           <li><a href=
           "#texture_floodfill">texture_floodfill</a></li>
 
@@ -643,11 +646,53 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
 
     <p><a href="image1.html#blur_image">blur_image</a>, <a href=
     "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
-    "image2.html#motion_blur">motion_blur</a></p>
+    "image2.html#motion_blur">motion_blur</a>, <a href=
+    "#radial_blur_channel">radial_blur_channel</a></p>
 
     <h4>Magick API</h4>
 
     <p>RadialBlurImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="radial_blur_channel">radial_blur_channel</h3>
+
+    <p><span class=
+    "arg">image</span>.radial_blur_channel(<span class=
+    "arg">aFloat</span> [, <span class="arg">channel</span>...])
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Applies a radial blur to the selected image channels.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>angle</dt>
+
+      <dd>Amount of blur, in degrees</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are blurred.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#radial_blur">radial_blur</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>RadialBlurImageChannel (available in ImageMagick 6.2.4)</p>
   </div>
 
   <div class="sig">
@@ -1727,7 +1772,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2723,6 +2768,10 @@ img.to_color(pixel)
     "image3.html#rotate">rotate</a>, <a href=
     "#transpose_bang">transpose!</a>, <a href=
     "image3.html#transverse">transverse</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>TransposeImage (available in ImageMagick 6.2.8)</p>
   </div>
 
   <div class="sig">
@@ -2778,6 +2827,10 @@ img.to_color(pixel)
     "image3.html#rotate">rotate</a>, <a href=
     "image3.html#transpose">transpose</a>, <a href=
     "#transverse_bang">transverse!</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>TransposeImage (available in ImageMagick 6.2.8)</p>
   </div>
 
   <div class="sig">

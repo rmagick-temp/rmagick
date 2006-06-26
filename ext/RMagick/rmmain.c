@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.123 2006/06/26 22:40:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.124 2006/06/26 23:32:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -839,6 +839,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "quantize", Image_quantize, -1);
     rb_define_method(Class_Image, "quantum_operator", Image_quantum_operator, -1);
     rb_define_method(Class_Image, "radial_blur", Image_radial_blur, 1);
+    rb_define_method(Class_Image, "radial_blur_channel", Image_radial_blur_channel, -1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
     rb_define_method(Class_Image, "random_channel_threshold", Image_random_channel_threshold, 2);
     rb_define_method(Class_Image, "random_threshold_channel", Image_random_threshold_channel, -1);
@@ -1798,7 +1799,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/06/26 22:40:29 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/06/26 23:32:37 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

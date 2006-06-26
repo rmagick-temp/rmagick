@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.151 2006/06/26 22:44:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.152 2006/06/26 23:32:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6530,6 +6530,51 @@ Image_radial_blur(VALUE self, VALUE angle)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+/*
+    Method:     Image#radial_blur_channel(angle[, channel..])
+    Purpose:    Call RadialBlurImageChannel
+    Notes:      Angle is in degrees
+*/
+VALUE
+Image_radial_blur_channel(
+    int argc,
+    VALUE *argv,
+    VALUE self)
+{
+#if defined(HAVE_RADIALBLURIMAGECHANNEL)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+    ChannelType channels;
+
+    channels = extract_channels(&argc, argv);
+
+    // There must be 1 remaining argument.
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+    }
+    else if (argc > 1)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = RadialBlurImageChannel(image, channels, NUM2DBL(argv[0]), &exception);
+
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
 #else
     rm_not_implemented();
     return (VALUE)0;

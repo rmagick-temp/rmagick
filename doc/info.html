@@ -96,13 +96,13 @@
         <li><a href="#dispose">dispose</a></li>
 
         <li><a href="#dither">dither</a></li>
-
-        <li><a href="#extract">extract</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#extract">extract</a></li>
+
         <li><a href="#filename">filename</a></li>
 
         <li><a href="#fill">fill</a></li>
@@ -124,15 +124,15 @@
         <li><a href="#matte_color">matte_color</a></li>
 
         <li><a href="#monitor">monitor</a></li>
-
-        <li><a href="#monochrome">monochrome</a></li>
-
-        <li><a href="#number_scenes">number_scenes</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#monochrome">monochrome</a></li>
+
+        <li><a href="#number_scenes">number_scenes</a></li>
+
         <li><a href="#orientation">orientation</a></li>
 
         <li><a href="#page">page</a></li>
@@ -148,12 +148,6 @@
         <li><a href="#server_name">server_name</a></li>
 
         <li><a href="#size">size</a></li>
-
-        <li><a href="#subimage">subimage</a></li>
-
-        <li><a href="#subrange">subrange</a></li>
-
-        <li><a href="#tile">tile</a></li>
 
         <li><a href="#units">units</a></li>
 
@@ -792,12 +786,6 @@ self.undefine("tiff", "bits-per-sample")
     <p>Either a geometry string or a <a href=
     "struct.html#Geometry">Geometry</a> object. For example:
     <code>self.extract = "200x200+100+100"</code>.</p>
-
-    <h4>Notes</h4>
-
-    <p>This attribute replaces the <a href="#Info.tile_eq">tile</a>
-    attribute, which is deprecated in ImageMagick 5.5.6 and
-    later.</p>
   </div>
 
   <div class="sig">
@@ -1058,14 +1046,6 @@ self.undefine("tiff", "bits-per-sample")
     <p>Used in conjunction with <a href="#scene">scene</a> to
     specify the range of frames to be extracted when constituting a
     multi-frame image.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute replaces the <a href="#subrange">subrange</a>
-    attribute, which is deprecated in ImageMagick 5.5.6 and later.
-    If <code>number_scenes</code> is used with a version of
-    ImageMagick prior to 5.5.6, it is a synonym for the
-    <code>subrange</code> attribute.</p>
   </div>
 
   <div class="sig">
@@ -1176,14 +1156,6 @@ self.undefine("tiff", "bits-per-sample")
     "#number_scenes">number_scenes</a> to specify the range of
     frames to be extracted when constituting a multi-frame
     image.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute replaces the <a href="#subimage">subimage</a>
-    attribute, which is deprecated in ImageMagick 5.5.6 and later.
-    If <code>scene</code> is used with a version of ImageMagick
-    prior to 5.5.6, it is a synonym for the <code>subimage</code>
-    attribute.</p>
   </div>
 
   <div class="sig">
@@ -1226,72 +1198,6 @@ self.undefine("tiff", "bits-per-sample")
 
     <p>A g<a href="imusage.html#geometry_string">eometry string</a>
     or a <a href="struct.html#Geometry">Geometry</a> object.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="subimage">subimage</h3>
-
-    <p><span class="arg">self.</span>subimage= <span class=
-    "arg">anInteger</span></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Specify a base image of an image sequence in a multi-frame
-    image.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute is deprecated in ImageMagick 5.5.6 and later.
-    Use the <a href="#scene">scene</a> attribute instead.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="subrange">subrange</h3>
-
-    <p><span class="arg">self.</span>subrange= <span class=
-    "arg">anInteger</span></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Specify the number of images relative to the base image. See
-    <a href="#subimage">subimage</a>.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute is deprecated in ImageMagick 5.5.6 and later.
-    Use the <a href="#number_scenes">number_scenes</a> attribute
-    instead.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="tile">tile</h3>
-
-    <p><span class="arg">self.</span>tile= <span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Specify a portion of an image to be extracted when the image
-    is constituted. The argument is a geometry string. For example:
-    <code>self.tile = "200x200+100+100"</code>. This attribute can
-    be used to identify a subset of an image that is otherwise too
-    large to keep in memory.</p>
-
-    <h4>Arguments</h4>
-
-    <p>A <a href="imusage.html#geometry_string">geometry string</a>
-    or a <a href="struct.html#Geometry">Geometry</a> object.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute is deprecated in ImageMagick 5.5.6 and later.
-    Use the <a href="#extract">extract</a> attribute instead.</p>
   </div>
 
   <div class="sig">

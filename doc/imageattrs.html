@@ -158,8 +158,6 @@
 
           <li><a href="#ticks_per_second">ticks_per_second</a></li>
 
-          <li><a href="#tile_info">tile_info</a></li>
-
           <li><a href="#total_colors">total_colors</a></li>
 
           <li><a href="#units">units</a></li>
@@ -687,14 +685,6 @@
     <h4>Returns</h4>
 
     <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
-
-    <h4>Note</h4>
-
-    <p>This attribute replaces the <a href=
-    "#Image.tile_info">tile_info</a> attribute in releases of
-    ImageMagick starting with 5.5.6. With releases of ImageMagick
-    prior to 5.5.6, this attribute is a synonym for
-    <code>tile_info</code>.</p>
   </div>
 
   <div class="sig">
@@ -1344,35 +1334,6 @@ blur_image is 100% complete.
     release the number of ticks per second was fixed at 100. The
     GIF image format only accepts 100 ticks per second regardless
     of the value of this attribute.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="tile_info">tile_info</h3>
-
-    <p><span class="arg">image.</span>tile_info -&gt;
-    <em>aRectangle</em><br />
-    <span class="arg">image.</span>tile_info = <span class=
-    "arg">aRectangle</span></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p class="imquote">Describes a tile within an image.&nbsp; For
-    example, if your image is 640x480 you may only want 320x256
-    with an offset of +128+64. It is used for raw formats such as
-    RGB and CMYK as well as for TIFF.</p>
-
-    <p>This attribute is deprecated in ImageMagick 5.5.6 and later.
-    Use <a href="#extract_info">extract_info</a> instead.</p>
-
-    <h4>Arguments</h4>
-
-    <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
-
-    <h4>Returns</h4>
-
-    <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
   </div>
 
   <div class="sig">

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.115 2006/06/26 23:32:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.116 2006/06/28 23:05:31 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -115,7 +115,7 @@ typedef enum
 {
     False = 0,
     True = 1
-} boolean;
+} rm_boolean;
 
 typedef enum {
     AnyWeight,

@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.14 2006/05/07 23:46:19 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.15 2006/06/28 23:06:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -13,12 +13,12 @@ typedef struct
     double x1, y1, x2, y2;
     PixelPacket start_color;
     PixelPacket stop_color;
-} GradientFill;
+} rm_GradientFill;
 
 typedef struct
 {
     Image *texture;
-} TextureFill;
+} rm_TextureFill;
 
 /*
     Static:     free_Fill
@@ -45,7 +45,7 @@ GradientFill_new(
     VALUE start_color,
     VALUE stop_color)
 {
-    GradientFill *fill;
+    rm_GradientFill *fill;
     volatile VALUE new_fill;
     VALUE argv[6];
 
@@ -57,7 +57,7 @@ GradientFill_new(
     argv[5] = stop_color;
 
     new_fill = Data_Make_Struct(class
-                              , GradientFill
+                              , rm_GradientFill
                               , NULL
                               , free_Fill
                               , fill);
@@ -69,9 +69,9 @@ GradientFill_new(
 VALUE
 GradientFill_alloc(VALUE class)
 {
-    GradientFill *fill;
+    rm_GradientFill *fill;
 
-    return Data_Make_Struct(class, GradientFill, NULL, free_Fill, fill);
+    return Data_Make_Struct(class, rm_GradientFill, NULL, free_Fill, fill);
 }
 #endif
 
@@ -89,9 +89,9 @@ GradientFill_initialize(
     VALUE start_color,
     VALUE stop_color)
 {
-    GradientFill *fill;
+    rm_GradientFill *fill;
 
-    Data_Get_Struct(self, GradientFill, fill);
+    Data_Get_Struct(self, rm_GradientFill, fill);
 
     fill->x1 = NUM2DBL(x1);
     fill->y1 = NUM2DBL(y1);
@@ -460,12 +460,12 @@ h_diagonal_fill(
 VALUE
 GradientFill_fill(VALUE self, VALUE image_obj)
 {
-    GradientFill *fill;
+    rm_GradientFill *fill;
     Image *image;
     PixelPacket start_color, stop_color;
     double x1, y1, x2, y2;          // points on the line
 
-    Data_Get_Struct(self, GradientFill, fill);
+    Data_Get_Struct(self, rm_GradientFill, fill);
     Data_Get_Struct(image_obj, Image, image);
 
     x1 = fill->x1;
@@ -527,7 +527,7 @@ GradientFill_fill(VALUE self, VALUE image_obj)
 static void
 free_TextureFill(void *fill_obj)
 {
-    TextureFill *fill = (TextureFill *)fill_obj;
+    rm_TextureFill *fill = (rm_TextureFill *)fill_obj;
 
     DestroyImage(fill->texture);
     xfree(fill);
@@ -542,12 +542,12 @@ free_TextureFill(void *fill_obj)
 VALUE
 TextureFill_new(VALUE class, VALUE texture)
 {
-    TextureFill *fill;
+    rm_TextureFill *fill;
     VALUE argv[1];
     volatile VALUE new_fill;
 
     new_fill = Data_Make_Struct(class
-                              , TextureFill
+                              , rm_TextureFill
                               , NULL
                               , free_TextureFill
                               , fill);
@@ -559,9 +559,9 @@ TextureFill_new(VALUE class, VALUE texture)
 VALUE
 TextureFill_alloc(VALUE class)
 {
-    TextureFill *fill;
+    rm_TextureFill *fill;
     return Data_Make_Struct(class
-                        , TextureFill
+                        , rm_TextureFill
                         , NULL
                         , free_TextureFill
                         , fill);
@@ -575,11 +575,11 @@ TextureFill_alloc(VALUE class)
 VALUE
 TextureFill_initialize(VALUE self, VALUE texture_arg)
 {
-    TextureFill *fill;
+    rm_TextureFill *fill;
     Image *texture;
     volatile VALUE texture_image;
 
-    Data_Get_Struct(self, TextureFill, fill);
+    Data_Get_Struct(self, rm_TextureFill, fill);
 
     texture_image = ImageList_cur_image(texture_arg);
 
@@ -598,11 +598,11 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
 VALUE
 TextureFill_fill(VALUE self, VALUE image_obj)
 {
-    TextureFill *fill;
+    rm_TextureFill *fill;
     Image *image;
 
     Data_Get_Struct(image_obj, Image, image);
-    Data_Get_Struct(self, TextureFill, fill);
+    Data_Get_Struct(self, rm_TextureFill, fill);
 
     TextureImage(image, fill->texture);
     rm_check_image_exception(image, RetainOnError);

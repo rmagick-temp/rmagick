@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.77 2006/06/20 00:43:19 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.78 2006/06/28 23:07:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -477,7 +477,7 @@ Pixel_from_color(VALUE class, VALUE name)
 {
     PixelPacket pp;
     ExceptionInfo exception;
-    boolean okay;
+    MagickBooleanType okay;
 
     class = class;      // defeat "never referenced" message from icc
 
@@ -1062,7 +1062,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
 static void
 Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 {
-    boolean okay;
+    MagickBooleanType okay;
     char *name;
     ExceptionInfo exception;
 

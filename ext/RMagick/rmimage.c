@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.152 2006/06/26 23:32:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.153 2006/06/28 23:07:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2190,7 +2190,11 @@ VALUE Image_composite_bang(
     VALUE *argv,
     VALUE self)
 {
-    ChannelType channels = (AllChannels &~ OpacityChannel);
+#if defined(HAVE_ALLCHANNELS)
+        ChannelType channels = (AllChannels &~ OpacityChannel);
+#else
+        ChannelType channels = (0xff &~ OpacityChannel);
+#endif
     return composite(True, argc, argv, self, channels);
 }
 
@@ -2199,7 +2203,11 @@ VALUE Image_composite(
     VALUE *argv,
     VALUE self)
 {
-    ChannelType channels = (AllChannels &~ OpacityChannel);
+#if defined(HAVE_ALLCHANNELS)
+        ChannelType channels = (AllChannels &~ OpacityChannel);
+#else
+        ChannelType channels = (0xff &~ OpacityChannel);
+#endif
     return composite(False, argc, argv, self, channels);
 }
 
@@ -2929,7 +2937,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     StorageType stg_type = FIX_STG_TYPE;
     char *map;
     long mapL;
-    boolean okay;
+    MagickBooleanType okay;
     ExceptionInfo exception;
     union
     {

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.116 2006/06/28 23:05:31 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.117 2006/07/16 15:58:25 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -163,6 +163,8 @@ typedef enum _QuantumExpressionOperator
     AndQuantumOperator,
     DivideQuantumOperator,
     LShiftQuantumOperator,
+    MaxQuantumOperator,
+    MinQuantumOperator,
     MultiplyQuantumOperator,
     OrQuantumOperator,
     RShiftQuantumOperator,

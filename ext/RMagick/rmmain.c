@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.124 2006/06/26 23:32:37 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.125 2006/07/16 15:58:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1563,6 +1563,10 @@ Init_RMagick(void)
         ENUMERATOR(AndQuantumOperator)
         ENUMERATOR(DivideQuantumOperator)
         ENUMERATOR(LShiftQuantumOperator)
+#if defined(HAVE_MAXEVALUATEOPERATOR)
+        ENUMERATOR(MaxQuantumOperator)
+        ENUMERATOR(MinQuantumOperator)
+#endif
         ENUMERATOR(MultiplyQuantumOperator)
         ENUMERATOR(OrQuantumOperator)
         ENUMERATOR(RShiftQuantumOperator)
@@ -1799,7 +1803,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/06/26 23:32:37 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/07/16 15:58:26 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

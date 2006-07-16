@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.153 2006/06/28 23:07:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.154 2006/07/16 15:58:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6440,6 +6440,14 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
         case LShiftQuantumOperator:
             qop = LeftShiftEvaluateOperator;
             break;
+#if defined(HAVE_MAXEVALUATEOPERATOR)
+        case MaxQuantumOperator:
+            qop = MaxEvaluateOperator;
+            break;
+        case MinQuantumOperator:
+            qop = MinEvaluateOperator;
+            break;
+#endif
         case MultiplyQuantumOperator:
             qop = MultiplyEvaluateOperator;
             break;
@@ -6458,7 +6466,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     }
 
     GetExceptionInfo(&exception);
-    (void) EvaluateImageChannel(image, channel, operator, rvalue, &exception);
+    (void) EvaluateImageChannel(image, channel, qop, rvalue, &exception);
     CHECK_EXCEPTION()
 
     DestroyExceptionInfo(&exception);

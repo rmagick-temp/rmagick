@@ -140,6 +140,8 @@
 #undef HAVE_MAGICKOFFSETTYPE
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_MAGICKSIZETYPE
+/* Introduced in IM 6.2.0 */
+#undef HAVE_MAXEVALUATEOPERATOR
 #undef HAVE_MEMORY_H
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_NEGATEIMAGECHANNEL

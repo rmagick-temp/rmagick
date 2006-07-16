@@ -539,6 +539,21 @@ if test "$rm_cv_enum_coalescelayer" = yes; then
   AC_DEFINE(HAVE_COALESCELAYER)
 fi
 
+AC_CACHE_CHECK(for MaxEvaluateOperator enum value, rm_cv_enum_maxevaluateoperator,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [MagickEvaluateOperator x; x = MaxEvaluateOperator],
+     rm_cv_enum_maxevaluateoperator='yes',
+     rm_cv_enum_maxevaluateoperator='no')])
+
+if test "$rm_cv_enum_maxevaluateoperator" = yes; then
+  AC_DEFINE(HAVE_MAXEVALUATEOPERATOR)
+fi
+
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
    AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,

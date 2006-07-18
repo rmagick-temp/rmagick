@@ -1,3 +1,8 @@
+RMagick 1.13.1
+    o Fix bug #5079, Image#quantum_operator method doesn't work
+    o Fix bug #5080, incorrect RVG images when non-0 values useds for the
+      min_x, min_y arguments to RVG#viewbox
+
 RMagick 1.13.0
     o Added transform, transform!, transpose, transpose! methods to Image class
       (available with ImageMagick 6.2.8)

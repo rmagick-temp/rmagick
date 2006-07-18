@@ -1,5 +1,5 @@
 #--
-# $Id: stretchable.rb,v 1.2 2005/12/31 14:41:04 rmagick Exp $
+# $Id: stretchable.rb,v 1.3 2006/07/18 22:24:59 rmagick Exp $
 # Copyright (C) 2006 Timothy P. Hunter
 #++
 
@@ -39,9 +39,9 @@ class Magick::RVG
     module Stretchable
 
       private
+        # Scale to fit
         def set_viewbox_none(width, height)
             sx, sy = 1.0, 1.0
-            tx, ty = @vbx_x, @vbx_y
 
             if @vbx_width
                 sx = width / @vbx_width
@@ -50,13 +50,12 @@ class Magick::RVG
                 sy = height / @vbx_height
             end
 
-            return [tx, ty, sx, sy]
+            return [sx, sy]
         end
 
         # Use align attribute to compute x- and y-offset from viewport's upper-left corner.
         def align_to_viewport(width, height, sx, sy)
-            tx, ty = @vbx_x, @vbx_y
-            tx += case @align
+            tx = case @align
                      when /\AxMin/
                          0
                      when NilClass, /\AxMid/
@@ -65,7 +64,7 @@ class Magick::RVG
                          width - @vbx_width*sx
             end
 
-            ty += case @align
+            ty = case @align
                      when /YMin\z/
                          0
                      when NilClass, /YMid\z/
@@ -79,15 +78,13 @@ class Magick::RVG
         # Scale to smaller viewbox dimension
         def set_viewbox_meet(width, height)
             sx = sy = [width / @vbx_width, height / @vbx_height].min
-            tx, ty = align_to_viewport(width, height, sx, sy)
-            return [tx, ty, sx, sy]
+            return [sx, sy]
         end
 
         # Scale to larger viewbox dimension
         def set_viewbox_slice(width, height)
             sx = sy = [width / @vbx_width, height / @vbx_height].max
-            tx, ty = align_to_viewport(width, height, sx, sy)
-            return [tx, ty, sx, sy]
+            return [sx, sy]
         end
 
         # Establish the viewbox as necessary
@@ -98,11 +95,14 @@ class Magick::RVG
             @vbx_y ||= 0.0
 
             if @align == 'none'
-                tx, ty, sx, sy = set_viewbox_none(width, height)
+                sx, sy = set_viewbox_none(width, height)
+                tx, ty = 0, 0
             elsif @meet_or_slice == 'meet'
-                tx, ty, sx, sy = set_viewbox_meet(width, height)
+                sx, sy = set_viewbox_meet(width, height)
+                tx, ty = align_to_viewport(width, height, sx, sy)
             else
-                tx, ty, sx, sy = set_viewbox_slice(width, height)
+                sx, sy = set_viewbox_slice(width, height)
+                tx, ty = align_to_viewport(width, height, sx, sy)
             end
 
             # Establish clipping path around the current viewport
@@ -112,8 +112,12 @@ class Magick::RVG
             end
 
             gc.clip_path(name)
+            # Add a non-scaled translation if meet or slice
             gc.translate(tx, ty) if (tx.abs > 1.0e-10 || ty.abs > 1.0e-10)
+            # Scale viewbox as necessary
             gc.scale(sx, sy) if (sx != 1.0 || sy != 1.0)
+            # Add a scaled translation if non-0 origin
+            gc.translate(-@vbx_x, -@vbx_y) if (@vbx_x.abs != 0.0 || @vbx_y.abs != 0)
         end
 
         def initialize(*args, &block)

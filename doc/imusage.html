@@ -85,6 +85,9 @@
     <ul style="margin-left: 15px; padding-top: 1em">
       <li><a href="#formats">Image formats and filenames</a></li>
 
+      <li><a href="#frames">Selecting frames from a multi-frame
+      image file</a></li>
+
       <li><a href="#color_names">Color names</a></li>
 
       <li><a href="#geometry">The geometry string</a></li>
@@ -118,6 +121,42 @@
 
   <p><em>Note:</em> Keep in mind that files in some formats may
   only be read by &times;Magick, not written.</p>
+
+  <h2 id="frames">Selecting frames from a multi-frame image
+  file</h2>
+
+  <p>When reading a multi-frame image file such as an AVI you can
+  specify the subset of frames by adding a list of frame number(s)
+  to the end of the file name enclosed in square brackets. For
+  example, "my_movie.avi[0]" tells &times;Magick to read only the
+  first frame. In general,</p>
+
+  <dl>
+    <dt>[N]</dt>
+
+    <dd>identifies a single frame. Frame numbers start at 0.
+    Negative numbers cause frames to be selected from the end of
+    the image file.</dd>
+
+    <dt>[M,N,O]</dt>
+
+    <dd>identifies multiple non-sequential frame numbers.</dd>
+
+    <dt>[N-M]</dt>
+
+    <dd>identifies the sequence of frames numbered N through
+    M.</dd>
+
+    <dt>[M,N-O,P]</dt>
+
+    <dd>identifies both non-sequential and sequential frame
+    numbers</dd>
+  </dl>
+
+  <p>Note that the entire image file will be read into memory
+  before the frames are selected. See <a href=
+  "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/files/#read">
+  this page</a> for additional uses of the [] modifier.</p>
 
   <h2 id="color_names">Color names</h2>
 

@@ -360,48 +360,26 @@
 
     <p>self</p>
 
+    <h4>See also</h4>
+
+    <p><a href="image1.html#add_profile">add_profile</a> and
+    <a href="image1.html#delete_profile">delete_profile</a> perform
+    very similar functions. However, <code>add_profile</code>
+    accepts the name of a profile file on disk instead of the
+    profile data itself and, if the file contains more than one
+    profile, will load all the profiles at once.</p>
+
     <h4>Magick API</h4>
 
     <p>ProfileImage</p>
 
     <h4>Notes</h4>
 
-    <ol>
-      <li>To extract a profile from an image, simply convert the
-      image, specifying the profile name (APP1, 8BIM, ICM, IPTC,
-      etc.) as the format of the output image. There are at least
-      two ways to do this.
-
-        <ol style="list-style-type: lower-alpha">
-          <li>Write the image to a file using the profile name as
-          the filename extension ("myimage.app1", for example).
-            <pre>
-img.write("myimage.app1")
-</pre>
-          </li>
-
-          <li>To capture the profile information in a string,
-          assign the profile name to the <a href=
-          "imageattrs.html#format">format=</a> attribute and call
-          <a href="image3.html#to_blob">to_blob.</a>
-            <pre>
-img.format = 'iptc'
-profile_str = img.to_blob
-</pre><a href=
-"http://www.imagemagick.org/script/formats.php#embedded">
-            This page (ImageMagick)</a> and <a href=
-            "http://www.graphicsmagick.org/www/formats.html">this
-            page (GraphicsMagick)</a> list the supported profiles.
-          </li>
-        </ol>
-      </li>
-
-      <li>&times;Magick does not automatically remove profiles when
-      resizing images. If you are trying to make your JPEG
-      thumbnail images as small as possible, use
-      <code>profile!</code> to remove any profiles from the image
-      as well. Also see <a href="#strip_bang">strip!</a></li>
-    </ol>
+    <p>&times;Magick does not automatically remove profiles when
+    resizing images. If you are trying to make your JPEG thumbnail
+    images as small as possible, use <code>profile!</code> to
+    remove any profiles from the image as well. Also see <a href=
+    "#strip_bang">strip!</a></p>
   </div>
 
   <div class="sig">
@@ -1105,7 +1083,7 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
@@ -1776,7 +1754,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 

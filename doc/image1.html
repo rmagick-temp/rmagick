@@ -102,6 +102,8 @@ float: left;
 
           <li><a href="#add_noise">add_noise</a></li>
 
+          <li><a href="#add_profile">add_profile</a></li>
+
           <li><a href=
           "#add_noise_channel">add_noise_channel</a></li>
 
@@ -126,13 +128,13 @@ float: left;
           <li><a href="#border_bang">border!</a></li>
 
           <li><a href="#change_geometry">change_geometry</a></li>
-
-          <li><a href="#changed_q">changed?</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#changed_q">changed?</a></li>
+
           <li><a href="#channel">channel</a></li>
 
           <li><a href="#channel_depth">channel_depth</a></li>
@@ -197,6 +199,8 @@ float: left;
           <li><a href="#crop_resized_bang">crop_resized!</a></li>
 
           <li><a href="#cycle_colormap">cycle_colormap</a></li>
+
+          <li><a href="#delete_profile">delete_profile</a></li>
 
           <li><a href="#despeckle">despeckle</a></li>
 
@@ -956,9 +960,54 @@ img = Magick::Image.read_inline(content)
   </div>
 
   <div class="sig">
+    <h3 id="add_profile">add_profile</h3>
+
+    <p><span class="arg">image</span>.add_profile(<span class=
+    "arg">filename</span>) -&gt; <span class="arg">self</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Adds an ICC (a.k.a. ICM), IPTC, or generic profile. If the
+    file contains more than one profile all the profiles are
+    added.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The filename of a file containing the profile.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+    <pre>
+    img.add_profile('my_cmyk.icm')
+</pre>
+
+    <h4>See also</h4>
+
+    <p>The <a href="imageattrs.html#iptc_profile">iptc_profile</a>
+    and <a href="imageattrs.html#color_profile">color_profile</a>
+    attributes provide very similar functionality, except that
+    these attributes accept the profile data in the form of a
+    string. The <a href="image3.html#profile_bang">profile!</a>
+    method can also be used to add a profile. The type of profile
+    must be specified and the profile data must be in the form of a
+    string. Also see <a href=
+    "#delete_profile">delete_profile</a>.</p>
+
+    <h4>Magick API</h4>
+
+    <p>ProfileImage</p>
+  </div>
+
+  <div class="sig">
     <h3 id="add_noise_channel">add_noise_channel</h3>
 
-    <p>image.add_noise_channel(<span class="arg">noise_type</span>
+    <p><span class=
+    "arg">image</span>.add_noise_channel(<span class="arg">noise_type</span>
     [,<span class="arg">channel</span>...]) -&gt;
     <em>anImage</em></p>
   </div>
@@ -3047,6 +3096,40 @@ cropped = img.crop(x, y, width, height, true)
   </div>
 
   <div class="sig">
+    <h3 id="delete_profile">delete_profile</h3>
+
+    <p><span class="arg">image</span>.delete_profile(<span class=
+    "arg">profile_name</span>) -&gt; <span class=
+    "arg">self</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Deletes the specified profile. This method is effectively
+    the same as passing a <code>nil</code> 2nd argument to <a href=
+    "image3.html#profile_bang">profile!</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The profile name, "IPTC" or "ICC" for example. Specify "*"
+    to delete all the profiles in the image.</p>
+
+    <h4>See also</h4>
+
+    <p>Setting the <a href=
+    "imageattrs.html#iptc_profile">iptc_profile</a> attribute or
+    <a href="imageattrs.html#color_profile">color_profile</a>
+    attribute to nil causes the profile to be deleted. Also see
+    <a href="image3.html#strip_bang">strip!</a> and <a href=
+    "imageattrs.html#add_profile">add_profile</a>.</p>
+
+    <h4>Magick API</h4>
+
+    <p>ProfileImage</p>
+  </div>
+
+  <div class="sig">
     <h3 id="despeckle">despeckle</h3>
 
     <p><span class="arg">image</span>.despeckle -&gt;
@@ -3207,12 +3290,13 @@ exit
 
     <h4>Magick API</h4>
 
-    <p>DispatchImage (GraphicsMagick), or ExportImagePixels (ImageMagick)</p>
+    <p>DispatchImage (GraphicsMagick), or ExportImagePixels
+    (ImageMagick)</p>
 
     <h4>Note</h4>
 
-    <p>This method is deprecated in ImageMagick.
-    Use the <code>export_pixels</code> method instead.</p>
+    <p>This method is deprecated in ImageMagick. Use the
+    <code>export_pixels</code> method instead.</p>
   </div>
 
   <div class="sig">

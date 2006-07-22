@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.117 2006/07/16 15:58:25 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.118 2006/07/22 23:02:03 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -754,6 +754,7 @@ extern VALUE Image_adaptive_sharpen_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_threshold(int, VALUE *, VALUE);
 extern VALUE Image_add_noise(VALUE, VALUE);
 extern VALUE Image_add_noise_channel(int, VALUE *, VALUE);
+extern VALUE Image_add_profile(VALUE, VALUE);
 extern VALUE Image_affine_transform(VALUE, VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);
@@ -797,6 +798,7 @@ extern VALUE Image_copy(VALUE);
 extern VALUE Image_crop(int, VALUE *, VALUE);
 extern VALUE Image_crop_bang(int, VALUE *, VALUE);
 extern VALUE Image_cycle_colormap(VALUE, VALUE);
+extern VALUE Image_delete_profile(VALUE, VALUE);
 extern VALUE Image_despeckle(VALUE);
 extern VALUE Image_difference(VALUE, VALUE);
 extern VALUE Image_dispatch(int, VALUE *, VALUE);

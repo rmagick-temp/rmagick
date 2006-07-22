@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.154 2006/07/16 15:58:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.155 2006/07/22 23:02:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -254,6 +254,137 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
     return (VALUE)0;
 #endif
 }
+
+
+/*
+    Method:     Image#add_profile(name)
+    Purpose:    adds all the profiles in the specified file
+    Notes:      `name' is the profile filename
+*/
+VALUE
+Image_add_profile(VALUE self, VALUE name)
+{
+#if defined(HAVE_GETNEXTIMAGEPROFILE)
+    // ImageMagick code based on the code for the "-profile" option in mogrify.c
+    Image *image, *profile_image;
+    ImageInfo *info;
+    ExceptionInfo exception;
+    char *profile_name;
+    char *profile_filename = NULL;
+    long profile_filename_l = 0;
+    const StringInfo *profile;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    // ProfileImage issues a warning if something goes wrong.
+    profile_filename = STRING_PTR_LEN(name, profile_filename_l);
+
+    info = CloneImageInfo(NULL);
+    info->client_data= (void *)GetImageProfile(image,"8bim");
+
+    strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
+    info->filename[MaxTextExtent-1] = '\0';
+
+    GetExceptionInfo(&exception);
+    profile_image = ReadImage(info, &exception);
+    DestroyImageInfo(info);
+    rm_check_exception(&exception, profile_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(profile_image);
+
+    ResetImageProfileIterator(profile_image);
+    profile_name = GetNextImageProfile(profile_image);
+    while (profile_name)
+    {
+        profile = GetImageProfile(profile_image, profile_name);
+        if (profile)
+        {
+            (void)ProfileImage(image, profile_name, profile->datum, (unsigned long)profile->length, False);
+            if (image->exception.severity >= ErrorException)
+            {
+                break;
+            }
+        }
+        profile_name = GetNextImageProfile(profile_image);
+    }
+
+    DestroyImage(profile_image);
+    rm_check_image_exception(image, RetainOnError);
+
+#else
+
+    // GraphicsMagick code based on the code for the "-profile" option in command.c
+    Image *image, *profile_image;
+    ImageInfo *info;
+    ExceptionInfo exception;
+    char *profile_filename = NULL;
+    long profile_filename_l = 0;
+    ProfileInfo *generic;
+    const unsigned char *profile;
+    size_t profile_l;
+    long x;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    // ProfileImage issues a warning if something goes wrong.
+    profile_filename = STRING_PTR_LEN(name, profile_filename_l);
+
+    info = CloneImageInfo(NULL);
+    info->client_data= (void *) &image->iptc_profile;
+    strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
+    info->filename[MaxTextExtent-1] = '\0';
+
+    GetExceptionInfo(&exception);
+    profile_image = ReadImage(info, &exception);
+    DestroyImageInfo(info);
+    rm_check_exception(&exception, profile_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(profile_image);
+
+    /* IPTC NewsPhoto Profile */
+    profile = GetImageProfile(profile_image, "IPTC", &profile_l);
+    if (profile)
+    {
+        (void)SetImageProfile(image, "IPTC", profile, profile_l);
+        if (image->exception.severity >= ErrorException)
+        {
+            goto done;
+        }
+    }
+
+    /* ICC ICM Profile */
+    profile = GetImageProfile(profile_image, "ICM", &profile_l);
+    if (profile)
+    {
+        (void)SetImageProfile(image, "ICM", profile, profile_l);
+        if (image->exception.severity >= ErrorException)
+        {
+            goto done;
+        }
+    }
+
+    /* Generic Profiles */
+    for (x = 0; x < (long)profile_image->generic_profiles; x++)
+    {
+        generic = profile_image->generic_profile + x;
+        (void)SetImageProfile(image, generic->name, generic->info, generic->length);
+        if (image->exception.severity >= ErrorException)
+        {
+            break;
+        }
+    }
+
+done:
+    DestroyImage(profile_image);
+    rm_check_image_exception(image, RetainOnError);
+
+#endif
+
+    return self;
+}
+
 
 /*
     Method:     Image#affine_transform(affine_matrix)
@@ -1489,80 +1620,189 @@ Image_color_histogram(VALUE self)
 #endif
 }
 
+
+/*
+    Static:     get_profile
+    Purpose:    retrieve the specified profile as a String object
+    Notes:      This function simply converts the image to a blob using
+                the profile name as the magick string. The output blob
+                is the profile.  Called from Image_color_profile and
+                Image_iptc_profile.
+*/
+static VALUE get_profile(VALUE self, const char *profile_name)
+{
+    Image *image, *profile_image;
+    ImageInfo *info;
+    ExceptionInfo exception;
+    const MagickInfo *m;
+    volatile VALUE profile;
+    void *blob = NULL;
+    size_t length = 2048;       // Do what Magick++ does
+
+    Data_Get_Struct(self, Image, image);
+
+    // Make a copy of the image
+    GetExceptionInfo(&exception);
+    profile_image = CloneImage(image, 0, 0, True, &exception);
+    rm_check_exception(&exception, image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(profile_image);
+
+    // Set the encoding format to the specified profile name
+    GetExceptionInfo(&exception);
+    m = GetMagickInfo(profile_name, &exception);
+    CHECK_EXCEPTION()
+
+    strncpy(profile_image->magick, m->name, MaxTextExtent);
+    profile_image->magick[MaxTextExtent-1] = '\0';
+
+    // "Convert" the image to a profile
+    info = CloneImageInfo(NULL);
+    blob = ImageToBlob(info, profile_image, &length, &exception);
+    DestroyImageInfo(info);
+    rm_check_exception(&exception, profile_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    DestroyImage(profile_image);
+
+    profile = rb_str_new(blob, length);
+    magick_free((void*)blob);
+
+    return profile;
+}
+
+
+/*
+    Static:     set_profile(target_image, name, profile_image)
+    Purpose:    The `profile_image' argument is an IPTC or ICC profile. Store
+                all the profiles in the profile in the target image.
+                Called from Image_color_profile_eq and Image_iptc_profile_eq
+*/
+static VALUE set_profile(VALUE self, const char *name, VALUE profile)
+{
+#if defined(HAVE_GETNEXTIMAGEPROFILE)
+    Image *image, *profile_image;
+    ImageInfo *info;
+    const MagickInfo *m;
+    ExceptionInfo exception;
+    char *profile_name;
+    char *profile_blob;
+    long profile_length;
+    const StringInfo *profile_data;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    profile_blob = STRING_PTR_LEN(profile, profile_length);
+
+    GetExceptionInfo(&exception);
+    m = GetMagickInfo(name, &exception);
+    CHECK_EXCEPTION()
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    strncpy(info->magick, m->name, MaxTextExtent);
+    info->magick[MaxTextExtent-1] = '\0';
+
+    profile_image = BlobToImage(info, profile_blob, profile_length, &exception);
+    DestroyImageInfo(info);
+    CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
+    ResetImageProfileIterator(profile_image);
+    profile_name = GetNextImageProfile(profile_image);
+    while (profile_name)
+    {
+        if (rm_strcasecmp(profile_name, name) == 0)
+        {
+            profile_data = GetImageProfile(profile_image, profile_name);
+            if (profile)
+            {
+                (void)ProfileImage(image, profile_name, profile_data->datum
+                                 , (unsigned long)profile_data->length, False);
+                if (image->exception.severity >= ErrorException)
+                {
+                    break;
+                }
+            }
+        }
+        profile_name = GetNextImageProfile(profile_image);
+    }
+
+    DestroyImage(profile_image);
+    rm_check_image_exception(image, RetainOnError);
+
+#else
+
+    Image *image, *profile_image;
+    ImageInfo *info;
+    ExceptionInfo exception;
+    const MagickInfo *m;
+    char *profile_blob;
+    long profile_length;
+    const unsigned char *profile_data;
+    size_t profile_data_l;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    profile_blob = STRING_PTR_LEN(profile, profile_length);
+
+    GetExceptionInfo(&exception);
+    m = GetMagickInfo(name, &exception);
+    CHECK_EXCEPTION()
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    strncpy(info->magick, m->name, MaxTextExtent);
+    info->magick[MaxTextExtent-1] = '\0';
+
+    profile_image = BlobToImage(info, profile_blob, profile_length, &exception);
+    DestroyImageInfo(info);
+    CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+
+    // GraphicsMagick uses "ICM" to refer to the ICC profile.
+    if (rm_strcasecmp(name, "ICC") == 0)
+    {
+        profile_data = GetImageProfile(profile_image, "ICM", &profile_data_l);
+    }
+    else
+    {
+        profile_data = GetImageProfile(profile_image, name, &profile_data_l);
+    }
+    if (profile_data)
+    {
+        (void)SetImageProfile(image, name, profile_data, profile_data_l);
+    }
+
+    DestroyImage(profile_image);
+    rm_check_image_exception(image, RetainOnError);
+
+#endif
+
+    return self;
+}
+
+
 /*
     Method:     Image#color_profile
     Purpose:    Return the ICC color profile as a String.
     Notes:      If there is no profile, returns ""
+                This method has no real use but is retained for compatibility
+                with earlier releases of RMagick, where it had no real use either.
 */
 VALUE
 Image_color_profile(VALUE self)
 {
-    Image *image;
-    volatile VALUE profile;
-
-#if defined(HAVE_GETIMAGEPROFILE)
-    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
-    /* but the implementations are different. IM 6.0.0  */
-    /* uses a StringInfo type. That's our feature test. */
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
-    char *str;
-    StringInfo *str_info;
-
-    Data_Get_Struct(self, Image, image);
-
-    str_info = (StringInfo *)GetImageProfile(image, "icc");
-    if (!str_info)
-    {
-        profile = Qnil;
-    }
-    else
-    {
-        str = StringInfoToString(str_info);
-        profile = rb_str_new2(str);
-        DestroyString(str);
-    }
-
-#else               /* !defined(HAVE_ACQUIRESTRINGINFO) */
-    const unsigned char *str;
-    size_t length;
-
-    Data_Get_Struct(self, Image, image);
-
-    profile = Qnil;     /* Assume no profile defined */
-    length = 0;
-    str = GetImageProfile(image, "icc", &length);
-    if (str)
-    {
-        profile = rb_str_new((char *)str, length);
-    }
-
-#endif
-
-#else
-    Data_Get_Struct(self, Image, image);
-
-    // Ensure consistency between the data field and the length field. If
-    // one field indicates that there is no profile, make the other agree.
-    if (image->color_profile.info == NULL)
-    {
-        image->color_profile.length = 0;
-    }
-    else if (image->color_profile.length == 0
-            && image->color_profile.info)
-    {
-        magick_free(image->color_profile.info);
-        image->color_profile.info = NULL;
-    }
-    if (image->color_profile.length == 0)
-    {
-        profile = Qnil;
-    }
-    profile = rb_str_new((const char *)image->color_profile.info
-                       , image->color_profile.length);
-#endif
-
-    return profile;
+    return get_profile(self, "ICC");
 }
 
 /*
@@ -1573,96 +1813,11 @@ Image_color_profile(VALUE self)
 VALUE
 Image_color_profile_eq(VALUE self, VALUE profile)
 {
-    Image *image;
-
-#if defined(HAVE_GETIMAGEPROFILE)
-
-    /* Both IM 6.0.0 and GM 1.1. define SetImageProfile */
-    /* but the implementations are different. IM 6.0.0  */
-    /* uses a StringInfo type. That's our feature test. */
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
-
-    StringInfo *str_info;
-    unsigned int status = True;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
     if (profile == Qnil)
     {
-#if defined(HAVE_NEW_REMOVEIMAGEPROFILE)
-        (void)RemoveImageProfile(image, "icc");
-#else
-        str_info = RemoveImageProfile(image, "icc");
-        if(str_info)
-        {
-            DestroyStringInfo(str_info);
-        }
-#endif
+        return Image_delete_profile(self, rb_str_new2("ICC"));
     }
-    else
-    {
-        str_info = StringToStringInfo(STRING_PTR(profile));
-        if (str_info)
-        {
-            if (str_info->length > 0)
-            {
-                status = SetImageProfile(image, "icc", str_info);
-            }
-
-            DestroyStringInfo(str_info);
-
-            if(!status)
-            {
-                rb_raise(rb_eNoMemError, "not enough memory to continue");
-            }
-        }
-    }
-
-#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
-    unsigned char *prof = NULL;
-    long prof_l = 0;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (profile == Qnil)
-    {
-        (void) SetImageProfile(image, "icc", NULL, 0);
-    }
-    else
-    {
-        prof = (unsigned char *)STRING_PTR_LEN(profile, prof_l);
-        (void) SetImageProfile(image, "icc", prof, (size_t)prof_l);
-    }
-#endif          /*  defined(HAVE_SETIMAGEPROFILE)   */
-
-#else
-
-    char *prof = NULL;
-    long prof_l = 0;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (profile != Qnil)
-    {
-        prof = STRING_PTR_LEN(profile, prof_l);
-    }
-
-    magick_free(image->color_profile.info);
-    image->color_profile.info = NULL;
-
-    if (prof_l > 0)
-    {
-        image->color_profile.info = magick_malloc((size_t)prof_l);
-        memcpy(image->color_profile.info, prof, (size_t)prof_l);
-        image->color_profile.length = prof_l;
-    }
-
-#endif
-    return self;
+    return set_profile(self, "ICC", profile);
 }
 
 /*
@@ -2857,6 +3012,27 @@ DEF_ATTR_ACCESSOR(Image, delay, ulong)
 
 
 /*
+    Method:     Image#delete_profile(name)
+    Purpose:    call ProfileImage
+    Notes:      name is the name of the profile to be deleted
+                ProfileImage raises an exception if the profile does not exist
+*/
+VALUE
+Image_delete_profile(VALUE self, VALUE name)
+{
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    (void) ProfileImage(image, STRING_PTR(name), NULL, 0, True);
+    rm_check_image_exception(image, RetainOnError);
+
+    return self;
+}
+
+
+/*
     Method:     Image#despeckle
     Purpose:    reduces the speckle noise in an image while preserving the
                 edges of the original image
@@ -3129,6 +3305,10 @@ Image__dump(VALUE self, VALUE depth)
     Data_Get_Struct(self, Image, image);
 
     info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
     strcpy(info->magick, image->magick);
 
     GetExceptionInfo(&exception);
@@ -4676,76 +4856,16 @@ Image_interlace_eq(VALUE self, VALUE interlace)
     Method:     Image#iptc_profile
     Purpose:    Return the IPTC profile as a String.
     Notes:      If there is no profile, returns ""
+                This method has no real use but is retained for compatibility
+                with earlier releases of RMagick, where it had no real use either.
 */
 VALUE
 Image_iptc_profile(VALUE self)
 {
-    Image *image;
-    volatile VALUE profile;
-
-#if defined(HAVE_GETIMAGEPROFILE)
-    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
-    /* but the implementations are different. IM 6.0.0  */
-    /* uses a StringInfo type. That's our feature test. */
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
-    StringInfo *str_info;
-    char *str;
-
-    Data_Get_Struct(self, Image, image);
-
-    profile = Qnil;
-
-    str_info = (StringInfo *)GetImageProfile(image, "iptc");
-    if (str_info)
-    {
-        str = StringInfoToString(str_info);
-        profile = rb_str_new2(str);
-        DestroyString(str);
-    }
-
-#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
-    const unsigned char *prof;
-    size_t length;
-
-    Data_Get_Struct(self, Image, image);
-
-    profile = Qnil;         /* Assume no profile defined */
-
-    prof = GetImageProfile(image, "iptc", &length);
-    if (prof)
-    {
-        profile = rb_str_new((char *)prof, (long) length);
-    }
-#endif
-
-#else
-
-    Data_Get_Struct(self, Image, image);
-
-    // Ensure consistency between the data field and the length field. If
-    // one field indicates that there is no profile, make the other agree.
-    if (image->iptc_profile.info == NULL)
-    {
-        image->iptc_profile.length = 0;
-    }
-    else if (image->iptc_profile.length == 0
-            && image->iptc_profile.info)
-    {
-        magick_free(image->iptc_profile.info);
-        image->iptc_profile.info = NULL;
-    }
-
-    if (image->iptc_profile.length == 0)
-    {
-        profile = Qnil;
-    }
-    profile = rb_str_new((const char *)image->iptc_profile.info
-                       , image->iptc_profile.length);
-#endif
-
-    return profile;
+    return get_profile(self, "IPTC");
 }
+
+
 
 /*
     Method:     Image#iptc_profile=(String)
@@ -4755,91 +4875,11 @@ Image_iptc_profile(VALUE self)
 VALUE
 Image_iptc_profile_eq(VALUE self, VALUE profile)
 {
-    Image *image;
-
-#if defined(HAVE_GETIMAGEPROFILE)
-    /* Both IM 6.0.0 and GM 1.1. define GetImageProfile */
-    /* but the implementations are different. IM 6.0.0  */
-    /* uses a StringInfo type. That's our feature test. */
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
-    StringInfo *str_info;
-    unsigned int status = True;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
     if (profile == Qnil)
     {
-#if defined(HAVE_NEW_REMOVEIMAGEPROFILE)
-        (void)RemoveImageProfile(image, "iptc");
-#else
-        str_info = RemoveImageProfile(image, "iptc");
-        if(str_info)
-        {
-            DestroyStringInfo(str_info);
-        }
-#endif
+        return Image_delete_profile(self, rb_str_new2("IPTC"));
     }
-    else
-    {
-        str_info = StringToStringInfo(STRING_PTR(profile));
-        if (str_info)
-        {
-            if (str_info->length > 0)
-            {
-                status = SetImageProfile(image, "iptc", str_info);
-            }
-
-            DestroyStringInfo(str_info);
-
-            if(!status)
-            {
-                rb_raise(rb_eNoMemError, "not enough memory to continue");
-            }
-        }
-    }
-#else           /* !defined(HAVE_ACQUIRESTRINGINFO) */
-    const unsigned char *prof = NULL;
-    long prof_l = 0;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (profile == Qnil)
-    {
-        (void) SetImageProfile(image, "iptc", NULL, 0);
-    }
-    else
-    {
-        prof = (unsigned char *)STRING_PTR_LEN(profile, prof_l);
-        (void) SetImageProfile(image, "iptc", prof, (size_t)prof_l);
-    }
-#endif
-
-#else
-
-    char *prof = NULL;
-    long prof_l = 0;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (profile != Qnil)
-    {
-        prof = STRING_PTR_LEN(profile, prof_l);
-    }
-    magick_free(image->iptc_profile.info);
-    image->iptc_profile.info = NULL;
-    if (prof_l > 0)
-    {
-        image->iptc_profile.info = magick_malloc((size_t)prof_l);
-        memcpy(image->iptc_profile.info, prof, (size_t)prof_l);
-        image->iptc_profile.length = (size_t) prof_l;
-    }
-
-#endif
-    return self;
+    return set_profile(self, "IPTC", profile);
 }
 
 /*
@@ -6234,34 +6274,26 @@ Image_preview(VALUE self, VALUE preview)
 
 /*
     Method:     Image#profile!(name, profile)
-    Purpose:    call ProfileImage
-    Notes:      modifies current image
-    History:    added 'True' value for 'clone' argument for IM 5.4.7
+    Purpose:    If "profile" is nil, deletes the profile. Otherwise "profile"
+                must be a string containing the specified profile.
 */
 VALUE
-Image_profile_bang(
-    VALUE self,
-    VALUE name,
-    VALUE profile)
+Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 {
-    Image *image;
-    char *prof = NULL;
-    long prof_l = 0;
 
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
+    rb_warning("This method is obsolete. Use add_profile or delete_profile instead.");
 
-    // ProfileImage issues a warning if something goes wrong.
-    if (profile != Qnil)
+    if (profile == Qnil)
     {
-        prof = STRING_PTR_LEN(profile, prof_l);
+        return Image_delete_profile(self, name);
     }
-    (void) ProfileImage(image, STRING_PTR(name), (const unsigned char *)prof
-                      , (size_t)prof_l, True);
-    rm_check_image_exception(image, RetainOnError);
+    else
+    {
+        return set_profile(self, STRING_PTR(name), profile);
+    }
 
-    return self;
 }
+
 
 
 #if defined(HAVE_IMAGE_QUALITY)

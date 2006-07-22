@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.125 2006/07/16 15:58:26 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.126 2006/07/22 23:02:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -734,6 +734,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "adaptive_threshold", Image_adaptive_threshold, -1);
     rb_define_method(Class_Image, "add_noise", Image_add_noise, 1);
     rb_define_method(Class_Image, "add_noise_channel", Image_add_noise_channel, -1);
+    rb_define_method(Class_Image, "add_profile", Image_add_profile, 1);
     rb_define_method(Class_Image, "affine_transform", Image_affine_transform, 1);
     rb_define_method(Class_Image, "[]", Image_aref, 1);
     rb_define_method(Class_Image, "[]=", Image_aset, 2);
@@ -778,6 +779,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "crop", Image_crop, -1);
     rb_define_method(Class_Image, "crop!", Image_crop_bang, -1);
     rb_define_method(Class_Image, "cycle_colormap", Image_cycle_colormap, 1);
+    rb_define_method(Class_Image, "delete_profile", Image_delete_profile, 1);
     rb_define_method(Class_Image, "despeckle", Image_despeckle, 0);
     rb_define_method(Class_Image, "difference", Image_difference, 1);
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
@@ -1803,7 +1805,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/07/16 15:58:26 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/07/22 23:02:03 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

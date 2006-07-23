@@ -402,6 +402,12 @@
     is <code>nil</code> instead of <span class="arg">aString</span>
     then any ICC color profile present in the image is deleted.</p>
 
+    <p>The setter form of this attribute deletes any existing ICC
+    color profile(s) before adding the new one. If you need to add
+    both source and destination profiles use <a href=
+    "image1.html#add_profile">add_profile</a> or <a href=
+    "image3.html#profile_bang">profile!</a>.</p>
+
     <h4>Returns</h4>
 
     <p>The current color profile, or <code>nil</code> if there is
@@ -411,6 +417,7 @@
 
     <p><a href="image1.html#add_profile">add_profile</a>, <a href=
     "image1.html#delete_profile">delete_profile</a>, <a href=
+    "image1.html#each_profile">each_profile</a>, <a href=
     "image3.html#profile_bang">profile!</a></p>
   </div>
 
@@ -935,6 +942,7 @@
 
     <p><a href="image1.html#add_profile">add_profile</a>, <a href=
     "image1.html#delete_profile">delete_profile</a>, <a href=
+    "image1.html#each_profile">each_profile</a>. <a href=
     "image3.html#profile_bang">profile!</a></p>
   </div>
 

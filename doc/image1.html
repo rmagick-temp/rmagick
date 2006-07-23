@@ -995,8 +995,8 @@ img = Magick::Image.read_inline(content)
     string. The <a href="image3.html#profile_bang">profile!</a>
     method can also be used to add a profile. The type of profile
     must be specified and the profile data must be in the form of a
-    string. Also see <a href=
-    "#delete_profile">delete_profile</a>.</p>
+    string. Also see <a href="#delete_profile">delete_profile</a>
+    and <a href="image1.html#each_profile">each_profile</a>.</p>
 
     <h4>Magick API</h4>
 
@@ -3422,7 +3422,16 @@ exit
     for each profile in the image, passing the profile name and
     value as parameters.
 
-    <h4>Returns</h4>the last value returned by the block
+    <h4>Returns</h4>
+
+    <p>the last value returned by the block</p>
+
+    <h4>See also</h4>
+
+    <p>The <a href=
+    "imageattrs.html#color_profile">color_profile</a> and <a href=
+    "imageattrs.html#iptc_profile">iptc_profile</a> attributes
+    return the ICC and IPTC profiles, respectively.</p>
 
     <h4>Magick API</h4>
 

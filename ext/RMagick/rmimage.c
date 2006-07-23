@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.155 2006/07/22 23:02:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.156 2006/07/23 14:30:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1808,16 +1808,18 @@ Image_color_profile(VALUE self)
 /*
     Method:     Image#color_profile=(String)
     Purpose:    Set the ICC color profile. The argument is a string.
-    Notes:      Pass nil to remove any existing profile
+    Notes:      Pass nil to remove any existing profile.
+                Removes any existing profile before adding the new one.
 */
 VALUE
 Image_color_profile_eq(VALUE self, VALUE profile)
 {
-    if (profile == Qnil)
+    (void) Image_delete_profile(self, rb_str_new2("ICC"));
+    if (profile != Qnil)
     {
-        return Image_delete_profile(self, rb_str_new2("ICC"));
+        (void) set_profile(self, "ICC", profile);
     }
-    return set_profile(self, "ICC", profile);
+    return self;
 }
 
 /*
@@ -3015,7 +3017,6 @@ DEF_ATTR_ACCESSOR(Image, delay, ulong)
     Method:     Image#delete_profile(name)
     Purpose:    call ProfileImage
     Notes:      name is the name of the profile to be deleted
-                ProfileImage raises an exception if the profile does not exist
 */
 VALUE
 Image_delete_profile(VALUE self, VALUE name)
@@ -4875,11 +4876,12 @@ Image_iptc_profile(VALUE self)
 VALUE
 Image_iptc_profile_eq(VALUE self, VALUE profile)
 {
-    if (profile == Qnil)
+    (void) Image_delete_profile(self, rb_str_new2("IPTC"));
+    if (profile != Qnil)
     {
-        return Image_delete_profile(self, rb_str_new2("IPTC"));
+        (void) set_profile(self, "IPTC", profile);
     }
-    return set_profile(self, "IPTC", profile);
+    return self;
 }
 
 /*

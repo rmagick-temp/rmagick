@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.156 2006/07/23 14:30:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.157 2006/07/23 15:10:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3362,7 +3362,7 @@ Image_dup(VALUE self)
 /*
     Method:  Image#each_profile
     Purpose: Iterate over image profiles
-    Notes:   5.5.8 and later
+    Notes:   ImageMagick only
 */
 VALUE
 Image_each_profile(VALUE self)
@@ -3370,8 +3370,7 @@ Image_each_profile(VALUE self)
 #if defined(HAVE_GETNEXTIMAGEPROFILE)
     Image *image;
     volatile VALUE ary, val;
-    char *str, *name;
-    StringInfo *str_info;
+    char *name;
 
     Data_Get_Struct(self, Image, image);
 
@@ -3383,18 +3382,7 @@ Image_each_profile(VALUE self)
     while (name)
     {
         rb_ary_store(ary, 0, rb_str_new2(name));
-
-        str_info = (StringInfo *)GetImageProfile(image, name);
-        if (str_info)
-        {
-            str = StringInfoToString(str_info);
-            rb_ary_store(ary, 1, rb_str_new2(str));
-            DestroyString(str);
-        }
-        else
-        {
-            rb_ary_store(ary, 1, Qnil);
-        }
+        rb_ary_store(ary, 1, get_profile(self, name));
         val = rb_yield(ary);
         name = GetNextImageProfile(image);
     }

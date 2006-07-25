@@ -27,5 +27,5 @@ rescue NotImplementedError
     exit
 end
 
-copy.display
+copy.write("copy.gif")
 exit

@@ -39,9 +39,7 @@ animation = ImageList.new
 
 animation.delay = 8
 
-# ignored if ImageMagick not configured with ZLIB
-animation.compression = ZipCompression
 #animation.animate
-puts "...Writing rotating_text.miff"
-animation.write("rotating_text.miff")
+puts "...Writing rotating_text.gif"
+animation.write("rotating_text.gif")
 exit

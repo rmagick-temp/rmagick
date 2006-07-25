@@ -13,7 +13,7 @@ puts <<END_INFO
 This example demonstrates the PATTERN: image format, which is
 new in ImageMagick 5.5.7. Specify the name of any of the
 supported patterns as an argument. For example, try "checkerboard".
-        
+
 END_INFO
 
 class PatternFill < Magick::TextureFill
@@ -34,5 +34,5 @@ end
 attrs = Image.ping("pattern:#{pattern}").first
 
 tryit = Image.new(10*attrs.columns, 10*attrs.rows, PatternFill.new(pattern))
-tryit.display
+tryit.write("pattern_fill.gif")
 exit

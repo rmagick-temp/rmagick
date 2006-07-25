@@ -60,6 +60,6 @@ white_bg = white_bg.composite(bg, CenterGravity, OverCompositeOp)
 # Finally, center the thumbnail on the gray background.
 thumbnail = white_bg.composite(img, CenterGravity, OverCompositeOp)
 
-thumbnail.display
+thumbnail.write("thumbnail.gif")
 exit
 

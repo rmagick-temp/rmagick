@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.157 2006/07/23 15:10:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.158 2006/07/26 00:03:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3861,6 +3861,60 @@ Image_filter_eq(VALUE self, VALUE filter)
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(filter, image->filter, FilterTypes);
     return self;
+}
+
+
+/*
+ *  Method:     Image#find_similar_region(target, x=0, y=0)
+ *  Purpose:    Search for a region in the image that is "similar" to the
+ *              target image.
+ */
+VALUE
+Image_find_similar_region(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ISIMAGESIMILAR)
+    Image *image, *target;
+    volatile VALUE region;
+    long x = 0L, y = 0L;
+    ExceptionInfo exception;
+    unsigned int okay;
+
+    Data_Get_Struct(self, Image, image);
+
+    switch (argc)
+    {
+        case 3:
+            y = NUM2LONG(argv[2]);
+        case 2:
+            x = NUM2LONG(argv[1]);
+        case 1:
+            Data_Get_Struct(argv[0], Image, target);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    okay = IsImageSimilar(image, target, &x, &y, &exception);
+    CHECK_EXCEPTION();
+    DestroyExceptionInfo(&exception);
+
+    if (!okay)
+    {
+        return Qnil;
+    }
+
+    region = rb_ary_new2(2);
+    rb_ary_store(region, 0L, LONG2NUM(x));
+    rb_ary_store(region, 1L, LONG2NUM(y));
+
+    return region;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

@@ -147,7 +147,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
 fi
 
 AC_CHECK_FUNCS([GetMagickResourceLimit GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
-AC_CHECK_FUNCS([InheritException InterpretImageAttributes IsColorSimilar NegateImageChannel])
+AC_CHECK_FUNCS([InheritException InterpretImageAttributes IsColorSimilar IsImageSimilar NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])

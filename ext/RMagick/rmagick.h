@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.118 2006/07/22 23:02:03 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.119 2006/07/26 00:03:26 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -814,6 +814,7 @@ extern VALUE Image_equalize(VALUE);
 extern VALUE Image_erase_bang(VALUE);
 extern VALUE Image_export_pixels(int, VALUE *, VALUE);
 extern VALUE Image_export_pixels_to_str(int, VALUE *, VALUE);
+extern VALUE Image_find_similar_region(int, VALUE *, VALUE);
 extern VALUE Image_flip(VALUE);
 extern VALUE Image_flip_bang(VALUE);
 extern VALUE Image_flop(VALUE);

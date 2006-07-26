@@ -125,6 +125,8 @@
 #undef HAVE_INTTYPES_H
 /* Introduced in IM 6.2.5 */
 #undef HAVE_ISCOLORSIMILAR
+/* Introduced in IM 6.2.8 */
+#undef HAVE_ISIMAGESIMILAR
 /* Introduced in IM 6.2.2 */
 #undef HAVE_JPEG2000COMPRESSION
 /* Introduced in GM 1.2 */

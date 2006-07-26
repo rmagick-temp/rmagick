@@ -58,6 +58,9 @@
           <li><a href=
           "#export_pixels_to_str">export_pixels_to_str</a></li>
 
+          <li><a href=
+          "#find_similar_region">find_similar_region</a></li>
+
           <li><a href="#flip">flip</a></li>
 
           <li><a href="#flip_bang">flip!</a></li>
@@ -402,6 +405,52 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Magick API</h4>
 
     <p>ExportImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="find_similar_region">find_similar_region</h3>
+
+    <p><span class=
+    "arg">image</span>.find_similar_region(<span class=
+    "arg">target</span>, <span class="arg">x</span>=0, <span class=
+    "arg">y</span>=0) -&gt; <em>[rx, ry]</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This interesting method searches for a rectangle in the
+    image that is <em>similar</em> to the target. For the rectangle
+    to be <em>similar</em> each pixel in the rectangle must match
+    the corresponding pixel in the target image within the range
+    specified by the <code>fuzz</code> attributes of the image and
+    the target image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>target</dt>
+
+      <dd>An image that forms the target of the search. This image
+      can be any size.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The starting <em>x-</em> and <em>y-</em>offsets for the
+      search. If omitted both <span class="arg">x</span> and
+      <span class="arg">y</span> default to 0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>If the search succeeds, the return value is an array with 2
+    elements. These elements are the <em>x-</em> and
+    <em>y-</em>offsets of the matching rectangle. If the search
+    fails the return value is <code>nil</code>.</p>
+
+    <h4>Magick API</h4>
+
+    <p>IsImageSimilar (available in ImageMagick 6.2.8)</p>
   </div>
 
   <div class="sig">

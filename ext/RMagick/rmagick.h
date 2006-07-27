@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.119 2006/07/26 00:03:26 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.120 2006/07/27 23:11:26 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -749,6 +749,8 @@ extern VALUE Image_new(int, VALUE *, VALUE);
 extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);
 #endif
 
+extern VALUE Image_adaptive_blur(int, VALUE *, VALUE);
+extern VALUE Image_adaptive_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_sharpen(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_sharpen_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_threshold(int, VALUE *, VALUE);

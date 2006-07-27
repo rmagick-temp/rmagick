@@ -1,6 +1,8 @@
 #undef GRAPHICSMAGICK
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_ACQUIREMAGICKMEMORY
+/* Introduced in IM 6.2.8-5 */
+#undef HAVE_ADAPTIVEBLURIMAGECHANNEL
 /* Introduced in IM 6.2.7 */
 #undef HAVE_ADAPTIVESHARPENIMAGE
 /* Introduced in IM 6.0.0 */

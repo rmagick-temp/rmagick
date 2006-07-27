@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.158 2006/07/26 00:03:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.159 2006/07/27 23:11:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -40,15 +40,17 @@ static ImageAttribute *Next_Attribute;
 
 
 
-
 /*
-    Method:     Image#adaptive_sharpen(radius=0.0, sigma=1.0)
-    Purpose:    call AdaptiveSharpenImage
+    Static:     adaptive_method
+    Purpose:    call Adaptive(Blur|Sharpen)Image
 */
-VALUE
-Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
+#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL) || defined(HAVE_ADAPTIVESHARPENIMAGE)
+static VALUE adaptive_method(
+    int argc,
+    VALUE *argv,
+    VALUE self,
+    Image *fp(const Image *, const double, const double, ExceptionInfo *))
 {
-#if defined(HAVE_ADAPTIVESHARPENIMAGE)
     Image *image, *new_image;
     double radius = 0.0;
     double sigma = 1.0;
@@ -71,7 +73,7 @@ Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-    new_image = AdaptiveSharpenImage(image, radius, sigma, &exception);
+    new_image = (fp)(image, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     DestroyExceptionInfo(&exception);
@@ -79,24 +81,20 @@ Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
-/*
-    Method:     Image#adaptive_sharpen_channel(radius=0.0, sigma=1.0[, channel...])
-    Purpose:    Call AdaptiveSharpenImageChannel
-*/
-VALUE
-Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
-{
-#if defined(HAVE_ADAPTIVESHARPENIMAGE)
 
+/*
+    Static:     adaptive_channel_method
+    Purpose:    call Adaptive(Blur|Sharpen)ImageChannel
+*/
+static VALUE adaptive_channel_method(
+    int argc,
+    VALUE *argv,
+    VALUE self,
+    Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
+{
     Image *image, *new_image;
     double radius = 0.0;
     double sigma = 1.0;
@@ -122,7 +120,7 @@ Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-    new_image = AdaptiveSharpenImageChannel(image, channels, radius, sigma, &exception);
+    new_image = (fp)(image, channels, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     DestroyExceptionInfo(&exception);
@@ -130,6 +128,71 @@ Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
+}
+#endif
+
+
+/*
+    Method:     Image#adaptive_blur(radius=0.0, sigma=1.0[ , channel...])
+    Purpose:    call AdaptiveBlurImage
+*/
+VALUE
+Image_adaptive_blur(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL)
+    return adaptive_method(argc, argv, self, AdaptiveBlurImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+
+/*
+    Method:     Image#adaptive_blur_channel(radius=0.0, sigma=1.0[ , channel...])
+    Purpose:    call AdaptiveBlurImageChannel
+*/
+VALUE
+Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL)
+    return adaptive_channel_method(argc, argv, self, AdaptiveBlurImageChannel);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+
+/*
+    Method:     Image#adaptive_sharpen(radius=0.0, sigma=1.0)
+    Purpose:    call AdaptiveSharpenImage
+*/
+VALUE
+Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVESHARPENIMAGE)
+    return adaptive_method(argc, argv, self, AdaptiveSharpenImage);
+#else
+
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+
+/*
+    Method:     Image#adaptive_sharpen_channel(radius=0.0, sigma=1.0[, channel...])
+    Purpose:    Call AdaptiveSharpenImageChannel
+*/
+VALUE
+Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVESHARPENIMAGE)
+    return adaptive_channel_method(argc, argv, self, AdaptiveSharpenImageChannel);
 #else
 
     rm_not_implemented();
@@ -540,7 +603,7 @@ static VALUE
 crisscross(
     int bang,
     VALUE self,
-    Image *(fp)(const Image *, ExceptionInfo *))
+    Image *fp(const Image *, ExceptionInfo *))
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -9302,7 +9365,11 @@ Image_write(VALUE self, VALUE file)
     return self;
 }
 
+
 DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
+
+DEF_ATTR_ACCESSOR(Image, y_resolution, dbl)
+
 
 /*
     Static:     cropper
@@ -9522,8 +9589,6 @@ xform_image(
     return rm_image_new(new_image);
 
 }
-
-DEF_ATTR_ACCESSOR(Image, y_resolution, dbl)
 
 
 /*

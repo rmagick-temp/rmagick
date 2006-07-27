@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.127 2006/07/26 00:03:26 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.128 2006/07/27 23:11:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -729,6 +729,8 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, x_resolution)
     DCL_ATTR_ACCESSOR(Image, y_resolution)
 
+    rb_define_method(Class_Image, "adaptive_blur", Image_adaptive_blur, -1);
+    rb_define_method(Class_Image, "adaptive_blur_channel", Image_adaptive_blur_channel, -1);
     rb_define_method(Class_Image, "adaptive_sharpen", Image_adaptive_sharpen, -1);
     rb_define_method(Class_Image, "adaptive_sharpen_channel", Image_adaptive_sharpen_channel, -1);
     rb_define_method(Class_Image, "adaptive_threshold", Image_adaptive_threshold, -1);
@@ -1806,7 +1808,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/07/26 00:03:26 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/07/27 23:11:27 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

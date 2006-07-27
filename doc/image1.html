@@ -92,6 +92,11 @@ float: left;
 
           <li><a href="#spaceship">&lt;=&gt;</a></li>
 
+          <li><a href="#adaptive_blur">adaptive_blur</a></li>
+
+          <li><a href=
+          "#adaptive_blur_channel">adaptive_blur_channel</a></li>
+
           <li><a href="#adaptive_sharpen">adaptive_sharpen</a></li>
 
           <li><a href=
@@ -126,13 +131,13 @@ float: left;
           <li><a href="#border">border</a></li>
 
           <li><a href="#border_bang">border!</a></li>
-
-          <li><a href="#change_geometry">change_geometry</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#change_geometry">change_geometry</a></li>
+
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
@@ -726,6 +731,112 @@ img = Magick::Image.read_inline(content)
     <h4>Magick API</h4>
 
     <p>SignatureImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="adaptive_blur">adaptive_blur</h3>
+
+    <p><span class="arg">image</span>.adaptive_blur(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Adaptively blurs the image by
+    bluring more intensely near image edges and less intensely
+    far from edges.</span> The adaptive_blur method blurs
+    <span class="imquote">the image with a Gaussian operator of the
+    given</span> <span class="arg">radius</span> <span class=
+    "imquote">and standard deviation</span> (<span class=
+    "arg">sigma</span>). <span class="imquote">For reasonable
+    results,</span> <span class="arg">radius</span> <span class=
+    "imquote">should be larger than</span> <span class=
+    "arg">sigma</span>. <span class="imquote">Use a</span>
+    <span class="arg">radius</span> <span class="imquote">of 0 and
+    adaptive_blur selects a suitable</span> <span class=
+    "arg">radius</span> <span class="imquote">for you.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd><span class="imquote">The radius of the Gaussian in
+      pixels, not counting the center pixel.</span> The default is
+      0.0.</dd>
+
+      <dt>sigma</dt>
+
+      <dd><span class="imquote">The standard deviation of the
+      Laplacian, in pixels.</span> The default is 1.0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "#adaptive_blur_channel">adaptive_blur_channel</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AdaptiveBlurImage (available in ImageMagick 6.2.8)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="adaptive_blur_channel">adaptive_blur_channel</h3>
+
+    <p><span class="arg">image</span>.adaptive_blur(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0
+    [,<span class="arg">channel</span>...]) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The same as <code>adaptive_blur</code> except only the
+    specified channels are blurred.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd><span class="imquote">The radius of the Gaussian in
+      pixels, not counting the center pixel.</span> The default is
+      0.0.</dd>
+
+      <dt>sigma</dt>
+
+      <dd><span class="imquote">The standard deviation of the
+      Laplacian, in pixels.</span> The default is 1.0.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, blurs all the channels. Specifying
+      no channel arguments has the same effect as the
+      <code>adaptive_blur</code> method, above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#adaptive_blur">adaptive_blur</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AdaptiveBlurImageChannel (available in ImageMagick
+    6.2.8)</p>
   </div>
 
   <div class="sig">

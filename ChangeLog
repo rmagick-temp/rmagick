@@ -2,7 +2,11 @@ RMagick 1.14.0
     o Feature request #5015, support CMYK->RGB conversions. Added the
       add_profile and delete_profiles to the Image class. Fixed the profile!,
       iptc_profile, and color_profile methods. (requested by Niklas Ekman)
-    o Add Image#find_similar_region (available with ImageMagick 6.2.8-4)
+    o Added find_similar_region to the Image class (available with ImageMagick
+      6.2.8-4)
+    o Added adaptive_blur and adaptive_blur_channel to the Image class (available
+      with ImageMagick 6.2.8-6)
+    o Added resample method to the Image class
     o Fix bug #5079, Image#quantum_operator method doesn't work (bug report from
       Pedro Martins)
     o Fix bug #5080, incorrect RVG images when non-0 values used for the min_x

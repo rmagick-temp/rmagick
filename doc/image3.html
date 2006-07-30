@@ -93,6 +93,8 @@
 
           <li><a href="#reduce_noise">reduce_noise</a></li>
 
+          <li><a href="#resample">resample</a></li>
+
           <li><a href="#resize">resize</a></li>
 
           <li><a href="#resize_bang">resize!</a></li>
@@ -849,10 +851,56 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="resample">resample</h3>
+
+    <p><span class="arg">image</span>.resample(<span class=
+    "arg">horizontal_res</span>=72.0[, <span class=
+    "arg">vertical_res</span>]) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Resample image to specified horizontal and
+    vertical resolution.</p>
+
+    <p><span class="imquote">Resize the image so that its rendered
+    size remains the same as the original at the specified target
+    resolution. For example, if a 300 DPI image renders at 3 inches
+    by 2 inches on a 300 DPI device, when the image has been
+    resampled to 72 DPI, it will render at 3 inches by 2 inches on
+    a 72 DPI device. Note that only a small number of image formats
+    (e.g. JPEG, PNG, and TIFF) are capable of storing the image
+    resolution. For formats which do not support an image
+    resolution, the original resolution of the image must be
+    specified via</span> the <a href=
+    "imageattrs.html#density">density</a> attribute <span class=
+    "imquote">prior to specifying the resample
+    resolution.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>horizontal_res</dt>
+
+      <dd>the target horizontal resolution. The default is
+      72.0.</dd>
+
+      <dt>vertical_res</dt>
+
+      <dd>the target vertical resolution. The default is
+      <span class="arg">horizontal_res</span>.</dd>
+    </dl>
+  </div>
+
+  <div class="sig">
     <h3 id="resize">resize</h3>
 
     <p><span class="arg">image</span>.resize(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>,
+    <em>filter</em>=<a href=
+    "constants.html#FilterType">LanczosFilter</a>,
+    <em>support</em>=1.0) -&gt; <em>image</em><br />
     <span class="arg">image</span>.resize(<span class=
     "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
   </div>
@@ -891,13 +939,12 @@ random_threshold_channel(geom, RedChannel)
       IIR (infinite impulse response). Bessel and Sinc are windowed
       (brought down to zero) with the Blackman filter.</span></dd>
 
-      <dt>blur</dt>
+      <dt>support</dt>
 
-      <dd>The blur factor. Values &gt; 1 increase the blurriness.
-      Values &lt; 1 increase the sharpness. If this argument is not
-      specified, <code>resize</code> uses the value of the
-      receiver's <a href="imageattrs.html#Image.blur">blur</a>
-      attribute.</dd>
+      <dd>Values &gt; 1 increase the blurriness. Values &lt; 1
+      increase the sharpness. If this argument is not specified,
+      <code>resize</code> uses the value of the receiver's <a href=
+      "imageattrs.html#Image.blur">blur</a> attribute.</dd>
 
       <dt>scale_factor</dt>
 
@@ -932,7 +979,7 @@ random_threshold_channel(geom, RedChannel)
     <p><em>image</em>.resize!(<em>new_width</em>,
     <em>new_height</em>, <em>filter</em>=<a href=
     "constants.html#FilterType">LanczosFilter</a>,
-    <em>blur</em>=1.0) -&gt; <em>image</em><br />
+    <em>support</em>=1.0) -&gt; <em>image</em><br />
     <span class="arg">image</span>.resize!(<span class=
     "arg">scale_factor</span>) -&gt; <em>image</em></p>
   </div>

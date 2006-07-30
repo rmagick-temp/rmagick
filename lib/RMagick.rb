@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.43 2006/06/20 23:18:22 rmagick Exp $
+# $Id: RMagick.rb,v 1.44 2006/07/30 00:01:31 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -776,6 +776,16 @@ class Image
     def matte_reset!
         self.opacity = Magick::TransparentOpacity
         self
+    end
+
+    # Corresponds to ImageMagick's -resample option
+    def resample(x_res=72.0, y_res=nil)
+        y_res ||= x_res
+        width = x_res * columns / x_resolution + 0.5
+        height = y_res * rows / y_resolution + 0.5
+        self.x_resolution = x_res
+        self.y_resolution = y_res
+        resize(width, height)
     end
 
     # Convenience method to resize retaining the aspect ratio.

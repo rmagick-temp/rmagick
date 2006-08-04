@@ -215,6 +215,8 @@ float: left;
 
           <li><a href="#display">display</a></li>
 
+          <li><a href="#dissolve">dissolve</a></li>
+
           <li><a href=
           "#distortion_channel">distortion_channel</a></li>
 
@@ -744,10 +746,10 @@ img = Magick::Image.read_inline(content)
   <div class="desc">
     <h4>Description</h4>
 
-    <p><span class="imquote">Adaptively blurs the image by
-    bluring more intensely near image edges and less intensely
-    far from edges.</span> The adaptive_blur method blurs
-    <span class="imquote">the image with a Gaussian operator of the
+    <p><span class="imquote">Adaptively blurs the image by bluring
+    more intensely near image edges and less intensely far from
+    edges.</span> The adaptive_blur method blurs <span class=
+    "imquote">the image with a Gaussian operator of the
     given</span> <span class="arg">radius</span> <span class=
     "imquote">and standard deviation</span> (<span class=
     "arg">sigma</span>). <span class="imquote">For reasonable
@@ -820,8 +822,8 @@ img = Magick::Image.read_inline(content)
 
       <dd>0 or more <a href=
       "constants.html#ChannelType">ChannelType</a> arguments. If no
-      channels are specified, blurs all the channels. Specifying
-      no channel arguments has the same effect as the
+      channels are specified, blurs all the channels. Specifying no
+      channel arguments has the same effect as the
       <code>adaptive_blur</code> method, above.</dd>
     </dl>
 
@@ -3445,6 +3447,57 @@ exit
     <h4>Magick API</h4>
 
     <p>DisplayImages</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="dissolve">dissolve</h3>
+
+    <p><span class="arg">image</span>.dissolve(<span class=
+    "arg">overlay</span>, <span class="arg">percentage</span>)
+    -&gt; <span class="arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Dissolve an the <span class="arg">overlay</span> image into
+    the target image by the given <span class=
+    "arg">percentage</span>. The opacity of <span class=
+    "arg">overlay</span> is multiplied by the given <span class=
+    "arg">percentage</span>, then composited over the target
+    image.</p>
+
+    <p>This method corresponds to the -dissolve option of
+    &times;Magick's <code>composite</code> command.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>overlay</dt>
+
+      <dd>The source image for the composite operation.</dd>
+
+      <dt>percentage</dt>
+
+      <dd>The desired opacity of the source image</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><code>bgnd.dissolve(overlay, 0.50)</code></p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('dissolve.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/dissolve.jpg'" src="ex/dissolve.jpg" alt=
+    "dissolve example" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
   </div>
 
   <div class="sig">

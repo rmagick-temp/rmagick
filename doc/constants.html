@@ -152,7 +152,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.10.0 ($Date: 2006/01/28 23:40:31 $)
+    <code>This is RMagick 1.10.0 ($Date: 2006/08/04 22:58:47 $)
     Copyright (C) 2006 by Timothy P. Hunter<br />
     Built with GraphicsMagick 1.2 unreleased Q16
     http://www.GraphicsMagick.org/<br />
@@ -334,7 +334,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>OHTAColorspace</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>XYZColorspace</dt>
 
@@ -346,15 +346,15 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>YCbCrColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
 
     <dt>YIQColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
 
     <dt>YPbPrColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
 
     <dt>YUVColorspace</dt>
 
@@ -385,19 +385,20 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>HSBColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
 
     <dt>LogColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
 
     <dt>LABColorspace</dt>
 
-    <dd>&nbsp; </dd>
+    <dd> </dd>
   </dl>
 
-  <p>The colorspaces in this group are typically associated with the DPX
-  and Cineon image formats used in the motion picture industry.</p>
+  <p>The colorspaces in this group are typically associated with
+  the DPX and Cineon image formats used in the motion picture
+  industry.</p>
 
   <dl>
     <dt>CineonLogRGBColorspace</dt>
@@ -544,8 +545,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dt>ReplaceCompositeOp</dt>
 
     <dd class="imquote">The resulting image is image replaced with
-    composite image. Here the matte information is ignored.
-    </dd>
+    composite image. Here the matte information is ignored.</dd>
 
     <dt>CopyCompositeOp</dt>
 
@@ -582,7 +582,8 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>DissolveCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd>The operator used in the <a href=
+    "image1.html#dissolve">dissolve</a> method.</dd>
 
     <dt>DisplaceCompositeOp</dt>
 
@@ -593,15 +594,15 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>ModulateCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>ThresholdCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>NoCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DarkenCompositeOp</dt>
 
@@ -646,83 +647,101 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>OverlayCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>CopyCyanCompositeOp</dt>
 
     <dd>Copy the cyan channel from the composite image to the
-    target image. </dd>
+    target image.</dd>
 
     <dt>CopyMagentaCompositeOp</dt>
 
     <dd>Copy the magenta channel from the composite image to the
-    target image. </dd>
+    target image.</dd>
 
     <dt>CopyYellowCompositeOp</dt>
 
     <dd>Copy the yellow channel from the composite image to the
-    target image. </dd>
+    target image.</dd>
 
     <dt>CopyBlackCompositeOp</dt>
 
     <dd>Copy the black channel from the composite image to the
-    target image. </dd>
+    target image.</dd>
 
     <dt>DstAtopCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DstCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DstInCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DstOutCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>DstOverCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>SrcAtopCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>SrcCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>SrcInCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>SrcOutCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>SrcOverCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>ColorDodgeCompositeOp</dt>
 
-    <dd class="imquote">Brightens the destination color to reflect the source color. Painting with black produces no change.</dd>
+    <dd class="imquote">Brightens the destination color to reflect
+    the source color. Painting with black produces no change.</dd>
 
     <dt>ExclusionCompositeOp</dt>
 
-    <dd>&nbsp;</dd>
+    <dd> </dd>
 
     <dt>HardLightCompositeOp</dt>
 
-    <dd class="imquote">Multiplies or screens the colors, dependent on the source color value. If the source color is lighter than 0.5, the destination is lightened as if it were screened. If the source color is darker than 0.5, the destination is darkened, as if it were multiplied. The degree of lightening or darkening is proportional to the difference between the source color and 0.5. If it is equal to 0.5 the destination is unchanged. Painting with pure black or white produces black or white.</dd>
+    <dd class="imquote">Multiplies or screens the colors, dependent
+    on the source color value. If the source color is lighter than
+    0.5, the destination is lightened as if it were screened. If
+    the source color is darker than 0.5, the destination is
+    darkened, as if it were multiplied. The degree of lightening or
+    darkening is proportional to the difference between the source
+    color and 0.5. If it is equal to 0.5 the destination is
+    unchanged. Painting with pure black or white produces black or
+    white.</dd>
 
     <dt>SoftLightCompositeOp</dt>
 
-    <dd class="imquote">Darkens or lightens the colors, dependent on the source color value. If the source color is lighter than 0.5, the destination is lightened. If the source color is darker than 0.5, the destination is darkened, as if it were burned in. The degree of darkening or lightening is proportional to the difference between the source color and 0.5. If it is equal to 0.5, the destination is unchanged. Painting with pure black or white produces a distinctly darker or lighter area, but does not result in pure black or white.</dd>
+    <dd class="imquote">Darkens or lightens the colors, dependent
+    on the source color value. If the source color is lighter than
+    0.5, the destination is lightened. If the source color is
+    darker than 0.5, the destination is darkened, as if it were
+    burned in. The degree of darkening or lightening is
+    proportional to the difference between the source color and
+    0.5. If it is equal to 0.5, the destination is unchanged.
+    Painting with pure black or white produces a distinctly darker
+    or lighter area, but does not result in pure black or
+    white.</dd>
   </dl>
 
   <h3 class="const" id="CompressionType">CompressionType</h3>
@@ -747,7 +766,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dt>BZipCompression</dt>
 
     <dd class="imquote">BZip (Burrows-Wheeler block-sorting text
-    compression algorithm and Huffman coding)  as used by bzip2
+    compression algorithm and Huffman coding) as used by bzip2
     utilities</dd>
 
     <dt>FaxCompression</dt>
@@ -1001,11 +1020,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>ColorSeparationMatteType</dt>
 
-    <dd> </dd>
-
     <dt>OptimizeType</dt>
-
-    <dd> </dd>
   </dl>
 
   <h3 class="const" id="InterlaceType">InterlaceType</h3>

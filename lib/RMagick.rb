@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.44 2006/07/30 00:01:31 rmagick Exp $
+# $Id: RMagick.rb,v 1.45 2006/08/04 22:58:14 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -54,14 +54,14 @@ class Geometry
         elsif width.to_f >= 0.0
             @width = width.to_f
         else
-            raise ArgumentError, "width must be >= 0: #{width}"
+            Kernel.raise ArgumentError, "width must be >= 0: #{width}"
         end
         if height == nil
             @height = 0
         elsif height.to_f >= 0.0
             @height = height.to_f
         else
-            raise ArgumentError, "height must be >= 0: #{height}"
+            Kernel.raise ArgumentError, "height must be >= 0: #{height}"
         end
 
         @x    = x.to_i
@@ -73,7 +73,7 @@ class Geometry
     RE = /\A(\d*)(?:x(\d+))?([-+]\d+)?([-+]\d+)?([%!<>@]?)\Z/
 
     def Geometry.from_s(str)
-        raise(ArgumentError, "no geometry string specified") unless str
+        Kernel.raise(ArgumentError, "no geometry string specified") unless str
 
         m = RE.match(str)
         if m
@@ -83,7 +83,7 @@ class Geometry
             y      = m[4].to_i
             flag   = RFLAGS[m[5]]
         else
-            raise ArgumentError, "invalid geometry format"
+            Kernel.raise ArgumentError, "invalid geometry format"
         end
         Geometry.new(width, height, x, y, flag)
     end
@@ -190,9 +190,9 @@ class Draw
     # Draw a bezier curve.
     def bezier(*points)
         if points.length == 0
-            raise ArgumentError, "no points specified"
+            Kernel.raise ArgumentError, "no points specified"
         elsif points.length % 2 != 0
-            raise ArgumentError, "odd number of arguments specified"
+            Kernel.raise ArgumentError, "odd number of arguments specified"
         end
         primitive "bezier " + points.join(',')
     end
@@ -210,7 +210,7 @@ class Draw
     # Define the clipping rule.
     def clip_rule(rule)
         if ( not ["evenodd", "nonzero"].include?(rule.downcase) )
-            raise ArgumentError, "Unknown clipping rule #{rule}"
+            Kernel.raise ArgumentError, "Unknown clipping rule #{rule}"
         end
         primitive "clip-rule #{rule}"
     end
@@ -218,7 +218,7 @@ class Draw
     # Define the clip units
     def clip_units(unit)
         if ( not ["userspace", "userspaceonuse", "objectboundingbox"].include?(unit.downcase) )
-            raise ArgumentError, "Unknown clip unit #{unit}"
+            Kernel.raise ArgumentError, "Unknown clip unit #{unit}"
         end
         primitive "clip-units #{unit}"
     end
@@ -227,7 +227,7 @@ class Draw
     # point, replace, floodfill, filltoborder,reset
     def color(x, y, method)
         if ( not PAINT_METHOD_NAMES.has_key?(method.to_i) )
-            raise ArgumentError, "Unknown PaintMethod: #{method}"
+            Kernel.raise ArgumentError, "Unknown PaintMethod: #{method}"
         end
         primitive "color #{x},#{y},#{PAINT_METHOD_NAMES[method.to_i]}"
     end
@@ -286,7 +286,7 @@ class Draw
 
     def fill_rule(rule)
         if ( not ["evenodd", "nonzero"].include?(rule.downcase) )
-            raise ArgumentError, "Unknown fill rule #{rule}"
+            Kernel.raise ArgumentError, "Unknown fill rule #{rule}"
         end
         primitive "fill-rule #{rule}"
     end
@@ -302,14 +302,14 @@ class Draw
 
     def font_stretch(stretch)
         if ( not STRETCH_TYPE_NAMES.has_key?(stretch.to_i) )
-            raise ArgumentError, "Unknown stretch type"
+            Kernel.raise ArgumentError, "Unknown stretch type"
         end
         primitive "font-stretch #{STRETCH_TYPE_NAMES[stretch.to_i]}"
     end
 
     def font_style(style)
         if ( not STYLE_TYPE_NAMES.has_key?(style.to_i) )
-            raise ArgumentError, "Unknown style type"
+            Kernel.raise ArgumentError, "Unknown style type"
         end
         primitive "font-style #{STYLE_TYPE_NAMES[style.to_i]}"
     end
@@ -328,7 +328,7 @@ class Draw
     # NorthWest, North, NorthEast, West, Center, East, SouthWest, South, SouthEast
     def gravity(grav)
         if ( not GRAVITY_NAMES.has_key?(grav.to_i) )
-            raise ArgumentError, "Unknown text positioning gravity"
+            Kernel.raise ArgumentError, "Unknown text positioning gravity"
         end
         primitive "gravity #{GRAVITY_NAMES[grav.to_i]}"
     end
@@ -342,7 +342,7 @@ class Draw
     # colorization rule
     def matte(x, y, rule)
         if ( not PAINT_METHOD_NAMES.has_key?(method.to_i) )
-            raise ArgumentError, "Unknown paint method"
+            Kernel.raise ArgumentError, "Unknown paint method"
         end
         primitive "matte #{x},#{y} #{PAINT_METHOD_NAMES[method.to_i]}"
     end
@@ -352,7 +352,7 @@ class Draw
     def opacity(opacity)
         if (Numeric === opacity)
             if (opacity < 0 || opacity > 1.0)
-                raise ArgumentError, "opacity must be >= 0 and <= 1.0"
+                Kernel.raise ArgumentError, "opacity must be >= 0 and <= 1.0"
             end
         end
         primitive "opacity #{opacity}"
@@ -396,9 +396,9 @@ class Draw
     # Draw a polygon
     def polygon(*points)
         if points.length == 0
-            raise ArgumentError, "no points specified"
+            Kernel.raise ArgumentError, "no points specified"
         elsif points.length % 2 != 0
-            raise ArgumentError, "odd number of points specified"
+            Kernel.raise ArgumentError, "odd number of points specified"
         end
         primitive "polygon " + points.join(',')
     end
@@ -406,9 +406,9 @@ class Draw
     # Draw a polyline
     def polyline(*points)
         if points.length == 0
-            raise ArgumentError, "no points specified"
+            Kernel.raise ArgumentError, "no points specified"
         elsif points.length % 2 != 0
-            raise ArgumentError, "odd number of points specified"
+            Kernel.raise ArgumentError, "odd number of points specified"
         end
         primitive "polyline " + points.join(',')
     end
@@ -492,7 +492,7 @@ class Draw
         else
             list.each { |x|
                 if x <= 0 then
-                    raise ArgumentError, "dash array elements must be > 0 (#{x} given)"
+                    Kernel.raise ArgumentError, "dash array elements must be > 0 (#{x} given)"
                 end
             }
             primitive "stroke-dasharray #{list.join(',')}"
@@ -506,21 +506,21 @@ class Draw
 
     def stroke_linecap(value)
         if ( not ["butt", "round", "square"].include?(value.downcase) )
-            raise ArgumentError, "Unknown linecap type: #{value}"
+            Kernel.raise ArgumentError, "Unknown linecap type: #{value}"
         end
         primitive "stroke-linecap #{value}"
     end
 
     def stroke_linejoin(value)
         if ( not ["round", "miter", "bevel"].include?(value.downcase) )
-            raise ArgumentError, "Unknown linejoin type: #{value}"
+            Kernel.raise ArgumentError, "Unknown linejoin type: #{value}"
         end
         primitive "stroke-linejoin #{value}"
     end
 
     def stroke_miterlimit(value)
         if (value < 1)
-            raise ArgumentError, "miterlimit must be >= 1"
+            Kernel.raise ArgumentError, "miterlimit must be >= 1"
         end
         primitive "stroke-miterlimit #{value}"
     end
@@ -539,7 +539,7 @@ class Draw
     # Draw text at position x,y. Add quotes to text that is not already quoted.
     def text(x, y, text)
         if text.to_s.empty?
-            raise ArgumentError, "missing text argument"
+            Kernel.raise ArgumentError, "missing text argument"
         end
         if text.length > 2 && /\A(?:\"[^\"]+\"|\'[^\']+\'|\{[^\}]+\})\z/.match(text)
             ; # text already quoted
@@ -559,7 +559,7 @@ class Draw
     # Specify text alignment relative to a given point
     def text_align(alignment)
         if ( not ALIGN_TYPE_NAMES.has_key?(alignment.to_i) )
-            raise ArgumentError, "Unknown alignment constant: #{alignment}"
+            Kernel.raise ArgumentError, "Unknown alignment constant: #{alignment}"
         end
         primitive "text-align #{ALIGN_TYPE_NAMES[alignment.to_i]}"
     end
@@ -567,7 +567,7 @@ class Draw
     # SVG-compatible version of text_align
     def text_anchor(anchor)
         if ( not ANCHOR_TYPE_NAMES.has_key?(anchor.to_i) )
-            raise ArgumentError, "Unknown anchor constant: #{anchor}"
+            Kernel.raise ArgumentError, "Unknown anchor constant: #{anchor}"
         end
         primitive "text-anchor #{ANCHOR_TYPE_NAMES[anchor.to_i]}"
     end
@@ -655,6 +655,36 @@ class Image
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image
         self
+    end
+
+    # Similar to `composite self -dissolve pct overlay'
+    # Returns composited result
+    def dissolve(overlay, pct)
+        begin
+            # Clamp to 0 <= pct <= 1
+            pct = [1.0, Float(pct)].min
+            pct = [0.0, pct].max
+            # Convert to 0 <= pct <= 100
+            pct = (pct * 100.0).to_i
+        rescue
+            m = pct.to_s.match(/\A\s*(\d+)%\s*\z/)
+            if m
+                # Clamp to 0 <= pct <= 100
+                pct = [100, m[1].to_i].min
+                pct = [0, pct].max
+            else
+                Kernel.raise ArgumentError, "expected percentage, got `#{pct}'"
+            end
+        end
+
+        temp = overlay.geometry
+        begin
+            overlay.geometry = pct.to_s
+            res = composite(overlay, 0, 0, Magick::DissolveCompositeOp)
+        ensure
+            overlay.geometry = temp
+        end
+        return res
     end
 
     # Retrieve EXIF data by entry or all. If one or more entry names specified,
@@ -837,10 +867,10 @@ class Image
 
         def initialize(img, x, y, width, height)
             if width <= 0 || height <= 0
-                raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
+                Kernel.raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
             end
             if x < 0 || y < 0 || (x+width) > img.columns || (y+height) > img.rows
-                raise RangeError, "geometry (#{width}x#{height}+#{x}+#{y}) exceeds image boundary"
+                Kernel.raise RangeError, "geometry (#{width}x#{height}+#{x}+#{y}) exceeds image boundary"
             end
             @view = img.get_pixels(x, y, width, height)
             @img = img
@@ -928,7 +958,7 @@ class Image
                     begin
                         rv = Pixel.from_color(rv)
                     rescue TypeError
-                        raise TypeError, "cannot convert #{rv.class} into Pixel"
+                        Kernel.raise TypeError, "cannot convert #{rv.class} into Pixel"
                     end
                 end
                 cols(args)
@@ -967,7 +997,7 @@ class Image
                                 @rows += @height
                             end
                             if @rows < 0 || @rows > @height-1
-                                raise IndexError, "index [#{@rows}] out of range"
+                                Kernel.raise IndexError, "index [#{@rows}] out of range"
                             end
                             # Convert back to an array
                             @rows = Array.new(1, @rows)
@@ -984,7 +1014,7 @@ class Image
                         end
 
                         if start > @height || start < 0 || length < 0
-                                raise IndexError, "index [#{@rows.first}] out of range"
+                                Kernel.raise IndexError, "index [#{@rows.first}] out of range"
                         else
                             if start + length > @height
                                 length = @height - length
@@ -1011,7 +1041,7 @@ class Image
                                 @cols += @width
                             end
                             if @cols < 0 || @cols > @width-1
-                                raise IndexError, "index [#{@cols}] out of range"
+                                Kernel.raise IndexError, "index [#{@cols}] out of range"
                             end
                             # Convert back to array
                             @cols = Array.new(1, @cols)
@@ -1049,11 +1079,11 @@ class Image
 
                 @rows.each do |j|
                     if j > maxrows
-                        raise IndexError, "index [#{j}] out of range"
+                        Kernel.raise IndexError, "index [#{j}] out of range"
                     end
                     @cols.each do |i|
                         if i > maxcols
-                            raise IndexError, "index [#{i}] out of range"
+                            Kernel.raise IndexError, "index [#{i}] out of range"
                         end
                         yield j*@width + i
                     end
@@ -1086,7 +1116,7 @@ protected
 
     def is_a_image(obj)
         unless obj.kind_of? Magick::Image
-            raise ArgumentError, "Magick::Image required (#{obj.class} given)"
+            Kernel.raise ArgumentError, "Magick::Image required (#{obj.class} given)"
         end
         true
     end
@@ -1094,7 +1124,7 @@ protected
     # Ensure array is always an array of Magick::Image objects
     def is_a_image_array(ary)
         unless ary.respond_to? :each
-            raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{ary.class} given)"
+            Kernel.raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{ary.class} given)"
         end
         ary.each { |obj| is_a_image obj }
         true
@@ -1126,16 +1156,16 @@ public
     # Allow scene to be set to nil
     def scene=(n)
         if n.nil?
-            raise IndexError, "scene number out of bounds" unless length == 0
+            Kernel.raise IndexError, "scene number out of bounds" unless length == 0
             @scene = nil
             return @scene
         elsif length == 0
-            raise IndexError, "scene number out of bounds"
+            Kernel.raise IndexError, "scene number out of bounds"
         end
 
         n = Integer(n)
         if n < 0 || n > length - 1
-            raise IndexError, "scene number out of bounds"
+            Kernel.raise IndexError, "scene number out of bounds"
         end
         @scene = n
         return @scene
@@ -1182,7 +1212,7 @@ public
 
     def *(n)
         unless n.kind_of? Integer
-            raise ArgumentError, "Integer required (#{n.class} given)"
+            Kernel.raise ArgumentError, "Integer required (#{n.class} given)"
         end
         cfid = self[@scene].__id__ rescue nil
         a = self.class.new.replace super
@@ -1299,7 +1329,7 @@ public
 
     if self.superclass.instance_methods(true).include? 'insert' then
         def insert(*args)
-            raise(ArgumentError, "can't insert nil") unless args.length > 1
+            Kernel.raise(ArgumentError, "can't insert nil") unless args.length > 1
             is_a_image_array args[1,args.length-1]
             cfid = self[@scene].__id__ rescue nil
             super
@@ -1449,7 +1479,7 @@ public
     #   return A.length <=> B.length
     def <=>(other)
         unless other.kind_of? self.class
-           raise TypeError, "#{self.class} required (#{other.class} given)"
+           Kernel.raise TypeError, "#{self.class} required (#{other.class} given)"
         end
         size = [self.length, other.length].min
         size.times do |x|
@@ -1459,9 +1489,9 @@ public
         if @scene.nil? && other.scene.nil?
             return 0
         elsif @scene.nil? && ! other.scene.nil?
-            raise TypeError, "cannot convert nil into #{other.scene.class}"
+            Kernel.raise TypeError, "cannot convert nil into #{other.scene.class}"
         elsif ! @scene.nil? && other.scene.nil?
-            raise TypeError, "cannot convert nil into #{self.scene.class}"
+            Kernel.raise TypeError, "cannot convert nil into #{self.scene.class}"
         end
         r = self.scene <=> other.scene
         return r unless r == 0
@@ -1486,7 +1516,7 @@ public
     # Return the current image
     def cur_image
         if ! @scene
-            raise IndexError, "no images in this list"
+            Kernel.raise IndexError, "no images in this list"
         end
         self[@scene]
     end
@@ -1501,7 +1531,7 @@ public
 
     def ticks_per_second=(t)
         if Integer(t) < 0
-            raise ArgumentError, "ticks_per_second must be greater than or equal to 0"
+            Kernel.raise ArgumentError, "ticks_per_second must be greater than or equal to 0"
         end
         each { |f| f.ticks_per_second = Integer(t) }
     end
@@ -1516,7 +1546,7 @@ public
 
     def from_blob(*blobs, &block)
         if (blobs.length == 0)
-            raise ArgumentError, "no blobs given"
+            Kernel.raise ArgumentError, "no blobs given"
         end
         blobs.each { |b|
             Magick::Image.from_blob(b, &block).each { |n| self << n  }
@@ -1548,7 +1578,7 @@ public
     def iterations=(n)
         n = Integer(n)
         if n < 0 || n > 65535
-            raise ArgumentError, "iterations must be between 0 and 65535"
+            Kernel.raise ArgumentError, "iterations must be between 0 and 65535"
         end
         each {|f| f.iterations=n}
         self
@@ -1566,10 +1596,10 @@ public
                 super
             end
         rescue NoMethodError
-          raise NoMethodError, "undefined method `#{methID.id2name}' for #{self.class}"
+          Kernel.raise NoMethodError, "undefined method `#{methID.id2name}' for #{self.class}"
         rescue Exception
             $@.delete_if { |s| /:in `send'$/.match(s) || /:in `method_missing'$/.match(s) }
-            raise
+            Kernel.raise
         end
     end
 
@@ -1592,7 +1622,7 @@ public
     # Ping files and concatenate the new images
     def ping(*files, &block)
         if (files.length == 0)
-            raise ArgumentError, "no files given"
+            Kernel.raise ArgumentError, "no files given"
         end
         files.each { |f|
             Magick::Image.ping(f, &block).each { |n| self << n }
@@ -1604,7 +1634,7 @@ public
     # Read files and concatenate the new images
     def read(*files, &block)
         if (files.length == 0)
-            raise ArgumentError, "no files given"
+            Kernel.raise ArgumentError, "no files given"
         end
         files.each { |f|
             Magick::Image.read(f, &block).each { |n| self << n }

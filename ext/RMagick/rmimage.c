@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.159 2006/07/27 23:11:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.160 2006/08/04 23:02:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -133,7 +133,7 @@ static VALUE adaptive_channel_method(
 
 
 /*
-    Method:     Image#adaptive_blur(radius=0.0, sigma=1.0[ , channel...])
+    Method:     Image#adaptive_blur(radius=0.0, sigma=1.0)
     Purpose:    call AdaptiveBlurImage
 */
 VALUE

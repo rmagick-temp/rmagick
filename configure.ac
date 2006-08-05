@@ -155,7 +155,7 @@ AC_CHECK_FUNCS([SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])
 AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageStorageClass])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
-AC_CHECK_FUNCS([SigmoidalContrastImageChannel SpliceImage StripImage])
+AC_CHECK_FUNCS([SigmoidalContrastImageChannel SketchImage SpliceImage StripImage])
 AC_CHECK_FUNCS([ThresholdImageChannel TintImage TransposeImage TransverseImage])
 AC_CHECK_FUNCS([UnsharpMaskImageChannel VignetteImage WhiteThresholdImage XImportImage])
 

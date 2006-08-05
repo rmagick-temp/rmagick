@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.160 2006/08/04 23:02:46 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.161 2006/08/05 14:11:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5547,37 +5547,48 @@ Image_montage_eq(
     return self;
 }
 
+
 /*
-    Method:     Image#motion_blur(radius, sigma, angle)
-    Purpose:    simulates motion blur. Convolves the image with a Gaussian
-                operator of the given radius and standard deviation (sigma).
-                For reasonable results, radius should be larger than sigma.
-                Use a radius of 0 and motion_blur selects a suitable radius
-                for you. Angle gives the angle of the blurring motion.
+    Static:     motion_blur(int argc, VALUE *argv, VALUE self, magick_api)
+    Purpose:    called from Image_motion_blur and Image_sketch
 */
-VALUE
-Image_motion_blur(
+static VALUE
+motion_blur(
+    int argc,
+    VALUE *argv,
     VALUE self,
-    VALUE radius_arg,
-    VALUE sigma_arg,
-    VALUE angle_arg)
+    Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
-    double radius, sigma, angle;
+    double radius = 0.0;
+    double sigma = 1.0;
+    double angle = 0.0;
     ExceptionInfo exception;
 
-    Data_Get_Struct(self, Image, image);
-    radius = NUM2DBL(radius_arg);
-    sigma  = NUM2DBL(sigma_arg);
-    angle  = NUM2DBL(angle_arg);
+    switch (argc)
+    {
+        case 3:
+            angle = NUM2DBL(argv[2]);
+        case 2:
+            sigma = NUM2DBL(argv[1]);
+        case 1:
+            radius = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
+            break;
+    }
 
     if (sigma == 0.0)
     {
         rb_raise(rb_eArgError, "sigma must be != 0.0");
     }
 
+    Data_Get_Struct(self, Image, image);
+
     GetExceptionInfo(&exception);
-    new_image = MotionBlurImage(image, radius, sigma, angle, &exception);
+    new_image = (fp)(image, radius, sigma, angle, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     DestroyExceptionInfo(&exception);
@@ -5586,6 +5597,22 @@ Image_motion_blur(
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#motion_blur(radius=0.0, sigma=1.0, angle=0.0)
+    Purpose:    simulates motion blur. Convolves the image with a Gaussian
+                operator of the given radius and standard deviation (sigma).
+                For reasonable results, radius should be larger than sigma.
+                Use a radius of 0 and motion_blur selects a suitable radius
+                for you. Angle gives the angle of the blurring motion.
+*/
+VALUE
+Image_motion_blur(int argc, VALUE *argv, VALUE self)
+{
+    return motion_blur(argc, argv, self, MotionBlurImage);
+}
+
 
 /*
     Method:     Image#negate(grayscale=false)
@@ -7867,6 +7894,24 @@ Image_signature(VALUE self)
     }
     return rb_str_new(signature->value, 64);
 }
+
+
+
+/*
+    Method:     Image#sketch(radius=0.0, sigma=1.0, angle=0.0)
+    Purpose:    Call SketchImage
+*/
+VALUE
+Image_sketch(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SKETCHIMAGE)
+    return motion_blur(argc, argv, self, SketchImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#solarize(threshold=50.0)

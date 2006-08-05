@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.128 2006/07/27 23:11:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.129 2006/08/05 14:11:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -826,7 +826,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "minify!", Image_minify_bang, 0);
     rb_define_method(Class_Image, "modulate", Image_modulate, -1);
     rb_define_method(Class_Image, "monochrome?", Image_monochrome_q, 0);
-    rb_define_method(Class_Image, "motion_blur", Image_motion_blur, 3);
+    rb_define_method(Class_Image, "motion_blur", Image_motion_blur, -1);
     rb_define_method(Class_Image, "negate", Image_negate, -1);
     rb_define_method(Class_Image, "negate_channel", Image_negate_channel, -1);
     rb_define_method(Class_Image, "normalize", Image_normalize, 0);
@@ -870,6 +870,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "shear", Image_shear, 2);
     rb_define_method(Class_Image, "sigmoidal_contrast_channel", Image_sigmoidal_contrast_channel, -1);
     rb_define_method(Class_Image, "signature", Image_signature, 0);
+    rb_define_method(Class_Image, "sketch", Image_sketch, -1);
     rb_define_method(Class_Image, "solarize", Image_solarize, -1);
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
     rb_define_method(Class_Image, "splice", Image_splice, -1);
@@ -1808,7 +1809,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/07/27 23:11:27 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/08/05 14:11:41 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

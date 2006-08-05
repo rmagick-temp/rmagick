@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.120 2006/07/27 23:11:26 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.121 2006/08/05 14:11:40 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -846,7 +846,7 @@ extern VALUE Image_minify(VALUE);
 extern VALUE Image_minify_bang(VALUE);
 extern VALUE Image_modulate(int, VALUE *, VALUE);
 extern VALUE Image_monochrome_q(VALUE);
-extern VALUE Image_motion_blur(VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_motion_blur(int, VALUE *, VALUE);
 extern VALUE Image_negate(int, VALUE *, VALUE);
 extern VALUE Image_negate_channel(int, VALUE *, VALUE);
 extern VALUE Image_normalize(VALUE);
@@ -894,6 +894,7 @@ extern VALUE Image_shave_bang(VALUE, VALUE, VALUE);
 extern VALUE Image_shear(VALUE, VALUE, VALUE);
 extern VALUE Image_sigmoidal_contrast_channel(int, VALUE *, VALUE);
 extern VALUE Image_signature(VALUE);
+extern VALUE Image_sketch(int, VALUE *, VALUE);
 extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
 extern VALUE Image_splice(int, VALUE *, VALUE);

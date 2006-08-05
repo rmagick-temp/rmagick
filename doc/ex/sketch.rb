@@ -11,7 +11,14 @@ img = img.quantize(256, Magick::GRAYColorspace)
 img = img.equalize
 
 # Sketch
-img = img.sketch(0, 20, 135)
+begin
+    img = img.sketch(0, 20, 135)
+    
+rescue NotImplementedError
+    not_impl = Magick::Image.read('images/notimplemented.gif').first
+    not_impl.resize!(img.columns, img.rows)
+    img = not_impl
+end
 
 img.write('sketch.jpg')
 

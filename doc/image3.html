@@ -147,6 +147,8 @@
 
           <li><a href="#signature">signature</a></li>
 
+          <li><a href="#sketch">sketch</a></li>
+
           <li><a href="#solarize">solarize</a></li>
 
           <li><a href="#splice">splice</a></li>
@@ -1921,6 +1923,51 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SignatureImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sketch">sketch</h3>
+
+    <p><span class="arg">image</span>.sketch(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0,
+    <span class="arg">angle</span>=0.0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Simulates a pencil sketch. For best results start with a
+    grayscale image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius, sigma</dt>
+
+      <dd>The radius and sigma of the Gaussian operator</dd>
+
+      <dt>angle</dt>
+
+      <dd>The angle toward which the image is sketched.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('sketch.rb.html')"><img src="ex/sketch.jpg"
+    title="Click to see the example script" alt="sketch example"
+    onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/sketch.jpg'" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>SketchImage (available in ImageMagick 6.2.8)</p>
   </div>
 
   <div class="sig">

@@ -53,6 +53,9 @@
 
           <li><a href="#base_rows">base_rows</a></li>
 
+          <li><a href=
+          "#black_point_compensation">black_point_compensation</a></li>
+
           <li><a href="#blur">blur</a></li>
 
           <li><a href="#border_color">border_color</a></li>
@@ -241,6 +244,24 @@
 
     <p>The number of rows in the image before any transformations.
     Get-only.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="black_point_compensation">black_point_compensation</h3>
+
+    <p><span class="arg">image</span>.black_point_compensation
+    -&gt; <code>true</code> or <code>false</code><br />
+    <span class="arg">image</span>.black_point_compensation =
+    <code>true</code> or <code>false</code> -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Use black point compensation. Typically used in CMYK-to-RGB
+    conversion along with <code>image.</code><a href=
+    "#rendering_intent">rendering_intent</a>=<a href=
+    "constants.html#RenderingIntent">Magick::RelativeIntent</a></p>
   </div>
 
   <div class="sig">
@@ -951,9 +972,8 @@
 
     <p><span class="arg">image.</span>matte -&gt; <code>true</code>
     <em>or</em> <code>false</code><br />
-    <span class="arg">image.</span>matte = <span class=
-    "arg"><code>true</code></span> or <span class=
-    "arg"><code>false</code></span></p>
+    <span class="arg">image.</span>matte = <code>true</code> or
+    <code>false</code></p>
   </div>
 
   <div class="desc">
@@ -1300,7 +1320,9 @@ blur_image is 100% complete.
   <div class="desc">
     <h4>Description</h4>
 
-    <p class="imquote">The type of rendering intent.</p>
+    <p class="imquote">The type of rendering intent. See <a href=
+    "http://www.cambridgeincolour.com/tutorials/color-space-conversion.htm">
+    http://www.cambridgeincolour.com/tutorials/color-space-conversion.htm</a></p>
 
     <h4>Arguments</h4>
 
@@ -1347,9 +1369,8 @@ blur_image is 100% complete.
 
     <p><span class="arg">image.</span>start_loop -&gt;
     <code>true</code> or <code>false</code><br />
-    <span class="arg">image.</span>start_loop = <span class=
-    "arg"><code>true</code></span> or <span class=
-    "arg"><code>false</code></span></p>
+    <span class="arg">image.</span>start_loop = <code>true</code>
+    or <code>false</code></p>
   </div>
 
   <div class="desc">

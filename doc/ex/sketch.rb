@@ -11,10 +11,7 @@ img = img.quantize(256, Magick::GRAYColorspace)
 img = img.equalize
 
 # Sketch
-img = img.sketch(1, 0.5, 90)
-
-# Add a little color
-img = img.colorize(0.0, 0.15, 0.15, '#cc9933')
+img = img.sketch(0, 20, 135)
 
 img.write('sketch.jpg')
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.121 2006/08/05 14:11:40 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.122 2006/08/05 20:51:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -684,6 +684,7 @@ ATTR_ACCESSOR(Image, background_color)
 ATTR_READER(Image, base_columns)
 ATTR_READER(Image, base_filename)
 ATTR_READER(Image, base_rows)
+ATTR_ACCESSOR(Image, black_point_compensation)
 ATTR_ACCESSOR(Image, blur)
 ATTR_ACCESSOR(Image, border_color)
 ATTR_READER(Image, bounding_box)

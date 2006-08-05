@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.161 2006/08/05 14:11:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.162 2006/08/05 20:51:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -37,6 +37,8 @@ static ChannelType extract_channels(int *, VALUE *);
 static void raise_ChannelType_error(VALUE);
 
 static ImageAttribute *Next_Attribute;
+
+static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation";
 
 
 
@@ -820,6 +822,52 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     rm_not_implemented();
     return (VALUE)0;
 #endif
+}
+
+
+/*
+    Method:     Image#black_point_compensation
+    Purpose:    Return current value
+*/
+VALUE
+Image_black_point_compensation(VALUE self)
+{
+    Image *image;
+    const ImageAttribute *attr;
+    volatile VALUE value;
+
+    Data_Get_Struct(self, Image, image);
+
+    attr = GetImageAttribute(image, BlackPointCompensationKey);
+    if (attr && rm_strcasecmp(attr->value, "true") == 0)
+    {
+        value = Qtrue;
+    }
+    else
+    {
+        value = Qfalse;
+    }
+    return value;
+}
+
+
+/*
+    Method:     Image#black_point_compensation=true or false
+    Purpose:    Set black point compensation attribute
+*/
+VALUE
+Image_black_point_compensation_eq(VALUE self, VALUE arg)
+{
+    Image *image;
+    char *value;
+
+    Data_Get_Struct(self, Image, image);
+
+    (void) SetImageAttribute(image, BlackPointCompensationKey, NULL);
+    value = RTEST(arg) ? "true" : "false";
+    (void) SetImageAttribute(image, BlackPointCompensationKey, value);
+
+    return self;
 }
 
 
@@ -5691,8 +5739,7 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 /*
     Method:     Image.new(cols, rows<, fill>) <{info block}>
     Purpose:    Create a new Image with "cols" columns and "rows" rows.
-                If the fill argument is omitted, create a SolidFill object
-                using the background color
+                If the fill argument is omitted, fill with the background color
     Returns:    A new Image
     Note:       This routine creates an Info structure to use when allocating
                 the Image structure. The caller can supply an info parm block to

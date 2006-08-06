@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.163 2006/08/06 01:09:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.164 2006/08/06 19:09:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -812,6 +812,7 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     Image *image;
     double bias;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     bias = rm_percentage(pct);
     image->bias = bias * MaxRGB;
@@ -898,6 +899,7 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
     Image *image;
     char *value;
 
+    rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     (void) SetImageAttribute(image, BlackPointCompensationKey, NULL);

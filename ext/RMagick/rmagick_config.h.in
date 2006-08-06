@@ -111,6 +111,8 @@
 /* Introduced in IM 6.0.0 - Not available in GM */
 #undef HAVE_INHERITEXCEPTION
 #undef HAVE_INDEXCHANNEL
+/* Introduced in IM 6.2.0 */
+#undef HAVE_IMAGE_BIAS
 /* Introduced in IM 5.5.6 - Not available in GM */
 #undef HAVE_IMAGE_EXTRACT_INFO
 /* Introduced in IM 6.0.0 */

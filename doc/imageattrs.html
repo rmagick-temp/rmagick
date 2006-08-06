@@ -53,6 +53,8 @@
 
           <li><a href="#base_rows">base_rows</a></li>
 
+          <li><a href="#bias">bias</a></li>
+
           <li><a href=
           "#black_point_compensation">black_point_compensation</a></li>
 
@@ -83,13 +85,13 @@
           <li><a href="#delay">delay</a></li>
 
           <li><a href="#density">density</a></li>
-
-          <li><a href="#depth">depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#depth">depth</a></li>
+
           <li><a href="#directory">directory</a></li>
 
           <li><a href="#dispose">dispose</a></li>
@@ -244,6 +246,27 @@
 
     <p>The number of rows in the image before any transformations.
     Get-only.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="bias">bias</h3>
+
+    <p><span class="arg">image</span>.bias -&gt; bias<br />
+    <span class="arg">image</span>.bias = <span class=
+    "arg">aFloat</span><br />
+    <span class="arg">image</span>.bias = <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Add bias when convolving an image</p>
+
+    <h4>Argument</h4>
+
+    <p>Either a number between 0.0 and 1.0 or a string in the form
+    "NN%".</p>
   </div>
 
   <div class="sig">

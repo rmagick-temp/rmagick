@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.162 2006/08/05 20:51:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.163 2006/08/06 01:09:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -787,6 +787,43 @@ VALUE Image_base_rows(VALUE self)
 }
 
 
+/*
+    Method:     Image#bias  -> bias
+                Image#bias = a number between 0.0 and 1.0 or "NN%"
+    Purpose:    Get/set image bias (used when convolving an image)
+*/
+VALUE Image_bias(VALUE self)
+{
+#if defined(HAVE_IMAGE_BIAS)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return rb_float_new(image->bias);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+VALUE Image_bias_eq(VALUE self, VALUE pct)
+{
+#if defined(HAVE_IMAGE_BIAS)
+    Image *image;
+    double bias;
+
+    Data_Get_Struct(self, Image, image);
+    bias = rm_percentage(pct);
+    image->bias = bias * MaxRGB;
+
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+
+}
 
 /*
  *  Method:     Image#bilevel_channel(threshold, channel=AllChannels)

@@ -2199,19 +2199,10 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
     <p>A new image</p>
 
     <h4>Example</h4>
-
-    <p>This example replaces white pixels with red pixels. Set the
-    fuzz attribute to specify how closely the target pixels must
-    match.</p>
-
-    <p class="rollover"><a href=
-    "javascript:popup('opaque.rb.html')"><img src="ex/opaque.jpg"
-    alt="opaque example" onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/opaque.jpg'" title=
-    "Click to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" title=
-    "Mouse over the example to see the original image" /></p>
+    <pre>
+img.fuzz = 25
+img = img.opaque('white', 'red')
+</pre>
 
     <h4>See also</h4>
 

@@ -414,24 +414,33 @@
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Sets or gets the image clip mask. <span class="imquote">The
-    clip mask must have the same dimensions as the image being
-    masked.</span> If not, the clip mask will be resized to match.
-    <span class="imquote">If the mask image has an alpha channel
-    the opacity of each pixel is used to define the mask.
+    <p>The <code>clip_mask=</code> attribute writer sets an image
+    clip mask created from the specified mask image. <span class=
+    "imquote">The mask image must have the same dimensions as the
+    image being masked.</span> If not, the mask image is resized to
+    match. <span class="imquote">If the mask image has an alpha
+    channel the opacity of each pixel is used to define the mask.
     Otherwise, the intensity (gray level) of each pixel is
     used.</span></p>
 
-    <p>In general, if the clip mask does not have an alpha channel,
-    a white pixel in the mask prevent changes to the corresponding
-    pixel in the image being masked, while a black pixel allows
-    changes. A pixels that is neither black nor white will allow
-    partial changes depending on its intensity.</p>
+    <p>In general, if the mask image does not have an alpha
+    channel, a white pixel in the mask prevents changes to the
+    corresponding pixel in the image being masked, while a black
+    pixel allows changes. A pixels that is neither black nor white
+    will allow partial changes depending on its intensity.</p>
+
+    <p>The <code>clip_mask</code> attribute reader returns a copy
+    of the clip mask. This is <em>not</em> a copy of the mask image
+    that was used to create the clip mask, nor is it the clip mask
+    image itself. Therefore, modifying the image returned by
+    <code>clip_mask</code> does not change the clip mask
+    itself.</p>
 
     <h4>Arguments</h4>
 
     <p>If the value is an imagelist, uses the current image as the
-    clip mask. Assign <code>nil</code> to remove the clip mask.</p>
+    mask image. Assign <code>nil</code> to remove the clip
+    mask.</p>
   </div>
 
   <div class="sig">

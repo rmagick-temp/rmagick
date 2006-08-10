@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.164 2006/08/06 19:09:43 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.165 2006/08/10 00:09:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1619,17 +1619,55 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
     return self;
 }
 
+
+/*
+    Method:     Image#clip_mask
+    Purpose:    Return the image's clip mask, or nil if it doesn't have a clip
+                mask.
+*/
+VALUE
+Image_clip_mask(VALUE self)
+{
+    Image *image, *clip_mask, *copy;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    clip_mask = GetImageClipMask(image, &exception);
+    CHECK_EXCEPTION()
+
+    if (!clip_mask)
+    {
+        DestroyExceptionInfo(&exception);
+        return Qnil;
+    }
+
+    copy = CloneImage(clip_mask, clip_mask->columns, clip_mask->rows
+                    , MagickTrue, &exception);
+    rm_check_exception(&exception, copy, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(copy);
+}
+
+
 /*
     Method:     Image#clip_mask=(mask-image)
     Purpose:    associates a clip mask with the image
     Notes:      pass "nil" for the mask-image to remove the current clip mask.
-                The two images must have the same dimensions.
+                If the clip mask is not the same size as the target image,
+                resizes the clip mask to match the target.
 */
 VALUE
 Image_clip_mask_eq(VALUE self, VALUE mask)
 {
-    Image *image, *mask_image;
+    Image *image, *mask_image, *resized_image;
     Image *clip_mask;
+    long x, y;
+    PixelPacket *q;
+    ExceptionInfo exception;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
@@ -1639,6 +1677,52 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         Data_Get_Struct(ImageList_cur_image(mask), Image, mask_image);
         clip_mask = rm_clone_image(mask_image);
 
+        // Resize if necessary
+        if (clip_mask->columns != image->columns || clip_mask->rows != image->rows)
+        {
+            GetExceptionInfo(&exception);
+            resized_image = ResizeImage(clip_mask, image->columns, image->rows
+                                      , UndefinedFilter, 0.0, &exception);
+            rm_check_exception(&exception, resized_image, DestroyOnError);
+            DestroyExceptionInfo(&exception);
+            rm_ensure_result(resized_image);
+            clip_mask = DestroyImage(clip_mask);
+            clip_mask = resized_image;
+        }
+
+        // The following section is copied from mogrify.c (6.2.8-8)
+        for (y = 0; y < (long) clip_mask->rows; y++)
+        {
+          q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
+          if (!q)
+          {
+              break;
+          }
+          for (x = 0; x < (long) clip_mask->columns; x++)
+          {
+            if (clip_mask->matte == MagickFalse)
+            {
+                q->opacity = PIXEL_INTENSITY(q);
+            }
+            q->red = q->opacity;
+            q->green = q->opacity;
+            q->blue = q->opacity;
+            q += 1;
+          }
+          if (SyncImagePixels(clip_mask) == MagickFalse)
+          {
+              clip_mask = DestroyImage(clip_mask);
+              rm_magick_error("SyncImagePixels failed", NULL);
+          }
+        }
+
+        if (SetImageStorageClass(clip_mask,DirectClass) == MagickFalse)
+        {
+            clip_mask = DestroyImage(clip_mask);
+            rm_magick_error("SetImageStorageClass failed", NULL);
+        }
+
+        clip_mask->matte = MagickTrue;
         (void) SetImageClipMask(image, clip_mask);
     }
     else
@@ -3801,7 +3885,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
         CHECK_EXCEPTION()
 
         // Should never get here...
-        rb_raise(rb_eStandardError, "ExportImagePixels failed with no explanation.");
+        rm_magick_error("ExportImagePixels failed with no explanation.", NULL);
     }
 
     DestroyExceptionInfo(&exception);
@@ -3925,7 +4009,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
         CHECK_EXCEPTION()
 
         // Should never get here...
-        rb_raise(rb_eStandardError, "ExportImagePixels failed with no explanation.");
+        rm_magick_error("ExportImagePixels failed with no explanation.", NULL);
     }
 
     DestroyExceptionInfo(&exception);
@@ -4874,7 +4958,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     {
         rm_check_image_exception(image, RetainOnError);
         // Shouldn't get here...
-        rb_raise(rb_eStandardError, "ImportImagePixels failed with no explanation.");
+        rm_magick_error("ImportImagePixels failed with no explanation.", NULL);
     }
 
     return self;

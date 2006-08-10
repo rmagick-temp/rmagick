@@ -405,24 +405,33 @@
   <div class="sig">
     <h3 id="clip_mask">clip_mask</h3>
 
-    <p><span class="arg">image.</span>clip_mask = <span class=
-    "arg">anImage</span> or <span class="arg">anImageList</span> or
-    <span class="arg"><code>nil</code></span></p>
+    <p><span class="arg">image</span>.clip_mask -&gt;
+    <em>anImage</em> or <code>nil</code><br />
+    <span class="arg">image.</span>clip_mask = <em>anImage</em> or
+    <em>anImageList</em> or <code>nil</code></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Associates a clip mask with the image. The clip mask must
-    have the same dimensions as the image. <span class=
-    "imquote">Set any pixel component of the clip mask to
-    TransparentOpacity to prevent that corresponding image pixel
-    component from being updated.</span> Set-only.</p>
+    <p>Sets or gets the image clip mask. <span class="imquote">The
+    clip mask must have the same dimensions as the image being
+    masked.</span> If not, the clip mask will be resized to match.
+    <span class="imquote">If the mask image has an alpha channel
+    the opacity of each pixel is used to define the mask.
+    Otherwise, the intensity (gray level) of each pixel is
+    used.</span></p>
+
+    <p>In general, if the clip mask does not have an alpha channel,
+    a white pixel in the mask prevent changes to the corresponding
+    pixel in the image being masked, while a black pixel allows
+    changes. A pixels that is neither black nor white will allow
+    partial changes depending on its intensity.</p>
 
     <h4>Arguments</h4>
 
-    <p>If an imagelist, uses the current image as the clip mask.
-    Assign <code>nil</code> to remove the clip mask.</p>
+    <p>If the value is an imagelist, uses the current image as the
+    clip mask. Assign <code>nil</code> to remove the clip mask.</p>
   </div>
 
   <div class="sig">

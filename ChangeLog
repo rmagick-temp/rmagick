@@ -1,17 +1,19 @@
 RMagick 1.14.0
     o Feature request #5015, support CMYK->RGB conversions. Added the
       add_profile and delete_profiles to the Image class. Fixed the profile!,
-      iptc_profile, and color_profile methods. Added the 
+      iptc_profile, and color_profile methods. Added the
       black_point_compensation attribute. (requested by Niklas Ekman)
     o Added adaptive_blur, adaptive_blur_channel, find_similar_region, sketch
       methods to the Image class (available with ImageMagick 6.2.8-6)
     o Added resample method to the Image class (thanks to Ant Peacocke for the
       idea)
     o Added dissolve method to the Image class
-    o Fix bug #5079, Image#quantum_operator method doesn't work (bug report 
-	  from Pedro Martins)
+    o Added the bias, clip_mask attributes to the Image class
+    o Fix bug #5079, Image#quantum_operator method doesn't work (bug report from
+      Pedro Martins)
     o Fix bug #5080, incorrect RVG images when non-0 values used for the min_x
       or min_y arguments to RVG#viewbox (bug report from Daniel Harple)
+    o Fix bug #5370, the clip_mask= attribute doesn't work
 
 RMagick 1.13.0
     o Added transform, transform!, transpose, transpose! methods to Image class

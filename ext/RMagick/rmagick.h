@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.123 2006/08/06 01:09:04 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.124 2006/08/10 00:09:06 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -73,6 +73,9 @@
 
 #undef DegreesToRadians     // defined in ImageMagick.h in 6.0.2
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
+
+#define PIXEL_INTENSITY(q) \
+        ((Quantum)(0.299*(q)->red + 0.587*(q)->green + 0.114*(q)->blue + 0.5))
 
 #define LMAX(a,b) ((((long)(a))>((long)(b)))?((long)(a)):((long)(b)))
 #define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
@@ -691,7 +694,7 @@ ATTR_ACCESSOR(Image, border_color)
 ATTR_READER(Image, bounding_box)
 ATTR_ACCESSOR(Image, chromaticity)
 ATTR_ACCESSOR(Image, class_type)
-ATTR_WRITER(Image, clip_mask)
+ATTR_ACCESSOR(Image, clip_mask)
 ATTR_ACCESSOR(Image, color_profile)
 ATTR_READER(Image, colors)
 ATTR_ACCESSOR(Image, colorspace)
@@ -1070,6 +1073,7 @@ extern void   rm_not_implemented(void);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
 extern void   rm_split(Image *);
+extern void   rm_magick_error(const char *, const char *);
 
 typedef enum
 {

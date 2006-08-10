@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.78 2006/06/28 23:07:55 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.79 2006/08/10 00:09:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2860,15 +2860,15 @@ rm_not_implemented(void)
 }
 
 /*
-    Static:     raise_error(msg, loc)
+    Static:     rm_magick_error(msg, loc)
     Purpose:    create a new ImageMagickError object and raise an exception
     Notes:      does not return
                 This funky technique allows me to safely add additional
                 information to the ImageMagickError object in both 1.6.8 and
                 1.8.0. See www.ruby_talk.org/36408.
 */
-static void
-raise_error(const char *msg, const char *loc)
+void
+rm_magick_error(const char *msg, const char *loc)
 {
     volatile VALUE exc, mesg, extra;
 
@@ -3321,11 +3321,11 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
      extra[sizeof(extra)-1] = '\0';
 
      DestroyExceptionInfo(exception);
-     raise_error(msg, extra);
+     rm_magick_error(msg, extra);
 
 #else
      DestroyExceptionInfo(exception);
-     raise_error(msg, NULL);
+     rm_magick_error(msg, NULL);
 #endif
 
 }

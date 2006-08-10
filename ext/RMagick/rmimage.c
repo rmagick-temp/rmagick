@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.165 2006/08/10 00:09:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.166 2006/08/10 22:29:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1628,28 +1628,19 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
 VALUE
 Image_clip_mask(VALUE self)
 {
-    Image *image, *clip_mask, *copy;
+    Image *image, *clip_mask;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
 
+    // The returned clip mask is a clone, ours to keep.
     clip_mask = GetImageClipMask(image, &exception);
-    CHECK_EXCEPTION()
-
-    if (!clip_mask)
-    {
-        DestroyExceptionInfo(&exception);
-        return Qnil;
-    }
-
-    copy = CloneImage(clip_mask, clip_mask->columns, clip_mask->rows
-                    , MagickTrue, &exception);
-    rm_check_exception(&exception, copy, DestroyOnError);
+    rm_check_exception(&exception, clip_mask, DestroyOnError);
     DestroyExceptionInfo(&exception);
 
-    return rm_image_new(copy);
+    return clip_mask ? rm_image_new(clip_mask) : Qnil;
 }
 
 
@@ -1723,7 +1714,12 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         }
 
         clip_mask->matte = MagickTrue;
+
+        // SetImageClipMask clones the clip_mask image. We can
+        // destroy our copy after SetImageClipMask is done with it.
+
         (void) SetImageClipMask(image, clip_mask);
+        clip_mask = DestroyImage(clip_mask);
     }
     else
     {

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.166 2006/08/10 22:29:55 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.167 2006/08/16 21:55:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -39,6 +39,7 @@ static void raise_ChannelType_error(VALUE);
 static ImageAttribute *Next_Attribute;
 
 static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation";
+
 
 
 
@@ -3468,6 +3469,216 @@ Image_dispose_eq(VALUE self, VALUE dispose)
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(dispose, image->dispose, DisposeType);
     return self;
+}
+
+
+/*
+    Static:     get_relative_offsets
+    Purpose:    compute offsets using the gravity to determine what the
+                offsets are relative to
+*/
+static void
+get_relative_offsets(
+    GravityType gravity,
+    Image *image,
+    Image *mark,
+    long *x_offset,
+    long *y_offset,
+    VALUE grav)
+{
+    MagickEnum *magick_enum;
+
+    switch(gravity)
+    {
+        case NorthEastGravity:
+        case EastGravity:
+            *x_offset = (long)(image->columns) - (long)(mark->columns) - *x_offset;
+            break;
+        case SouthWestGravity:
+        case SouthGravity:
+            *y_offset = (long)(image->rows) - (long)(mark->rows) - *y_offset;
+            break;
+        case SouthEastGravity:
+            *x_offset = (long)(image->columns) - (long)(mark->columns) - *x_offset;
+            *y_offset = (long)(image->rows) - (long)(mark->rows) - *y_offset;
+            break;
+        default:
+            Data_Get_Struct(grav, MagickEnum, magick_enum);
+            rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+            break;
+    }
+
+}
+
+
+/*
+    Static:     get_offsets_from_gravity
+    Purpose:    compute watermark offsets from gravity type
+*/
+static void
+get_offsets_from_gravity(
+    GravityType gravity,
+    Image *image,
+    Image *mark,
+    long *x_offset,
+    long *y_offset)
+{
+
+    switch (gravity)
+    {
+        case ForgetGravity:
+        case NorthWestGravity:
+            *x_offset = 0;
+            *y_offset = 0;
+        break;
+        case NorthGravity:
+            *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
+            *y_offset = 0;
+        break;
+        case NorthEastGravity:
+            *x_offset = (long)(image->columns) - (long)(mark->columns);
+            *y_offset = 0;
+        break;
+        case WestGravity:
+            *x_offset = 0;
+            *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
+        break;
+        case StaticGravity:
+        case CenterGravity:
+        default:
+            *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
+            *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
+        break;
+        case EastGravity:
+            *x_offset = (long)(image->columns) - (long)(mark->columns);
+            *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
+        break;
+        case SouthWestGravity:
+            *x_offset = 0;
+            *y_offset = (long)(image->rows) - (long)(mark->rows);
+        break;
+        case SouthGravity:
+            *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
+            *y_offset = (long)(image->rows) - (long)(mark->rows);
+        break;
+        case SouthEastGravity:
+            *x_offset = (long)(image->columns) - (long)(mark->columns);
+            *y_offset = (long)(image->rows) - (long)(mark->rows);
+        break;
+    }
+}
+
+
+/*
+    Static:     check_for_long_value
+    Purpose:    called from rb_protect, returns the number if obj is really
+                a numeric value.
+*/
+static VALUE check_for_long_value(VALUE obj)
+{
+    long t;
+    t = NUM2LONG(obj);
+    t = t;      // placate gcc
+    return (VALUE)0;
+}
+
+
+static void get_composite_offsets(
+    int argc,
+    VALUE *argv,
+    Image *dest,
+    Image *src,
+    long *x_offset,
+    long *y_offset)
+{
+    GravityType gravity;
+    int exc = 0;
+
+    if (CLASS_OF(argv[0]) == Class_GravityType)
+    {
+        VALUE_TO_ENUM(argv[0], gravity, GravityType);
+
+        switch (argc)
+        {
+            // Gravity + offset(s). Offsets are relative to the image edges
+            // as specified by the gravity.
+            case 3:
+                *y_offset = NUM2LONG(argv[2]);
+            case 2:
+                *x_offset = NUM2LONG(argv[1]);
+                get_relative_offsets(gravity, dest, src, x_offset, y_offset, argv[1]);
+                break;
+            case 1:
+                // No offsets specified. Compute offset based on the gravity alone.
+                get_offsets_from_gravity(gravity, dest, src, x_offset, y_offset);
+                break;
+        }
+    }
+    // Gravity not specified at all. Offsets are measured from the
+    // NorthWest corner. The arguments must be numbers.
+    else
+    {
+        *x_offset = rb_protect(check_for_long_value, argv[0], &exc);
+        if (exc)
+        {
+            rb_raise(rb_eArgError, "expected GravityType, got %s", rb_obj_classname(argv[0]));
+        }
+        *x_offset = NUM2LONG(argv[0]);
+        if (argc > 1)
+        {
+            *y_offset = NUM2LONG(argv[1]);
+        }
+    }
+
+}
+
+
+/*
+    Method:     Image#dissolve(overlay, percent, x_offset=0, y_offset=0)
+                Image#dissolve(overlay, percent, gravity, x_offset=0, y_offset=0)
+    Purpose:    Corresponds to the composite -dissolve operation
+    Notes:      `percent' can be a number between 0 and 1.0 or a string in the form "NN%"
+*/
+VALUE
+Image_dissolve(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *overlay, *new_image;
+    double percent;
+    long x_offset = 0L, y_offset = 0L;
+    char geometry[10];
+
+    Data_Get_Struct(self, Image, image);
+
+    if (argc > 2)
+    {
+        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
+        get_composite_offsets(argc-2, &argv[2], image, overlay, &x_offset, &y_offset);
+        // There must be 2 arguments left
+        argc = 2;
+    }
+
+    if (argc < 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 5)", argc);
+    }
+
+    percent = rm_percentage(argv[1]) * 100.0;
+    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
+
+    // Clamp percent to 0.0 <= n <= 100.0
+    percent = FMAX(0.0, percent);
+    percent = FMIN(100.0, percent);
+
+    memset(geometry, 0xdf, sizeof(geometry));
+    sprintf(geometry, "%-.0f", percent);
+    CloneString(&overlay->geometry, geometry);
+
+    new_image = rm_clone_image(image);
+    (void) CompositeImage(new_image, DissolveCompositeOp, overlay, x_offset, y_offset);
+
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
 }
 
 
@@ -9453,6 +9664,80 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
     VALUE_TO_ENUM(method, vpm, VirtualPixelMethod);
     (void) SetImageVirtualPixelMethod(image, vpm);
     return self;
+}
+
+
+
+
+/*
+  Method:   Image#watermark(mark, brightness=100.0, saturation=100.0
+                          , [gravity,] x_off=0, y_off=0)
+  Purpose:  add a watermark to an image
+  Notes:    x_off and y_off can be negative, which means measure from the right/bottom
+            of the target image.
+*/
+VALUE
+Image_watermark(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *new_image, *mark;
+    double brightness = 100.0;
+    double saturation = 100.0;
+    long x_offset = 0L, y_offset = 0L;
+    char geometry[10];
+
+    Data_Get_Struct(self, Image, image);
+
+    if (argc > 3)
+    {
+        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, mark);
+        get_composite_offsets(argc-3, &argv[3], image, mark, &x_offset, &y_offset);
+        // There must be 3 arguments left
+        argc = 3;
+    }
+
+    switch (argc)
+    {
+        case 3:
+            saturation = rm_percentage(argv[2]) * 100.0;
+        case 2:
+            brightness = rm_percentage(argv[1]) * 100.0;
+        case 1:
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, mark);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 6)", argc);
+            break;
+    }
+
+
+    // Clamp to 0.0 <= n <= 100.0
+    brightness = FMAX(0.0, brightness);
+    brightness = FMIN(100.0, brightness);
+    saturation = FMAX(0.0, saturation);
+    saturation = FMIN(100.0, saturation);
+
+    memset(geometry, 0xdf, sizeof(geometry));
+    if (saturation == 0.0)
+    {
+        sprintf(geometry, "%-.0f", brightness);
+    }
+    else if (brightness == 0.0)
+    {
+        sprintf(geometry, "x%-.0f", saturation);
+    }
+    else
+    {
+        sprintf(geometry, "%-.0fx%-.0f", brightness, saturation);
+    }
+    CloneString(&mark->geometry, geometry);
+
+    new_image = rm_clone_image(image);
+
+    (void) CompositeImage(new_image, ModulateCompositeOp, mark, x_offset, y_offset);
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
+
 }
 
 /*

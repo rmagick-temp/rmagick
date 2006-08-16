@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.132 2006/08/10 00:09:06 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.133 2006/08/16 21:55:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -788,6 +788,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "difference", Image_difference, 1);
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
+    rb_define_method(Class_Image, "dissolve", Image_dissolve, -1);
     rb_define_method(Class_Image, "distortion_channel", Image_distortion_channel, -1);
     rb_define_method(Class_Image, "_dump", Image__dump, 1);
     rb_define_method(Class_Image, "dup", Image_dup, 0);
@@ -900,6 +901,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "unsharp_mask", Image_unsharp_mask, -1);
     rb_define_method(Class_Image, "unsharp_mask_channel", Image_unsharp_mask_channel, -1);
     rb_define_method(Class_Image, "vignette", Image_vignette, -1);
+    rb_define_method(Class_Image, "watermark", Image_watermark, -1);
     rb_define_method(Class_Image, "wave", Image_wave, -1);
     rb_define_method(Class_Image, "white_threshold", Image_white_threshold, -1);
     rb_define_method(Class_Image, "write", Image_write, 1);
@@ -1811,7 +1813,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/08/10 00:09:06 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/08/16 21:55:31 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

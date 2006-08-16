@@ -7,8 +7,9 @@ RMagick 1.14.0
       methods to the Image class (available with ImageMagick 6.2.8-6)
     o Added resample method to the Image class (thanks to Ant Peacocke for the
       idea)
-    o Added dissolve method to the Image class
-    o Added the bias, clip_mask attributes to the Image class
+    o Added two new compositing methods to the Image class, dissolve and
+      watermark
+    o Added the bias and clip_mask attributes to the Image class
     o Fix bug #5079, Image#quantum_operator method doesn't work (bug report from
       Pedro Martins)
     o Fix bug #5080, incorrect RVG images when non-0 values used for the min_x

@@ -2520,7 +2520,9 @@ f.color_reset!(red)
 
     <h4>See also</h4>
 
-    <p><a href="#composite_bang">composite!</a></p>
+    <p><a href="#composite_bang">composite!</a>, <a href=
+    "#dissolve">dissolve</a>, <a href=
+    "image3.html#watermark">watermark</a></p>
 
     <h4>Magick API</h4>
 
@@ -3453,8 +3455,14 @@ exit
     <h3 id="dissolve">dissolve</h3>
 
     <p><span class="arg">image</span>.dissolve(<span class=
-    "arg">overlay</span>, <span class="arg">percentage</span>)
-    -&gt; <span class="arg">anImage</span></p>
+    "arg">overlay</span>, <span class="arg">percentage</span>,
+    <span class="arg">x_offset</span>=0, <span class=
+    "arg">y_offset</span>=0) -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.dissolve(<span class=
+    "arg">overlay</span>, <span class="arg">percentage</span>,
+    <span class="arg">gravity</span>, <span class=
+    "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
+    -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -3475,12 +3483,22 @@ exit
     <dl>
       <dt>overlay</dt>
 
-      <dd>The source image for the composite operation.</dd>
+      <dd>The source image for the composite operation. Either an
+      imagelist or an image. If an imagelist, uses the current
+      image.</dd>
 
       <dt>percentage</dt>
 
-      <dd>The desired opacity of the source image</dd>
+      <dd>The desired opacity of the source image. Either a number
+      between 0.0 and 1.0 or a string in the form "NN%".</dd>
     </dl>
+
+    <p>The <code>dissolve</code> method can be called with or
+    without a <span class="arg">gravity</span> argument. The
+    <span class="arg">gravity</span>, <span class=
+    "arg">x_offset</span>, and <span class="arg">y_offset</span>
+    arguments are described in the documentation for <a href=
+    "image3.html#watermark">watermark</a>.</p>
 
     <h4>Example</h4>
 
@@ -3498,6 +3516,10 @@ exit
     <h4>Returns</h4>
 
     <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite">composite</a></p>
   </div>
 
   <div class="sig">

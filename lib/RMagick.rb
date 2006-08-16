@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.45 2006/08/04 22:58:14 rmagick Exp $
+# $Id: RMagick.rb,v 1.46 2006/08/16 21:54:56 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -655,36 +655,6 @@ class Image
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image
         self
-    end
-
-    # Similar to `composite self -dissolve pct overlay'
-    # Returns composited result
-    def dissolve(overlay, pct)
-        begin
-            # Clamp to 0 <= pct <= 1
-            pct = [1.0, Float(pct)].min
-            pct = [0.0, pct].max
-            # Convert to 0 <= pct <= 100
-            pct = (pct * 100.0).to_i
-        rescue
-            m = pct.to_s.match(/\A\s*(\d+)%\s*\z/)
-            if m
-                # Clamp to 0 <= pct <= 100
-                pct = [100, m[1].to_i].min
-                pct = [0, pct].max
-            else
-                Kernel.raise ArgumentError, "expected percentage, got `#{pct}'"
-            end
-        end
-
-        temp = overlay.geometry
-        begin
-            overlay.geometry = pct.to_s
-            res = composite(overlay, 0, 0, Magick::DissolveCompositeOp)
-        ensure
-            overlay.geometry = temp
-        end
-        return res
     end
 
     # Retrieve EXIF data by entry or all. If one or more entry names specified,

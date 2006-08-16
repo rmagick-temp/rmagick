@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.32 2006/05/07 21:58:32 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.33 2006/08/16 21:54:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -445,13 +445,8 @@ VALUE Draw_annotate(
     x      = NUM2LONG(x_arg);
     y      = NUM2LONG(y_arg);
 
-    // If either the width or height is 0, both must be 0.
-    if (width == 0 || height == 0)
+    if (width == 0 && height == 0)
     {
-        if (width != 0 || height != 0)
-        {
-            rb_raise(rb_eArgError, "invalid geometry %lux%lu%+ld%+ld", width, height, x, y);
-        }
         sprintf(geometry_str, "%+ld%+ld", x, y);
     }
 

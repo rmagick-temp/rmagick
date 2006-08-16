@@ -210,6 +210,8 @@
 
           <li><a href="#vignette">vignette</a></li>
 
+          <li><a href="#watermark">watermark</a></li>
+
           <li><a href="#wave">wave</a></li>
 
           <li><a href="#white_threshold">white_threshold</a></li>
@@ -1803,7 +1805,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2244,6 +2246,10 @@ p stats.red.stddev &raquo; 0.231399683489667
     <h4>Magick API</h4>
 
     <p>SteganoImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#watermark">watermark</a></p>
   </div>
 
   <div class="sig">
@@ -3305,6 +3311,161 @@ end
     to the image produced by RMagick's vignette.rb example script.
     However, the example script gives you more control over the
     size, shape, and background color of the vignette.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="watermark">watermark</h3>
+
+    <p><span class="arg">image</span>.watermark(<span class=
+    "arg">mark</span>, <span class="arg">lightness</span>=1.0,
+    <span class="arg">saturation</span>=1.0, <span class=
+    "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
+    -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.watermark(<span class=
+    "arg">mark</span>, <span class="arg">lightness</span>=1.0,
+    <span class="arg">saturation</span>=1.0, <span class=
+    "arg">gravity</span>, <span class="arg">x_offset</span>=0,
+    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Composites a watermark image on the target image using the
+    <a href="constants.html#CompositeOperator">Modulate</a>
+    composite operator. This composite operation operates in the
+    HSL colorspace and combines part of the lightness, part of the
+    saturation, and all of the hue of each pixel in the watermark
+    with the corresponding pixel in the target image</p>
+
+    <h4>Arguments</h4>
+
+    <p>Watermark can be called with a <span class=
+    "arg">gravity</span> argument or without.</p>
+
+    <dl>
+      <dt>mark</dt>
+
+      <dd>The watermark image. Either an imagelist or an image. If
+      an imagelist, uses the current image.</dd>
+
+      <dt>lightness</dt>
+
+      <dd>The percentage of the lightness component of the
+      watermark pixels to be composited onto the target image. Must
+      be a number between 0 and 1.0 or a string in the form "NN%".
+      For example, 0.25 and "25%" both mean 25%. If the number
+      falls outside the range it will be forced into the range. The
+      default is 1.0.</dd>
+
+      <dt>saturation</dt>
+
+      <dd>The percentage of the saturation component of the
+      watermark pixels to be composited onto the target image. Must
+      be a number between 0 and 1.0 or a string in the form "NN%".
+      For example, 0.25 and "25%" both mean 25%. If the number
+      falls outside the range it will be forced into the range. The
+      default is 1.0.</dd>
+
+      <dt>x_offset</dt>
+
+      <dd>The offset of the watermark, measured from the left-hand
+      side of the target image. The default is 0.</dd>
+
+      <dt>y_offset</dt>
+
+      <dd>The offset of the watermark, measured from the top of the
+      target image. The default is 0.</dd>
+    </dl>
+
+    <p>When a <span class="arg">gravity</span> argument is
+    specified but the <span class="arg">x-</span> and <span class=
+    "arg">y-offsets</span> are omitted, the watermark is positioned
+    based on the value of the <span class="arg">gravity</span>
+    argument:</p>
+
+    <dl>
+      <dt>NorthWestGravity</dt>
+
+      <dd>The watermark abuts the top and left sides of the
+      image.</dd>
+
+      <dt>NorthGravity</dt>
+
+      <dd>The watermark is centered left-to-right and abuts the top
+      of the image.</dd>
+
+      <dt>NorthEastGravity</dt>
+
+      <dd>The watermark abuts the top and right sides of the
+      image.</dd>
+
+      <dt>EastGravity</dt>
+
+      <dd>The watermark is centered top-to-bottom and abuts the
+      right side of the image.</dd>
+
+      <dt>SouthEastGravity</dt>
+
+      <dd>The watermark abuts the bottom and right sides of the
+      image.</dd>
+
+      <dt>SouthGravity</dt>
+
+      <dd>The watermark is centered left-to-right and abuts the
+      bottom of the image.</dd>
+
+      <dt>SouthWestGravity</dt>
+
+      <dd>The watermark abuts the bottom and left sides of the
+      image.</dd>
+
+      <dt>WestGravity</dt>
+
+      <dd>The watermark is centered top-to-bottom and abuts the
+      left side of the image.</dd>
+
+      <dt>CenterGravity</dt>
+
+      <dd>The watermark is centered left-to-right and
+      top-to-bottom.</dd>
+    </dl>
+
+    <p>When the <span class="arg">gravity</span> argument is
+    present and the <span class="arg">x-offset</span> (and
+    optionally the <span class="arg">y-offset</span>) is present,
+    the <span class="arg">x-</span> and <span class=
+    "arg">y-offset</span> are measured from the right and/or bottom
+    edges of the target image based on the value of <span class=
+    "arg">gravity</span>. If the argument is NorthEastGravity,
+    EastGravity, or SouthEastGravity, the <span class=
+    "arg">x-offset</span> is measured from the right side of the
+    image. If the argument is SouthEastGravity, SouthGravity, or
+    SouthWestGravity, the <span class="arg">y-offset</span> is
+    measured from the bottom of the image. All other values are
+    ignored and the <span class="arg">x-</span> and <span class=
+    "arg">y-offset</span> are measured from the upper-left corner
+    of the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('watermark.rb.html')"><img src=
+    "ex/watermark.jpg" alt="watermark example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/watermark.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#composite">composite</a>, <a href=
+    "#stegano">stegano</a></p>
   </div>
 
   <div class="sig">

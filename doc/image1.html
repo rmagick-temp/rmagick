@@ -97,6 +97,8 @@ float: left;
           <li><a href=
           "#adaptive_blur_channel">adaptive_blur_channel</a></li>
 
+          <li><a href="#adaptive_resize">adaptive_resize</a></li>
+
           <li><a href="#adaptive_sharpen">adaptive_sharpen</a></li>
 
           <li><a href=
@@ -839,6 +841,60 @@ img = Magick::Image.read_inline(content)
 
     <p>AdaptiveBlurImageChannel (available in ImageMagick
     6.2.8)</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="adaptive_resize">adaptive_resize</h3>
+
+    <p><span class="arg">image</span>.adaptive_resize(<span class=
+    "arg">new_width</span>, <span class="arg">new_height</span>)
+    -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.adaptive_resize(<span class=
+    "arg">scale_factor</span>) -&gt; <span class=
+    "arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Resizes the image with data dependent triangulation.</p>
+
+    <h4>Arguments</h4>
+
+    <p>You can specify the new size in two ways. Either specify the
+    new width and height explicitly, or specify a <em>scale
+    factor</em>, a number that represents the percentage
+    change.</p>
+
+    <p>Use the <a href="#change_geometry">change_geometry</a>
+    method to compute new dimensions for an image with constraints
+    such as "maintain the current proportions."</p>
+
+    <dl>
+      <dt>new_width, new_height</dt>
+
+      <dd>The desired width and height.</dd>
+
+      <dt>scale_factor</dt>
+
+      <dd>You can use this argument instead of specifying the
+      desired width and height. The percentage size change. For
+      example, 1.25 makes the new image 125% of the size of the
+      receiver. The scale factor 0.5 makes the new image 50% of the
+      size of the receiver.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#resize">resize</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>AdaptiveResizeImage (available in ImageMagick 6.2.9)</p>
   </div>
 
   <div class="sig">

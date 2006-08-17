@@ -5,6 +5,8 @@ RMagick 1.14.0
       black_point_compensation attribute. (requested by Niklas Ekman)
     o Added adaptive_blur, adaptive_blur_channel, find_similar_region, sketch
       methods to the Image class (available with ImageMagick 6.2.8-6)
+    o Added adaptive_resize to the Image class (available with
+      ImageMagick 6.2.9)
     o Added resample method to the Image class (thanks to Ant Peacocke for the
       idea)
     o Added two new compositing methods to the Image class, dissolve and

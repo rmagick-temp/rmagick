@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.167 2006/08/16 21:55:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.168 2006/08/17 22:13:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -161,6 +161,65 @@ Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL)
     return adaptive_channel_method(argc, argv, self, AdaptiveBlurImageChannel);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Image#adaptive_resize(scale)
+                Image#adaptive_resize(cols, rows)
+    Purpose:    Call AdaptiveResizeImage
+*/
+VALUE
+Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ADAPTIVERESIZEIMAGE)
+
+    Image *image, *new_image;
+    unsigned long rows, columns;
+    double scale, drows, dcols;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    switch (argc)
+    {
+        case 2:
+            rows = NUM2ULONG(argv[1]);
+            columns = NUM2ULONG(argv[0]);
+            break;
+        case 1:
+            scale = NUM2DBL(argv[0]);
+            if (scale < 0.0)
+            {
+                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+            }
+            drows = scale * image->rows + 0.5;
+            dcols = scale * image->columns + 0.5;
+            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            {
+                rb_raise(rb_eRangeError, "resized image too big");
+            }
+            rows = (unsigned long) drows;
+            columns = (unsigned long) dcols;
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = AdaptiveResizeImage(image, columns, rows, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -7556,7 +7615,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
             dcols = scale * image->columns + 0.5;
             if (drows > ULONG_MAX || dcols > ULONG_MAX)
             {
-                rb_raise(rb_eRangeError, "resulting image too big");
+                rb_raise(rb_eRangeError, "resized image too big");
             }
             rows = (unsigned long) drows;
             columns = (unsigned long) dcols;
@@ -7743,7 +7802,7 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
             dcols = scale * image->columns + 0.5;
             if (drows > ULONG_MAX || dcols > ULONG_MAX)
             {
-                rb_raise(rb_eRangeError, "resulting image too big");
+                rb_raise(rb_eRangeError, "resized image too big");
             }
             rows = (unsigned long) drows;
             columns = (unsigned long) dcols;
@@ -8920,7 +8979,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
             dcols = scale * image->columns + 0.5;
             if (drows > ULONG_MAX || dcols > ULONG_MAX)
             {
-                rb_raise(rb_eRangeError, "resulting image too big");
+                rb_raise(rb_eRangeError, "resized image too big");
             }
             rows = (unsigned long) drows;
             columns = (unsigned long) dcols;

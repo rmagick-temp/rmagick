@@ -3,6 +3,8 @@
 #undef HAVE_ACQUIREMAGICKMEMORY
 /* Introduced in IM 6.2.8-5 */
 #undef HAVE_ADAPTIVEBLURIMAGECHANNEL
+/* Introduced in IM 6.2.9 */
+#undef HAVE_ADAPTIVERESIZEIMAGE
 /* Introduced in IM 6.2.7 */
 #undef HAVE_ADAPTIVESHARPENIMAGE
 /* Introduced in IM 6.0.0 */

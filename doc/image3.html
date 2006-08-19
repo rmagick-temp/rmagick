@@ -201,6 +201,8 @@
 
           <li><a href="#trim_bang">trim!</a></li>
 
+          <li><a href="#unique_colors">unique_colors</a></li>
+
           <li><a href="#unsharp_mask">unsharp_mask</a></li>
 
           <li><a href=
@@ -2059,12 +2061,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example"  /></a>
+    "ex/splice.jpg" alt="splice example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2982,6 +2984,29 @@ img.to_color(pixel)
   </div>
 
   <div class="sig">
+    <h3 id="unique_colors">unique_colors</h3>
+
+    <p><span class="arg">image</span>.unique_colors -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Constructs a new image with one pixel for each unique color
+    in the image. The new image has 1 row. The row has 1 column for
+    each unique pixel in the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>UniqueImageColors (available in ImageMagick 6.2.9)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="unsharp_mask">unsharp_mask</h3>
 
     <p><span class="arg">image</span>.unsharp_mask(<span class=
@@ -3497,13 +3522,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
+    "ex/images/Flower_Hat.jpg" alt="wave example" />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

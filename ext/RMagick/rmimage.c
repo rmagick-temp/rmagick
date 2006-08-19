@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.168 2006/08/17 22:13:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.169 2006/08/19 22:44:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1950,14 +1950,20 @@ static VALUE get_profile(VALUE self, const char *profile_name)
     info = CloneImageInfo(NULL);
     blob = ImageToBlob(info, profile_image, &length, &exception);
     DestroyImageInfo(info);
-    rm_check_exception(&exception, profile_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
     DestroyImage(profile_image);
 
-    profile = rb_str_new(blob, length);
-    magick_free((void*)blob);
+    // Don't raise an exception. Return nil instead.
+    DestroyExceptionInfo(&exception);
 
-    return profile;
+    if (blob)
+    {
+        profile = rb_str_new(blob, length);
+        magick_free((void*)blob);
+        return profile;
+    }
+
+    return Qnil;
+
 }
 
 
@@ -9488,6 +9494,34 @@ VALUE Image_image_type(VALUE self)
     DestroyExceptionInfo(&exception);
 
     return ImageType_new(type);
+}
+
+
+/*
+    Method:     Image#unique_colors
+    Purpose:    Call UniqueImageColors
+*/
+VALUE
+Image_unique_colors(VALUE self)
+{
+#if defined(HAVE_UNIQUEIMAGECOLORS)
+    Image *image, *new_image;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = UniqueImageColors(image, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

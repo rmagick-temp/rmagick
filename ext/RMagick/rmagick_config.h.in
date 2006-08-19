@@ -222,6 +222,8 @@
 #undef HAVE_TRANSVERSEIMAGE
 /* Introduced in IM 6.0.0 */
 #undef HAVE_UNDEFINEDGRAVITY
+/* Introduced in IM 6.2.9 */
+#undef HAVE_UNIQUEIMAGECOLORS
 #undef HAVE_UNISTD_H
 /* Introduced in IM 6.1.0 */
 #undef HAVE_UNSHARPMASKIMAGECHANNEL

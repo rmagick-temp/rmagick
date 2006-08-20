@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.169 2006/08/19 22:44:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.170 2006/08/20 23:47:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3544,14 +3544,16 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 */
 static void
 get_relative_offsets(
-    GravityType gravity,
+    VALUE grav,
     Image *image,
     Image *mark,
     long *x_offset,
-    long *y_offset,
-    VALUE grav)
+    long *y_offset)
 {
     MagickEnum *magick_enum;
+    GravityType gravity;
+
+    VALUE_TO_ENUM(grav, gravity, GravityType);
 
     switch(gravity)
     {
@@ -3671,7 +3673,7 @@ static void get_composite_offsets(
                 *y_offset = NUM2LONG(argv[2]);
             case 2:
                 *x_offset = NUM2LONG(argv[1]);
-                get_relative_offsets(gravity, dest, src, x_offset, y_offset, argv[1]);
+                get_relative_offsets(argv[0], dest, src, x_offset, y_offset);
                 break;
             case 1:
                 // No offsets specified. Compute offset based on the gravity alone.
@@ -4394,7 +4396,7 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
         case 2:
             x = NUM2LONG(argv[1]);
         case 1:
-            Data_Get_Struct(argv[0], Image, target);
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, target);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
@@ -6856,8 +6858,6 @@ Image_preview(VALUE self, VALUE preview)
 VALUE
 Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 {
-
-    rb_warning("This method is obsolete. Use add_profile or delete_profile instead.");
 
     if (profile == Qnil)
     {

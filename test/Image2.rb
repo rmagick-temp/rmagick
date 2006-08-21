@@ -213,6 +213,25 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(NoMethodError) { img1.difference(2) }
     end
 
+    def test_dissolve
+        src = Magick::Image.new(@img.columns, @img.rows)
+        src_list = Magick::ImageList.new
+        src_list << src.copy
+        assert_nothing_raised { @img.dissolve(src,50 ) }
+        assert_nothing_raised { @img.dissolve(src_list, 50) }
+        assert_nothing_raised { @img.dissolve(src, '50%') }
+        assert_nothing_raised { @img.dissolve(src, 50, 10) }
+        assert_nothing_raised { @img.dissolve(src, 50, 10, 10) }
+        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity) }
+        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity, 10) }
+        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity, 10, 10) }
+
+        assert_raise(ArgumentError) { @img.dissolve(src, 'x') }
+        assert_raise(ArgumentError) { @img.dissolve(src, 50, 'x') }
+        assert_raise(TypeError) { @img.dissolve(src, 50, Magick::NorthEastGravity, 'x') }
+        assert_raise(TypeError) { @img.dissolve(src, 50, Magick::NorthEastGravity, 10, 'x') }
+    end
+
     def test_distortion_channel
         assert_nothing_raised do
             metric = @img.distortion_channel(@img, Magick::MeanAbsoluteErrorMetric)
@@ -247,7 +266,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             @img.each_profile do |name, value|
                 assert_equal("iptc", name)
-                assert_equal("test profile", value)
+                assert_nil(value)
             end
         end
     end
@@ -372,6 +391,45 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::QuantumPixel, 1) }
         # last arg s/b StorageType
         assert_raise(TypeError) { @img.export_pixels_to_str(0, 0, 10, 10, "I", 2) }
+    end
+
+    def test_find_similar_region
+        girl = Magick::Image.read(IMAGES_DIR+"/Flower_Hat.jpg").first
+        region = girl.crop(10, 10, 50, 50)
+        assert_nothing_raised do
+            x, y = girl.find_similar_region(region)
+            assert_not_nil(x)
+            assert_not_nil(y)
+            assert_equal(10, x)
+            assert_equal(10, y)
+        end
+        assert_nothing_raised do
+            x, y = girl.find_similar_region(region, 0)
+            assert_equal(10, x)
+            assert_equal(10, y)
+        end
+        assert_nothing_raised do
+            x, y = girl.find_similar_region(region, 0, 0)
+            assert_equal(10, x)
+            assert_equal(10, y)
+        end
+
+        list = Magick::ImageList.new
+        list << region
+        assert_nothing_raised do
+            x, y = girl.find_similar_region(list, 0, 0)
+            assert_equal(10, x)
+            assert_equal(10, y)
+        end
+
+
+        x = girl.find_similar_region(@img)
+        assert_nil(x)
+
+        assert_raise(ArgumentError) { girl.find_similar_region(region, 10, 10, 10) }
+        assert_raise(TypeError) { girl.find_similar_region(region, 10, 'x') }
+        assert_raise(TypeError) { girl.find_similar_region(region, 'x') }
+
     end
 
     def test_flip
@@ -598,8 +656,21 @@ class Image2_UT < Test::Unit::TestCase
             assert_same(img, res)
             assert_equal(@img, res)
         end
-        assert_raise(TypeError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, 2) }
+        assert_nothing_raised do
+            qp = pixels.pack("D*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::DoublePixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+        assert_nothing_raised do
+            qp = pixels.pack("F*")
+            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::FloatPixel)
+            assert_same(img, res)
+            assert_equal(@img, res)
+        end
+
         assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::DoublePixel) }
+        assert_raise(TypeError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, 2) }
 
         # pixel buffer too small
         assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", "xxxx") }
@@ -619,9 +690,9 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.level(0.0, 1.0) }
         assert_nothing_raised { @img.level(0.0, 1.0, Magick::MaxRGB) }
         assert_raise(ArgumentError) { @img.level(0.0, 1.0, Magick::MaxRGB, 2) }
-        assert_raise(TypeError) { @img.level('x') }
-        assert_raise(TypeError) { @img.level(0.0, 'x') }
-        assert_raise(TypeError) { @img.level(0.0, 1.0, 'x') }
+        assert_raise(ArgumentError) { @img.level('x') }
+        assert_raise(ArgumentError) { @img.level(0.0, 'x') }
+        assert_raise(ArgumentError) { @img.level(0.0, 1.0, 'x') }
     end
 
     # Ensure that #level properly swaps old-style arg list
@@ -875,7 +946,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.posterize(5, true) }
         assert_raise(ArgumentError) { @img.posterize(5, true, 'x') }
     end
-
+=begin
     def test_preview
         preview_types = [
           Magick::RotatePreview,
@@ -920,7 +991,7 @@ class Image2_UT < Test::Unit::TestCase
         end
         assert_raise(TypeError) { @img.preview(2) }
     end
-
+=end
 end
 
 if __FILE__ == $0

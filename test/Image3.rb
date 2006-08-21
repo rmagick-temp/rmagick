@@ -100,6 +100,18 @@ class Image3_UT < Test::Unit::TestCase
         end
     end
 
+    def test_radial_blur_channel
+        res = nil
+        assert_nothing_raised { res = @img.radial_blur_channel(30) }
+        assert_not_nil(res)
+        assert_instance_of(Magick::Image, res)
+        assert_nothing_raised { res = @img.radial_blur_channel(30, Magick::RedChannel) }
+        assert_nothing_raised { res = @img.radial_blur_channel(30, Magick::RedChannel, Magick::BlueChannel) }
+
+        assert_raise(ArgumentError) { @img.radial_blur_channel }
+        assert_raise(TypeError) { @img.radial_blur_channel(30, 2) }
+    end
+
     def test_raise
         assert_nothing_raised do
             res = @img.raise
@@ -132,6 +144,24 @@ class Image3_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
         assert_nothing_raised { @img.reduce_noise(4) }
+    end
+
+    def test_resample
+        assert_nothing_raised { @img.resample }
+        assert_nothing_raised { @img.resample(100) }
+        assert_nothing_raised { @img.resample(100, 100) }
+
+        girl = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
+        assert_equal(240.0, girl.x_resolution)
+        assert_equal(240.0, girl.y_resolution)
+        res = girl.resample(120, 120)
+        assert_equal(100, res.columns)
+        assert_equal(125, res.rows)
+        assert_equal(120.0, res.x_resolution)
+        assert_equal(120.0, res.y_resolution)
+
+        assert_raise(NoMethodError) { @img.resample('x') }
+        assert_raise(NoMethodError) { @img.resample(100, 'x') }
     end
 
     def test_resize
@@ -176,6 +206,16 @@ class Image3_UT < Test::Unit::TestCase
         end
         @img.freeze
         assert_raise(TypeError) { @img.resize!(0.50) }
+    end
+
+    def test_resize_to_fit
+        img = Magick::Image.new(200, 250)
+        res = nil
+        assert_nothing_raised { res = img.resize_to_fit(50, 50) }
+        assert_not_nil(res)
+        assert_instance_of(Magick::Image, res)
+        assert_equal(40, res.columns)
+        assert_equal(50, res.rows)
     end
 
     def test_roll
@@ -393,6 +433,17 @@ class Image3_UT < Test::Unit::TestCase
         end
     end
 
+    def test_sketch
+        assert_nothing_raised { @img.sketch }
+        assert_nothing_raised { @img.sketch(0) }
+        assert_nothing_raised { @img.sketch(0, 1) }
+        assert_nothing_raised { @img.sketch(0, 1, 0) }
+        assert_raise(ArgumentError) { @img.sketch(0, 1, 0, 1) }
+        assert_raise(TypeError) { @img.sketch('x') }
+        assert_raise(TypeError) { @img.sketch(0, 'x') }
+        assert_raise(TypeError) { @img.sketch(0, 1, 'x') }
+    end
+
     def test_solarize
         assert_nothing_raised do
             res = @img.solarize
@@ -558,6 +609,32 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.transparent(2) }
     end
 
+    def test_transpose
+        assert_nothing_raised do
+            res = @img.transpose
+            assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
+        end
+        assert_nothing_raised do
+            res = @img.transpose!
+            assert_instance_of(Magick::Image, res)
+            assert_same(@img, res)
+        end
+    end
+
+    def test_transverse
+        assert_nothing_raised do
+            res = @img.transverse
+            assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
+        end
+        assert_nothing_raised do
+            res = @img.transverse!
+            assert_instance_of(Magick::Image, res)
+            assert_same(@img, res)
+        end
+    end
+
     def test_trim
         # Can't use the default image because it's a solid color
         hat = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
@@ -568,6 +645,15 @@ class Image3_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = hat.trim!
             assert_same(hat, res)
+        end
+    end
+
+    def test_unique_colors
+        assert_nothing_raised do
+            res = @img.unique_colors
+            assert_instance_of(Magick::Image, res)
+            assert_equal(1, res.columns)
+            assert_equal(1, res.rows)
         end
     end
 
@@ -638,6 +724,29 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.vignette(0, 0, 0, 1, 1) }
         # sigma=0 not allowed
         assert_raise(Magick::ImageMagickError) { @img.vignette(0, 0, 0, 0) }
+    end
+
+    def test_watermark
+        mark = Magick::Image.new(5,5)
+        mark_list = Magick::ImageList.new
+        mark_list << mark.copy
+        assert_nothing_raised { @img.watermark(mark) }
+        assert_nothing_raised { @img.watermark(mark_list) }
+        assert_nothing_raised { @img.watermark(mark, 50) }
+        assert_nothing_raised { @img.watermark(mark, '50%') }
+        assert_nothing_raised { @img.watermark(mark, 50, 50) }
+        assert_nothing_raised { @img.watermark(mark, 50, '50%') }
+        assert_nothing_raised { @img.watermark(mark, 50, 50, 10) }
+        assert_nothing_raised { @img.watermark(mark, 50, 50, 10, 10) }
+        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity) }
+        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10) }
+        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10, 10) }
+
+        assert_raise(ArgumentError) { @img.watermark(mark, 'x') }
+        assert_raise(ArgumentError) { @img.watermark(mark, 50, 'x') }
+        assert_raise(ArgumentError) { @img.watermark(mark, 50, 50, 'x') }
+        assert_raise(TypeError) { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 'x') }
+        assert_raise(TypeError) { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10, 'x') }
     end
 
     def test_wave

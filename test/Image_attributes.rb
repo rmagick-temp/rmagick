@@ -51,6 +51,28 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(NoMethodError) { @img.base_rows = 1 }
     end
 
+    def test_bias
+        assert_nothing_raised { @img.bias }
+        assert_equal(0.0, @img.bias)
+        assert_instance_of(Float, @img.bias)
+
+        assert_nothing_raised { @img.bias = 0.1 }
+        assert_equal(25.5, @img.bias)
+
+        assert_nothing_raised { @img.bias = '10%' }
+        assert_equal(25.5, @img.bias)
+
+        assert_raise(TypeError) { @img.bias = [] }
+        assert_raise(ArgumentError) { @img.bias = 'x' }
+    end
+
+    def test_black_point_compensation
+        assert_nothing_raised { @img.black_point_compensation = true }
+        assert(@img.black_point_compensation)
+        assert_nothing_raised { @img.black_point_compensation = false }
+        assert(! @img.black_point_compensation)
+    end
+
     def test_blur
         assert_nothing_raised { @img.blur }
         assert_equal(1.0, @img.blur)
@@ -110,7 +132,12 @@ class Image_Attributes_UT < Test::Unit::TestCase
     def test_clip_mask
         cimg = Magick::Image.new(10,10)
         assert_nothing_raised { @img.clip_mask = cimg }
-        assert_raise(NoMethodError) { @img.clip_mask }
+        res = nil
+        assert_nothing_raised { res = @img.clip_mask }
+        assert_not_nil(res)
+        assert_not_same(cimg, res)
+        assert_equal(100, res.columns)
+        assert_equal(100, res.rows)
 
         # clip_mask expects an Image and calls `cur_image'
         assert_raise(NoMethodError) { @img.clip_mask = 2 }
@@ -406,7 +433,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.iptc_profile }
         assert_nil(@img.iptc_profile)
         assert_nothing_raised { @img.iptc_profile = 'xxx' }
-        assert_equal('xxx', @img.iptc_profile)
+        assert_nil(@img.iptc_profile)
         assert_raise(TypeError) { @img.iptc_profile = 2 }
     end
 
@@ -488,7 +515,14 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.orientation }
         assert_instance_of(Magick::OrientationType, @img.orientation)
         assert_equal(Magick::UndefinedOrientation, @img.orientation)
-        assert_raise(NoMethodError) { @img.orientation = Magick::UndefinedOrientation }
+        assert_nothing_raised { @img.orientation = Magick::UndefinedOrientation }
+        assert_nothing_raised { @img.orientation = Magick::TopLeftOrientation }
+        assert_nothing_raised { @img.orientation = Magick::TopRightOrientation }
+        assert_nothing_raised { @img.orientation = Magick::BottomRightOrientation }
+        assert_nothing_raised { @img.orientation = Magick::LeftTopOrientation }
+        assert_nothing_raised { @img.orientation = Magick::RightTopOrientation }
+        assert_nothing_raised { @img.orientation = Magick::RightBottomOrientation }
+        assert_nothing_raised { @img.orientation = Magick::LeftBottomOrientation }
     end
 
     def test_page

@@ -114,8 +114,65 @@ class Image1_UT < Test::Unit::TestCase
         assert_not_equal(img0, img1)
     end
 
+    def test_adaptive_blur
+        assert_nothing_raised do
+            res = @img.adaptive_blur
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.adaptive_blur(2) }
+        assert_nothing_raised { @img.adaptive_blur(3, 2) }
+        assert_raise(ArgumentError) { @img.adaptive_blur(3, 2, 2) }
+    end
+
+    def test_adaptive_blur_channel
+        assert_nothing_raised do
+            res = @img.adaptive_blur_channel
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.adaptive_blur_channel(2) }
+        assert_nothing_raised { @img.adaptive_blur_channel(3, 2) }
+        assert_nothing_raised { @img.adaptive_blur_channel(3, 2, Magick::RedChannel) }
+        assert_nothing_raised { @img.adaptive_blur_channel(3, 2, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(ArgumentError) { @img.adaptive_blur(3, 2, 2) }
+    end
+
+    def test_adaptive_resize
+        assert_nothing_raised do
+            res = @img.adaptive_resize(10,10)
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.adaptive_resize(2) }
+        assert_raise(ArgumentError) { @img.adaptive_resize(10,10,10) }
+        assert_raise(ArgumentError) { @img.adaptive_resize }
+    end
+
+    def test_adaptive_sharpen
+        assert_nothing_raised do
+            res = @img.adaptive_sharpen
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.adaptive_sharpen(2) }
+        assert_nothing_raised { @img.adaptive_sharpen(3, 2) }
+        assert_raise(ArgumentError) { @img.adaptive_sharpen(3, 2, 2) }
+    end
+
+    def test_adaptive_sharpen_channel
+        assert_nothing_raised do
+            res = @img.adaptive_sharpen_channel
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.adaptive_sharpen_channel(2) }
+        assert_nothing_raised { @img.adaptive_sharpen_channel(3, 2) }
+        assert_nothing_raised { @img.adaptive_sharpen_channel(3, 2, Magick::RedChannel) }
+        assert_nothing_raised { @img.adaptive_sharpen_channel(3, 2, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(ArgumentError) { @img.adaptive_sharpen(3, 2, 2) }
+    end
+
     def test_adaptive_threshold
-        assert_nothing_raised { @img.adaptive_threshold }
+        assert_nothing_raised do
+            res = @img.adaptive_threshold
+            assert_instance_of(Magick::Image, res)
+        end
         assert_nothing_raised { @img.adaptive_threshold(2) }
         assert_nothing_raised { @img.adaptive_threshold(2,4) }
         assert_nothing_raised { @img.adaptive_threshold(2,4,1) }
@@ -154,6 +211,17 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.affine_transform(0) }
         res = @img.affine_transform(affine)
         assert_instance_of(Magick::Image,  res)
+    end
+
+    def test_auto_orient
+        res = nil
+        assert_nothing_raised { res = @img.auto_orient }
+        assert_not_nil(res)
+        assert_instance_of(Magick::Image, res)
+        assert_not_same(@img, res)
+
+        assert_nothing_raised { res = @img.auto_orient! }
+        assert_nil(res)
     end
 
     def test_bilevel_channel

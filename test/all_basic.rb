@@ -5,15 +5,15 @@ require 'test/unit/ui/console/testrunner'
 
 
 module Test
-	module Unit
-		class TestCase
-			alias :_old_run_ :run
-			def run(result, &blk)
-				puts "Running #{@method_name}"
-				_old_run_(result, &blk)
-			end
-		end
-	end
+    module Unit
+        class TestCase
+            alias :_old_run_ :run
+            def run(result, &blk)
+                puts "Running #{@method_name}"
+                _old_run_(result, &blk)
+            end
+        end
+    end
 end
 
 
@@ -30,3 +30,5 @@ require 'Image3.rb'
 require 'ImageList1.rb'
 require 'ImageList2.rb'
 require 'Image_attributes.rb'
+require 'Pixel.rb'
+require 'Magick.rb'

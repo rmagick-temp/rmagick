@@ -236,6 +236,28 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_equal(2, @ilist.scene)
     end
 
+    def test_optimize_layers
+        layer_methods = [
+           Magick::CompareAnyLayer,
+           Magick::CompareClearLayer,
+           Magick::CompareOverlayLayer,
+           Magick::OptimizeLayer,
+           Magick::OptimizePlusLayer,
+           Magick::CoalesceLayer,
+           Magick::DisposeLayer
+           ]
+        @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_0.gif')
+        layer_methods.each do |method|
+            assert_nothing_raised do
+                res = @ilist.optimize_layers(method)
+                assert_instance_of(Magick::ImageList, res)
+                assert_equal(2, res.length)
+            end
+        end
+        assert_raise(ArgumentError) {@ilist.optimize_layers(Magick::UndefinedLayer)}
+        assert_raise(TypeError) {@ilist.optimize_layers(2)}
+    end
+
     def test_ping
         assert_nothing_raised { @ilist.ping(FLOWER_HAT) }
         assert_equal(1, @ilist.length)

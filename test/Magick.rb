@@ -37,3 +37,8 @@ class Magick_UT < Test::Unit::TestCase
 
     end
 end
+
+if __FILE__ == $0
+Test::Unit::UI::Console::TestRunner.run(Magick_UT)
+end
+

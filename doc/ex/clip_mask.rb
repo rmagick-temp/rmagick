@@ -12,7 +12,7 @@ require 'RMagick'
 # In this example the mask is simply the words "Flower Hat" in black text
 # positioned near the bottom of the white clip mask image.
 
-img = Magick::Image.read("../doc/ex/images/Flower_Hat.jpg").first
+img = Magick::Image.read("images/Flower_Hat.jpg").first
 q = Magick::Image.new(img.columns, img.rows)
 
 gc = Magick::Draw.new
@@ -31,7 +31,6 @@ q.matte = false
 img.clip_mask = q
 
 # Use the #level method to darken the image under the black part of the mask.
-# This adds a nice transparent label to the image.
 
 img = img.level(0, Magick::MaxRGB, 0.50)
 img.write('clip_mask.jpg')

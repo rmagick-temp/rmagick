@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.41 2006/06/20 23:33:07 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.42 2006/08/22 00:04:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -23,13 +23,14 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     Info *info;
     volatile VALUE info_obj;
 
-    // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
-
     if (argc > 1)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
     }
+
+    // Convert the images array to an images sequence.
+    images = rm_images_from_imagelist(self);
+
     if (argc == 1)
     {
         Image *img;
@@ -174,12 +175,12 @@ ImageList_display(VALUE self)
     Info *info;
     volatile VALUE info_obj;
 
-    // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
-
     // Create a new Info object to use with this call
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
+
+    // Convert the images array to an images sequence.
+    images = rm_images_from_imagelist(self);
 
     (void) DisplayImages(info, images);
     rm_split(images);
@@ -337,8 +338,8 @@ ImageList_morph(VALUE self, VALUE nimages)
         rb_raise(rb_eArgError, "number of intervening images must be > 0");
     }
 
-    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
+    images = rm_images_from_imagelist(self);
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
@@ -360,8 +361,8 @@ ImageList_mosaic(VALUE self)
     Image *images, *new_image;
     ExceptionInfo exception;
 
-    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
+    images = rm_images_from_imagelist(self);
     new_image = MosaicImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
@@ -386,29 +387,34 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     MagickLayerMethod mthd;
     ExceptionInfo exception;
 
-    images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
+    images = rm_images_from_imagelist(self);
 
     switch (mthd)
     {
 #if defined(HAVE_COALESCELAYER)
-      case CoalesceLayer:
-        new_images = CoalesceImages(images, &exception);
-        break;
-      case DisposeLayer:
-        new_images = DisposeImages(images, &exception);
-        break;
+        case CoalesceLayer:
+            new_images = CoalesceImages(images, &exception);
+            break;
+        case DisposeLayer:
+            new_images = DisposeImages(images, &exception);
+            break;
 #endif
-      case OptimizeLayer:
-        new_images = OptimizeImageLayers(images, &exception);
-        break;
-      case OptimizePlusLayer:
-        new_images = OptimizePlusImageLayers(images, &exception);
-        break;
-      default:
-        new_images = CompareImageLayers(images, mthd, &exception);
-        break;
+        case OptimizeLayer:
+            new_images = OptimizeImageLayers(images, &exception);
+            break;
+        case OptimizePlusLayer:
+            new_images = OptimizePlusImageLayers(images, &exception);
+            break;
+        case CompareAnyLayer:
+        case CompareClearLayer:
+        case CompareOverlayLayer:
+            new_images = CompareImageLayers(images, mthd, &exception);
+            break;
+        default:
+            rb_raise(rb_eArgError, "undefined layer method");
+            break;
     }
 
     rm_split(images);
@@ -631,7 +637,7 @@ ImageList_to_blob(VALUE self)
 
     GetExceptionInfo(&exception);
     (void) SetImageInfo(info, True, &exception);
-    CHECK_EXCEPTION()
+    rm_check_exception(&exception, images, RetainOnError);
 
     if (*info->magick != '\0')
     {
@@ -707,9 +713,6 @@ ImageList_write(VALUE self, VALUE file)
     Data_Get_Struct(info_obj, Info, info);
 
 
-    // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
-
     if (TYPE(file) == T_FILE)
     {
         OpenFile *fptr;
@@ -731,6 +734,9 @@ ImageList_write(VALUE self, VALUE file)
         SetImageInfoFile(info, NULL);
     }
 
+    // Convert the images array to an images sequence.
+    images = rm_images_from_imagelist(self);
+
     // Copy the filename into each images. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c
     for (scene = 0, img = images; img; img = GetNextImageInList(img))
@@ -741,10 +747,13 @@ ImageList_write(VALUE self, VALUE file)
 
     GetExceptionInfo(&exception);
     (void) SetImageInfo(info, True, &exception);
+    rm_check_exception(&exception, images, RetainOnError);
+    DestroyExceptionInfo(&exception);
 
     // Find out if the format supports multi-images files.
+    GetExceptionInfo(&exception);
     m = GetMagickInfo(info->magick, &exception);
-    CHECK_EXCEPTION()
+    rm_check_exception(&exception, images, RetainOnError);
     DestroyExceptionInfo(&exception);
 
     // Tell WriteImage if we want a multi-images file.

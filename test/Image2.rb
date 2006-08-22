@@ -53,6 +53,23 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.contrast(true, 2) }
     end
 
+    def test_contrast_stretch_channel
+        assert_nothing_raised do
+            res = @img.contrast_stretch_channel(25)
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.contrast_stretch_channel(25, 50) }
+        assert_nothing_raised { @img.contrast_stretch_channel('10%') }
+        assert_nothing_raised { @img.contrast_stretch_channel('10%', '50%') }
+        assert_nothing_raised { @img.contrast_stretch_channel(25, 50, Magick::RedChannel) }
+        assert_nothing_raised { @img.contrast_stretch_channel(25, 50, Magick::RedChannel, Magick::GreenChannel) }
+        assert_raise(TypeError) { @img.contrast_stretch_channel(25, 50, 'x') }
+        assert_raise(ArgumentError) { @img.contrast_stretch_channel }
+        assert_raise(ArgumentError) { @img.contrast_stretch_channel('x') }
+        assert_raise(ArgumentError) { @img.contrast_stretch_channel(25, 'x') }
+
+    end
+
     def test_convolve
         kernel = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
         order = 3
@@ -946,52 +963,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.posterize(5, true) }
         assert_raise(ArgumentError) { @img.posterize(5, true, 'x') }
     end
-=begin
-    def test_preview
-        preview_types = [
-          Magick::RotatePreview,
-          Magick::ShearPreview,
-          Magick::RollPreview,
-          Magick::HuePreview,
-          Magick::SaturationPreview,
-          Magick::BrightnessPreview,
-          Magick::GammaPreview,
-          Magick::SpiffPreview,
-          Magick::DullPreview,
-          Magick::GrayscalePreview,
-          Magick::QuantizePreview,
-          Magick::DespecklePreview,
-          Magick::ReduceNoisePreview,
-          Magick::AddNoisePreview,
-          Magick::SharpenPreview,
-          Magick::BlurPreview,
-          Magick::ThresholdPreview,
-          Magick::EdgeDetectPreview,
-          Magick::SpreadPreview,
-          Magick::SolarizePreview,
-          Magick::ShadePreview,
-          Magick::RaisePreview,
-          Magick::SegmentPreview,
-          Magick::SwirlPreview,
-          Magick::ImplodePreview,
-          Magick::WavePreview,
-          Magick::OilPaintPreview,
-          Magick::CharcoalDrawingPreview,
-          Magick::JPEGPreview ]
 
-        hat = Magick::Image.read(IMAGES_DIR+'/Flower_Hat.jpg').first
-        assert_nothing_raised do
-            prev = hat.preview(Magick::RotatePreview)
-            assert_instance_of(Magick::Image, prev)
-        end
-        puts "\n"
-        preview_types.each do |type|
-            puts "testing #{type.to_s}..."
-            assert_nothing_raised { prev = hat.preview(type) }
-        end
-        assert_raise(TypeError) { @img.preview(2) }
-    end
-=end
 end
 
 if __FILE__ == $0

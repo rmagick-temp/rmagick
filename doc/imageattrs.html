@@ -433,14 +433,26 @@
     of the clip mask. This is <em>not</em> a copy of the mask image
     that was used to create the clip mask, nor is it the clip mask
     image itself. Therefore, modifying the image returned by
-    <code>clip_mask</code> does not change the clip mask
-    itself.</p>
+    <code>clip_mask</code> does not change the clip mask itself. To
+    change the clip mask you must assign a new image to the
+    <code>clip_mask=</code> attribute writer.</p>
 
     <h4>Arguments</h4>
 
     <p>If the value is an imagelist, uses the current image as the
     mask image. Assign <code>nil</code> to remove the clip
     mask.</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('clip_mask.rb.html')"><img src=
+    "ex/clip_mask.jpg" alt="clip_mask example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/clip_mask.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
   </div>
 
   <div class="sig">

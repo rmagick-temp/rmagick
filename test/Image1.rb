@@ -205,6 +205,14 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.add_noise_channel }
     end
 
+    def add_delete_profile
+        img = Magick::Image.read("cmyk.jpg"),first
+        assert_nothing_raised { img.add_profile("cmyk.icm") }
+        assert_nothing_raised { img.add_profile("srgb.icm") }
+        img.each_profile { |name, value| assert_equal("icc", name) }
+        assert_nothing_raised { img.delete_profile("icc") }
+    end
+
     def test_affine_matrix
         affine = Magick::AffineMatrix.new(1, Math::PI/6, Math::PI/6, 1, 0, 0)
         assert_nothing_raised { @img.affine_transform(affine) }
@@ -214,14 +222,17 @@ class Image1_UT < Test::Unit::TestCase
     end
 
     def test_auto_orient
-        res = nil
-        assert_nothing_raised { res = @img.auto_orient }
-        assert_not_nil(res)
-        assert_instance_of(Magick::Image, res)
-        assert_not_same(@img, res)
+        assert_nothing_raised do
+            res = @img.auto_orient
+            assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
+        end
 
-        assert_nothing_raised { res = @img.auto_orient! }
-        assert_nil(res)
+        assert_nothing_raised do
+            res = @img.auto_orient!
+            # When not changed, returns nil
+            assert_nil(res)
+        end
     end
 
     def test_bilevel_channel

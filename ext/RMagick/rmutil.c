@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.79 2006/08/10 00:09:07 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.80 2006/08/24 21:45:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1102,7 +1102,7 @@ AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
     am->sy = v == Qnil ? 1.0 : NUM2DBL(v);
     v = rb_ary_entry(values, 4);
     am->tx = v == Qnil ? 0.0 : NUM2DBL(v);
-    v = rb_ary_entry(values, 4);
+    v = rb_ary_entry(values, 5);
     am->ty = v == Qnil ? 0.0 : NUM2DBL(v);
 }
 

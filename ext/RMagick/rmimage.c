@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.170 2006/08/20 23:47:52 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.171 2006/08/26 20:29:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4726,17 +4726,17 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#gamma_correct(red_gamma<, green_gamma<, blue_gamma
-                                         <, opacity_gamma>>>)
+    Method:     Image#gamma_correct(red_gamma<, green_gamma<, blue_gamma>>>)
     Purpose:    gamma-correct an image
     Notes:      At least red_gamma must be specified. If one or more levels are
                 omitted, the last specified number is used as the default.
+                For backward compatibility accept a 4th argument but ignore it.
 */
 VALUE
 Image_gamma_correct(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double red_gamma, green_gamma, blue_gamma, opacity_gamma;
+    double red_gamma, green_gamma, blue_gamma;
     char gamma[50];
 
     switch(argc)
@@ -4750,31 +4750,25 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
             {
                 rb_raise(rb_eArgError, "invalid gamma value (%f)", red_gamma);
             }
-            green_gamma = blue_gamma = opacity_gamma = red_gamma;
+            green_gamma = blue_gamma = red_gamma;
             break;
         case 2:
             red_gamma   = NUM2DBL(argv[0]);
             green_gamma = NUM2DBL(argv[1]);
-            blue_gamma  = opacity_gamma = green_gamma;
+            blue_gamma  = green_gamma;
             break;
         case 3:
-            red_gamma     = NUM2DBL(argv[0]);
-            green_gamma   = NUM2DBL(argv[1]);
-            blue_gamma    = NUM2DBL(argv[2]);
-            opacity_gamma = blue_gamma;
-            break;
         case 4:
             red_gamma     = NUM2DBL(argv[0]);
             green_gamma   = NUM2DBL(argv[1]);
             blue_gamma    = NUM2DBL(argv[2]);
-            opacity_gamma = NUM2DBL(argv[3]);
             break;
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
             break;
     }
 
-    sprintf(gamma, "%f,%f,%f,%f", red_gamma, green_gamma, blue_gamma, opacity_gamma);
+    sprintf(gamma, "%f,%f,%f", red_gamma, green_gamma, blue_gamma);
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);

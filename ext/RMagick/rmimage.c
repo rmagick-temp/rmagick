@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.171 2006/08/26 20:29:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.172 2006/08/26 22:42:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1916,8 +1916,7 @@ Image_color_histogram(VALUE self)
     Purpose:    retrieve the specified profile as a String object
     Notes:      This function simply converts the image to a blob using
                 the profile name as the magick string. The output blob
-                is the profile.  Called from Image_color_profile and
-                Image_iptc_profile.
+                is the profile.  Called from Image_each_profile.
 */
 static VALUE get_profile(VALUE self, const char *profile_name)
 {
@@ -2098,7 +2097,37 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
 VALUE
 Image_color_profile(VALUE self)
 {
-    return get_profile(self, "ICC");
+    Image *image;
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
+
+    const StringInfo *profile;
+
+    Data_Get_Struct(self, Image, image);
+    profile = GetImageProfile(image, "icc");
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new((char *)profile->datum, (long)profile->length);
+
+#else
+
+    unsigned char *profile;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = GetImageProfile("ICM", &length);
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new(profile, (long)length);
+
+#endif
 }
 
 /*
@@ -5400,14 +5429,42 @@ Image_interlace_eq(VALUE self, VALUE interlace)
 /*
     Method:     Image#iptc_profile
     Purpose:    Return the IPTC profile as a String.
-    Notes:      If there is no profile, returns ""
-                This method has no real use but is retained for compatibility
-                with earlier releases of RMagick, where it had no real use either.
+    Notes:      If there is no profile, returns Qnil
 */
 VALUE
 Image_iptc_profile(VALUE self)
 {
-    return get_profile(self, "IPTC");
+    Image *image;
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
+    const StringInfo *profile;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = GetImageProfile(image, "iptc");
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new((char *)profile->datum, (long)profile->length);
+
+#else
+
+    unsigned char *profile;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = GetImageProfile(image, "iptc", &length);
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_string_new((char *)profile, (long)length);
+
+#endif
 }
 
 

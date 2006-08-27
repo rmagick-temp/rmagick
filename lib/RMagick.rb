@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.46 2006/08/16 21:54:56 rmagick Exp $
+# $Id: RMagick.rb,v 1.47 2006/08/27 17:45:14 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -590,6 +590,115 @@ class Draw
     end
 end # class Magick::Draw
 
+
+# Define IPTC record number:dataset tags for use with Image#get_iptc_dataset
+module IPTC
+    module Envelope
+        Model_Version                          = "1:00"
+        Destination                            = "1:05"
+        File_Format                            = "1:20"
+        File_Format_Version                    = "1:22"
+        Service_Identifier                     = "1:30"
+        Envelope_Number                        = "1:40"
+        Product_ID                             = "1:50"
+        Envelope_Priority                      = "1:60"
+        Date_Sent                              = "1:70"
+        Time_Sent                              = "1:80"
+        Coded_Character_Set                    = "1:90"
+        UNO                                    = "1:100"
+        Unique_Name_of_Object                  = "1:100"
+        ARM_Identifier                         = "1:120"
+        ARM_Version                            = "1:122"
+    end
+
+    module Application
+       #Record_Version                         = "2:00" abends with IM 6.2.9
+        Object_Type_Reference                  = "2:03"
+        Object_Name                            = "2:05"
+        Title                                  = "2:05"
+        Edit_Status                            = "2:07"
+        Editorial_Update                       = "2:08"
+        Urgency                                = "2:10"
+        Subject_Reference                      = "2:12"
+        Category                               = "2:15"
+        Supplemental_Category                  = "2:20"
+        Fixture_Identifier                     = "2:22"
+        Keywords                               = "2:25"
+        Content_Location_Code                  = "2:26"
+        Content_Location_Name                  = "2:27"
+        Release_Date                           = "2:30"
+        Release_Time                           = "2:35"
+        Expiration_Date                        = "2:37"
+        Expiration_Time                        = "2:35"
+        Special_Instructions                   = "2:40"
+        Action_Advised                         = "2:42"
+        Reference_Service                      = "2:45"
+        Reference_Date                         = "2:47"
+        Reference_Number                       = "2:50"
+        Date_Created                           = "2:55"
+        Time_Created                           = "2:60"
+        Digital_Creation_Date                  = "2:62"
+        Digital_Creation_Time                  = "2:63"
+        Originating_Program                    = "2:65"
+        Program_Version                        = "2:70"
+        Object_Cycle                           = "2:75"
+        By_Line                                = "2:80"
+        Author                                 = "2:80"
+        By_Line_Title                          = "2:85"
+        Author_Position                        = "2:85"
+        City                                   = "2:90"
+        Sub_Location                           = "2:92"
+        Province                               = "2:95"
+        State                                  = "2:95"
+        Country_Primary_Location_Code          = "2:100"
+        Country_Primary_Location_Name          = "2:101"
+        Original_Transmission_Reference        = "2:103"
+        Headline                               = "2:105"
+        Credit                                 = "2:110"
+        Source                                 = "2:115"
+        Copyright_Notice                       = "2:116"
+        Contact                                = "2:118"
+        Abstract                               = "2:120"
+        Caption                                = "2:120"
+        Editor                                 = "2:122"
+        Caption_Writer                         = "2:122"
+        Rasterized_Caption                     = "2:125"
+        Image_Type                             = "2:130"
+        Image_Orientation                      = "2:131"
+        Language_Identifier                    = "2:135"
+        Audio_Type                             = "2:150"
+        Audio_Sampling_Rate                    = "2:151"
+        Audio_Sampling_Resolution              = "2:152"
+        Audio_Duration                         = "2:153"
+        Audio_Outcue                           = "2:154"
+        ObjectData_Preview_File_Format         = "2:200"
+        ObjectData_Preview_File_Format_Version = "2:201"
+        ObjectData_Preview_Data                = "2:202"
+    end
+
+    module Pre_ObjectData_Descriptor
+        Size_Mode                              = "7:10"
+        Max_Subfile_Size                       = "7:20"
+        ObjectData_Size_Announced              = "7:90"
+        Maximum_ObjectData_Size                = "7:95"
+    end
+
+    module ObjectData
+        Subfile                                = "8:10"
+    end
+
+    module Post_ObjectData_Descriptor
+        Confirmed_ObjectData_Size              = "9:10"
+    end
+
+    # Make all constants above immutable
+    constants.each do |record|
+        rec = const_get(record)
+        rec.constants.each { |ds| rec.const_get(ds).freeze }
+    end
+
+end # module Magick::IPTC
+
 # Ruby-level Magick::Image methods
 class Image
     include Comparable
@@ -696,6 +805,23 @@ class Image
             end
         end
         return hash
+    end
+
+    # Retrieve IPTC information by record number:dataset tag constant defined in
+    # Magick::IPTC, above.
+    def get_iptc_dataset(ds)
+        self['IPTC:'+ds]
+    end
+
+    # Iterate over IPTC record number:dataset tags, yield for each non-nil dataset
+    def each_iptc_dataset
+        Magick::IPTC.constants.each do |record|
+            rec = const_get(record)
+            rec.constants.each do |dataset|
+                data_field = get_iptc_dataset(rec.const_get(dataset))
+                yield(dataset, data_field) unless data_field.nil?
+            end
+        end
     end
 
     # Patches problematic change to the order of arguments in 1.11.0.

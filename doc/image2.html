@@ -15,6 +15,13 @@
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
 <script type="text/javascript" src="scripts/doc.js">
 </script>
+<script type="text/javascript" src="scripts/stripeTables.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+    addLoadEvent(stripeTables);
+  //]]>
+</script>
 <script type="text/javascript">
   //<![CDATA[
     <!-- Pre-load this image so that the browser knows how big it is. -->
@@ -24,6 +31,19 @@
     // End -->
   //]]>
 </script>
+<style type="text/css">
+  /*<![CDATA[*/
+#iptc  {
+    border: thin solid black;
+}
+#iptc th {
+    background-color: #c0c0c0;
+}
+td.ds {
+    text-align: right;
+}
+  /*]]>*/
+</style>
 </head>
 
 <body>
@@ -71,6 +91,8 @@
 
           <li><a href="#frame">frame</a></li>
 
+          <li><a href="#freeze">freeze</a></li>
+
           <li><a href="#gamma_channel">gamma_channel</a></li>
 
           <li><a href="#gamma_correct">gamma_correct</a></li>
@@ -90,6 +112,8 @@
 
       <div class="toccol">
         <ul>
+          <li><a href="#get_iptc_dataset">get_iptc_dataset</a></li>
+
           <li><a href="#get_pixels">get_pixels</a></li>
 
           <li><a href="#gray_q">gray?</a></li>
@@ -642,6 +666,23 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   </div>
 
   <div class="sig">
+    <h3 id="freeze">freeze</h3>
+
+    <p><span class="arg">image</span>.freeze -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Prevent further modifications to the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
     <h3 id="gamma_channel">gamma_channel</h3>
 
     <p><span class="arg">image</span>.gamma_channel(<span class=
@@ -693,8 +734,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p><span class="arg">image</span>.gamma_correct(<span class=
     "arg">red_gamma</span>[,<span class="arg">green_gamma</span>[,
-    <span class="arg">blue_gamma</span>[, <span class=
-    "arg">opacity_gamma</span>]]]) -&gt; <em>anImage</em></p>
+    <span class="arg">blue_gamma</span>]]) -&gt;
+    <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -915,6 +956,545 @@ image.get_exif_by_number() &raquo;
     <h4>See also</h4>
 
     <p><a href="#get_exif_by_entry">get_exif_by_entry</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="get_iptc_dataset">get_iptc_dataset</h3>
+
+    <p><span class="arg">image</span>.get_iptc_dataset(<span class=
+    "arg">ds</span>) -&gt; <em>aString</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Retrieves the data field for the specified DataSet, or
+    <code>nil</code> if the DataSet is not used or the data field
+    has length 0.</p>
+
+    <h4>Arguments</h4>
+
+    <p>RMagick defines the following constants for use as arguments
+    to this method. All the constants are in the Magick::IPTC
+    namespace. Notice that some DataSets have two names.</p>
+
+    <table id="iptc" class="striped" summary=
+    "IPTC dataset constants">
+      <tr>
+        <th>Constant</th>
+
+        <th>Record:DataSet</th>
+      </tr>
+
+      <tr>
+       <td>
+       Envelope::Model_Version</td>
+
+       <td class="ds">1:00</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Destination</td>
+
+       <td class="ds">1:05</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::UNO</td>
+
+       <td class="ds">1:100</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Unique_Name_of_Object</td>
+
+       <td class="ds">1:100</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::ARM_Identifier</td>
+
+       <td class="ds">1:120</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::ARM_Version</td>
+
+       <td class="ds">1:122</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::File_Format</td>
+
+       <td class="ds">1:20</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::File_Format_Version</td>
+
+       <td class="ds">1:22</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Service_Identifier</td>
+
+       <td class="ds">1:30</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Envelope_Number</td>
+
+       <td class="ds">1:40</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Product_ID</td>
+
+       <td class="ds">1:50</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Envelope_Priority</td>
+
+       <td class="ds">1:60</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Date_Sent</td>
+
+       <td class="ds">1:70</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Time_Sent</td>
+
+       <td class="ds">1:80</td>
+      </tr>
+      <tr>
+       <td>
+       Envelope::Coded_Character_Set</td>
+
+       <td class="ds">1:90</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Object_Type_Reference</td>
+
+       <td class="ds">2:03</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Object_Name</td>
+
+       <td class="ds">2:05</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Title</td>
+
+       <td class="ds">2:05</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Edit_Status</td>
+
+       <td class="ds">2:07</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Editorial_Update</td>
+
+       <td class="ds">2:08</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Urgency</td>
+
+       <td class="ds">2:10</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Country_Primary_Location_Code</td>
+
+       <td class="ds">2:100</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Country_Primary_Location_Name</td>
+
+       <td class="ds">2:101</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Original_Transmission_Reference</td>
+
+       <td class="ds">2:103</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Headline</td>
+
+       <td class="ds">2:105</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Credit</td>
+
+       <td class="ds">2:110</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Source</td>
+
+       <td class="ds">2:115</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Copyright_Notice</td>
+
+       <td class="ds">2:116</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Contact</td>
+
+       <td class="ds">2:118</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Subject_Reference</td>
+
+       <td class="ds">2:12</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Abstract</td>
+
+       <td class="ds">2:120</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Caption</td>
+
+       <td class="ds">2:120</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Caption_Writer</td>
+
+       <td class="ds">2:122</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Editor</td>
+
+       <td class="ds">2:122</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Rasterized_Caption</td>
+
+       <td class="ds">2:125</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Image_Type</td>
+
+       <td class="ds">2:130</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Image_Orientation</td>
+
+       <td class="ds">2:131</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Language_Identifier</td>
+
+       <td class="ds">2:135</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Category</td>
+
+       <td class="ds">2:15</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Audio_Type</td>
+
+       <td class="ds">2:150</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Audio_Sampling_Rate</td>
+
+       <td class="ds">2:151</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Audio_Sampling_Resolution</td>
+
+       <td class="ds">2:152</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Audio_Duration</td>
+
+       <td class="ds">2:153</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Audio_Outcue</td>
+
+       <td class="ds">2:154</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Supplemental_Category</td>
+
+       <td class="ds">2:20</td>
+      </tr>
+      <tr>
+       <td>
+       Application::ObjectData_Preview_File_Format</td>
+
+       <td class="ds">2:200</td>
+      </tr>
+      <tr>
+       <td>
+       Application::ObjectData_Preview_File_Format_Version</td>
+
+       <td class="ds">2:201</td>
+      </tr>
+      <tr>
+       <td>
+       Application::ObjectData_Preview_Data</td>
+
+       <td class="ds">2:202</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Fixture_Identifier</td>
+
+       <td class="ds">2:22</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Keywords</td>
+
+       <td class="ds">2:25</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Content_Location_Code</td>
+
+       <td class="ds">2:26</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Content_Location_Name</td>
+
+       <td class="ds">2:27</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Release_Date</td>
+
+       <td class="ds">2:30</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Release_Time</td>
+
+       <td class="ds">2:35</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Expiration_Time</td>
+
+       <td class="ds">2:35</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Expiration_Date</td>
+
+       <td class="ds">2:37</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Special_Instructions</td>
+
+       <td class="ds">2:40</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Action_Advised</td>
+
+       <td class="ds">2:42</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Reference_Service</td>
+
+       <td class="ds">2:45</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Reference_Date</td>
+
+       <td class="ds">2:47</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Reference_Number</td>
+
+       <td class="ds">2:50</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Date_Created</td>
+
+       <td class="ds">2:55</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Time_Created</td>
+
+       <td class="ds">2:60</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Digital_Creation_Date</td>
+
+       <td class="ds">2:62</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Digital_Creation_Time</td>
+
+       <td class="ds">2:63</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Originating_Program</td>
+
+       <td class="ds">2:65</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Program_Version</td>
+
+       <td class="ds">2:70</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Object_Cycle</td>
+
+       <td class="ds">2:75</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Author</td>
+
+       <td class="ds">2:80</td>
+      </tr>
+      <tr>
+       <td>
+       Application::By_Line</td>
+
+       <td class="ds">2:80</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Author_Position</td>
+
+       <td class="ds">2:85</td>
+      </tr>
+      <tr>
+       <td>
+       Application::By_Line_Title</td>
+
+       <td class="ds">2:85</td>
+      </tr>
+      <tr>
+       <td>
+       Application::City</td>
+
+       <td class="ds">2:90</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Sub_Location</td>
+
+       <td class="ds">2:92</td>
+      </tr>
+      <tr>
+       <td>
+       Application::Province</td>
+
+       <td class="ds">2:95</td>
+      </tr>
+      <tr>
+       <td>
+       Application::State</td>
+
+       <td class="ds">2:95</td>
+      </tr>
+      <tr>
+       <td>
+       Pre_ObjectData_Descriptor::Size_Mode</td>
+
+       <td class="ds">7:10</td>
+      </tr>
+      <tr>
+       <td>
+       Pre_ObjectData_Descriptor::Max_Subfile_Size</td>
+
+       <td class="ds">7:20</td>
+      </tr>
+      <tr>
+       <td>
+       Pre_ObjectData_Descriptor::ObjectData_Size_Announced</td>
+
+       <td class="ds">7:90</td>
+      </tr>
+      <tr>
+       <td>
+       Pre_ObjectData_Descriptor::Maximum_ObjectData_Size</td>
+
+       <td class="ds">7:95</td>
+      </tr>
+      <tr>
+       <td>
+       ObjectData::Subfile</td>
+
+       <td class="ds">8:10</td>
+      </tr>
+      <tr>
+       <td>
+       Post_ObjectData_Descriptor::Confirmed_ObjectData_Size</td>
+
+       <td class="ds">9:10</td>
+      </tr>
+
+    </table>
+
+    <h4>Example</h4>
+    <pre>
+img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
+</pre>
+
+    <h4>Returns</h4>
+
+    <p>The data field or nil</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image1.html#each_iptc_dataset">each_iptc_dataset</a>, <a href=
+    "imageattrs.html#iptc_profile">iptc_profile</a></p>
   </div>
 
   <div class="sig">

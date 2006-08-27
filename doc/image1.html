@@ -181,13 +181,13 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
+
+          <li><a href="#contrast">contrast</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#contrast">contrast</a></li>
-
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
 
@@ -223,6 +223,9 @@ float: left;
           "#distortion_channel">distortion_channel</a></li>
 
           <li><a href="#dup">dup</a></li>
+
+          <li><a href=
+          "#each_iptc_dataset">each_iptc_dataset</a></li>
 
           <li><a href="#each_profile">each_profile</a></li>
 
@@ -3649,6 +3652,40 @@ exit
     <h4>See also</h4>
 
     <p><a href="#clone">clone</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="each_iptc_dataset">each_iptc_dataset</h3>
+
+    <p>image.each_iptc_dataset -&gt; <code>nil</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Iterates over the IPTC DataSet constants in Magick::IPTC. If
+    the image's IPTC profile has the DataSet and the data field has
+    non-0 length, yields to the block. The IPTC DataSet constants
+    are listed <a href="image2.html#get_iptc_dataset">here</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The block arguments are:</p>
+
+    <dl>
+      <dt>dataset</dt>
+
+      <dd>The DataSet name</dd>
+
+      <dt>data_field</dt>
+
+      <dd>The data field</dd>
+    </dl>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image2.html#get_iptc_dataset">get_iptc_dataset</a></p>
   </div>
 
   <div class="sig">

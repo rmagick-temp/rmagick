@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.47 2006/08/27 17:45:14 rmagick Exp $
+# $Id: RMagick.rb,v 1.48 2006/08/27 23:06:00 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -816,12 +816,13 @@ class Image
     # Iterate over IPTC record number:dataset tags, yield for each non-nil dataset
     def each_iptc_dataset
         Magick::IPTC.constants.each do |record|
-            rec = const_get(record)
+            rec = Magick::IPTC.const_get(record)
             rec.constants.each do |dataset|
                 data_field = get_iptc_dataset(rec.const_get(dataset))
                 yield(dataset, data_field) unless data_field.nil?
             end
         end
+        nil
     end
 
     # Patches problematic change to the order of arguments in 1.11.0.

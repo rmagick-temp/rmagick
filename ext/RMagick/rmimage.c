@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.172 2006/08/26 22:42:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.173 2006/08/28 22:21:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1695,9 +1695,16 @@ Image_clip_mask(VALUE self)
 
     GetExceptionInfo(&exception);
 
+#if defined(HAVE_GETIMAGECLIPMASK)
+
     // The returned clip mask is a clone, ours to keep.
     clip_mask = GetImageClipMask(image, &exception);
     rm_check_exception(&exception, clip_mask, DestroyOnError);
+
+#else
+    clip_mask = image->clip_mask;
+#endif
+
     DestroyExceptionInfo(&exception);
 
     return clip_mask ? rm_image_new(clip_mask) : Qnil;
@@ -1737,7 +1744,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
             rm_check_exception(&exception, resized_image, DestroyOnError);
             DestroyExceptionInfo(&exception);
             rm_ensure_result(resized_image);
-            clip_mask = DestroyImage(clip_mask);
+            (void) DestroyImage(clip_mask);
             clip_mask = resized_image;
         }
 
@@ -1762,16 +1769,24 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
           }
           if (SyncImagePixels(clip_mask) == MagickFalse)
           {
-              clip_mask = DestroyImage(clip_mask);
+              (void) DestroyImage(clip_mask);
               rm_magick_error("SyncImagePixels failed", NULL);
           }
         }
 
-        if (SetImageStorageClass(clip_mask,DirectClass) == MagickFalse)
+#if defined(HAVE_SETIMAGESTORAGECLASS)
+        if (SetImageStorageClass(clip_mask, DirectClass) == MagickFalse)
         {
-            clip_mask = DestroyImage(clip_mask);
+            (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
         }
+#else
+        if (clip_mask->storage_class == PseudoClass)
+        {
+            SyncImage(image);
+            image->storage_class = DirectClass;
+        }
+#endif
 
         clip_mask->matte = MagickTrue;
 
@@ -1779,7 +1794,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         // destroy our copy after SetImageClipMask is done with it.
 
         (void) SetImageClipMask(image, clip_mask);
-        clip_mask = DestroyImage(clip_mask);
+        (void) DestroyImage(clip_mask);
     }
     else
     {
@@ -1910,60 +1925,6 @@ Image_color_histogram(VALUE self)
 #endif
 }
 
-
-/*
-    Static:     get_profile
-    Purpose:    retrieve the specified profile as a String object
-    Notes:      This function simply converts the image to a blob using
-                the profile name as the magick string. The output blob
-                is the profile.  Called from Image_each_profile.
-*/
-static VALUE get_profile(VALUE self, const char *profile_name)
-{
-    Image *image, *profile_image;
-    ImageInfo *info;
-    ExceptionInfo exception;
-    const MagickInfo *m;
-    volatile VALUE profile;
-    void *blob = NULL;
-    size_t length = 2048;       // Do what Magick++ does
-
-    Data_Get_Struct(self, Image, image);
-
-    // Make a copy of the image
-    GetExceptionInfo(&exception);
-    profile_image = CloneImage(image, 0, 0, True, &exception);
-    rm_check_exception(&exception, image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
-    rm_ensure_result(profile_image);
-
-    // Set the encoding format to the specified profile name
-    GetExceptionInfo(&exception);
-    m = GetMagickInfo(profile_name, &exception);
-    CHECK_EXCEPTION()
-
-    strncpy(profile_image->magick, m->name, MaxTextExtent);
-    profile_image->magick[MaxTextExtent-1] = '\0';
-
-    // "Convert" the image to a profile
-    info = CloneImageInfo(NULL);
-    blob = ImageToBlob(info, profile_image, &length, &exception);
-    DestroyImageInfo(info);
-    DestroyImage(profile_image);
-
-    // Don't raise an exception. Return nil instead.
-    DestroyExceptionInfo(&exception);
-
-    if (blob)
-    {
-        profile = rb_str_new(blob, length);
-        magick_free((void*)blob);
-        return profile;
-    }
-
-    return Qnil;
-
-}
 
 
 /*
@@ -2114,18 +2075,18 @@ Image_color_profile(VALUE self)
 
 #else
 
-    unsigned char *profile;
+    const unsigned char *profile;
     size_t length;
 
     Data_Get_Struct(self, Image, image);
 
-    profile = GetImageProfile("ICM", &length);
+    profile = GetImageProfile(image, "ICM", &length);
     if (!profile)
     {
         return Qnil;
     }
 
-    return rb_str_new(profile, (long)length);
+    return rb_str_new((char *)profile, (long)length);
 
 #endif
 }
@@ -3919,7 +3880,36 @@ Image_each_profile(VALUE self)
     while (name)
     {
         rb_ary_store(ary, 0, rb_str_new2(name));
-        rb_ary_store(ary, 1, get_profile(self, name));
+#if defined(HAVE_ACQUIRESTRINGINFO)
+        {
+            const StringInfo *profile;
+
+            profile = GetImageProfile(image, name);
+            if (!profile)
+            {
+                rb_ary_store(ary, 1, Qnil);
+            }
+            else
+            {
+                rb_ary_store(ary, 1, rb_str_new((char *)profile->datum, (long)profile->length));
+            }
+        }
+#else
+        {
+            unsigned char *profile;
+            size_t length;
+
+            profile = GetImageProfile(image, "iptc", &length);
+            if (!profile)
+            {
+                rb_ary_store(ary, 1, Qnil);
+            }
+            else
+            {
+                rb_ary_store(ary, 1, rb_string_new((char *)profile, (long)length));
+            }
+        }
+#endif
         val = rb_yield(ary);
         name = GetNextImageProfile(image);
     }
@@ -5451,7 +5441,7 @@ Image_iptc_profile(VALUE self)
 
 #else
 
-    unsigned char *profile;
+    const unsigned char *profile;
     size_t length;
 
     Data_Get_Struct(self, Image, image);
@@ -5462,7 +5452,7 @@ Image_iptc_profile(VALUE self)
         return Qnil;
     }
 
-    return rb_string_new((char *)profile, (long)length);
+    return rb_str_new((char *)profile, (long)length);
 
 #endif
 }

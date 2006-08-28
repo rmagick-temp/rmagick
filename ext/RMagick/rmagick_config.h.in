@@ -75,6 +75,8 @@
 #undef HAVE_GETIMAGECHANNELMEAN
 /* Introduced in IM 6.2.0 */
 #undef HAVE_GETIMAGECHANNELDISTORTION
+/* Not available in GM */
+#undef HAVE_GETIMAGECLIPMASK
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGEHISTOGRAM
 /* Introduced in IM 6.1.5 */

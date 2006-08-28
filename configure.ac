@@ -117,7 +117,7 @@ if test "$rm_have_getcolorinfolist" = yes; then
 fi
 
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
-AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean])
+AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean GetImageClipMask])
 AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])
 
 # We need to be able to query this later in the configure script, so set a shell variable here

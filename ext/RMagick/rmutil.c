@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.81 2006/08/26 20:31:31 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.82 2006/08/28 22:21:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -574,8 +574,7 @@ Pixel_to_HSL(VALUE self)
     volatile VALUE hsl;
 
     Data_Get_Struct(self, Pixel, pixel);
-    TransformHSL(RoundToQuantum(pixel->red), RoundToQuantum(pixel->green)
-               , RoundToQuantum(pixel->blue), &hue, &saturation, &luminosity);
+    TransformHSL(pixel->red, pixel->green, pixel->blue, &hue, &saturation, &luminosity);
 
     hsl = rb_ary_new3(3, rb_float_new(hue), rb_float_new(saturation),
                       rb_float_new(luminosity));

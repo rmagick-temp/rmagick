@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.173 2006/08/28 22:21:28 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.174 2006/08/28 22:23:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1784,7 +1784,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         if (clip_mask->storage_class == PseudoClass)
         {
             SyncImage(image);
-            image->storage_class = DirectClass;
+            clip_mask->storage_class = DirectClass;
         }
 #endif
 

@@ -383,8 +383,8 @@ imagelist.ticks_per_second = 1000
     <h4>Example</h4>
 
     <p>Add noise to a model image. Append the resulting image to
-    the imagelist in "example". (See: <a href=
-    "javascript:popup('demo.rb.html')">demo.rb</a>)</p>
+    the imagelist in "example". (See the <code>demo.rb</code>
+    example.)</p>
     <pre>
 example = Magick::ImageList.new
 model = Magick::ImageList.new "model.miff"
@@ -533,16 +533,17 @@ imagelist.animate { self.server_name = "other:0.0" }
      <img style="display:none" id="notaveraged" onmouseout=
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
-    "ex/average_before.gif" alt="average example"  /><!--
+    "ex/average_before.gif" alt="average example"
+     /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
     src="ex/average_after.gif" alt="average example"
-    /></a> <img src="ex/images/spin.gif" alt="" class=
+     /></a> <img src="ex/images/spin.gif" alt="" class=
     "spin" style="left:131px; display:" id="averagedspin" title=
     "Mouse over the example to see the 3 original images"
-    /></p>
+     /></p>
 
     <h4>Magick API</h4>
 
@@ -1153,12 +1154,6 @@ img[2]['Label'] = "Mom's Birthday"
     <p>An imagelist that contains as many images as are required to
     display all the tiles.</p>
 
-    <h4>Example</h4><a href=
-    "javascript:popup('demo.rb.html')">demo.rb</a>
-
-    <h4>Example</h4><a href=
-    "javascript:popup('demo.rb.html')">demo.rb</a>
-
     <h4>Magick API</h4>
 
     <p>MontageImages</p>
@@ -1580,8 +1575,7 @@ number = '0'
         end
 </pre>
 
-    <p>Also see the <a href="#morph">morph</a> example and <a href=
-    "javascript:popup('demo.rb.html')">demo.rb</a>.</p>
+    <p>Also see the morph.rb example and the demo.rb example.</p>
 
     <h4>See also</h4>
 

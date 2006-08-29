@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.42 2006/08/22 00:04:17 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.43 2006/08/29 22:33:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -216,21 +216,31 @@ ImageList_flatten_images(VALUE self)
 
 
 /*
-    Method:     ImageList#map
+    Method:     ImageList#map(reference, dither=false)
     Purpose:    Call MapImages
     Returns:    a new ImageList with mapped images. @scene is set to self.scene
 */
 VALUE
-ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
+ImageList_map(int argc, VALUE *argv, VALUE self)
 {
     Image *images, *new_images = NULL;
     Image *map;
-    unsigned int dither;
-    volatile VALUE image, scene, new_imagelist;
+    unsigned int dither = False;
+    volatile VALUE scene, new_imagelist;
     ExceptionInfo exception;
 
-    image = ImageList_cur_image(map_image);
-    Data_Get_Struct(image, Image, map);
+    switch (argc)
+    {
+        case 2:
+            dither = RTEST(argv[1]);
+        case 1:
+            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, map);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
 
     if (rm_imagelist_length(self) == 0)
     {
@@ -249,7 +259,6 @@ ImageList_map(VALUE self, VALUE map_image, VALUE dither_arg)
     rm_ensure_result(new_images);
 
     // Call ImageMagick
-    dither = !(dither_arg == Qfalse || dither_arg == Qnil);
     (void) MapImages(new_images, map, dither);
     rm_check_image_exception(new_images, DestroyOnError);
 

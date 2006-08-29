@@ -114,11 +114,13 @@ class ImageList2_UT < Test::Unit::TestCase
         map = Magick::Image.read("netscape:")[0]
         @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_1.gif')
         assert_nothing_raised do
+            img = @ilist.map(map)
+            assert_instance_of(Magick::ImageList, img)
+        end
+        assert_nothing_raised do
             img = @ilist.map(map, true)
             assert_instance_of(Magick::ImageList, img)
         end
-        img = @ilist.map(map, false)
-        assert_instance_of(Magick::ImageList, img)
 
         map = Magick::ImageList.new("netscape:")
         img = @ilist.map(map, true)

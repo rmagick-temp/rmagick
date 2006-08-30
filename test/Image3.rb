@@ -231,6 +231,20 @@ class Image3_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
         assert_nothing_raised { @img.rotate(-45) }
+
+        img = Magick::Image.new(100, 50)
+        assert_nothing_raised do
+            res = img.rotate(90, '>')
+            assert_instance_of(Magick::Image, res)
+            assert_equal(50, res.columns)
+            assert_equal(100, res.rows);
+        end
+        assert_nothing_raised do
+            res = img.rotate(90, '<')
+            assert_nil(res)
+        end
+        assert_raise(ArgumentError) { img.rotate(90, 't') }
+        assert_raise(TypeError) { img.rotate(90, []) }
     end
 
     def test_rotate!

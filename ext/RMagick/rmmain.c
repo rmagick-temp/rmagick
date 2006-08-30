@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.136 2006/08/29 22:33:25 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.137 2006/08/30 23:38:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -856,8 +856,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "resize", Image_resize, -1);
     rb_define_method(Class_Image, "resize!", Image_resize_bang, -1);
     rb_define_method(Class_Image, "roll", Image_roll, 2);
-    rb_define_method(Class_Image, "rotate", Image_rotate, 1);
-    rb_define_method(Class_Image, "rotate!", Image_rotate_bang, 1);
+    rb_define_method(Class_Image, "rotate", Image_rotate, -1);
+    rb_define_method(Class_Image, "rotate!", Image_rotate_bang, -1);
     rb_define_method(Class_Image, "sample", Image_sample, -1);
     rb_define_method(Class_Image, "sample!", Image_sample_bang, -1);
     rb_define_method(Class_Image, "scale", Image_scale, -1);
@@ -1815,7 +1815,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/08/29 22:33:25 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/08/30 23:38:26 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

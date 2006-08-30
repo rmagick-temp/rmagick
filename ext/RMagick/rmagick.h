@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.128 2006/08/29 22:33:25 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.129 2006/08/30 23:38:25 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -883,8 +883,8 @@ extern VALUE Image_reduce_noise(VALUE, VALUE);
 extern VALUE Image_resize(int, VALUE *, VALUE);
 extern VALUE Image_resize_bang(int, VALUE *, VALUE);
 extern VALUE Image_roll(VALUE, VALUE, VALUE);
-extern VALUE Image_rotate(VALUE, VALUE);
-extern VALUE Image_rotate_bang(VALUE, VALUE);
+extern VALUE Image_rotate(int, VALUE *, VALUE);
+extern VALUE Image_rotate_bang(int, VALUE *, VALUE);
 extern VALUE Image_sample(int, VALUE *, VALUE);
 extern VALUE Image_sample_bang(int, VALUE *, VALUE);
 extern VALUE Image_scale(int, VALUE *, VALUE);

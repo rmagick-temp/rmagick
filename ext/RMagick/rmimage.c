@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.174 2006/08/28 22:23:54 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.175 2006/08/30 23:38:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -28,7 +28,7 @@ static VALUE cropper(int, int, VALUE *, VALUE);
 static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
 static VALUE flipflop(int, VALUE, flipper_t);
 static VALUE rd_image(VALUE, VALUE, reader_t);
-static VALUE rotate(int, VALUE, VALUE);
+static VALUE rotate(int, int, VALUE *, VALUE);
 static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
@@ -705,6 +705,7 @@ static VALUE auto_orient(int bang, VALUE self)
 #if defined(HAVE_TRANSPOSEIMAGE) || defined(HAVE_TRANSVERSEIMAGE)
     Image *image;
     volatile VALUE new_image;
+    VALUE degrees[1];
 
     Data_Get_Struct(self, Image, image);
 
@@ -715,7 +716,8 @@ static VALUE auto_orient(int bang, VALUE self)
             break;
 
         case BottomRightOrientation:
-            new_image = rotate(bang, self, rb_float_new(180.0));
+            degrees[0] = rb_float_new(180.0);
+            new_image = rotate(bang, 1, degrees, self);
             break;
 
         case BottomLeftOrientation:
@@ -727,7 +729,8 @@ static VALUE auto_orient(int bang, VALUE self)
             break;
 
         case RightTopOrientation:
-            new_image = rotate(bang, self, rb_float_new(90.0));
+            degrees[0] = rb_float_new(90.0);
+            new_image = rotate(bang, 1, degrees, self);
             break;
 
         case RightBottomOrientation:
@@ -735,7 +738,8 @@ static VALUE auto_orient(int bang, VALUE self)
             break;
 
         case LeftBottomOrientation:
-            new_image = rotate(bang, self, rb_float_new(270.0));
+            degrees[0] = rb_float_new(270.0);
+            new_image = rotate(bang, 1, degrees, self);
             break;
 
         default:                // Return IMMEDIATELY
@@ -7728,21 +7732,51 @@ Image_roll(VALUE self, VALUE x_offset, VALUE y_offset)
 
 
 /*
-    Method:     Image#rotate(degrees)
+    Method:     Image#rotate(degrees [,'<' | '>'])
     Purpose:    creates a new image that is a rotated copy of an existing one
                 Image#rotate!(degrees)
     Purpose:    rotates the image by the specified number of degrees
+    Note:       If the 2nd argument is '<' rotate only if width < height.
+                If the 2nd argument is '>' rotate only if width > height.
 */
 static VALUE
-rotate(int bang, VALUE self, VALUE degrees)
+rotate(int bang, int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
+    double degrees;
+    char *arrow;
+    long arrow_l;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
+
+    switch (argc)
+    {
+        case 2:
+            arrow = STRING_PTR_LEN(argv[1], arrow_l);
+            if (arrow_l != 1 || (*arrow != '<' && *arrow != '>'))
+            {
+                rb_raise(rb_eArgError, "second argument must be '<' or '>', '%s' given", arrow);
+            }
+            if (*arrow == '>' && image->columns <= image->rows)
+            {
+                return Qnil;
+            }
+            if (*arrow == '<' && image->columns >= image->rows)
+            {
+                return Qnil;
+            }
+        case 1:
+            degrees = NUM2DBL(argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
     GetExceptionInfo(&exception);
 
-    new_image = RotateImage(image, NUM2DBL(degrees), &exception);
+    new_image = RotateImage(image, degrees, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     DestroyExceptionInfo(&exception);
@@ -7759,16 +7793,16 @@ rotate(int bang, VALUE self, VALUE degrees)
 }
 
 VALUE
-Image_rotate(VALUE self, VALUE degrees)
+Image_rotate(int argc, VALUE *argv, VALUE self)
 {
-    return rotate(False, self, degrees);
+    return rotate(False, argc, argv, self);
 }
 
 VALUE
-Image_rotate_bang(VALUE self, VALUE degrees)
+Image_rotate_bang(int argc, VALUE *argv, VALUE self)
 {
     rm_check_frozen(self);
-    return rotate(True, self, degrees);
+    return rotate(True, argc, argv, self);
 }
 
 DEF_ATTR_READER(Image, rows, int)

@@ -1104,7 +1104,8 @@ random_threshold_channel(geom, RedChannel)
     <h3 id="rotate">rotate</h3>
 
     <p><span class="arg">image</span>.rotate(<span class=
-    "arg">amount</span>) -&gt; <em>anImage</em></p>
+    "arg">amount</span> [, <span class="arg">qualifier</span>])
+    -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1120,11 +1121,25 @@ random_threshold_channel(geom, RedChannel)
 
     <h4>Arguments</h4>
 
-    <p>The number of degrees to rotate the image.</p>
+    <dl>
+      <dt>amount</dt>
+
+      <dd>The number of degrees to rotate the image.</dd>
+
+      <dt>qualifier</dt>
+
+      <dd>If present, either "&gt;" or "&lt;". If "&gt;", rotates
+      the image only if the image's width exceeds its height. If
+      "&lt;" rotates the image only if its height exceeds its
+      width. If this argument is omitted the image is always
+      rotated</dd>
+    </dl>
 
     <h4>Returns</h4>
 
-    <p>A new image</p>
+    <p>A new image, or <code>nil</code> if the image was not
+    rotated because it did not meet the qualification specified by
+    the second argument.</p>
 
     <h4>Example</h4>
 
@@ -1160,7 +1175,8 @@ random_threshold_channel(geom, RedChannel)
     <h3 id="rotate_bang">rotate!</h3>
 
     <p><span class="arg">image</span>.rotate!(<span class=
-    "arg">amount</span>) -&gt; <em>image</em></p>
+    "arg">amount</span> [, <span class="arg">qualifier</span>])
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2061,12 +2077,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example" /></a>
+    "ex/splice.jpg" alt="splice example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3522,13 +3538,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" />
+    "ex/images/Flower_Hat.jpg" alt="wave example"  />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example" /></a> <img src=
+    "ex/wave.jpg" alt="wave example"  /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

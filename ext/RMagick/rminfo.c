@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.39 2006/09/01 00:07:13 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.40 2006/09/01 16:43:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1543,6 +1543,43 @@ Info_size_eq(VALUE self, VALUE size_arg)
 
 
 /*
+    Method:     Image::Info#texture=texture_image
+    Purpose:    Set name of texture to tile onto the image background
+*/
+VALUE
+Info_texture_eq(VALUE self, VALUE texture)
+{
+    Info *info;
+    Image *image;
+    char name[MaxTextExtent];
+
+    Data_Get_Struct(self, Info, info);
+
+    // Delete any existing texture file
+    if (info->texture)
+    {
+        rm_delete_temp_image(info->texture);
+        magick_free(info->texture);
+        info->texture = NULL;
+    }
+
+    // If argument is nil we're done
+    if (texture == Qnil)
+    {
+        return self;
+    }
+
+    // Create a temp copy of the texture and store its name in the texture field
+    Data_Get_Struct(texture, Image, image);
+    rm_write_temp_image(image, name);
+
+    magick_clone_string(&info->texture, name);
+
+    return self;
+}
+
+
+/*
     Method:     Info#undefine
     Purpose:    Undefine image option
 */
@@ -1658,6 +1695,27 @@ Info_view_eq(VALUE self, VALUE view_arg)
     return self;
 }
 
+
+/*
+    Static:     destroy_Info
+    Purpose:    if there is a texture image, delete it before destroying
+                the ImageInfo structure
+*/
+static void
+destroy_Info(void *infoptr)
+{
+    Info *info = (Info *)infoptr;
+
+    if (info->texture)
+    {
+        rm_delete_temp_image(info->texture);
+        magick_free(info->texture);
+        info->texture = NULL;
+    }
+
+    DestroyImageInfo(info);
+}
+
 /*
     Method:     Info.new
     Purpose:    Create an Info object by calling CloneInfo
@@ -1674,7 +1732,7 @@ Info_new(VALUE class)
     {
         rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
     }
-    new_obj = Data_Wrap_Struct(class, NULL, DestroyImageInfo, info);
+    new_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
     rb_obj_call_init(new_obj, 0, NULL);
     return new_obj;
 }
@@ -1706,7 +1764,7 @@ Info_alloc(VALUE class)
     {
         rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
     }
-    info_obj = Data_Wrap_Struct(class, NULL, DestroyImageInfo, info);
+    info_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
     return info_obj;
 }
 /*

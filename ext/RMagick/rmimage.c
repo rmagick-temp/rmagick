@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.175 2006/08/30 23:38:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.176 2006/09/01 20:01:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -777,7 +777,6 @@ Image_auto_orient_bang(VALUE self)
 }
 
 
-
 /*
     Method:     Image#background_color
     Purpose:    Return the name of the background color as a String.
@@ -790,6 +789,7 @@ Image_background_color(VALUE self)
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->background_color);
 }
+
 
 /*
     Method:     Image#background_color=
@@ -805,6 +805,7 @@ Image_background_color_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&image->background_color, color);
     return self;
 }
+
 
 /*
     Method:     Image#base_columns
@@ -9417,6 +9418,46 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#transparent_color
+    Purpose:    Return the name of the transparent color as a String.
+*/
+VALUE
+Image_transparent_color(VALUE self)
+{
+#if defined(HAVE_IMAGE_TRANSPARENT_COLOR)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return PixelPacket_to_Color_Name(image, &image->transparent_color);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Image#transparent_color=
+    Purpose:    Set the the transparent color to the specified color spec.
+*/
+VALUE
+Image_transparent_color_eq(VALUE self, VALUE color)
+{
+#if defined(HAVE_IMAGE_TRANSPARENT_COLOR)
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    Color_to_PixelPacket(&image->transparent_color, color);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

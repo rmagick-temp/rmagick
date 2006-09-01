@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.129 2006/08/30 23:38:25 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.130 2006/09/01 00:07:13 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -628,6 +628,7 @@ ATTR_ACCESSOR(Info, antialias)
 ATTR_ACCESSOR(Info, authenticate)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)
+ATTR_WRITER(Info, channel)
 ATTR_ACCESSOR(Info, colorspace)
 ATTR_ACCESSOR(Info, comment)
 ATTR_ACCESSOR(Info, compression)

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.38 2006/05/27 21:05:59 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.39 2006/09/01 00:07:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -258,6 +258,36 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->border_color, bc_arg);
+    return self;
+}
+
+
+/*
+    Method:     Info#channel=
+    Purpose:    Set channel(s)
+    Notes:      The argument can be a ChannelType enum or any of the strings
+                that Magick accepts with the -channel option.
+*/
+VALUE
+Info_channel_eq(VALUE self, VALUE channel)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (CLASS_OF(channel) == Class_ChannelType)
+    {
+        VALUE_TO_ENUM(channel, info->channel, ChannelType);
+    }
+    else
+    {
+        info->channel = ParseChannelOption(STRING_PTR(channel));
+        if (info->channel == (ChannelType) -1)
+        {
+            rb_raise(rb_eArgError, "unrecognized channel specification `%s'", STRING_PTR(channel));
+        }
+    }
+
     return self;
 }
 

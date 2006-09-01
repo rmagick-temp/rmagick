@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.137 2006/08/30 23:38:26 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.138 2006/09/01 00:07:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1087,6 +1087,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, authenticate)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
+    DCL_ATTR_WRITER(Info, channel)
     DCL_ATTR_ACCESSOR(Info, colorspace)
     DCL_ATTR_ACCESSOR(Info, comment)        // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, compression)
@@ -1217,6 +1218,8 @@ Init_RMagick(void)
         ENUMERATOR(BlueChannel)
         ENUMERATOR(YellowChannel)
         ENUMERATOR(OpacityChannel)
+
+
         ENUMERATOR(BlackChannel)
         ENUMERATOR(MatteChannel)
 #if defined(HAVE_INDEXCHANNEL)
@@ -1228,6 +1231,29 @@ Init_RMagick(void)
 #if defined(HAVE_ALLCHANNELS)
         ENUMERATOR(AllChannels)
 #endif
+
+        // Define alternate names for ChannelType enums for Image::Info#channel=
+        // AlphaChannel == OpacityChannel
+        _enum = rm_enum_new(Class_ChannelType, ID2SYM(rb_intern("AlphaChannel")), INT2FIX(OpacityChannel));
+        rb_define_const(Module_Magick, "AlphaChannel", _enum);
+
+        // DefaultChannels
+        _enum = rm_enum_new(Class_ChannelType, ID2SYM(rb_intern("DefaultChannels")), INT2FIX(0xff & ~OpacityChannel));
+        rb_define_const(Module_Magick, "DefaultChannels", _enum);
+
+        // HueChannel == RedChannel
+        _enum = rm_enum_new(Class_ChannelType, ID2SYM(rb_intern("HueChannel")), INT2FIX(RedChannel));
+        rb_define_const(Module_Magick, "HueChannel", _enum);
+
+        // LuminosityChannel = BlueChannel
+        _enum = rm_enum_new(Class_ChannelType, ID2SYM(rb_intern("LuminosityChannel")), INT2FIX(BlueChannel));
+        rb_define_const(Module_Magick, "LuminosityChannel", _enum);
+
+        // SaturationChannel = GreenChannel
+        _enum = rm_enum_new(Class_ChannelType, ID2SYM(rb_intern("SaturationChannel")), INT2FIX(GreenChannel));
+        rb_define_const(Module_Magick, "SaturationChannel", _enum);
+
+
     END_ENUM
 
     // ClassType constants
@@ -1815,7 +1841,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/08/30 23:38:26 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/09/01 00:07:13 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

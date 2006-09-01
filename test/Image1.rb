@@ -317,6 +317,11 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.channel(Magick::YellowChannel) }
         assert_nothing_raised { @img.channel(Magick::BlackChannel) }
         assert_nothing_raised { @img.channel(Magick::GrayChannel) }
+        assert_nothing_raised { @img.channel(Magick::AlphaChannel) }
+        assert_nothing_raised { @img.channel(Magick::DefaultChannels) }
+        assert_nothing_raised { @img.channel(Magick::HueChannel) }
+        assert_nothing_raised { @img.channel(Magick::LuminosityChannel) }
+        assert_nothing_raised { @img.channel(Magick::SaturationChannel) }
         assert_instance_of(Magick::Image, @img.channel(Magick::RedChannel))
         assert_raise(TypeError) { @img.channel(2) }
     end

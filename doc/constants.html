@@ -152,7 +152,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.10.0 ($Date: 2006/08/16 22:19:28 $)
+    <code>This is RMagick 1.10.0 ($Date: 2006/09/01 00:07:30 $)
     Copyright (C) 2006 by Timothy P. Hunter<br />
     Built with GraphicsMagick 1.2 unreleased Q16
     http://www.GraphicsMagick.org/<br />
@@ -238,7 +238,8 @@
   <h3 class="const" id="ChannelType">ChannelType</h3>
 
   <p>Specify an image channel. See <a href=
-  "image1.html#channel">channel</a>.</p>
+  "image1.html#channel">Image#channel</a> and <a href=
+  "info.html#channel">Image::Info#channel=</a>.</p>
 
   <dl>
     <dt>UndefinedChannel</dt>
@@ -262,6 +263,20 @@
     <dt>AllChannels</dt>
 
     <dt>GrayChannel</dt>
+
+    <dt>AlphaChannel</dt>
+
+    <dd>Same as OpacityChannel</dd>
+
+    <dt>DefaultChannels</dt>
+
+    <dd>Same as AllChannels, excluding OpacityChannel</dd>
+
+    <dt>HueChannel</dt>
+
+    <dt>LuminosityChannel</dt>
+
+    <dt>SaturationChannel</dt>
   </dl>
 
   <h3 class="const" id="ClassType">ClassType</h3>

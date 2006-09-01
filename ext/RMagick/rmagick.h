@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.131 2006/09/01 16:43:15 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.132 2006/09/01 19:19:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -550,6 +550,7 @@ ATTR_WRITER(Draw, rotation)
 ATTR_WRITER(Draw, stroke)
 ATTR_WRITER(Draw, stroke_width)
 ATTR_WRITER(Draw, text_antialias)
+ATTR_WRITER(Draw, tile)
 ATTR_WRITER(Draw, undercolor)
 extern VALUE Draw_annotate(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Draw_clone(VALUE);

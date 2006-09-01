@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.33 2006/08/16 21:54:15 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.34 2006/09/01 19:19:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -370,6 +370,36 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     draw->info->text_antialias = RTEST(text_antialias);
+    return self;
+}
+
+/*
+    Method:     Draw#tile=
+    Purpose:    tile attribute writer
+*/
+VALUE
+Draw_tile_eq(VALUE self, VALUE image)
+{
+    Draw *draw;
+    Image *tile;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+
+    if (draw->info->fill_pattern)
+    {
+        DestroyImage(draw->info->fill_pattern);
+        draw->info->fill_pattern = NULL;
+    }
+
+    if (image == Qnil)
+    {
+        return self;
+    }
+
+    Data_Get_Struct(ImageList_cur_image(image), Image, tile);
+    draw->info->fill_pattern = rm_clone_image(tile);
+
     return self;
 }
 

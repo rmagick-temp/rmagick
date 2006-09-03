@@ -126,18 +126,20 @@ float: left;
 
           <li><a href="#black_threshold">black_threshold</a></li>
 
+          <li><a href="#blend">blend</a></li>
+
           <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
 
           <li><a href="#border">border</a></li>
-
-          <li><a href="#border_bang">border!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#border_bang">border!</a></li>
+
           <li><a href="#change_geometry">change_geometry</a></li>
 
           <li><a href="#changed_q">changed?</a></li>
@@ -181,13 +183,13 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
-
-          <li><a href="#contrast">contrast</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#contrast">contrast</a></li>
+
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
 
@@ -1415,6 +1417,125 @@ img = Magick::Image.read_inline(content)
   </div>
 
   <div class="sig">
+    <h3 id="black_threshold">black_threshold</h3>
+
+    <p><span class="arg">image</span>.black_threshold(<span class=
+    "arg">red_channel</span> [, <span class=
+    "arg">green_channel</span> [, <span class=
+    "arg">blue_channel</span> [, <span class=
+    "arg">opacity_channel</span>]]]) -&gt; <em>anImage</em></p>
+  </div><!-- this example is larger than normal -->
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Forces all pixels below the threshold into
+    black while leaving all pixels above the threshold
+    unchanged.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Each channel argument is a number between 0 and MaxRGB. All
+    arguments except the first may be omitted. If the <span class=
+    "arg">green_channel</span> or <span class=
+    "arg">blue_channel</span> argument is omitted, the default
+    value is the <span class="arg">red_channel</span> value. If the
+    <span class="arg">opacity_channel</span> argument is omitted,
+    the default value is <a href=
+    "constants.html#Opacity">OpaqueOpacity</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image3.html#white_threshold">white_threshold</a>,
+    <a href="#bilevel_channel">bilevel_channel</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>BlackThresholdImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="blend">blend</h3>
+
+    <p><span class="arg">image</span>.blend(<span class=
+    "arg">overlay</span>, <span class="arg">src_percentage</span>,
+    <span class="arg">dst_percentage</span>, <span class=
+    "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
+    -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.blend(<span class=
+    "arg">overlay</span>, <span class="arg">src_percentage</span>,
+    <span class="arg">dst_percentage</span>, <span class=
+    "arg">gravity</span>, <span class="arg">x_offset</span>=0,
+    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Adds the <span class="arg">overlay</span> image to the
+    target image according to <span class="arg">src_percent</span>
+    and <span class="arg">dst_percent</span>.</p>
+
+    <p>This method corresponds to the -blend option of
+    &times;Magick's <code>composite</code> command.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>overlay</dt>
+
+      <dd>The source image for the composite operation. Either an
+      imagelist or an image. If an imagelist, uses the current
+      image.</dd>
+
+      <dt>src_percentage</dt>
+
+      <dd>Either a non-negative number a string in the form "NN%".
+      If <span class="arg">src_percentage</span> is a number it is
+      interpreted as a percentage. Both 0.25 and "25%" mean 25%.
+      This argument is required.</dd>
+
+      <dt>dst_percentage</dt>
+
+      <dd>Either a non-negative number a string in the form "NN%".
+      If <span class="arg">src_percentage</span> is a number it is
+      interpreted as a percentage. Both 0.25 and "25%" mean 25%.
+      This argument may omitted if no other arguments follow it. In
+      this case the default is 100%-<span class=
+      "arg">src_percentage</span>.</dd>
+    </dl>
+
+    <p>The <code>blend</code> method can be called with or without
+    a <span class="arg">gravity</span> argument. The <span class=
+    "arg">gravity</span>, <span class="arg">x_offset</span>, and
+    <span class="arg">y_offset</span> arguments are described in
+    the documentation for <a href=
+    "image3.html#watermark">watermark</a>.</p>
+
+    <h4>Example</h4>
+
+    <p>See <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/compose/#blend">
+    "Blend Two Images Together"</a> in Anthony Thyssen's
+    <cite><a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/">Examples
+    of ImageMagick Usage</a></cite>.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#dissolve">dissolve</a>, <a href=
+    "#composite">composite</a></p>
+  </div>
+
+  <div class="sig">
     <h3 id="blur_channel">blur_channel</h3>
 
     <p><span class="arg">image</span>.blur_channel(<span class=
@@ -1514,48 +1635,6 @@ img = Magick::Image.read_inline(content)
     <h4>Magick API</h4>
 
     <p>BlurImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="black_threshold">black_threshold</h3>
-
-    <p><span class="arg">image</span>.black_threshold(<span class=
-    "arg">red_channel</span> [, <span class=
-    "arg">green_channel</span> [, <span class=
-    "arg">blue_channel</span> [, <span class=
-    "arg">opacity_channel</span>]]]) -&gt; <em>anImage</em></p>
-  </div><!-- this example is larger than normal -->
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p class="imquote">Forces all pixels below the threshold into
-    black while leaving all pixels above the threshold
-    unchanged.</p>
-
-    <h4>Arguments</h4>
-
-    <p>Each channel argument is a number between 0 and MaxRGB. All
-    arguments except the first may be omitted. If the <span class=
-    "arg">green_channel</span> or <span class=
-    "arg">blue_channel</span> argument is omitted, the default
-    value is the <span class="arg">red_channel</span> value. If the
-    <span class="arg">opacity_channel</span> argument is omitted,
-    the default value is <a href=
-    "constants.html#Opacity">OpaqueOpacity</a>.</p>
-
-    <h4>Returns</h4>
-
-    <p>A new image</p>
-
-    <h4>See also</h4>
-
-    <p><a href="image3.html#white_threshold">white_threshold</a>,
-    <a href="#bilevel_channel">bilevel_channel</a></p>
-
-    <h4>Magick API</h4>
-
-    <p>BlackThresholdImage</p>
   </div>
 
   <div class="sig">
@@ -3514,25 +3593,25 @@ exit
     <h3 id="dissolve">dissolve</h3>
 
     <p><span class="arg">image</span>.dissolve(<span class=
-    "arg">overlay</span>, <span class="arg">percentage</span>,
-    <span class="arg">x_offset</span>=0, <span class=
-    "arg">y_offset</span>=0) -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.dissolve(<span class=
-    "arg">overlay</span>, <span class="arg">percentage</span>,
-    <span class="arg">gravity</span>, <span class=
+    "arg">overlay</span>, <span class="arg">src_percentage</span>,
+    <span class="arg">dst_percentage</span>, <span class=
     "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.dissolve(<span class=
+    "arg">overlay</span>, <span class="arg">src_percentage</span>,
+    <span class="arg">dst_percentage</span>, <span class=
+    "arg">gravity</span>, <span class="arg">x_offset</span>=0,
+    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Dissolve an the <span class="arg">overlay</span> image into
-    the target image by the given <span class=
-    "arg">percentage</span>. The opacity of <span class=
-    "arg">overlay</span> is multiplied by the given <span class=
-    "arg">percentage</span>, then composited over the target
-    image.</p>
+    <p>Composites the <span class="arg">overlay</span> image into
+    the target image. The opacity of <span class="arg">image</span>
+    is multiplied by <span class="arg">dst_percentage</span> and
+    opacity of <span class="arg">overlay</span> is multiplied by
+    <span class="arg">src_percentage</span>.</p>
 
     <p>This method corresponds to the -dissolve option of
     &times;Magick's <code>composite</code> command.</p>
@@ -3546,10 +3625,21 @@ exit
       imagelist or an image. If an imagelist, uses the current
       image.</dd>
 
-      <dt>percentage</dt>
+      <dt>src_percentage</dt>
 
-      <dd>The desired opacity of the source image. Either a number
-      between 0.0 and 1.0 or a string in the form "NN%".</dd>
+      <dd>Either a non-negative number a string in the form "NN%".
+      If <span class="arg">src_percentage</span> is a number it is
+      interpreted as a percentage. Both 0.25 and "25%" mean 25%.
+      This argument is required.</dd>
+
+      <dt>dst_percentage</dt>
+
+      <dd>Either a non-negative number a string in the form "NN%".
+      If <span class="arg">src_percentage</span> is a number it is
+      interpreted as a percentage. Both 0.25 and "25%" mean 25%.
+      This argument may omitted if no other arguments follow it. In
+      this case <span class="arg">image</span>'s opacity is
+      unchanged.</dd>
     </dl>
 
     <p>The <code>dissolve</code> method can be called with or
@@ -3561,7 +3651,14 @@ exit
 
     <h4>Example</h4>
 
-    <p><code>bgnd.dissolve(overlay, 0.50)</code></p>
+    <p>See "<a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/compose/#dissolve">
+    Dissolve One Image Over Another</a>" in Anthony Thyssen's
+    <cite><a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/">Examples
+    of ImageMagick Usage</a></cite>.</p>
+
+    <p><code>bgnd.dissolve(overlay, 0.50, 1.0)</code></p>
 
     <p class="rollover"><a href=
     "javascript:popup('dissolve.rb.html')"><img onmouseover=
@@ -3578,7 +3675,8 @@ exit
 
     <h4>See also</h4>
 
-    <p><a href="#composite">composite</a></p>
+    <p><a href="#blend">blend</a>, <a href=
+    "#composite">composite</a></p>
   </div>
 
   <div class="sig">

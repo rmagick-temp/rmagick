@@ -3392,21 +3392,19 @@ end
 
       <dt>lightness</dt>
 
-      <dd>The percentage of the lightness component of the
-      watermark pixels to be composited onto the target image. Must
-      be a number between 0 and 1.0 or a string in the form "NN%".
-      For example, 0.25 and "25%" both mean 25%. If the number
-      falls outside the range it will be forced into the range. The
-      default is 1.0.</dd>
+      <dd>The fraction of the lightness component of the watermark
+      pixels to be composited onto the target image. Must be a
+      non-negative number or a string in the form "NN%". If
+      lightness is a number it is interpreted as a percentage. Both
+      0.25 and "25%" mean 25%. The default is 100%.</dd>
 
       <dt>saturation</dt>
 
-      <dd>The percentage of the saturation component of the
-      watermark pixels to be composited onto the target image. Must
-      be a number between 0 and 1.0 or a string in the form "NN%".
-      For example, 0.25 and "25%" both mean 25%. If the number
-      falls outside the range it will be forced into the range. The
-      default is 1.0.</dd>
+      <dd>The fraction of the saturation component of the watermark
+      pixels to be composited onto the target image. Must be a
+      non-negative number or a string in the form "NN%". If
+      lightness is a number it is interpreted as a percentage. Both
+      0.25 and "25%" mean 25%. The default is 100%.</dd>
 
       <dt>x_offset</dt>
 

@@ -434,6 +434,20 @@ if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
   AC_DEFINE(HAVE_COLORDODGECOMPOSITEOP)
 fi
 
+AC_CACHE_CHECK(for BlendCompositeOp enum value, rm_cv_enum_BlendCompositeOp,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = BlendCompositeOp],
+     rm_cv_enum_BlendCompositeOp='yes',
+     rm_cv_enum_BlendCompositeOp='no')])
+
+if test "$rm_cv_enum_BlendCompositeOp" = yes; then
+  AC_DEFINE(HAVE_BLENDCOMPOSITEOP)
+fi
 
 AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
   [AC_TRY_COMPILE(

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.133 2006/09/01 20:01:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.134 2006/09/04 00:46:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -775,6 +775,7 @@ extern VALUE Image_auto_orient_bang(VALUE);
 extern VALUE Image_properties(VALUE);
 extern VALUE Image_bilevel_channel(int, VALUE *, VALUE);
 extern VALUE Image_black_threshold(int, VALUE *, VALUE);
+extern VALUE Image_blend(int, VALUE *, VALUE);
 extern VALUE Image_blur_image(int, VALUE *, VALUE);
 extern VALUE Image_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_border(VALUE, VALUE, VALUE, VALUE);

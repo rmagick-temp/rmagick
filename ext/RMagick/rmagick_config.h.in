@@ -19,6 +19,8 @@
 #undef HAVE_BILEVELIMAGECHANNEL
 /* Introduced in IM 5.5.7, GM 1.1 */
 #undef HAVE_BLACKTHRESHOLDIMAGE
+/* Not available in GM */
+#undef HAVE_BLENDCOMPOSITEOP
 /* Introduced in IM 6.0.1 */
 #undef HAVE_BLURIMAGECHANNEL
 /* Introduced in IM 6.2.7 */

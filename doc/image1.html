@@ -217,6 +217,8 @@ float: left;
 
           <li><a href="#dispatch">dispatch</a></li>
 
+          <li><a href="#displace">displace</a></li>
+
           <li><a href="#display">display</a></li>
 
           <li><a href="#dissolve">dissolve</a></li>
@@ -3553,6 +3555,77 @@ exit
   </div>
 
   <div class="sig">
+    <h3 id="displace">displace</h3>
+
+    <p><span class="arg">image</span>.displace(<span class=
+    "arg">displacement_map</span>, <span class=
+    "arg">x_amplitude</span>, <span class="arg">y_amplitude</span>,
+    <span class="arg">x_offset</span>=0, <span class=
+    "arg">y_offset</span>=0) -&gt; <em>anImage</em><br />
+    <span class="arg">image</span>.displace(<span class=
+    "arg">displacement_map</span>, <span class=
+    "arg">x_amplitude</span>, <span class="arg">y_amplitude</span>,
+    <span class="arg">gravity</span>, <span class=
+    "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Uses <span class="arg">displacement_map</span> to move color
+    from <span class="arg">image</span> to the output image.</p>
+
+    <p>This method corresponds to the -displace option of
+    &times;Magick's <code>composite</code> command.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>displacement_map</dt>
+
+      <dd>The source image for the composite operation. Either an
+      imagelist or an image. If an imagelist, uses the current
+      image.</dd>
+
+      <dt>x_amplitude</dt>
+
+      <dd>The maximum displacement on the x-axis.</dd>
+
+      <dt>y_amplitude</dt>
+
+      <dd>The maximum displacement on the y-axis. This argument may
+      omitted if no other arguments follow it. In this case the
+      default is the value of <span class=
+      "arg">x_amplitude</span>.</dd>
+    </dl>
+
+    <p>The <code>displace</code> method can be called with or
+    without a <span class="arg">gravity</span> argument. The
+    <span class="arg">gravity</span>, <span class=
+    "arg">x_offset</span>, and <span class="arg">y_offset</span>
+    arguments are described in the documentation for <a href=
+    "image3.html#watermark">watermark</a>.</p>
+
+    <h4>Example</h4>
+
+    <p>See <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/compose/#displace">
+    "Composite Displacement Maps"</a> in Anthony Thyssen's
+    <cite><a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/">Examples
+    of ImageMagick Usage</a></cite>.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite">composite</a></p>
+  </div>
+
+  <div class="sig">
     <h3 id="display">display</h3>
 
     <p><span class="arg">image</span>.display [ <span class="arg">{
@@ -3651,7 +3724,7 @@ exit
 
     <h4>Example</h4>
 
-    <p>See "<a href=
+    <p>See " <a href=
     "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/compose/#dissolve">
     Dissolve One Image Over Another</a>" in Anthony Thyssen's
     <cite><a href=

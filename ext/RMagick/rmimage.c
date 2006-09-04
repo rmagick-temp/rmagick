@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.177 2006/09/04 00:46:44 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.178 2006/09/04 21:49:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3696,6 +3696,53 @@ VALUE Image_difference(VALUE self, VALUE other)
 
 
 DEF_ATTR_READER(Image, directory, str)
+
+
+/*
+    Method:     Image#displace(displacement_map, x_amp, y_amp, x_offset=0, y_offset=0)
+                Image#displace(displacement_map, x_amp, y_amp, gravity, x_offset=0, y_offset=0)
+    Purpose:    Implement the -displace option of xMagick's composite command
+    Notes:      If y_amp is omitted the default is x_amp.
+*/
+VALUE
+Image_displace(int argc, VALUE *argv, VALUE self)
+{
+
+    Image *image, *displacement_map;
+    double x_amplitude, y_amplitude;
+    long x_offset = 0L, y_offset = 0L;
+
+    Data_Get_Struct(self, Image, image);
+
+    if (argc < 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
+    }
+
+    if (argc > 3)
+    {
+        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, displacement_map);
+        get_composite_offsets(argc-3, &argv[3], image, displacement_map, &x_offset, &y_offset);
+        // There must be 3 arguments left
+        argc = 3;
+    }
+
+    switch (argc)
+    {
+        case 3:
+            y_amplitude = NUM2DBL(argv[2]);
+            x_amplitude = NUM2DBL(argv[1]);
+            break;
+        case 2:
+            x_amplitude = NUM2DBL(argv[1]);
+            y_amplitude = x_amplitude;
+            break;
+    }
+
+    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, displacement_map);
+    return special_composite(image, displacement_map, x_amplitude, y_amplitude
+                           , x_offset, y_offset, DisplaceCompositeOp);
+}
 
 
 /*

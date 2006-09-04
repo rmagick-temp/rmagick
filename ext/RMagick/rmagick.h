@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.134 2006/09/04 00:46:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.135 2006/09/04 21:49:51 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -815,6 +815,7 @@ extern VALUE Image_delete_profile(VALUE, VALUE);
 extern VALUE Image_despeckle(VALUE);
 extern VALUE Image_difference(VALUE, VALUE);
 extern VALUE Image_dispatch(int, VALUE *, VALUE);
+extern VALUE Image_displace(int, VALUE *, VALUE);
 extern VALUE Image_display(VALUE);
 extern VALUE Image_dissolve(int, VALUE *, VALUE);
 extern VALUE Image_distortion_channel(int, VALUE *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.142 2006/09/04 00:46:45 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.143 2006/09/04 21:49:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -790,6 +790,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "despeckle", Image_despeckle, 0);
     rb_define_method(Class_Image, "difference", Image_difference, 1);
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
+    rb_define_method(Class_Image, "displace", Image_displace, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
     rb_define_method(Class_Image, "dissolve", Image_dissolve, -1);
     rb_define_method(Class_Image, "distortion_channel", Image_distortion_channel, -1);
@@ -1845,7 +1846,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/09/04 00:46:45 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/09/04 21:49:51 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

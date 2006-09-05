@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.178 2006/09/04 21:49:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.179 2006/09/05 23:10:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1184,7 +1184,7 @@ blend_geometry(
         {
             src_percent = dst_percent;
         }
-        rb_raise(rb_eArgError, "%g%% is out of range +/-999.99%%", src_percent);
+        rb_raise(rb_eArgError, "%g is out of range +/-999.99", src_percent);
     }
 
     assert(geometry_l >= 20);

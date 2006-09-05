@@ -6,15 +6,15 @@ function stripeTables() {
     var tables = document.getElementsByTagName("table");
     for (var i = 0; i < tables.length; i++) {
         if (tables[i].className == "striped") {
-            var odd = false;
+            var gray = true;
             var rows = tables[i].getElementsByTagName("tr");
             for (var j = 0; j < rows.length; j++) {
-                if (odd) {
+                if (gray) {
                     rows[j].style.backgroundColor = "#f0f0f0";
-                    odd = false;
+                    gray = false;
                 }
                 else {
-                    odd = true;
+                    gray = true;
                 }
             }
         }

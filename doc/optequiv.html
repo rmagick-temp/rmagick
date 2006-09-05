@@ -1,0 +1,1913 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+
+  <title>RMagick: Magick Command Options and Their
+  Equivalent Methods</title>
+  <meta http-equiv="Content-Type" content=
+  "text/html; charset=us-ascii" />
+  <meta name="GENERATOR" content="Quanta Plus" />
+  <meta name="Copyright" content=
+  "Copyright (C) 2006 by Timothy P. Hunter" />
+  <link rel="stylesheet" type="text/css" href="css/doc.css" />
+<script type="text/javascript" src="scripts/doc.js">
+</script>
+<script type="text/javascript" src="scripts/stripeTables.js">
+</script>
+<script type="text/javascript">
+  //<![CDATA[
+    addLoadEvent(stripeTables);
+  //]]>
+</script>
+<style type="text/css">
+  /*<![CDATA[*/
+
+  /* Styles local to this page. */
+table {
+    margin-top: 2em;
+    margin-left: 5%;
+    width: 95%;
+    border: 1px solid #545454;
+}
+
+th {
+    padding: 2px;
+    vertical-align: top;
+    background-color: #c0c0c0;
+    width:50%;
+}
+
+td {
+    padding: 2px;
+    vertical-align :top;
+}
+
+.intro p {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 5px;
+}
+
+ .intro h3 {
+    margin: 0 0;
+    margin-top: 1em;
+    padding-left: 5px;
+    background-color: white;
+    background-image: url(ex/images/graydient230x6.gif);
+    background-repeat: repeat-y;
+    color: black;
+    font-weight: normal;
+    font-size: small;
+    padding-bottom: 0;
+  }
+
+  /*]]>*/
+</style>
+</head>
+
+<body>
+  <h6 id="header">RMagick User's Guide and Reference</h6>
+
+  <div class="nav">
+    &laquo; <a href="index.html">Prev</a> | <a href=
+    "imusage.html">Contents</a> | <a href="comtasks.html">Next</a>
+    &raquo;
+  </div>
+
+  <h1>RMagick: Magick Command Options and Their Equivalent
+  Methods</h1>
+
+  <div id="toc">
+    <h2>Table of Contents</h2>
+
+    <h3>Commands</h3>
+
+    <div class="toccol">
+      <ul>
+        <li><a href="#convert">convert, mogrify</a></li>
+
+        <li><a href="#composite">composite</a></li>
+
+        <li><a href="#montage">montage</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <h2 class="methods" id="convert">convert, mogrify</h2>
+
+  <div class="intro">
+    <h3>Introduction</h3>
+
+    <p>If you're familar with the &times;Magick command-line tools
+    <code>convert</code>, <code>mogrify</code>,
+    <code>composite</code>, and <code>montage</code> you can use
+    the tables on this page to determine which RMagick methods
+    correspond to the options used by these tools. Most of the
+    options have RMagick equivalents. The few options that don't
+    are usually the options that don't make sense in the context of
+    Ruby programs.</p>
+
+    <p>&times;Magick's <code>convert</code> and
+    <code>mogrify</code> share many options with each other, as
+    well as with the other utilities. This table includes all the
+    options for both <code>convert</code> and <code>mogrify</code>.
+    When another utility has an option with the same name and
+    purpose, and same RMagick equivalent, the option is omitted
+    from the table for that utility.</p>
+  </div>
+
+  <table class="striped" summary=
+  "convert, mogrify options and equivalent methods">
+    <thead>
+      <tr>
+        <th>Magick Option</th>
+
+        <th>RMagick Method</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>-adaptive-blur <em>radius</em>x<em>sigma</em></td>
+
+        <td>Image#<a href=
+        "image1.html#adaptive_blur">adaptive_blur</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-adaptive-resize <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image1.html#adaptive_resize">adaptive_resize</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-adaptive-sharpen <em>radius</em>x<em>sigma</em></td>
+
+        <td>Image#<a href=
+        "image1.html#adaptive_sharpen">adaptive_sharpen</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-adjoin</td>
+
+        <td>No equivalent. All images in an imagelist are written
+        to the same file if the file format supports multi-image
+        files.</td>
+      </tr>
+
+      <tr>
+        <td>-affine <em>sx</em>, <em>rx</em>, <em>ry</em>,
+        <em>sy</em>, <em>tx</em>, <em>ty</em></td>
+
+        <td>Draw#<a href="draw.html#affine">affine</a>(<em>sx</em>,
+        <em>rx</em>, <em>ry</em>, <em>sy</em>, <em>tx</em>,
+        <em>ty</em>) (for drawing)<br />
+        Draw#<a href=
+        "draw.html#affine_eq">affine=</a><em>matrix</em> (for
+        annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-annotate
+        <em>x-rotate</em>x<em>y-rotate</em>+<em>x</em>+<em>y</em>
+        <em>text</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#annotate">annotate</a>(<em>image</em>,
+        <em>x-rotate</em>, <em>y-rotate</em>, <em>x</em>,
+        <em>y</em>, <em>text</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-antialias</td>
+
+        <td>Draw#<a href=
+        "draw.html#stroke_antialias">stroke_antialias</a>(<code>true</code>)<br />
+
+        Draw#<a href=
+        "draw.html#text_antialias">text_antialias</a>(<code>true</code>)
+        (for drawing)<br />
+        Draw#<a href=
+        "Draw#text_antialias_eq">text_antialias=</a><code>true</code>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-append<br />
+        +append</td>
+
+        <td>ImageList#<a href=
+        "ilist.html#append">append</a>(<code>true</code>)<br />
+        ImageList#<a href=
+        "ilist.html#append">append</a>(<code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-authenticate <em>string</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#authenticate">authenticate</a>=<em>string</em></td>
+      </tr>
+
+      <tr>
+        <td>-auto-orient</td>
+
+        <td>Image#<a href=
+        "image1.html#auto-orient">auto-orient</a></td>
+      </tr>
+
+      <tr>
+        <td>-average</td>
+
+        <td>ImageList#<a href="ilist.html#average">average</a></td>
+      </tr>
+
+      <tr>
+        <td>-background <em>color</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#background_color">background_color=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-bias <em>value[%]</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#bias">bias</a>(<em>value</em>)<br />
+        Image#<a href=
+        "imageattrs.html#bias">bias</a>('<em>value%</em>')</td>
+      </tr>
+
+      <tr>
+        <td>-black-point-compensation</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#black_point_compensation">black_point_compensation</a>=
+        <code>true</code></td>
+      </tr>
+
+      <tr>
+        <td>-black-threshold <em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image1.html#black_threshold">black_threshold</a>(<em>red_channel</em>
+        [, <em>green_channel</em> [, <em>blue_channel</em> [,
+        <em>opacity_channel</em>]]])</td>
+      </tr>
+
+      <tr>
+        <td>-blue-primary <em>x</em>,<em>y</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#chromaticity">chromaticity=</a><em><a href="struct.html#Chromaticity">
+        chromaticity</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-blur <em>radius</em>x<em>sigma</em></td>
+
+        <td>Image#<a href=
+        "image1.html#blur_image">blur_image</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-border <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image1.html#border">border</a>(<em>width</em>,
+        <em>height</em>, <em>color</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-bordercolor <em>color</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#border_color">border_color=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-channel <em>type</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#channel">channel=</a><em>type</em><br />
+        Channel value arguments are accepted by many methods.</td>
+      </tr>
+
+      <tr>
+        <td>-charcoal <em>factor</em></td>
+
+        <td>Image#<a href=
+        "image1.html#charcoal">charcoal</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-chop
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em></td>
+
+        <td>Image#<a href="image1.html#chop">chop</a>(<em>x</em>,
+        <em>y</em>, <em>width</em>, <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-clip</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-clip-path</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-clone</td>
+
+        <td>Image#<a href="image1.html#clone">clone</a><br />
+        Image#<a href="image1.html#copy">copy</a><br />
+        Image#<a href="image1.html#dup">dup</a></td>
+      </tr>
+
+      <tr>
+        <td>-coalesce</td>
+
+        <td>ImageList#<a href=
+        "ilist.html#coalesce">coalesce</a></td>
+      </tr>
+
+      <tr>
+        <td>-colorize <em>value</em></td>
+
+        <td>Image#<a href=
+        "image1.html#colorize">colorize</a>(<em>red</em>,
+        <em>green</em>, <em>blue</em>, [<em>matte</em>, ]
+        <em>fill</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-colors</td>
+
+        <td>This option corresponds to the first argument to
+        Image#<a href="image3.html#quantize">quantize</a> and
+        ImageList#<a href="ilist.html#quantize">quantize</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-colorspace <em>colorspace</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#colorspace">colorspace=</a><em><a href=
+        "constants.html#ColorspaceType">colorspace</a></em><br />
+        Also corresponds to the <em>colorspace</em> argument to
+        Image#<a href="image3.html#quantize">quantize</a> and
+        ImageList#<a href="ilist.html#quantize">quantize</a></td>
+      </tr>
+
+      <tr>
+        <td>-combine</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-comment <em>string</em></td>
+
+        <td>Image#<a href=
+        "image1.html#aset">['Comment']=</a><em>string</em></td>
+      </tr>
+
+      <tr>
+        <td>-compose <em>operator</em></td>
+
+        <td>This option corresponds to the <em><a href=
+        "constants.html#CompositeOperator">composite_op</a></em>
+        argument to Image#<a href=
+        "image1.html#composite">composite</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-composite</td>
+
+        <td>Image#<a href=
+        "image1.html#composite">composite</a>(<em>source_image</em>,
+        <em>x</em>, <em>y</em>, <em><a href=
+        "constants.html#CompositeOperator">composite_op</a></em>)</td>
+      </tr>
+
+      <tr>
+        <td>-compress <em>type</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#compression">compression=</a><em><a href=
+        "constants.html#CompressionType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-contrast<br />
+        +contrast</td>
+
+        <td>Image#<a href=
+        "image1.html#contrast">contrast</a>(<code>true</code>)<br />
+
+        Image#<a href=
+        "image1.html#contrast">contrast</a>(<code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-contrast-stretch
+        <em>black-point</em>x<em>white-point</em></td>
+
+        <td>Image#<a href=
+        "image1.html#contrast_stretch_channel">contrast_stretch_channel</a>(
+        <em>black_point</em>, <em>white_point</em> [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>...])</td>
+      </tr>
+
+      <tr>
+        <td>-convolve <em>kernel</em></td>
+
+        <td>Image#<a href=
+        "image1.html#convolve">convolve</a>(<em>order</em>,
+        <em>kernel</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-crop
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em></td>
+
+        <td>Image#<a href="image1.html#crop">crop</a>(<em>x</em>,
+        <em>y</em>, <em>width</em>, <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-cycle <em>amount</em></td>
+
+        <td>Image#<a href=
+        "image1.html#cycle_colormap">cycle_colormap</a>(<em>amount</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-debug</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-deconstruct</td>
+
+        <td>ImageList#<a href=
+        "ilist.html#deconstruct">deconstruct</a></td>
+      </tr>
+
+      <tr>
+        <td>-define <em>key</em>=<em>value</em><br />
+        +define <em>key</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#define">define</a>(<em>format</em>,
+        <em>key</em>, <em>value</em>)<br />
+        Image::Info#<a href=
+        "info.html#undefine">undefine</a>(<em>format</em>,
+        <em>key</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-delay <em>ticks</em>x<em>ticks-per-second</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#ticks">ticks=</a><em>ticks</em><br />
+        Image#<a href=
+        "imageattrs.html#ticks_per_second">ticks_per_second=</a>
+        <em>ticks-per-second</em></td>
+      </tr>
+
+      <tr>
+        <td>-delete <em>index</em></td>
+
+        <td>ImageList#<a href=
+        "ilist.html#array_methods">delete_at</a>(<em>index</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-density <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#density">density=</a>"<em>width</em>x<em>height</em>"<br />
+
+        Image::Info#<a href=
+        "info.html#density">density=</a>"<em>width</em>x<em>height</em>"<br />
+
+        Image#<a href=
+        "imageattrs.html#x_resolution">x_resolution=</a><em>width</em><br />
+
+        Image#<a href=
+        "imageattrs.html#y_resolution">y_resolution=</a><em>height</em></td>
+      </tr>
+
+      <tr>
+        <td>-depth <em>depth</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#depth">depth=</a><em>depth</em></td>
+      </tr>
+
+      <tr>
+        <td>-despeckle</td>
+
+        <td>Image#<a href=
+        "image1.html#despeckle">despeckle</a></td>
+      </tr>
+
+      <tr>
+        <td>-display</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-dispose <em>method</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#dispose">dispose=</a><em><a href=
+        "constants.html#DisposeType">method</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-dither<br />
+        +dither</td>
+
+        <td>This option corresponds to the <em>dither</em> option
+        to Image#<a href="image1.html#quantize">quantize</a> and
+        ImageList#<a href="ilist.html#quantize">quantize</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-draw <em>string</em></td>
+
+        <td>Draw#<a href="draw.html#draw">draw</a></td>
+      </tr>
+
+      <tr>
+        <td>-edge <em>radius</em></td>
+
+        <td>Image#<a href=
+        "image1.html#edge">edge</a>(<em>radius</em>=0.0)</td>
+      </tr>
+
+      <tr>
+        <td>-emboss <em>radius</em></td>
+
+        <td>Image#<a href=
+        "image1.html#emboss">emboss</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-encoding <em>type</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#encoding">encoding</a>(<em>type</em>) (for
+        drawing)<br />
+        Draw#<a href=
+        "draw.html#encoding_eq">encoding=</a><em>type</em> (for
+        annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-endian type</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#endian">endian=</a><em><a href=
+        "constants.html#EndianType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-enhance</td>
+
+        <td>Image#<a href="image2.html#enhance">enhance</a></td>
+      </tr>
+
+      <tr>
+        <td>-equalize</td>
+
+        <td>Image#<a href="image2.html#equalize">equalize</a></td>
+      </tr>
+
+      <tr>
+        <td>-evaluate <em>operator</em> <em>value</em></td>
+
+        <td>Image#<a href=
+        "image3.html#quantum_operator">quantum_operator</a>(<em>operator</em>,
+        <em>value</em> [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>])</td>
+      </tr>
+
+      <tr>
+        <td>-extent</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-extract
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em></td>
+
+        <td>Image::Info.<a href=
+        "info.html#extract">extract=</a>"<em>width</em>x<em>height</em>+
+        <em>x</em>+<em>y</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-family <em>name</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#family">family</a>(<em>name</em>) (for
+        drawing)<br />
+        Draw#<a href="draw.html#family_eq">family=</a><em>name</em>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-fill <em>color</em></td>
+
+        <td>Draw#<a href="draw.html#fill">fill</a>(<em>color</em>)
+        (for drawing)<br />
+        Draw#<a href="draw.html#fill_eq">fill=</a><em>color</em>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-filter <em>type</em></td>
+
+        <td>This option corresponds to the <a href=
+        "constants.html#FilterTypes">filter</a> option to
+        Image#<a href="image3htm#resize">resize</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-flatten</td>
+
+        <td>ImageList#<a href="ilist.html#flatten">flatten</a></td>
+      </tr>
+
+      <tr>
+        <td>-flip</td>
+
+        <td>Image#<a href="image2.html#flip">flip</a></td>
+      </tr>
+
+      <tr>
+        <td>-floodfill <em>geometry</em> <em>color</em></td>
+
+        <td>Image#<a href=
+        "image1.html#color_floodfill">color_floodfill</a>(<em>x</em>,
+        <em>y</em>, <em>color</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-flop</td>
+
+        <td>Image#<a href="image2.html#flop">flop</a></td>
+      </tr>
+
+      <tr>
+        <td>-font <em>name</em></td>
+
+        <td>Draw#<a href="draw.html#font">font</a>(<em>name</em>)
+        (for drawing)<br />
+        Draw#<a href="draw.html#font_eq">font=</a><em>name</em>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-format <em>type</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#format">format=</a><em>type</em></td>
+      </tr>
+
+      <tr>
+        <td>-frame
+        <em>width</em>x<em>height</em>+<em>outer-bevel-width</em>+
+        <em>inner-bevel-width</em></td>
+
+        <td>Image#<a href=
+        "image2.html#frame">frame</a>(<em>width</em>,
+        <em>height</em>, <em>x</em>, <em>y</em>,
+        <em>inner_bevel_width</em>, <em>outer_bevel_width</em>,
+        <em>color</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-fuzz <em>distance</em><br />
+        -fuzz <em>distance%</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#fuzz">fuzz=</a><em>distance</em><br />
+        Image#<a href=
+        "imageattrs.html#fuzz">fuzz=</a>"<em>distance%</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-fx</td>
+
+        <td>No equivalent. For access to individual pixels in an
+        image, see Image#<a href="image3.html#view">view</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-gamma <em>red_gamma,green_gamma,blue_gamma</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.htlm#gamma_correct">gamma_correct</a>(<em>red_gamma</em>[,
+        <em>green_gamma</em>[, <em>blue_gamma</em>]])</td>
+      </tr>
+
+      <tr>
+        <td>-gaussian <em>radius</em>x<em>sigma</em></td>
+
+        <td>Image#<a href=
+        "image2.html#gaussian_blur">gaussian_blur</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)<br />
+        Image#<a href=
+        "image2.html#gaussian_blur_channel">gaussian_blur_channel</a>(
+        <em>radius</em>=0.0, <em>sigma</em>=1.0 [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>...])</td>
+      </tr>
+
+      <tr>
+        <td>-geometry widthxheight+x+y</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#geometry">geometry=</a>"<em>width</em>x
+        <em>height</em>+<em>x</em>+<em>y</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-gravity <em>type</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#gravity">gravity</a>(<em><a href=
+        "constants.html#GravityType">type</a></em>) (for
+        drawing)<br />
+        Draw#<a href=
+        "draw.html#gravity_eq">gravity=</a><em><a href="constants.html#GravityType">
+        type</a></em> (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-green-primary <em>x</em>,<em>y</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#chromaticity">chromaticity=</a><em><a href="struct.html#Chromaticity">
+        chromaticity</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-identify</td>
+
+        <td>Image#<a href="image2.html#inspect">inspect</a></td>
+      </tr>
+
+      <tr>
+        <td>-implode <em>factor</em></td>
+
+        <td>Image#<a href=
+        "image2.html#implode">implode</a>(<em>factor</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-insert <em>index</em></td>
+
+        <td>ImageList#<a href=
+        "ilist.html#array_methods">insert</a>(<em>index</em>)<br />
+        ImageList#<a href=
+        "ilist.html#array_methods">[<em>index</em>]</a></td>
+      </tr>
+
+      <tr>
+        <td>-intent <em>type</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#rendering_intent">rendering_intent=</a>
+        <em><a href=
+        "constants.html#RenderingIntent">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-interlace <em>type</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#interlace">interlace=</a><em><a href=
+        "constants.html#InterlaceType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-interpolate</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-label <em>name</em></td>
+
+        <td>Image#<a href=
+        "image1.html#aset">['Label']=</a><em>name</em></td>
+      </tr>
+
+      <tr>
+        <td>-lat
+        <em>width</em>x<em>height</em>+<em>offset</em></td>
+
+        <td>Image#<a href=
+        "image1.html#adaptive_threshold">adaptive_threshold</a>(
+        <em>width</em>, <em>height</em>, <em>offset</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-layers <em>method</em></td>
+
+        <td>ImageList#<a href=
+        "ilist.html#optimize_layers">optimize_layers</a>(<em>method</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-level
+        <em>black-point</em>,<em>white-point</em>,<em>gamma</em></td>
+
+        <td>Image#<a href=
+        "image2.html#level">level</a>(<em>black_point</em>=0.0,
+        <em>white_point</em>=MaxRGB, <em>gamma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-limit <em>type</em> <em>value</em></td>
+
+        <td>Magick.<a href=
+        "magick.html#limit_resource">limit_resource</a>(<em>type</em>,
+        <em>value</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-linewidth <em>width</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#stroke_width">stroke_width</a>(<em>width</em>)
+        (for drawing)<br />
+        Draw#<a href=
+        "draw.html#stroke_width_eq">stroke_width=</a><em>width</em>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-list <em>type</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-log <em>string</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-loop <em>iterations</em></td>
+
+        <td>ImageList#<a href=
+        "ilist.html#iterations_eq">iterations=</a><em>iterations</em></td>
+      </tr>
+
+      <tr>
+        <td>-magnify</td>
+
+        <td>Image#<a href="image2.html#magnify">magnify</a></td>
+      </tr>
+
+      <tr>
+        <td>-map <em>filename</em></td>
+
+        <td>Image#<a href=
+        "image2.html#map">map</a>(<em>reference</em>,
+        <em>dither</em>=<code>false</code>)<br />
+        ImageList#<a href=
+        "ilist.html#map">map</a>(<em>reference</em>, <span class=
+        "arg">dither</span>=<code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-mask filename</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#clip_mask">clip_mask=</a><em>mask</em></td>
+      </tr>
+
+      <tr>
+        <td>-matte<br />
+        +matte</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#matte">matte=</a><code>true</code><br />
+        Image#<a href=
+        "imageattrs.html#matte">matte=</a><code>false</code></td>
+      </tr>
+
+      <tr>
+        <td>-mattecolor <em>color</em></td>
+
+        <td>This option corresponds to the <em>color</em> option to
+        Image#<a href="image2.html#frame">frame</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-median radius</td>
+
+        <td>Image#<a href=
+        "image2.html#median_filter">median_filter</a>(<em>radius</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-metric <em>type</em></td>
+
+        <td>This option corresponds to the <em><a href=
+        "constants.html#MetricType">metric</a></em> option to
+        Image#<a href=
+        "image1.html#distortion_channel">distortion_channel</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-modulate <em>value</em></td>
+
+        <td>Image#<a href=
+        "image2.html#modulate">modulate</a>(<em>brightness</em>=1.0,
+        <em>saturation</em>=1.0, <em>hue</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-monitor</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#monitor">monitor=</a></td>
+      </tr>
+
+      <tr>
+        <td>-monochrome</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#image_type">image_type=</a> <a href=
+        "constants.html#ImageType">Magick::BilevelType</a></td>
+      </tr>
+
+      <tr>
+        <td>-morph <em>frames</em></td>
+
+        <td>ImageList#<a href=
+        "ilist#html#morph">morph</a>(<em>frames</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-mosaic</td>
+
+        <td>ImageList#<a href="ilist.html#mosaic">mosaic</a></td>
+      </tr>
+
+      <tr>
+        <td>-motion-blur
+        <em>radius</em>x<em>sigma</em>+<em>angle</em></td>
+
+        <td>Image#<a href=
+        "image2.html#motion_blur">motion_blur</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0, <em>angle</em>=0.0)</td>
+      </tr>
+
+      <tr>
+        <td>-negate<br />
+        +negate</td>
+
+        <td>Image#<a href="image2.html#negate">negate</a><br />
+        Image#<a href=
+        "image2.html#negate">negate</a>(<code>true</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-noise <em>radius</em><br />
+        +noise <em>type</em></td>
+
+        <td>Image#<a href=
+        "image3.html#reduce_noise">reduce_noise</a>(<em>radius</em>)<br />
+
+        Image#<a href="image1.html#add_noise">add_noise</a>(
+        <a href="constants.html#NoiseType">type</a>)</td>
+      </tr>
+
+      <tr>
+        <td>-normalize</td>
+
+        <td>Image#<a href=
+        "image2.html#normalize">normalize</a></td>
+      </tr>
+
+      <tr>
+        <td>-opaque <em>color</em></td>
+
+        <td>Image#<a href=
+        "image2.html#opaque">opaque</a>(<em>color</em>,
+        <em>fill</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-ordered-dither <em>N</em>x<em>N</em></td>
+
+        <td>Image#<a href=
+        "image1.html#ordered_dither">ordered_dither</a>(<em>N</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-orient <em>orientation</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#orientation">orientation=</a><em><a href=
+        "constants.html#OrientationType">orientation</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-page
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em><br />
+        -page <em>media</em></td>
+
+        <td>Image::Info.<a href=
+        "info.html#page">page=</a>"<em>width</em>x<em>height</em>+
+        <em>x</em>+<em>y</em>"<br />
+        Image::Info.<a href=
+        "info.html#page">page=</a>"<em>media</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-paint <em>radius</em></td>
+
+        <td>Image#<a href=
+        "image2.html#oil_paint">oil_paint</a>(<em>radius</em>=3.0)</td>
+      </tr>
+
+      <tr>
+        <td>-ping</td>
+
+        <td>Image.<a href=
+        "image1.html#ping">ping</a>(<em>filename</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-pointsize <em>value</em></td>
+
+        <td>Draw.<a href=
+        "draw.html#pointsize">pointsize</a>(<em>value</em>) (for
+        drawing)<br />
+        Draw.<a href=
+        "draw.html#pointsize_eq">pointsize=</a><em>value</em> (for
+        annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-posterize <em>levels</em></td>
+
+        <td>Image#<a href=
+        "image2.html#posterize">posterize</a>(<em>levels</em>=4,
+        <em>dither</em>=<code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-preview <em>type</em></td>
+
+        <td>Image#<a href=
+        "image3.html#preview">preview</a>(<em>type<a href=
+        "constants.html#PreviewType"></a></em>)</td>
+      </tr>
+
+      <tr>
+        <td>-process command</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-profile <em>filename</em><br />
+        +profile <em>name</em></td>
+
+        <td>Image#<a href=
+        "image1.html#add_profile">add_profile</a>(<em>filename</em>)<br />
+
+        Image#<a href=
+        "image1.html#delete_profile">delete_profile</a>(<em>name</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-quality <em>value</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#quality">quality=</a><em>value</em></td>
+      </tr>
+
+      <tr>
+        <td>-quantize <em>colorspace</em></td>
+
+        <td>Image#<a href=
+        "image3.html#quantize">quantize</a>(<em>number_colors</em>=256,
+        <em>colorspace</em>=RGBColorspace,
+        <em>dither</em>=<code>true</code>, <em>tree_depth</em>=0,
+        <em>measure_error</em>=<code>false</code>)<br />
+        ImageList#<a href=
+        "ilist.html#quantize">quantize</a>(<em>number_colors</em>=256,
+        <em>colorspace</em>=RGBColorspace,
+        <em>dither</em>=<code>true</code>, <em>tree_depth</em>=0,
+        <em>measure_error</em>=<code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-quiet</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-radial-blur <em>angle</em></td>
+
+        <td>Image#<a href=
+        "image3.html#radial_blur">radial_blur</a>(<em>angle</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-raise <em>width</em>x<em>height</em><br />
+        +raise <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image3.html#raise">raise</a>(<em>width</em>,
+        <em>height</em>, <code>true</code>)<br />
+        Image#<a href="image3.html#raise">raise</a>(<em>width</em>,
+        <em>height</em>, <code>false</code>)</td>
+      </tr>
+
+      <tr>
+        <td>-random-threshold <em>low</em>x<em>high</em></td>
+
+        <td>Image#<a href=
+        "image3.html#random_threshold_channel">random_threshold_channel</a>("
+        <em>low</em>x<em>high</em>" [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>...])</td>
+      </tr>
+
+      <tr>
+        <td>-red-primary <em>x</em>,<em>y</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#chromaticity">chromaticity=</a><em><a href="struct.html#Chromaticity">
+        chromaticity</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-regard-warnings</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-region
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-render</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-repage <em>geometry</em><br />
+        +repage</td>
+
+        <td>Image#<a href=
+        "imageattrs.html#page">page=</a><em>geometry</em><br />
+        This option corresponds to adding <code>true</code> as the
+        last argument to Image#<a href=
+        "image1.html#crop">crop</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-resample <em>horizontal</em>x<em>vertical</em></td>
+
+        <td>Image#<a href=
+        "image3.html#resample">resample</a>(<em>horizontal</em>,
+        <em>vertical</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-resize <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image3.html#resize">resize</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-roll +<em>x</em>+<em>y</em></td>
+
+        <td>Image#<a href="image3.html#roll">roll</a>(<em>x</em>,
+        <em>y</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-rotate <em>degrees</em></td>
+
+        <td>Image#<a href=
+        "image3.html#rotate">rotate</a>(<em>degrees</em> [,
+        <em>qualifier</em>])</td>
+      </tr>
+
+      <tr>
+        <td>-sample <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image3.html#sample">sample</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-sampling-factor
+        <em>horizontal-factor</em>x<em>vertical-factor</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#sampling_factor">sampling_factor=</a><em>horizontal-factor</em>x
+        <em>vertical-factor</em></td>
+      </tr>
+
+      <tr>
+        <td>-scale <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image3.html#scale">scale</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-scene <em>value</em></td>
+
+        <td>ImageList#<a href=
+        "ilist.html#scene">scene=</a><em>value</em></td>
+      </tr>
+
+      <tr>
+        <td>-scenes <em>value</em>-<em>value</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-seed</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-segment
+        <em>cluster-threshold</em>x<em>smoothing-threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#segment">segment</a>(<em>colorspace</em>=
+        <code>RGBColorspace</code>, <em>cluster_threshold</em>=1.0,
+        <em>smoothing_threshold</em>=1.5,
+        <em>verbose</em>=false)</td>
+      </tr>
+
+      <tr>
+        <td>-separate</td>
+
+        <td>Image#<a href=
+        "image1.html#channel">channel</a>(<em><a href=
+        "constants.html#ChannelType">type</a></em>)</td>
+      </tr>
+
+      <tr>
+        <td>-sepia-tone <em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#sepiatone">sepiatone</a>(<em>threshold</em>=MaxRGB)</td>
+      </tr>
+
+      <tr>
+        <td>-set <em>attribute</em> <em>value</em></td>
+
+        <td>Image#<a href=
+        "image1.html#aset">[</a>'<em>attribute</em>'<a href=
+        "image1.html#aset">] =</a> <em>value</em></td>
+      </tr>
+
+      <tr>
+        <td>-shade <em>azimuth</em>x<em>elevation</em></td>
+
+        <td>Image#<a href=
+        "image3.html#shade">shade</a>(<em>shading</em>=<code>false</code>,
+        <em>azimuth</em>=30, <em>elevation</em>=30)</td>
+      </tr>
+
+      <tr>
+        <td>-shadow
+        <em>opacity</em>x<em>sigma</em>+<em>x</em>+<em>y</em></td>
+
+        <td>Image#<a href=
+        "image3.html#shadow">shadow</a>(<em>x</em>=4, <em>y</em>=4,
+        <em>sigma</em>=4.0, <em>opacity</em>=4.0)</td>
+      </tr>
+
+      <tr>
+        <td>-sharpen <em>radius</em>x<em>sigma</em></td>
+
+        <td>Image#<a href=
+        "image3.html#sharpen">sharpen</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0)</td>
+      </tr>
+
+      <tr>
+        <td>-shave <em>width</em>x<em>height</em></td>
+
+        <td>Image#<a href=
+        "image3.html#shave">shave</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-shear <em>x-degrees</em>x<em>y-degrees</em></td>
+
+        <td>Image#<a href=
+        "image3.html#shear">shear</a>(<em>x_degrees</em>,
+        <em>y_degrees</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-sigmoidal-contrast
+        <em>contrast</em>x<em>mid-point</em></td>
+
+        <td>Image#<a href=
+        "image3.html#sigmoidal_contrast_channel">sigmoidal_contrast_channel</a>(
+        <em>contrast</em>=3.0, <em>mid_point</em>=50.0,
+        <em>sharpen</em>=<code>false</code> [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>...])</td>
+      </tr>
+
+      <tr>
+        <td>-size
+        <em>width</em>x<em>height</em>+<em>offset</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#size">size=</a>"<em>width</em>x<em>height</em>+
+        <em>offset</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-sketch
+        <em>radius</em>x<em>sigma</em>+<em>angle</em></td>
+
+        <td>Image#<a href=
+        "image3.html#sketch">sketch</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0, <em>angle</em>=0.0)</td>
+      </tr>
+
+      <tr>
+        <td>-solarize <em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#solarize">solarize</a>(<em>threshold</em>=50)</td>
+      </tr>
+
+      <tr>
+        <td>-splice
+        <em>width</em>x<em>height</em>+<em>x</em>+<em>y</em></td>
+
+        <td>Image#<a href=
+        "image3.html#splice">splice</a>(<em>x</em>, <em>y</em>,
+        <em>width</em>, <em>height</em> [, <em>color</em>])</td>
+      </tr>
+
+      <tr>
+        <td>-spread <em>amount</em></td>
+
+        <td>Image#<a href=
+        "image3.html#spread">spread</a>(<em>amount</em>=3)</td>
+      </tr>
+
+      <tr>
+        <td>-stegano <em>offset</em></td>
+
+        <td>Image#<a href=
+        "image3.html#stegano">stegano</a>(<em>watermark</em>,
+        <em>offset</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-stereo</td>
+
+        <td>Image#<a href=
+        "image3.html#stereo">stereo</a>(<em>offset_image</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-stretch <em>type</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#font_stretch">font_stretch</a>(<em><a href=
+        "constants.html#StretchType">type</a></em>) (for
+        drawing)<br />
+        Draw#<a href=
+        "draw.html#font_stretch_eq">font_stretch=</a><em><a href=
+        "constants.html#StretchType">type</a></em> (for
+        annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-storage-type <em>type</em></td>
+
+        <td>This option corresponds to the <em><a href=
+        "constants.html#StorageType">type</a></em> argument to
+        Image#<a href="image2.html#import_pixels">import_pixels</a>
+        and Image#<a href=
+        "image2.html#export_pixels_to_str">export_pixels_to_str</a></td>
+      </tr>
+
+      <tr>
+        <td>-strip</td>
+
+        <td>Image#<a href="image3.html#strip_bang">strip!</a></td>
+      </tr>
+
+      <tr>
+        <td>-stroke <em>color</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#stroke">stroke</a>(<em>color</em>) (for
+        drawing)<br />
+        Draw#<a href=
+        "draw.html#stroke_eq">stroke=</a><em>color</em> (for
+        annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-strokewidth <em>value</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#stroke_width">stroke_width</a>(<em>value</em>)
+        (for drawing)<br />
+        Draw#<a href=
+        "draw.html#stroke_width_eq">stroke_width=</a><em>value</em>
+        (for annotation)</td>
+      </tr>
+
+      <tr>
+        <td>-support <em>factor</em></td>
+
+        <td>This option corresponds to the <em>support</em>
+        argument to Image#<a href=
+        "image3.html#resize">resize</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-swirl <em>degrees</em></td>
+
+        <td>Image#<a href=
+        "image3.html#swirl">swirl</a>(<em>degrees</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-text-font</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-texture <em>filename</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#texture">texture=</a><em>image</em></td>
+      </tr>
+
+      <tr>
+        <td>-threshold <em>value</em></td>
+
+        <td>Image#<a href=
+        "image1.html#bilevel_channel">bilevel_channel</a>(<em>value</em>
+        [, <em><a href=
+        "constants.html#ChannelType">channel</a></em>...])</td>
+      </tr>
+
+      <tr>
+        <td>-thumbnail widthxheight</td>
+
+        <td>Image#<a href=
+        "image1.html#thumbnail">thumbnail</a>(<em>width</em>,
+        <em>height</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-tile <em>filename</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#tile">tile</a>(<em>image</em>)</td>
+      </tr>
+
+      <tr>
+        <td>-tint</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-transform</td>
+
+        <td>Image#<a href=
+        "image1.html#affine_transform">affine_transform</a>(<em><a href="struct.html#AffineMatrix">
+        matrix</a></em>)</td>
+      </tr>
+
+      <tr>
+        <td>-transparent <em>color</em></td>
+
+        <td>Image#transparent(<em>color</em>, <em><a href=
+        "constants.html#Opacity">opacity</a></em>=TransparentOpacity)</td>
+      </tr>
+
+      <tr>
+        <td>-transparent-color <em>color</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#transparent_color">transparent_color=</a>
+        <em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-transpose</td>
+
+        <td>Image#<a href=
+        "image3.html#transpose">transpose</a></td>
+      </tr>
+
+      <tr>
+        <td>-transverse</td>
+
+        <td>Image#<a href=
+        "image3.html#transverse">transverse</a></td>
+      </tr>
+
+      <tr>
+        <td>-treedepth <em>value</em></td>
+
+        <td>This option corresponds to the <em>tree_depth</em>
+        argument to Image#<a href=
+        "image3.html#quantize">quantize</a> and ImageList#<a href=
+        "ilist.html#quantize">quantize</a>.</td>
+      </tr>
+
+      <tr>
+        <td>-trim</td>
+
+        <td>Image#<a href="image3.html#trim">trim</a></td>
+      </tr>
+
+      <tr>
+        <td>-type <em>type</em></td>
+
+        <td>Image#type=<em><a href=
+        "constants.html#ImageType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-undercolor <em>color</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#text_undercolor">text_undercolor</a>(<em>color</em>)<br />
+
+        Draw#<a href=
+        "draw.html#undercolor">undercolor=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-unique-colors</td>
+
+        <td>Image#<a href=
+        "image3.html#unique_colors">unique_colors</a></td>
+      </tr>
+
+      <tr>
+        <td>-units <em>type</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#units">units=</a><em><a href=
+        "constants.html#ResolutionType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-unsharp
+        <em>radius</em>x<em>sigma</em>+<em>amount</em>+<em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#unsharp_mask">unsharp_mask</a>(<em>radius</em>=0.0,
+        <em>sigma</em>=1.0, <em>amount</em>=1.0,
+        <em>threshold</em>=0.05)</td>
+      </tr>
+
+      <tr>
+        <td>-verbose</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-version</td>
+
+        <td><a href=
+        "constants.html#Miscellaneous_constants">Magick::Long_version</a></td>
+      </tr>
+
+      <tr>
+        <td>-view <em>string</em></td>
+
+        <td><a href=
+        "info.html#view">Image::Info#view=</a><em>string</em></td>
+      </tr>
+
+      <tr>
+        <td>-vignette
+        <em>radius</em>x<em>sigma</em>+<em>amount</em>+<em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#vignette">vignette</a>(<em>x</em>, <em>y</em>,
+        <em>radius</em>=0.0, <em>sigma</em>=10.0)</td>
+      </tr>
+
+      <tr>
+        <td>-virtual-pixel <em>method</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#virtual_pixel_method">virtual_pixel_method</a>=
+        <em>method</em></td>
+      </tr>
+
+      <tr>
+        <td>-wave <em>amplitude</em>x<em>wavelength</em></td>
+
+        <td>Image#<a href=
+        "image3.html#wave">wave</a>(<em>amplitude</em>=25.0,
+        <em>wavelength</em>=150.0)</td>
+      </tr>
+
+      <tr>
+        <td>-weight <em>type</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#font_weight">font_weight</a>(<a href=
+        "constants.html#WeightType">type</a>) (for drawing)<br />
+        Draw#<a href=
+        "draw.html#font_weight_eq">font_weight=</a><em><a href=
+        "constants.html#WeightType">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-white-point <em>x</em>.<em>y</em></td>
+
+        <td>Image#<a href=
+        "imageattrs.html#chromaticity">chromaticity=</a><em><a href="struct.html#Chromaticity">
+        chromaticity</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-white-threshold <em>threshold</em></td>
+
+        <td>Image#<a href=
+        "image3.html#white_threshold">white_threshold</a>(<em>red_channel</em>
+        [, <em>green_channel</em>[, <em>blue_channel</em>[,
+        <em>opacity_channel</em>]]])</td>
+      </tr>
+
+      <tr>
+        <td>-write <em>filename</em></td>
+
+        <td>Image#<a href=
+        "image3.html#write">write</a>(<em>filename</em>)<br />
+        ImageList#<a href=
+        "ilist.html#write">write</a>(<em>filename</em>)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="methods" id="composite">composite</h2>
+
+  <table class="striped" summary=
+  "composite options and equivalent methods">
+    <thead>
+      <tr>
+        <th>Magick Option</th>
+
+        <th>RMagick Method</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>-blend <em>src-percent</em>x<em>dst-percent</em></td>
+
+        <td>Image#<a href=
+        "image1.html#blend">blend</a>(<em>overlay</em>,
+        <em>src_percent</em>, <em>dst_percent</em>,
+        <em>x_offset</em>=0, <em>y_offset</em>=0)</td>
+      </tr>
+
+      <tr>
+        <td>-displace
+        <em>x-amplitude</em>x<em>y-amplitude</em></td>
+
+        <td>Image#<a href=
+        "image1.html#displace">displace</a>(<em>displacement_map</em>,
+        <em>x_amplitude</em>, <em>y_amplitude</em>,
+        <em>x_offset</em>=0, <em>y_offset</em>=0)</td>
+      </tr>
+
+      <tr>
+        <td>-dissolve
+        <em>src_percent</em>x<em>dst_percent</em></td>
+
+        <td>Image#<a href=
+        "image1.html#dissolve">dissolve</a>(<span class=
+        "arg">overlay</span>, <span class="arg">src_percent</span>,
+        <span class="arg">dst_percent</span>, <span class=
+        "arg">x_offset</span>=0, <span class=
+        "arg">y_offset</span>=0)</td>
+      </tr>
+
+      <tr>
+        <td>-watermark <em>lightness</em></td>
+
+        <td>Image#<a href=
+        "image3.html#watermark">watermark</a>(<em>mark</em>,
+        <em>lightness</em>=1.0, <em>saturation</em>=1.0,
+        <em>x_offset</em>=0, <em>y_offset</em>=0)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="methods" id="montage">montage</h2>
+
+  <div class="intro">
+    <h3>Notes</h3>
+
+    <p>The RMagick methods that correspond to
+    <code>montage</code>'s options are in the
+    <code>Magick::ImageList::Montage</code> class.</p>
+  </div>
+
+  <table class="striped" summary=
+  "montage options and equivalent methods">
+    <thead>
+      <tr>
+        <th>Magick Option</th>
+
+        <th>RMagick Method</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>-backgroundcolor <em>color</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">background_color=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-bordercolor <em>color</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">border_color=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-borderwidth <em>value</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">border_width=</a><em>value</em></td>
+      </tr>
+
+      <tr>
+        <td>-clone</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-compose <em>operator</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">compose=</a><em>operator</em></td>
+      </tr>
+
+      <tr>
+        <td>-fill <em>color</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">fill=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-frame <em>geometry</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">frame=</a>"<em>geometry</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-geometry <em>geometry</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">geometry=</a>"<em>geometry</em>"</td>
+      </tr>
+
+      <tr>
+        <td>-gravity <em>type</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">gravity=</a><em>type</em></td>
+      </tr>
+
+      <tr>
+        <td>-mattecolor <em>color</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">matte_color=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-mode <em>type</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-pointsize <em>value</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">pointsize=</a><em>value</em></td>
+      </tr>
+
+      <tr>
+        <td>-shadow</td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">shadow=</a><code>true</code></td>
+      </tr>
+
+      <tr>
+        <td>-stroke <em>color</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">stroke=</a><em>color</em></td>
+      </tr>
+
+      <tr>
+        <td>-texture <em>filename</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">texture=</a><em>image</em></td>
+      </tr>
+
+      <tr>
+        <td>-tile <em>geometry</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">tile=</a><em>geometry</em></td>
+      </tr>
+
+      <tr>
+        <td>-title <em>string</em></td>
+
+        <td>Montage#<a href=
+        "ilist.html#montage">title=</a><em>string</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="spacer">&nbsp;</p>
+
+  <div class="nav">
+    &laquo; <a href="index.html">Prev</a> | <a href=
+    "imusage.html">Contents</a> | <a href="comtasks.html">Next</a>
+    &raquo;
+  </div>
+</body>
+</html>

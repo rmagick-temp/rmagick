@@ -5,15 +5,16 @@ require 'RMagick'
 img = Magick::Image.read('images/Flower_Hat.jpg').first
 
 # Convert to grayscale
-img = img.quantize(256, Magick::GRAYColorspace)
+sketch = img.quantize(256, Magick::GRAYColorspace)
 
 # Apply histogram equalization
-img = img.equalize
+sketch = sketch.equalize
 
-# Sketch
+# Sketch, then dissolve 25% of the original back in
 begin
-    img = img.sketch(0, 20, 135)
-    
+    sketch = sketch.sketch(0, 10, 135)
+    img = img.dissolve(sketch, 0.75, 0.25)
+
 rescue NotImplementedError
     not_impl = Magick::Image.read('images/notimplemented.gif').first
     not_impl.resize!(img.columns, img.rows)

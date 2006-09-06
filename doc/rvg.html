@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
   <title>RMagick: RVG Reference: RVG Class</title>
   <meta http-equiv="Content-Type" content=
@@ -891,76 +891,79 @@ canvas.background_position = :scaled
 
   <h2 id="units" class="methods">Units</h2>
 
-  <p>RVG supports a subset of the unit identifiers defined by the
-  SVG specification. In RVG, unit identifiers are methods in the
-  Float and Fixnum classes. The units are (for the most part)
-  defined in terms of "dots per inch," accordingly, the unit
-  identifier methods are added only if the value</p>
-  <pre>
+  <div style="margin-left: 235px; margin-top:1em">
+    <p>RVG supports a subset of the unit identifiers defined by the
+    SVG specification. In RVG, unit identifiers are methods in the
+    Float and Fixnum classes. The units are (for the most part)
+    defined in terms of "dots per inch," accordingly, the unit
+    identifier methods are added only if the value</p>
+    <pre>
     Magick::RVG.dpi = NN
 </pre>
 
-  <p>is defined, where NN is the number of "dots" (pixels) per inch
-  you wish to use. (Hint: 90 is a good default.)</p>
+    <p>is defined, where NN is the number of "dots" (pixels) per
+    inch you wish to use. (Hint: 90 is a good default.)</p>
 
-  <p>For example, to specify a length of 10 inches, you can use</p>
-  <pre>
+    <p>For example, to specify a length of 10 inches, you can
+    use</p>
+    <pre>
     Magick::RVG.dpi = 90
     length = 10.in  # =&gt; 900 pixels
 </pre>
 
-  <p>If the dpi is defined, the following methods are added to
-  <code>Float</code> and <code>Fixnum</code></p>
+    <p>If the dpi is defined, the following methods are added to
+    <code>Float</code> and <code>Fixnum</code></p>
 
-  <dl>
-    <dt>px</dt>
+    <dl>
+      <dt>px</dt>
 
-    <dd>Pixel. The default unit of measurement.</dd>
+      <dd>Pixel. The default unit of measurement.</dd>
 
-    <dt>in</dt>
+      <dt>in</dt>
 
-    <dd>Converts inches to pixels</dd>
+      <dd>Converts inches to pixels</dd>
 
-    <dt>mm</dt>
+      <dt>mm</dt>
 
-    <dd>Converts millimeters to pixels</dd>
+      <dd>Converts millimeters to pixels</dd>
 
-    <dt>cm</dt>
+      <dt>cm</dt>
 
-    <dd>Converts centimeters to pixels</dd>
+      <dd>Converts centimeters to pixels</dd>
 
-    <dt>pt</dt>
+      <dt>pt</dt>
 
-    <dd>Converts points to pixels. There are 72 points to the
-    inch.</dd>
+      <dd>Converts points to pixels. There are 72 points to the
+      inch.</dd>
 
-    <dt>pc</dt>
+      <dt>pc</dt>
 
-    <dd>Converts picas to pixels. There are 12 points to the
-    pica.</dd>
+      <dd>Converts picas to pixels. There are 12 points to the
+      pica.</dd>
 
-    <dt>deg</dt>
+      <dt>deg</dt>
 
-    <dd>Degrees. The default unit of rotation.</dd>
+      <dd>Degrees. The default unit of rotation.</dd>
 
-    <dt>rad</dt>
+      <dt>rad</dt>
 
-    <dd>Converts radians to degrees.</dd>
+      <dd>Converts radians to degrees.</dd>
 
-    <dt>grad</dt>
+      <dt>grad</dt>
 
-    <dd>Converts grads to degrees. There are 400 grads in a
-    circle.</dd>
+      <dd>Converts grads to degrees. There are 400 grads in a
+      circle.</dd>
 
-    <dt>pct</dt>
+      <dt>pct</dt>
 
-    <dd>This conversion takes an numeric argument and returns a
-    percentage of the argument. For example 20.pct(150) -&gt;
-    30</dd>
-  </dl>
+      <dd>This conversion takes an numeric argument and returns a
+      percentage of the argument. For example 20.pct(150) -&gt;
+      30</dd>
+    </dl>
 
-  <p>SVG also supports <em>em</em> and <em>ex</em>, which are
-  measurements based on the font size. RVG does not.</p>
+    <p>SVG also supports <em>em</em> and <em>ex</em>, which are
+    measurements based on the font size. RVG does not.</p>
+  </div>
 
   <p class="spacer">&nbsp;</p>
 

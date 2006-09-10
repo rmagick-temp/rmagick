@@ -3705,7 +3705,7 @@ exit
       interpreted as a percentage. Both 0.25 and "25%" mean 25%.
       This argument is required.</dd>
 
-      <dt>dst_percentage</dt>
+      <dt>dst_percentage (with ImageMagick)</dt>
 
       <dd>Either a non-negative number a string in the form "NN%".
       If <span class="arg">src_percentage</span> is a number it is
@@ -3713,6 +3713,12 @@ exit
       This argument may omitted if no other arguments follow it. In
       this case <span class="arg">image</span>'s opacity is
       unchanged.</dd>
+
+      <dt>dst_percentage (with GraphicsMagick)</dt>
+
+      <dd>With GraphicsMagick, <code>dissolve</code> ignores the
+      value and uses <code>1.0-<span class=
+      "arg">src_percentage</span></code> instead.</dd>
     </dl>
 
     <p>The <code>dissolve</code> method can be called with or

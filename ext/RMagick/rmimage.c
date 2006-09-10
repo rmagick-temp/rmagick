@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.179 2006/09/05 23:10:42 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.180 2006/09/10 19:31:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1263,7 +1263,7 @@ special_composite(
 VALUE
 Image_blend(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_BLENDCOMPOSITEOP)
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
     Image *image, *overlay;
     double src_percent, dst_percent;
     long x_offset = 0L, y_offset = 0L;
@@ -2081,7 +2081,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
           }
           for (x = 0; x < (long) clip_mask->columns; x++)
           {
-            if (clip_mask->matte == MagickFalse)
+            if (clip_mask->matte == False)
             {
                 q->opacity = PIXEL_INTENSITY(q);
             }
@@ -2090,7 +2090,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
             q->blue = q->opacity;
             q += 1;
           }
-          if (SyncImagePixels(clip_mask) == MagickFalse)
+          if (SyncImagePixels(clip_mask) == False)
           {
               (void) DestroyImage(clip_mask);
               rm_magick_error("SyncImagePixels failed", NULL);
@@ -2098,7 +2098,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         }
 
 #if defined(HAVE_SETIMAGESTORAGECLASS)
-        if (SetImageStorageClass(clip_mask, DirectClass) == MagickFalse)
+        if (SetImageStorageClass(clip_mask, DirectClass) == False)
         {
             (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
@@ -2111,7 +2111,7 @@ Image_clip_mask_eq(VALUE self, VALUE mask)
         }
 #endif
 
-        clip_mask->matte = MagickTrue;
+        clip_mask->matte = True;
 
         // SetImageClipMask clones the clip_mask image. We can
         // destroy our copy after SetImageClipMask is done with it.
@@ -3897,6 +3897,48 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 }
 
 
+
+#if defined(GRAPHICSMAGICK)
+/*
+    Static:     create_mattes
+    Purpose:    GraphicsMagick establishes the source image mattes in
+                command.c, before calling CompositeImage. This function does
+                that step for Image_dissolve when we're built for GraphicsMagick.
+*/
+static void
+create_mattes(Image *image, double src_percent)
+{
+    long x, y;
+    PixelPacket *q;
+
+    if (!image->matte)
+    {
+        SetImageOpacity(image,OpaqueOpacity);
+    }
+
+    for (y = 0; y < (long) image->rows; y++)
+    {
+      q = GetImagePixels(image, 0, y, image->columns, 1);
+
+      if (q == NULL)
+      {
+          break;
+      }
+
+      for (x = 0; x < (long) image->columns; x++)
+      {
+        q->opacity = (Quantum) (((MaxRGB - q->opacity) * src_percent) / 100.0);
+        q += 1;
+      }
+
+      if (!SyncImagePixels(image))
+      {
+          break;
+      }
+    }
+}
+#endif
+
 /*
     Method:     Image#dissolve(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
                 Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
@@ -3911,6 +3953,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     Image *image, *overlay;
     double src_percent, dst_percent = -1.0;
     long x_offset = 0L, y_offset = 0L;
+    volatile VALUE composite;
 
     Data_Get_Struct(self, Image, image);
 
@@ -3940,8 +3983,21 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     }
 
     Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
-    return special_composite(image, overlay, src_percent, dst_percent
-                           , x_offset, y_offset, BlendCompositeOp);
+
+    // GraphicsMagick needs an extra step (ref: GM's command.c)
+#if defined(GRAPHICSMAGICK)
+    overlay = rm_clone_image(overlay);
+    create_mattes(overlay, src_percent);
+#endif
+
+    composite =  special_composite(image, overlay, src_percent, dst_percent
+                                 , x_offset, y_offset, DissolveCompositeOp);
+
+#if defined(GRAPHICSMAGICK)
+    DestroyImage(overlay);
+#endif
+
+    return composite;
 }
 
 

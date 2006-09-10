@@ -196,42 +196,14 @@ AC_CHECK_MEMBERS([ExceptionInfo.module],,,
                  #endif
                  #include "magick/api.h"])
 
-AC_CHECK_MEMBERS([Image.bias],,,
+AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
                  #include "magick/api.h"])
 
-AC_CHECK_MEMBERS([Image.orientation],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-AC_CHECK_MEMBERS([ImageInfo.orientation],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-AC_CHECK_MEMBERS([Image.quality],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-AC_CHECK_MEMBERS([Image.ticks_per_second],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-AC_CHECK_MEMBERS([Image.transparent_color],,,
+AC_CHECK_MEMBERS([ImageInfo.orientation, ImageInfo.channel],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
@@ -432,21 +404,6 @@ AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompos
 
 if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
   AC_DEFINE(HAVE_COLORDODGECOMPOSITEOP)
-fi
-
-AC_CACHE_CHECK(for BlendCompositeOp enum value, rm_cv_enum_BlendCompositeOp,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = BlendCompositeOp],
-     rm_cv_enum_BlendCompositeOp='yes',
-     rm_cv_enum_BlendCompositeOp='no')])
-
-if test "$rm_cv_enum_BlendCompositeOp" = yes; then
-  AC_DEFINE(HAVE_BLENDCOMPOSITEOP)
 fi
 
 AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,

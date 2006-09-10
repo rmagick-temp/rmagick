@@ -1116,8 +1116,9 @@ random_threshold_channel(geom, RedChannel)
     counter-clockwise. <span class="imquote">Rotated images are
     usually larger than the originals and have "empty" triangular
     corners. Empty triangles left over from shearing the image are
-    filled with the color defined by the pixel at location
-    (0,0).</span></p>
+    filled with the <a href=
+    "imageattrs.html#background_color">background
+    color</a>.</span></p>
 
     <h4>Arguments</h4>
 
@@ -1132,7 +1133,7 @@ random_threshold_channel(geom, RedChannel)
       the image only if the image's width exceeds its height. If
       "&lt;" rotates the image only if its height exceeds its
       width. If this argument is omitted the image is always
-      rotated</dd>
+      rotated.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1186,7 +1187,9 @@ random_threshold_channel(geom, RedChannel)
 
     <h4>Returns</h4>
 
-    <p>self</p>
+    <p>self, or <code>nil</code> if the image was not rotated
+    because it did not meet the qualification specified by the
+    second argument.</p>
   </div>
 
   <div class="sig">
@@ -1599,13 +1602,13 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-     /></a> <img src="ex/images/spin.gif" alt="" style=
+    /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3415,13 +3418,11 @@ end
     </dl>
 
     <p>Watermark can be called with a <span class=
-    "arg">gravity</span> argument or without.
-
-    When a <span class="arg">gravity</span> argument is
-    specified but the <span class="arg">x-</span> and <span class=
-    "arg">y-offsets</span> are omitted, the watermark is positioned
-    based on the value of the <span class="arg">gravity</span>
-    argument:</p>
+    "arg">gravity</span> argument or without. When a <span class=
+    "arg">gravity</span> argument is specified but the <span class=
+    "arg">x-</span> and <span class="arg">y-offsets</span> are
+    omitted, the watermark is positioned based on the value of the
+    <span class="arg">gravity</span> argument:</p>
 
     <dl>
       <dt>NorthWestGravity</dt>
@@ -3491,7 +3492,12 @@ end
     <p>A new image</p>
 
     <h4>Example</h4>
-    <p>See <a href="http://www.cit.gu.edu.au/~anthony/graphics/imagick6/annotating/#wmark_image">"Watermarking with Images"</a> in Anthony Thyssen's <a href="http://www.cit.gu.edu.au/~anthony/graphics/imagick6/"><cite>Examples of ImageMagick Usage</cite></a>.</p>
+
+    <p>See <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/annotating/#wmark_image">
+    "Watermarking with Images"</a> in Anthony Thyssen's <a href=
+    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/"><cite>Examples
+    of ImageMagick Usage</cite></a>.</p>
 
     <p class="rollover"><a href=
     "javascript:popup('watermark.rb.html')"><img src=

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.40 2006/09/01 16:43:15 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.41 2006/09/10 19:30:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -271,6 +271,7 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
 VALUE
 Info_channel_eq(VALUE self, VALUE channel)
 {
+#if defined(HAVE_IMAGEINFO_CHANNEL)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
@@ -289,6 +290,10 @@ Info_channel_eq(VALUE self, VALUE channel)
     }
 
     return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

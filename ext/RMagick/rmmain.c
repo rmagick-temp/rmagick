@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.143 2006/09/04 21:49:51 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.144 2006/09/11 23:22:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -676,7 +676,6 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, border_color)
     DCL_ATTR_READER(Image, bounding_box)
     DCL_ATTR_ACCESSOR(Image, chromaticity)
-    DCL_ATTR_ACCESSOR(Image, clip_mask)
     DCL_ATTR_ACCESSOR(Image, color_profile)
     DCL_ATTR_READER(Image, colors)
     DCL_ATTR_ACCESSOR(Image, colorspace)
@@ -701,6 +700,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, interlace)
     DCL_ATTR_ACCESSOR(Image, iptc_profile)
     DCL_ATTR_ACCESSOR(Image, iterations)        // do not document! Only used by Image#iterations=
+    DCL_ATTR_ACCESSOR(Image, mask)
     DCL_ATTR_ACCESSOR(Image, matte)
     DCL_ATTR_ACCESSOR(Image, matte_color)
     DCL_ATTR_READER(Image, mean_error_per_pixel)
@@ -1846,7 +1846,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/09/04 21:49:51 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/09/11 23:22:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

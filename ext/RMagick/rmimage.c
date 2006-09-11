@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.180 2006/09/10 19:31:53 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.181 2006/09/11 23:21:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2002,130 +2002,6 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
     return self;
 }
 
-
-/*
-    Method:     Image#clip_mask
-    Purpose:    Return the image's clip mask, or nil if it doesn't have a clip
-                mask.
-*/
-VALUE
-Image_clip_mask(VALUE self)
-{
-    Image *image, *clip_mask;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-
-    GetExceptionInfo(&exception);
-
-#if defined(HAVE_GETIMAGECLIPMASK)
-
-    // The returned clip mask is a clone, ours to keep.
-    clip_mask = GetImageClipMask(image, &exception);
-    rm_check_exception(&exception, clip_mask, DestroyOnError);
-
-#else
-    clip_mask = image->clip_mask;
-#endif
-
-    DestroyExceptionInfo(&exception);
-
-    return clip_mask ? rm_image_new(clip_mask) : Qnil;
-}
-
-
-/*
-    Method:     Image#clip_mask=(mask-image)
-    Purpose:    associates a clip mask with the image
-    Notes:      pass "nil" for the mask-image to remove the current clip mask.
-                If the clip mask is not the same size as the target image,
-                resizes the clip mask to match the target.
-*/
-VALUE
-Image_clip_mask_eq(VALUE self, VALUE mask)
-{
-    Image *image, *mask_image, *resized_image;
-    Image *clip_mask;
-    long x, y;
-    PixelPacket *q;
-    ExceptionInfo exception;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (mask != Qnil)
-    {
-        Data_Get_Struct(ImageList_cur_image(mask), Image, mask_image);
-        clip_mask = rm_clone_image(mask_image);
-
-        // Resize if necessary
-        if (clip_mask->columns != image->columns || clip_mask->rows != image->rows)
-        {
-            GetExceptionInfo(&exception);
-            resized_image = ResizeImage(clip_mask, image->columns, image->rows
-                                      , UndefinedFilter, 0.0, &exception);
-            rm_check_exception(&exception, resized_image, DestroyOnError);
-            DestroyExceptionInfo(&exception);
-            rm_ensure_result(resized_image);
-            (void) DestroyImage(clip_mask);
-            clip_mask = resized_image;
-        }
-
-        // The following section is copied from mogrify.c (6.2.8-8)
-        for (y = 0; y < (long) clip_mask->rows; y++)
-        {
-          q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
-          if (!q)
-          {
-              break;
-          }
-          for (x = 0; x < (long) clip_mask->columns; x++)
-          {
-            if (clip_mask->matte == False)
-            {
-                q->opacity = PIXEL_INTENSITY(q);
-            }
-            q->red = q->opacity;
-            q->green = q->opacity;
-            q->blue = q->opacity;
-            q += 1;
-          }
-          if (SyncImagePixels(clip_mask) == False)
-          {
-              (void) DestroyImage(clip_mask);
-              rm_magick_error("SyncImagePixels failed", NULL);
-          }
-        }
-
-#if defined(HAVE_SETIMAGESTORAGECLASS)
-        if (SetImageStorageClass(clip_mask, DirectClass) == False)
-        {
-            (void) DestroyImage(clip_mask);
-            rm_magick_error("SetImageStorageClass failed", NULL);
-        }
-#else
-        if (clip_mask->storage_class == PseudoClass)
-        {
-            SyncImage(image);
-            clip_mask->storage_class = DirectClass;
-        }
-#endif
-
-        clip_mask->matte = True;
-
-        // SetImageClipMask clones the clip_mask image. We can
-        // destroy our copy after SetImageClipMask is done with it.
-
-        (void) SetImageClipMask(image, clip_mask);
-        (void) DestroyImage(clip_mask);
-    }
-    else
-    {
-        (void) SetImageClipMask(image, NULL);
-    }
-
-    return self;
-}
 
 /*
     Method:     Image#clone
@@ -5992,6 +5868,134 @@ Image_map(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#mask
+    Purpose:    Return the image's clip mask, or nil if it doesn't have a clip
+                mask.
+    Notes:      Distinguish from Image#clip_mask
+*/
+VALUE
+Image_mask(VALUE self)
+{
+    Image *image, *mask;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+#if defined(HAVE_GETIMAGECLIPMASK)
+
+    // The returned clip mask is a clone, ours to keep.
+    mask = GetImageClipMask(image, &exception);
+    rm_check_exception(&exception, mask, DestroyOnError);
+
+#else
+    mask = image->clip_mask;
+#endif
+
+    DestroyExceptionInfo(&exception);
+
+    return mask ? rm_image_new(mask) : Qnil;
+}
+
+
+/*
+    Method:     Image#mask=(mask-image)
+    Purpose:    associates a clip mask with the image
+    Notes:      pass "nil" for the mask-image to remove the current clip mask.
+                If the clip mask is not the same size as the target image,
+                resizes the clip mask to match the target.
+    Notes:      Distinguish from Image#clip_mask=
+*/
+VALUE
+Image_mask_eq(VALUE self, VALUE mask)
+{
+    Image *image, *mask_image, *resized_image;
+    Image *clip_mask;
+    long x, y;
+    PixelPacket *q;
+    ExceptionInfo exception;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    if (mask != Qnil)
+    {
+        Data_Get_Struct(ImageList_cur_image(mask), Image, mask_image);
+        clip_mask = rm_clone_image(mask_image);
+
+        // Resize if necessary
+        if (clip_mask->columns != image->columns || clip_mask->rows != image->rows)
+        {
+            GetExceptionInfo(&exception);
+            resized_image = ResizeImage(clip_mask, image->columns, image->rows
+                                      , UndefinedFilter, 0.0, &exception);
+            rm_check_exception(&exception, resized_image, DestroyOnError);
+            DestroyExceptionInfo(&exception);
+            rm_ensure_result(resized_image);
+            (void) DestroyImage(clip_mask);
+            clip_mask = resized_image;
+        }
+
+        // The following section is copied from mogrify.c (6.2.8-8)
+        for (y = 0; y < (long) clip_mask->rows; y++)
+        {
+          q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
+          if (!q)
+          {
+              break;
+          }
+          for (x = 0; x < (long) clip_mask->columns; x++)
+          {
+            if (clip_mask->matte == False)
+            {
+                q->opacity = PIXEL_INTENSITY(q);
+            }
+            q->red = q->opacity;
+            q->green = q->opacity;
+            q->blue = q->opacity;
+            q += 1;
+          }
+          if (SyncImagePixels(clip_mask) == False)
+          {
+              (void) DestroyImage(clip_mask);
+              rm_magick_error("SyncImagePixels failed", NULL);
+          }
+        }
+
+#if defined(HAVE_SETIMAGESTORAGECLASS)
+        if (SetImageStorageClass(clip_mask, DirectClass) == False)
+        {
+            (void) DestroyImage(clip_mask);
+            rm_magick_error("SetImageStorageClass failed", NULL);
+        }
+#else
+        if (clip_mask->storage_class == PseudoClass)
+        {
+            SyncImage(image);
+            clip_mask->storage_class = DirectClass;
+        }
+#endif
+
+        clip_mask->matte = True;
+
+        // SetImageClipMask clones the clip_mask image. We can
+        // destroy our copy after SetImageClipMask is done with it.
+
+        (void) SetImageClipMask(image, clip_mask);
+        (void) DestroyImage(clip_mask);
+    }
+    else
+    {
+        (void) SetImageClipMask(image, NULL);
+    }
+
+    return self;
+}
+
 
 DEF_ATTR_ACCESSOR(Image, matte, bool)
 

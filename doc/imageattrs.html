@@ -68,8 +68,6 @@
 
           <li><a href="#class_type">class_type</a></li>
 
-          <li><a href="#clip_mask">clip_mask</a></li>
-
           <li><a href="#color_profile">color_profile</a></li>
 
           <li><a href="#colors">colors</a></li>
@@ -85,13 +83,13 @@
           <li><a href="#delay">delay</a></li>
 
           <li><a href="#density">density</a></li>
+
+          <li><a href="#depth">depth</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#depth">depth</a></li>
-
           <li><a href="#directory">directory</a></li>
 
           <li><a href="#dispose">dispose</a></li>
@@ -119,6 +117,8 @@
           <li><a href="#interlace">interlace</a></li>
 
           <li><a href="#iptc_profile">iptc_profile</a></li>
+
+          <li><a href="#mask">mask</a></li>
 
           <li><a href="#matte">matte</a></li>
 
@@ -400,59 +400,6 @@
 
     <p>A <a href="constants.html#ClassType">ClassType</a>
     constant.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="clip_mask">clip_mask</h3>
-
-    <p><span class="arg">image</span>.clip_mask -&gt;
-    <em>anImage</em> or <code>nil</code><br />
-    <span class="arg">image.</span>clip_mask = <em>anImage</em> or
-    <em>anImageList</em> or <code>nil</code></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>The <code>clip_mask=</code> attribute writer sets an image
-    clip mask created from the specified mask image. <span class=
-    "imquote">The mask image must have the same dimensions as the
-    image being masked.</span> If not, the mask image is resized to
-    match. <span class="imquote">If the mask image has an alpha
-    channel the opacity of each pixel is used to define the mask.
-    Otherwise, the intensity (gray level) of each pixel is
-    used.</span></p>
-
-    <p>In general, if the mask image does not have an alpha
-    channel, a white pixel in the mask prevents changes to the
-    corresponding pixel in the image being masked, while a black
-    pixel allows changes. A pixels that is neither black nor white
-    will allow partial changes depending on its intensity.</p>
-
-    <p>The <code>clip_mask</code> attribute reader returns a copy
-    of the clip mask. This is <em>not</em> a copy of the mask image
-    that was used to create the clip mask, nor is it the clip mask
-    image itself. Therefore, modifying the image returned by
-    <code>clip_mask</code> does not change the clip mask itself. To
-    change the clip mask you must assign a new image to the
-    <code>clip_mask=</code> attribute writer.</p>
-
-    <h4>Arguments</h4>
-
-    <p>If the value is an imagelist, uses the current image as the
-    mask image. Assign <code>nil</code> to remove the clip
-    mask.</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('clip_mask.rb.html')"><img src=
-    "ex/clip_mask.jpg" alt="clip_mask example" title=
-    "Click to see the example script" onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/clip_mask.jpg'" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" title=
-    "Mouse over the example to see the original image" /></p>
   </div>
 
   <div class="sig">
@@ -1018,6 +965,59 @@
     "image1.html#delete_profile">delete_profile</a>, <a href=
     "image1.html#each_profile">each_profile</a>. <a href=
     "image3.html#profile_bang">profile!</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="mask">mask</h3>
+
+    <p><span class="arg">image</span>.mask -&gt;
+    <em>anImage</em> or <code>nil</code><br />
+    <span class="arg">image.</span>mask = <em>anImage</em> or
+    <em>anImageList</em> or <code>nil</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The <code>mask=</code> attribute writer sets an image
+    clip mask created from the specified mask image. <span class=
+    "imquote">The mask image must have the same dimensions as the
+    image being masked.</span> If not, the mask image is resized to
+    match. <span class="imquote">If the mask image has an alpha
+    channel the opacity of each pixel is used to define the mask.
+    Otherwise, the intensity (gray level) of each pixel is
+    used.</span></p>
+
+    <p>In general, if the mask image does not have an alpha
+    channel, a white pixel in the mask prevents changes to the
+    corresponding pixel in the image being masked, while a black
+    pixel allows changes. A pixels that is neither black nor white
+    will allow partial changes depending on its intensity.</p>
+
+    <p>The <code>mask</code> attribute reader returns a copy
+    of the clip mask. This is <em>not</em> a copy of the mask image
+    that was used to create the clip mask, nor is it the clip mask
+    image itself. Therefore, modifying the image returned by
+    <code>mask</code> does not change the clip mask itself. To
+    change the clip mask you must assign a new image to the
+    <code>mask=</code> attribute writer.</p>
+
+    <h4>Arguments</h4>
+
+    <p>If the value is an imagelist, uses the current image as the
+    mask image. Assign <code>nil</code> to remove the clip
+    mask.</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('mask.rb.html')"><img src=
+    "ex/mask.jpg" alt="mask example" title=
+    "Click to see the example script" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/mask.jpg'" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
   </div>
 
   <div class="sig">

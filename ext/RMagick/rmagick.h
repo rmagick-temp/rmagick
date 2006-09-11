@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.135 2006/09/04 21:49:51 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.136 2006/09/11 23:21:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -697,7 +697,6 @@ ATTR_ACCESSOR(Image, border_color)
 ATTR_READER(Image, bounding_box)
 ATTR_ACCESSOR(Image, chromaticity)
 ATTR_ACCESSOR(Image, class_type)
-ATTR_ACCESSOR(Image, clip_mask)
 ATTR_ACCESSOR(Image, color_profile)
 ATTR_READER(Image, colors)
 ATTR_ACCESSOR(Image, colorspace)
@@ -722,6 +721,7 @@ ATTR_ACCESSOR(Image, image_type)
 ATTR_ACCESSOR(Image, interlace)
 ATTR_ACCESSOR(Image, iptc_profile)
 ATTR_ACCESSOR(Image, iterations)
+ATTR_ACCESSOR(Image, mask)
 ATTR_ACCESSOR(Image, matte)
 ATTR_ACCESSOR(Image, matte_color)
 ATTR_READER(Image, mean_error_per_pixel)

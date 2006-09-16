@@ -991,8 +991,11 @@
     <p>In general, if the mask image does not have an alpha
     channel, a white pixel in the mask prevents changes to the
     corresponding pixel in the image being masked, while a black
-    pixel allows changes. A pixels that is neither black nor white
+    pixel allows changes. A pixel that is neither black nor white
     will allow partial changes depending on its intensity.</p>
+
+    <p>Use <a href="#matte">matte=</a> to specify whether
+    or not the mask image has an alpha channel.</p>
 
     <p>The <code>mask</code> attribute reader returns a copy
     of the clip mask. This is <em>not</em> a copy of the mask image

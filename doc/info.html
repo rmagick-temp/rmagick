@@ -64,6 +64,8 @@
 
       <li><a href="#aref">[]</a></li>
 
+      <li><a href="#channel">channel</a></li>
+
       <li><a href="#define">define</a></li>
 
       <li><a href="#undefine">undefine</a></li>
@@ -80,8 +82,6 @@
         <li><a href="#background_color">background_color</a></li>
 
         <li><a href="#border_color">border_color</a></li>
-
-        <li><a href="#channel">channel</a></li>
 
         <li><a href="#colorspace">colorspace</a></li>
 
@@ -287,6 +287,33 @@ self["tiff", "bits-per-sample"] &raquo; 2
   </div>
 
   <div class="sig">
+    <h3 id="channel">channel</h3>
+
+    <p><span class="arg">self</span>.channel([<span class=
+    "arg">channel</span> [, <span class=
+    "arg">channel</span>...]])</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Restrict the method to the specified channel(s). This
+    attribute is set-only.</p>
+
+    <h4>Argument</h4>
+
+    <p>The arguments may be any <a href=
+    "constants.html#ChannelType">ChannelType</a> values.</p>
+
+    <h4>Notes</h4>
+
+    <p>If you call <code>channel</code> with no arguments,
+    <em>all</em> channels are included. If you do not call
+    <code>channel</code> at all, the channels used do not include
+    the alpha channel.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="define">define</h3>
 
     <p><span class="arg">self</span>.define(<span class=
@@ -441,70 +468,6 @@ self.undefine("tiff", "bits-per-sample")
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
     <a href="struct.html#Pixel">aPixel</a>.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="channel">channel</h3>
-
-    <p><span class="arg">self</span>.channel= <em>aChannelType</em>
-    or <em>aString</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Restrict the method to the specified channel(s). This
-    attribute is set-only.</p>
-
-    <h4>Argument</h4>
-
-    <p>The argument may be any <a href=
-    "constants.html#ChannelType">ChannelType</a> value or one of
-    these strings:</p>
-
-    <ul>
-      <li>"All"</li>
-
-      <li>"Alpha"</li>
-
-      <li>"Black"</li>
-
-      <li>"Blue"</li>
-
-      <li>"Cyan"</li>
-
-      <li>"Default"</li>
-
-      <li>"Gray"</li>
-
-      <li>"Green"</li>
-
-      <li>"Hue"</li>
-
-      <li>"Index"</li>
-
-      <li>"Luminosity"</li>
-
-      <li>"Magenta"</li>
-
-      <li>"Matte"</li>
-
-      <li>"Opacity"</li>
-
-      <li>"Red"</li>
-
-      <li>"Saturation"</li>
-
-      <li>"Yellow"</li>
-
-      <li>"RGB"</li>
-
-      <li>"RGBA"</li>
-
-      <li>"CMYK"</li>
-
-      <li>"CMYKA"</li>
-    </ul>
   </div>
 
   <div class="sig">

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.41 2006/09/10 19:30:27 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.42 2006/09/16 19:15:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -262,39 +262,37 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
 }
 
 
+
 /*
-    Method:     Info#channel=
-    Purpose:    Set channel(s)
-    Notes:      The argument can be a ChannelType enum or any of the strings
-                that Magick accepts with the -channel option.
+    Method:     Info#channel(channel [, channel...])
+    Purpose:    Set the channels
+    Thanks:     Douglas Sellers
 */
 VALUE
-Info_channel_eq(VALUE self, VALUE channel)
+Info_channel(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_IMAGEINFO_CHANNEL)
     Info *info;
+    ChannelType channels;
+
+    channels = extract_channels(&argc, argv);
+
+    // Ensure all arguments consumed.
+    if (argc > 0)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
 
     Data_Get_Struct(self, Info, info);
 
-    if (CLASS_OF(channel) == Class_ChannelType)
-    {
-        VALUE_TO_ENUM(channel, info->channel, ChannelType);
-    }
-    else
-    {
-        info->channel = ParseChannelOption(STRING_PTR(channel));
-        if (info->channel == (ChannelType) -1)
-        {
-            rb_raise(rb_eArgError, "unrecognized channel specification `%s'", STRING_PTR(channel));
-        }
-    }
-
+    info->channel = channels;
     return self;
 #else
     rm_not_implemented();
     return (VALUE)0;
 #endif
 }
+
 
 /*
     Method:     Info#colorspace

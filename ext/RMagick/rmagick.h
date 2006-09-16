@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.136 2006/09/11 23:21:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.137 2006/09/16 19:15:02 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -629,7 +629,6 @@ ATTR_ACCESSOR(Info, antialias)
 ATTR_ACCESSOR(Info, authenticate)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)
-ATTR_WRITER(Info, channel)
 ATTR_ACCESSOR(Info, colorspace)
 ATTR_ACCESSOR(Info, comment)
 ATTR_ACCESSOR(Info, compression)
@@ -680,6 +679,7 @@ extern VALUE Info_new(VALUE);
 extern VALUE Info_define(int, VALUE *, VALUE);
 extern VALUE Info_aset(VALUE, VALUE, VALUE, VALUE);
 extern VALUE Info_aref(VALUE, VALUE, VALUE);
+extern VALUE Info_channel(int, VALUE *, VALUE);
 extern VALUE Info_undefine(VALUE, VALUE, VALUE);
 extern VALUE Info_initialize(VALUE);
 extern VALUE rm_info_new(void);
@@ -749,6 +749,9 @@ ATTR_ACCESSOR(Image, units)
 ATTR_ACCESSOR(Image, virtual_pixel_method)
 ATTR_ACCESSOR(Image, x_resolution)
 ATTR_ACCESSOR(Image, y_resolution)
+
+extern ChannelType extract_channels(int *, VALUE *);
+extern void raise_ChannelType_error(VALUE);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Image_alloc(VALUE);

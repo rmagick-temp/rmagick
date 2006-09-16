@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.144 2006/09/11 23:22:00 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.145 2006/09/16 19:15:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1081,6 +1081,7 @@ Init_RMagick(void)
 #endif
 
     rb_define_method(Class_Info, "initialize", Info_initialize, 0);
+    rb_define_method(Class_Info, "channel", Info_channel, -1);
     rb_define_method(Class_Info, "freeze", rm_no_freeze, 0);
     rb_define_method(Class_Info, "define", Info_define, -1);
     rb_define_method(Class_Info, "[]=", Info_aset, 3);
@@ -1091,7 +1092,6 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, authenticate)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
-    DCL_ATTR_WRITER(Info, channel)
     DCL_ATTR_ACCESSOR(Info, colorspace)
     DCL_ATTR_ACCESSOR(Info, comment)        // new in 6.0.0
     DCL_ATTR_ACCESSOR(Info, compression)
@@ -1846,7 +1846,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/09/11 23:22:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/09/16 19:15:03 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

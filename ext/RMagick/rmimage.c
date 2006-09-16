@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.181 2006/09/11 23:21:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.182 2006/09/16 19:15:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -33,8 +33,6 @@ static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
-static ChannelType extract_channels(int *, VALUE *);
-static void raise_ChannelType_error(VALUE);
 
 static ImageAttribute *Next_Attribute;
 
@@ -10542,7 +10540,7 @@ xform_image(
 
 
 /*
-    Static:     extract_channels
+    Extern:     extract_channels
     Purpose:    Remove all the ChannelType arguments from the
                 end of the argument list.
     Returns:    A ChannelType value suitable for passing into
@@ -10550,7 +10548,7 @@ xform_image(
                 no channel arguments were found. Returns the
                 number of remaining arguments.
 */
-static ChannelType extract_channels(
+ChannelType extract_channels(
     int *argc,
     VALUE *argv)
 {
@@ -10586,11 +10584,11 @@ static ChannelType extract_channels(
 
 
 /*
-    Static:     raise_ChannelType_error
+    Extern:     raise_ChannelType_error
     Purpose:    raise TypeError when an non-ChannelType object
                 is unexpectedly encountered
 */
-static void
+void
 raise_ChannelType_error(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument needs to be a ChannelType (%s given)"

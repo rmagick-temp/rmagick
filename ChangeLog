@@ -13,10 +13,11 @@ RMagick 1.14.0
       dissolve, and watermark
     o Feature request #5418, add get_iptc_dataset and each_iptc_dataset to the
       Image class (requested by Oliver Andrich)
-    o Added the bias and clip_mask attributes to the Image class
+    o Added the bias and mask attributes to the Image class
     o Added optional qualifier argument to Image#rotate
-    o Added channel= attribute writer to the Image::Info class. Added new
-      ChannelType values (suggested by Douglas Sellers)
+    o Patch #5742 from Douglas Sellers, adds channel method to the Image::Info
+      class.
+    o Added new ChannelType values
     o Added texture= attribute writer to the Image::Info class
     o Added tile= attribute writer to the Draw class
     o Added "Magick Command Options and Their Equivalent Methods" page to the

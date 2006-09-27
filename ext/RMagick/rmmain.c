@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.145 2006/09/16 19:15:03 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.146 2006/09/27 21:26:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -714,6 +714,7 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Image, opacity)
     DCL_ATTR_ACCESSOR(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
+    DCL_ATTR_ACCESSOR(Image, pixel_interpolation_method)
 #if defined(HAVE_IMAGE_QUALITY)
     DCL_ATTR_READER(Image, quality)
 #endif
@@ -1504,6 +1505,19 @@ Init_RMagick(void)
         ENUMERATOR(PartitionInterlace)
     END_ENUM
 
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+    DEF_ENUM(InterpolatePixelMethod)
+        ENUMERATOR(UndefinedInterpolatePixel)
+        ENUMERATOR(AverageInterpolatePixel)
+        ENUMERATOR(BicubicInterpolatePixel)
+        ENUMERATOR(BilinearInterpolatePixel)
+        ENUMERATOR(FilterInterpolatePixel)
+        ENUMERATOR(IntegerInterpolatePixel)
+        ENUMERATOR(MeshInterpolatePixel)
+        ENUMERATOR(NearestNeighborInterpolatePixel)
+    END_ENUM
+#endif
+
 #if defined(HAVE_COMPAREIMAGELAYERS)
     DEF_ENUM(MagickLayerMethod)
         ENUMERATOR(UndefinedLayer)
@@ -1846,7 +1860,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/09/16 19:15:03 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/09/27 21:26:35 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

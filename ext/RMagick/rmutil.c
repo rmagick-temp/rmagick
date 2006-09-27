@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.82 2006/08/28 22:21:29 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.83 2006/09/27 21:26:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1075,6 +1075,27 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
     }
 }
 
+
+/*
+    Extern:     Pixel_from_MagickPixelPacket
+    Purpose:    Create a Magick::Pixel from a MagickPixelPacket structure
+*/
+#if defined(HAVE_MAGICKPIXELPACKET)
+VALUE
+Pixel_from_MagickPixelPacket(MagickPixelPacket *mpp)
+{
+    PixelPacket pixel;
+
+    pixel.red = RoundToQuantum(mpp->red);
+    pixel.green = RoundToQuantum(mpp->green);
+    pixel.blue = RoundToQuantum(mpp->blue);
+    pixel.opacity = RoundToQuantum(mpp->opacity);
+
+    return Pixel_from_PixelPacket(&pixel);
+}
+#endif
+
+
 /*
     Extern:     AffineMatrix_to_AffineMatrix
     Purpose:    Convert a Magick::AffineMatrix object to a AffineMatrix structure.
@@ -1566,6 +1587,44 @@ InterlaceType_new(InterlaceType interlace)
     name = InterlaceType_name(interlace);
     return rm_enum_new(Class_InterlaceType, ID2SYM(rb_intern(name)), INT2FIX(interlace));
 }
+
+
+/*
+    Static:     InterpolatePixelMethod_name
+    Purpose:    Return the name of a InterpolatePixelMethod enum as a string
+*/
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+static const char *
+InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
+{
+    switch(interpolate)
+    {
+        default:
+        ENUM_TO_NAME(UndefinedInterpolatePixel)
+        ENUM_TO_NAME(AverageInterpolatePixel)
+        ENUM_TO_NAME(BicubicInterpolatePixel)
+        ENUM_TO_NAME(BilinearInterpolatePixel)
+        ENUM_TO_NAME(FilterInterpolatePixel)
+        ENUM_TO_NAME(IntegerInterpolatePixel)
+        ENUM_TO_NAME(MeshInterpolatePixel)
+        ENUM_TO_NAME(NearestNeighborInterpolatePixel)
+    }
+}
+
+
+/*
+    External:   InterpolatePixelMethod_new
+    Purpose:    Construct an InterpolatePixelMethod enum object for the specified value.
+*/
+VALUE
+InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
+{
+    const char *name;
+
+    name = InterpolatePixelMethod_name(interpolate);
+    return rm_enum_new(Class_InterpolatePixelMethod, ID2SYM(rb_intern(name)), INT2FIX(interpolate));
+}
+#endif
 
 
 /*

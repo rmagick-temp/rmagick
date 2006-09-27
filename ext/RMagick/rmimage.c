@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.182 2006/09/16 19:15:03 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.183 2006/09/27 21:26:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5523,6 +5523,7 @@ Image_inspect(VALUE self)
     return rb_str_new2(buffer);
 }
 
+
 /*
     Method:     Image#interlace
     Purpose:    get the interlace attribute
@@ -5536,6 +5537,7 @@ Image_interlace(VALUE self)
 
     return InterlaceType_new(image->interlace);
 }
+
 
 /*
     Method:     Image#interlace=
@@ -5551,6 +5553,7 @@ Image_interlace_eq(VALUE self, VALUE interlace)
     VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
     return self;
 }
+
 
 /*
     Method:     Image#iptc_profile
@@ -7038,6 +7041,47 @@ Image_pixel_color(
 
     return Pixel_from_PixelPacket(&old_color);
 }
+
+
+/*
+    Method:     Image.pixel_interpolation_method
+                Image.pixel_interpolation_method=method
+    Purpose:    Get/set the "interpolate" field in the Image structure.
+    Ref:        Image.interpolate_pixel_color
+*/
+VALUE
+Image_pixel_interpolation_method(VALUE self)
+{
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return InterpolatePixelMethod_new(image->interpolate);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+VALUE
+Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
+{
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(method, image->interpolate, InterpolatePixelMethod);
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 #if 0
 /*

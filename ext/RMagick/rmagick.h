@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.137 2006/09/16 19:15:02 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.138 2006/09/27 21:26:35 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -294,6 +294,9 @@ EXTERN VALUE Class_FilterTypes;
 EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+EXTERN VALUE Class_InterpolatePixelMethod;
+#endif
 #if defined(HAVE_COMPAREIMAGELAYERS)
 EXTERN VALUE Class_MagickLayerMethod;
 #endif
@@ -735,6 +738,7 @@ ATTR_ACCESSOR(Image, offset)
 ATTR_WRITER(Image, opacity)
 ATTR_ACCESSOR(Image, orientation)
 ATTR_ACCESSOR(Image, page)
+ATTR_ACCESSOR(Image, pixel_interpolation_method)
 ATTR_READER(Image, quality)
 ATTR_READER(Image, quantum_depth)
 ATTR_ACCESSOR(Image, rendering_intent)
@@ -1017,6 +1021,9 @@ extern VALUE  Pixel_to_s(VALUE);
 extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE  Pixel_from_PixelPacket(PixelPacket *);
+#if defined(HAVE_MAGICKPIXELPACKET)
+extern VALUE  Pixel_from_MagickPixelPacket(MagickPixelPacket *);
+#endif
 
 extern void   Point_to_PointInfo(PointInfo *, VALUE);
 extern VALUE  PointInfo_to_Point(PointInfo *);
@@ -1031,6 +1038,12 @@ extern VALUE  Segment_from_SegmentInfo(SegmentInfo *);
 extern void   AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
 extern void   ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
 extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
+#if defined(HAVE_INTERPOLATEPIXELCOLOR)
+extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);
+#endif
+#if defined(HAVE_IMAGE_ORIENTATION)
+extern VALUE  OrientationType_new(OrientationType);
+#endif
 extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
 extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
 extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);
@@ -1042,11 +1055,8 @@ extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
 #if defined(HAVE_GETIMAGESTATISTICS)
 extern VALUE  Statistics_new(ImageStatistics *);
 #endif
-#if defined(HAVE_IMAGE_ORIENTATION)
-extern VALUE   OrientationType_new(OrientationType);
-#endif
 extern const char *StorageType_name(StorageType);
-extern VALUE   VirtualPixelMethod_new(VirtualPixelMethod);
+extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  Enum_alloc(VALUE);

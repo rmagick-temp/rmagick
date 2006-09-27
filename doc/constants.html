@@ -113,16 +113,19 @@
 
         <li><a href="#InterlaceType">InterlaceType</a></li>
 
+        <li><a href=
+        "#InterpolatePixelMethod">InterpolatePixelMethod</a></li>
+
         <li><a href="#MetricType">MetricType</a></li>
 
         <li><a href="#NoiseType">NoiseType</a></li>
-
-        <li><a href="#Opacity">Opacity</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#Opacity">Opacity</a></li>
+
         <li><a href="#OrientationType">OrientationType</a></li>
 
         <li><a href="#PaintMethod">PaintMethod</a></li>
@@ -152,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.10.0 ($Date: 2006/09/06 23:51:02 $)
+    <code>This is RMagick 1.10.0 ($Date: 2006/09/27 21:26:56 $)
     Copyright (C) 2006 by Timothy P. Hunter<br />
     Built with GraphicsMagick 1.2 unreleased Q16
     http://www.GraphicsMagick.org/<br />
@@ -1035,6 +1038,33 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     the different planes are saved to individual files (e.g.
     image.R, image.G, and image.B)</dd>
   </dl>
+
+  <h3 class="const" id="InterpolatePixelMethod">
+  InterpolatePixelMethod</h3>
+
+  <p>The pixel color interpolation method. See <a href=
+  "imageattrs.html#pixel_interpolation_method">pixel_interpolation_method</a>.</p>
+
+  <dl>
+    <dt>AverageInterpolatePixel</dt>
+
+    <dt>BicubicInterpolatePixel</dt>
+
+    <dt>BilinearInterpolatePixel</dt>
+
+    <dt>FilterInterpolatePixel</dt>
+
+    <dt>IntegerInterpolatePixel</dt>
+
+    <dt>MeshInterpolatePixel</dt>
+
+    <dt>NearestNeighborInterpolatePixel</dt>
+  </dl>
+
+  <p>For FilterInterpolatePixel, specify the filter with the
+  <a href="imageattrs.html#filter">filter</a> attribute. Specify
+  the sharpness with the <a href="imageattrs.html#blur">blur</a>
+  attribute.</p>
 
   <h3 class="const" id="MetricType">MetricType</h3>
 

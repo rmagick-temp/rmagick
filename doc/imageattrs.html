@@ -151,6 +151,9 @@
 
           <li><a href="#page">page</a></li>
 
+          <li><a href=
+          "#pixel_interpolation_method">pixel_interpolation_method</a></li>
+
           <li><a href="#quality">quality</a></li>
 
           <li><a href="#quantum_depth">quantum_depth</a></li>
@@ -299,6 +302,10 @@
   <div class="desc">
     <h4>Description</h4>The blur factor to use when resizing. See
     <a href="image3.html#resize">resize</a>.
+
+    <h4>Argument</h4>
+
+    <p>&gt; 1.0 is blurry, &lt; 1.0 is sharp.</p>
   </div>
 
   <div class="sig">
@@ -970,8 +977,8 @@
   <div class="sig">
     <h3 id="mask">mask</h3>
 
-    <p><span class="arg">image</span>.mask -&gt;
-    <em>anImage</em> or <code>nil</code><br />
+    <p><span class="arg">image</span>.mask -&gt; <em>anImage</em>
+    or <code>nil</code><br />
     <span class="arg">image.</span>mask = <em>anImage</em> or
     <em>anImageList</em> or <code>nil</code></p>
   </div>
@@ -979,8 +986,8 @@
   <div class="desc">
     <h4>Description</h4>
 
-    <p>The <code>mask=</code> attribute writer sets an image
-    clip mask created from the specified mask image. <span class=
+    <p>The <code>mask=</code> attribute writer sets an image clip
+    mask created from the specified mask image. <span class=
     "imquote">The mask image must have the same dimensions as the
     image being masked.</span> If not, the mask image is resized to
     match. <span class="imquote">If the mask image has an alpha
@@ -994,13 +1001,13 @@
     pixel allows changes. A pixel that is neither black nor white
     will allow partial changes depending on its intensity.</p>
 
-    <p>Use <a href="#matte">matte=</a> to specify whether
-    or not the mask image has an alpha channel.</p>
+    <p>Use <a href="#matte">matte=</a> to specify whether or not
+    the mask image has an alpha channel.</p>
 
-    <p>The <code>mask</code> attribute reader returns a copy
-    of the clip mask. This is <em>not</em> a copy of the mask image
-    that was used to create the clip mask, nor is it the clip mask
-    image itself. Therefore, modifying the image returned by
+    <p>The <code>mask</code> attribute reader returns a copy of the
+    clip mask. This is <em>not</em> a copy of the mask image that
+    was used to create the clip mask, nor is it the clip mask image
+    itself. Therefore, modifying the image returned by
     <code>mask</code> does not change the clip mask itself. To
     change the clip mask you must assign a new image to the
     <code>mask=</code> attribute writer.</p>
@@ -1014,12 +1021,11 @@
     <h4>Example</h4>
 
     <p class="rollover"><a href=
-    "javascript:popup('mask.rb.html')"><img src=
-    "ex/mask.jpg" alt="mask example" title=
-    "Click to see the example script" onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/mask.jpg'" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" title=
+    "javascript:popup('mask.rb.html')"><img src="ex/mask.jpg" alt=
+    "mask example" title="Click to see the example script"
+    onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/mask.jpg'" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
   </div>
 
@@ -1327,6 +1333,40 @@ blur_image is 100% complete.
   </div>
 
   <div class="sig">
+    <h3 id="pixel_interpolation_method">
+    pixel_interpolation_method</h3>
+
+    <p><span class="arg">image</span>.pixel_interpolation_method
+    -&gt; <em>anInterpolatePixelMethod</em><br />
+    <span class="arg">image</span>.pixel_interpolation_method =
+    <span class="arg">anInterpolatePixelMethod</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Get/set the pixel color interpolation method. Some methods
+    (such as <a href="image3.html#wave">wave</a>, <a href=
+    "image3.html#swirl">swirl</a>, <a href=
+    "image2.html#implode">implode</a>, and <a href=
+    "image1.html#composite">composite</a>) use the pixel color
+    interpolation method to determine how to blend adjacent
+    pixels.</p>
+
+    <h4>Argument</h4>
+
+    <p>An <a href=
+    "constants.html#InterpolatePixelMethod">InterpolatePixelMethod</a>
+    enum value.</p>
+
+    <h4>Returns</h4>
+
+    <p>An <a href=
+    "constants.html#InterpolatePixelMethod">InterpolatePixelMethod</a>
+    enum value.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="quality">quality</h3>
 
     <p><span class="arg">image</span>.quality -&gt;
@@ -1334,10 +1374,12 @@ blur_image is 100% complete.
   </div>
 
   <div class="desc">
-    <h4>Description</h4>For JPEG images, returns the Independent
-    JPEG Group quality value. This number is a measurement of the
-    amount of compression used when the image was saved. Lower
-    numbers mean higher compression.
+    <h4>Description</h4>
+
+    <p>For JPEG images, returns the Independent JPEG Group quality
+    value. This number is a measurement of the amount of
+    compression used when the image was saved. Lower numbers mean
+    higher compression.</p>
 
     <h4>Returns</h4>
 

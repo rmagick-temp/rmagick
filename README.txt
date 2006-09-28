@@ -51,6 +51,9 @@ their web sites if you have questions.
 
 <h2 id="tips">Tips for installing and configuring ImageMagick and GraphicsMagick</h2>
 
+See <http://rmagick.rubyforge.org/install-faq.html> for the latest version
+of these tips.
+
 If you are installing RMagick by compiling the source code, I strongly
 encourage you to install the latest version of ImageMagick or
 GraphicsMagick _from source_.  If you have never installed ImageMagick or
@@ -304,20 +307,6 @@ For example, the default log format is:
 
         Magick::set_log_format("%t %r %u %p %m/%f/%l/%d:\n  %e")
 
-<h2 id="issues">Known issues</h2>
-
-1. gcc 3.2, during the "install.rb setup" step, issues the following warning.
-   This does not indicate a problem.
-
-    `cc1: warning: changing search order for system directory "/usr/local/include"`   <br>
-    `cc1: warning:   as it has already been specified as a non-system directory`
-
-2. With older releases of ImageMagick you may see this warning. It does not
-   indicate a problem.
-
-    `/usr/include/sys/ipc.h:25:3: warning: #warning "Files using this header must
-    be compiled with _SVID_SOURCE or _XOPEN_SOURCE"`
-
 <h2 id="bugs">Reporting bugs</h2>
 
 Please report bugs in RMagick, its documentation, or its installation
@@ -331,14 +320,9 @@ to their respective authors or distributors.
 
 Thanks to
 
-   * Akinori MUSHA, for his work making RMagick available on FreeBSD.
-   * Tom Payne, for reporting bugs, sending me the Ruby 1.8.0 patches, and for the Gentoo ebuild.
-   * Bob Friesenhahn, for GraphicsMagick. Also for his help with the RMagick installation and many other things.
    * Simple Systems, for hosting the RMagick documentation online.
-   * Mike Williams, for the RMagick Debian package
    * ImageMagick Studio LLC, for ImageMagick and for hosting the RMagick documentation.
-   * Kaspar Schiess, for the MS Windows gem.
-   * Jeremy Hinegardner, for the amd64 patch.
+   * Kaspar Schiess and Brett DiFrischia, for the MS Windows gems.
 
 <h2 id="license">License</h2>
 

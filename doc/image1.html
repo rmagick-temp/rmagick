@@ -1685,7 +1685,7 @@ img = Magick::Image.read_inline(content)
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3799,6 +3799,9 @@ exit
 
     <h4>Returns</h4>
 
+    <p>The distortion metric, represented as a floating-point
+    number.</p>
+
     <h4>Magick API</h4>
 
     <p>GetImageChannelDistortion (available in ImageMagick
@@ -3834,7 +3837,9 @@ exit
   <div class="sig">
     <h3 id="each_iptc_dataset">each_iptc_dataset</h3>
 
-    <p>image.each_iptc_dataset -&gt; <code>nil</code></p>
+    <p>image.each_iptc_dataset { |<span class="arg">dataset</span>,
+    <span class="arg">data_field</span>| <span class=
+    "arg">block</span>} -&gt; <code>nil</code></p>
   </div>
 
   <div class="desc">

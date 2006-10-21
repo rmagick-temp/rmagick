@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.83 2006/09/27 21:26:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.84 2006/10/21 13:41:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -16,6 +16,9 @@ static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
 static VALUE Enum_type_inspect(VALUE);
 static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
+#if defined(HAVE_NEW_COLORINFO)
+static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
+#endif
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
@@ -1077,26 +1080,6 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 
 
 /*
-    Extern:     Pixel_from_MagickPixelPacket
-    Purpose:    Create a Magick::Pixel from a MagickPixelPacket structure
-*/
-#if defined(HAVE_MAGICKPIXELPACKET)
-VALUE
-Pixel_from_MagickPixelPacket(MagickPixelPacket *mpp)
-{
-    PixelPacket pixel;
-
-    pixel.red = RoundToQuantum(mpp->red);
-    pixel.green = RoundToQuantum(mpp->green);
-    pixel.blue = RoundToQuantum(mpp->blue);
-    pixel.opacity = RoundToQuantum(mpp->opacity);
-
-    return Pixel_from_PixelPacket(&pixel);
-}
-#endif
-
-
-/*
     Extern:     AffineMatrix_to_AffineMatrix
     Purpose:    Convert a Magick::AffineMatrix object to a AffineMatrix structure.
     Notes:      If not initialized, the defaults are [sx,rx,ry,sy,tx,ty] = [1,0,0,1,0,0]
@@ -1785,7 +1768,11 @@ Color_from_ColorInfo(const ColorInfo *ci)
 
     compliance_type = ci->compliance;
     compliance = ComplianceType_new(compliance_type);
+#if defined(HAVE_NEW_COLORINFO)
+    color      = Pixel_from_MagickPixelPacket((MagickPixelPacket *)(&(ci->color)));
+#else
     color      = Pixel_from_PixelPacket((PixelPacket *)(&(ci->color)));
+#endif
 
     return rb_funcall(Class_Color, ID_new, 3
                     , name, compliance, color);
@@ -1826,7 +1813,18 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     if (m != Qnil)
     {
         Data_Get_Struct(m, Pixel, pixel);
+#if defined(HAVE_NEW_COLORINFO)
+        // For >= 6.3.0, ColorInfo.color is a MagickPixelPacket so we have to
+        // convert the PixelPacket.
+        GetMagickPixelPacket(NULL, &ci->color);
+        ci->color.red = (MagickRealType) pixel->red;
+        ci->color.green = (MagickRealType) pixel->green;
+        ci->color.blue = (MagickRealType) pixel->blue;
+        ci->color.opacity = (MagickRealType) OpaqueOpacity;
+        ci->color.index = (MagickRealType) 0;
+#else
         ci->color = *pixel;
+#endif
     }
 }
 
@@ -1852,11 +1850,20 @@ Color_to_s(VALUE self)
     char buff[1024];
 
     Color_to_ColorInfo(&ci, self);
+
+#if defined(HAVE_NEW_COLORINFO)
+    sprintf(buff, "name=%s, compliance=%s, "
+                  "color.red=%g, color.green=%g, color.blue=%g, color.opacity=%g ",
+                  ci.name,
+                  ComplianceType_name(&ci.compliance),
+                  ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
+#else
     sprintf(buff, "name=%s, compliance=%s, "
                   "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
                   ci.name,
                   ComplianceType_name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
+#endif
 
     destroy_ColorInfo(&ci);
     return rb_str_new2(buff);
@@ -1876,6 +1883,28 @@ Pixel_from_PixelPacket(PixelPacket *pp)
     *pixel = *pp;
     return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
+
+
+/*
+    Static:     Pixel_from_MagickPixelPacket
+    Purpose:    Create a Magick::Pixel object from a MagickPixelPacket structure.
+    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
+*/
+#if defined(HAVE_NEW_COLORINFO)
+static VALUE
+Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
+{
+    Pixel *pixel;
+
+    pixel          = ALLOC(Pixel);
+    pixel->red     = RoundToQuantum(pp->red);
+    pixel->green   = RoundToQuantum(pp->green);
+    pixel->blue    = RoundToQuantum(pp->blue);
+    pixel->opacity = RoundToQuantum(pp->opacity);
+
+    return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
+}
+#endif
 
 
 /*

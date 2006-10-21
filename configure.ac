@@ -131,6 +131,13 @@ fi
 
 AC_CHECK_FUNCS([GetImageStatistics GetMagickInfoArray])
 
+AC_CHECK_FUNC(GetMagickPixelPacket,
+              rm_have_getmagickpixelpacket=yes,
+              rm_have_getmagickpixelpacket=no)
+if test "$rm_have_getmagickpixelpacket" = yes; then
+   AC_DEFINE(HAVE_GETMAGICKPIXELPACKET)
+fi
+
 AC_CHECK_FUNC(GetMagickInfoList,
               rm_have_getmagickinfolist=yes,
               rm_have_getmagickinfolist=no)
@@ -138,7 +145,7 @@ if test "$rm_have_getmagickinfolist" = yes; then
    AC_DEFINE(HAVE_GETMAGICKINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GetMultilineTypeMetrics GetNextImageAttribute GetNextImageProfile])
+AC_CHECK_FUNCS([GetMagickResourceLimit GetMultilineTypeMetrics GetNextImageAttribute GetNextImageProfile])
 
 AC_CHECK_FUNC(GetTypeInfoList,
               rm_have_gettypeinfolist=yes,
@@ -147,7 +154,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GetMagickResourceLimit GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
 AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes IsColorSimilar])
 AC_CHECK_FUNCS([IsImageSimilar NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
@@ -634,6 +641,25 @@ if test "$rm_have_acquirestringinfo" = yes -a "$rm_have_magickbooleantype" = yes
 fi
 
 
+# The MagickPixelPacket type was introduced in IM 6.0.0. The GetMagickPixelPacket
+# function was introduced in 6.2.0. IM 6.3.0 changed the type of the 'color'
+# member of the ColorInfo structure from PixelPacket to MagickPixelPacket.
+if test "$rm_have_getmagickpixelpacket" = yes; then
+   AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_info_color,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
+        rv_cv_struct_color_info_color='yes',
+        rv_cv_struct_color_info_color='no')])
+
+   if test "$rv_cv_struct_color_info_color" = yes; then
+      AC_DEFINE(HAVE_NEW_COLORINFO)
+   fi
+fi
 
 # Where is ****Magick installed?
 MAGICKPREFIX=`${MAGICKCONFIG} --prefix`

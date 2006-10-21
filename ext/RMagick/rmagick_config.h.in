@@ -95,6 +95,8 @@
 #undef HAVE_GETMAGICKINFOLIST
 /* API changed in IM 6.1.3 */
 #undef HAVE_OLD_GETMAGICKINFOLIST
+/* Introduced in IM 6.3.0 */
+#undef HAVE_GETMAGICKPIXELPACKET
 /* Introduced in IM 6.2.5 */
 #undef HAVE_GETMAGICKRESOURCELIMIT
 /* Introduced in IM 6.1.5 */
@@ -163,6 +165,8 @@
 #undef HAVE_MEMORY_H
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_NEGATEIMAGECHANNEL
+/* ColorInfo changed in 6.3.0 */
+#undef HAVE_NEW_COLORINFO
 /* Introduced in IM 6.1.0 */
 #undef HAVE_NORMALIZEIMAGECHANNEL
 /* Introduced in IM 5.5.4 - Not available in GM */

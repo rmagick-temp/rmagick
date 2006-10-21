@@ -1,3 +1,7 @@
+RMagick 1.14.1
+    o Handle change to the type of the ColorInfo.color field introduced by
+      ImageMagick 6.3.0
+
 RMagick 1.14.0
     o Feature request #5015, support CMYK->RGB conversions. Added the
       add_profile and delete_profiles to the Image class. Fixed the profile!,

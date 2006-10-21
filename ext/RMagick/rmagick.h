@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.138 2006/09/27 21:26:35 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.139 2006/10/21 13:40:47 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1021,9 +1021,6 @@ extern VALUE  Pixel_to_s(VALUE);
 extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE  Pixel_from_PixelPacket(PixelPacket *);
-#if defined(HAVE_MAGICKPIXELPACKET)
-extern VALUE  Pixel_from_MagickPixelPacket(MagickPixelPacket *);
-#endif
 
 extern void   Point_to_PointInfo(PointInfo *, VALUE);
 extern VALUE  PointInfo_to_Point(PointInfo *);

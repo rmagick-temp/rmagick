@@ -1,5 +1,5 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.6 2005/12/31 14:41:04 rmagick Exp $
+# $Id: rvg.rb,v 1.7 2006/10/24 22:35:41 rmagick Exp $
 #
 #                    Copyright (C) 2006 by Timothy P. Hunter
 #
@@ -257,9 +257,11 @@ class Magick::RVG
     # Primitives for the outermost RVG object
     def add_outermost_primitives(gc)    #:nodoc:
         add_transform_primitives(gc)
+        gc.push
         add_viewbox_primitives(@width, @height, gc)
         add_style_primitives(gc)
         @content.each { |element| element.add_primitives(gc) }
+        gc.pop
         self
     end
 

@@ -15,6 +15,7 @@ pr.define_clip_path('example') {
     }
 
 # Enable the clip-path
+pr.push
 pr.clip_path('example')
 
 # Composite the Flower Hat image over
@@ -33,6 +34,8 @@ girl.change_geometry("290") do |c,r|
     cols = c
     rows = r
 end
+
+pr.pop
 
 # Create a canvas to draw on, a bit bigger than the star.
 canvas = Magick::Image.new(cols, rows)

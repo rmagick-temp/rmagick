@@ -1038,7 +1038,19 @@ draw.inspect &raquo;
     masked.</p>
 
     <p>Before using a clip-path, you must create it using the
-    <a href="#define_clip_path">define_clip_path</a> method.</p>
+    <a href="#define_clip_path">define_clip_path</a> method. You
+    must precede <code>clip_path</code> with <a href=
+    "#push">push</a> and terminate the primitives that draw within
+    the clip path with <a href="#pop">pop</a>. For example,</p>
+    <pre>
+gc.push
+gc.clip_path('mypath')
+# drawing primitives within the clip path
+gc.pop
+gc.draw
+</pre>
+
+    <p>Also see the example below.</p>
 
     <h4>Arguments</h4>
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.139 2006/10/21 13:40:47 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.140 2006/11/07 00:22:05 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -27,9 +27,14 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_TARNAME
-#include "magick/api.h"
 
 
+// magick_api_config.h has a feature test symbol that defines which version
+// of the ImageMagick API header file to use. That file changed from "api.h"
+// to "MagickCore.h" in IM 6.2.3. All "magick_api.h" does is include the
+// correct API header file.
+#include "magick_api_config.h"
+#include "magick_api.h"
 
 // Undef ImageMagick's versions of these symbols
 #undef PACKAGE_VERSION
@@ -37,6 +42,8 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_TARNAME
+
+
 #include "rmagick_config.h"
 
 // Define a pair of macros that make it easier to code

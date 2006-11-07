@@ -1,0 +1,3 @@
+/* Which Magick API header file? */
+#undef HAVE_MAGICK_CORE_H
+#undef HAVE_MAGICK_API_H

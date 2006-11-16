@@ -17,7 +17,6 @@ Table Of Contents
 * [Upgrading] [upgrade]
 * [Uninstalling] [uninstall]
 * [More samples] [samples]
-* [Undocumented features] [undoc]
 * [Known issues] [issues]
 * [Reporting bugs] [bugs]
 * [Credits] [credits]
@@ -258,54 +257,6 @@ The `uninstall` target will uninstall RMagick completely:
 
 You can find more sample RMagick programs in the /example directory.
 These programs are not installed in the RMagick documentation tree.
-
-<h2 id="undoc">Undocumented features</h2>
-This release includes an extra feature that isn't in the documentation.
-The Magick module defines two methods that control ImageMagick's logging
-function.  This function is not officially documented by ImageMagick, so I
-have decided not to add them to RMagick's documentation.  However, you may
-find them helpful for debugging your application.  (Caveat: these two
-methods may change behavior or be removed without advance notice!  You are
-on your own!)
-
-##### Magick::set\_log\_event_mask(event [,...])
-
-The arguments are one or more "event domains".  The set_log_event_mask
-method recognizes these event domains: "all", "annotate", "blob", "cache",
-"coder", "configure", "deprecate", "draw", "locale", "none", "resource",
-"transform", "user", and "x11".  ImageMagick events that match the mask
-are logged.  The default domain is "none".  For example,
-
-        Magick::set\_log\_event_mask("render")
-
-Logging is controlled by the log.mgk file, which may be found in the same
-directory as the delegates.mgk files.  (See ImageMagick's README.txt
-file.) The purpose of the entries in this file is undocumented, so your
-guess is as good as mine.  Also, the meaning of the event domains and
-exactly what events are logged are undocumented.
-
-##### Magick::set\_log\_format(format)
-
-The default log format is described in the log.mgk file.  This method
-allows you to redefine the format at run-time.  The format argument is a
-string similar to an fprintf format string.  Each line in the log has the
-format described by the format string.  Characters that are not control
-characters are printed as-is.  The control characters are:
-
-        %t - the current time
-        %r - the elapsed time
-        %u - the user time
-        %p - the pid (process id)
-        %m - the name of the ImageMagick source file that contains the
-             function that generated the event
-        %f - the name of the ImageMagick function that generated the event
-        %l - the line number in the source file
-        %d - the event domain (one of the event mask strings listed above)
-        %e - the event name
-
-For example, the default log format is:
-
-        Magick::set_log_format("%t %r %u %p %m/%f/%l/%d:\n  %e")
 
 <h2 id="bugs">Reporting bugs</h2>
 

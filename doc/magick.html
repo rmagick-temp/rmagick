@@ -51,6 +51,10 @@
       <li><a href=
       "#set_cache_threshold">set_cache_threshold</a></li>
 
+      <li><a href="#set_log_event_mask">set_log_event_mask</a></li>
+
+      <li><a href="#set_log_format">set_log_format</a></li>
+
       <li><a href="#set_monitor">set_monitor</a></li>
     </ul>
   </div>
@@ -362,8 +366,8 @@ p Magick.formats &raquo;
       <code>:file</code>, the limit is the number of open files. If
       <code>:memory</code> or <code>:map</code>, the limit is
       measured megabytes. If <code>:disk</code>, the limit is
-      measured in gigabytes. If this argument is omitted the limit is not
-      changed.</dd>
+      measured in gigabytes. If this argument is omitted the limit
+      is not changed.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -414,6 +418,123 @@ Magick.imit_resource(:map, 2*n)
     <pre>
 Magick.set_cache_threshold(n)
 </pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="set_log_event_mask">set_log_event_mask</h3>
+
+    <p>Magick.set_log_event_mask(<span class=
+    "arg">event_list</span>)</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify which events to log.</p>
+
+    <h4>Argument</h4>
+
+    <p>A string composed of one or more of the following event
+    types. If more than one event type is specified, separate the
+    event types with commas.</p>
+
+    <p><code>All, Annotate, Blob, Cache, Coder, Configure,
+    Deprecate, Draw, Exception, Locale, Module, None, Resource,
+    Trace, Transform, User, Wand, X11</code></p>
+
+    <h4>Example</h4>
+    <pre>
+Magick.set_log_event_mask("Module,Coder")
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>SetLogEventMask</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#set_log_format">set_log_format</a></p>
+
+    <h4>Log configuration</h4>
+
+    <p>Magick logging is configured with the log.xml file in
+    Magick's config directory. See <a href=
+    "http://redux.imagemagick.org/script/resources.php">Resources</a>
+    in the ImageMagick documenation for more information.</p>
+
+    <p>Use this command to find out about the current log
+    configuration.</p>
+    <pre>
+convert -list log
+</pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="set_log_format">set_log_format</h3>
+
+    <p>Magick.set_log_format(<span class="arg">format</span>)</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the event log format.</p>
+
+    <h4>Argument</h4>
+
+    <p>A fprintf-like format string composed of optional "normal"
+    text (to which no meaning is assigned) and the following format
+    characters:</p>
+
+    <dl>
+      <dt>%d</dt>
+
+      <dd>domain</dd>
+
+      <dt>%e</dt>
+
+      <dd>event</dd>
+
+      <dt>%f</dt>
+
+      <dd>function</dd>
+
+      <dt>%l</dt>
+
+      <dd>line</dd>
+
+      <dt>%m</dt>
+
+      <dd>module</dd>
+
+      <dt>%p</dt>
+
+      <dd>process ID</dd>
+
+      <dt>%r</dt>
+
+      <dd>read CPU time</dd>
+
+      <dt>%t</dt>
+
+      <dd>wall clock time</dd>
+
+      <dt>%u</dt>
+
+      <dd>user CPU time</dd>
+
+      <dt>%%</dt>
+
+      <dd>percent sign</dd>
+
+      <dt>\n</dt>
+
+      <dd>newline</dd>
+
+      <dt>\r</dt>
+
+      <dd>carriage return</dd>
+    </dl>
   </div>
 
   <div class="sig">

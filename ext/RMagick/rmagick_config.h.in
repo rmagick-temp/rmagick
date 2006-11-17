@@ -55,6 +55,8 @@
 #undef HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE
 /* Introduced in IM 5.5.5 - Not defined in GraphicsMagick */
 #undef HAVE_FUZZYCOLORCOMPARE
+/* Introduced in IM 6.2.0 */
+#undef HAVE_FXIMAGECHANNEL
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GAMMAIMAGECHANNEL
 /* Introduced in IM 6.0.1 */

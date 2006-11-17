@@ -91,18 +91,20 @@
 
         <li><a href="#from_blob">from_blob</a></li>
 
+        <li><a href="#fx">fx</a></li>
+
         <li><a href="#inspect">inspect</a></li>
 
         <li><a href="#map">map</a></li>
 
         <li><a href="#montage">montage</a></li>
-
-        <li><a href="#morph">morph</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#morph">morph</a></li>
+
         <li><a href="#mosaic">mosaic</a></li>
 
         <li><a href="#new_image">new_image</a></li>
@@ -858,6 +860,83 @@ ilist.display
     <h4>Magick API</h4>
 
     <p>BlobToImageList</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="fx">fx</h3>
+
+    <p>imagelist.fx(expression [, channel...]) -&gt; anImage</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Applies the specified mathematical expression to the input
+    images. This method corresponds to ImageMagick's <a href=
+    "http://redux.imagemagick.org/script/fx.php">-fx</a>
+    operator.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>expression</dt>
+
+      <dd>A mathematical expression of the form accepted by the -fx
+      operator..</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments.
+      Specify the output channels. If no channels are specified the
+      result is set over all channels except the opacity
+      channel.</dd>
+    </dl>
+
+    <h4>Notes</h4>
+
+    <ul>
+      <li>Fx expressions are interpreted. Therefore this method can
+      be quite slow depending on the complexity of the expression.
+      Generally you will get better performance by accessing the
+      image pixels as <a href="struct.html#Pixel">Pixel</a> objects
+      (see <a href="image2.html#get_pixel">get_pixel</a> and
+      <a href="image3.html#view">view</a>) and using Ruby code to
+      perform the mathematics.</li>
+
+      <li>The <code>u</code> and <code>v</code> symbols refer to
+      the 0th and 1st image in the list. The image reference index
+      (<code>u[2]</code> for example) works as expected. The
+      current <a href="#scene">scene number</a> has no meaning in
+      the context of the <code>fx</code> method.</li>
+
+      <li>To specify a non-default pixel interpolation method, set
+      the <a href=
+      "imageattrs.html#pixel_interpolation_method">pixel_interpolation_method</a>
+      attribute of the last image in the list.</li>
+    </ul>
+
+    <h4>Returns</h4>
+
+    <p>The image created by the expression.</p>
+
+    <h4>Example</h4>
+    <pre>
+# Produce a navy blue image from a black image
+imgl = Magick::ImageList.new
+imgl &lt;&lt; Magick::Image.new(64, 64) {self.background_color = 'black'}
+
+res = imgl.fx('1/2', Magick::BlueChannel)
+</pre>
+
+    <h4>ImageMagick API</h4>
+
+    <p>FxImageChannel</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#get_pixel">get_pixel</a>, <a href=
+    "image3.html#view">view</a></p>
   </div>
 
   <div class="sig">

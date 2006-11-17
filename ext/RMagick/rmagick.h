@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.140 2006/11/07 00:22:05 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.141 2006/11/17 01:21:54 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -617,6 +617,7 @@ extern VALUE ImageList_coalesce(VALUE);
 extern VALUE ImageList_deconstruct(VALUE);
 extern VALUE ImageList_display(VALUE);
 extern VALUE ImageList_flatten_images(VALUE);
+extern VALUE ImageList_fx(int, VALUE *, VALUE);
 extern VALUE ImageList_map(int, VALUE *, VALUE);
 extern VALUE ImageList_montage(VALUE);
 extern VALUE ImageList_morph(VALUE, VALUE);

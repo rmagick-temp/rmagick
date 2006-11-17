@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.43 2006/08/29 22:33:25 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.44 2006/11/17 01:21:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -211,6 +211,50 @@ ImageList_flatten_images(VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     ImageList#fx(expression[, channel...])
+*/
+VALUE
+ImageList_fx(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_FXIMAGECHANNEL)
+    Image *images, *new_image;
+    char *expression;
+    ChannelType channels;
+    ExceptionInfo exception;
+
+
+    channels = extract_channels(&argc, argv);
+
+    // There must be exactly 1 remaining argument.
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+    }
+    else if (argc > 1)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    expression = STRING_PTR(argv[0]);
+
+    images = rm_images_from_imagelist(self);
+    GetExceptionInfo(&exception);
+    new_image = FxImageChannel(images, channels, expression, &exception);
+    rm_split(images);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

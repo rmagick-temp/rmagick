@@ -1,4 +1,5 @@
-RMagick 1.14.2
+RMagick 1.15.0
+    o Added fx method to ImageList class
     o Fix bug #6260, some RVG examples produce all-black GIF images
 
 RMagick 1.14.1

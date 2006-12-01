@@ -272,7 +272,9 @@ gc = Draw.new
     <h3 id="annotate">annotate</h3>
 
     <p><span class="arg">draw.</span>annotate(<span class=
-    "arg">img, x_rotate, y_rotate, x, y, text</span>) <span class=
+    "arg">img</span>, <span class="arg">width</span>, <span class=
+    "arg">height</span>, <span class="arg">x</span>, <span class=
+    "arg">y</span>, <span class="arg">text</span>) <span class=
     "arg">[&nbsp;{ additional parameters }&nbsp;]</span> -&gt;
     <em>draw</em></p>
   </div>
@@ -281,12 +283,15 @@ gc = Draw.new
     <h4>Description</h4>
 
     <p>Annotates a image with text. The text is positioned
-    according to the <code>gravity</code> attribute, starting
-    <span class="arg">x</span> pixels from the left and with its
-    baseline at <span class="arg">y</span>. The <span class=
-    "arg">x_rotate</span> and <span class="arg">y_rotate</span>
-    arguments specify a rotation in degrees on the x-axis and
-    y-axis, respectively. The attributes described in <a href=
+    according to the <code>gravity</code> attribute around the
+    rectangle described by the <span class="arg">x</span>,
+    <span class="arg">y</span>, <span class="arg">width</span>, and
+    <span class="arg">height</span> arguments. If either of the
+    <span class="arg">width</span> or <span class=
+    "arg">height</span> arguments are 0, uses the image
+    width-<span class="arg">x</span> and the image
+    height-<span class="arg">y</span> to compute the rectangle
+    width and height. The attributes described in <a href=
     "#attributes">annotate attributes</a>, below, influence the
     appearance and position of the text. These attributes may be
     set in the Draw object before calling <code>annotate</code>, or
@@ -303,13 +308,15 @@ gc = Draw.new
 
       <dd>the image or imagelist to be annotated</dd>
 
-      <dt>x-rotate</dt>
+      <dt>width</dt>
 
-      <dd>rotation on the x-axis, in degrees</dd>
+      <dd>width of the rectangle within which the text is
+      positioned</dd>
 
-      <dt>y-rotate</dt>
+      <dt>height</dt>
 
-      <dd>rotation on the y-axis, in degrees</dd>
+      <dd>height of the rectangle within which the text is
+      positioned</dd>
 
       <dt>x</dt>
 

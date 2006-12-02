@@ -1,6 +1,7 @@
 RMagick 1.15.0
     o Added fx method to ImageList class
     o Fix bug #6260, some RVG examples produce all-black GIF images
+    o Added wet_floor method to the Image class
 
 RMagick 1.14.1
     o Handle change to the type of the ColorInfo.color field introduced by

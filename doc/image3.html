@@ -116,13 +116,13 @@
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
+
+          <li><a href="#segment">segment</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#segment">segment</a></li>
-
           <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
@@ -166,17 +166,17 @@
           <li><a href="#strip_bang">strip!</a></li>
 
           <li><a href="#swirl">swirl</a></li>
-        </ul>
-      </div>
 
-      <div class="toccol">
-        <ul>
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
 
           <li><a href=
           "#texture_floodfill">texture_floodfill</a></li>
+        </ul>
+      </div>
 
+      <div class="toccol">
+        <ul>
           <li><a href="#threshold">threshold</a></li>
 
           <li><a href="#thumbnail">thumbnail</a></li>
@@ -215,6 +215,8 @@
           <li><a href="#watermark">watermark</a></li>
 
           <li><a href="#wave">wave</a></li>
+
+          <li><a href="#wet_floor">wet_floor</a></li>
 
           <li><a href="#white_threshold">white_threshold</a></li>
 
@@ -1827,7 +1829,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3562,6 +3564,72 @@ end
 
     <p><a href=
     "imageattrs.html#virtual_pixel_method">virtual_pixel_method</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="wet_floor">wet_floor</h3>
+
+    <p><span class="arg">image</span>.wet_floor(<span class=
+    "arg">intial=0.5</span>, <span class="arg">rate=1.0</span>)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Creates a <a href=
+    "http://en.wikipedia.org/wiki/Wet_floor_effect">"wet floor"</a>
+    reflection. The reflection is an inverted copy of the image
+    that changes from partially transparent to entirely
+    transparent. By default only the bottom third of the image
+    appears in the reflection.</p>
+
+    <p>Note that the output image is just the reflection. This
+    makes it easy to apply further transformations to the
+    reflection before combining it with the original image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>initial</dt>
+
+      <dd>A value between 0.0 and 1.0 that specifies the initial
+      percentage of transparency. Higher values cause the top of
+      the reflection to be more transparent, lower values less
+      transparent. The default is 0.5, which means that the top of
+      the reflection is 50% transparent.</dd>
+
+      <dt>rate</dt>
+
+      <dd>A non-negative value that specifies how rapidly the
+      reflection transitions from the initial level of transparency
+      to entirely transparent. The default value is 1.0, which
+      means that the transition occurs in 1/3 the image height.
+      Values greater than 1.0 speed up the transition (the
+      reflection will have fewer rows), values lower than 1.0 slow
+      down the transition (the reflection will have more rows). A
+      value of 0.0 means that the level of transparency will not
+      change.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>Here are four examples of <code>wet_floor</code>. The top
+    image shows the result of appending the default reflection to
+    the original image. The second image shows the result of
+    decreasing the initial transparency to 0.25 and using 0.5 as
+    the <span class="arg">rate</span> argument. The third image
+    uses the same reflection as the second image but has a slant
+    added. The bottom image is the same as the third image but with
+    a ripple effect.</p>
+
+    <p><a href="javascript:popup('wet_floor.rb.html')"><img src=
+    "ex/wet_floor.gif" title="Click to see the example script" alt=
+    "wet floor example" /></a></p>
   </div>
 
   <div class="sig">

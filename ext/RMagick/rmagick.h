@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.141 2006/11/17 01:21:54 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.142 2006/12/02 19:07:58 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -87,6 +87,7 @@
 #define LMAX(a,b) ((((long)(a))>((long)(b)))?((long)(a)):((long)(b)))
 #define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
 #define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
+#define RMAGICK_PI 3.14159265358979
 
 typedef ImageInfo Info; // Make type name match class name
 typedef PixelPacket Pixel;
@@ -953,6 +954,7 @@ extern VALUE Image_unsharp_mask_channel(int, VALUE *, VALUE);
 extern VALUE Image_vignette(int, VALUE *, VALUE);
 extern VALUE Image_watermark(int, VALUE *, VALUE);
 extern VALUE Image_wave(int, VALUE *, VALUE);
+extern VALUE Image_wet_floor(int, VALUE *, VALUE);
 extern VALUE Image_white_threshold(int, VALUE *, VALUE);
 extern VALUE Image_write(VALUE, VALUE);
 

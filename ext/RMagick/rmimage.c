@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.183 2006/09/27 21:26:35 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.184 2006/12/02 19:07:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5976,7 +5976,7 @@ Image_mask_eq(VALUE self, VALUE mask)
 #else
         if (clip_mask->storage_class == PseudoClass)
         {
-            SyncImage(image);
+            SyncImage(clip_mask);
             clip_mask->storage_class = DirectClass;
         }
 #endif
@@ -10274,6 +10274,151 @@ Image_wave(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#wet_floor(initial, rate)
+    Purpose:    Construct a "wet floor" reflection.
+    Notes:      `initial' is a number between 0 and 1, inclusive, that represents
+                the initial level of transparency. Smaller numbers are less
+                transparent than larger numbers. 0 is fully opaque. 1.0 is
+                fully transparent. The default is 0.5.
+                `rate' is the rate at which the initial level of transparency
+                changes to complete transparency. The default is 1.0. Values
+                larger than 1.0 cause the change to occur more rapidly. The
+                resulting reflection will be shorter. Values smaller than 1.0
+                cause the change to occur less rapidly. The resulting
+                reflection will be taller. If the rate is exactly 0 then the
+                amount of transparency doesn't change at all.
+    Notes:      http://en.wikipedia.org/wiki/Wet_floor_effect
+*/
+VALUE
+Image_wet_floor(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *reflection, *flip_image;
+    PixelPacket *p, *q;
+    RectangleInfo geometry;
+    long x, y, max_rows;
+    double initial = 0.5;
+    double rate = 1.0;
+    double opacity, step;
+    char *func;
+    ExceptionInfo exception;
+
+    switch (argc)
+    {
+        case 2:
+            rate = NUM2DBL(argv[1]);
+        case 1:
+            initial = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
+            break;
+    }
+
+
+    if (initial < 0.0 || initial > 1.0)
+    {
+        rb_raise(rb_eArgError, "Initial transparency must be in the range 0.0-1.0 (%g)", initial);
+    }
+    if (rate < 0.0)
+    {
+        rb_raise(rb_eArgError, "Transparency change rate must be >= 0.0 (%g)", rate);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    initial *= TransparentOpacity;
+
+    // The number of rows in which to transition from the initial level of
+    // transparency to complete transparency. rate == 0.0 -> no change.
+    if (rate > 0.0)
+    {
+        max_rows = ((double)image->rows) / (3.0 * rate);
+        max_rows = min(max_rows, image->rows);
+        step =  (TransparentOpacity - initial) / max_rows;
+    }
+    else
+    {
+        max_rows = image->rows;
+        step = 0.0;
+    }
+
+
+    GetExceptionInfo(&exception);
+    flip_image = FlipImage(image, &exception);
+    CHECK_EXCEPTION();
+
+
+    geometry.x = 0;
+    geometry.y = 0;
+    geometry.width = image->columns;
+    geometry.height = max_rows;
+    reflection = CropImage(flip_image, &geometry, &exception);
+    DestroyImage(flip_image);
+    CHECK_EXCEPTION();
+
+
+#if defined(HAVE_SETIMAGESTORAGECLASS)
+    SetImageStorageClass(reflection, DirectClass);
+    rm_check_image_exception(reflection, DestroyOnError);
+#else
+    if (reflection->storage_class == PseudoClass)
+    {
+        SyncImage(reflection);
+        reflection->storage_class = DirectClass;
+    }
+#endif
+
+
+    reflection->matte = MagickTrue;
+    opacity = initial;
+
+    for (y = 0; y < max_rows; y++)
+    {
+        if (opacity > TransparentOpacity)
+        {
+            opacity = TransparentOpacity;
+        }
+
+        p = (PixelPacket *)AcquireImagePixels(reflection, 0, y, image->columns, 1, &exception);
+        rm_check_exception(&exception, reflection, RetainOnError);
+
+        q = SetImagePixels(reflection, 0, y, image->columns, 1);
+        if (!q)
+        {
+            func = "SetImagePixels";
+            goto error;
+        }
+
+        for (x = 0; x < (long) image->columns; x++)
+        {
+            q[x] = p[x];
+            // Never make a pixel *less* transparent than it already is.
+            q[x].opacity = max(q[x].opacity, (Quantum)opacity);
+        }
+
+        if (SyncImagePixels(reflection) == MagickFalse)
+        {
+            func = "SyncImagePixels";
+            goto error;
+        }
+
+        opacity += step;
+    }
+
+
+    DestroyExceptionInfo(&exception);
+    return rm_image_new(reflection);
+
+error:
+    DestroyExceptionInfo(&exception);
+    DestroyImage(reflection);
+    rb_raise(rb_eRuntimeError, "%s failed on row %lu", func, y);
+    return (VALUE)0;
 }
 
 

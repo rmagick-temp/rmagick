@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.48 2006/08/27 23:06:00 rmagick Exp $
+# $Id: RMagick.rb,v 1.49 2006/12/05 23:59:50 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2006 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -340,7 +340,7 @@ class Draw
 
     # Set matte (make transparent) in image according to the specified
     # colorization rule
-    def matte(x, y, rule)
+    def matte(x, y, method)
         if ( not PAINT_METHOD_NAMES.has_key?(method.to_i) )
             Kernel.raise ArgumentError, "Unknown paint method"
         end

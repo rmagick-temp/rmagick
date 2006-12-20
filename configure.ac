@@ -159,7 +159,7 @@ fi
 
 AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
 AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes IsColorSimilar])
-AC_CHECK_FUNCS([IsImageSimilar NegateImageChannel])
+AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel ParseSizeGeometry PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])

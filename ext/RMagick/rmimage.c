@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.184 2006/12/02 19:07:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.185 2006/12/20 00:12:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3130,6 +3130,65 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
+/*
+    Static:     get_black_white_point
+    Purpose:    Convert percentages to #pixels. If the white-point (2nd)
+                argument is not supplied set it to #pixels - black-point.
+*/
+static void get_black_white_point(
+    Image *image,
+    int argc,
+    VALUE *argv,
+    double *black_point,
+    double *white_point)
+{
+    double pixels;
+
+    pixels = image->columns * image->rows;
+
+    switch (argc)
+    {
+        case 2:
+            if (rm_check_num2dbl(argv[0]))
+            {
+                *black_point = NUM2DBL(argv[0]);
+            }
+            else
+            {
+                *black_point = pixels * rm_str_to_pct(argv[0]);
+            }
+            if (rm_check_num2dbl(argv[1]))
+            {
+                *white_point = NUM2DBL(argv[1]);
+            }
+            else
+            {
+                *white_point = pixels * rm_str_to_pct(argv[1]);
+            }
+            break;
+
+        case 1:
+            if (rm_check_num2dbl(argv[0]))
+            {
+                *black_point = NUM2DBL(argv[0]);
+            }
+            else
+            {
+                *black_point = pixels * rm_str_to_pct(argv[0]);
+            }
+            *white_point = pixels - *black_point;
+            break;
+
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+    return;
+}
+
+
 /*
     Method:     Image#contrast_stretch_channel(black_point <, white_point> <, channel...>)
     Purpose:    Call ContrastStretchImageChannel
@@ -3144,7 +3203,6 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     ChannelType channels;
     double black_point, white_point;
-    unsigned long pixels;
 
     channels = extract_channels(&argc, argv);
     if (argc > 2)
@@ -3154,45 +3212,7 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(self, Image, image);
 
-    pixels = image->columns * image->rows;
-
-    switch (argc)
-    {
-        case 2:
-            if (rm_check_num2dbl(argv[0]))
-            {
-                black_point = NUM2DBL(argv[0]);
-            }
-            else
-            {
-                black_point = pixels * rm_str_to_pct(argv[0]);
-            }
-            if (rm_check_num2dbl(argv[1]))
-            {
-                white_point = NUM2DBL(argv[1]);
-            }
-            else
-            {
-                white_point = pixels * rm_str_to_pct(argv[1]);
-            }
-            break;
-
-        case 1:
-            if (rm_check_num2dbl(argv[0]))
-            {
-                black_point = NUM2DBL(argv[0]);
-            }
-            else
-            {
-                black_point = pixels * rm_str_to_pct(argv[0]);
-            }
-            white_point = (double) pixels - black_point;
-            break;
-
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
-            break;
-    }
+    get_black_white_point(image, argc, argv, &black_point, &white_point);
 
     new_image = rm_clone_image(image);
 
@@ -5709,6 +5729,35 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+}
+
+/*
+    Method:     Image_linear_stretch(black_point <, white_point>)
+    Purpose:    Call LinearStretchImage
+    Notes:      The default for white_point is #pixels-black_point.
+                See Image_contrast_stretch_channel.
+*/
+VALUE
+Image_linear_stretch(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_LINEARSTRETCHIMAGE)
+    Image *image, *new_image;
+    double black_point, white_point;
+
+    Data_Get_Struct(self, Image, image);
+
+    get_black_white_point(image, argc, argv, &black_point, &white_point);
+
+    new_image = rm_clone_image(image);
+
+    (void) LinearStretchImage(new_image, black_point, white_point);
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*
@@ -10762,9 +10811,9 @@ ChannelType extract_channels(
     if (channels == 0)
     {
 #if defined(HAVE_ALLCHANNELS)
-        channels = AllChannels;
+        channels = AllChannels & ~OpacityChannel;
 #else
-        channels = 0xff;
+        channels = 0xf7;
 #endif
     }
 

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.149 2006/12/02 19:07:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.150 2006/12/20 00:12:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -825,6 +825,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "inspect", Image_inspect, 0);
     rb_define_method(Class_Image, "level2", Image_level2, -1);
     rb_define_method(Class_Image, "level_channel", Image_level_channel, -1);
+    rb_define_method(Class_Image, "linear_stretch", Image_linear_stretch, -1);
     rb_define_method(Class_Image, "magnify", Image_magnify, 0);
     rb_define_method(Class_Image, "magnify!", Image_magnify_bang, 0);
     rb_define_method(Class_Image, "map", Image_map, -1);
@@ -1861,7 +1862,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/12/02 19:07:59 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/12/20 00:12:42 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

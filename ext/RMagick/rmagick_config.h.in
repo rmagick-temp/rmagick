@@ -149,6 +149,8 @@
 #undef HAVE_JPEG2000COMPRESSION
 /* Introduced in GM 1.2 */
 #undef HAVE_LABCOLORSPACE
+/* Introduced in IM 6.3.1 */
+#undef HAVE_LINEARSTRETCHIMAGE
 /* Introduced in IM 6.2.3 */
 #undef HAVE_LOGCOLORSPACE
 /* Introduced in IM 6.0.2 */

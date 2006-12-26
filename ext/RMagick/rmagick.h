@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.143 2006/12/20 00:12:41 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.144 2006/12/26 20:07:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -902,6 +902,7 @@ extern VALUE Image_random_channel_threshold(VALUE, VALUE, VALUE);
 extern VALUE Image_random_threshold_channel(int, VALUE *, VALUE);
 extern VALUE Image_read(VALUE, VALUE);
 extern VALUE Image_read_inline(VALUE, VALUE);
+extern VALUE Image_recolor(VALUE, VALUE);
 extern VALUE Image_reduce_noise(VALUE, VALUE);
 extern VALUE Image_resize(int, VALUE *, VALUE);
 extern VALUE Image_resize_bang(int, VALUE *, VALUE);

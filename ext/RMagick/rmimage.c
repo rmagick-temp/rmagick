@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.185 2006/12/20 00:12:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.186 2006/12/26 20:07:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7828,6 +7828,51 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     DestroyExceptionInfo(&exception);
 
     return array_from_images(images);
+}
+
+
+/*
+    Method:     Image#recolor(matrix)
+    Purpose:    Call RecolorImage
+*/
+VALUE
+Image_recolor(VALUE self, VALUE color_matrix)
+{
+#if defined(HAVE_RECOLORIMAGE)
+    Image *image, *new_image;
+    unsigned long order;
+    long x, len;
+    double *matrix;
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+
+    // Allocate color matrix from Ruby's memory
+    len = RARRAY(color_matrix)->len;
+    matrix = ALLOC_N(double, len);
+
+    for (x = 0; x < len; x++)
+    {
+        matrix[x] = NUM2DBL(rb_ary_entry(color_matrix, x));
+    }
+
+    order = (unsigned long)sqrt((double)(len + 1.0));
+
+    Data_Get_Struct(self, Image, image);
+
+    // RecolorImage sets the ExceptionInfo and returns a NULL image if an error occurs.
+    new_image = RecolorImage(image, order, matrix, &exception);
+    xfree((void *)matrix);
+
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

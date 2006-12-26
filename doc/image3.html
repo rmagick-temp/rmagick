@@ -91,6 +91,8 @@
           <li><a href=
           "#random_threshold_channel">random_threshold_channel</a></li>
 
+          <li><a href="#recolor">recolor</a></li>
+
           <li><a href="#reduce_noise">reduce_noise</a></li>
 
           <li><a href="#resample">resample</a></li>
@@ -116,13 +118,13 @@
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
-
-          <li><a href="#segment">segment</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#segment">segment</a></li>
+
           <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
@@ -169,14 +171,14 @@
 
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
-
-          <li><a href=
-          "#texture_floodfill">texture_floodfill</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#texture_floodfill">texture_floodfill</a></li>
+
           <li><a href="#threshold">threshold</a></li>
 
           <li><a href="#thumbnail">thumbnail</a></li>
@@ -808,6 +810,32 @@ random_threshold_channel(geom, RedChannel)
     <h4>Magick API</h4>
 
     <p>RandomThresholdImageChannel</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="recolor">recolor</h3>
+
+    <p><span class="arg">image</span>.recolor(<span class=
+    "arg">color_matrix</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Use this method to <span class="imquote">translate, scale,
+    shear, or rotate image colors. Although you can use variable
+    sized matrices, typically you use a 5&times;5 for an RGBA image
+    and a 6&times;6 for CMYKA. Populate the last row with
+    normalized values to translate.</span></p>
+
+    <h4>Arguments</h4>
+
+    <p>An array of Float values representing the recolor
+    matrix.</p>
+
+    <h4>Magick API</h4>
+
+    <p>RecolorImage (introduced in ImageMagick 6.3.1)</p>
   </div>
 
   <div class="sig">
@@ -1611,7 +1639,7 @@ random_threshold_channel(geom, RedChannel)
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-     /></a> <img src="ex/images/spin.gif" alt="" style=
+    /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3552,7 +3580,7 @@ end
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

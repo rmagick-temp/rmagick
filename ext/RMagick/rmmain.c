@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.151 2006/12/26 20:07:02 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.152 2006/12/28 00:29:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1120,6 +1120,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, monochrome)
     DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
     DCL_ATTR_ACCESSOR(Info, orientation)    // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, origin)         // new in 6.3.1
     DCL_ATTR_ACCESSOR(Info, page)
     DCL_ATTR_ACCESSOR(Info, pointsize)
     DCL_ATTR_ACCESSOR(Info, quality)
@@ -1863,7 +1864,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/12/26 20:07:02 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2006/12/28 00:29:52 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

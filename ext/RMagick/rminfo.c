@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.42 2006/09/16 19:15:03 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.43 2006/12/28 00:29:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1299,6 +1299,69 @@ Info_orientation_eq(VALUE self, VALUE inter)
 #endif
 }
 
+
+/*
+    Method:     Info#origin
+    Purpose:    Return origin geometry
+*/
+VALUE
+Info_origin(VALUE self)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *origin;
+
+    Data_Get_Struct(self, Info, info);
+
+    origin = GetImageOption(info, "origin");
+    return origin ? rb_str_new2(origin) : Qnil;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Info#origin=+-x+-y
+    Purpose:    Set origin geometry. Argument may be a Geometry object as well
+                as a geometry string.
+*/
+VALUE
+Info_origin_eq(VALUE self, VALUE origin_arg)
+{
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    volatile VALUE origin_str;
+    char *origin;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(origin_arg))
+    {
+        (void) RemoveImageOption(info, "origin");
+        return self;
+    }
+
+    origin_str = rb_funcall(origin_arg, ID_to_s, 0);
+    origin = GetPageGeometry(STRING_PTR(origin_str));
+
+    if (IsGeometry(origin) == MagickFalse)
+    {
+        rb_raise(rb_eArgError, "invalid origin geometry: %s", origin);
+    }
+
+    (void) SetImageOption(info, "origin", origin);
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 VALUE
 Info_page(VALUE self)
 {
@@ -1307,7 +1370,6 @@ Info_page(VALUE self)
 
     Data_Get_Struct(self, Info, info);
 #if defined(HAVE_SETIMAGEOPTION)
-
     page = GetImageOption(info, "page");
 #else
     page = (const char *)info->page;

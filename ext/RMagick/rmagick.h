@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.144 2006/12/26 20:07:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.145 2006/12/28 00:29:52 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -665,6 +665,7 @@ ATTR_WRITER(Info, monitor)
 ATTR_ACCESSOR(Info, monochrome)
 ATTR_ACCESSOR(Info, number_scenes)
 ATTR_ACCESSOR(Info, orientation)
+ATTR_ACCESSOR(Info, origin)
 ATTR_ACCESSOR(Info, page)
 ATTR_ACCESSOR(Info, pen)
 // ATTR_ACCESSOR(Info, ping) obsolete

@@ -96,13 +96,13 @@
         <li><a href="#depth">depth</a></li>
 
         <li><a href="#dispose">dispose</a></li>
+
+        <li><a href="#dither">dither</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#dither">dither</a></li>
-
         <li><a href="#extract">extract</a></li>
 
         <li><a href="#filename">filename</a></li>
@@ -124,16 +124,18 @@
         <li><a href="#label">label</a></li>
 
         <li><a href="#matte_color">matte_color</a></li>
+
+        <li><a href="#monitor">monitor</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#monitor">monitor</a></li>
-
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#orientation">orientation</a></li>
+
+        <li><a href="#origin">origin</a></li>
 
         <li><a href="#page">page</a></li>
 
@@ -1076,6 +1078,26 @@ self.undefine("tiff", "bits-per-sample")
 
     <p>An <a href=
     "constants.html#OrientationType">OrientationType</a> value.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="origin">origin</h3>
+
+    <p><span class="arg">self</span>.origin=<span class=
+    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set the image origin.</p>
+
+    <h4>Argument</h4>
+
+    <p>A <a href="imusage.html#geometry">geometry string</a> of the
+    form <code>+x+y</code> (a "-" may be used instead of "+" to
+    indicate a negative offset) or a <a href=
+    "struct.html#Geometry">Geometry</a> object.</p>
   </div>
 
   <div class="sig">

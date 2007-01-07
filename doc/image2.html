@@ -189,6 +189,8 @@ td.ds {
 
           <li><a href="#pixel_color">pixel_color</a></li>
 
+          <li><a href="#polaroid">polaroid</a></li>
+
           <li><a href="#posterize">posterize</a></li>
         </ul>
       </div>
@@ -651,7 +653,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img onmouseover="this.style.display='none';frameless.style.display='';"
     src="ex/frame.jpg" alt="frame example" /></a> <img src=
@@ -2381,9 +2383,11 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
 
     <p>The left side of the image has been modified by <a href=
     "image1.html#add_noise">add_noise</a>. The right side has been
-    filtered by median_filter(0.05).</p><a href=
-    "javascript:popup('median_filter.rb.html')"><img src=
-    "ex/median_filter.jpg" alt="median_filter example" /></a>
+    filtered by median_filter(0.05).</p>
+
+    <p><a href=
+    "javascript:popup('median_filter.rb.html')"><img src="ex/median_filter.jpg"
+    alt="median_filter example" /></a></p>
 
     <h4>See also</h4>
 
@@ -2947,8 +2951,8 @@ img = img.opaque('white', 'red')
       <dt>new_color</dt>
 
       <dd>If specified, the pixel is set to this color. May be
-      either a color name or a <a href=
-      "struct.html#Pixel">Pixel</a>.</dd>
+      either a <a href="imusage.html#color_names">color name</a> or
+      a <a href="struct.html#Pixel">Pixel</a>.</dd>
     </dl>
 
     <h4>Returns</h4>A <a href="struct.html#Pixel">Pixel</a> having
@@ -2962,6 +2966,80 @@ old = image.pixel_color(20,40,"white")
     <h4>Magick API</h4>
 
     <p>AcquireImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="polaroid">polaroid</h3>
+
+    <p>image.polaroid(angle=-5.0) [ <span class="arg">{ optional
+    arguments }</span> ] -&gt; anImage</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Produce an image that looks like a Polaroid&reg; instant
+    picture. If the image has a "label" <a href=
+    "image1.html#aset">property</a>, the resulting image is
+    captioned.</p>
+
+    <p>Optional arguments may be specified in a block associated
+    with the method. These arguments control the shadow color and
+    how the label is rendered. By default the shadow color is
+    gray75. To specify a different shadow color, use
+    <code>self.shadow_color</code>. The argument can be either a
+    <a href="imusage.html#color_names">color name</a> or a <a href=
+    "struct.html#Pixel">Pixel</a>.</p>
+
+    <p>The following <a href="draw.html#annotate">annotate</a>
+    attributes control the label rendering: <a href=
+    "draw.html#decorate_eq">decorate</a>, <a href=
+    "draw.html#density_eq">density</a>, <a href=
+    "draw.html#encoding_eq">encoding</a>, <a href=
+    "draw.html#fill_eq">fill</a>, <a href=
+    "draw.html#font_eq">font</a>, <a href=
+    "draw.html##font_family_eq">font_family</a>, <a href=
+    "draw.html#font_stretch_eq">font_stretch</a>, <a href=
+    "draw.html#font_style_eq">font_style</a>, <a href=
+    "draw.html#font_weight_eq">font_weight</a>, <a href=
+    "draw.html#pointsize_eq">pointsize</a>, <a href=
+    "draw.html#stroke_eq">stroke</a>, <a href=
+    "draw.html#stroke_width_eq">stroke_width</a>, <a href=
+    "draw.html#text_antialias_eq">text_antialias</a>, <a href=
+    "draw.html#undercolor_eq">undercolor</a>.</p>
+    <pre>
+img.polaroid do
+   self.shadow_color = "gray40"
+   self.pointsize = 12
+end
+</pre>
+
+    <p>Polaroid is a registered trademark of the Polaroid
+    Corporation.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>angle</dt>
+
+      <dd>The resulting image is rotated by this amount, measured
+      in degrees. The default is -5.0.</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('polaroid.rb.html')"><img src=
+    "ex/polaroid.jpg" alt="polaroid example" /></a></p>
+
+    <h4>Magick API</h4>
+
+    <p>PolaroidImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "http://rmagick.rubyforge.org/Polaroid/polaroid.html">The
+    Polaroid Effect</a></p>
   </div>
 
   <div class="sig">

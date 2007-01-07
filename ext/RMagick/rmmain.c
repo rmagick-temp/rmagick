@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.152 2006/12/28 00:29:52 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.153 2007/01/07 23:44:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -846,6 +846,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "ordered_dither", Image_ordered_dither, -1);
     rb_define_method(Class_Image, "palette?", Image_palette_q, 0);
     rb_define_method(Class_Image, "pixel_color", Image_pixel_color, -1);
+    rb_define_method(Class_Image, "polaroid", Image_polaroid, -1);
     rb_define_method(Class_Image, "posterize", Image_posterize, -1);
 //  rb_define_method(Class_Image, "plasma", Image_plasma, 6);
     rb_define_method(Class_Image, "preview", Image_preview, 1);
@@ -1135,6 +1136,40 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
+
+
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::Image::PolaroidOptions                                  */
+    /*-----------------------------------------------------------------------*/
+
+    Class_PolaroidOptions = rb_define_class_under(Class_Image, "PolaroidOptions", rb_cObject);
+
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_define_alloc_func(Class_Info, PolaroidOptions_alloc);
+#else
+    rb_define_singleton_method(Class_PolaroidOptions, "new", PolaroidOptions_new, 0);
+#endif
+
+    rb_define_method(Class_PolaroidOptions, "initialize", PolaroidOptions_initialize, 0);
+
+    DCL_ATTR_WRITER(PolaroidOptions, shadow_color)
+    // The other attribute writer methods are implemented by Draw's functions
+//  BORROW_ATTR_WRITER(PolaroidOptions, Draw, align)    broken in 6.3.1-6
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, decorate)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, density)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, encoding)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, fill)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_family)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_stretch)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_style)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_weight)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, pointsize)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, stroke)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, stroke_width)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, text_antialias)
+    BORROW_ATTR_WRITER(PolaroidOptions, Draw, undercolor)
+
 
     /*-----------------------------------------------------------------------*/
     /* Magick::******Fill classes and methods                                */
@@ -1864,7 +1899,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2006/12/28 00:29:52 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/07 23:44:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

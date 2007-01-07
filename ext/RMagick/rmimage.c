@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.186 2006/12/26 20:07:02 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.187 2007/01/07 23:44:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7173,6 +7173,65 @@ Image_plasma(
     return rm_image_new(new_image);
 }
 #endif
+
+
+/*
+    Method:     Image#polaroid([angle=-5])
+    Purpose:    Call PolaroidImage
+    Notes:      Accepts an options block to get Draw attributes for drawing
+                the label. Specify self.border_color to set a non-default
+                border color.
+*/
+VALUE
+Image_polaroid(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_POLAROIDIMAGE)
+    Image *image, *clone, *new_image;
+    PixelPacket default_border_color;
+    volatile VALUE options;
+    double angle = -5.0;
+    Draw *draw;
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+
+    Data_Get_Struct(self, Image, image);
+
+    switch (argc)
+    {
+        case 1:
+            angle = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+            break;
+    }
+
+    options = rm_polaroid_new();
+    Data_Get_Struct(options, Draw, draw);
+
+    clone = CloneImage(image, 0, 0, MagickTrue, &exception);
+    rm_check_exception(&exception, clone, DestroyOnError);
+
+    clone->background_color = draw->shadow_color;
+
+    new_image = PolaroidImage(clone, draw->info, angle, &exception);
+
+    rm_check_exception(&exception, clone, DestroyOnError);
+    DestroyImage(clone);
+    DestroyExceptionInfo(&exception);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 
 
 /*

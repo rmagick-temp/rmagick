@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.34 2006/09/01 19:19:20 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.35 2007/01/07 23:44:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1253,6 +1253,105 @@ Montage_title_eq(VALUE self, VALUE title)
 
     Data_Get_Struct(self, Montage, montage);
     magick_clone_string(&montage->info->title, STRING_PTR(title));
+    return self;
+}
+
+
+/*
+    Extern:     PolaroidOptions_alloc()
+    Purpose:    Allocate a new Magick::PolaroidOptions object
+    Notes:      Internally a PolaroidOptions object is the same as a Draw
+                object. The methods are implemented by Draw methods in
+                rmdraw.c.
+*/
+VALUE
+PolaroidOptions_alloc(VALUE class)
+{
+    volatile VALUE polaroid_obj;
+    ImageInfo *image_info;
+    Draw *draw;
+
+    image_info = AcquireImageInfo();
+
+    draw = ALLOC(Draw);
+    memset(draw, 0, sizeof(*draw));
+
+    draw->info=CloneDrawInfo(image_info,(DrawInfo *) NULL);
+    (void)DestroyImageInfo(image_info);
+
+    polaroid_obj = Data_Wrap_Struct(class, NULL, destroy_Draw, draw);
+
+    return polaroid_obj;
+}
+
+
+/*
+    Method:     PolaroidOptions.new
+    Purpose:    Ruby 1.6 singleton function to allocate and init a PolaroidOptions
+                object
+*/
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE PolaroidOptions_new(VALUE class)
+{
+    volatile VALUE polaroid_obj;
+
+    polaroid_obj = PolaroidOptions_alloc(class);
+    rb_obj_call_init(polaroid_obj, 0, NULL);
+}
+#endif
+
+
+/*
+    Method:     Magick::PolaroidOptions#initialize
+    Purpose:    Yield to an optional block
+*/
+VALUE
+PolaroidOptions_initialize(VALUE self)
+{
+    Draw *draw;
+    ExceptionInfo exception;
+
+    // Default shadow color
+    Data_Get_Struct(self, Draw, draw);
+
+    GetExceptionInfo(&exception);
+    (void) QueryColorDatabase("gray75", &draw->shadow_color, &exception);
+    CHECK_EXCEPTION()
+
+    if (rb_block_given_p())
+    {
+        // Run the block in self's context
+        rb_obj_instance_eval(0, NULL, self);
+    }
+    return self;
+}
+
+
+/*
+    Extern:     rm_polaroid_new
+    Purpose:    allocate a PolaroidOptions instance
+    Notes:      Internal use
+*/
+VALUE rm_polaroid_new(void)
+{
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    return PolaroidOptions_initialize(PolaroidOptions_alloc(Class_PolaroidOptions));
+#else
+    return PolaroidOptions_new(Class_PolaroidOptions);
+#endif
+}
+
+
+/*
+    Method:     PolaroidOptions#shadow_color=
+    Purpose:    Set the shadow color attribute
+*/
+VALUE PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
+{
+    Draw *draw;
+
+    Data_Get_Struct(self, Draw, draw);
+    Color_to_PixelPacket(&draw->shadow_color, shadow);
     return self;
 }
 

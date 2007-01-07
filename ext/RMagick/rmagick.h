@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.145 2006/12/28 00:29:52 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.146 2007/01/07 23:44:00 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -108,9 +108,10 @@ struct TmpFile_Name
 
 typedef struct
 {
-    DrawInfo *info;         // the DrawInfo struct
-    VALUE primitives;       // the primitive string
+    DrawInfo *info;             // the DrawInfo struct
+    VALUE primitives;           // the primitive string
     struct TmpFile_Name *tmpfile_ary;
+    PixelPacket shadow_color;   // PolaroidOptions#shadow_color
 } Draw;             // make the type match the class name
 
 // Enum
@@ -270,6 +271,7 @@ EXTERN VALUE Class_Geometry;
 EXTERN VALUE Class_GeometryValue;   // Defined in RMagick.rb
 EXTERN VALUE Class_Pixel;
 EXTERN VALUE Class_Point;
+EXTERN VALUE Class_PolaroidOptions;
 EXTERN VALUE Class_Primary;
 EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
@@ -383,6 +385,9 @@ EXTERN ID ID_y;                 // "y"
 #define DCL_ATTR_ACCESSOR(class, attr) \
     DCL_ATTR_READER(class, attr) \
     DCL_ATTR_WRITER(class, attr)
+// Borrow another class' attribute writer definition
+#define BORROW_ATTR_WRITER(to, from, attr) \
+    rb_define_method(Class_##to, #attr "=", from##_##attr##_eq, 1);
 
 /*
     Define simple attribute accessor methods (boolean, int, string, and double types)
@@ -604,6 +609,15 @@ extern VALUE Montage_alloc(VALUE);
 extern VALUE Montage_new(VALUE);
 #endif
 extern VALUE rm_montage_new(void);
+
+
+extern VALUE PolaroidOptions_alloc(VALUE);
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE PolaroidOptions_new(VALUE);
+#endif
+extern VALUE PolaroidOptions_initialize(VALUE);
+extern VALUE rm_polaroid_new(void);
+ATTR_WRITER(PolaroidOptions, shadow_color);
 
 
 // rmmain.c
@@ -889,7 +903,7 @@ extern VALUE Image_ordered_dither(int, VALUE *, VALUE);
 extern VALUE Image_palette_q(VALUE);
 extern VALUE Image_ping(VALUE, VALUE);
 extern VALUE Image_pixel_color(int, VALUE *, VALUE);
-// VALUE Image_plasma(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_polaroid(int, VALUE *, VALUE);
 extern VALUE Image_posterize(int, VALUE *, VALUE);
 extern VALUE Image_preview(VALUE, VALUE);
 extern VALUE Image_profile_bang(VALUE, VALUE, VALUE);

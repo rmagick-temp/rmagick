@@ -3,8 +3,8 @@ RMagick 1.15.0
     o Added wet_floor method to the Image class
     o Added linear_stretch method to the Image class (available with
       ImageMagick 6.3.1-1)
-    o Added recolor method to the Image class (available with ImageMagick
-      6.3.1-3)
+    o Added recolor method to the Image class (available with ImageMagick 6.3.1-3)
+    o Added polaroid method to the Image class (available with ImageMagick 6.3.1-6)
     o Added origin attribute to the Image::Info class (supported by
       ImageMagick 6.3.1-4 and later)
     o Fix bug #6260, some RVG examples produce all-black GIF images

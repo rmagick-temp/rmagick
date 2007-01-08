@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.35 2007/01/07 23:44:00 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.36 2007/01/08 23:35:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1271,7 +1271,7 @@ PolaroidOptions_alloc(VALUE class)
     ImageInfo *image_info;
     Draw *draw;
 
-    image_info = AcquireImageInfo();
+    image_info = CloneImageInfo(NULL);
 
     draw = ALLOC(Draw);
     memset(draw, 0, sizeof(*draw));

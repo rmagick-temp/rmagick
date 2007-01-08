@@ -653,7 +653,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img onmouseover="this.style.display='none';frameless.style.display='';"
     src="ex/frame.jpg" alt="frame example" /></a> <img src=
@@ -2856,24 +2856,30 @@ img = img.opaque('white', 'red')
     <h3 id="ordered_dither">ordered_dither</h3>
 
     <p><span class="arg">image</span>.ordered_dither(<span class=
-    "arg">order</span>=2) -&gt; <em>anImage</em></p>
+    "arg">threshold_map</span>='2x2') -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p class="imquote">Uses the ordered dithering technique of
-    reducing color images to monochrome using positional
-    information to retain as much information as possible.</p>
+    <p>DIthers the image to a predefined pattern. The <span class=
+    "arg">threshold_map</span> argument defines the pattern to
+    use.</p>
 
     <h4>Arguments</h4>
 
-    <dl>
-      <dt>order</dt>
+    <p>The <span class="arg">threshold_map</span> argument can be
+    any of the strings listed by this command:</p>
+    <pre>
+convert -list Thresholds
+</pre>
 
-      <dd>The dither order. Must be one of the integers 2, 3, or
-      4.</dd>
-    </dl>
+    <p>GraphicsMagick and older releases of ImageMagick do not
+    accept threshold map strings and will not respond to that
+    command. In these cases <span class="arg">threshold_map</span>
+    should be one of the numbers 2, 3, or 4. These numbers
+    correspond to the threshold maps "o2x2", "o3x3", and "o4x4",
+    respectively.</p>
 
     <h4>Returns</h4>
 
@@ -2897,7 +2903,7 @@ img = img.opaque('white', 'red')
 
     <h4>Magick API</h4>
 
-    <p>RandomThresholdImageChannel</p>
+    <p>OrderedPosterizeImage</p>
   </div>
 
   <div class="sig">

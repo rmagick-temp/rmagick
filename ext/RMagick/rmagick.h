@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.146 2007/01/07 23:44:00 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.147 2007/01/08 23:34:18 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -216,8 +216,13 @@ typedef enum _QuantumExpressionOperator
     #endif
 #endif
 
+// IM < 6.2.0 and GM don't have MagickBooleanType
 #if !defined(HAVE_MAGICKBOOLEANTYPE)
-typedef unsigned int MagickBooleanType;
+typedef enum
+{
+  MagickFalse = 0,
+  MagickTrue = 1
+} MagickBooleanType;
 #endif
 
 #if !defined(HAVE_UNDEFINEDGRAVITY)

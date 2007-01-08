@@ -7,10 +7,17 @@ require 'date'
 img = Magick::Image.read('images/Flower_Hat.jpg').first
 img[:label] = "\nLosha\n" + Date.today.to_s
 
-picture = img.polaroid
+begin
+    picture = img.polaroid
 
-# Composite it on a white background so the result is opaque.
-background = Magick::Image.new(picture.columns, picture.rows)
-result = background.composite(picture, Magick::CenterGravity, Magick::OverCompositeOp)
+    # Composite it on a white background so the result is opaque.
+    background = Magick::Image.new(picture.columns, picture.rows)
+    result = background.composite(picture, Magick::CenterGravity, Magick::OverCompositeOp)
+
+rescue NotImplementedError
+    result = Magick::Image.read('images/notimplemented.gif').first
+    result.resize!(img.columns, img.rows)
+end
+
 
 result.write('polaroid.jpg')

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.187 2007/01/07 23:44:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.188 2007/01/08 00:54:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6831,9 +6831,11 @@ Image_opaque_q(VALUE self)
 }
 
 /*
-    Method:     Image#ordered_dither(order=2)
+    Method:     Image#ordered_dither(threshold_map='2x2')
     Purpose:    perform ordered dither on image
     Notes:      order must be 2, 3, or 4
+                (6.3.0) order can be any of the threshold strings listed
+                by "convert -list Thresholds" but the default is still "2x2".
                 I don't call OrderedDitherImages anymore. Sometime after
                 IM 6.0.0 it quit working. IM and GM use the routines I use
                 below to implement the "ordered-dither" option.
@@ -6843,7 +6845,7 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     int order;
-    const char *thresholds = "2x2";
+    const char *threshold_map = "2x2";
     ExceptionInfo exception;
 
     if (argc > 1)
@@ -6852,18 +6854,25 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
     }
     if (argc == 1)
     {
-        order = NUM2INT(argv[0]);
-        if (order == 3)
+        if (TYPE(argv[0]) == T_STRING)
         {
-            thresholds = "3x3";
+            threshold_map = STRING_PTR(argv[0]);
         }
-        else if (order == 4)
+        else
         {
-            thresholds = "4x4";
-        }
-        else if (order != 2)
-        {
-            rb_raise(rb_eArgError, "order must be 2, 3, or 4 (%d given)", order);
+            order = NUM2INT(argv[0]);
+            if (order == 3)
+            {
+                threshold_map = "3x3";
+            }
+            else if (order == 4)
+            {
+                threshold_map = "4x4";
+            }
+            else if (order != 2)
+            {
+                rb_raise(rb_eArgError, "order must be 2, 3, or 4 (%d given)", order);
+            }
         }
     }
 
@@ -6874,10 +6883,15 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
-    (void) RandomThresholdImageChannel(new_image, AllChannels, thresholds, &exception);
+#if defined(HAVE_ORDEREDPOSTERIZEIMAGECHANNEL)
+    // ImageMagick >= 6.3.0
+    (void) OrderedPosterizeImage(new_image, threshold_map, &exception);
+#elif defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
+    // ImageMagick 6.0.0 thru 6.3.0
+    (void) RandomThresholdImageChannel(new_image, AllChannels, threshold_map, &exception);
 #else
-    (void) RandomChannelThresholdImage(new_image, "all", thresholds, &exception);
+    // GraphicsMagick
+    (void) RandomChannelThresholdImage(new_image, "all", threshold_map, &exception);
 #endif
     rm_check_exception(&exception, new_image, DestroyOnError);
 

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.36 2007/01/08 23:35:13 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.37 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -15,7 +15,7 @@ static void destroy_Draw(void *);
 static void destroy_Montage(void *);
 
 typedef MagickBooleanType (get_type_metrics_func_t)(Image *, const DrawInfo *, TypeMetric *);
-static VALUE get_type_metrics(int, VALUE *, VALUE, get_type_metrics_func_t *);
+static VALUE get_type_metrics(int, VALUE *, VALUE, get_type_metrics_func_t);
 
 
 /*
@@ -369,7 +369,7 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    draw->info->text_antialias = RTEST(text_antialias);
+    draw->info->text_antialias = (MagickBooleanType) RTEST(text_antialias);
     return self;
 }
 
@@ -388,7 +388,7 @@ Draw_tile_eq(VALUE self, VALUE image)
 
     if (draw->info->fill_pattern)
     {
-        DestroyImage(draw->info->fill_pattern);
+        (void) DestroyImage(draw->info->fill_pattern);
         draw->info->fill_pattern = NULL;
     }
 
@@ -887,7 +887,7 @@ destroy_Draw(void *drawptr)
     Draw *draw = (Draw *)drawptr;
     struct TmpFile_Name *tmpfile;
 
-    DestroyDrawInfo(draw->info);
+    (void) DestroyDrawInfo(draw->info);
 
     // Erase any temporary image files.
     while (draw->tmpfile_ary)
@@ -1100,7 +1100,7 @@ Montage_new(VALUE class)
     }
 
     montage_info = CloneMontageInfo(image_info, NULL);
-    DestroyImageInfo(image_info);
+    (void) (void) DestroyImageInfo(image_info);
 
     if (!montage_info)
     {
@@ -1113,7 +1113,7 @@ Montage_new(VALUE class)
     montage_obj = Data_Wrap_Struct(class, NULL, destroy_Montage, montage);
 
 #if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-    rb_obj_call_init(montage_obj, 0, NULL);
+    (void) rb_obj_call_init(montage_obj, 0, NULL);
 #endif
 
     return montage_obj;
@@ -1149,7 +1149,7 @@ destroy_Montage(void *obj)
     {
         rm_delete_temp_image(montage->info->texture);
     }
-    DestroyMontageInfo(montage->info);
+    (void) DestroyMontageInfo(montage->info);
     xfree(montage);
 }
 
@@ -1177,7 +1177,7 @@ Montage_shadow_eq(VALUE self, VALUE shadow)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    montage->info->shadow = RTEST(shadow);
+    montage->info->shadow = (MagickBooleanType) RTEST(shadow);
     return self;
 }
 
@@ -1277,7 +1277,7 @@ PolaroidOptions_alloc(VALUE class)
     memset(draw, 0, sizeof(*draw));
 
     draw->info=CloneDrawInfo(image_info,(DrawInfo *) NULL);
-    (void)DestroyImageInfo(image_info);
+    (void)(void) DestroyImageInfo(image_info);
 
     polaroid_obj = Data_Wrap_Struct(class, NULL, destroy_Draw, draw);
 
@@ -1321,7 +1321,7 @@ PolaroidOptions_initialize(VALUE self)
     if (rb_block_given_p())
     {
         // Run the block in self's context
-        rb_obj_instance_eval(0, NULL, self);
+        (void) rb_obj_instance_eval(0, NULL, self);
     }
     return self;
 }
@@ -1375,7 +1375,7 @@ static VALUE get_dummy_tm_img(VALUE klass)
         {
             rb_raise(rb_eNoMemError, "not enough memory to continue");
         }
-        DestroyImageInfo(info);
+        (void) DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
 
         RUBY18(rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0));
@@ -1397,10 +1397,10 @@ get_type_metrics(
      int argc,
      VALUE *argv,
      VALUE self,
-     get_type_metrics_func_t *getter)
+     get_type_metrics_func_t getter)
 {
      static char attrs[] = "OPbcdefghiklmnopqrstuwxyz[@#%";
- #define ATTRS_L (sizeof(attrs)-1)
+ #define ATTRS_L ((int)(sizeof(attrs)-1))
      Image *image;
      Draw *draw;
      TypeMetric metrics;

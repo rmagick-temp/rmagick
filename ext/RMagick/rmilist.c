@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.44 2006/11/17 01:21:55 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.45 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -78,7 +78,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
     new_image = AppendImages(images, stack, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -103,7 +103,7 @@ ImageList_average(VALUE self)
     new_image = AverageImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -131,7 +131,7 @@ ImageList_coalesce(VALUE self)
     new_images = CoalesceImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -157,7 +157,7 @@ ImageList_deconstruct(VALUE self)
     new_images = DeconstructImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -206,7 +206,7 @@ ImageList_flatten_images(VALUE self)
     new_image = FlattenImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -246,7 +246,7 @@ ImageList_fx(int argc, VALUE *argv, VALUE self)
     new_image = FxImageChannel(images, channels, expression, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -298,7 +298,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -334,7 +334,7 @@ ImageList_montage(VALUE self)
     {
         // Run the block in the instance's context, allowing the app to modify the
         // object's attributes.
-        rb_obj_instance_eval(0, NULL, montage_obj);
+        (void) rb_obj_instance_eval(0, NULL, montage_obj);
     }
 
     Data_Get_Struct(montage_obj, Montage, montage);
@@ -357,7 +357,7 @@ ImageList_montage(VALUE self)
     new_images = MontageImages(images, montage->info, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -396,7 +396,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -419,7 +419,7 @@ ImageList_mosaic(VALUE self)
     new_image = MosaicImages(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -472,7 +472,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
@@ -522,7 +522,7 @@ rm_imagelist_from_images(Image *images)
           rm_imagelist_push(new_imagelist, rm_image_new(image));
      }
 
-     rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
+     (void) rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
      return new_imagelist;
 }
 
@@ -566,7 +566,7 @@ VALUE
 rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
 {
      rm_check_frozen(imagelist);
-     rb_iv_set(imagelist, "@scene", scene);
+     (void) rb_iv_set(imagelist, "@scene", scene);
      return scene;
 }
 
@@ -615,15 +615,15 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 5:
-            quantize_info.measure_error = RTEST(argv[4]);
+            quantize_info.measure_error = (MagickBooleanType) RTEST(argv[4]);
         case 4:
-            quantize_info.tree_depth = NUM2INT(argv[3]);
+            quantize_info.tree_depth = (unsigned long)NUM2INT(argv[3]);
         case 3:
-            quantize_info.dither = RTEST(argv[2]);
+            quantize_info.dither = (MagickBooleanType) RTEST(argv[2]);
         case 2:
             VALUE_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
         case 1:
-            quantize_info.number_colors = NUM2INT(argv[0]);
+            quantize_info.number_colors = NUM2ULONG(argv[0]);
         case 0:
             break;
         default:
@@ -642,12 +642,12 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_images);
 
 
-    QuantizeImages(&quantize_info, new_images);
+    (void) QuantizeImages(&quantize_info, new_images);
     rm_check_exception(&exception, new_images, DestroyOnError);
 
     // Create new ImageList object, convert mapped image sequence to images,
@@ -660,7 +660,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
 
     // Set @scene in new ImageList object to same value as in self.
     scene = rb_iv_get(self, "@scene");
-    rb_iv_set(new_imagelist, "@scene", scene);
+    (void) rb_iv_set(new_imagelist, "@scene", scene);
 
     return new_imagelist;
 }
@@ -689,7 +689,7 @@ ImageList_to_blob(VALUE self)
     images = rm_images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
-    (void) SetImageInfo(info, True, &exception);
+    (void) SetImageInfo(info, MagickTrue, &exception);
     rm_check_exception(&exception, images, RetainOnError);
 
     if (*info->magick != '\0')
@@ -704,7 +704,7 @@ ImageList_to_blob(VALUE self)
     // Unconditionally request multi-images support. The worst that
     // can happen is that there's only one image or the format
     // doesn't support multi-image files.
-    info->adjoin = True;
+    info->adjoin = MagickTrue;
 #if defined(HAVE_IMAGESTOBLOB)
     blob = ImagesToBlob(info, images, &length, &exception);
 #else
@@ -716,7 +716,7 @@ ImageList_to_blob(VALUE self)
     }
     rm_split(images);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
 
     if (length == 0 || !blob)
@@ -724,7 +724,7 @@ ImageList_to_blob(VALUE self)
         return Qnil;
     }
 
-    blob_str = rb_str_new(blob, length);
+    blob_str = rb_str_new(blob, (long)length);
     magick_free((void*)blob);
 
     return blob_str;
@@ -759,7 +759,7 @@ ImageList_write(VALUE self, VALUE file)
     volatile VALUE info_obj;
     char *filename;
     long filenameL;
-    int scene;
+    unsigned long scene;
     ExceptionInfo exception;
 
     info_obj = rm_info_new();
@@ -799,20 +799,20 @@ ImageList_write(VALUE self, VALUE file)
     }
 
     GetExceptionInfo(&exception);
-    (void) SetImageInfo(info, True, &exception);
+    (void) SetImageInfo(info, MagickTrue, &exception);
     rm_check_exception(&exception, images, RetainOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // Find out if the format supports multi-images files.
     GetExceptionInfo(&exception);
     m = GetMagickInfo(info->magick, &exception);
     rm_check_exception(&exception, images, RetainOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // Tell WriteImage if we want a multi-images file.
     if (rm_imagelist_length(self) > 1 && m->adjoin)
     {
-        info->adjoin = True;
+        info->adjoin = MagickTrue;
     }
 
     for (img = images; img; img = GetNextImageInList(img))

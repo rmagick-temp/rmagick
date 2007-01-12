@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.153 2007/01/07 23:44:00 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.154 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -44,7 +44,7 @@ Magick_colors(VALUE class)
 
     color_ary = GetColorInfoArray(&exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
 
     if (rb_block_given_p())
@@ -89,7 +89,7 @@ Magick_colors(VALUE class)
 
     color_info_list = GetColorInfoList("*", &number_colors, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
 #endif
 
@@ -98,7 +98,7 @@ Magick_colors(VALUE class)
     {
         for(x = 0; x < number_colors; x++)
         {
-            rb_yield(Color_from_ColorInfo(color_info_list[x]));
+            (void) rb_yield(Color_from_ColorInfo(color_info_list[x]));
         }
         magick_free(color_info_list);
         return class;
@@ -108,7 +108,7 @@ Magick_colors(VALUE class)
         ary = rb_ary_new2((long) number_colors);
         for(x = 0; x < number_colors; x++)
         {
-            rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
+            (void) rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
         }
 
         magick_free(color_info_list);
@@ -125,7 +125,7 @@ Magick_colors(VALUE class)
     GetExceptionInfo(&exception);
 
     color_list = GetColorInfo("*", &exception);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // The order of the colors list can change in mid-iteration,
     // so the only way we can guarantee a single pass thru the list
@@ -179,7 +179,7 @@ Magick_fonts(VALUE class)
     GetExceptionInfo(&exception);
     type_info = GetTypeInfoList("*", &number_types, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
 #endif
 
@@ -187,17 +187,17 @@ Magick_fonts(VALUE class)
     {
         for(x = 0; x < number_types; x++)
         {
-            rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
+            (void) rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
         magick_free(type_info);
         return class;
     }
     else
     {
-        ary = rb_ary_new2(number_types);
+        ary = rb_ary_new2((long)number_types);
         for(x = 0; x < number_types; x++)
         {
-            rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
+            (void) rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
         magick_free(type_info);
         return ary;
@@ -214,7 +214,7 @@ Magick_fonts(VALUE class)
 
     type_list = GetTypeInfo("*", &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // If block, iterate over fonts
     if (rb_block_given_p())
@@ -288,7 +288,7 @@ Magick_init_formats(VALUE class)
     GetExceptionInfo(&exception);
     magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     for(m = magick_info; m != NULL; m = m->next)
     {
@@ -318,15 +318,15 @@ Magick_init_formats(VALUE class)
     GetExceptionInfo(&exception);
     magick_info = GetMagickInfoList("*", &number_formats, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
 #endif
 
     for(x = 0; x < number_formats; x++)
     {
-        rb_hash_aset(formats
-            , rb_str_new2(magick_info[x]->name)
-            , MagickInfo_to_format((MagickInfo *)magick_info[x]));
+        (void) rb_hash_aset(formats
+                          , rb_str_new2(magick_info[x]->name)
+                          , MagickInfo_to_format((MagickInfo *)magick_info[x]));
     }
     return formats;
 
@@ -343,7 +343,7 @@ Magick_init_formats(VALUE class)
     GetExceptionInfo(&exception);
     m = (MagickInfo *)GetMagickInfo("*", &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     for ( ; m != NULL; m = m->next)
     {
@@ -380,7 +380,7 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
             return class;
 
         case T_SYMBOL:
-            id = SYM2ID(resource);
+            id = (ID)SYM2ID(resource);
             if (id == rb_intern("memory"))
             {
                 res = MemoryResource;
@@ -436,7 +436,7 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 
     if (argc > 1)
     {
-        SetMagickResourceLimit(res, NUM2ULONG(limit));
+        (void) SetMagickResourceLimit(res, NUM2ULONG(limit));
     }
 
     return ULONG2NUM(cur_limit);
@@ -532,8 +532,8 @@ static VALUE
 Magick_set_cache_threshold(VALUE class, VALUE threshold)
 {
     unsigned long thrshld = NUM2ULONG(threshold);
-    SetMagickResourceLimit(MemoryResource,thrshld);
-    SetMagickResourceLimit(MapResource,2*thrshld);
+    (void) SetMagickResourceLimit(MemoryResource,thrshld);
+    (void) SetMagickResourceLimit(MapResource,2*thrshld);
     return class;
 }
 
@@ -996,7 +996,7 @@ Init_RMagick(void)
     Class_Pixel = rb_define_class_under(Module_Magick, "Pixel", rb_cObject);
 
     // include Observable in Pixel for Image::View class
-    rb_require("observer");
+    (void) rb_require("observer");
     observable = rb_const_get(rb_cObject, rb_intern("Observable"));
     rb_include_module(Class_Pixel, observable);
 
@@ -1891,15 +1891,15 @@ static void version_constants(void)
     mgk_version = GetMagickVersion(NULL);
 
     str = rb_str_new2(mgk_version);
-    rb_obj_freeze(str);
+    (void) rb_obj_freeze(str);
     rb_define_const(Module_Magick, "Magick_version", str);
 
     str = rb_str_new2(PACKAGE_STRING);
-    rb_obj_freeze(str);
+    (void) rb_obj_freeze(str);
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/07 23:44:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/12 00:08:00 $) Copyright (C) 2006 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"
@@ -1907,7 +1907,7 @@ static void version_constants(void)
         PACKAGE_STRING, mgk_version, RUBY_VERSION_STRING);
 
     str = rb_str_new2(long_version);
-    rb_obj_freeze(str);
+    (void) rb_obj_freeze(str);
     rb_define_const(Module_Magick, "Long_version", str);
 
 }

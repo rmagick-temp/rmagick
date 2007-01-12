@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.15 2006/06/28 23:06:15 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.16 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -116,7 +116,7 @@ point_fill(
     PixelPacket *stop_color)
 {
     double steps, distance;
-    long x, y;
+    unsigned long x, y;
     double red_step, green_step, blue_step;
 
     steps = sqrt((double)((image->columns-x0)*(image->columns-x0)
@@ -129,16 +129,16 @@ point_fill(
     {
         PixelPacket *row_pixels;
 
-        if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
+        if (!(row_pixels = SetImagePixels(image, 0, (long int)y, image->columns, 1)))
         {
             rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
             distance = sqrt((double)((x-x0)*(x-x0)+(y-y0)*(y-y0)));
-            row_pixels[x].red     = start_color->red   + (distance * red_step);
-            row_pixels[x].green   = start_color->green + (distance * green_step);
-            row_pixels[x].blue    = start_color->blue  + (distance * blue_step);
+            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))
@@ -161,7 +161,7 @@ vertical_fill(
     PixelPacket *stop_color)
 {
     double steps;
-    long x, y;
+    unsigned long x, y;
     volatile PixelPacket *master;
     double red_step, green_step, blue_step;
 
@@ -196,9 +196,9 @@ vertical_fill(
     for (x = 0; x < image->columns; x++)
     {
         double distance   = fabs(x1 - x);
-        master[x].red     = start_color->red   + (red_step * distance);
-        master[x].green   = start_color->green + (green_step * distance);
-        master[x].blue    = start_color->blue  + (blue_step * distance);
+        master[x].red     = RoundToQuantum(start_color->red   + (red_step * distance));
+        master[x].green   = RoundToQuantum(start_color->green + (green_step * distance));
+        master[x].blue    = RoundToQuantum(start_color->blue  + (blue_step * distance));
         master[x].opacity = OpaqueOpacity;
     }
 
@@ -207,7 +207,7 @@ vertical_fill(
     {
         PixelPacket *row_pixels;
 
-        if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
+        if (!(row_pixels = SetImagePixels(image, 0, (long int)y, image->columns, 1)))
         {
             rm_check_image_exception(image, RetainOnError);
         }
@@ -234,7 +234,7 @@ horizontal_fill(
     PixelPacket *stop_color)
 {
     double steps;
-    long x, y;
+    unsigned long x, y;
     volatile PixelPacket *master;
     double red_step, green_step, blue_step;
 
@@ -267,9 +267,9 @@ horizontal_fill(
     for (y = 0; y < image->rows; y++)
     {
         double distance   = fabs(y1 - y);
-        master[y].red     = start_color->red   + (distance * red_step);
-        master[y].green   = start_color->green + (distance * green_step);
-        master[y].blue    = start_color->blue  + (distance * blue_step);
+        master[y].red     = RoundToQuantum(start_color->red   + (distance * red_step));
+        master[y].green   = RoundToQuantum(start_color->green + (distance * green_step));
+        master[y].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
         master[y].opacity = OpaqueOpacity;
     }
 
@@ -277,7 +277,7 @@ horizontal_fill(
     {
         PixelPacket *col_pixels;
 
-        if (!(col_pixels = SetImagePixels(image, x, 0, 1, image->rows)))
+        if (!(col_pixels = SetImagePixels(image, (long int)x, 0, 1, image->rows)))
         {
             rm_check_image_exception(image, RetainOnError);
         }
@@ -306,7 +306,7 @@ v_diagonal_fill(
     PixelPacket *start_color,
     PixelPacket *stop_color)
 {
-    long x, y;
+    unsigned long x, y;
     double red_step, green_step, blue_step;
     double m, b, steps = 0.0;
     double d1, d2;
@@ -325,7 +325,7 @@ v_diagonal_fill(
     {
         steps += FMAX(fabs(d1),fabs(d2));
     }
-    else if (d1 > image->rows && d2 > image->rows)
+    else if (d1 > (double)image->rows && d2 > (double)image->rows)
     {
         steps += FMAX(d1-image->rows, d2-image->rows);
     }
@@ -351,16 +351,16 @@ v_diagonal_fill(
     {
         PixelPacket *row_pixels;
 
-        if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
+        if (!(row_pixels = SetImagePixels(image, 0, (long int)y, image->columns, 1)))
         {
             rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
-            double distance = fabs(y-(m * x + b));
-            row_pixels[x].red     = start_color->red   + (distance * red_step);
-            row_pixels[x].green   = start_color->green + (distance * green_step);
-            row_pixels[x].blue    = start_color->blue  + (distance * blue_step);
+            double distance = (double) abs((int)(y-(m * x + b)));
+            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))
@@ -385,7 +385,7 @@ h_diagonal_fill(
     PixelPacket *start_color,
     PixelPacket *stop_color)
 {
-    long x, y;
+    unsigned long x, y;
     double m, b, steps = 0.0;
     double red_step, green_step, blue_step;
     double d1, d2;
@@ -398,7 +398,7 @@ h_diagonal_fill(
     // the left or right side of the image between y=0 and y=image->rows.
     // When y=0, x=-b/m. When y=image->rows, x = (image->rows-b)/m.
     d1 = -b/m;
-    d2 = (image->rows-b)/m;
+    d2 = (double) ((image->rows-b) / m);
 
     // If the line is entirely to the right or left of the image, increase
     // the number of steps.
@@ -406,9 +406,9 @@ h_diagonal_fill(
     {
         steps += FMAX(fabs(d1),fabs(d2));
     }
-    else if (d1 > image->columns && d2 > image->columns)
+    else if (d1 > (double)image->columns && d2 > (double)image->columns)
     {
-        steps += FMAX(fabs(image->columns-d1),fabs(image->columns-d2));
+        steps += FMAX(abs((int)(image->columns-d1)),abs((int)(image->columns-d2)));
     }
 
     d1 = FMAX(d1, image->columns-d1);
@@ -432,16 +432,16 @@ h_diagonal_fill(
     {
         PixelPacket *row_pixels;
 
-        if (!(row_pixels = SetImagePixels(image, 0, y, image->columns, 1)))
+        if (!(row_pixels = SetImagePixels(image, 0, (long int)y, image->columns, 1)))
         {
             rm_check_image_exception(image, RetainOnError);
         }
         for (x = 0; x < image->columns; x++)
         {
-            double distance = fabs(x-((y-b)/m));
-            row_pixels[x].red     = start_color->red   + (distance * red_step);
-            row_pixels[x].green   = start_color->green + (distance * green_step);
-            row_pixels[x].blue    = start_color->blue  + (distance * blue_step);
+            double distance = (double) abs((int)(x-((y-b)/m)));
+            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))
@@ -529,7 +529,7 @@ free_TextureFill(void *fill_obj)
 {
     rm_TextureFill *fill = (rm_TextureFill *)fill_obj;
 
-    DestroyImage(fill->texture);
+    (void) DestroyImage(fill->texture);
     xfree(fill);
 }
 
@@ -585,7 +585,7 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
 
     // Bump the reference count on the texture image.
     Data_Get_Struct(texture_image, Image, texture);
-    ReferenceImage(texture);
+    (void) ReferenceImage(texture);
 
     fill->texture = texture;
     return self;
@@ -604,7 +604,7 @@ TextureFill_fill(VALUE self, VALUE image_obj)
     Data_Get_Struct(image_obj, Image, image);
     Data_Get_Struct(self, rm_TextureFill, fill);
 
-    TextureImage(image, fill->texture);
+    (void) TextureImage(image, fill->texture);
     rm_check_image_exception(image, RetainOnError);
 
     return self;

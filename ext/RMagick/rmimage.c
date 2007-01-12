@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.188 2007/01/08 00:54:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.189 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -25,11 +25,11 @@ typedef unsigned int (thresholder_t)(Image *, const char *);
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE cropper(int, int, VALUE *, VALUE);
-static VALUE effect_image(VALUE, int, VALUE *, effector_t *);
+static VALUE effect_image(VALUE, int, VALUE *, effector_t);
 static VALUE flipflop(int, VALUE, flipper_t);
 static VALUE rd_image(VALUE, VALUE, reader_t);
 static VALUE rotate(int, int, VALUE *, VALUE);
-static VALUE scale(int, int, VALUE *, VALUE, scaler_t *);
+static VALUE scale(int, int, VALUE *, VALUE, scaler_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
@@ -77,7 +77,7 @@ static VALUE adaptive_method(
     new_image = (fp)(image, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -124,7 +124,7 @@ static VALUE adaptive_channel_method(
     new_image = (fp)(image, channels, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -197,7 +197,7 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
             }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
             }
@@ -213,7 +213,7 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
     new_image = AdaptiveResizeImage(image, columns, rows, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -274,13 +274,14 @@ VALUE
 Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    unsigned long width = 3, height = 3, offset = 0;
+    unsigned long width = 3, height = 3;
+    long offset = 0;
     ExceptionInfo exception;
 
     switch (argc)
     {
         case 3:
-           offset = NUM2ULONG(argv[2]);
+           offset = NUM2LONG(argv[2]);
         case 2:
            height = NUM2ULONG(argv[1]);
         case 1:
@@ -297,7 +298,7 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     new_image = AdaptiveThresholdImage(image, width, height, offset, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -324,7 +325,7 @@ Image_add_noise(VALUE self, VALUE noise)
     new_image = AddNoiseImage(image, noise_type, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -366,7 +367,7 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
     new_image = AddNoiseImageChannel(image, channels, noise_type, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -406,14 +407,14 @@ Image_add_profile(VALUE self, VALUE name)
     info = CloneImageInfo(NULL);
     info->client_data= (void *)GetImageProfile(image,"8bim");
 
-    strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
+    strncpy(info->filename, profile_filename, min((size_t)profile_filename_l, sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
 
     GetExceptionInfo(&exception);
     profile_image = ReadImage(info, &exception);
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
     rm_check_exception(&exception, profile_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     rm_ensure_result(profile_image);
 
     ResetImageProfileIterator(profile_image);
@@ -423,7 +424,7 @@ Image_add_profile(VALUE self, VALUE name)
         profile = GetImageProfile(profile_image, profile_name);
         if (profile)
         {
-            (void)ProfileImage(image, profile_name, profile->datum, (unsigned long)profile->length, False);
+            (void)ProfileImage(image, profile_name, profile->datum, (unsigned long)profile->length, MagickFalse);
             if (image->exception.severity >= ErrorException)
             {
                 break;
@@ -432,7 +433,7 @@ Image_add_profile(VALUE self, VALUE name)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    DestroyImage(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 #else
@@ -461,9 +462,9 @@ Image_add_profile(VALUE self, VALUE name)
 
     GetExceptionInfo(&exception);
     profile_image = ReadImage(info, &exception);
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
     rm_check_exception(&exception, profile_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     rm_ensure_result(profile_image);
 
     /* IPTC NewsPhoto Profile */
@@ -500,7 +501,7 @@ Image_add_profile(VALUE self, VALUE name)
     }
 
 done:
-    DestroyImage(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 #endif
@@ -530,7 +531,7 @@ Image_affine_transform(VALUE self, VALUE affine)
     new_image = AffineTransformImage(image, &matrix, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -558,7 +559,7 @@ Image_aref(VALUE self, VALUE key_arg)
             return Qnil;
 
         case T_SYMBOL:
-            key = rb_id2name(SYM2ID(key_arg));
+            key = rb_id2name((ID)SYM2ID(key_arg));
             break;
 
         default:
@@ -609,7 +610,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
             return self;
 
         case T_SYMBOL:
-            key = rb_id2name(SYM2ID(key_arg));
+            key = rb_id2name((ID)SYM2ID(key_arg));
             break;
 
         default:
@@ -675,14 +676,14 @@ crisscross(
     new_image = (fp)(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -1142,7 +1143,7 @@ static void get_composite_offsets(
     // NorthWest corner. The arguments must be numbers.
     else
     {
-        *x_offset = rb_protect(check_for_long_value, argv[0], &exc);
+        (void)rb_protect(check_for_long_value, argv[0], &exc);
         if (exc)
         {
             rb_raise(rb_eArgError, "expected GravityType, got %s", rb_obj_classname(argv[0]));
@@ -1173,7 +1174,7 @@ blend_geometry(
     double src_percent,
     double dst_percent)
 {
-    int sz = 0;
+    size_t sz = 0;
     int fw, prec;
 
     if (fabs(src_percent) >= 1000.0 || fabs(dst_percent) >= 1000.0)
@@ -1190,13 +1191,13 @@ blend_geometry(
 
     fw = 4;
     prec = 0;
-    if (src_percent != (int)(src_percent))
+    if (src_percent != floor(src_percent))
     {
         prec = 2;
         fw += 3;
     }
 
-    sz = sprintf(geometry, "%*.*f", -fw, prec, src_percent);
+    sz = (size_t)sprintf(geometry, "%*.*f", -fw, prec, src_percent);
     assert(sz < geometry_l);
 
     sz = strcspn(geometry, " ");
@@ -1206,14 +1207,14 @@ blend_geometry(
     {
         fw = 4;
         prec = 0;
-        if (dst_percent != (int)(dst_percent))
+        if (dst_percent != floor(dst_percent))
         {
             prec = 2;
             fw += 3;
         }
 
 
-        sz += sprintf(geometry+sz, "x%*.*f", -fw, prec, dst_percent);
+        sz += (size_t)sprintf(geometry+sz, "x%*.*f", -fw, prec, dst_percent);
         assert(sz < geometry_l);
         sz = strcspn(geometry, " ");
     }
@@ -1240,7 +1241,7 @@ special_composite(
     char geometry[20];
 
     blend_geometry(geometry, sizeof(geometry), image_pct, overlay_pct);
-    CloneString(&overlay->geometry, geometry);
+    (void) CloneString(&overlay->geometry, geometry);
 
     new_image = rm_clone_image(image);
     (void) CompositeImage(new_image, op, overlay, x_off, y_off);
@@ -1345,7 +1346,7 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
      new_image = BlurImageChannel(image, channels, radius, sigma, &exception);
      rm_check_exception(&exception, new_image, DestroyOnError);
 
-     DestroyExceptionInfo(&exception);
+     (void) DestroyExceptionInfo(&exception);
 
      rm_ensure_result(new_image);
 
@@ -1400,7 +1401,7 @@ static VALUE border(
     new_image = BorderImage(image, &rect, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -1408,7 +1409,7 @@ static VALUE border(
     {
         new_image->border_color = old_border;
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -1483,7 +1484,7 @@ VALUE Image_bounding_box(VALUE self)
     box = GetImageBoundingBox(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return Rectangle_from_RectangleInfo(&box);
 }
@@ -1515,15 +1516,15 @@ Image_capture(
     switch (argc)
     {
         case 5:
-           ximage_info.borders = RTEST(argv[4]);
+           ximage_info.borders = (MagickBooleanType)RTEST(argv[4]);
         case 4:
-           ximage_info.screen = RTEST(argv[3]);
+           ximage_info.screen  = (MagickBooleanType)RTEST(argv[3]);
         case 3:
-           ximage_info.descend = RTEST(argv[2]);
+           ximage_info.descend = (MagickBooleanType)RTEST(argv[2]);
         case 2:
-           ximage_info.frame = RTEST(argv[1]);
+           ximage_info.frame   = (MagickBooleanType)RTEST(argv[1]);
         case 1:
-           ximage_info.silent = RTEST(argv[0]);
+           ximage_info.silent  = (MagickBooleanType)RTEST(argv[0]);
         case 0:
            break;
         default:
@@ -1688,7 +1689,7 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
     channel_depth = GetImageChannelDepth(image, channels, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return ULONG2NUM(channel_depth);
 #else
@@ -1732,7 +1733,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     (void) GetImageChannelExtrema(image, channels, &min, &max, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ary = rb_ary_new2(2);
     rb_ary_store(ary, 0, ULONG2NUM(min));
@@ -1771,7 +1772,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     (void) GetImageStatistics(image, &stats, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ary = rb_ary_new2(2);
     switch(channel)
@@ -1840,7 +1841,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     (void) GetImageChannelMean(image, channels, &mean, &stddev, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ary = rb_ary_new2(2);
     rb_ary_store(ary, 0, rb_float_new(mean));
@@ -1879,7 +1880,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     (void) GetImageStatistics(image, &stats, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ary = rb_ary_new2(2);
     switch(channel)
@@ -2013,7 +2014,7 @@ Image_clone(VALUE self)
     clone = Image_dup(self);
     if (OBJ_FROZEN(self))
     {
-        rb_obj_freeze(clone);
+        (void) rb_obj_freeze(clone);
     }
 
     return clone;
@@ -2041,7 +2042,7 @@ Image_color_histogram(VALUE self)
     histogram = GetColorHistogram(image, &colors, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     hash = rb_hash_new();
     for (x = 0; x < colors; x++)
@@ -2072,7 +2073,7 @@ Image_color_histogram(VALUE self)
     if (image->storage_class != DirectClass)
     {
         dc_copy = rm_clone_image(image);
-        SyncImage(dc_copy);
+        (void) SyncImage(dc_copy);
         magick_free(dc_copy->colormap);
         dc_copy->colormap = NULL;
         dc_copy->storage_class = DirectClass;
@@ -2086,33 +2087,33 @@ Image_color_histogram(VALUE self)
     {
         if (dc_copy)
         {
-            DestroyImage(dc_copy);
+            (void) DestroyImage(dc_copy);
         }
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     if (exception.severity != UndefinedException)
     {
-        RelinquishMagickMemory(histogram);
+        (void) RelinquishMagickMemory(histogram);
         rm_check_exception(&exception, dc_copy, DestroyOnError);
     }
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     hash = rb_hash_new();
     for (x = 0; x < colors; x++)
     {
         pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, ULONG2NUM((unsigned long)histogram[x].count));
+        (void) rb_hash_aset(hash, pixel, ULONG2NUM((unsigned long)histogram[x].count));
     }
 
     /*
         Christy evidently didn't agree with Bob's memory management.
     */
-    RelinquishMagickMemory(histogram);
+    (void) RelinquishMagickMemory(histogram);
 
     if (dc_copy)
     {
-        DestroyImage(dc_copy);
+        (void) DestroyImage(dc_copy);
     }
 
     return hash;
@@ -2160,10 +2161,10 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
     strncpy(info->magick, m->name, MaxTextExtent);
     info->magick[MaxTextExtent-1] = '\0';
 
-    profile_image = BlobToImage(info, profile_blob, profile_length, &exception);
-    DestroyImageInfo(info);
+    profile_image = BlobToImage(info, profile_blob, (size_t)profile_length, &exception);
+    (void) DestroyImageInfo(info);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ResetImageProfileIterator(profile_image);
     profile_name = GetNextImageProfile(profile_image);
@@ -2175,7 +2176,8 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
             if (profile)
             {
                 (void)ProfileImage(image, profile_name, profile_data->datum
-                                 , (unsigned long)profile_data->length, False);
+                                 , (unsigned long)profile_data->length
+                                 , (MagickBooleanType)False);
                 if (image->exception.severity >= ErrorException)
                 {
                     break;
@@ -2185,7 +2187,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    DestroyImage(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 #else
@@ -2218,9 +2220,9 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
     info->magick[MaxTextExtent-1] = '\0';
 
     profile_image = BlobToImage(info, profile_blob, profile_length, &exception);
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // GraphicsMagick uses "ICM" to refer to the ICC profile.
     if (rm_strcasecmp(name, "ICC") == 0)
@@ -2236,7 +2238,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
         (void)SetImageProfile(image, name, profile_data, profile_data_l);
     }
 
-    DestroyImage(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 #endif
@@ -2337,9 +2339,9 @@ Image_color_flood_fill(
 
     x = NUM2LONG(xv);
     y = NUM2LONG(yv);
-    if (x > image->columns || y > image->rows)
+    if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
-        rb_raise(rb_eArgError, "target out of range. %dx%d given, image is %dx%d"
+        rb_raise(rb_eArgError, "target out of range. %lux%lu given, image is %lux%lu"
                , x, y, image->columns, image->rows);
     }
 
@@ -2362,7 +2364,7 @@ Image_color_flood_fill(
     (void) ColorFloodfillImage(new_image, draw_info, target, x, y, (PaintMethod)fill_method);
     // No need to check for error
 
-    DestroyDrawInfo(draw_info);
+    (void) DestroyDrawInfo(draw_info);
     return rm_image_new(new_image);
 }
 
@@ -2412,7 +2414,7 @@ Image_colorize(
     new_image = ColorizeImage(image, opacity, target, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -2433,7 +2435,7 @@ VALUE
 Image_colormap(int argc, VALUE *argv, VALUE self)
 {
     Image *image;
-    unsigned int index;
+    unsigned long index;
     PixelPacket color, new_color;
 
     Data_Get_Struct(self, Image, image);
@@ -2444,7 +2446,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
     }
 
-    index = NUM2UINT(argv[0]);
+    index = NUM2ULONG(argv[0]);
     if (index > MaxRGB)
     {
         rb_raise(rb_eIndexError, "index out of range");
@@ -2478,7 +2480,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     if (!image->colormap || index > image->colors-1)
     {
         PixelPacket black = {0};
-        unsigned int i;
+        unsigned long i;
 
         if (!image->colormap)
         {
@@ -2629,7 +2631,7 @@ VALUE Image_compare_channel(
                                             , &exception);
     rm_check_exception(&exception, difference_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(difference_image);
 
@@ -3007,8 +3009,8 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     // and raises TypeError if it can't.
     pixels_arg = rb_Array(pixels_arg);
 
-    width = NUM2INT(width_arg);
-    height = NUM2INT(height_arg);
+    width = NUM2ULONG(width_arg);
+    height = NUM2ULONG(height_arg);
 
     if (width == 0 || height == 0)
     {
@@ -3017,7 +3019,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 
     map = STRING_PTR_LEN(map_arg, map_l);
 
-    npixels = width * height * map_l;
+    npixels = (long)(width * height * map_l);
     if (RARRAY(pixels_arg)->len != npixels)
     {
         rb_raise(rb_eArgError, "wrong number of array elements (%d for %d)"
@@ -3081,7 +3083,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         rb_raise(rb_eNoMemError, "not enough memory to continue.");
     }
     SetImageExtent(image, width, height);
-    SetImageBackgroundColor(image);
+    (void) SetImageBackgroundColor(image);
 
     (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
     rm_check_image_exception(image, DestroyOnError);
@@ -3090,7 +3092,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     rm_check_exception(&exception, image, DestroyOnError);
 #endif
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     DestroyConstitute();
 
     xfree((void *)pixels.v);
@@ -3145,7 +3147,7 @@ static void get_black_white_point(
 {
     double pixels;
 
-    pixels = image->columns * image->rows;
+    pixels = (double) (image->columns * image->rows);
 
     switch (argc)
     {
@@ -3248,14 +3250,14 @@ Image_convolve(
 
     order = NUM2UINT(order_arg);
 
-    rm_check_ary_len(kernel_arg, order*order);
+    rm_check_ary_len(kernel_arg, (long)(order*order));
 
     // Convert the kernel array argument to an array of doubles
 
     kernel = (volatile double *)ALLOC_N(double, order*order);
     for (x = 0; x < order*order; x++)
     {
-        kernel[x] = NUM2DBL(rb_ary_entry(kernel_arg, x));
+        kernel[x] = NUM2DBL(rb_ary_entry(kernel_arg, (long)x));
     }
 
     GetExceptionInfo(&exception);
@@ -3264,7 +3266,7 @@ Image_convolve(
     xfree((double *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -3304,17 +3306,17 @@ Image_convolve_channel(
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
 
-    order = NUM2INT(argv[0]);
+    order = NUM2UINT(argv[0]);
     ary = argv[1];
 
-    rm_check_ary_len(ary, order*order);
+    rm_check_ary_len(ary, (long)(order*order));
 
-    kernel = ALLOC_N(double, order*order);
+    kernel = ALLOC_N(double, (long)(order*order));
 
     // Convert the kernel array argument to an array of doubles
     for (x = 0; x < order*order; x++)
     {
-        kernel[x] = NUM2DBL(rb_ary_entry(ary, x));
+        kernel[x] = NUM2DBL(rb_ary_entry(ary, (long)x));
     }
 
     GetExceptionInfo(&exception);
@@ -3323,7 +3325,7 @@ Image_convolve_channel(
     xfree((double *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -3507,7 +3509,7 @@ Image_depth(VALUE self)
     depth = GetImageDepth(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return INT2FIX(depth);
 }
@@ -3529,7 +3531,7 @@ Image_delete_profile(VALUE self, VALUE name)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    (void) ProfileImage(image, STRING_PTR(name), NULL, 0, True);
+    (void) ProfileImage(image, STRING_PTR(name), NULL, 0, MagickTrue);
     rm_check_image_exception(image, RetainOnError);
 
     return self;
@@ -3554,7 +3556,7 @@ Image_despeckle(VALUE self)
     new_image = DespeckleImage(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -3658,8 +3660,8 @@ VALUE
 Image_dispatch(int argc, VALUE *argv, VALUE self)
 {
     Image *image;
-    unsigned long x, y, columns, rows;
-    unsigned long n, npixels;
+    long x, y;
+    unsigned long columns, rows, n, npixels;
     volatile VALUE pixels_ary;
     StorageType stg_type = FIX_STG_TYPE;
     char *map;
@@ -3678,8 +3680,8 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 5 or 6)", argc);
     }
 
-    x       = NUM2ULONG(argv[0]);
-    y       = NUM2ULONG(argv[1]);
+    x       = NUM2LONG(argv[0]);
+    y       = NUM2LONG(argv[1]);
     columns = NUM2ULONG(argv[2]);
     rows    = NUM2ULONG(argv[3]);
     map     = STRING_PTR_LEN(argv[4], mapL);
@@ -3714,21 +3716,21 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
 
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // Convert the pixel data to the appropriate Ruby type
     if (stg_type == FIX_STG_TYPE)
     {
         for (n = 0; n < npixels; n++)
         {
-            rb_ary_push(pixels_ary, UINT2NUM((unsigned int) pixels.i[n]));
+            (void) rb_ary_push(pixels_ary, UINT2NUM((unsigned int) pixels.i[n]));
         }
     }
     else
     {
         for (n = 0; n < npixels; n++)
         {
-            rb_ary_push(pixels_ary, rb_float_new((double)pixels.f[n]));
+            (void) rb_ary_push(pixels_ary, rb_float_new((double)pixels.f[n]));
         }
     }
 
@@ -3888,7 +3890,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
                                  , x_offset, y_offset, DissolveCompositeOp);
 
 #if defined(GRAPHICSMAGICK)
-    DestroyImage(overlay);
+    (void) DestroyImage(overlay);
 #endif
 
     return composite;
@@ -3928,7 +3930,7 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
                                    , metric, &distortion, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rb_float_new(distortion);
 #else
@@ -3970,11 +3972,11 @@ Image__dump(VALUE self, VALUE depth)
     blob = ImageToBlob(info, image, &length, &exception);
 
     // Free ImageInfo first - error handling may raise an exception
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
 
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!blob)
     {
@@ -3989,11 +3991,11 @@ Image__dump(VALUE self, VALUE depth)
     mi.mj = DUMPED_IMAGE_MAJOR_VERS;
     mi.mi = DUMPED_IMAGE_MINOR_VERS;
     strcpy(mi.magick, image->magick);
-    mi.len = strlen(mi.magick);
+    mi.len = (unsigned char) min((size_t)UCHAR_MAX, strlen(mi.magick));
 
     // Concatenate the blob onto the header & return the result
-    str = rb_str_new((char *)&mi, mi.len+offsetof(DumpedImage,magick));
-    return rb_str_cat(str, (char *)blob, length);
+    str = rb_str_new((char *)&mi, (long)(mi.len+offsetof(DumpedImage,magick)));
+    return rb_str_cat(str, (char *)blob, (long)length);
 }
 
 /*
@@ -4008,7 +4010,7 @@ Image_dup(VALUE self)
     dup = Data_Wrap_Struct(CLASS_OF(self), NULL, DestroyImage, NULL);
     if (rb_obj_tainted(self))
     {
-        rb_obj_taint(dup);
+        (void) rb_obj_taint(dup);
     }
     return rb_funcall(dup, ID_initialize_copy, 1, self);
 }
@@ -4108,7 +4110,7 @@ Image_edge(int argc, VALUE *argv, VALUE self)
     new_image = EdgeImage(image, radius, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -4124,7 +4126,7 @@ effect_image(
     VALUE self,
     int argc,
     VALUE *argv,
-    effector_t *effector)
+    effector_t effector)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -4153,7 +4155,7 @@ effect_image(
     new_image = (effector)(image, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -4218,7 +4220,7 @@ Image_enhance(VALUE self)
     new_image = EnhanceImage(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -4242,7 +4244,7 @@ Image_equalize(VALUE self)
     (void) EqualizeImage(new_image);
     rm_check_image_exception(new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 }
@@ -4261,7 +4263,7 @@ Image_erase_bang(VALUE self)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    SetImageBackgroundColor(image);
+    (void) SetImageBackgroundColor(image);
 
     rm_check_image_exception(image, RetainOnError);
 
@@ -4279,7 +4281,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     Image *image;
     long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
-    unsigned long n, npixels;
+    long n, npixels;
     unsigned int okay;
     char *map = "RGB";
     volatile unsigned int *pixels;
@@ -4310,15 +4312,15 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    if (   x_off < 0 || x_off > image->columns
-        || y_off < 0 || y_off > image->rows
+    if (   x_off < 0 || (unsigned long)x_off > image->columns
+        || y_off < 0 || (unsigned long)y_off > image->rows
         || cols == 0 || rows == 0)
     {
         rb_raise(rb_eArgError, "invalid extract geometry");
     }
 
 
-    npixels = cols * rows * strlen(map);
+    npixels = (long)(cols * rows * strlen(map));
     pixels = ALLOC_N(unsigned int, npixels);
     if (!pixels)    // app recovered from exception
     {
@@ -4337,13 +4339,13 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
         rm_magick_error("ExportImagePixels failed with no explanation.", NULL);
     }
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     ary = rb_ary_new2(npixels);
     for (n = 0; n < npixels; n++)
     {
         Quantum p = ScaleLongToQuantum(pixels[n]);
-        rb_ary_push(ary, UINT2NUM(p));
+        (void) rb_ary_push(ary, UINT2NUM(p));
     }
 
     xfree((unsigned int *)pixels);
@@ -4402,8 +4404,8 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    if (   x_off < 0 || x_off > image->columns
-        || y_off < 0 || y_off > image->rows
+    if (   x_off < 0 || (unsigned long)x_off > image->columns
+        || y_off < 0 || (unsigned long)y_off > image->rows
         || cols == 0 || rows == 0)
     {
         rb_raise(rb_eArgError, "invalid extract geometry");
@@ -4445,7 +4447,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     // Allocate a string long enough to hold the exported pixel data.
     // Get a pointer to the buffer.
     string = rb_str_new2("");
-    rb_str_resize(string, (long)(sz * npixels));
+    (void) rb_str_resize(string, (long)(sz * npixels));
     str = STRING_PTR(string);
 
     GetExceptionInfo(&exception);
@@ -4454,14 +4456,14 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     if (!okay)
     {
         // Let GC have the string buffer.
-        rb_str_resize(string, 0);
+        (void) rb_str_resize(string, 0);
         CHECK_EXCEPTION()
 
         // Should never get here...
         rm_magick_error("ExportImagePixels failed with no explanation.", NULL);
     }
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return string;
 
@@ -4581,7 +4583,7 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     okay = IsImageSimilar(image, target, &x, &y, &exception);
     CHECK_EXCEPTION();
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!okay)
     {
@@ -4622,14 +4624,14 @@ flipflop(int bang, VALUE self, flipper_t flipflopper)
     new_image = (flipflopper)(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -4689,7 +4691,7 @@ Image_format(VALUE self)
         // Deliberately ignore the exception info!
         GetExceptionInfo(&exception);
         magick_info = GetMagickInfo(image->magick, &exception);
-        DestroyExceptionInfo(&exception);
+        (void) DestroyExceptionInfo(&exception);
         return magick_info ? rb_str_new2(magick_info->name) : Qnil;
     }
 
@@ -4718,7 +4720,7 @@ Image_format_eq(VALUE self, VALUE magick)
     m = GetMagickInfo(mgk, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!m)
     {
@@ -4802,7 +4804,7 @@ Image_frame(int argc, VALUE *argv, VALUE self)
     new_image = FrameImage(image, &frame_info, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -4834,7 +4836,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     images = BlobToImage(info,  blob, (size_t)length, &exception);
     rm_check_exception(&exception, images, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(images);
 
@@ -5002,7 +5004,7 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
     new_image = GaussianBlurImageChannel(image, channels, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 
@@ -5070,17 +5072,18 @@ Image_get_pixels(
     Image *image;
     PixelPacket *pixels;
     ExceptionInfo exception;
-    long x, y, columns, rows;
+    long x, y;
+    unsigned long columns, rows;
     long size, n;
     VALUE pixel_ary;
 
     Data_Get_Struct(self, Image, image);
-    x = NUM2LONG(x_arg);
-    y = NUM2LONG(y_arg);
-    columns = NUM2LONG(cols_arg);
-    rows = NUM2LONG(rows_arg);
+    x       = NUM2LONG(x_arg);
+    y       = NUM2LONG(y_arg);
+    columns = NUM2ULONG(cols_arg);
+    rows    = NUM2ULONG(rows_arg);
 
-    if (x+columns > image->columns || y+rows > image->rows || columns < 0 || rows < 0)
+    if ((x+columns) > image->columns || (y+rows) > image->rows || columns < 0 || rows < 0)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , columns, rows, x, y);
@@ -5092,7 +5095,7 @@ Image_get_pixels(
     pixels = (PixelPacket *)AcquireImagePixels(image, x, y, columns, rows, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // If the function failed, return a 0-length array.
     if (!pixels)
@@ -5101,7 +5104,7 @@ Image_get_pixels(
     }
 
     // Allocate an array big enough to contain the PixelPackets.
-    size = columns*rows;
+    size = (long)(columns * rows);
     pixel_ary = rb_ary_new2(size);
 
     // Convert the PixelPackets to Magick::Pixel objects
@@ -5134,7 +5137,7 @@ Image_get_one_pixel(VALUE self, VALUE x, VALUE y)
     pixel = AcquireOnePixel(image, NUM2LONG(x), NUM2LONG(y), &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return Pixel_from_PixelPacket(&pixel);
 }
@@ -5158,7 +5161,7 @@ Image_gray_q(VALUE self)
     r = IsGrayImage(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return r ? Qtrue : Qfalse;
 }
@@ -5229,7 +5232,7 @@ Image_implode(int argc, VALUE *argv, VALUE self)
 
     new_image = ImplodeImage(image, amount, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -5249,8 +5252,8 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     Image *image;
     long x_off, y_off;
     unsigned long cols, rows;
-    unsigned long npixels;
-    long n, buffer_l;
+    unsigned long n, npixels;
+    long buffer_l;
     char *map;
     volatile VALUE pixel_arg, pixel_ary;
     StorageType stg_type = CharPixel;
@@ -5332,7 +5335,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         {
             rb_raise(rb_eArgError, "pixel buffer must contain an exact multiple of the map length");
         }
-        if (buffer_l / type_sz < npixels)
+        if ((unsigned long)(buffer_l / type_sz) < npixels)
         {
             rb_raise(rb_eArgError, "pixel buffer too small (need %lu channel values, got %ld)"
                    , npixels, buffer_l/type_sz);
@@ -5350,7 +5353,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         {
             rb_raise(rb_eArgError, "pixel array must contain an exact multiple of the map length");
         }
-        if (RARRAY(pixel_ary)->len < npixels)
+        if ((unsigned long)RARRAY(pixel_ary)->len < npixels)
         {
             rb_raise(rb_eArgError, "pixel array too small (need %lu elements, got %ld)"
                    , npixels, RARRAY(pixel_ary)->len);
@@ -5376,7 +5379,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             for (n = 0; n < npixels; n++)
             {
                 volatile VALUE p = rb_ary_entry(pixel_ary, n);
-                long q = ScaleQuantumToLong(NUM2LONG(p));
+                unsigned long q = ScaleQuantumToLong((Quantum)NUM2LONG(p));
                 pixels[n] = (int) q;
             }
             buffer = (void *) pixels;
@@ -5469,13 +5472,13 @@ Image_inspect(VALUE self)
         x += sprintf(buffer+x, "DirectClass ");
         if (image->total_colors != 0)
         {
-            if (image->total_colors >= (1 << 24))
+            if (image->total_colors >= (unsigned long)(1 << 24))
             {
                 x += sprintf(buffer+x, "%lumc ", image->total_colors/1024/1024);
             }
             else
             {
-                if (image->total_colors >= (1 << 16))
+                if (image->total_colors >= (unsigned long)(1 << 16))
                 {
                     x += sprintf(buffer+x, "%lukc ", image->total_colors/1024);
                 }
@@ -5492,11 +5495,11 @@ Image_inspect(VALUE self)
         // building with GM. GM defines that field as an unsigned int.
         if (image->total_colors <= image->colors)
         {
-            x += sprintf(buffer+x, "PseudoClass %luc ", (long) image->colors);
+            x += sprintf(buffer+x, "PseudoClass %ldc ", (long) image->colors);
         }
         else
         {
-            x += sprintf(buffer+x, "PseudoClass %lu=>%luc ", image->total_colors
+            x += sprintf(buffer+x, "PseudoClass %lu=>%ldc ", image->total_colors
                        , (long)image->colors);
             if (image->error.mean_error_per_pixel != 0.0)
             {
@@ -5513,7 +5516,7 @@ Image_inspect(VALUE self)
 #if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
     quantum_depth = GetImageQuantumDepth(image);
 #else
-    quantum_depth = GetImageQuantumDepth(image, True);
+    quantum_depth = GetImageQuantumDepth(image, MagickTrue);
 #endif
 #else
     quantum_depth = image->depth;
@@ -5821,11 +5824,11 @@ Image__load(VALUE class, VALUE str)
     blob += offsetof(DumpedImage,magick) + mi.len;
     length -= offsetof(DumpedImage,magick) + mi.len;
     image = BlobToImage(info, blob, (size_t) length, &exception);
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
 
     rm_check_exception(&exception, image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(image);
 
@@ -5854,14 +5857,14 @@ magnify(int bang, VALUE self, magnifier_t magnifier)
     new_image = (magnifier)(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -5946,7 +5949,7 @@ Image_mask(VALUE self)
     mask = image->clip_mask;
 #endif
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return mask ? rm_image_new(mask) : Qnil;
 }
@@ -5984,9 +5987,9 @@ Image_mask_eq(VALUE self, VALUE mask)
             resized_image = ResizeImage(clip_mask, image->columns, image->rows
                                       , UndefinedFilter, 0.0, &exception);
             rm_check_exception(&exception, resized_image, DestroyOnError);
-            DestroyExceptionInfo(&exception);
+            (void) DestroyExceptionInfo(&exception);
             rm_ensure_result(resized_image);
-            (void) DestroyImage(clip_mask);
+            (void) (void) DestroyImage(clip_mask);
             clip_mask = resized_image;
         }
 
@@ -6000,7 +6003,7 @@ Image_mask_eq(VALUE self, VALUE mask)
           }
           for (x = 0; x < (long) clip_mask->columns; x++)
           {
-            if (clip_mask->matte == False)
+            if (clip_mask->matte == MagickFalse)
             {
                 q->opacity = PIXEL_INTENSITY(q);
             }
@@ -6009,17 +6012,17 @@ Image_mask_eq(VALUE self, VALUE mask)
             q->blue = q->opacity;
             q += 1;
           }
-          if (SyncImagePixels(clip_mask) == False)
+          if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
           {
-              (void) DestroyImage(clip_mask);
+              (void) (void) DestroyImage(clip_mask);
               rm_magick_error("SyncImagePixels failed", NULL);
           }
         }
 
 #if defined(HAVE_SETIMAGESTORAGECLASS)
-        if (SetImageStorageClass(clip_mask, DirectClass) == False)
+        if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
         {
-            (void) DestroyImage(clip_mask);
+            (void) (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
         }
 #else
@@ -6030,13 +6033,13 @@ Image_mask_eq(VALUE self, VALUE mask)
         }
 #endif
 
-        clip_mask->matte = True;
+        clip_mask->matte = MagickTrue;
 
         // SetImageClipMask clones the clip_mask image. We can
         // destroy our copy after SetImageClipMask is done with it.
 
         (void) SetImageClipMask(image, clip_mask);
-        (void) DestroyImage(clip_mask);
+        (void) (void) DestroyImage(clip_mask);
     }
     else
     {
@@ -6092,7 +6095,7 @@ Image_matte_flood_fill(
 {
     Image *image, *new_image;
     PixelPacket target;
-    unsigned int op;
+    unsigned long op;
     long x, y;
     PaintMethod pm;
 
@@ -6100,10 +6103,10 @@ Image_matte_flood_fill(
 
     Color_to_PixelPacket(&target, color);
 
-    op = NUM2UINT(opacity);
+    op = NUM2ULONG(opacity);
     if (op > MaxRGB)
     {
-        rb_raise(rb_eArgError, "opacity (%d) exceeds MaxRGB", op);
+        rb_raise(rb_eArgError, "opacity (%lu) exceeds MaxRGB", op);
     }
 
     VALUE_TO_ENUM(method, pm, PaintMethod);
@@ -6114,16 +6117,16 @@ Image_matte_flood_fill(
     }
     x = NUM2LONG(x_obj);
     y = NUM2LONG(y_obj);
-    if (x > image->columns || y > image->rows)
+    if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
-        rb_raise(rb_eArgError, "target out of range. %dx%d given, image is %dx%d"
+        rb_raise(rb_eArgError, "target out of range. %ldx%ld given, image is %lux%lu"
                , x, y, image->columns, image->rows);
     }
 
 
     new_image = rm_clone_image(image);
 
-    (void) MatteFloodfillImage(new_image, target, op, x, y, pm);
+    (void) MatteFloodfillImage(new_image, target, (Quantum)op, x, y, pm);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -6160,7 +6163,7 @@ Image_median_filter(int argc, VALUE *argv, VALUE self)
     new_image = MedianFilterImage(image, radius, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -6316,7 +6319,7 @@ Image_monochrome_q(VALUE self)
     r = IsMonochromeImage(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return r ? Qtrue : Qfalse;
 }
@@ -6393,7 +6396,7 @@ motion_blur(
     new_image = (fp)(image, radius, sigma, angle, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -6519,7 +6522,7 @@ Image_new(int argc, VALUE *argv, VALUE class)
     Data_Get_Struct(info_obj, Info, info);
 
     image = AllocateImage(info);
-    new_image = Data_Wrap_Struct(class, NULL, DestroyImage, image);
+    new_image = Data_Wrap_Struct(class, NULL, (void) DestroyImage, image);
     init_arg[0] = info_obj;
     init_arg[1] = argv[0];
     init_arg[2] = argv[1];
@@ -6635,7 +6638,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     // specifying it when creating the Info parm block.
     if (!fill)
     {
-        SetImageBackgroundColor(image);
+        (void) SetImageBackgroundColor(image);
     }
     // fillobj.fill(self)
     else
@@ -6737,7 +6740,7 @@ Image_number_colors(VALUE self)
     n = (unsigned long) GetNumberColors(image, NULL, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return ULONG2NUM(n);
 }
@@ -6771,7 +6774,7 @@ Image_oil_paint(int argc, VALUE *argv, VALUE self)
     new_image = OilPaintImage(image, radius, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -6825,7 +6828,7 @@ Image_opaque_q(VALUE self)
     r = IsOpaqueImage(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return r ? Qtrue : Qfalse;
 }
@@ -6895,7 +6898,7 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 #endif
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 }
@@ -6989,7 +6992,7 @@ Image_palette_q(VALUE self)
     r = IsPaletteImage(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return r ? Qtrue : Qfalse;
 }
@@ -7054,7 +7057,7 @@ Image_pixel_color(
         old_color = *AcquireImagePixels(image, x, y, 1, 1, &exception);
         CHECK_EXCEPTION()
 
-        DestroyExceptionInfo(&exception);
+        (void) DestroyExceptionInfo(&exception);
 
         // PseudoClass
         if (image->storage_class == PseudoClass)
@@ -7071,7 +7074,7 @@ Image_pixel_color(
 
     // ImageMagick segfaults if the pixel location is out of bounds.
     // Do what IM does and return the background color.
-    if (x < 0 || y < 0 || x >= image->columns || y >= image->rows)
+    if (x < 0 || y < 0 || (unsigned long)x >= image->columns || (unsigned long)y >= image->rows)
     {
         return Pixel_from_PixelPacket(&image->background_color);
     }
@@ -7080,7 +7083,7 @@ Image_pixel_color(
     // Convert to DirectClass
     if (image->storage_class == PseudoClass)
     {
-        SyncImage(image);
+        (void) SyncImage(image);
         magick_free(image->colormap);
         image->colormap = NULL;
         image->storage_class = DirectClass;
@@ -7201,7 +7204,6 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_POLAROIDIMAGE)
     Image *image, *clone, *new_image;
-    PixelPacket default_border_color;
     volatile VALUE options;
     double angle = -5.0;
     Draw *draw;
@@ -7233,8 +7235,8 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     new_image = PolaroidImage(clone, draw->info, angle, &exception);
 
     rm_check_exception(&exception, clone, DestroyOnError);
-    DestroyImage(clone);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyImage(clone);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -7258,16 +7260,16 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_POSTERIZEIMAGE)
     Image *image, *new_image;
-    MagickBooleanType dither = False;
+    MagickBooleanType dither = MagickFalse;
     unsigned long levels = 4;
 
     switch(argc)
     {
         case 2:
-            dither = RTEST(argv[1]);
+            dither = (MagickBooleanType) RTEST(argv[1]);
             /* fall through */
         case 1:
-            levels = NUM2INT(argv[0]);
+            levels = NUM2ULONG(argv[0]);
             /* fall through */
         case 0:
             break;
@@ -7309,7 +7311,7 @@ Image_preview(VALUE self, VALUE preview)
     new_image = PreviewImage(image, preview_type, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -7465,7 +7467,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     (void) QuantumOperatorImage(image, channel, qop, rvalue, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return self;
 
@@ -7548,7 +7550,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     (void) EvaluateImageChannel(image, channel, qop, rvalue, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return self;
 
@@ -7576,15 +7578,15 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 5:
-            quantize_info.measure_error = RTEST(argv[4]);
+            quantize_info.measure_error = (MagickBooleanType) RTEST(argv[4]);
         case 4:
-            quantize_info.tree_depth = NUM2INT(argv[3]);
+            quantize_info.tree_depth = NUM2UINT(argv[3]);
         case 3:
-            quantize_info.dither = RTEST(argv[2]);
+            quantize_info.dither = (MagickBooleanType) RTEST(argv[2]);
         case 2:
             VALUE_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
         case 1:
-            quantize_info.number_colors = NUM2INT(argv[0]);
+            quantize_info.number_colors = NUM2UINT(argv[0]);
         case 0:
             break;
         default:
@@ -7594,7 +7596,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    QuantizeImage(&quantize_info, new_image);
+    (void) QuantizeImage(&quantize_info, new_image);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -7620,7 +7622,7 @@ Image_radial_blur(VALUE self, VALUE angle)
     new_image = RadialBlurImage(image, NUM2DBL(angle), &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -7665,7 +7667,7 @@ Image_radial_blur_channel(
     new_image = RadialBlurImageChannel(image, channels, NUM2DBL(argv[0]), &exception);
 
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -7717,7 +7719,7 @@ Image_random_channel_threshold(
     (void) RandomChannelThresholdImage(new_image, channel, thresholds, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 #else
@@ -7772,7 +7774,7 @@ Image_random_threshold_channel(
     (void) RandomThresholdImageChannel(new_image, channels, thresholds, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 
@@ -7898,7 +7900,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     images = (reader)(info, &exception);
     rm_check_exception(&exception, images, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return array_from_images(images);
 }
@@ -7938,7 +7940,7 @@ Image_recolor(VALUE self, VALUE color_matrix)
     xfree((void *)matrix);
 
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 
@@ -8004,7 +8006,7 @@ Image_read_inline(VALUE self, VALUE content)
 
      rm_check_exception(&exception, images, DestroyOnError);
 
-     DestroyExceptionInfo(&exception);
+     (void) DestroyExceptionInfo(&exception);
 
      return array_from_images(images);
 }
@@ -8028,7 +8030,7 @@ static VALUE array_from_images(Image *images)
      {
          image = RemoveFirstImageFromList(&images);
          image_obj = rm_image_new(image);
-         rb_ary_push(image_ary, image_obj);
+         (void) rb_ary_push(image_ary, image_obj);
      }
 
      return image_ary;
@@ -8052,7 +8054,7 @@ Image_reduce_noise(VALUE self, VALUE radius)
     new_image = ReduceNoiseImage(image, NUM2DBL(radius), &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 }
@@ -8135,7 +8137,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
             }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
             }
@@ -8151,14 +8153,14 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
     new_image = ResizeImage(image, columns, rows, filter, blur, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
     return rm_image_new(new_image);
@@ -8194,7 +8196,7 @@ Image_roll(VALUE self, VALUE x_offset, VALUE y_offset)
     new_image = RollImage(image, NUM2LONG(x_offset), NUM2LONG(y_offset), &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -8250,14 +8252,14 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
     new_image = RotateImage(image, degrees, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
     return rm_image_new(new_image);
@@ -8325,7 +8327,7 @@ Image_scale_bang(int argc, VALUE *argv, VALUE self)
                 if 2 arguments, (cols, rows)
 */
 static VALUE
-scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
+scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 {
     Image *image, *new_image;
     unsigned long columns, rows;
@@ -8352,7 +8354,7 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
             }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
             }
@@ -8368,14 +8370,14 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t *scaler)
     new_image = (scaler)(image, columns, rows, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -8442,7 +8444,7 @@ Image_sepiatone(int argc, VALUE *argv, VALUE self)
     new_image = SepiaToneImage(image, threshold, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -8517,7 +8519,7 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
         rb_raise(rb_eArgError, "opacity level (%d) exceeds MaxRGB", opacity);
     }
 
-    SetImageOpacity(image, opacity);
+    (void) SetImageOpacity(image, (Quantum)opacity);
     return self;
 }
 
@@ -8550,9 +8552,9 @@ Image_properties(VALUE self)
         attr = GetNextImageAttribute(image);
         while (attr)
         {
-            rb_ary_store(ary, 0, rb_str_new2(attr->key));
-            rb_ary_store(ary, 1, rb_str_new2(attr->value));
-            rb_yield(ary);
+            (void) rb_ary_store(ary, 0, rb_str_new2(attr->key));
+            (void) rb_ary_store(ary, 1, rb_str_new2(attr->value));
+            (void) rb_yield(ary);
             attr = GetNextImageAttribute(image);
         }
 #else
@@ -8578,13 +8580,13 @@ Image_properties(VALUE self)
         attr = GetNextImageAttribute(image);
         while (attr)
         {
-            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
+            (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
             attr = GetNextImageAttribute(image);
         }
 #else
         for (attr = image->attributes; attr; attr = attr->next)
         {
-            rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
+            (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
         }
 #endif
         return attr_hash;
@@ -8629,7 +8631,7 @@ Image_shade(int argc, VALUE *argv, VALUE self)
     new_image = ShadeImage(image, shading, azimuth, elevation, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -8672,9 +8674,9 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
         case 3:
             sigma = NUM2DBL(argv[2]);
         case 2:
-            y_offset = NUM2ULONG(argv[1]);
+            y_offset = NUM2LONG(argv[1]);
         case 1:
-            x_offset = NUM2ULONG(argv[0]);
+            x_offset = NUM2LONG(argv[0]);
         case 0:
             break;
         default:
@@ -8688,7 +8690,7 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     new_image = ShadowImage(image, opacity, sigma, x_offset, y_offset, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -8749,7 +8751,7 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
     (void) SharpenImageChannel(new_image, channels, radius, sigma, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 #else
@@ -8809,7 +8811,7 @@ Image_shear(
     new_image = ShearImage(image, NUM2DBL(x_shear), NUM2DBL(y_shear), &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -8838,7 +8840,7 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
     switch(argc)
     {
         case 3:
-            sharpen  = RTEST(argv[2]);
+            sharpen  = (MagickBooleanType) RTEST(argv[2]);
         case 2:
             midpoint = NUM2DBL(argv[1]);
         case 1:
@@ -8874,7 +8876,7 @@ Image_signature(VALUE self)
     const ImageAttribute *signature;
 
     Data_Get_Struct(self, Image, image);
-    SignatureImage(image);
+    (void) SignatureImage(image);
     signature = GetImageAttribute(image, "signature");
     if (!signature)
     {
@@ -8968,8 +8970,8 @@ Image_spaceship(VALUE self, VALUE other)
     Data_Get_Struct(self, Image, imageA);
     Data_Get_Struct(other, Image, imageB);
 
-    SignatureImage(imageA);
-    SignatureImage(imageB);
+    (void) SignatureImage(imageA);
+    (void) SignatureImage(imageB);
     sigA = GetImageAttribute(imageA, "signature");
     sigB = GetImageAttribute(imageB, "signature");
     if (!sigA || !sigB)
@@ -9018,8 +9020,8 @@ Image_splice(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    rectangle.x      = NUM2ULONG(argv[0]);
-    rectangle.y      = NUM2ULONG(argv[1]);
+    rectangle.x      = NUM2LONG(argv[0]);
+    rectangle.y      = NUM2LONG(argv[1]);
     rectangle.width  = NUM2ULONG(argv[2]);
     rectangle.height = NUM2ULONG(argv[3]);
 
@@ -9033,7 +9035,7 @@ Image_splice(int argc, VALUE *argv, VALUE self)
 
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -9075,7 +9077,7 @@ Image_spread(int argc, VALUE *argv, VALUE self)
     rm_check_exception(&exception, new_image, DestroyOnError);
     rm_ensure_result(new_image);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
 }
@@ -9101,7 +9103,7 @@ Image_statistics(VALUE self)
     (void) GetImageStatistics(image, &stats, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return Statistics_new(&stats);
 #else
@@ -9141,7 +9143,7 @@ Image_stegano(
     new_image = SteganoImage(image, watermark, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -9175,7 +9177,7 @@ Image_stereo(
     new_image = StereoImage(image, offset, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -9214,7 +9216,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
 
     if (image->storage_class == PseudoClass && class_type == DirectClass)
     {
-        SyncImage(image);
+        (void) SyncImage(image);
         magick_free(image->colormap);
         image->colormap = NULL;
     }
@@ -9222,11 +9224,11 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     {
         GetQuantizeInfo(&qinfo);
         qinfo.number_colors = MaxRGB+1;
-        QuantizeImage(&qinfo, image);
+        (void) QuantizeImage(&qinfo, image);
     }
 
 #if defined(HAVE_SETIMAGESTORAGECLASS)
-    SetImageStorageClass(image, class_type);
+    (void) SetImageStorageClass(image, class_type);
 #else
     image->storage_class = class_type;
 #endif
@@ -9254,25 +9256,26 @@ Image_store_pixels(
     Pixel *pixels, *pixel;
     volatile VALUE new_pixel;
     long n, size;
-    long x, y, cols, rows;
+    long x, y;
+    unsigned long cols, rows;
     unsigned int okay;
 
     Data_Get_Struct(self, Image, image);
 
     x = NUM2LONG(x_arg);
     y = NUM2LONG(y_arg);
-    cols = NUM2LONG(cols_arg);
-    rows = NUM2LONG(rows_arg);
+    cols = NUM2ULONG(cols_arg);
+    rows = NUM2ULONG(rows_arg);
     if (x < 0 || y < 0 || x+cols > image->columns || y+rows > image->rows)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , cols, rows, x, y);
     }
 
-    size = cols * rows;
+    size = (long)(cols * rows);
     rm_check_ary_len(new_pixels, size);
 
-    SetImageType(image, TrueColorType);
+    (void) SetImageType(image, TrueColorType);
 
     // Get a pointer to the pixels. Replace the values with the PixelPackets
     // from the pixels argument.
@@ -9336,7 +9339,7 @@ Image_swirl(VALUE self, VALUE degrees)
     new_image = SwirlImage(image, NUM2DBL(degrees), &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -9377,9 +9380,9 @@ Image_texture_flood_fill(
     x = NUM2LONG(x_obj);
     y = NUM2LONG(y_obj);
 
-    if (x > image->columns || y > image->rows)
+    if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
-        rb_raise(rb_eArgError, "target out of range. %dx%d given, image is %dx%d"
+        rb_raise(rb_eArgError, "target out of range. %ldx%ld given, image is %lux%lu"
                , x, y, image->columns, image->rows);
     }
 
@@ -9387,7 +9390,7 @@ Image_texture_flood_fill(
     if (method != FillToBorderMethod && method != FloodfillMethod)
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
-                               "FillToBorderMethod (%d given)", method);
+                               "FillToBorderMethod (%d given)", (int)method);
     }
 
     draw_info = CloneDrawInfo(NULL, NULL);
@@ -9404,14 +9407,14 @@ Image_texture_flood_fill(
     // the fill color even though the fill color isn't used.
     if (method == FillToBorderMethod)
     {
-        draw_info->fill.red = color.red + new_image->fuzz + 1;
+        draw_info->fill.red = RoundToQuantum(color.red + new_image->fuzz + 1);
         draw_info->fill.green = color.green;
         draw_info->fill.blue = color.blue;
     }
 
     (void) ColorFloodfillImage(new_image, draw_info, color, x, y, method);
 
-    DestroyDrawInfo(draw_info);
+    (void) DestroyDrawInfo(draw_info);
     rm_check_image_exception(new_image, DestroyOnError);
 
 
@@ -9529,7 +9532,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
             }
             drows = scale * image->rows + 0.5;
             dcols = scale * image->columns + 0.5;
-            if (drows > ULONG_MAX || dcols > ULONG_MAX)
+            if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
             }
@@ -9545,14 +9548,14 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
     new_image = ThumbnailImage(image, columns, rows, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -9600,7 +9603,7 @@ Image_ticks_per_second_eq(VALUE self, VALUE tps)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
-    image->ticks_per_second = NUM2INT(tps);
+    image->ticks_per_second = NUM2ULONG(tps);
     return self;
 #else
     rm_not_implemented();
@@ -9712,7 +9715,7 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     new_image = TintImage(image, opacity, *tint, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -9762,7 +9765,7 @@ Image_to_blob(VALUE self)
     GetExceptionInfo(&exception);
     if (*info->magick)
     {
-        (void) SetImageInfo(info, True, &exception);
+        (void) SetImageInfo(info, MagickTrue, &exception);
         CHECK_EXCEPTION()
 
         if (*info->magick == '\0')
@@ -9790,7 +9793,7 @@ Image_to_blob(VALUE self)
     blob = ImageToBlob(info, image, &length, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (length == 0 || !blob)
     {
@@ -9830,7 +9833,7 @@ Image_to_color(VALUE self, VALUE pixel_arg)
     (void) QueryColorname(image, pixel, AllCompliance, name, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rb_str_new2(name);
 
@@ -9884,7 +9887,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    (void) TransparentImage(new_image, color, opacity);
+    (void) TransparentImage(new_image, color, (Quantum)opacity);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -10013,14 +10016,14 @@ trimmer(int bang, VALUE self)
     new_image = CropImage(image, &geometry, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 
@@ -10057,7 +10060,7 @@ VALUE Image_image_type_eq(VALUE self, VALUE type)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(type, it, ImageType);
-    SetImageType(image, it);
+    (void) SetImageType(image, it);
 
     return self;
 }
@@ -10077,7 +10080,7 @@ VALUE Image_image_type(VALUE self)
     type = GetImageType(image, &exception);
     CHECK_EXCEPTION()
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return ImageType_new(type);
 }
@@ -10099,7 +10102,7 @@ Image_unique_colors(VALUE self)
 
     new_image = UniqueImageColors(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -10209,7 +10212,7 @@ Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
     new_image = UnsharpMaskImage(image, radius, sigma, amount, threshold, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -10245,7 +10248,7 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
                                       , threshold, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -10273,8 +10276,8 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(self, Image, image);
 
-    horz_radius = image->columns * 0.10 + 0.5;
-    vert_radius = image->rows * 0.10 + 0.5;
+    horz_radius = (long)(image->columns * 0.10 + 0.5);
+    vert_radius = (long)(image->rows * 0.10 + 0.5);
 
     switch (argc)
     {
@@ -10298,7 +10301,7 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
     new_image = VignetteImage(image, radius, sigma, horz_radius, vert_radius, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -10393,7 +10396,7 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
     }
 
     blend_geometry(geometry, sizeof(geometry), src_percent, dst_percent);
-    CloneString(&overlay->geometry, geometry);
+    (void) CloneString(&overlay->geometry, geometry);
 
     new_image = rm_clone_image(image);
     (void) CompositeImage(new_image, ModulateCompositeOp, overlay, x_offset, y_offset);
@@ -10436,7 +10439,7 @@ Image_wave(int argc, VALUE *argv, VALUE self)
     new_image = WaveImage(image, amplitude, wavelength, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
@@ -10504,13 +10507,13 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     // transparency to complete transparency. rate == 0.0 -> no change.
     if (rate > 0.0)
     {
-        max_rows = ((double)image->rows) / (3.0 * rate);
-        max_rows = min(max_rows, image->rows);
+        max_rows = (long)((double)image->rows) / (3.0 * rate);
+        max_rows = (long)min((unsigned long)max_rows, image->rows);
         step =  (TransparentOpacity - initial) / max_rows;
     }
     else
     {
-        max_rows = image->rows;
+        max_rows = (long)image->rows;
         step = 0.0;
     }
 
@@ -10525,12 +10528,12 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     geometry.width = image->columns;
     geometry.height = max_rows;
     reflection = CropImage(flip_image, &geometry, &exception);
-    DestroyImage(flip_image);
+    (void) DestroyImage(flip_image);
     CHECK_EXCEPTION();
 
 
 #if defined(HAVE_SETIMAGESTORAGECLASS)
-    SetImageStorageClass(reflection, DirectClass);
+    (void) SetImageStorageClass(reflection, DirectClass);
     rm_check_image_exception(reflection, DestroyOnError);
 #else
     if (reflection->storage_class == PseudoClass)
@@ -10578,12 +10581,12 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     }
 
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     return rm_image_new(reflection);
 
 error:
-    DestroyExceptionInfo(&exception);
-    DestroyImage(reflection);
+    (void) DestroyExceptionInfo(&exception);
+    (void) DestroyImage(reflection);
     rb_raise(rb_eRuntimeError, "%s failed on row %lu", func, y);
     return (VALUE)0;
 }
@@ -10650,10 +10653,10 @@ Image_write(VALUE self, VALUE file)
         strcpy(image->filename, info->filename);
 
         GetExceptionInfo(&exception);
-        (void) SetImageInfo(info, True, &exception);
+        (void) SetImageInfo(info, MagickTrue, &exception);
         CHECK_EXCEPTION()
 
-        DestroyExceptionInfo(&exception);
+        (void) DestroyExceptionInfo(&exception);
 
         if (*info->magick == '\0')
         {
@@ -10662,7 +10665,7 @@ Image_write(VALUE self, VALUE file)
         SetImageInfoFile(info, NULL);
     }
 
-    info->adjoin = False;
+    info->adjoin = MagickFalse;
     (void) WriteImage(info, image);
     rm_check_image_exception(image, RetainOnError);
 
@@ -10859,7 +10862,7 @@ xform_image(
     VALUE y,
     VALUE width,
     VALUE height,
-    xformer_t *xformer)
+    xformer_t xformer)
 {
     Image *image, *new_image;
     RectangleInfo rect;
@@ -10879,14 +10882,14 @@ xform_image(
     rm_check_image_exception(image, RetainOnError);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(new_image);
 
     if (bang)
     {
         DATA_PTR(self) = new_image;
-        DestroyImage(image);
+        (void) DestroyImage(image);
         return self;
     }
 

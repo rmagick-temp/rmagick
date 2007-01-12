@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.84 2006/10/21 13:41:32 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.85 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -46,7 +46,7 @@ void *magick_malloc(const size_t size)
 void magick_free(void *ptr)
 {
 #if defined(HAVE_ACQUIREMAGICKMEMORY)
-    RelinquishMagickMemory(ptr);
+    (void) RelinquishMagickMemory(ptr);
 #else
     void *v = ptr;
     LiberateMemory(&v);
@@ -79,7 +79,7 @@ void *magick_realloc(void *ptr, const size_t size)
 */
 void magick_clone_string(char **new_str, const char *str)
 {
-    CloneString(new_str, str);
+    (void) CloneString(new_str, str);
 }
 
 
@@ -161,7 +161,7 @@ rm_strcasecmp(const char *s1, const char *s2)
  *  Purpose:    raise exception if array too short
 */
 void
-rm_check_ary_len(VALUE ary, int len)
+rm_check_ary_len(VALUE ary, long len)
 {
     if (RARRAY(ary)->len < len)
     {
@@ -237,7 +237,7 @@ rm_percentage(VALUE arg)
     int not_num;
 
     // Try to convert the argument to a number. If failure, sets not_num to non-zero.
-    rb_protect(arg_is_number, arg, &not_num);
+    (void) rb_protect(arg_is_number, arg, &not_num);
 
     if (not_num)
     {
@@ -287,7 +287,7 @@ rm_percentage(VALUE arg)
 static VALUE
 check_num2dbl(VALUE obj)
 {
-    rb_num2dbl(obj);
+    (void) rb_num2dbl(obj);
     return INT2FIX(1);
 }
 
@@ -360,7 +360,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
     int not_num;
 
     // Try to convert the argument to a number. If failure, sets not_num to non-zero.
-    rb_protect(arg_is_number, fuzz_arg, &not_num);
+    (void) rb_protect(arg_is_number, fuzz_arg, &not_num);
 
     if (not_num)
     {
@@ -462,7 +462,7 @@ Pixel_to_s(VALUE self)
 
     Data_Get_Struct(self, Pixel, pixel);
     sprintf(buff, "red=%d, green=%d, blue=%d, opacity=%d"
-          , pixel->red, pixel->green, pixel->blue, pixel->opacity);
+          , (int)pixel->red, (int)pixel->green, (int)pixel->blue, (int)pixel->opacity);
     return rb_str_new2(buff);
 }
 
@@ -487,7 +487,7 @@ Pixel_from_color(VALUE class, VALUE name)
     GetExceptionInfo(&exception);
     okay = QueryColorDatabase(STRING_PTR(name), &pp, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!okay)
     {
@@ -553,12 +553,12 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     image = AllocateImage(info);
     image->depth = depth;
     image->matte = matte;
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
     GetExceptionInfo(&exception);
     (void) QueryColorname(image, pixel, compliance, name, &exception);
-    DestroyImage(image);
+    (void) DestroyImage(image);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     // Always return a string, even if it's ""
     return rb_str_new2(name);
@@ -672,7 +672,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
 
     image->colorspace = colorspace;
     image->fuzz = fuzz;
@@ -682,7 +682,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 #else
     equal = FuzzyColorCompare(image, this, that);
 #endif
-    DestroyImage(image);
+    (void) DestroyImage(image);
 
 #else
     equal = FuzzyColorMatch(this, that, fuzz);
@@ -926,7 +926,7 @@ Pixel_dup(VALUE self)
     dup = Data_Wrap_Struct(CLASS_OF(self), NULL, destroy_Pixel, pixel);
     if (rb_obj_tainted(self))
     {
-        rb_obj_taint(dup);
+        (void) rb_obj_taint(dup);
     }
     return rb_funcall(dup, ID_initialize_copy, 1, self);
 }
@@ -944,7 +944,7 @@ Pixel_clone(VALUE self)
     clone = Pixel_dup(self);
     if (OBJ_FROZEN(self))
     {
-        rb_obj_freeze(clone);
+        (void) rb_obj_freeze(clone);
     }
 
     return clone;
@@ -1018,7 +1018,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
 
     (void) QueryColorname(image, color, X11Compliance, name, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return rb_str_new2(name);
 }
@@ -1045,12 +1045,12 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
     my_info = info ? info : CloneImageInfo(NULL);
 
     image = AllocateImage(info);
-    image->matte = False;
+    image->matte = MagickFalse;
     color_name = PixelPacket_to_Color_Name(image, color);
-    DestroyImage(image);
+    (void) DestroyImage(image);
     if (!info)
     {
-        DestroyImageInfo(my_info);
+        (void) DestroyImageInfo(my_info);
     }
 
     return color_name;
@@ -1071,7 +1071,7 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
     GetExceptionInfo(&exception);
     name = STRING_PTR(name_arg);
     okay = QueryColorDatabase(name, color, &exception);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
     if (!okay)
     {
         rb_raise(rb_eArgError, "invalid color name %s", name);
@@ -1802,7 +1802,7 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
-        CloneString((char **)&(ci->name), STRING_PTR(m));
+        (void) CloneString((char **)&(ci->name), STRING_PTR(m));
     }
     m = rb_ary_entry(members, 1);
     if (m != Qnil)
@@ -1970,11 +1970,11 @@ PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
     }
     members = rb_funcall(sp, ID_values, 0);
     m = rb_ary_entry(members, 0);
-    pi->x = m == Qnil ? 0 : FIX2INT(m);
+    pi->x = m == Qnil ? 0.0 : NUM2DBL(m);
     m = rb_ary_entry(members, 1);
-    pi->y = m == Qnil ? 0 : FIX2INT(m);
+    pi->y = m == Qnil ? 0.0 : NUM2DBL(m);
     m = rb_ary_entry(members, 2);
-    pi->z = m == Qnil ? 0 : FIX2INT(m);
+    pi->z = m == Qnil ? 0.0 : NUM2DBL(m);
 }
 
 /*
@@ -2004,9 +2004,9 @@ Point_to_PointInfo(PointInfo *pi, VALUE sp)
     }
     members = rb_funcall(sp, ID_values, 0);
     m = rb_ary_entry(members, 0);
-    pi->x = m == Qnil ? 0 : FIX2INT(m);
+    pi->x = m == Qnil ? 0.0 : NUM2DBL(m);
     m = rb_ary_entry(members, 1);
-    pi->y = m == Qnil ? 0 : FIX2INT(m);
+    pi->y = m == Qnil ? 0.0 : NUM2DBL(m);
 }
 
 
@@ -2221,7 +2221,7 @@ Font_from_TypeInfo(TypeInfo *ti)
     family      = rb_str_new2(ti->family);
     style       = StyleType_new(ti->style);
     stretch     = StretchType_new(ti->stretch);
-    weight      = INT2NUM(ti->weight);
+    weight      = UINT2NUM(ti->weight);
     description = ti->description ? rb_str_new2(ti->description) : Qnil;
     encoding    = ti->encoding    ? rb_str_new2(ti->encoding) : Qnil;
     foundry     = ti->foundry     ? rb_str_new2(ti->foundry)  : Qnil;
@@ -2253,17 +2253,17 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
-        CloneString((char **)&(ti->name), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->name), STRING_PTR(m));
     }
     m = rb_ary_entry(members, 1);
     if (m != Qnil)
     {
-        CloneString((char **)&(ti->description), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->description), STRING_PTR(m));
     }
     m = rb_ary_entry(members, 2);
     if (m != Qnil)
     {
-        CloneString((char **)&(ti->family), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->family), STRING_PTR(m));
     }
     m = rb_ary_entry(members, 3); ti->style   = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 4); ti->stretch = m == Qnil ? 0 : FIX2INT(m);
@@ -2271,13 +2271,13 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
 
     m = rb_ary_entry(members, 6);
     if (m != Qnil)
-        CloneString((char **)&(ti->encoding), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->encoding), STRING_PTR(m));
     m = rb_ary_entry(members, 7);
     if (m != Qnil)
-        CloneString((char **)&(ti->foundry), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->foundry), STRING_PTR(m));
     m = rb_ary_entry(members, 8);
     if (m != Qnil)
-        CloneString((char **)&(ti->format), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->format), STRING_PTR(m));
 }
 
 
@@ -2655,7 +2655,7 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 
     super_argv[0] = sym;
     super_argv[1] = val;
-    rb_call_super(2, (VALUE *)super_argv);
+    (void) rb_call_super(2, (VALUE *)super_argv);
 
     if (rb_cvar_defined(CLASS_OF(self), ID_enumerators) != Qtrue)
     {
@@ -2664,7 +2664,7 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
     }
 
     enumerators = rb_cvar_get(CLASS_OF(self), ID_enumerators);
-    rb_ary_push(enumerators, self);
+    (void) rb_ary_push(enumerators, self);
 
     return self;
 }
@@ -2703,7 +2703,7 @@ static VALUE Enum_type_values(VALUE class)
     {
         for (x = 0; x < RARRAY(enumerators)->len; x++)
         {
-            rb_yield(rb_ary_entry(enumerators, x));
+            (void) rb_yield(rb_ary_entry(enumerators, x));
         }
         rv = class;
     }
@@ -2712,7 +2712,7 @@ static VALUE Enum_type_values(VALUE class)
         copy = rb_ary_new2(RARRAY(enumerators)->len);
         for (x = 0; x < RARRAY(enumerators)->len; x++)
         {
-            rb_ary_push(copy, rb_ary_entry(enumerators, x));
+            (void) rb_ary_push(copy, rb_ary_entry(enumerators, x));
         }
         OBJ_FREEZE(copy);
         rv = copy;
@@ -2963,7 +2963,7 @@ rm_magick_error(const char *msg, const char *loc)
     extra = loc ? rb_str_new2(loc) : Qnil;
 
     exc = rb_funcall(Class_ImageMagickError, ID_new, 2, mesg, extra);
-    rb_funcall(rb_cObject, rb_intern("raise"), 1, exc);
+    (void) rb_funcall(rb_cObject, rb_intern("raise"), 1, exc);
 }
 
 
@@ -2992,8 +2992,8 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
     }
 
-    rb_call_super(super_argc, (VALUE *)super_argv);
-    rb_iv_set(self, "@"MAGICK_LOC, extra);
+    (void) rb_call_super(super_argc, (VALUE *)super_argv);
+    (void) rb_iv_set(self, "@"MAGICK_LOC, extra);
 
 
     return self;
@@ -3059,13 +3059,13 @@ Image *rm_clone_image(Image *image)
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
-    clone = CloneImage(image, 0, 0, True, &exception);
+    clone = CloneImage(image, 0, 0, MagickTrue, &exception);
     if (!clone)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     rm_check_exception(&exception, clone, DestroyOnError);
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     return clone;
 }
@@ -3267,7 +3267,7 @@ rm_check_image_exception(Image *imglist, ErrorRetention retention)
         rm_check_exception(&exception, imglist, retention);
     }
 
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 }
 
 
@@ -3407,11 +3407,11 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 
      extra[sizeof(extra)-1] = '\0';
 
-     DestroyExceptionInfo(exception);
+     (void) DestroyExceptionInfo(exception);
      rm_magick_error(msg, extra);
 
 #else
-     DestroyExceptionInfo(exception);
+     (void) DestroyExceptionInfo(exception);
      rm_magick_error(msg, NULL);
 #endif
 

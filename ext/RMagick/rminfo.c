@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.43 2006/12/28 00:29:52 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.44 2007/01/12 00:08:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -141,7 +141,7 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
     GetExceptionInfo(&exception);
     okay = AddDefinitions(info, definitions, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!okay)
     {
@@ -444,7 +444,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     okay = AddDefinitions(info, definitions, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!okay)
     {
@@ -500,8 +500,7 @@ Info_delay(VALUE self)
 static VALUE
 arg_is_integer(VALUE arg)
 {
-    double d;
-    d = NUM2INT(arg);
+    int d = NUM2INT(arg);
     d = d;      // satisfy icc
     return arg;
 }
@@ -530,7 +529,7 @@ Info_delay_eq(VALUE self, VALUE string)
     else
     {
         not_num = 0;
-        rb_protect(arg_is_integer, string, &not_num);
+        (void) rb_protect(arg_is_integer, string, &not_num);
         if (not_num)
         {
             rb_raise(rb_eTypeError, "failed to convert %s into Integer", rb_class2name(CLASS_OF(string)));
@@ -592,10 +591,10 @@ VALUE
 Info_depth_eq(VALUE self, VALUE depth)
 {
     Info *info;
-    int d;
+    unsigned long d;
 
     Data_Get_Struct(self, Info, info);
-    d = NUM2INT(depth);
+    d = NUM2ULONG(depth);
     switch (d)
     {
         case 8:                     // always okay
@@ -951,7 +950,7 @@ VALUE Info_format(VALUE self)
     {
         GetExceptionInfo(&exception);
         magick_info = GetMagickInfo(info->magick, &exception);
-        DestroyExceptionInfo(&exception);
+        (void) DestroyExceptionInfo(&exception);
 
         return magick_info ? rb_str_new2(magick_info->name) : Qnil;
     }
@@ -978,7 +977,7 @@ Info_format_eq(VALUE self, VALUE magick)
     mgk = STRING_PTR(magick);
     m = GetMagickInfo(mgk, &exception);
     CHECK_EXCEPTION()
-    DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
     if (!m)
     {
@@ -1413,7 +1412,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
 }
 
 DEF_ATTR_ACCESSOR(Info, pointsize, dbl)
-DEF_ATTR_ACCESSOR(Info, quality, long)
+DEF_ATTR_ACCESSOR(Info, quality, ulong)
 
 /*
     Method:     Info#sampling_factor, #sampling_factor=
@@ -1778,7 +1777,7 @@ destroy_Info(void *infoptr)
         info->texture = NULL;
     }
 
-    DestroyImageInfo(info);
+    (void) DestroyImageInfo(info);
 }
 
 /*
@@ -1857,7 +1856,7 @@ Info_initialize(VALUE self)
     if (rb_block_given_p())
     {
         // Run the block in self's context
-        rb_obj_instance_eval(0, NULL, self);
+        (void) rb_obj_instance_eval(0, NULL, self);
     }
     return self;
 }

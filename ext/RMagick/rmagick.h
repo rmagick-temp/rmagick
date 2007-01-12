@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.147 2007/01/08 23:34:18 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.148 2007/01/12 00:08:00 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -218,11 +218,9 @@ typedef enum _QuantumExpressionOperator
 
 // IM < 6.2.0 and GM don't have MagickBooleanType
 #if !defined(HAVE_MAGICKBOOLEANTYPE)
-typedef enum
-{
-  MagickFalse = 0,
-  MagickTrue = 1
-} MagickBooleanType;
+typedef unsigned int MagickBooleanType;
+#define MagickFalse (MagickBooleanType)(0)
+#define MagickTrue (MagickBooleanType)(1)
 #endif
 
 #if !defined(HAVE_UNDEFINEDGRAVITY)
@@ -480,9 +478,9 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_channel_ = (Quantum) NUM2UINT(v); \
-    rb_funcall(self, ID_changed, 0); \
-    rb_funcall(self, ID_notify_observers, 1, self); \
-    return INT2NUM(pixel->_channel_); \
+    (void) rb_funcall(self, ID_changed, 0); \
+    (void) rb_funcall(self, ID_notify_observers, 1, self); \
+    return UINT2NUM((unsigned int)(pixel->_channel_)); \
 }
 
 
@@ -498,9 +496,9 @@ Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_rgb_channel_ = (Quantum) NUM2UINT(v); \
-    rb_funcall(self, ID_changed, 0); \
-    rb_funcall(self, ID_notify_observers, 1, self); \
-    return INT2NUM(pixel->_rgb_channel_); \
+    (void) rb_funcall(self, ID_changed, 0); \
+    (void) rb_funcall(self, ID_notify_observers, 1, self); \
+    return UINT2NUM((unsigned int)pixel->_rgb_channel_); \
 } \
  \
 extern VALUE \
@@ -1112,7 +1110,7 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
-extern void   rm_check_ary_len(VALUE, int);
+extern void   rm_check_ary_len(VALUE, long);
 extern void   rm_check_frozen(VALUE);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);

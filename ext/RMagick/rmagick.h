@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.149 2007/01/13 16:22:57 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.150 2007/01/13 21:12:53 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -382,7 +382,7 @@ EXTERN ID ID_y;                 // "y"
     DCL_ATTR_READER(class, attr) \
     DCL_ATTR_WRITER(class, attr)
 // Borrow another class' attribute writer definition
-#define BORROW_ATTR_WRITER(to, from, attr) \
+#define SHARE_ATTR_WRITER(to, from, attr) \
     rb_define_method(Class_##to, #attr "=", from##_##attr##_eq, 1);
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.155 2007/01/12 00:11:19 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.156 2007/01/13 21:12:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1154,21 +1154,22 @@ Init_RMagick(void)
 
     DCL_ATTR_WRITER(PolaroidOptions, shadow_color)
     // The other attribute writer methods are implemented by Draw's functions
-//  BORROW_ATTR_WRITER(PolaroidOptions, Draw, align)    broken in 6.3.1-6
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, decorate)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, density)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, encoding)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, fill)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_family)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_stretch)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_style)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, font_weight)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, pointsize)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, stroke)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, stroke_width)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, text_antialias)
-    BORROW_ATTR_WRITER(PolaroidOptions, Draw, undercolor)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, align)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, decorate)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, density)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, encoding)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, fill)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, font)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_family)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_stretch)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_style)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_weight)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, gravity)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, pointsize)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, stroke)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, stroke_width)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, text_antialias)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, undercolor)
 
 
     /*-----------------------------------------------------------------------*/
@@ -1899,7 +1900,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/12 00:11:19 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/13 21:12:54 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

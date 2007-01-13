@@ -4,7 +4,7 @@
 AC_INIT(RMagick, MAJOR.MINOR.TEENY, rmagick@rubyforge.org, RMagick-MAJOR.MINOR.TEENY.tar.gz)
 echo "Configuring ${PACKAGE_STRING}"
 
-AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h ext/RMagick/magick_api_config.h])
+AC_CONFIG_HEADER([ext/RMagick/rmagick_config.h])
 
 # Save caller's CFLAGS before configure changes it.
 rm_saved_CFLAGS=${CFLAGS}
@@ -76,12 +76,6 @@ AC_SUBST(MAGICKLIB)
 AC_SUBST(MAGICKNAME)
 AC_SUBST(MAGICKCONFIG)
 AC_DEFINE_UNQUOTED(MAGICKNAME, $MAGICKNAME)
-
-AC_CHECK_HEADER(magick/MagickCore.h,
-   [AC_DEFINE([HAVE_MAGICK_CORE_H], 1, [])],
-   [AC_CHECK_HEADER(magick/api.h,
-       [AC_DEFINE([HAVE_MAGICK_API_H], 1, [])],
-       [AC_MSG_ERROR([Can't find magick/MagickCore.h or magick/api.h])])])
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
@@ -182,7 +176,7 @@ AC_CHECK_TYPE(MagickBooleanType,
                #if HAVE_SYS_TYPES_H
                #include <sys/types.h>
                #endif
-               #include "ext/RMagick/magick_api.h"])
+               #include "magick/api.h"])
 if test "$rm_have_magickbooleantype" = yes; then
    AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
 fi
@@ -199,7 +193,7 @@ AC_CHECK_TYPES([magick_int64_t,
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
-                 #include "ext/RMagick/magick_api.h"])
+                 #include "magick/api.h"])
 
 
 AC_CHECK_MEMBERS([ExceptionInfo.module],,,
@@ -207,21 +201,21 @@ AC_CHECK_MEMBERS([ExceptionInfo.module],,,
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
-                 #include "ext/RMagick/magick_api.h"])
+                 #include "magick/api.h"])
 
 AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
-                 #include "ext/RMagick/magick_api.h"])
+                 #include "magick/api.h"])
 
 AC_CHECK_MEMBERS([ImageInfo.orientation, ImageInfo.channel],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
-                 #include "ext/RMagick/magick_api.h"])
+                 #include "magick/api.h"])
 
 
 # Don't use AC_CHECK_MEMBERS!
@@ -231,7 +225,7 @@ AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
 #include <sys/types.h>
 #endif
 #include <stdio.h>
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
     [Image i; i.extract_info.x = 0;],
     rm_cv_member_Image_extract_info=yes,
     rm_cv_member_Image_extract_info=no))
@@ -245,7 +239,7 @@ AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcol
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = CineonLogRGBColorspace],
      rm_cv_enum_cineonlogrgbcolorspace='yes',
      rm_cv_enum_cineonlogrgbcolorspace='no')])
@@ -260,7 +254,7 @@ AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = HSBColorspace],
      rm_cv_enum_hsbcolorspace='yes',
      rm_cv_enum_hsbcolorspace='no')])
@@ -275,7 +269,7 @@ AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = LABColorspace],
      rm_cv_enum_labcolorspace='yes',
      rm_cv_enum_labcolorspace='no')])
@@ -290,7 +284,7 @@ AC_CACHE_CHECK(for Rec601LumaColorspace enum value, rm_cv_enum_rec601lumacolorsp
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = Rec601LumaColorspace],
      rm_cv_enum_rec601lumacolorspace='yes',
      rm_cv_enum_rec601lumacolorspace='no')])
@@ -305,7 +299,7 @@ AC_CACHE_CHECK(for Rec601YCbCrColorspace enum value, rm_cv_enum_rec601ycbcrcolor
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = Rec601YCbCrColorspace],
      rm_cv_enum_rec601ycbcrcolorspace='yes',
      rm_cv_enum_rec601ycbcrcolorspace='no')])
@@ -320,7 +314,7 @@ AC_CACHE_CHECK(for Rec709LumaColorspace enum value, rm_cv_enum_rec709lumacolorsp
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = Rec709LumaColorspace],
      rm_cv_enum_rec709lumacolorspace='yes',
      rm_cv_enum_rec709lumacolorspace='no')])
@@ -335,7 +329,7 @@ AC_CACHE_CHECK(for Rec709YCbCrColorspace enum value, rm_cv_enum_rec709ycbcrcolor
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = Rec709YCbCrColorspace],
      rm_cv_enum_rec709ycbcrcolorspace='yes',
      rm_cv_enum_rec709ycbcrcolorspace='no')])
@@ -350,7 +344,7 @@ AC_CACHE_CHECK(for LogColorspace enum value, rm_cv_enum_logcolorspace,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ColorspaceType x; x = LogColorspace],
      rm_cv_enum_logcolorspace='yes',
      rm_cv_enum_logcolorspace='no')])
@@ -365,7 +359,7 @@ AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeo
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [CompositeOperator x; x = CopyCyanCompositeOp],
      rm_cv_enum_copycyancompositeop='yes',
      rm_cv_enum_copycyancompositeop='no')])
@@ -380,7 +374,7 @@ AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [CompositeOperator x; x = ReplaceCompositeOp],
      rm_cv_enum_replacecompositeop='yes',
      rm_cv_enum_replacecompositeop='no')])
@@ -395,7 +389,7 @@ AC_CACHE_CHECK(for DstCompositeOp enum value, rm_cv_enum_dstcompositeop,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [CompositeOperator x; x = DstCompositeOp],
      rm_cv_enum_dstcompositeop='yes',
      rm_cv_enum_dstcompositeop='no')])
@@ -410,7 +404,7 @@ AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompos
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [CompositeOperator x; x = ColorDodgeCompositeOp],
      rm_cv_enum_ColorDodgeCompositeOp='yes',
      rm_cv_enum_ColorDodgeCompositeOp='no')])
@@ -425,7 +419,7 @@ AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ChannelType x; x = IndexChannel],
      rm_cv_enum_indexchannel='yes',
      rm_cv_enum_indexchannel='no')])
@@ -440,7 +434,7 @@ AC_CACHE_CHECK(for GrayChannel enum value, rm_cv_enum_graychannel,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ChannelType x; x = GrayChannel],
      rm_cv_enum_graychannel='yes',
      rm_cv_enum_graychannel='no')])
@@ -455,7 +449,7 @@ AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [ChannelType x; x = AllChannels],
      rm_cv_enum_allchannels='yes',
      rm_cv_enum_allchannels='no')])
@@ -470,7 +464,7 @@ AC_CACHE_CHECK(for JPEG2000Compression enum value, rm_cv_enum_jpeg2000compressio
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [CompressionType x; x = JPEG2000Compression],
      rm_cv_enum_jpeg2000compression='yes',
      rm_cv_enum_jpeg2000compression='no')])
@@ -485,7 +479,7 @@ AC_CACHE_CHECK(for UndefinedGravity enum value, rm_cv_enum_undefinedgravity,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [GravityType x; x = UndefinedGravity],
      rm_cv_enum_undefinedgravity='yes',
      rm_cv_enum_undefinedgravity='no')])
@@ -500,7 +494,7 @@ AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [StorageType x; x = QuantumPixel],
      rm_cv_enum_quantumpixel='yes',
      rm_cv_enum_quantumpixel='no')])
@@ -514,7 +508,7 @@ AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transpar
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [VirtualPixelMethod x; x = TransparentVirtualPixelMethod],
      rm_cv_enum_transparentvirtualpixelmethod='yes',
      rm_cv_enum_transparentvirtualpixelmethod='no')])
@@ -529,7 +523,7 @@ AC_CACHE_CHECK(for CoalesceLayer enum value, rm_cv_enum_coalescelayer,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [MagickLayerMethod x; x = CoalesceLayer],
      rm_cv_enum_coalescelayer='yes',
      rm_cv_enum_coalescelayer='no')])
@@ -544,7 +538,7 @@ AC_CACHE_CHECK(for MaxEvaluateOperator enum value, rm_cv_enum_maxevaluateoperato
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "ext/RMagick/magick_api.h"],
+#include "magick/api.h"],
      [MagickEvaluateOperator x; x = MaxEvaluateOperator],
      rm_cv_enum_maxevaluateoperator='yes',
      rm_cv_enum_maxevaluateoperator='no')])
@@ -561,7 +555,7 @@ if test "$rm_have_getimagequantumdepth" = yes; then
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [Image *image; (void)GetImageQuantumDepth(image)],
         rm_cv_args_get_image_quantum_depth='yes',
         rm_cv_args_get_image_quantum_depth='no')])
@@ -579,7 +573,7 @@ if test "$rm_have_getcolorinfolist" = yes; then
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [const char *pattern; unsigned long ncolors; (void)GetColorInfoList(pattern, &ncolors)],
         rm_cv_args_get_color_info_list='yes',
         rm_cv_args_get_color_info_list='no')])
@@ -597,7 +591,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [const char *pattern; unsigned long ncolors; (void)GetTypeInfoList(pattern, &ncolors)],
         rm_cv_args_get_type_info_list='yes',
         rm_cv_args_get_type_info_list='no')])
@@ -615,7 +609,7 @@ if test "$rm_have_getmagickinfolist" = yes; then
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
         rm_cv_args_get_magick_info_list='yes',
         rm_cv_args_get_magick_info_list='no')])
@@ -634,7 +628,7 @@ if test "$rm_have_acquirestringinfo" = yes -a "$rm_have_magickbooleantype" = yes
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [MagickBooleanType bool; Image *image; bool=RemoveImageProfile(image, "icc")],
         rv_cv_args_remove_image_profile='yes',
         rv_cv_args_remove_image_profile='no')])
@@ -655,7 +649,7 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
    #if HAVE_SYS_TYPES_H
    #include <sys/types.h>
    #endif
-   #include "ext/RMagick/magick_api.h"],
+   #include "magick/api.h"],
         [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
         rv_cv_struct_color_info_color='yes',
         rv_cv_struct_color_info_color='no')])

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.190 2007/01/12 00:11:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.191 2007/01/13 16:24:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6354,7 +6354,7 @@ Image_montage_eq(
 
 
 /*
-    Static:     motion_blur(int argc, VALUE *argv, VALUE self, magick_api)
+    Static:     motion_blur(int argc, VALUE *argv, VALUE self, Image *fp)
     Purpose:    called from Image_motion_blur and Image_sketch
 */
 static VALUE

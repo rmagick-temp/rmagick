@@ -2,6 +2,7 @@
 
 require 'RMagick'
 
+
 results = Magick::ImageList.new
 
 img = Magick::Image.new(270, 60)
@@ -18,8 +19,10 @@ gc.annotate(img, 0, 0, 0, -25, "RUBY!") do
 end
 
 # Add a little bit of shading
-shade = img.shade(true, 310, 30)
-img.composite!(shade, Magick::CenterGravity, Magick::HardLightCompositeOp)
+if Magick.const_defined? "HardLightCompositeOp"
+    shade = img.shade(true, 310, 30)
+    img.composite!(shade, Magick::CenterGravity, Magick::HardLightCompositeOp)
+end
 
 # Create the default reflection
 reflection = img.wet_floor

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.148 2007/01/12 00:08:00 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.149 2007/01/13 16:22:57 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -29,12 +29,7 @@
 #undef PACKAGE_TARNAME
 
 
-// magick_api_config.h has a feature test symbol that defines which version
-// of the ImageMagick API header file to use. That file changed from "api.h"
-// to "MagickCore.h" in IM 6.2.3. All "magick_api.h" does is include the
-// correct API header file.
-#include "magick_api_config.h"
-#include "magick_api.h"
+#include "magick/api.h"
 
 // Undef ImageMagick's versions of these symbols
 #undef PACKAGE_VERSION
@@ -219,8 +214,6 @@ typedef enum _QuantumExpressionOperator
 // IM < 6.2.0 and GM don't have MagickBooleanType
 #if !defined(HAVE_MAGICKBOOLEANTYPE)
 typedef unsigned int MagickBooleanType;
-#define MagickFalse (MagickBooleanType)(0)
-#define MagickTrue (MagickBooleanType)(1)
 #endif
 
 #if !defined(HAVE_UNDEFINEDGRAVITY)

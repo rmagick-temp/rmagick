@@ -5,10 +5,10 @@ require 'date'
 # Demonstrate the Image#polaroid method
 
 img = Magick::Image.read('images/Flower_Hat.jpg').first
-img[:label] = "\nLosha\n" + Date.today.to_s
+img[:Caption] = "\nLosha\n" + Date.today.to_s
 
 begin
-    picture = img.polaroid
+    picture = img.polaroid { self.gravity = Magick::CenterGravity }
 
     # Composite it on a white background so the result is opaque.
     background = Magick::Image.new(picture.columns, picture.rows)

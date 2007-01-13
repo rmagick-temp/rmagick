@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.86 2007/01/12 00:11:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.87 2007/01/13 21:12:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2902,11 +2902,11 @@ rm_write_temp_image(Image *image, char *tmpnam)
     long registry_id;
 
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
+    rm_check_image_exception(image, RetainOnError);
     if (registry_id < 0)
     {
         rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
     }
-    rm_check_image_exception(image, RetainOnError);
 
     sprintf(tmpnam, "mpri:%ld", registry_id);
 }

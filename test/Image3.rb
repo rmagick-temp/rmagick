@@ -746,21 +746,21 @@ class Image3_UT < Test::Unit::TestCase
         mark_list << mark.copy
         assert_nothing_raised { @img.watermark(mark) }
         assert_nothing_raised { @img.watermark(mark_list) }
-        assert_nothing_raised { @img.watermark(mark, 50) }
+        assert_nothing_raised { @img.watermark(mark, 0.50) }
         assert_nothing_raised { @img.watermark(mark, '50%') }
-        assert_nothing_raised { @img.watermark(mark, 50, 50) }
-        assert_nothing_raised { @img.watermark(mark, 50, '50%') }
-        assert_nothing_raised { @img.watermark(mark, 50, 50, 10) }
-        assert_nothing_raised { @img.watermark(mark, 50, 50, 10, 10) }
-        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity) }
-        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10) }
-        assert_nothing_raised { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10, 10) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, '50%') }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50, 10) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50, 10, 10) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 10) }
+        assert_nothing_raised { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 10, 10) }
 
         assert_raise(ArgumentError) { @img.watermark(mark, 'x') }
-        assert_raise(ArgumentError) { @img.watermark(mark, 50, 'x') }
-        assert_raise(ArgumentError) { @img.watermark(mark, 50, 50, 'x') }
-        assert_raise(TypeError) { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 'x') }
-        assert_raise(TypeError) { @img.watermark(mark, 50, 50, Magick::NorthEastGravity, 10, 'x') }
+        assert_raise(ArgumentError) { @img.watermark(mark, 0.50, 'x') }
+        assert_raise(ArgumentError) { @img.watermark(mark, 0.50, 0.50, 'x') }
+        assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 'x') }
+        assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 10, 'x') }
     end
 
     def test_wave

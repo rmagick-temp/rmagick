@@ -234,19 +234,19 @@ class Image2_UT < Test::Unit::TestCase
         src = Magick::Image.new(@img.columns, @img.rows)
         src_list = Magick::ImageList.new
         src_list << src.copy
-        assert_nothing_raised { @img.dissolve(src,50 ) }
-        assert_nothing_raised { @img.dissolve(src_list, 50) }
+        assert_nothing_raised { @img.dissolve(src, 0.50 ) }
+        assert_nothing_raised { @img.dissolve(src_list, 0.50) }
         assert_nothing_raised { @img.dissolve(src, '50%') }
-        assert_nothing_raised { @img.dissolve(src, 50, 10) }
-        assert_nothing_raised { @img.dissolve(src, 50, 10, 10) }
-        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity) }
-        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity, 10) }
-        assert_nothing_raised { @img.dissolve(src, 50, Magick::NorthEastGravity, 10, 10) }
+        assert_nothing_raised { @img.dissolve(src, 0.50, 0.10) }
+        assert_nothing_raised { @img.dissolve(src, 0.50, 0.10, 10) }
+        assert_nothing_raised { @img.dissolve(src, 0.50, 0.10, Magick::NorthEastGravity) }
+        assert_nothing_raised { @img.dissolve(src, 0.50, 0.10, Magick::NorthEastGravity, 10) }
+        assert_nothing_raised { @img.dissolve(src, 0.50, 0.10, Magick::NorthEastGravity, 10, 10) }
 
         assert_raise(ArgumentError) { @img.dissolve(src, 'x') }
-        assert_raise(ArgumentError) { @img.dissolve(src, 50, 'x') }
-        assert_raise(TypeError) { @img.dissolve(src, 50, Magick::NorthEastGravity, 'x') }
-        assert_raise(TypeError) { @img.dissolve(src, 50, Magick::NorthEastGravity, 10, 'x') }
+        assert_raise(ArgumentError) { @img.dissolve(src, 0.50, 'x') }
+        assert_raise(ArgumentError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 'x') }
+        assert_raise(TypeError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 10, 'x') }
     end
 
     def test_distortion_channel
@@ -283,7 +283,8 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             @img.each_profile do |name, value|
                 assert_equal("iptc", name)
-                assert_nil(value)
+                # As of 6.3.1
+                assert_equal("8BIM\004\004\000\000\000\000\001\340test profile", value)
             end
         end
     end
@@ -642,48 +643,49 @@ class Image2_UT < Test::Unit::TestCase
         img = Magick::Image.new(@img.columns, @img.rows)
         assert_nothing_raised do
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::CharPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
         assert_nothing_raised do
             spixels = pixels.collect {|p| p*257}
             sp = spixels.pack("S*")
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", sp, Magick::ShortPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
         assert_nothing_raised do
             ipixels = pixels.collect {|p| p * 16843009}
             ip = ipixels.pack("I*")
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", ip, Magick::IntegerPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
         assert_nothing_raised do
             lpixels = pixels.collect {|p| p * 16843009}
             lp = lpixels.pack("L*")
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", lp, Magick::LongPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
-        assert_nothing_raised do
-            assert_equal(255, Magick::MaxRGB)   # test depend on an 8-bit pixel
-            qp = pixels.pack("C*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::QuantumPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+        if Magick::MaxRGB == 255   # test depend on an 8-bit pixel
+            assert_nothing_raised do
+                qp = pixels.pack("C*")
+                res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::QuantumPixel)
+                _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+                assert_equal(diff, 0.0)
+            end
         end
         assert_nothing_raised do
             qp = pixels.pack("D*")
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::DoublePixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
         assert_nothing_raised do
             qp = pixels.pack("F*")
             res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::FloatPixel)
-            assert_same(img, res)
-            assert_equal(@img, res)
+            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
+            assert_equal(diff, 0.0)
         end
 
         assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::DoublePixel) }

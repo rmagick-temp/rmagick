@@ -27,9 +27,9 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.background_color }
         assert_equal("white", @img.background_color)
         assert_nothing_raised { @img.background_color = "#dfdfdf" }
-        assert_equal("#DFDFDF00", @img.background_color)
+        assert_equal("rgb(223,223,223)", @img.background_color)
         assert_nothing_raised { @img.background_color = Magick::Pixel.new(100, 150, 200) }
-        assert_equal("#6496C800", @img.background_color)
+        assert_equal("rgb(0.15259%,0.228885%,0.30518%)", @img.background_color)
         assert_raise(TypeError) { @img.background_color = 2 }
     end
 
@@ -57,10 +57,10 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_instance_of(Float, @img.bias)
 
         assert_nothing_raised { @img.bias = 0.1 }
-        assert_equal(25.5, @img.bias)
+        assert_in_delta(Magick::MaxRGB * 0.1, @img.bias, 0.1)
 
         assert_nothing_raised { @img.bias = '10%' }
-        assert_equal(25.5, @img.bias)
+        assert_in_delta(Magick::MaxRGB * 0.10, @img.bias, 0.1)
 
         assert_raise(TypeError) { @img.bias = [] }
         assert_raise(ArgumentError) { @img.bias = 'x' }
@@ -70,7 +70,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.black_point_compensation = true }
         assert(@img.black_point_compensation)
         assert_nothing_raised { @img.black_point_compensation = false }
-        assert(! @img.black_point_compensation)
+        assert_block("black_point_compensation is true, s/b false") {@img.black_point_compensation == false}
     end
 
     def test_blur
@@ -82,11 +82,11 @@ class Image_Attributes_UT < Test::Unit::TestCase
 
     def test_border_color
         assert_nothing_raised { @img.border_color }
-        assert_equal("#DFDFDF00", @img.border_color)
+        assert_equal("rgb(223,223,223)", @img.border_color)
         assert_nothing_raised { @img.border_color = "red" }
         assert_equal("red", @img.border_color)
         assert_nothing_raised { @img.border_color = Magick::Pixel.new(100, 150, 200) }
-        assert_equal("#6496C800", @img.border_color)
+        assert_equal("rgb(0.15259%,0.228885%,0.30518%)", @img.border_color)
         assert_raise(TypeError) { @img.border_color = 2 }
     end
 
@@ -127,20 +127,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.class_type = Magick::PseudoClass }
         assert_equal(Magick::PseudoClass, @img.class_type)
         assert_raise(TypeError) { @img.class_type = 2 }
-    end
-
-    def test_clip_mask
-        cimg = Magick::Image.new(10,10)
-        assert_nothing_raised { @img.clip_mask = cimg }
-        res = nil
-        assert_nothing_raised { res = @img.clip_mask }
-        assert_not_nil(res)
-        assert_not_same(cimg, res)
-        assert_equal(100, res.columns)
-        assert_equal(100, res.rows)
-
-        # clip_mask expects an Image and calls `cur_image'
-        assert_raise(NoMethodError) { @img.clip_mask = 2 }
     end
 
     def test_color_profile
@@ -276,7 +262,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
     end
 
     def test_depth
-        assert_equal(8, @img.depth)
+        assert_equal(Magick::QuantumDepth, @img.depth)
         assert_raise(NoMethodError) { @img.depth = 2 }
     end
 
@@ -375,7 +361,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.fuzz = 50 }
         assert_equal(50.0, @img.fuzz)
         assert_nothing_raised { @img.fuzz = '50%' }
-        assert_equal(127.5, @img.fuzz)
+        assert_in_delta(Magick::MaxRGB * 0.50, @img.fuzz, 0.1)
         assert_raise(TypeError) { @img.fuzz = [] }
         assert_raise(ArgumentError) { @img.fuzz = 'xxx' }
     end
@@ -433,8 +419,23 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.iptc_profile }
         assert_nil(@img.iptc_profile)
         assert_nothing_raised { @img.iptc_profile = 'xxx' }
-        assert_nil(@img.iptc_profile)
+        # As of 6.3.1
+        assert_equal(@img.iptc_profile, "8BIM\004\004\000\000\000\000\001\340xxx")
         assert_raise(TypeError) { @img.iptc_profile = 2 }
+    end
+
+    def test_mask
+        cimg = Magick::Image.new(10,10)
+        assert_nothing_raised { @img.mask = cimg }
+        res = nil
+        assert_nothing_raised { res = @img.mask }
+        assert_not_nil(res)
+        assert_not_same(cimg, res)
+        assert_equal(100, res.columns)
+        assert_equal(100, res.rows)
+
+        # mask expects an Image and calls `cur_image'
+        assert_raise(NoMethodError) { @img.mask = 2 }
     end
 
     def test_matte
@@ -549,7 +550,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
 
     def test_quantum_depth
         assert_nothing_raised { @img.quantum_depth }
-        assert_equal(8, @img.quantum_depth)
+        assert_equal(Magick::QuantumDepth, @img.quantum_depth)
         assert_raise(NoMethodError) { @img.quantum_depth = 8 }
     end
 
@@ -673,7 +674,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         wp = Magick::Point.new(1,1)
         assert_raise(TypeError) { @img.chromaticity = Magick::Chromaticity.new(rp, gp, bp, wp) }
         assert_raise(TypeError) { @img.class_type = Magick::DirectClass }
-        assert_raise(TypeError) { @img.clip_mask = @img }
         assert_raise(TypeError) { @img.color_profile = 'xxx' }
         assert_raise(TypeError) { @img.colorspace = Magick::RGBColorspace }
         assert_raise(TypeError) { @img.compose = Magick::OverCompositeOp }
@@ -683,7 +683,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.dispose = Magick::NoneDispose }
         assert_raise(TypeError) { @img.endian = Magick::MSBEndian }
         assert_raise(TypeError) { @img.extract_info = Magick::Rectangle.new(1,2,3,4) }
-        assert_raise(TypeError) { @img.clip_mask = @img }
         assert_raise(TypeError) { @img.filter = Magick::PointFilter }
         assert_raise(TypeError) { @img.format = 'GIF' }
         assert_raise(TypeError) { @img.fuzz = 50.0 }
@@ -691,6 +690,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.geometry = '100x100' }
         assert_raise(TypeError) { @img.interlace = Magick::NoInterlace }
         assert_raise(TypeError) { @img.iptc_profile = 'xxx' }
+        assert_raise(TypeError) { @img.mask = @img }
         assert_raise(TypeError) { @img.matte = true }
         assert_raise(TypeError) { @img.monitor = Proc.new { |name, q, s| puts name } }
         assert_raise(TypeError) { @img.offset = 100 }

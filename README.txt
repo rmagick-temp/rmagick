@@ -1,4 +1,4 @@
-RMagick MAJOR.MINOR.TEENY README
+RMagick 0.0.0 README
 ================================
 YY/MM/DD
 --------
@@ -195,7 +195,7 @@ addition to the regular options, there are a few RMagick-specific options:
 
 <h4 id="scripts">Running the <code>configure</code> and <code>make</code> scripts</h4>
 
-De-compress the RMagick-MAJOR.MINOR.TEENY.tar.gz archive and enter the top
+De-compress the RMagick-0.0.0.tar.gz archive and enter the top
 directory.  Then type:
 
     $ ./configure <configuration options>
@@ -213,9 +213,9 @@ The message can also refer to "libGraphicsMagick". Typically this message means 
 #### Cannot open shared object file
 When make is running the examples, if you get a message like this:
 
-    /home/you/RMagick-MAJOR.MINOR.TEENY/lib/RMagick.rb:11:in `require': libMagick.so.0:
+    /home/you/RMagick-0.0.0/lib/RMagick.rb:11:in `require': libMagick.so.0:
       cannot open shared object file: No such file or directory -
-      /home/you/RMagick-MAJOR.MINOR.TEENY/ext/RMagick/RMagick.so (LoadError)
+      /home/you/RMagick-0.0.0/ext/RMagick/RMagick.so (LoadError)
 
 you probably do not have the directory in which the ImageMagick or GraphicsMagick
 library is installed in your load path. An easy way to fix this is to define the
@@ -232,7 +232,7 @@ systems, see the documentation for the dynamic loading facility.
 #### No such file or directory - "/tmp/rmagick6872.6"
 When make is running the examples, if you get a message like this:
 
-    hook /home/me/src/RMagick-MAJOR.MINOR.TEENY/./post-setup.rb failed:
+    hook /home/me/src/RMagick-0.0.0/./post-setup.rb failed:
     No such file or directory - "/tmp/rmagick6872.6"
 
 you probably do not have a temporary directory environment variable set. Set

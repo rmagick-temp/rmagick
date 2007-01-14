@@ -175,6 +175,8 @@
 #undef HAVE_NORMALIZEIMAGECHANNEL
 /* Introduced in IM 6.3.0 */
 #undef HAVE_ORDEREDPOSTERIZEIMAGECHANNEL
+/* Introduced in IM 6.2.9 */
+#undef HAVE_PALETTEBILEVELMATTETYPE
 /* Introduced in IM 5.5.4 - Not available in GM */
 #undef HAVE_PARSESIZEGEOMETRY
 /* Introduced in IM 6.3.1-6 */

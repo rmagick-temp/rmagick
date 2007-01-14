@@ -547,6 +547,21 @@ if test "$rm_cv_enum_maxevaluateoperator" = yes; then
   AC_DEFINE(HAVE_MAXEVALUATEOPERATOR)
 fi
 
+AC_CACHE_CHECK(for PaletteBilevelMatteType enum value, rm_cv_enum_palettebilevelmattetype,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ImageType x; x = PaletteBilevelMatteType],
+     rm_cv_enum_palettebilevelmattetype='yes',
+     rm_cv_enum_palettebilevelmattetype='no')])
+
+if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
+  AC_DEFINE(HAVE_PALETTEBILEVELMATTETYPE)
+fi
+
 if test "$rm_have_getimagequantumdepth" = yes; then
    # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
    AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,

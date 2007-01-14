@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.156 2007/01/13 21:12:54 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.157 2007/01/14 23:57:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1535,6 +1535,9 @@ Init_RMagick(void)
         ENUMERATOR(ColorSeparationType)
         ENUMERATOR(ColorSeparationMatteType)
         ENUMERATOR(OptimizeType)
+#if defined(HAVE_PALETTEBILEVELMATTETYPE)
+        ENUMERATOR(PaletteBilevelMatteType)
+#endif
     END_ENUM
 
     // InterlaceType constants
@@ -1900,7 +1903,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/13 21:12:54 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/14 23:57:20 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.88 2007/01/14 18:51:34 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.89 2007/01/14 23:57:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1521,6 +1521,9 @@ ImageType_name(ImageType type)
         ENUM_TO_NAME(ColorSeparationType)
         ENUM_TO_NAME(ColorSeparationMatteType)
         ENUM_TO_NAME(OptimizeType)
+#if defined(HAVE_PALETTEBILEVELMATTETYPE)
+        ENUM_TO_NAME(PaletteBilevelMatteType)
+#endif
     }
 
 }

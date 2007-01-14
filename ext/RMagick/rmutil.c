@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.87 2007/01/13 21:12:19 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.88 2007/01/14 18:51:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -723,14 +723,15 @@ VALUE
 Pixel_intensity(VALUE self)
 {
     Pixel *pixel;
-    unsigned long intensity;
+    Quantum intensity;
 
     Data_Get_Struct(self, Pixel, pixel);
 
-    intensity = (unsigned long)
-                (0.299*pixel->red) + (0.587*pixel->green) + (0.114*pixel->blue);
+    intensity = RoundToQuantum((0.299*pixel->red)
+                             + (0.587*pixel->green)
+                             + (0.114*pixel->blue));
 
-    return ULONG2NUM(intensity);
+    return ULONG2NUM((unsigned long) intensity);
 }
 
 

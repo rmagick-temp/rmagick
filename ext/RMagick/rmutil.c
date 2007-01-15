@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.89 2007/01/14 23:57:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90 2007/01/15 23:32:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -20,6 +20,47 @@ static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 #endif
 
+#if !defined(HAVE_ACQUIREMAGICKMEMORY)
+/*
+    Dummy versions of ImageMagick memory routines for use with GraphicsMagick.
+*/
+static void *AcquireMagickMemory(const size_t size)
+{
+    assert(size > 0);
+    return malloc(size);
+}
+
+static void *RelinquishMagickMemory(void *memory)
+{
+    if (memory)
+    {
+        free(memory);
+    }
+    return NULL;
+}
+
+static void *ResizeMagickMemory(void *memory, const size_t size)
+{
+    void *new;
+
+    if (!memory)
+    {
+        return malloc(size);
+    }
+    if (size == 0)
+    {
+        free(memory);
+        return NULL;
+    }
+    new = realloc(memory, size);
+    if (!new)
+    {
+        free(memory);
+    }
+    return new;
+}
+#endif
+
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
     Purpose:    ****Magick versions of standard memory routines.
@@ -30,11 +71,7 @@ static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 void *magick_malloc(const size_t size)
 {
     void *ptr;
-#if defined(HAVE_ACQUIREMAGICKMEMORY)
     ptr = AcquireMagickMemory(size);
-#else
-    ptr = AcquireMemory(size);
-#endif
     if (!ptr)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
@@ -45,23 +82,13 @@ void *magick_malloc(const size_t size)
 
 void magick_free(void *ptr)
 {
-#if defined(HAVE_ACQUIREMAGICKMEMORY)
     (void) RelinquishMagickMemory(ptr);
-#else
-    void *v = ptr;
-    LiberateMemory(&v);
-#endif
 }
 
 void *magick_realloc(void *ptr, const size_t size)
 {
     void *v;
-#if defined(HAVE_ACQUIREMAGICKMEMORY)
     v = ResizeMagickMemory(ptr, size);
-#else
-    v = ptr;
-    ReacquireMemory(&v, size);
-#endif
     if (!v)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
@@ -1292,12 +1319,10 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(ColorizeCompositeOp)
         ENUM_TO_NAME(CopyBlueCompositeOp)
         ENUM_TO_NAME(CopyCompositeOp)
-#if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
         ENUM_TO_NAME(CopyCyanCompositeOp)
         ENUM_TO_NAME(CopyMagentaCompositeOp)
         ENUM_TO_NAME(CopyYellowCompositeOp)
         ENUM_TO_NAME(CopyBlackCompositeOp)
-#endif
         ENUM_TO_NAME(CopyGreenCompositeOp)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)

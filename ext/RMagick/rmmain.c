@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.157 2007/01/14 23:57:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.158 2007/01/15 23:32:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1386,12 +1386,10 @@ Init_RMagick(void)
         ENUMERATOR(CopyGreenCompositeOp)
         ENUMERATOR(CopyOpacityCompositeOp)
         ENUMERATOR(CopyRedCompositeOp)
-#if defined(HAVE_COPYCYANCOMPOSITEOP)   // CYMK added 5.5.7
         ENUMERATOR(CopyCyanCompositeOp)
         ENUMERATOR(CopyMagentaCompositeOp)
         ENUMERATOR(CopyYellowCompositeOp)
         ENUMERATOR(CopyBlackCompositeOp)
-#endif
         ENUMERATOR(DarkenCompositeOp)
         ENUMERATOR(DifferenceCompositeOp)
         ENUMERATOR(DisplaceCompositeOp)
@@ -1903,7 +1901,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/14 23:57:20 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/15 23:32:31 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

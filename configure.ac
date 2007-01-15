@@ -353,21 +353,6 @@ if test "$rm_cv_enum_logcolorspace" = yes; then
   AC_DEFINE(HAVE_LOGCOLORSPACE)
 fi
 
-AC_CACHE_CHECK(for CopyCyanCompositeOp enum value, rm_cv_enum_copycyancompositeop,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = CopyCyanCompositeOp],
-     rm_cv_enum_copycyancompositeop='yes',
-     rm_cv_enum_copycyancompositeop='no')])
-
-if test "$rm_cv_enum_copycyancompositeop" = yes; then
-  AC_DEFINE(HAVE_COPYCYANCOMPOSITEOP)
-fi
-
 AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
   [AC_TRY_COMPILE(
 [#include <stdio.h>

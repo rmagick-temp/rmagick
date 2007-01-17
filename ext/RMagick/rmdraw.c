@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.38 2007/01/12 00:11:16 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.39 2007/01/17 23:03:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -887,7 +887,10 @@ destroy_Draw(void *drawptr)
     Draw *draw = (Draw *)drawptr;
     struct TmpFile_Name *tmpfile;
 
-    (void) DestroyDrawInfo(draw->info);
+    if (draw->info)
+    {
+        (void) DestroyDrawInfo(draw->info);
+    }
 
     // Erase any temporary image files.
     while (draw->tmpfile_ary)
@@ -1145,11 +1148,14 @@ destroy_Montage(void *obj)
     Montage *montage = obj;
 
     // If we saved a temporary texture image, delete it now.
-    if (montage->info->texture != NULL)
+    if (montage->info && montage->info->texture != NULL)
     {
         rm_delete_temp_image(montage->info->texture);
     }
-    (void) DestroyMontageInfo(montage->info);
+    if (montage->info)
+    {
+        (void) DestroyMontageInfo(montage->info);
+    }
     xfree(montage);
 }
 

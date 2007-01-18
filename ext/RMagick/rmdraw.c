@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.39 2007/01/17 23:03:58 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.40 2007/01/18 00:06:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -756,43 +756,22 @@ VALUE Draw_init_copy(VALUE self, VALUE orig)
 /*
     Method:     Draw#initialize <{ info initializers }>
     Purpose:    Initialize Draw object
-    Notes:      Here are the DrawInfo fields that are copied from Info.
-                These are the only Info fields that can be usefully
-                set in the initializer block.
-
-                DrawInfo            Info
-                --------            ---------
-                stroke_antialias    antialias
-                font                font
-                density             density
-                text_antialias      antialias
-                pointsize           pointsize
-                border_color        border_color
-                server_name         server_name
-                debug               debug
 */
 VALUE
 Draw_initialize(VALUE self)
 {
     Draw *draw;
-    Info *info;
-    volatile VALUE info_obj;
 
     Data_Get_Struct(self, Draw, draw);
 
-    // Create a new Info object, running the info parms block in the process
-    info_obj = rm_info_new();
+    // AcquireDrawInfo raises an exception if it fails
+    draw->info = AcquireDrawInfo();
 
-    // Use the Info structure to create the DrawInfo structure
-    Data_Get_Struct(info_obj, Info, info);
-    draw->info = CloneDrawInfo(info, NULL);
-    if (!draw->info)
+    if (rb_block_given_p())
     {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
+        // Run the block in self's context
+        (void) rb_obj_instance_eval(0, NULL, self);
     }
-
-    draw->primitives = (VALUE)0;
-    draw->tmpfile_ary = NULL;
 
     return self;
 }
@@ -815,11 +794,11 @@ Draw_inspect(VALUE self)
     Purpose:    Create a new Draw object
     Raises:     ImageMagickError if no memory
 */
-VALUE
+
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-Draw_alloc(VALUE class)
+VALUE Draw_alloc(VALUE class)
 #else
-Draw_new(VALUE class)
+VALUE Draw_new(VALUE class)
 #endif
 {
     Draw *draw;

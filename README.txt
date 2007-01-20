@@ -40,6 +40,7 @@ __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 __O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, OS X.
 
 __Ruby__ 1.6.7 or later. You can get Ruby from <http://www.ruby-lang.org>.
+RVG requires Ruby 1.8.
 
 Either __ImageMagick__ 6.0.0 or later, or any release of
 __GraphicsMagick__.  GraphicsMagick is a friendly fork of ImageMagick

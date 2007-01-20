@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.150 2007/01/13 21:12:53 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.151 2007/01/20 15:45:29 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -254,6 +254,7 @@ EXTERN VALUE Module_Magick;
 EXTERN VALUE Class_ImageList;
 EXTERN VALUE Class_Info;
 EXTERN VALUE Class_Draw;
+EXTERN VALUE Class_DrawOptions;
 EXTERN VALUE Class_Image;
 EXTERN VALUE Class_Montage;
 EXTERN VALUE Class_ImageMagickError;
@@ -576,10 +577,14 @@ extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Draw_alloc(VALUE);
+extern VALUE DrawOptions_alloc(VALUE);
 #else
 extern VALUE Draw_new(VALUE);
+extern VALUE DrawOptions_new(VALUE);
 #endif
 extern VALUE Draw_primitive(VALUE, VALUE);
+extern VALUE DrawOptions_initialize(VALUE);
+
 
 ATTR_WRITER(Montage, background_color)
 ATTR_WRITER(Montage, border_color)

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.158 2007/01/15 23:32:31 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.159 2007/01/20 15:45:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -958,7 +958,6 @@ Init_RMagick(void)
 
     DCL_ATTR_WRITER(Draw, affine)
     DCL_ATTR_WRITER(Draw, align)
-    DCL_ATTR_WRITER(Draw, border_color)
     DCL_ATTR_WRITER(Draw, decorate)
     DCL_ATTR_WRITER(Draw, density)
     DCL_ATTR_WRITER(Draw, encoding)
@@ -988,6 +987,42 @@ Init_RMagick(void)
     rb_define_method(Class_Draw, "initialize_copy", Draw_init_copy, 1);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
+
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::DrawOptions is identical to Magick::Draw but with       */
+    /* only the attribute writer methods. This is the object that is passed  */
+    /* to the block associated with the Draw.new method call.                */
+    /*-----------------------------------------------------------------------*/
+
+    Class_DrawOptions = rb_define_class_under(Class_Image, "DrawOptions", rb_cObject);
+
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_define_alloc_func(Class_DrawOptions, DrawOptions_alloc);
+#else
+    rb_define_singleton_method(Class_DrawOptions, "new", DrawOptions_new, 0);
+#endif
+
+    rb_define_method(Class_DrawOptions, "initialize", DrawOptions_initialize, 0);
+
+    SHARE_ATTR_WRITER(DrawOptions, Draw, affine)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, align)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, decorate)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, density)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, encoding)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, fill)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, font)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, font_family)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, font_stretch)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, font_style)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, font_weight)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, gravity)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, pointsize)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, rotation)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, stroke)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, stroke_width)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, text_antialias)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, tile)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, undercolor)
 
     /*-----------------------------------------------------------------------*/
     /* Class Magick::Pixel                                                   */
@@ -1145,7 +1180,7 @@ Init_RMagick(void)
     Class_PolaroidOptions = rb_define_class_under(Class_Image, "PolaroidOptions", rb_cObject);
 
 #if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-    rb_define_alloc_func(Class_Info, PolaroidOptions_alloc);
+    rb_define_alloc_func(Class_PolaroidOptions, PolaroidOptions_alloc);
 #else
     rb_define_singleton_method(Class_PolaroidOptions, "new", PolaroidOptions_new, 0);
 #endif
@@ -1901,7 +1936,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/15 23:32:31 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/20 15:45:29 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -7,9 +7,18 @@ RMagick 1.15.0
     o Added polaroid method to the Image class (available with ImageMagick 6.3.1-6)
     o Added origin attribute to the Image::Info class (supported by
       ImageMagick 6.3.1-4 and later)
+    o Added PaletteBilevelMatteType to the ImageType enum (available with
+      ImageMagick 6.2.9)
     o Fix bug #6260, some RVG examples produce all-black GIF images
     o Fix bug #7034, fix the matte method in the Draw class
     o Fix bug #7373, default channels should be RGB instead of RGBA
+    o Fix bug #7716, Pixel#intensity wrong for gray images (bug report from
+      Morio Miki)
+    o Fix bug #7949, Magick::Draw.new abends when an exception occurs before
+      the draw object is fully initialized (bug report from Andrew Kaspick)
+    o Fix bug #8015, Magick::Draw.new doesn't call the optional arguments block
+      in the right scope (bug report from Andrew Kaspick)
+    o Tested with ImageMagick 6.3.2-0
 
 RMagick 1.14.1
     o Handle change to the type of the ColorInfo.color field introduced by

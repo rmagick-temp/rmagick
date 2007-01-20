@@ -1,6 +1,6 @@
-# $Id: RMagick.rb,v 1.50 2006/12/06 00:51:07 rmagick Exp $
+# $Id: RMagick.rb,v 1.51 2007/01/20 23:13:50 rmagick Exp $
 #==============================================================================
-#                  Copyright (C) 2006 by Timothy P. Hunter
+#                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
 #   Author:     Tim Hunter
 #   Purpose:    Extend Ruby to interface with ImageMagick.

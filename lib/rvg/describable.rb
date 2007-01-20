@@ -1,51 +1,53 @@
 #--
-# $Id: describable.rb,v 1.2 2005/12/31 14:41:04 rmagick Exp $
-# Copyright (C) 2006 Timothy P. Hunter
+# $Id: describable.rb,v 1.3 2007/01/20 17:39:49 rmagick Exp $
+# Copyright (C) 2007 Timothy P. Hunter
 #++
 
-class Magick::RVG
+module Magick
+    class RVG
 
-    #--
-    # Corresponds to SVG's Description.class
-    #++
-    # This module defines a number of metadata attributes.
-    module Describable
+        #--
+        # Corresponds to SVG's Description.class
+        #++
+        # This module defines a number of metadata attributes.
+        module Describable
 
-      private
+          private
 
-        def initialize(*args, &block)       #:nodoc:
-            super
-            @title, @desc, @metadata = nil
-        end
+            def initialize(*args, &block)       #:nodoc:
+                super
+                @title, @desc, @metadata = nil
+            end
 
-      public
+          public
 
-        # Sets the object description
-        attr_writer :desc
-        # Sets the object title
-        attr_writer :title
-        # Sets the object metadata
-        attr_writer :metadata
+            # Sets the object description
+            attr_writer :desc
+            # Sets the object title
+            attr_writer :title
+            # Sets the object metadata
+            attr_writer :metadata
 
-        # Returns the title of this object. The RVG object title is stored as
-        # the 'title' property on the image
-        def title
-            @title.to_s
-        end
+            # Returns the title of this object. The RVG object title is stored as
+            # the 'title' property on the image
+            def title
+                @title.to_s
+            end
 
-        # Returns the description of this object. The RVG object description is
-        # stored as the 'desc' property on the image
-        def desc
-            @desc.to_s
-        end
+            # Returns the description of this object. The RVG object description is
+            # stored as the 'desc' property on the image
+            def desc
+                @desc.to_s
+            end
 
-        # Returns additional metadata of this object. The RVG object metadata
-        # are stored as the 'metadata' property on the image
-        def metadata
-            @metadata.to_s
-        end
+            # Returns additional metadata of this object. The RVG object metadata
+            # are stored as the 'metadata' property on the image
+            def metadata
+                @metadata.to_s
+            end
 
-    end     # module Describable
+        end     # module Describable
 
-end     # class Magick::RVG
+    end # class RVG
+end # module Magick
 

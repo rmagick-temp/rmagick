@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.191 2007/01/13 16:24:11 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192 2007/01/20 17:43:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1146,7 +1146,8 @@ static void get_composite_offsets(
         (void)rb_protect(check_for_long_value, argv[0], &exc);
         if (exc)
         {
-            rb_raise(rb_eArgError, "expected GravityType, got %s", rb_obj_classname(argv[0]));
+            rb_raise(rb_eArgError, "expected GravityType, got %s"
+                   , rb_class2name(CLASS_OF(argv[0])));
         }
         *x_offset = NUM2LONG(argv[0]);
         if (argc > 1)
@@ -3605,7 +3606,7 @@ Image_displace(int argc, VALUE *argv, VALUE self)
 {
 
     Image *image, *displacement_map;
-    double x_amplitude, y_amplitude;
+    double x_amplitude = 0.0, y_amplitude = 0.0;
     long x_offset = 0L, y_offset = 0L;
 
     Data_Get_Struct(self, Image, image);
@@ -6522,7 +6523,7 @@ Image_new(int argc, VALUE *argv, VALUE class)
     Data_Get_Struct(info_obj, Info, info);
 
     image = AllocateImage(info);
-    new_image = Data_Wrap_Struct(class, NULL, (void) DestroyImage, image);
+    new_image = Data_Wrap_Struct(class, NULL, DestroyImage, image);
     init_arg[0] = info_obj;
     init_arg[1] = argv[0];
     init_arg[2] = argv[1];
@@ -7506,6 +7507,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     // Map QuantumExpressionOperator to MagickEvaluateOperator
     switch(operator)
     {
+        default:
         case UndefinedQuantumOperator:
             qop = UndefinedEvaluateOperator;
             break;

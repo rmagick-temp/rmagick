@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.42 2007/01/20 16:08:10 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.43 2007/01/20 17:40:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1336,6 +1336,8 @@ VALUE PolaroidOptions_new(VALUE class)
 
     polaroid_obj = PolaroidOptions_alloc(class);
     rb_obj_call_init(polaroid_obj, 0, NULL);
+
+    return polaroid_obj;
 }
 #endif
 

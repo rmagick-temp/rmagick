@@ -1,5 +1,5 @@
 #--
-# $Id: stylable.rb,v 1.3 2007/01/20 17:39:50 rmagick Exp $
+# $Id: stylable.rb,v 1.4 2007/01/20 17:49:57 rmagick Exp $
 # Copyright (C) 2007 Timothy P. Hunter
 #++
 
@@ -22,7 +22,7 @@ module Magick
 
             def set(styles)
                 begin
-                    styles.each do |style, value|
+                    styles.each_pair do |style, value|
                         begin
                             self[style] = value
                         rescue NoMethodError
@@ -37,7 +37,7 @@ module Magick
 
             # Iterate over the style names. Yield for each style that has a value.
             def each_value
-                each do |style, value|
+                each_pair do |style, value|
                     yield(style, value) if value
                 end
             end
@@ -45,7 +45,7 @@ module Magick
             # The "usual" deep_copy method doesn't copy a Struct correctly.
             def deep_copy(h=nil)
                 copy = Styles.new
-                each { |style, value| copy[style] = value }
+                each_pair { |style, value| copy[style] = value }
                 return copy
             end
 

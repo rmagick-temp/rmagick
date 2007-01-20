@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.41 2007/01/20 15:47:58 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.42 2007/01/20 16:08:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -919,7 +919,13 @@ VALUE DrawOptions_initialize(VALUE self)
     Draw *draw_options;
 
     Data_Get_Struct(self, Draw, draw_options);
-    draw_options->info = AcquireDrawInfo();
+    draw_options->info = magick_malloc(sizeof(DrawInfo));
+    if (!draw_options->info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    GetDrawInfo(NULL, draw_options->info);
 
     if (rb_block_given_p())
     {

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.40 2007/01/18 00:06:20 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.41 2007/01/20 15:47:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -13,6 +13,7 @@
 static void mark_Draw(void *);
 static void destroy_Draw(void *);
 static void destroy_Montage(void *);
+static VALUE new_DrawOptions(void);
 
 typedef MagickBooleanType (get_type_metrics_func_t)(Image *, const DrawInfo *, TypeMetric *);
 static VALUE get_type_metrics(int, VALUE *, VALUE, get_type_metrics_func_t);
@@ -45,21 +46,6 @@ Draw_align_eq(VALUE self, VALUE align)
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     VALUE_TO_ENUM(align, draw->info->align, AlignType);
-    return self;
-}
-
-/*
-    Method:     Draw#border_color=
-    Purpose:    border_color attribute writer
-*/
-VALUE
-Draw_border_color_eq(VALUE self, VALUE border_color)
-{
-    Draw *draw;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Draw, draw);
-    Color_to_PixelPacket(&draw->info->border_color, border_color);
     return self;
 }
 
@@ -753,6 +739,7 @@ VALUE Draw_init_copy(VALUE self, VALUE orig)
     return self;
 }
 
+
 /*
     Method:     Draw#initialize <{ info initializers }>
     Purpose:    Initialize Draw object
@@ -760,18 +747,15 @@ VALUE Draw_init_copy(VALUE self, VALUE orig)
 VALUE
 Draw_initialize(VALUE self)
 {
-    Draw *draw;
+    Draw *draw, *draw_options;
+    volatile VALUE options;
 
     Data_Get_Struct(self, Draw, draw);
 
-    // AcquireDrawInfo raises an exception if it fails
-    draw->info = AcquireDrawInfo();
-
-    if (rb_block_given_p())
-    {
-        // Run the block in self's context
-        (void) rb_obj_instance_eval(0, NULL, self);
-    }
+    options = new_DrawOptions();
+    Data_Get_Struct(options, Draw, draw_options);
+    draw->info = draw_options->info;
+    draw_options->info = NULL;
 
     return self;
 }
@@ -882,6 +866,70 @@ destroy_Draw(void *drawptr)
 
     xfree(drawptr);
 }
+
+
+/*
+    Static:     new_DrawOptions
+    Purpose:    Allocate & initialize a DrawOptions object.
+*/
+static VALUE new_DrawOptions(void)
+{
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    return DrawOptions_initialize(Draw_alloc(Class_DrawOptions));
+#else
+    return DrawOptions_new(Class_DrawOptions);
+#endif
+}
+
+
+/*
+    Method:     DrawOptions#allocate
+                DarwOptions#new
+    Purpose:    Create a DrawOptions object
+    Notes:      The DrawOptions class is the same as the Draw class except
+                is has only the attribute writer functions.
+*/
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE DrawOptions_alloc(VALUE class)
+#else
+VALUE DrawOptions_new(VALUE class)
+#endif
+{
+    Draw *draw_options;
+    volatile VALUE draw_options_obj;
+
+    draw_options = ALLOC(Draw);
+    memset(draw_options, 0, sizeof(Draw));
+    draw_options_obj = Data_Wrap_Struct(class, mark_Draw, destroy_Draw, draw_options);
+
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+    rb_obj_call_init(draw_options_obj, 0, NULL);
+#endif
+
+    return draw_options_obj;
+}
+
+
+/*
+    Method:     DrawOptions#initialize
+    Purpose:    Initialize a DrawOptions object
+*/
+VALUE DrawOptions_initialize(VALUE self)
+{
+    Draw *draw_options;
+
+    Data_Get_Struct(self, Draw, draw_options);
+    draw_options->info = AcquireDrawInfo();
+
+    if (rb_block_given_p())
+    {
+        // Run the block in self's context
+        (void) rb_obj_instance_eval(0, NULL, self);
+    }
+
+    return self;
+}
+
 
 /*
     Method:     Magick::Montage#background_color(color-name)

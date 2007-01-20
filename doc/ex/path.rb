@@ -39,7 +39,7 @@ gc.stroke_width 3
 gc.circle 170,220, 173,223
 
 # Add labels
-gc.stroke "#000000ff"       # unset stroke color
+gc.stroke "none"       # unset stroke color
 gc.fill 'black'
 
 # Add end point labels

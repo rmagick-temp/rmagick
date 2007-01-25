@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152 2007/01/20 16:07:12 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.153 2007/01/25 00:26:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -40,18 +40,6 @@
 
 
 #include "rmagick_config.h"
-
-// Define a pair of macros that make it easier to code
-// 1.6 and 1.8 alternatives. Code enclosed in RUBY18()
-// is present when compiled for 1.8.0 and later. Code
-// enclosed in RUBY16 is present for 1.6 versions.
-#if RUBY_VERSION >= 0x180
-#define RUBY18(d) d
-#define RUBY16(d)
-#else
-#define RUBY18(d)
-#define RUBY16(d) d
-#endif
 
 // Backport these definitions to Ruby 1.6.7
 #if !defined(ULONG2NUM)
@@ -581,13 +569,8 @@ extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_init_copy(VALUE, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Draw_alloc(VALUE);
 extern VALUE DrawOptions_alloc(VALUE);
-#else
-extern VALUE Draw_new(VALUE);
-extern VALUE DrawOptions_new(VALUE);
-#endif
 extern VALUE Draw_primitive(VALUE, VALUE);
 extern VALUE DrawOptions_initialize(VALUE);
 
@@ -610,18 +593,11 @@ ATTR_WRITER(Montage, texture)
 ATTR_WRITER(Montage, tile)
 ATTR_WRITER(Montage, title)
 extern VALUE Montage_initialize(VALUE);
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Montage_alloc(VALUE);
-#else
-extern VALUE Montage_new(VALUE);
-#endif
 extern VALUE rm_montage_new(void);
 
 
 extern VALUE PolaroidOptions_alloc(VALUE);
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-extern VALUE PolaroidOptions_new(VALUE);
-#endif
 extern VALUE PolaroidOptions_initialize(VALUE);
 extern VALUE rm_polaroid_new(void);
 ATTR_WRITER(PolaroidOptions, shadow_color);
@@ -704,11 +680,7 @@ ATTR_ACCESSOR(Info, units)
 ATTR_ACCESSOR(Info, view)
 //ATTR_ACCESSOR(Info, verbose)
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Info_alloc(VALUE);
-#else
-extern VALUE Info_new(VALUE);
-#endif
 
 extern VALUE Info_define(int, VALUE *, VALUE);
 extern VALUE Info_aset(VALUE, VALUE, VALUE, VALUE);
@@ -788,14 +760,8 @@ ATTR_ACCESSOR(Image, y_resolution)
 extern ChannelType extract_channels(int *, VALUE *);
 extern void raise_ChannelType_error(VALUE);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Image_alloc(VALUE);
 extern VALUE Image_initialize(int, VALUE *, VALUE);
-#else
-extern VALUE Image_new(int, VALUE *, VALUE);
-extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);
-#endif
-
 extern VALUE Image_adaptive_blur(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_resize(int, VALUE *, VALUE);
@@ -986,21 +952,11 @@ extern VALUE rm_image_new(Image *);
 
 
 // rmfill.c
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  GradientFill_alloc(VALUE);
-#else
-extern VALUE  GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
-#endif
-
 extern VALUE  GradientFill_initialize(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE  GradientFill_fill(VALUE, VALUE);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  TextureFill_alloc(VALUE);
-#else
-extern VALUE  TextureFill_new(VALUE, VALUE);
-#endif
-
 extern VALUE  TextureFill_initialize(VALUE, VALUE);
 extern VALUE  TextureFill_fill(VALUE, VALUE);
 
@@ -1024,11 +980,8 @@ extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE  ImageType_new(ImageType);
 extern VALUE  InterlaceType_new(InterlaceType);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE   Pixel_alloc(VALUE);
-#else
-extern VALUE   Pixel_new(int, VALUE *, VALUE);
-#endif
+
 ATTR_ACCESSOR(Pixel, red)
 ATTR_ACCESSOR(Pixel, green)
 ATTR_ACCESSOR(Pixel, blue)
@@ -1089,11 +1042,7 @@ extern VALUE  Statistics_new(ImageStatistics *);
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  Enum_alloc(VALUE);
-#else
-extern VALUE  Enum_new(VALUE, VALUE, VALUE);
-#endif
 extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
 extern VALUE  Enum_to_s(VALUE);
 extern VALUE  Enum_to_i(VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192 2007/01/20 17:43:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.193 2007/01/25 00:26:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6495,88 +6495,6 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image.new(cols, rows<, fill>) <{info block}>
-    Purpose:    Create a new Image with "cols" columns and "rows" rows.
-                If the fill argument is omitted, fill with the background color
-    Returns:    A new Image
-    Note:       This routine creates an Info structure to use when allocating
-                the Image structure. The caller can supply an info parm block to
-                use for initializing the Info.
-*/
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE
-Image_new(int argc, VALUE *argv, VALUE class)
-{
-    Info *info;
-    Image *image;
-    volatile VALUE info_obj;
-    volatile VALUE new_image;
-    VALUE init_arg[4];
-
-    if (argc < 2 || argc > 3)
-    {
-        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
-    }
-
-    // Create a new Info object to use when creating this image.
-    info_obj = rm_info_new();
-    Data_Get_Struct(info_obj, Info, info);
-
-    image = AllocateImage(info);
-    new_image = Data_Wrap_Struct(class, NULL, DestroyImage, image);
-    init_arg[0] = info_obj;
-    init_arg[1] = argv[0];
-    init_arg[2] = argv[1];
-    init_arg[3] = argc == 3 ? argv[2] : 0;
-
-    rb_obj_call_init((VALUE)new_image, 4, init_arg);
-    return new_image;
-}
-
-/*
-    Method:     Image#initialize
-    Purpose:    initialize a new Image object
-                If the fill argument is omitted, fill with the background color
-*/
-VALUE
-Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fill)
-{
-    Image *image;
-    Info *info;
-    unsigned long cols, rows;
-
-    cols = NUM2ULONG(width);
-    rows = NUM2ULONG(height);
-
-    if (cols <= 0 || rows <= 0)
-    {
-        rb_raise(rb_eArgError, "invalid image size (%dx%d)", cols, rows);
-    }
-
-    Data_Get_Struct(info_obj, Info, info);
-    Data_Get_Struct(self, Image, image);
-
-    SetImageExtent(image, cols, rows);
-
-    // If the caller did not supply a fill argument, call SetImage to fill the
-    // image using the background color. The background color can be set by
-    // specifying it when creating the Info parm block.
-    if (!fill)
-    {
-        SetImageBackgroundColor(image);
-    }
-    // fillobj.fill(self)
-    else
-    {
-        (void) rb_funcall(fill, ID_fill, 1, self);
-    }
-
-    return self;
-}
-#else
-
-
-/*
     Extern:     Image_alloc(cols,rows,[fill])
     Purpose:    "allocate" a new Image object
     Note:       actually we defer allocating the image
@@ -6649,7 +6567,6 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
 
     return self;
 }
-#endif
 
 
 /*

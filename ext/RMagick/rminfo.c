@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.45 2007/01/12 00:11:19 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.46 2007/01/25 00:26:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1780,38 +1780,6 @@ destroy_Info(void *infoptr)
     (void) DestroyImageInfo(info);
 }
 
-/*
-    Method:     Info.new
-    Purpose:    Create an Info object by calling CloneInfo
-*/
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE
-Info_new(VALUE class)
-{
-    Info *info;
-    volatile VALUE new_obj;
-
-    info = CloneImageInfo(NULL);
-    if (!info)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
-    }
-    new_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
-    rb_obj_call_init(new_obj, 0, NULL);
-    return new_obj;
-}
-
-/*
-    Extern:     rm_info_new
-    Purpose:    provide a Info.new method for internal use
-    Notes:      takes no parameters, but runs the parm block if present
-*/
-VALUE
-rm_info_new()
-{
-    return Info_new(Class_Info);
-}
-#else
 
 /*
     Extern:     Info_alloc
@@ -1831,6 +1799,8 @@ Info_alloc(VALUE class)
     info_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
     return info_obj;
 }
+
+
 /*
     Extern:     rm_info_new
     Purpose:    provide a Info.new method for internal use
@@ -1844,7 +1814,7 @@ rm_info_new()
     info_obj = Info_alloc(Class_Info);
     return Info_initialize(info_obj);
 }
-#endif
+
 
 /*
     Method:     Info#initialize

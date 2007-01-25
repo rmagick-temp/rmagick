@@ -3,18 +3,10 @@
 
 require 'mkmf'
 
-# Pass along Ruby's version number
-VERSION_NUMBER = '0x'+RUBY_VERSION.tr('.','')
 
 $CFLAGS = "@CFLAGS@"
-$CPPFLAGS = "-DRUBY_VERSION=#{VERSION_NUMBER} @CPPFLAGS@"
-
-if RUBY_VERSION >= '1.8.0'
-    $DLDFLAGS = "@LDFLAGS@"
-else
-    $LDFLAGS = "@LDFLAGS@"
-end
-
+$CPPFLAGS = "@CPPFLAGS@"
+$DLDFLAGS = "@LDFLAGS@"
 $LOCAL_LIBS = "@LOCAL_LIBS@"
 
 # Force re-compilation if the generated Makefile or

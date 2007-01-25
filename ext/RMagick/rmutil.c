@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90 2007/01/15 23:32:31 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.91 2007/01/25 00:26:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -840,7 +840,6 @@ destroy_Pixel(Pixel *pixel)
 }
 
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:     Pixel_alloc
     Purpose:    Allocate a Pixel object
@@ -854,27 +853,6 @@ Pixel_alloc(VALUE class)
     memset(pixel, '\0', sizeof(Pixel));
     return Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
 }
-
-#else
-
-/*
-    Method:     Pixel.new
-    Purpose:    Construct a new Pixel object
-*/
-VALUE
-Pixel_new(int argc, VALUE *argv, VALUE class)
-{
-    Pixel *pixel;
-    volatile VALUE pixel_obj;
-
-    pixel = ALLOC(Pixel);
-    memset(pixel, '\0', sizeof(Pixel));
-    pixel_obj = Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
-
-    rb_obj_call_init(pixel_obj, argc, argv);
-    return pixel_obj;
-}
-#endif
 
 
 /*
@@ -2515,13 +2493,11 @@ VALUE rm_define_enum_type(char *tag)
 
     rb_define_singleton_method(class, "values", Enum_type_values, 0);
     rb_define_method(class, "initialize", Enum_type_initialize, 2);
-    RUBY16(rb_enable_super(class, "initialize");)
     rb_define_method(class, "inspect", Enum_type_inspect, 0);
     return class;
 }
 
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:  rm_enum_new (1.8)
     Purpose: Construct a new Enum subclass instance
@@ -2549,38 +2525,6 @@ VALUE Enum_alloc(VALUE class)
    return enumr;
 }
 
-
-#else
-/*
-    Extern:  rm_enum_new (1.6)
-    Purpose: Construct a new Enum subclass instance
-*/
-VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
-{
-    return Enum_new(class, sym, val);
-}
-
-/*
-    Method:  Enum.new
-    Purpose: Construct a new Enum object
-    Notes:   `class' can be an Enum subclass
-*/
-VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
-{
-    volatile VALUE new_enum;
-    volatile VALUE argv[2];
-    MagickEnum *magick_enum;
-
-    new_enum = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
-    argv[0] = sym;
-    argv[1] = val;
-
-    rb_obj_call_init(new_enum, 2, argv);
-    OBJ_FREEZE(new_enum);
-    return new_enum;
-}
-
-#endif
 
 /*
     Method:  Enum#initialize
@@ -2688,8 +2632,7 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 
     if (rb_cvar_defined(CLASS_OF(self), ID_enumerators) != Qtrue)
     {
-        RUBY18(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new(), 0));
-        RUBY16(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new()));
+        rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new(), 0);
     }
 
     enumerators = rb_cvar_get(CLASS_OF(self), ID_enumerators);

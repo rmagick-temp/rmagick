@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.17 2007/01/12 00:11:16 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.18 2007/01/25 00:26:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -31,41 +31,9 @@ static void free_Fill(void *fill)
 }
 
 /*
-    Extern:     GradientFill.new(x1, y1, x2, y2, start_color, stop_color)
+    Extern:     GradientFill.allocate(x1, y1, x2, y2, start_color, stop_color)
     Purpose:    Create new GradientFill object
 */
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE
-GradientFill_new(
-    VALUE class,
-    VALUE x1,
-    VALUE y1,
-    VALUE x2,
-    VALUE y2,
-    VALUE start_color,
-    VALUE stop_color)
-{
-    rm_GradientFill *fill;
-    volatile VALUE new_fill;
-    VALUE argv[6];
-
-    argv[0] = x1;
-    argv[1] = y1;
-    argv[2] = x2;
-    argv[3] = y2;
-    argv[4] = start_color;
-    argv[5] = stop_color;
-
-    new_fill = Data_Make_Struct(class
-                              , rm_GradientFill
-                              , NULL
-                              , free_Fill
-                              , fill);
-
-    rb_obj_call_init((VALUE)new_fill, 6, argv);
-    return new_fill;
-}
-#else
 VALUE
 GradientFill_alloc(VALUE class)
 {
@@ -73,7 +41,7 @@ GradientFill_alloc(VALUE class)
 
     return Data_Make_Struct(class, rm_GradientFill, NULL, free_Fill, fill);
 }
-#endif
+
 
 /*
     Extern:     GradientFill#initialize(start_color, stop_color)
@@ -534,28 +502,10 @@ free_TextureFill(void *fill_obj)
 }
 
 /*
-    Extern:     TextureFill.new(texture)
+    Extern:     TextureFill.allocate(texture)
     Purpose:    Create new TextureFill object
     Notes:      the texture is an Image or Image *object
 */
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE
-TextureFill_new(VALUE class, VALUE texture)
-{
-    rm_TextureFill *fill;
-    VALUE argv[1];
-    volatile VALUE new_fill;
-
-    new_fill = Data_Make_Struct(class
-                              , rm_TextureFill
-                              , NULL
-                              , free_TextureFill
-                              , fill);
-    argv[0] = texture;
-    rb_obj_call_init((VALUE)new_fill, 1, argv);
-    return new_fill;
-}
-#else
 VALUE
 TextureFill_alloc(VALUE class)
 {
@@ -566,7 +516,6 @@ TextureFill_alloc(VALUE class)
                         , free_TextureFill
                         , fill);
 }
-#endif
 
 /*
     Extern:     TextureFill#initialize

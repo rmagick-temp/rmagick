@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.159 2007/01/20 15:45:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.160 2007/01/25 00:26:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -508,11 +508,7 @@ Magick_set_monitor(VALUE class, VALUE monitor)
     else
     // Otherwise, store monitor in @@__MAGICK_MONITOR__
     {
-        // 1.8.0 deletes rb_cvar_declare and adds another
-        // parm to rb_cvar_set - if rb_cvar_declare is
-        // available, use the 3-parm version of rb_cvar_set.
-        RUBY18(rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);)
-        RUBY16(rb_cvar_set(Module_Magick, Magick_Monitor, monitor);)
+        rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);
         (void) SetMonitorHandler((MonitorHandler)&monitor_handler);
     }
 
@@ -650,13 +646,8 @@ Init_RMagick(void)
     // Define an alias for Object#display before we override it
     rb_define_alias(Class_Image, "__display__", "display");
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Image, Image_alloc);
     rb_define_method(Class_Image, "initialize", Image_initialize, -1);
-#else
-    rb_define_singleton_method(Class_Image, "new", Image_new, -1);
-    rb_define_method(Class_Image, "initialize", Image_initialize, 4);
-#endif
 
     rb_define_singleton_method(Class_Image, "constitute", Image_constitute, 4);
     rb_define_singleton_method(Class_Image, "_load", Image__load, 1);
@@ -950,11 +941,7 @@ Init_RMagick(void)
     /*-----------------------------------------------------------------------*/
 
     Class_Draw = rb_define_class_under(Module_Magick, "Draw", rb_cObject);
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Draw, Draw_alloc);
-#else
-    rb_define_singleton_method(Class_Draw, "new", Draw_new, 0);
-#endif
 
     DCL_ATTR_WRITER(Draw, affine)
     DCL_ATTR_WRITER(Draw, align)
@@ -996,11 +983,7 @@ Init_RMagick(void)
 
     Class_DrawOptions = rb_define_class_under(Class_Image, "DrawOptions", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_DrawOptions, DrawOptions_alloc);
-#else
-    rb_define_singleton_method(Class_DrawOptions, "new", DrawOptions_new, 0);
-#endif
 
     rb_define_method(Class_DrawOptions, "initialize", DrawOptions_initialize, 0);
 
@@ -1039,11 +1022,7 @@ Init_RMagick(void)
     rb_include_module(Class_Pixel, rb_mComparable);
 
     // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Pixel, Pixel_alloc);
-#else
-    rb_define_singleton_method(Class_Pixel, "new", Pixel_new, -1);
-#endif
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
 
@@ -1081,11 +1060,7 @@ Init_RMagick(void)
 
     Class_Montage = rb_define_class_under(Class_ImageList, "Montage", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Montage, Montage_alloc);
-#else
-    rb_define_singleton_method(Class_Montage, "new", Montage_new, 0);
-#endif
 
     rb_define_method(Class_Montage, "initialize", Montage_initialize, 0);
     rb_define_method(Class_Montage, "freeze", rm_no_freeze, 0);
@@ -1115,11 +1090,7 @@ Init_RMagick(void)
 
     Class_Info = rb_define_class_under(Class_Image, "Info", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Info, Info_alloc);
-#else
-    rb_define_singleton_method(Class_Info, "new", Info_new, 0);
-#endif
 
     rb_define_method(Class_Info, "initialize", Info_initialize, 0);
     rb_define_method(Class_Info, "channel", Info_channel, -1);
@@ -1179,11 +1150,7 @@ Init_RMagick(void)
 
     Class_PolaroidOptions = rb_define_class_under(Class_Image, "PolaroidOptions", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_PolaroidOptions, PolaroidOptions_alloc);
-#else
-    rb_define_singleton_method(Class_PolaroidOptions, "new", PolaroidOptions_new, 0);
-#endif
 
     rb_define_method(Class_PolaroidOptions, "initialize", PolaroidOptions_initialize, 0);
 
@@ -1214,11 +1181,7 @@ Init_RMagick(void)
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_GradientFill, GradientFill_alloc);
-#else
-    rb_define_singleton_method(Class_GradientFill, "new", GradientFill_new, 6);
-#endif
 
     rb_define_method(Class_GradientFill, "initialize", GradientFill_initialize, 6);
     rb_define_method(Class_GradientFill, "fill", GradientFill_fill, 1);
@@ -1226,11 +1189,7 @@ Init_RMagick(void)
     // class Magick::TextureFill
     Class_TextureFill = rb_define_class_under(Module_Magick, "TextureFill", rb_cObject);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_TextureFill, TextureFill_alloc);
-#else
-    rb_define_singleton_method(Class_TextureFill, "new", TextureFill_new, 1);
-#endif
 
     rb_define_method(Class_TextureFill, "initialize", TextureFill_initialize, 1);
     rb_define_method(Class_TextureFill, "fill", TextureFill_fill, 1);
@@ -1241,7 +1200,6 @@ Init_RMagick(void)
 
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, -1);
-    RUBY16(rb_enable_super(Class_ImageMagickError, "initialize");)
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
 
@@ -1263,11 +1221,7 @@ Init_RMagick(void)
     Class_Enum = rb_define_class_under(Module_Magick, "Enum", rb_cObject);
     rb_include_module(Class_Enum, rb_mComparable);
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Enum, Enum_alloc);
-#else
-    rb_define_singleton_method(Class_Enum, "new", Enum_new, 2);
-#endif
 
     rb_define_method(Class_Enum, "initialize", Enum_initialize, 2);
     rb_define_method(Class_Enum, "to_s", Enum_to_s, 0);
@@ -1936,7 +1890,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/20 15:45:29 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/25 00:26:45 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

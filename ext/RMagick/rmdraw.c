@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.43 2007/01/20 17:40:41 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.44 2007/01/25 00:26:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -779,11 +779,7 @@ Draw_inspect(VALUE self)
     Raises:     ImageMagickError if no memory
 */
 
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE Draw_alloc(VALUE class)
-#else
-VALUE Draw_new(VALUE class)
-#endif
 {
     Draw *draw;
     volatile VALUE draw_obj;
@@ -791,10 +787,6 @@ VALUE Draw_new(VALUE class)
     draw = ALLOC(Draw);
     memset(draw, 0, sizeof(Draw));
     draw_obj = Data_Wrap_Struct(class, mark_Draw, destroy_Draw, draw);
-
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-    rb_obj_call_init(draw_obj, 0, NULL);
-#endif
 
     return draw_obj;
 }
@@ -874,11 +866,7 @@ destroy_Draw(void *drawptr)
 */
 static VALUE new_DrawOptions(void)
 {
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     return DrawOptions_initialize(Draw_alloc(Class_DrawOptions));
-#else
-    return DrawOptions_new(Class_DrawOptions);
-#endif
 }
 
 
@@ -889,11 +877,7 @@ static VALUE new_DrawOptions(void)
     Notes:      The DrawOptions class is the same as the Draw class except
                 is has only the attribute writer functions.
 */
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 VALUE DrawOptions_alloc(VALUE class)
-#else
-VALUE DrawOptions_new(VALUE class)
-#endif
 {
     Draw *draw_options;
     volatile VALUE draw_options_obj;
@@ -901,10 +885,6 @@ VALUE DrawOptions_new(VALUE class)
     draw_options = ALLOC(Draw);
     memset(draw_options, 0, sizeof(Draw));
     draw_options_obj = Data_Wrap_Struct(class, mark_Draw, destroy_Draw, draw_options);
-
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-    rb_obj_call_init(draw_options_obj, 0, NULL);
-#endif
 
     return draw_options_obj;
 }
@@ -1117,11 +1097,7 @@ Montage_matte_color_eq(VALUE self, VALUE color)
     Purpose:    Create a new Montage object
 */
 VALUE
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 Montage_alloc(VALUE class)
-#else
-Montage_new(VALUE class)
-#endif
 {
     MontageInfo *montage_info;
     Montage *montage;
@@ -1148,10 +1124,6 @@ Montage_new(VALUE class)
     montage->compose = OverCompositeOp;
     montage_obj = Data_Wrap_Struct(class, NULL, destroy_Montage, montage);
 
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-    (void) rb_obj_call_init(montage_obj, 0, NULL);
-#endif
-
     return montage_obj;
 }
 
@@ -1162,11 +1134,7 @@ Montage_new(VALUE class)
 
 VALUE rm_montage_new(void)
 {
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     return Montage_initialize(Montage_alloc(Class_Montage));
-#else
-    return Montage_new(Class_Montage);
-#endif
 }
 
 /*
@@ -1325,24 +1293,6 @@ PolaroidOptions_alloc(VALUE class)
 
 
 /*
-    Method:     PolaroidOptions.new
-    Purpose:    Ruby 1.6 singleton function to allocate and init a PolaroidOptions
-                object
-*/
-#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
-VALUE PolaroidOptions_new(VALUE class)
-{
-    volatile VALUE polaroid_obj;
-
-    polaroid_obj = PolaroidOptions_alloc(class);
-    rb_obj_call_init(polaroid_obj, 0, NULL);
-
-    return polaroid_obj;
-}
-#endif
-
-
-/*
     Method:     Magick::PolaroidOptions#initialize
     Purpose:    Yield to an optional block
 */
@@ -1375,11 +1325,7 @@ PolaroidOptions_initialize(VALUE self)
 */
 VALUE rm_polaroid_new(void)
 {
-#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     return PolaroidOptions_initialize(PolaroidOptions_alloc(Class_PolaroidOptions));
-#else
-    return PolaroidOptions_new(Class_PolaroidOptions);
-#endif
 }
 
 
@@ -1419,8 +1365,7 @@ static VALUE get_dummy_tm_img(VALUE klass)
         (void) DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
 
-        RUBY18(rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0));
-        RUBY16(rb_cvar_set(klass, ID__dummy_img_, dummy_img));
+        rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0);
     }
     dummy_img = rb_cvar_get(klass, ID__dummy_img_);
 

@@ -467,10 +467,10 @@ class Image_Attributes_UT < Test::Unit::TestCase
         img = @img.copy
         img.format = 'GIF'
         assert_nothing_raised { img.mime_type }
-        assert_equal('image/gif', img.mime_type)
+        assert_equal('image/x-gif', img.mime_type)
         img.format = 'JPG'
-        assert_equal('image/jpeg', img.mime_type)
-        assert_raise(NoMethodError) { img.mime_type = 'image/jpeg' }
+        assert_equal('image/x-jpg', img.mime_type)
+        assert_raise(NoMethodError) { img.mime_type = 'image/x-jpg' }
     end
 
     def test_monitor

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.153 2007/01/25 00:26:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.154 2007/01/26 23:05:05 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -345,9 +345,6 @@ EXTERN ID ID_y;                 // "y"
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
-
-#define Q(N) Q2(N)
-#define Q2(N) #N
 
 /*
    Handle warnings & errors

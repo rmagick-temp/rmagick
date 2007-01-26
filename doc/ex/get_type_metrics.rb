@@ -3,26 +3,27 @@ require 'RMagick'
 include Magick
 
 # Add a method for drawing braces.
-class Draw
+module Magick
+    class Draw
 
-    # (w,h) - width & height of rectangle enclosing brace.
-    # Normally the brace is drawn with its opening to the
-    # left and its lower point on the origin.
-    #
-    # Set w < 0 to draw right-opening brace. Set h < 0 to
-    # position top point at origin.
-    #
-    # The placement & orientation is affected by the
-    # current user coordinate system.
-    def brace(w, h)
-        raise(ArgumentError, "width must be != 0") unless w != 0
-        raise(ArgumentError, "height must be != 0") unless h != 0
-        path("M0,0 Q#{w},0 #{w/2.0},#{-h/4.0} T#{w},#{-h/2.0}" +
-             "Q0,#{-h/2.0} #{w/2.0},#{-(3.0*h/4.0)} T0,#{-h}")
-    end
+        # (w,h) - width & height of rectangle enclosing brace.
+        # Normally the brace is drawn with its opening to the
+        # left and its lower point on the origin.
+        #
+        # Set w < 0 to draw right-opening brace. Set h < 0 to
+        # position top point at origin.
+        #
+        # The placement & orientation is affected by the
+        # current user coordinate system.
+        def brace(w, h)
+            raise(ArgumentError, "width must be != 0") unless w != 0
+            raise(ArgumentError, "height must be != 0") unless h != 0
+            path("M0,0 Q#{w},0 #{w/2.0},#{-h/4.0} T#{w},#{-h/2.0}" +
+                 "Q0,#{-h/2.0} #{w/2.0},#{-(3.0*h/4.0)} T0,#{-h}")
+        end
 
-end     # class Draw
-
+    end     # class Draw
+end
 
 
 

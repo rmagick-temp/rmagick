@@ -6,7 +6,8 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (instance methods, part 3)</title>
+  <title>RMagick 0.0.0: class Image (instance methods, part
+  3)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -387,7 +388,7 @@
 
     <h4>Notes</h4>
 
-    <p>&times;Magick does not automatically remove profiles when
+    <p>ImageMagick does not automatically remove profiles when
     resizing images. If you are trying to make your JPEG thumbnail
     images as small as possible, use <code>profile!</code> to
     remove any profiles from the image as well. Also see <a href=
@@ -597,8 +598,7 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
     well as operations on channels within pixels. See <a href=
     "#view">view</a>, below.</p>
 
-    <h4>Magick API</h4>QuantumOperatorRegionImage (GraphicsMagick
-    1.1), EvaluateImageChannel (ImageMagick)
+    <h4>Magick API</h4>EvaluateImageChannel (ImageMagick)
   </div>
 
   <div class="sig">
@@ -1181,12 +1181,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example"  /></a>
+    "ex/rotate_f.jpg" alt="rotate example" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1633,7 +1633,7 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
@@ -1851,7 +1851,7 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script"  /> <!--
+    "Click to see the example script" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
@@ -1949,7 +1949,7 @@ random_threshold_channel(geom, RedChannel)
     and is convenient for determining if an image has been modified
     or whether two images are identical.</p>
 
-    <p>&times;Magick adds the computed signature to the image's
+    <p>ImageMagick adds the computed signature to the image's
     properties.</p>
 
     <h4>Returns</h4>
@@ -2111,12 +2111,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example"  /></a>
+    "ex/splice.jpg" alt="splice example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2408,8 +2408,9 @@ p stats.red.stddev &raquo; 0.231399683489667
 
     <p>self</p>
 
-    <h4>Magick API</h4>StripImage (available in ImageMagick and
-    GraphicsMagick 1.1)
+    <h4>Magick API</h4>
+
+    <p>StripImage</p>
   </div>
 
   <div class="sig">
@@ -3304,7 +3305,7 @@ end
 
     <p>The <code>view</code> method introduces a relatively high
     level of overhead to pixel manipulation compared to methods
-    that use the &times;Magick API to identify and change pixels. I
+    that use the ImageMagick API to identify and change pixels. I
     recommend that you use <code>view</code> only when the number
     of pixels identified in the view is fairly small (a few
     thousand to a few hundred thousand, depending on your patience
@@ -3355,7 +3356,7 @@ end
       expense of increased execution time. In general, <span class=
       "arg">radius</span> should be larger than <span class=
       "arg">sigma</span>, although if <span class=
-      "arg">radius</span> is 0 then &times;Magick will choose a
+      "arg">radius</span> is 0 then ImageMagick will choose a
       suitable value. <span class="arg">Sigma</span> must be
       non-zero. Choose a very small value for <span class=
       "arg">sigma</span> to produce a "hard" edge.</dd>
@@ -3574,7 +3575,7 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
+    "ex/images/Flower_Hat.jpg" alt="wave example" />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
@@ -3716,13 +3717,13 @@ end
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Writes the image to the specified file. &times;Magick
+    <p>Writes the image to the specified file. ImageMagick
     determines image format from the <a href=
     "imusage.html#formats">prefix or extension</a>.</p>
 
-    <p>If the argument is an open file, &times;Magick will write
-    the image in its current format. You can force a different
-    format by setting the image's <a href=
+    <p>If the argument is an open file, ImageMagick will write the
+    image in its current format. You can force a different format
+    by setting the image's <a href=
     "imageattrs.html#Image.format">format</a> attribute.</p>
 
     <h4>Arguments</h4>

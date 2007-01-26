@@ -155,22 +155,19 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.10.0 ($Date: 2007/01/14 23:57:19 $)
-    Copyright (C) 2006 by Timothy P. Hunter<br />
-    Built with GraphicsMagick 1.2 unreleased Q16
-    http://www.GraphicsMagick.org/<br />
-    Built for ruby 1.8.4 (2005-12-24) [i686-linux]<br />
+    <code>This is RMagick 1.15.0 ($Date: 2007/01/26 23:41:18 $)
+    Copyright (C) 2007 by Timothy P. Hunter<br />
+    Built with ImageMagick 6.2.5 03/05/06 Q8
+    http://www.imagemagick.org<br />
+    Built for ruby 1.8.0 (2003-08-04) [i686-linux]<br />
     Web page: http://rmagick.rubyforge.org<br />
-    Email: rmagick@rubyforge.org</code></dd>
+    Email: rmagick@rubyforge.org<br /></code></dd>
 
     <dt>MagickVersion</dt>
 
-    <dd>The &times;Magick version string. This has the form:<br />
+    <dd>The ImageMagick version string. This has the form:<br />
     <code>@(#)ImageMagick X.Y.Z MM/DD/YY Q:16
-    http://www.imagemagick.org</code><br />
-    or<br />
-    <code>GraphicsMagick X.Y.Z MM/DD/YY Q8
-    http://www.GraphicsMagick.org/</code></dd>
+    http://www.imagemagick.org</code></dd>
 
     <dt>MaxRGB</dt>
 
@@ -186,7 +183,6 @@
       QuantumDepth and MaxRGB is summarized in this table.
 
       <table summary="number of bits in a quantum" id="maxrgb">
-
         <tr>
           <th>QuantumDepth</th>
 
@@ -321,9 +317,9 @@
   files.</span> See <a href=
   "imageattrs.html#colorspace">colorspace</a>.</p>
 
-  <p>Each version of ImageMagick and GraphicsMagick defines a
-  subset of the colorspaces listed below. To list the subset
-  supported by your version, issue the command:</p>
+  <p>Each version of ImageMagick defines a subset of the
+  colorspaces listed below. To list the subset supported by your
+  version, issue the command:</p>
   <pre class="example">
 ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 </pre>
@@ -378,9 +374,9 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>SRGBColorspace</dt>
 
-    <dd>Kodak PhotoCD sRGB. In &times;Magick, this constant is
-    named sRGBColorspace, but since Ruby constants must start with
-    an uppercase letter, I had to change it.</dd>
+    <dd>Kodak PhotoCD sRGB. In ImageMagick, this constant is named
+    sRGBColorspace, but since Ruby constants must start with an
+    uppercase letter, I had to change it.</dd>
 
     <dt>HSLColorspace</dt>
 
@@ -723,8 +719,8 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
   when encoding an image. Be aware that most image types only
   support a sub-set of the available compression types. If the
   compression type specified is incompatable with the image,
-  &times;Magick selects a compression type compatable with the
-  image type.</span> See <a href=
+  ImageMagick selects a compression type compatable with the image
+  type.</span> See <a href=
   "imageattrs.html#compression">compression</a>.</p>
 
   <dl>
@@ -848,7 +844,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
   <p><span class="imquote">Used to adjust the filter algorithm used
   when resizing images. Different filters experience varying
   degrees of success with various images and can take sigificantly
-  different amounts of processing time. &times;Magick uses the
+  different amounts of processing time. ImageMagick uses the
   LanczosFilter by default since this filter has been shown to
   provide the best results for most images in a reasonable amount
   of time. Other filter types (e.g. TriangleFilter) may execute
@@ -1313,8 +1309,8 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>QuantumPixel</dt>
 
-    <dd>corresponds to the Quantum type used by &times;Magick,
-    range 0-MaxRGB.</dd>
+    <dd>corresponds to the Quantum type used by ImageMagick, range
+    0-MaxRGB.</dd>
   </dl>
 
   <h3 class="const" id="StyleType">StyleType</h3>

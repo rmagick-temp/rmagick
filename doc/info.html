@@ -177,7 +177,7 @@
     that is, only those attributes that are meaningful for the
     particular method. Any other attributes that you set are
     ignored. Also, some attributes are only used by a subset of the
-    image formats. See the &times;Magick documentation for more
+    image formats. See the ImageMagick documentation for more
     information.</p>
 
     <p>Remember, you do not ever need to create an
@@ -207,10 +207,9 @@
 
     <p>Define a format-specific option. An alternative to <a href=
     "#define">define</a>, below. Use this method to set options for
-    reading or writing certain image formats. ImageMagick and
-    GraphicsMagick support different options, and the list of
-    supported options changes from release to release. For a list
-    of the valid image formats, keys, and values, refer to the
+    reading or writing certain image formats. The list of supported
+    options changes from release to release. For a list of the
+    valid image formats, keys, and values, refer to the
     documentation for the -define option for the specific release
     of the library you're using.</p>
 
@@ -243,8 +242,7 @@ self["tiff", "bits-per-sample"] = 2
 
     <h4>Magick API</h4>
 
-    <p>SetImageOption (ImageMagick 6.0.0), AddDefinitions
-    (GraphicsMagick 1.1)</p>
+    <p>SetImageOption (ImageMagick 6.0.0)</p>
   </div>
 
   <div class="sig">
@@ -284,8 +282,7 @@ self["tiff", "bits-per-sample"] &raquo; 2
 
     <h4>Magick API</h4>
 
-    <p>GetImageOption (ImageMagick 6.0.0), AccessDefinitions
-    (GraphicsMagick 1.1)</p>
+    <p>GetImageOption (ImageMagick 6.0.0)</p>
   </div>
 
   <div class="sig">
@@ -358,8 +355,7 @@ self.define("tiff", "bits-per-sample", 2)
 
     <h4>Magick API</h4>
 
-    <p>SetImageOption (ImageMagick 6.0.0), AddDefinitions
-    (GraphicsMagick 1.1)</p>
+    <p>SetImageOption (ImageMagick 6.0.0)</p>
   </div>
 
   <div class="sig">
@@ -672,17 +668,10 @@ self.undefine("tiff", "bits-per-sample")
       <li>NoCompression is accepted for all image formats. Except
       as noted in the table, it is the default.</li>
 
-      <li>Prior to July 10, 2004, the default for GIF images was
-      NoCompression.</li>
-
-      <li>&times;Magick must be configured and built with extra
-      support to use LZWCompression (in releases prior to July 10,
-      2004) and LosslessJPEGCompression.</li>
-
-      <li>This table is based on my examination of the
-      &times;Magick source code. It is not necessarily complete and
-      it may contain mistakes. If you need an authoritative list,
-      you should consult the &times;Magick developers.</li>
+      <li>This table is based on my examination of the ImageMagick
+      source code. It is not necessarily complete and it may
+      contain mistakes. If you need an authoritative list, you
+      should consult the ImageMagick developers.</li>
     </ol>
 
     <h4>Arguments</h4>A <a href=
@@ -748,8 +737,8 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Arguments</h4>
 
     <p>Either 8, 16, or 32. You can specify 16 and 32 only when
-    &times;Magick was compiled with a QuantumDepth that allows
-    these depth values.</p>
+    ImageMagick was compiled with a QuantumDepth that allows these
+    depth values.</p>
 
     <p>Use <code>depth</code> to specify the depth of CMYK, GRAY,
     RGB, RGBA, MAP, and XC format images. See also <a href=
@@ -1144,7 +1133,7 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Description</h4>
 
     <p>The compression level for JPEG, MPEG, JPEG-2000, MIFF, MNG,
-    and PNG image format. Corresponds to &times;Magick's -quality
+    and PNG image format. Corresponds to ImageMagick's -quality
     option. The default is 75. See <em><a href=
     "comtasks.html#compressing">Compressing image
     files</a></em>.</p>
@@ -1229,7 +1218,7 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Description</h4>
 
     <p>Set a texture to tile onto the image background. Corresponds
-    to the -texture option to &times;Magick's convert and mogrify
+    to the -texture option to ImageMagick's convert and mogrify
     commands. This attribute is set-only.</p>
 
     <h4>Argument</h4>

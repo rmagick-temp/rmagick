@@ -6,8 +6,8 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (class and instance methods, part
-  1)</title>
+  <title>RMagick 0.0.0: class Image (class and instance methods,
+  part 1)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -636,7 +636,7 @@ img = Magick::Image.read_inline(content)
     <p>Returns the value of the image property identified by
     <span class="arg">key</span>. An image may have any number of
     properties. Each property is identified by a string (or symbol)
-    key. The property value is a string. &times;Magick predefines
+    key. The property value is a string. ImageMagick predefines
     some properties, including <code>Label</code>,
     <code>Comment</code>, <code>Signature</code>, and in some cases
     <code>EXIF</code>.</p>
@@ -664,7 +664,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Note</h4>
 
-    <p>&times;Magick calls properties "attributes." I use the word
+    <p>ImageMagick calls properties "attributes." I use the word
     "properties" to reduce the confusion with image object
     attributes such as <code>rows</code> and
     <code>columns</code>.</p>
@@ -1097,7 +1097,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-       /></a>
+      /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1254,8 +1254,8 @@ img = Magick::Image.read_inline(content)
 
     <h4>Example</h4>
 
-    <p>The affine matrix in this example skews the receiver by &pi;/6 radians
-    along both axes.</p>
+    <p>The affine matrix in this example skews the receiver by
+    &pi;/6 radians along both axes.</p>
 
     <p class="rollover"><a href=
     "javascript:popup('affine_transform.rb.html')"><img onmouseover="this.src='ex/images/Flower_Hat.jpg'"
@@ -1482,7 +1482,7 @@ img = Magick::Image.read_inline(content)
     and <span class="arg">dst_percent</span>.</p>
 
     <p>This method corresponds to the -blend option of
-    &times;Magick's <code>composite</code> command.</p>
+    ImageMagick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -1680,7 +1680,7 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script"  /> <img id=
+    "Click to see the example script" /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
@@ -1885,10 +1885,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
-      arguments are specified, the default is all channels.
-      <em>GraphicsMagick users note:</em> Specify exactly one
-      channel. The <code>AllChannels</code> value is not
-      supported.</dd>
+      arguments are specified, the default is all channels.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1896,15 +1893,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <p>An array. The first element in the array is the minimum
     value. The second element is the maximum value.</p>
 
-    <h4>See also</h4>
-
-    <p>GraphicsMagick users see <a href=
-    "image3.html#statistics">statistics</a></p>
-
     <h4>Magick API</h4>
 
-    <p>GetImageChannelExtrema (available in ImageMagick),
-    GetImageStatistics (available in GraphicsMagick 1.1)</p>
+    <p>GetImageChannelExtrema</p>
   </div>
 
   <div class="sig">
@@ -1928,10 +1919,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
-      arguments are specified, the default is all channels.
-      <em>GraphicsMagick users note:</em> Specify exactly one
-      channel. The <code>AllChannels</code> value is not
-      supported.</dd>
+      arguments are specified, the default is all channels.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1939,15 +1927,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <p>An array. The first element in the array is the mean value.
     The second element is the standard deviation.</p>
 
-    <h4>See also</h4>
-
-    <p>GraphicsMagick users see <a href=
-    "image3.html#statistics">statistics</a></p>
-
     <h4>Magick API</h4>
 
-    <p>GetImageChannelMean (available in ImageMagick),
-    GetImageStatistics (available in GraphicsMagick 1.1)</p>
+    <p>GetImageChannelMean</p>
   </div>
 
   <div class="sig">
@@ -2237,9 +2219,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     "ex/color_histogram.gif" alt="color_histogram example" title=
     "Click the image to see the example script" /></a></p>
 
-    <h4>Magick API</h4>GetColorHistogram (available in
-    GraphicsMagick 1.1), GetImageHistogram (available in
-    ImageMagick)
+    <h4>Magick API</h4>
+
+    <p>GetImageHistogram</p>
   </div>
 
   <div class="sig">
@@ -3279,7 +3261,7 @@ cropped = img.crop(x, y, width, height, true)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example"  /></a>
+    "ex/crop_resized.jpg" alt="frame example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3544,8 +3526,7 @@ exit
 
     <h4>Magick API</h4>
 
-    <p>DispatchImage (GraphicsMagick), or ExportImagePixels
-    (ImageMagick)</p>
+    <p>ExportImagePixels</p>
 
     <h4>Note</h4>
 
@@ -3576,7 +3557,7 @@ exit
     from <span class="arg">image</span> to the output image.</p>
 
     <p>This method corresponds to the -displace option of
-    &times;Magick's <code>composite</code> command.</p>
+    ImageMagick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -3686,7 +3667,7 @@ exit
     <span class="arg">src_percentage</span>.</p>
 
     <p>This method corresponds to the -dissolve option of
-    &times;Magick's <code>composite</code> command.</p>
+    ImageMagick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -3704,7 +3685,7 @@ exit
       interpreted as a percentage. Both 0.25 and "25%" mean 25%.
       This argument is required.</dd>
 
-      <dt>dst_percentage (with ImageMagick)</dt>
+      <dt>dst_percentage</dt>
 
       <dd>Either a non-negative number a string in the form "NN%".
       If <span class="arg">src_percentage</span> is a number it is
@@ -3712,12 +3693,6 @@ exit
       This argument may omitted if no other arguments follow it. In
       this case <span class="arg">image</span>'s opacity is
       unchanged.</dd>
-
-      <dt>dst_percentage (with GraphicsMagick)</dt>
-
-      <dd>With GraphicsMagick, <code>dissolve</code> ignores the
-      value and uses <code>1.0-<span class=
-      "arg">src_percentage</span></code> instead.</dd>
     </dl>
 
     <p>The <code>dissolve</code> method can be called with or

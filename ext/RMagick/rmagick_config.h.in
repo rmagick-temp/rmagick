@@ -1,4 +1,3 @@
-#undef GRAPHICSMAGICK
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_ACQUIREMAGICKMEMORY
 /* Introduced in IM 6.2.8-5 */

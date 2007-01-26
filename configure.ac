@@ -17,71 +17,26 @@ if test -z "$RUBY"; then
     AC_MSG_ERROR([Can't install RMagick. Ruby must be installed first.])
 fi
 
-# See if user prefers GraphicsMagick over ImageMagick
-AC_ARG_WITH(graphics-magick,
-    AS_HELP_STRING([--with-graphics-magick], [configure RMagick with GraphicsMagick]),
-    [with_graphics_magick=$withval],
-    [with_graphics_magick='no'])
-
-if test "$with_graphics_magick" != 'no' ; then
-    AC_CHECK_PROGS(MAGICKCONFIG, GraphicsMagick-config)
-    if test -z "$MAGICKCONFIG"; then
-        AC_MSG_ERROR([Can't install RMagick. Can't find GraphicsMagick-config program.])
-    fi
-    MAGICKNAME=GraphicsMagick
-    MAGICKLIB=GraphicsMagick
-    AC_DEFINE(GRAPHICSMAGICK,1)
-
-# Otherwise see which one is installed
-else
-    AC_CHECK_PROGS(MAGICKCONFIG, [Magick-config GraphicsMagick-config])
-    if test -z "$MAGICKCONFIG"; then
-        AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config or GraphicsMagick-config program.])
-    else
-        case "$MAGICKCONFIG" in
-            Magick-config )
-                MAGICKNAME=ImageMagick
-                MAGICKLIB=Magick
-                MAGICKVERS=`${MAGICKCONFIG} --version | tr -d .`
-                if test $MAGICKVERS -lt 600; then
-                   MAGICKVERS=`${MAGICKCONFIG} --version`
-                   AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.0.0 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
-                fi
-                ;;
-            GraphicsMagick-config )
-                MAGICKNAME=GraphicsMagick
-                MAGICKLIB=GraphicsMagick
-                AC_DEFINE(GRAPHICSMAGICK,1)
-                ;;
-        esac
-    fi
-fi
-
-# Append ***Magick's lists of flags to the user's lists (if any)
-LDFLAGS="${LDFLAGS} `${MAGICKCONFIG} --ldflags`"
-CPPFLAGS="${CPPFLAGS} `${MAGICKCONFIG} --cppflags`"
+# Append ImageMagick's lists of flags to the user's lists (if any)
+LDFLAGS="${LDFLAGS} `Magick-config --ldflags`"
+CPPFLAGS="${CPPFLAGS} `Magick-config --cppflags`"
 
 AC_SUBST(LDFLAGS, ${LDFLAGS})
 AC_SUBST(CFLAGS, ${rm_saved_CFLAGS})
 AC_SUBST(CPPFLAGS, ${CPPFLAGS})
-AC_SUBST(LOCAL_LIBS, `${MAGICKCONFIG} --libs`)
+AC_SUBST(LOCAL_LIBS, `Magick-config --libs`)
 
-AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
-    [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB} or one of the dependent libraries.
+AC_CHECK_LIB(Magick, InitializeMagick, [],
+    [AC_MSG_ERROR([Can't install RMagick. Can't find libMagick or one of the dependent libraries.
                   Check the config.log file for more detailed information.])],
-    [`${MAGICKCONFIG} --libs`])
+    [`Magick-config --libs`])
 
-
-AC_SUBST(MAGICKLIB)
-AC_SUBST(MAGICKNAME)
-AC_SUBST(MAGICKCONFIG)
-AC_DEFINE_UNQUOTED(MAGICKNAME, $MAGICKNAME)
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
 
-# Append ***Magick's lists of libs to the user's list (if any)
-LIBS="${LIBS} `${MAGICKCONFIG} --libs`"
+# Append ImageMagick's lists of libs to the user's list (if any)
+LIBS="${LIBS} `Magick-config --libs`"
 
 # What ImageMagick/GraphicsMagick functions?
 AC_CHECK_FUNCS([AcquireMagickMemory])
@@ -660,7 +615,7 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
 fi
 
 # Where is ****Magick installed?
-MAGICKPREFIX=`${MAGICKCONFIG} --prefix`
+MAGICKPREFIX=`Magick-config --prefix`
 
 # Options to pass to ruby config step
 
@@ -747,6 +702,6 @@ AC_OUTPUT
 echo ""
 echo ""
 echo "This installation of $PACKAGE_STRING is configured for"
-echo "$RUBY_VERSION_STRING and $MAGICKNAME `$MAGICKCONFIG --version`."
+echo "$RUBY_VERSION_STRING and ImageMagick `Magick-config --version`."
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.193 2007/01/25 00:26:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.194 2007/01/26 23:08:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1933,7 +1933,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_channel_threshold(int argc, VALUE *argv, VALUE self)
 {
-    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
+    rb_warning("This method is deprecated in this release of ImageMagick"
                ". Use bilevel_channel instead.");
     return threshold_image(argc, argv, self,
 #if defined(HAVE_THRESHOLDIMAGECHANNEL)
@@ -3794,48 +3794,6 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 }
 
 
-
-#if defined(GRAPHICSMAGICK)
-/*
-    Static:     create_mattes
-    Purpose:    GraphicsMagick establishes the source image mattes in
-                command.c, before calling CompositeImage. This function does
-                that step for Image_dissolve when we're built for GraphicsMagick.
-*/
-static void
-create_mattes(Image *image, double src_percent)
-{
-    long x, y;
-    PixelPacket *q;
-
-    if (!image->matte)
-    {
-        SetImageOpacity(image,OpaqueOpacity);
-    }
-
-    for (y = 0; y < (long) image->rows; y++)
-    {
-      q = GetImagePixels(image, 0, y, image->columns, 1);
-
-      if (q == NULL)
-      {
-          break;
-      }
-
-      for (x = 0; x < (long) image->columns; x++)
-      {
-        q->opacity = (Quantum) (((MaxRGB - q->opacity) * src_percent) / 100.0);
-        q += 1;
-      }
-
-      if (!SyncImagePixels(image))
-      {
-          break;
-      }
-    }
-}
-#endif
-
 /*
     Method:     Image#dissolve(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
                 Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
@@ -3881,18 +3839,8 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
 
-    // GraphicsMagick needs an extra step (ref: GM's command.c)
-#if defined(GRAPHICSMAGICK)
-    overlay = rm_clone_image(overlay);
-    create_mattes(overlay, src_percent);
-#endif
-
     composite =  special_composite(image, overlay, src_percent, dst_percent
                                  , x_offset, y_offset, DissolveCompositeOp);
-
-#if defined(GRAPHICSMAGICK)
-    (void) DestroyImage(overlay);
-#endif
 
     return composite;
 }
@@ -7623,8 +7571,8 @@ Image_random_channel_threshold(
     ExceptionInfo exception;
 
 #if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
-    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
-               ". Use Image#random_threshold_channel instead.");
+    rb_warning("This method is deprecated in this release of ImageMagick."
+               " Use Image#random_threshold_channel instead.");
 #endif
 
     Data_Get_Struct(self, Image, image);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.91 2007/01/25 00:26:45 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.92 2007/01/26 23:06:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2906,16 +2906,13 @@ rm_delete_temp_image(char *tmpnam)
     Purpose:    raise NotImplementedError
     Notes:      Called when a xMagick API is not available.
                 Replaces Ruby's rb_notimplement function.
-    Notes:      The MagickPackageName macro is not available
-                until 5.5.7. Use MAGICKNAME instead.
 */
 void
 rm_not_implemented(void)
 {
 
-    rb_raise(rb_eNotImpError, "the `%s' method is not supported by "
-                              Q(MAGICKNAME) " " MagickLibVersionText
-                              , rb_id2name(rb_frame_last_func()));
+    rb_raise(rb_eNotImpError, "the `%s' method is not supported by ImageMagick "
+            MagickLibVersionText, rb_id2name(rb_frame_last_func()));
 }
 
 /*

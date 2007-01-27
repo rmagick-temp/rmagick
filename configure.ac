@@ -57,7 +57,7 @@ AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
 AC_CHECK_FUNCS([FxImageChannel GammaImageChannel])
-AC_CHECK_FUNCS([GaussianBlurImageChannel GetColorHistogram GetColorInfoArray])
+AC_CHECK_FUNCS([GaussianBlurImageChannel])
 
 # We need to be able to query these symbols later in the configure script, so set a shell
 # variable here as well as defining symbols.

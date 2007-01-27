@@ -87,8 +87,6 @@
 /* Introduced in IM 6.0.0, signature changed in 6.0.5 */
 #undef HAVE_OLD_GETIMAGEQUANTUMDEPTH
 /* Introduced in GM 1.1 */
-#undef HAVE_GETIMAGESTATISTICS
-/* Introduced in GM 1.1 */
 #undef HAVE_GETMAGICKINFOARRAY
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETMAGICKINFOLIST

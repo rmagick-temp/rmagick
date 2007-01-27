@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.160 2007/01/25 00:26:45 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.161 2007/01/27 00:11:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -877,7 +877,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
     rb_define_method(Class_Image, "splice", Image_splice, -1);
     rb_define_method(Class_Image, "spread", Image_spread, -1);
-    rb_define_method(Class_Image, "statistics", Image_statistics, 0);
     rb_define_method(Class_Image, "stegano", Image_stegano, 2);
     rb_define_method(Class_Image, "stereo", Image_stereo, 1);
     rb_define_method(Class_Image, "strip!", Image_strip_bang, 0);
@@ -1749,18 +1748,6 @@ Init_RMagick(void)
     Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", NULL);
     rb_define_const(Module_Magick, "AffineMatrix", Class_AffineMatrix);
 
-#if defined(HAVE_GETIMAGESTATISTICS)
-    // These classes are defined for >= GM 1.1.
-
-    // Magick::Statistics
-    Class_Statistics = rb_struct_define(NULL, "red", "green", "blue", "opacity", NULL);
-    rb_define_const(Module_Magick, "Statistics", Class_Statistics);
-    // Magick::ChannelStatistics
-    Class_StatisticsChannel = rb_struct_define(NULL, "max", "min", "mean", "stddev", "var", NULL);
-    rb_define_const(Class_Statistics, "Channel", Class_StatisticsChannel);
-#endif
-
-
     // Magick::Primary
     Class_Primary = rb_struct_define(NULL, "x", "y", "z", NULL);
     rb_define_method(Class_Primary, "to_s", PrimaryInfo_to_s, 0);
@@ -1890,7 +1877,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/25 00:26:45 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 00:11:40 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

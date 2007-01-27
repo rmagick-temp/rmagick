@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.154 2007/01/26 23:05:05 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.155 2007/01/27 00:11:39 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -272,10 +272,6 @@ EXTERN VALUE Class_MetricType;
 #endif
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
 EXTERN VALUE Class_QuantumExpressionOperator;
-#endif
-#if defined(HAVE_GETIMAGESTATISTICS)
-EXTERN VALUE Class_Statistics;
-EXTERN VALUE Class_StatisticsChannel;
 #endif
 
 // Enum classes
@@ -915,7 +911,6 @@ extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
 extern VALUE Image_splice(int, VALUE *, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
-extern VALUE Image_statistics(VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);
 extern VALUE Image_stereo(VALUE, VALUE);
 extern VALUE Image_store_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -1033,9 +1028,6 @@ extern void   TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
 extern VALUE  Font_from_TypeInfo(TypeInfo *);
 extern VALUE  TypeMetric_to_s(VALUE);
 extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
-#if defined(HAVE_GETIMAGESTATISTICS)
-extern VALUE  Statistics_new(ImageStatistics *);
-#endif
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 

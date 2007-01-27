@@ -52,8 +52,6 @@
 #undef HAVE_GAUSSIANBLURIMAGECHANNEL
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETCOLORINFOLIST
-/* API changed in IM 6.1.3 */
-#undef HAVE_OLD_GETCOLORINFOLIST
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGECHANNELDEPTH
 /* Introduced in IM 6.0.0, GM 1.1 */
@@ -74,8 +72,6 @@
 #undef HAVE_GETIMAGEQUANTUMDEPTH
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETMAGICKINFOLIST
-/* API changed in IM 6.1.3 */
-#undef HAVE_OLD_GETMAGICKINFOLIST
 /* Introduced in IM 6.3.0 */
 #undef HAVE_GETMAGICKPIXELPACKET
 /* Introduced in IM 6.2.5 */
@@ -88,8 +84,6 @@
 #undef HAVE_GETNEXTIMAGEPROFILE
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETTYPEINFOLIST
-/* API changed in IM 6.1.3 */
-#undef HAVE_OLD_GETTYPEINFOLIST
 #undef HAVE_GRAYCHANNEL
 /* Introduced in IM 6.0.0 - Not available in GM */
 #undef HAVE_HSBCOLORSPACE

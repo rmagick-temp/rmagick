@@ -9,20 +9,10 @@ HIST_HEIGHT = 200
 img = Image.read('images/Hot_Air_Balloons_H.jpg').first
 img = img.quantize(NUM_COLORS)
 
-begin
-    hist = img.color_histogram
-rescue NotImplementedError
-    img = Image.read('images/notimplemented.gif').first
-    img.write('color_histogram.gif')
-    exit
-end
+hist = img.color_histogram
 
 # sort pixels by increasing count
-begin
-    pixels = hist.keys.sort_by {|pixel| hist[pixel] }
-rescue NameError    # No sort_by?
-    pixels = hist.keys.sort { |p, q| hist[p] <=> hist[q] }
-end
+pixels = hist.keys.sort_by {|pixel| hist[pixel] }
 
 scale = HIST_HEIGHT / (hist.values.max*1.025)   # put 2.5% air at the top
 

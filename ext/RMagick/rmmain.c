@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.167 2007/01/27 21:26:01 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.168 2007/01/27 23:41:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -39,12 +39,6 @@ Magick_colors(VALUE class)
     const ColorInfo **color_info_list;
     unsigned long number_colors, x;
     volatile VALUE ary;
-
-#if defined(HAVE_OLD_GETCOLORINFOLIST)
-    color_info_list = GetColorInfoList("*", &number_colors);
-
-#else
-    // IM 6.1.3 added an exception parm to GetColorInfoList
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
@@ -52,8 +46,6 @@ Magick_colors(VALUE class)
     color_info_list = GetColorInfoList("*", &number_colors, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
-
-#endif
 
 
     if (rb_block_given_p())
@@ -130,20 +122,12 @@ Magick_fonts(VALUE class)
     const TypeInfo **type_info;
     unsigned long number_types, x;
     volatile VALUE ary;
-
-#if defined(HAVE_OLD_GETTYPEINFOLIST)
-    type_info = GetTypeInfoList("*", &number_types);
-
-#else
-    // IM 6.1.3 added an exception argument to GetTypeInfoList
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
     type_info = GetTypeInfoList("*", &number_types, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
-
-#endif
 
     if (rb_block_given_p())
     {
@@ -242,24 +226,17 @@ Magick_init_formats(VALUE class)
     const MagickInfo **magick_info;
     unsigned long number_formats, x;
     volatile VALUE formats;
-#if !defined(HAVE_OLD_GETMAGICKINFOLIST)
     ExceptionInfo exception;
-#endif
 
     class = class;      // defeat "never referenced" message from icc
     formats = rb_hash_new();
 
-#if defined(HAVE_OLD_GETMAGICKINFOLIST)
-    magick_info = GetMagickInfoList("*", &number_formats);
-
-#else
     // IM 6.1.3 added an exception argument to GetMagickInfoList
     GetExceptionInfo(&exception);
     magick_info = GetMagickInfoList("*", &number_formats, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
 
-#endif
 
     for(x = 0; x < number_formats; x++)
     {
@@ -1812,7 +1789,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 21:26:01 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 23:41:39 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

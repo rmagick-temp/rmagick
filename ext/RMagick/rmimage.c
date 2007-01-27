@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.198 2007/01/27 21:21:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.199 2007/01/27 23:10:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5261,11 +5261,7 @@ Image_inspect(VALUE self)
 
     // Print bit depth
 #if defined(HAVE_GETIMAGEQUANTUMDEPTH)
-#if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
-    quantum_depth = GetImageQuantumDepth(image);
-#else
     quantum_depth = GetImageQuantumDepth(image, MagickTrue);
-#endif
 #else
     quantum_depth = image->depth;
 #endif
@@ -7031,11 +7027,7 @@ Image_quantum_depth(VALUE self)
     unsigned long quantum_depth;
 
     Data_Get_Struct(self, Image, image);
-#if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
-    quantum_depth = GetImageQuantumDepth(image);
-#else
     quantum_depth = GetImageQuantumDepth(image, MagickFalse);
-#endif
 
     rm_check_image_exception(image, RetainOnError);
 

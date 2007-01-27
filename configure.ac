@@ -106,7 +106,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([ImagesToBlob ImportImagePixels])
 AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes IsColorSimilar])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])

@@ -134,19 +134,6 @@ AC_CHECK_FUNCS([UnsharpMaskImageChannel VignetteImage WhiteThresholdImage XImpor
 
 # What typedefs?
 
-# Need a separate test for this so we can set an env. variable to test below.
-AC_CHECK_TYPE(MagickBooleanType,
-              rm_have_magickbooleantype=yes,
-              rm_have_magickbooleantype=no,
-              [#include <stdio.h>
-               #if HAVE_SYS_TYPES_H
-               #include <sys/types.h>
-               #endif
-               #include "magick/api.h"])
-if test "$rm_have_magickbooleantype" = yes; then
-   AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
-fi
-
 AC_CHECK_TYPES([MagickPixelPacket],
                 [], [],
                 [#include <stdio.h>
@@ -540,7 +527,7 @@ fi
 
 # IM 6.2.1 changed the return value from RemoveImageProfile from StringInfo * to
 # MagickBooleanType. The presence of StringInfo implies RemoveImageProfile.
-if test "$rm_have_acquirestringinfo" = yes -a "$rm_have_magickbooleantype" = yes; then
+if test "$rm_have_acquirestringinfo" = yes; then
    AC_CACHE_CHECK(if RemoveImageProfile returns MagickBooleanType, rv_cv_args_remove_image_profile,
      [AC_TRY_COMPILE(
    [#include <stdio.h>

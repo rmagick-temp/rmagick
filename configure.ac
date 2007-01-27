@@ -122,7 +122,7 @@ AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes]
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([ParseSizeGeometry PolaroidImage PosterizeImage PreviewImage])
-AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChannel])
+AC_CHECK_FUNCS([RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])

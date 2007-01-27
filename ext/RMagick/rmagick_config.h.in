@@ -157,7 +157,6 @@
 #undef HAVE_POSTERIZEIMAGE
 /* Introduced in IM 5.5.1? Not available in GM */
 #undef HAVE_PREVIEWIMAGE
-#undef HAVE_QUANTUMOPERATORREGIONIMAGE
 /* Introduced in IM 6.2.0 */
 #undef HAVE_QUANTUMPIXEL
 /* Not available in GM */

@@ -583,23 +583,6 @@ class Image2_UT < Test::Unit::TestCase
         assert(!red.gray?)
     end
 
-    def test_grayscale_pseudo_class
-        # only supported on GraphicsMagick
-        begin
-            @img.grayscale_pseudo_class
-        rescue NotImplementedError
-            return
-        end
-
-        assert_nothing_raised do
-            res = @img.grayscale_pseudo_class
-            assert_instance_of(Magick::Image, res)
-            assert_equal(Magick::PsuedoClass, res.class_type)
-        end
-        assert_nothing_raised { @img.grayscale_pseudo_class(false) }
-        assert_raise(ArgumentError) { @img.grayscale_pseudo_class(false, 2) }
-    end
-
     def test_implode
         assert_nothing_raised do
             res = @img.implode(0.5)

@@ -40,8 +40,6 @@
 #undef HAVE_DSTCOMPOSITEOP
 /* Introduced in IM 6.0.1 */
 #undef HAVE_EVALUATEIMAGECHANNEL
-/* Introduced in GM 1.1 */
-#undef HAVE_EXCEPTIONINFO_MODULE
 /* Introduced in IM 5.5.7, GM 1.1 */
 #undef HAVE_EXPORTIMAGEPIXELS
 /* Introduced in IM 5.5.5 - Not defined in GraphicsMagick */

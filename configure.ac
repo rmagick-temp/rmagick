@@ -155,14 +155,6 @@ AC_CHECK_TYPES([MagickPixelPacket],
                  #endif
                  #include "magick/api.h"])
 
-
-AC_CHECK_MEMBERS([ExceptionInfo.module],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
 AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H

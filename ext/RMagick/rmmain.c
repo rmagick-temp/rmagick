@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.163 2007/01/27 15:37:34 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.164 2007/01/27 17:04:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -34,45 +34,7 @@ static VALUE Magick_Monitor;
 VALUE
 Magick_colors(VALUE class)
 {
-#if defined(HAVE_GETCOLORINFOARRAY) // GraphicsMagick
-    ColorInfo **color_ary;
-    ExceptionInfo exception;
-    volatile VALUE ary;
-    int x;
-
-    GetExceptionInfo(&exception);
-
-    color_ary = GetColorInfoArray(&exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-
-    if (rb_block_given_p())
-    {
-        x = 0;
-        while(color_ary[x])
-        {
-            rb_yield(Color_from_ColorInfo(color_ary[x]));
-            x += 1;
-        }
-        magick_free(color_ary);
-        return class;
-    }
-    else
-    {
-        ary = rb_ary_new();
-
-        x = 0;
-        while (color_ary[x])
-        {
-            rb_ary_push(ary, Color_from_ColorInfo(color_ary[x]));
-            x += 1;
-        }
-        magick_free(color_ary);
-        return ary;
-    }
-
-#elif defined(HAVE_GETCOLORINFOLIST)    // ImageMagick 6.0.0
+#if defined(HAVE_GETCOLORINFOLIST)    // ImageMagick 6.0.0
 
     const ColorInfo **color_info_list;
     unsigned long number_colors, x;
@@ -1876,7 +1838,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 15:37:34 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 17:04:41 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

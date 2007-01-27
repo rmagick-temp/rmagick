@@ -136,13 +136,7 @@ if test "$rm_have_magickbooleantype" = yes; then
    AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
 fi
 
-AC_CHECK_TYPES([magick_int64_t,
-                magick_uint64_t,
-                ExtendedSignedIntegralType,
-                ExtendedUnsignedIntegralType,
-                MagickOffsetType,
-                MagickSizeType,
-                MagickPixelPacket],
+AC_CHECK_TYPES([MagickPixelPacket],
                 [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H

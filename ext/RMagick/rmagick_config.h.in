@@ -146,15 +146,8 @@
 #undef HAVE_LOGCOLORSPACE
 /* Introduced in IM 6.0.2 */
 #undef HAVE_MAGICKBOOLEANTYPE
-/* Introduced in IM 5.5.3, GM 1.0 */
-#undef HAVE_MAGICK_INT64_T
-#undef HAVE_MAGICK_UINT64_T
-/* Introduced in IM 6.0.0 */
-#undef HAVE_MAGICKOFFSETTYPE
 /* Only in ImageMagick */
 #undef HAVE_MAGICKPIXELPACKET
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_MAGICKSIZETYPE
 /* Introduced in IM 6.2.0 */
 #undef HAVE_MAXEVALUATEOPERATOR
 #undef HAVE_MEMORY_H

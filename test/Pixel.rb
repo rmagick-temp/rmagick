@@ -38,4 +38,17 @@ class Pixel_UT < Test::Unit::TestCase
         assert(!@pixel.eql?(p))
     end
 
+    def test_fcmp
+        red = Magick::Pixel.from_color('red')
+        blue = Magick::Pixel.from_color('blue')
+        assert_nothing_raised { red.fcmp(red) }
+        assert(red.fcmp(red))
+        assert(! red.fcmp(blue) )
+
+        assert_nothing_raised { red.fcmp(blue, 10) }
+        assert_nothing_raised { red.fcmp(blue, 10, Magick::RGBColorspace) }
+        assert_raises(TypeError) { red.fcmp(blue, 'x') }
+        assert_raises(TypeError) { red.fcmp(blue, 10, 'x') }
+    end
+
 end

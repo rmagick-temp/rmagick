@@ -51,7 +51,7 @@ if test "$rm_have_acquirestringinfo" = yes; then
 fi
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
-AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions])
+AC_CHECK_FUNCS([AdaptiveThresholdImage])
 AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
 AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])

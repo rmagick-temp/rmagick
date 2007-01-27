@@ -70,7 +70,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.black_point_compensation = true }
         assert(@img.black_point_compensation)
         assert_nothing_raised { @img.black_point_compensation = false }
-        assert_block("black_point_compensation is true, s/b false") {@img.black_point_compensation == false}
+        assert { ! @img.black_point_compensation }
     end
 
     def test_blur

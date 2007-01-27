@@ -56,7 +56,7 @@ AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
 AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
-AC_CHECK_FUNCS([FuzzyColorCompare FxImageChannel GammaImageChannel])
+AC_CHECK_FUNCS([FxImageChannel GammaImageChannel])
 AC_CHECK_FUNCS([GaussianBlurImageChannel GetColorHistogram GetColorInfoArray])
 
 # We need to be able to query these symbols later in the configure script, so set a shell
@@ -107,7 +107,7 @@ if test "$rm_have_gettypeinfolist" = yes; then
 fi
 
 AC_CHECK_FUNCS([ImagesToBlob ImportImagePixels])
-AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes IsColorSimilar])
+AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([ParseSizeGeometry PolaroidImage PosterizeImage PreviewImage])

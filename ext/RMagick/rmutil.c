@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.93 2007/01/27 00:11:40 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.94 2007/01/27 15:59:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -657,10 +657,8 @@ Pixel_eql_q(VALUE self, VALUE other)
 VALUE
 Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_FUZZYCOLORCOMPARE)
     Image *image;
     Info *info;
-#endif
 
     Pixel *this, *that;
     ColorspaceType colorspace = RGBColorspace;
@@ -684,8 +682,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Pixel, this);
     Data_Get_Struct(argv[0], Pixel, that);
 
-#if defined(HAVE_FUZZYCOLORCOMPARE) || defined(HAVE_ISCOLORSIMILAR)
-    // The FuzzyColorCompare function expects to get the
+    // The IsColorSimilar function expects to get the
     // colorspace and fuzz parameters from an Image structure.
 
     info = CloneImageInfo(NULL);
@@ -695,25 +692,20 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     }
 
     image = AllocateImage(info);
+
+    // Delete Info now in case we have to raise an exception
+    (void) DestroyImageInfo(info);
+
     if (!image)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    (void) DestroyImageInfo(info);
 
     image->colorspace = colorspace;
     image->fuzz = fuzz;
 
-#if defined(HAVE_ISCOLORSIMILAR)
     equal = IsColorSimilar(image, this, that);
-#else
-    equal = FuzzyColorCompare(image, this, that);
-#endif
     (void) DestroyImage(image);
-
-#else
-    equal = FuzzyColorMatch(this, that, fuzz);
-#endif
 
     return equal ? Qtrue : Qfalse;
 }

@@ -471,59 +471,6 @@ if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
   AC_DEFINE(HAVE_PALETTEBILEVELMATTETYPE)
 fi
 
-if test "$rm_have_getcolorinfolist" = yes; then
-   # IM 6.1.3 changed the number of arguments to GetColorInfoList
-   AC_CACHE_CHECK(if GetColorInfoList has only 2 arguments, rm_cv_args_get_color_info_list,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [const char *pattern; unsigned long ncolors; (void)GetColorInfoList(pattern, &ncolors)],
-        rm_cv_args_get_color_info_list='yes',
-        rm_cv_args_get_color_info_list='no')])
-
-   if test "$rm_cv_args_get_color_info_list" = yes; then
-      AC_DEFINE(HAVE_OLD_GETCOLORINFOLIST)
-   fi
-fi
-
-if test "$rm_have_gettypeinfolist" = yes; then
-   # IM 6.1.3 changed the number of arguments to GetTypeInfoList
-   AC_CACHE_CHECK(if GetTypeInfoList has only 2 arguments, rm_cv_args_get_type_info_list,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [const char *pattern; unsigned long ncolors; (void)GetTypeInfoList(pattern, &ncolors)],
-        rm_cv_args_get_type_info_list='yes',
-        rm_cv_args_get_type_info_list='no')])
-
-   if test "$rm_cv_args_get_type_info_list" = yes; then
-      AC_DEFINE(HAVE_OLD_GETTYPEINFOLIST)
-   fi
-fi
-
-if test "$rm_have_getmagickinfolist" = yes; then
-   # IM 6.1.3 changed the number of arguments to GetMagickInfoList
-   AC_CACHE_CHECK(if GetMagickInfoList has only 2 arguments, rm_cv_args_get_magick_info_list,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
-        rm_cv_args_get_magick_info_list='yes',
-        rm_cv_args_get_magick_info_list='no')])
-
-   if test "$rm_cv_args_get_magick_info_list" = yes; then
-      AC_DEFINE(HAVE_OLD_GETMAGICKINFOLIST)
-   fi
-fi
 
 # IM 6.2.1 changed the return value from RemoveImageProfile from StringInfo * to
 # MagickBooleanType. The presence of StringInfo implies RemoveImageProfile.

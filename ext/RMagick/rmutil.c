@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.95 2007/01/27 21:26:01 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.96 2007/01/27 21:55:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3111,19 +3111,6 @@ rm_split(Image *image)
           magick_clone_string(&exception->description, relative->description);
         }
 
-
-        #if defined(HAVE_EXCEPTIONINFO_MODULE)
-            if (relative->module)
-            {
-              magick_clone_string(&exception->module, relative->module);
-            }
-            if (relative->function)
-            {
-              magick_clone_string(&exception->function, relative->function);
-            }
-
-            exception->line = relative->line;
-        #endif
     }
 
 
@@ -3213,13 +3200,6 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
     char desc[500];
     char msg[sizeof(reason)+sizeof(desc)+20];
 
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-    char module[200], function[200];
-    char extra[sizeof(module)+sizeof(function)+20];
-    unsigned long line;
-#endif
-
-
     memset(msg, 0, sizeof(msg));
 
 
@@ -3291,40 +3271,8 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 
     msg[sizeof(msg)-1] = '\0';
 
-
-#if defined(HAVE_EXCEPTIONINFO_MODULE)
-
-    memset(module, 0, sizeof(module));
-    memset(function, 0, sizeof(function));
-    memset(extra, 0, sizeof(extra));
-
-    if (exception->module)
-    {
-        strncpy(module, exception->module, sizeof(module)-1);
-        module[sizeof(module)-1] = '\0';
-    }
-    if (exception->function)
-    {
-        strncpy(function, exception->function, sizeof(function)-1);
-        function[sizeof(function)-1] = '\0';
-    }
-    line = exception->line;
-
-#if defined(HAVE_SNPRINTF)
-     snprintf(extra, sizeof(extra)-1, "%s at %s:%lu", function, module, line);
-#else
-     sprintf(extra, "%.*s at %.*s:%lu", sizeof(function), function, sizeof(module), module, line);
-#endif
-
-     extra[sizeof(extra)-1] = '\0';
-
-     (void) DestroyExceptionInfo(exception);
-     rm_magick_error(msg, extra);
-
-#else
-     (void) DestroyExceptionInfo(exception);
-     rm_magick_error(msg, NULL);
-#endif
+    (void) DestroyExceptionInfo(exception);
+    rm_magick_error(msg, NULL);
 
 }
 

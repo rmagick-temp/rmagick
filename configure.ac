@@ -81,7 +81,7 @@ if test "$rm_have_getimagequantumdepth" = yes; then
    AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
 fi
 
-AC_CHECK_FUNCS([GetImageStatistics GetMagickInfoArray])
+AC_CHECK_FUNCS([GetMagickInfoArray])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
               rm_have_getmagickpixelpacket=yes,

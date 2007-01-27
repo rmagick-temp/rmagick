@@ -107,8 +107,6 @@
 /* API changed in IM 6.1.3 */
 #undef HAVE_OLD_GETTYPEINFOLIST
 #undef HAVE_GRAYCHANNEL
-/* Introduced in GM 1.0 */
-#undef HAVE_GRAYSCALEPSEUDOCLASSIMAGE
 /* Introduced in IM 6.0.0 - Not available in GM */
 #undef HAVE_HSBCOLORSPACE
 /* Introduced in IM 6.0.0 - Not available in GM */

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.155 2007/01/27 00:11:39 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.156 2007/01/27 15:00:08 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -839,7 +839,6 @@ extern VALUE Image_gaussian_blur(int, VALUE *, VALUE);
 extern VALUE Image_gaussian_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_get_pixels(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_gray_q(VALUE);
-extern VALUE Image_grayscale_pseudo_class(int, VALUE *, VALUE);
 extern VALUE Image_implode(int, VALUE *, VALUE);
 extern VALUE Image_import_pixels(int, VALUE *, VALUE);
 extern VALUE Image_init_copy(VALUE, VALUE);

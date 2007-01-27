@@ -12,10 +12,23 @@ rm_saved_CFLAGS=${CFLAGS}
 # Check for required programs
 AC_PROG_CC
 AC_PROG_CC_STDC
+
 AC_PATH_PROG(RUBY, ruby,)
 if test -z "$RUBY"; then
     AC_MSG_ERROR([Can't install RMagick. Ruby must be installed first.])
 fi
+
+AC_PATH_PROG(MAGICKCONFIG, Magick-config)
+if test -z "$MAGICKCONFIG"; then
+    AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config program.])
+fi
+
+MAGICKVERS=`Magick-config --version | tr -d .`
+if test $MAGICKVERS -lt 625; then
+    MAGICKVERS=`${MAGICKCONFIG} --version`
+    AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.2.5 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
+fi
+
 
 # Append ImageMagick's lists of flags to the user's lists (if any)
 LDFLAGS="${LDFLAGS} `Magick-config --ldflags`"
@@ -80,8 +93,6 @@ AC_CHECK_FUNC(GetImageQuantumDepth,
 if test "$rm_have_getimagequantumdepth" = yes; then
    AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
 fi
-
-AC_CHECK_FUNCS([GetMagickInfoArray])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
               rm_have_getmagickpixelpacket=yes,

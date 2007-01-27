@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.164 2007/01/27 17:04:41 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.165 2007/01/27 17:45:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -237,30 +237,7 @@ static VALUE MagickInfo_to_format(MagickInfo *magick_info)
 VALUE
 Magick_init_formats(VALUE class)
 {
-#if defined(HAVE_GETMAGICKINFOARRAY)    // GraphicsMagick
-
-    MagickInfo *magick_info, *m;
-    volatile VALUE formats;
-    ExceptionInfo exception;
-
-    class = class;      // defeat "never referenced" message from icc
-
-    formats = rb_hash_new();
-
-    GetExceptionInfo(&exception);
-    magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    for(m = magick_info; m != NULL; m = m->next)
-    {
-        rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
-    }
-
-    magick_free(magick_info);
-    return formats;
-
-#elif defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
+#if defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
 
     const MagickInfo **magick_info;
     unsigned long number_formats, x;
@@ -1838,7 +1815,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 17:04:41 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 17:45:28 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

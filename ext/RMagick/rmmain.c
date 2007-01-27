@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.162 2007/01/27 15:00:10 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.163 2007/01/27 15:37:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -451,11 +451,11 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
     This is the exit known to ImageMagick. Retrieve the monitor
     proc and call it, passing the 3 exit arguments.
 */
-static unsigned int
+static MagickBooleanType
 monitor_handler(
     const char *text,
-    const magick_int64_t quantum,
-    const magick_uint64_t span,
+    const MagickOffsetType quantum,
+    const MagickSizeType span,
     ExceptionInfo *exception)
 {
     volatile VALUE monitor;
@@ -509,7 +509,7 @@ Magick_set_monitor(VALUE class, VALUE monitor)
     // Otherwise, store monitor in @@__MAGICK_MONITOR__
     {
         rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);
-        (void) SetMonitorHandler((MonitorHandler)&monitor_handler);
+        (void) SetMonitorHandler(monitor_handler);
     }
 
     return class;
@@ -1876,7 +1876,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 15:00:10 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 15:37:34 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

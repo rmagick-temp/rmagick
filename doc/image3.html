@@ -158,8 +158,6 @@
 
           <li><a href="#spread">spread</a></li>
 
-          <li><a href="#statistics">statistics</a></li>
-
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
@@ -172,14 +170,14 @@
 
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
+
+          <li><a href=
+          "#texture_floodfill">texture_floodfill</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href=
-          "#texture_floodfill">texture_floodfill</a></li>
-
           <li><a href="#threshold">threshold</a></li>
 
           <li><a href="#thumbnail">thumbnail</a></li>
@@ -2166,81 +2164,6 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SpreadImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="statistics">statistics</h3>
-
-    <p><span class="arg">image</span>.statistics -&gt; <em>see
-    below</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Computes the minimum, maximum, mean, standard deviation, and
-    variance for each channel in the image.</p>
-
-    <h4>Returns</h4>
-
-    <p>The statistics method returns a <code>Statistics</code>
-    class object. This class defines four <em>channel</em>
-    attributes: <code>red</code>, <code>green</code>,
-    <code>blue</code>, and <code>opacity</code>. Each channel
-    attribute is a <code>Statistics::Channel</code> class object.
-    This class defines 5 <em>statistic</em> attributes:
-    <code>min</code>, <code>max</code>, <code>mean</code>
-    <code>stddev</code>, and <code>var</code>. See the example
-    below.</p>
-
-    <h4>Example</h4>
-    <pre>
-require 'pp'
-
-img = Image.read("Flower_Hat.jpg").first
-stats = img.statistics
-
-pp stats &raquo;
-    #&lt;Magick::Statistics
-    red=
-      #&lt;Magick::Statistics::Channel
-      max=1.0,
-      min=0.0,
-      mean=0.627182352941187,
-      stddev=0.231399683489667,
-      var=0.0535458135191179&gt;,
-    green=
-      #&lt;Magick::Statistics::Channel
-      max=1.0,
-      min=0.0,
-      mean=0.571999607843132,
-      stddev=0.22246563644744,
-      var=0.0494909593999647&gt;,
-    blue=
-      #&lt;Magick::Statistics::Channel
-      max=1.0,
-      min=0.0,
-      mean=0.508869725490209,
-      stddev=0.269422111063184,
-      var=0.0725882739297426&gt;,
-    opacity=
-      #&lt;Magick::Statistics::Channel
-      max=0.0,
-      min=0.0,
-      mean=0.0,
-      stddev=0.0,
-      var=0.0&gt;&gt;
-
-p stats.red.stddev &raquo; 0.231399683489667
-</pre>
-
-    <h4>See also</h4>
-
-    <p><a href="image1.html#channel_extrema">channel_extrema</a>,
-    <a href="image1.html#channel_mean">channel_mean</a></p>
-
-    <h4>Magick API</h4>GetImageStatistics (available in
-    GraphicsMagick 1.1)
   </div>
 
   <div class="sig">

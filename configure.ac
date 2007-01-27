@@ -484,24 +484,6 @@ if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
   AC_DEFINE(HAVE_PALETTEBILEVELMATTETYPE)
 fi
 
-if test "$rm_have_getimagequantumdepth" = yes; then
-   # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
-   AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [Image *image; (void)GetImageQuantumDepth(image)],
-        rm_cv_args_get_image_quantum_depth='yes',
-        rm_cv_args_get_image_quantum_depth='no')])
-
-   if test "$rm_cv_args_get_image_quantum_depth" = yes; then
-      AC_DEFINE(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
-   fi
-fi
-
 if test "$rm_have_getcolorinfolist" = yes; then
    # IM 6.1.3 changed the number of arguments to GetColorInfoList
    AC_CACHE_CHECK(if GetColorInfoList has only 2 arguments, rm_cv_args_get_color_info_list,

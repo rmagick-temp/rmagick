@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.196 2007/01/27 15:00:09 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.197 2007/01/27 17:05:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1892,45 +1892,13 @@ Image_clone(VALUE self)
 
 /*
     Method:     Image_color_histogram(VALUE self);
-    Purpose:    Call GetColorHistogram (>= GM 1.1)
-                     GetImageHistogram (>= IM 5.5.8)
+    Purpose:    Call GetImageHistogram (>= IM 5.5.8)
     Notes:      returns hash {aPixel=>count}
 */
 VALUE
 Image_color_histogram(VALUE self)
 {
-#if defined(HAVE_GETCOLORHISTOGRAM)
-    Image *image;
-    volatile VALUE hash, pixel;
-    unsigned long x, colors;
-    HistogramColorPacket *histogram;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-
-    GetExceptionInfo(&exception);
-    histogram = GetColorHistogram(image, &colors, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    hash = rb_hash_new();
-    for (x = 0; x < colors; x++)
-    {
-        pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
-        rb_hash_aset(hash, pixel, ULONG2NUM(histogram[x].count));
-    }
-
-    /*
-        The histogram array is specifically allocated by malloc because it is
-        supposed to be freed by the caller.
-    */
-    free(histogram);
-
-    return hash;
-
-
-#elif defined(HAVE_GETIMAGEHISTOGRAM)
+#if defined(HAVE_GETIMAGEHISTOGRAM)
     Image *image, *dc_copy = NULL;
     volatile VALUE hash, pixel;
     unsigned long x, colors;

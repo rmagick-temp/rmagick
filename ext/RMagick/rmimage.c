@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.197 2007/01/27 17:05:02 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.198 2007/01/27 21:21:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7049,94 +7049,18 @@ Image_quantum_depth(VALUE self)
 
 /*
     Method:     Image#quantum_operator(operator, rvalue[, channel] )
-    Purpose:    This method is an adapter method that calls either the
-                    QuantumOperatorRegionImage method (GraphicsMagick 1.1) or the
-                    EvaluateImageChannel method (ImageMagick 6.0.0)
-    Note 1:     By necessity this method implements the "lowest common denominator"
-                of the two implementations.
+    Purpose:    This method is an adapter method that calls the
+                    EvaluateImageChannel method
+    Note 1:     Historically this method used QuantumOperatorRegionImage
+                in GraphicsMagick. By necessity this method implements
+                the "lowest common denominator" of the two implementations.
 
     Note 2:     If the channel argument is omitted, the default is AllChannels.
 */
 VALUE
 Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
-    Image *image;
-    QuantumExpressionOperator operator;
-    QuantumOperator qop;
-    ChannelType channel;
-    double rvalue;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-
-    // The default channel is AllChannels
-    channel = AllChannels;
-
-    /*
-        If there are 3 arguments, argument 2 is a ChannelType argument.
-        Arguments 1 and 0 are required and are the rvalue and operator,
-        respectively.
-    */
-    switch(argc)
-    {
-        case 3:
-            VALUE_TO_ENUM(argv[2], channel, ChannelType);
-            /* Fall through */
-        case 2:
-            rvalue = NUM2DBL(argv[1]);
-            VALUE_TO_ENUM(argv[0], operator, QuantumExpressionOperator);
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
-            break;
-    }
-
-    // Map QuantumExpressionOperator to QuantumOperator
-    switch(operator)
-    {
-        default:
-        case UndefinedQuantumOperator:
-            qop = UndefinedQuantumOp;
-            break;
-        case AddQuantumOperator:
-            qop = AddQuantumOp;
-            break;
-        case AndQuantumOperator:
-            qop = AndQuantumOp;
-            break;
-        case DivideQuantumOperator:
-            qop = DivideQuantumOp;
-            break;
-        case LShiftQuantumOperator:
-            qop = LShiftQuantumOp;
-            break;
-        case MultiplyQuantumOperator:
-            qop = MultiplyQuantumOp;
-            break;
-        case OrQuantumOperator:
-            qop = OrQuantumOp;
-            break;
-        case RShiftQuantumOperator:
-            qop = RShiftQuantumOp;
-            break;
-        case SubtractQuantumOperator:
-            qop = SubtractQuantumOp;
-            break;
-        case XorQuantumOperator:
-            qop = XorQuantumOp;
-            break;
-    }
-
-    GetExceptionInfo(&exception);
-    (void) QuantumOperatorImage(image, channel, qop, rvalue, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return self;
-
-#elif defined(HAVE_EVALUATEIMAGECHANNEL)
+#if defined(HAVE_EVALUATEIMAGECHANNEL)
     Image *image;
     QuantumExpressionOperator operator;
     MagickEvaluateOperator qop;

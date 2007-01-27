@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.165 2007/01/27 17:45:28 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.166 2007/01/27 21:21:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1581,7 +1581,7 @@ Init_RMagick(void)
         ENUMERATOR(JPEGPreview)
     END_ENUM
 
-#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
+#if defined(HAVE_EVALUATEIMAGECHANNEL)
     DEF_ENUM(QuantumExpressionOperator)
         ENUMERATOR(UndefinedQuantumOperator)
         ENUMERATOR(AddQuantumOperator)
@@ -1815,7 +1815,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 17:45:28 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/27 21:21:11 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -193,21 +193,6 @@ if test "$rm_cv_member_Image_extract_info" = yes; then
   AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
 fi
 
-AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = CineonLogRGBColorspace],
-     rm_cv_enum_cineonlogrgbcolorspace='yes',
-     rm_cv_enum_cineonlogrgbcolorspace='no')])
-
-if test "$rm_cv_enum_cineonlogrgbcolorspace" = yes; then
-  AC_DEFINE(HAVE_CINEONLOGRGBCOLORSPACE)
-fi
-
 AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
   [AC_TRY_COMPILE(
 [#include <stdio.h>

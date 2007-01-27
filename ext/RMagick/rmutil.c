@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.94 2007/01/27 15:59:03 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.95 2007/01/27 21:26:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1213,11 +1213,6 @@ ColorspaceType_new(ColorspaceType cs)
 #if defined(HAVE_LABCOLORSPACE)
         case LABColorspace:
             name = "LABColorspace";
-            break;
-#endif
-#if defined(HAVE_CINEONLOGRGBCOLORSPACE)
-        case CineonLogRGBColorspace:
-            name = "CineonLogRGBColorspace";
             break;
 #endif
 #if defined(HAVE_REC601LUMACOLORSPACE)

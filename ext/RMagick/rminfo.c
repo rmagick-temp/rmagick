@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.46 2007/01/25 00:26:45 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.47 2007/01/27 15:16:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -49,19 +49,6 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 
     return rb_str_new2(value);
 
-#elif defined(HAVE_ADDDEFINITIONS)
-    Info *info;
-    const char *value;
-
-    Data_Get_Struct(self, Info, info);
-    value = AccessDefinition(info, STRING_PTR(format), STRING_PTR(key));
-
-    if (!value)
-    {
-        return Qnil;
-    }
-
-    return rb_str_new2(value);
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -71,7 +58,7 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 
 /*
     Method:     Info[format, key] = value
-    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
+    Purpose:    Call SetImageOption
     Note:       Essentially the same function as Info#define but paired
                 with Info#[]=
 */
@@ -106,46 +93,6 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
     if (!okay)
     {
         rb_warn("%.60s:%.1024s not defined - SetImageOption failed.", format_p, key_p);
-        return Qnil;
-    }
-
-    return self;
-
-#elif defined(HAVE_ADDDEFINITIONS)
-    Info *info;
-    char *format_p, *key_p, *value_p = NULL;
-    long format_l, key_l, value_l = 0;
-    unsigned int okay;
-    ExceptionInfo exception;
-    char definitions[MaxTextExtent*2];/* Make this buffer longer than the buffer used   */
-                                      /* for SetImageOptions since AddDefinitions cats  */
-                                      /* the value onto the format:key pair.            */
-
-    Data_Get_Struct(self, Info, info);
-
-    format_p = STRING_PTR_LEN(format, format_l);
-    key_p = STRING_PTR_LEN(key, key_l);
-    value = rb_funcall(value, ID_to_s, 0);
-    value_p = STRING_PTR_LEN(value, value_l);
-
-    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
-    {
-        rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
-    }
-    (void)sprintf(definitions, "%s:%s=", format_p, key_p);
-    if (value_l > 0)
-    {
-        strcat(definitions, value_p);
-    }
-
-    GetExceptionInfo(&exception);
-    okay = AddDefinitions(info, definitions, &exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    if (!okay)
-    {
-        rb_warn("%.60s:%.1024s not defined - AddDefinitions failed.", format_p, key_p);
         return Qnil;
     }
 
@@ -355,7 +302,7 @@ Info_compression_eq(VALUE self, VALUE type)
 
 /*
     Method:     Info#define(format, key[, value])
-    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
+    Purpose:    Call SetImageOption
     Note:       The only method in Info that is not an
                 attribute accessor.
 */
@@ -396,59 +343,6 @@ Info_define(int argc, VALUE *argv, VALUE self)
     if (!okay)
     {
         rb_warn("%.20s=\"%.78s\" not defined - SetImageOption failed.", ckey, value);
-        return Qnil;
-    }
-
-    return self;
-
-#elif defined(HAVE_ADDDEFINITIONS)
-    Info *info;
-    char *format, *key, *value = NULL;
-    long format_l, key_l, value_l = 0;
-    unsigned int okay;
-    volatile VALUE fmt_arg;
-    ExceptionInfo exception;
-    char definitions[200];      /* Make this buffer longer than the buffer used   */
-                                /* for SetImageOptions since AddDefinitions cats  */
-                                /* the value onto the format:key pair.            */
-
-    Data_Get_Struct(self, Info, info);
-
-    switch(argc)
-    {
-        case 3:
-            /* Allow any argument that supports to_s */
-            fmt_arg = rb_funcall(argv[2], ID_to_s, 0);
-            value = STRING_PTR_LEN(fmt_arg, value_l);
-            /* Fall through */
-        case 2:
-            key = STRING_PTR_LEN(argv[1], key_l);
-            format = STRING_PTR_LEN(argv[0], format_l);
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
-            break;
-    }
-
-
-    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
-    {
-        rb_raise(rb_eArgError, "%.20s:%.20s not defined - too long", format, key);
-    }
-    (void)sprintf(definitions, "%s:%s=", format, key);
-    if (value)
-    {
-        strcat(definitions, value);
-    }
-
-    GetExceptionInfo(&exception);
-    okay = AddDefinitions(info, definitions, &exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    if (!okay)
-    {
-        rb_warn("%.*s not defined - AddDefinitions failed.", sizeof(definitions), definitions);
         return Qnil;
     }
 
@@ -1671,31 +1565,6 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     /* Depending on the IM version, RemoveImageOption returns either */
     /* char * or MagickBooleanType. Ignore the return value.         */
     (void) RemoveImageOption(info, fkey);
-    return self;
-
-#elif defined(HAVE_ADDDEFINITIONS)
-    Info *info;
-    unsigned int okay;
-    char *format_p, *key_p;
-    long format_l, key_l;
-    char fkey[MaxTextExtent];
-
-    format_p = STRING_PTR_LEN(format, format_l);
-    key_p = STRING_PTR_LEN(key, key_l);
-
-    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
-    {
-        rb_raise(rb_eArgError, "can't undefine %.60s:%.1024s - too long", format_p, key_p);
-    }
-
-    sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
-
-    Data_Get_Struct(self, Info, info);
-    okay = RemoveDefinitions(info, fkey);
-    if (!okay)
-    {
-        rb_raise(rb_eArgError, "no such key: `%s'", fkey);
-    }
     return self;
 
 #else

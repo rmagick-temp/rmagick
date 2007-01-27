@@ -494,14 +494,6 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.spread('x') }
     end
 
-    def test_statistics
-        begin
-            @img.statistics
-        rescue NotImplementedError
-            return
-        end
-    end
-
     def test_stegano
         img = Magick::Image.new(100, 100) { self.background_color = 'black' }
         watermark = Magick::Image.new(10, 10) { self.background_color = 'white' }

@@ -472,26 +472,6 @@ if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
 fi
 
 
-# IM 6.2.1 changed the return value from RemoveImageProfile from StringInfo * to
-# MagickBooleanType. The presence of StringInfo implies RemoveImageProfile.
-if test "$rm_have_acquirestringinfo" = yes; then
-   AC_CACHE_CHECK(if RemoveImageProfile returns MagickBooleanType, rv_cv_args_remove_image_profile,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [MagickBooleanType bool; Image *image; bool=RemoveImageProfile(image, "icc")],
-        rv_cv_args_remove_image_profile='yes',
-        rv_cv_args_remove_image_profile='no')])
-
-   if test "$rv_cv_args_remove_image_profile" = yes; then
-      AC_DEFINE(HAVE_NEW_REMOVEIMAGEPROFILE)
-   fi
-fi
-
-
 # The MagickPixelPacket type was introduced in IM 6.0.0. The GetMagickPixelPacket
 # function was introduced in 6.2.0. IM 6.3.0 changed the type of the 'color'
 # member of the ColorInfo structure from PixelPacket to MagickPixelPacket.

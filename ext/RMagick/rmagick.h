@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.159 2007/01/27 23:20:19 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.160 2007/01/28 20:19:03 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -169,11 +169,6 @@ typedef enum _QuantumExpressionOperator
 #endif
 
 
-#if !defined(HAVE_UNDEFINEDGRAVITY)
-#define UndefinedGravity 0
-#endif
-
-
 #if !defined(HAVE_SETIMAGEINFOFILE)
 #define SetImageInfoFile(info, fptr) (info)->file = (fptr)
 #endif
@@ -257,9 +252,7 @@ EXTERN VALUE Class_InterpolatePixelMethod;
 EXTERN VALUE Class_MagickLayerMethod;
 #endif
 EXTERN VALUE Class_NoiseType;
-#if defined(HAVE_IMAGE_ORIENTATION)
 EXTERN VALUE Class_OrientationType;
-#endif
 EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
@@ -975,9 +968,7 @@ extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
 #if defined(HAVE_INTERPOLATEPIXELCOLOR)
 extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);
 #endif
-#if defined(HAVE_IMAGE_ORIENTATION)
 extern VALUE  OrientationType_new(OrientationType);
-#endif
 extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
 extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
 extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.168 2007/01/27 23:41:39 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.169 2007/01/28 20:18:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -622,9 +622,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
     DCL_ATTR_ACCESSOR(Image, pixel_interpolation_method)
-#if defined(HAVE_IMAGE_QUALITY)
     DCL_ATTR_READER(Image, quality)
-#endif
     DCL_ATTR_READER(Image, quantum_depth)
     DCL_ATTR_ACCESSOR(Image, rendering_intent)
     DCL_ATTR_READER(Image, rows)
@@ -1172,15 +1170,9 @@ Init_RMagick(void)
 
         ENUMERATOR(BlackChannel)
         ENUMERATOR(MatteChannel)
-#if defined(HAVE_INDEXCHANNEL)
-        ENUMERATOR(IndexChannel)    // 5.5.8
-#endif
-#if defined(HAVE_GRAYCHANNEL)
+        ENUMERATOR(IndexChannel)
         ENUMERATOR(GrayChannel)
-#endif
-#if defined(HAVE_ALLCHANNELS)
         ENUMERATOR(AllChannels)
-#endif
 
         // Define alternate names for ChannelType enums for Image::Info#channel=
         // AlphaChannel == OpacityChannel
@@ -1233,9 +1225,7 @@ Init_RMagick(void)
                       , INT2FIX(sRGBColorspace)));
         ENUMERATOR(HSLColorspace)
         ENUMERATOR(HWBColorspace)
-#if defined(HAVE_HSBCOLORSPACE)
         ENUMERATOR(HSBColorspace)           // IM 6.0.0
-#endif
 #if defined(HAVE_LABCOLORSPACE)
         ENUMERATOR(LABColorspace)           // GM 1.2
 #endif
@@ -1251,9 +1241,7 @@ Init_RMagick(void)
 #if defined(HAVE_REC709YCBCRCOLORSPACE)
         ENUMERATOR(Rec709YCbCrColorspace)   // GM 1.2 && IM 6.2.2
 #endif
-#if defined(HAVE_LOGCOLORSPACE)
         ENUMERATOR(LogColorspace)           // IM 6.2.3
-#endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -1294,13 +1282,11 @@ Init_RMagick(void)
         ENUMERATOR(DifferenceCompositeOp)
         ENUMERATOR(DisplaceCompositeOp)
         ENUMERATOR(DissolveCompositeOp)
-#if defined(HAVE_DSTCOMPOSITEOP)
-        ENUMERATOR(DstAtopCompositeOp)    // Added 6.0.2?
+        ENUMERATOR(DstAtopCompositeOp)
         ENUMERATOR(DstCompositeOp)
         ENUMERATOR(DstInCompositeOp)
         ENUMERATOR(DstOutCompositeOp)
         ENUMERATOR(DstOverCompositeOp)
-#endif
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
@@ -1312,30 +1298,23 @@ Init_RMagick(void)
         ENUMERATOR(OverCompositeOp)
         ENUMERATOR(OverlayCompositeOp)
         ENUMERATOR(PlusCompositeOp)
-#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUMERATOR(ReplaceCompositeOp)    // synonym for CopyCompositeOp
-#endif
         ENUMERATOR(SaturateCompositeOp)
         ENUMERATOR(ScreenCompositeOp)
-#if defined(HAVE_DSTCOMPOSITEOP)
         ENUMERATOR(SrcAtopCompositeOp)
         ENUMERATOR(SrcCompositeOp)
         ENUMERATOR(SrcInCompositeOp)
         ENUMERATOR(SrcOutCompositeOp)
         ENUMERATOR(SrcOverCompositeOp)
-#endif
         ENUMERATOR(SubtractCompositeOp)
         ENUMERATOR(ThresholdCompositeOp)
         ENUMERATOR(XorCompositeOp)
-
-#if defined(HAVE_COLORDODGECOMPOSITEOP)
         ENUMERATOR(BlendCompositeOp)
         ENUMERATOR(ColorBurnCompositeOp)
         ENUMERATOR(ColorDodgeCompositeOp)
         ENUMERATOR(ExclusionCompositeOp)
         ENUMERATOR(HardLightCompositeOp)
         ENUMERATOR(SoftLightCompositeOp)
-#endif
     END_ENUM
 
     // CompressionType constants
@@ -1346,9 +1325,7 @@ Init_RMagick(void)
         ENUMERATOR(FaxCompression)
         ENUMERATOR(Group4Compression)
         ENUMERATOR(JPEGCompression)
-#if defined(HAVE_JPEG2000COMPRESSION)
         ENUMERATOR(JPEG2000Compression)
-#endif
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
         ENUMERATOR(RLECompression)              // preferred
@@ -1400,13 +1377,7 @@ Init_RMagick(void)
 
     // GravityType constants
     DEF_ENUM(GravityType)
-#if defined(HAVE_UNDEFINEDGRAVITY)
         ENUMERATOR(UndefinedGravity)
-#else
-        // Provide this enumerator in older (pre 6.0.0) versions of ImageMagick
-        _enum = rm_enum_new(_cls, ID2SYM(rb_intern("UndefinedGravity")), INT2FIX(0));\
-        rb_define_const(Module_Magick, "UndefinedGravity", _enum);
-#endif
         ENUMERATOR(ForgetGravity)
         ENUMERATOR(NorthWestGravity)
         ENUMERATOR(NorthGravity)
@@ -1497,7 +1468,6 @@ Init_RMagick(void)
         ENUMERATOR(PoissonNoise)
     END_ENUM
 
-#if defined(HAVE_IMAGE_ORIENTATION)
     // Orientation constants
     DEF_ENUM(OrientationType)
         ENUMERATOR(UndefinedOrientation)
@@ -1510,7 +1480,6 @@ Init_RMagick(void)
         ENUMERATOR(RightBottomOrientation)
         ENUMERATOR(LeftBottomOrientation)
     END_ENUM
-#endif
 
     // Paint method constants
     DEF_ENUM(PaintMethod)
@@ -1562,10 +1531,8 @@ Init_RMagick(void)
         ENUMERATOR(AndQuantumOperator)
         ENUMERATOR(DivideQuantumOperator)
         ENUMERATOR(LShiftQuantumOperator)
-#if defined(HAVE_MAXEVALUATEOPERATOR)
         ENUMERATOR(MaxQuantumOperator)
         ENUMERATOR(MinQuantumOperator)
-#endif
         ENUMERATOR(MultiplyQuantumOperator)
         ENUMERATOR(OrQuantumOperator)
         ENUMERATOR(RShiftQuantumOperator)
@@ -1592,17 +1559,13 @@ Init_RMagick(void)
 
     // StorageType
     DEF_ENUM(StorageType)
-#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
         ENUMERATOR(UndefinedPixel)
-#endif
         ENUMERATOR(CharPixel)
         ENUMERATOR(DoublePixel)
         ENUMERATOR(FloatPixel)
         ENUMERATOR(IntegerPixel)
         ENUMERATOR(LongPixel)
-#if defined(HAVE_QUANTUMPIXEL)
         ENUMERATOR(QuantumPixel)
-#endif
         ENUMERATOR(ShortPixel)
     END_ENUM
 
@@ -1789,7 +1752,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/27 23:41:39 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/28 20:18:34 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

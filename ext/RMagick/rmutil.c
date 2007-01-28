@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.97 2007/01/28 00:10:26 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.98 2007/01/28 20:18:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1165,11 +1165,9 @@ ColorspaceType_new(ColorspaceType cs)
         case HWBColorspace:
             name = "HWBColorspace";
             break;
-#if defined(HAVE_HSBCOLORSPACE)
         case HSBColorspace:
             name = "HSBColorspace";
             break;
-#endif
 #if defined(HAVE_LABCOLORSPACE)
         case LABColorspace:
             name = "LABColorspace";
@@ -1190,11 +1188,9 @@ ColorspaceType_new(ColorspaceType cs)
             name = "Rec709YCbCrColorspace";
             break;
 #endif
-#if defined(HAVE_LOGCOLORSPACE)
         case LogColorspace:
             name = "LogColorspace";
             break;
-#endif
     }
 
     return rm_enum_new(Class_ColorspaceType, ID2SYM(rb_intern(name)), INT2FIX(cs));
@@ -1233,14 +1229,12 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(AtopCompositeOp)
         ENUM_TO_NAME(BumpmapCompositeOp)
         ENUM_TO_NAME(ClearCompositeOp)
-#if defined(HAVE_COLORDODGECOMPOSITEOP)
         ENUM_TO_NAME(ColorBurnCompositeOp)
         ENUM_TO_NAME(BlendCompositeOp)
         ENUM_TO_NAME(ColorDodgeCompositeOp)
         ENUM_TO_NAME(ExclusionCompositeOp)
         ENUM_TO_NAME(HardLightCompositeOp)
         ENUM_TO_NAME(SoftLightCompositeOp)
-#endif
         ENUM_TO_NAME(ColorizeCompositeOp)
         ENUM_TO_NAME(CopyBlueCompositeOp)
         ENUM_TO_NAME(CopyCompositeOp)
@@ -1252,13 +1246,11 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)
         ENUM_TO_NAME(DarkenCompositeOp)
-#if defined(HAVE_DSTCOMPOSITEOP)
         ENUM_TO_NAME(DstAtopCompositeOp)
         ENUM_TO_NAME(DstCompositeOp)
         ENUM_TO_NAME(DstInCompositeOp)
         ENUM_TO_NAME(DstOutCompositeOp)
         ENUM_TO_NAME(DstOverCompositeOp)
-#endif
         ENUM_TO_NAME(DifferenceCompositeOp)
         ENUM_TO_NAME(DisplaceCompositeOp)
         ENUM_TO_NAME(DissolveCompositeOp)
@@ -1273,18 +1265,14 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(OverCompositeOp)
         ENUM_TO_NAME(OverlayCompositeOp)
         ENUM_TO_NAME(PlusCompositeOp)
-#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUM_TO_NAME(ReplaceCompositeOp)
-#endif
         ENUM_TO_NAME(SaturateCompositeOp)
         ENUM_TO_NAME(ScreenCompositeOp)
-#if defined(HAVE_DSTCOMPOSITEOP)
         ENUM_TO_NAME(SrcAtopCompositeOp)
         ENUM_TO_NAME(SrcCompositeOp)
         ENUM_TO_NAME(SrcInCompositeOp)
         ENUM_TO_NAME(SrcOutCompositeOp)
         ENUM_TO_NAME(SrcOverCompositeOp)
-#endif
         ENUM_TO_NAME(SubtractCompositeOp)
         ENUM_TO_NAME(ThresholdCompositeOp)
         ENUM_TO_NAME(XorCompositeOp)
@@ -1667,7 +1655,6 @@ ResolutionType_new(ResolutionType type)
 
 
 
-#if defined(HAVE_IMAGE_ORIENTATION)
 /*
     Static:     OrientationType_name
     Purpose:    Return the name of a OrientationType enum as a string
@@ -1703,7 +1690,6 @@ OrientationType_new(OrientationType type)
     name = OrientationType_name(type);
     return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
-#endif
 
 
 /*
@@ -2698,16 +2684,10 @@ StorageType_name(StorageType type)
         ENUM_TO_NAME(FloatPixel)
         ENUM_TO_NAME(IntegerPixel)
         ENUM_TO_NAME(LongPixel)
-#if defined(HAVE_QUANTUMPIXEL)
         ENUM_TO_NAME(QuantumPixel)
-#endif
         ENUM_TO_NAME(ShortPixel)
         default:
-#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedPixel)
-#else
-        return "UndefinedPixel";
-#endif
     }
 }
 
@@ -2731,11 +2711,7 @@ StretchType_name(StretchType stretch)
         ENUM_TO_NAME(UltraExpandedStretch)
         ENUM_TO_NAME(AnyStretch)
         default:
-#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStretch were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedStretch)
-#else
-        return "UndefinedStretch";
-#endif
     }
 }
 
@@ -2754,11 +2730,7 @@ StyleType_name(StyleType style)
         ENUM_TO_NAME(ObliqueStyle)
         ENUM_TO_NAME(AnyStyle)
         default:
-#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStyle were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedStyle)
-#else
-        return "UndefinedStyle";
-#endif
     }
 }
 

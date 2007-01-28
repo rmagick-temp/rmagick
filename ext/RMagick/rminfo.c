@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.47 2007/01/27 15:16:01 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.48 2007/01/28 20:18:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -218,7 +218,6 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
 VALUE
 Info_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_IMAGEINFO_CHANNEL)
     Info *info;
     ChannelType channels;
 
@@ -234,10 +233,6 @@ Info_channel(int argc, VALUE *argv, VALUE self)
 
     info->channel = channels;
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -611,7 +606,6 @@ Info_dispose_eq(VALUE self, VALUE disp)
 
 DEF_ATTR_ACCESSOR(Info, dither, bool)
 
-#ifdef HAVE_IMAGE_EXTRACT_INFO
 
 /*
     Method:     aString=Info#extract
@@ -672,66 +666,6 @@ Info_tile_eq(VALUE self, VALUE tile)
     return Info_extract_eq(self, tile);
 }
 
-#else
-
-/*
-    Method:     aString=Info#extract
-                Info#extract=aString
-    Purpose:    Get/set the extract string, e.g. "200x200+100+100"
-    Raise:      ArgumentError
-    Notes:      defined for IM 5.5.6 and later
-*/
-VALUE
-Info_extract(VALUE self)
-{
-    rm_not_implemented();
-    return (VALUE)0;
-}
-VALUE
-Info_extract_eq(VALUE self, VALUE extr)
-{
-    rm_not_implemented();
-    return (VALUE)0;
-}
-
-/*
-    Method:     aString = Info#tile
-                Info#tile=aString
-    Purpose:    Get/set the tile string, e.g. "200x200+100+100"
-    Raise:      ArgumentError
-    Notes:      defined for IM 5.5.5 and earlier, before the tile field was
-                deprecated and replaced by extract
-*/
-DEF_ATTR_READER(Info, tile, str)
-
-VALUE
-Info_tile_eq(VALUE self, VALUE tile_arg)
-{
-    Info *info;
-    char *til;
-    volatile VALUE tile;
-
-    Data_Get_Struct(self, Info, info);
-
-    if (NIL_P(tile_arg))
-    {
-        magick_free(info->tile);
-        info->tile = NULL;
-        return self;
-    }
-
-    tile = rb_funcall(tile_arg, ID_to_s, 0);
-    til = STRING_PTR(tile);
-    if (!IsGeometry(til))
-    {
-        rb_raise(rb_eArgError, "invalid tile geometry: %s", til);
-    }
-
-    magick_clone_string(&info->tile, til);
-
-    return self;
-}
-#endif
 
 /*
     Methods:    aString=Info#filename
@@ -1160,15 +1094,10 @@ Info_number_scenes_eq(VALUE self, VALUE nscenes)
 VALUE
 Info_orientation(VALUE self)
 {
-#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
     return OrientationType_new(info->orientation);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1180,16 +1109,11 @@ Info_orientation(VALUE self)
 VALUE
 Info_orientation_eq(VALUE self, VALUE inter)
 {
-#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
     VALUE_TO_ENUM(inter, info->orientation, OrientationType);
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

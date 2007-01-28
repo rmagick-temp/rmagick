@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.200 2007/01/28 00:35:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.201 2007/01/28 20:18:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -858,21 +858,15 @@ VALUE Image_base_rows(VALUE self)
 */
 VALUE Image_bias(VALUE self)
 {
-#if defined(HAVE_IMAGE_BIAS)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return rb_float_new(image->bias);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
 VALUE Image_bias_eq(VALUE self, VALUE pct)
 {
-#if defined(HAVE_IMAGE_BIAS)
     Image *image;
     double bias;
 
@@ -882,12 +876,6 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     image->bias = bias * MaxRGB;
 
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-
 }
 
 /*
@@ -1263,7 +1251,6 @@ special_composite(
 VALUE
 Image_blend(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_COLORDODGECOMPOSITEOP)
     Image *image, *overlay;
     double src_percent, dst_percent;
     long x_offset = 0L, y_offset = 0L;
@@ -1303,10 +1290,6 @@ Image_blend(int argc, VALUE *argv, VALUE self)
     return special_composite(image, overlay, src_percent, dst_percent
                            , x_offset, y_offset, BlendCompositeOp);
 
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -2651,25 +2634,16 @@ VALUE Image_composite_bang(
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_ALLCHANNELS)
-        ChannelType channels = (AllChannels &~ OpacityChannel);
-#else
-        ChannelType channels = (0xff &~ OpacityChannel);
-#endif
-    return composite(True, argc, argv, self, channels);
+    return composite(True, argc, argv, self, DefaultChannels);
 }
+
 
 VALUE Image_composite(
     int argc,
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_ALLCHANNELS)
-        ChannelType channels = (AllChannels &~ OpacityChannel);
-#else
-        ChannelType channels = (0xff &~ OpacityChannel);
-#endif
-    return composite(False, argc, argv, self, channels);
+    return composite(False, argc, argv, self, DefaultChannels);
 }
 
 
@@ -4181,11 +4155,9 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
         case LongPixel:
             sz = sizeof(unsigned long);
             break;
-#if defined(HAVE_QUANTUMPIXEL)
         case QuantumPixel:
             sz = sizeof(Quantum);
             break;
-#endif
         case UndefinedPixel:
         default:
             rb_raise(rb_eArgError, "undefined storage type");
@@ -4231,12 +4203,7 @@ Image_extract_info(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-#ifdef HAVE_IMAGE_EXTRACT_INFO
     return Rectangle_from_RectangleInfo(&image->extract_info);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 VALUE
@@ -4246,13 +4213,8 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
-#ifdef HAVE_IMAGE_EXTRACT_INFO
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -5027,11 +4989,9 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case FloatPixel:
                 type_sz = sizeof(float);
                 break;
-#if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
                 break;
-#endif
             default:
                 rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
                 break;
@@ -6516,15 +6476,10 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_orientation(VALUE self)
 {
-#if defined(HAVE_IMAGE_ORIENTATION)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return OrientationType_new(image->orientation);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -6535,18 +6490,12 @@ Image_orientation(VALUE self)
 VALUE
 Image_orientation_eq(VALUE self, VALUE orientation)
 {
-#if defined(HAVE_IMAGE_ORIENTATION)
     Image *image;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(orientation, image->orientation, OrientationType);
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -6949,11 +6898,7 @@ Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 }
 
 
-
-#if defined(HAVE_IMAGE_QUALITY)
 DEF_ATTR_READER(Image, quality, ulong)
-#endif
-
 
 
 /*
@@ -7047,14 +6992,12 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
         case LShiftQuantumOperator:
             qop = LeftShiftEvaluateOperator;
             break;
-#if defined(HAVE_MAXEVALUATEOPERATOR)
         case MaxQuantumOperator:
             qop = MaxEvaluateOperator;
             break;
         case MinQuantumOperator:
             qop = MinEvaluateOperator;
             break;
-#endif
         case MultiplyQuantumOperator:
             qop = MultiplyEvaluateOperator;
             break;
@@ -9081,32 +9024,22 @@ Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_ticks_per_second(VALUE self)
 {
-#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->ticks_per_second);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
 VALUE
 Image_ticks_per_second_eq(VALUE self, VALUE tps)
 {
-#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
     Image *image;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     image->ticks_per_second = NUM2ULONG(tps);
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9120,13 +9053,10 @@ Image_tile_info(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-#ifdef HAVE_IMAGE_EXTRACT_INFO
+
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info is deprecated in this release of ImageMagick. Use extract_info instead.");
     return Rectangle_from_RectangleInfo(&image->extract_info);
-#else
-    return Rectangle_from_RectangleInfo(&image->tile_info);
-#endif
 }
 
 VALUE
@@ -9135,15 +9065,11 @@ Image_tile_info_eq(VALUE self, VALUE rect)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-#ifdef HAVE_IMAGE_EXTRACT_INFO
+
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info= is deprecated in this release of ImageMagick. Use extract_info= instead.");
     rm_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
-#else
-    rm_check_frozen(self);
-    Rectangle_to_RectangleInfo(&image->tile_info, rect);
-#endif
     return self;
 }
 
@@ -10401,7 +10327,7 @@ xform_image(
     Purpose:    Remove all the ChannelType arguments from the
                 end of the argument list.
     Returns:    A ChannelType value suitable for passing into
-                an xMagick function. Returns AllChannels if
+                an xMagick function. Returns DefaultChannels if
                 no channel arguments were found. Returns the
                 number of remaining arguments.
 */
@@ -10429,11 +10355,7 @@ ChannelType extract_channels(
 
     if (channels == 0)
     {
-#if defined(HAVE_ALLCHANNELS)
-        channels = AllChannels & ~OpacityChannel;
-#else
-        channels = 0xf7;
-#endif
+        channels = DefaultChannels;
     }
 
     return channels;

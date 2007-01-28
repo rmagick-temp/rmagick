@@ -20,13 +20,16 @@ fi
 
 AC_PATH_PROG(MAGICKCONFIG, Magick-config)
 if test -z "$MAGICKCONFIG"; then
-    AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config program.])
+    AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config in PATH.])
 fi
 
-MAGICKVERS=`Magick-config --version | tr -d .`
-if test $MAGICKVERS -lt 625; then
-    MAGICKVERS=`${MAGICKCONFIG} --version`
-    AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.2.5 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
+AC_MSG_CHECKING([ImageMagick version])
+MAGICKVERS=`Magick-config --version`
+AC_MSG_RESULT($MAGICKVERS)
+
+MAGICKVERS=`echo ${MAGICKVERS} | tr -d .`
+if test $MAGICKVERS -lt 626; then
+    AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.2.6 or later.])
 fi
 
 
@@ -123,58 +126,13 @@ AC_CHECK_FUNCS([UnsharpMaskImageChannel VignetteImage WhiteThresholdImage XImpor
 
 # What typedefs?
 
-AC_CHECK_TYPES([MagickPixelPacket],
-                [], [],
+AC_CHECK_MEMBERS([Image.transparent_color],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
                  #include "magick/api.h"])
 
-AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-AC_CHECK_MEMBERS([ImageInfo.orientation, ImageInfo.channel],,,
-                [#include <stdio.h>
-                 #if HAVE_SYS_TYPES_H
-                 #include <sys/types.h>
-                 #endif
-                 #include "magick/api.h"])
-
-
-# Don't use AC_CHECK_MEMBERS!
-AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
-  AC_TRY_COMPILE([
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include <stdio.h>
-#include "magick/api.h"],
-    [Image i; i.extract_info.x = 0;],
-    rm_cv_member_Image_extract_info=yes,
-    rm_cv_member_Image_extract_info=no))
-if test "$rm_cv_member_Image_extract_info" = yes; then
-  AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
-fi
-
-AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = HSBColorspace],
-     rm_cv_enum_hsbcolorspace='yes',
-     rm_cv_enum_hsbcolorspace='no')])
-
-if test "$rm_cv_enum_hsbcolorspace" = yes; then
-  AC_DEFINE(HAVE_HSBCOLORSPACE)
-fi
 
 AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
   [AC_TRY_COMPILE(
@@ -251,154 +209,6 @@ if test "$rm_cv_enum_rec709ycbcrcolorspace" = yes; then
   AC_DEFINE(HAVE_REC709YCBCRCOLORSPACE)
 fi
 
-AC_CACHE_CHECK(for LogColorspace enum value, rm_cv_enum_logcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = LogColorspace],
-     rm_cv_enum_logcolorspace='yes',
-     rm_cv_enum_logcolorspace='no')])
-
-if test "$rm_cv_enum_logcolorspace" = yes; then
-  AC_DEFINE(HAVE_LOGCOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = ReplaceCompositeOp],
-     rm_cv_enum_replacecompositeop='yes',
-     rm_cv_enum_replacecompositeop='no')])
-
-if test "$rm_cv_enum_replacecompositeop" = yes; then
-  AC_DEFINE(HAVE_REPLACECOMPOSITEOP)
-fi
-
-AC_CACHE_CHECK(for DstCompositeOp enum value, rm_cv_enum_dstcompositeop,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = DstCompositeOp],
-     rm_cv_enum_dstcompositeop='yes',
-     rm_cv_enum_dstcompositeop='no')])
-
-if test "$rm_cv_enum_dstcompositeop" = yes; then
-  AC_DEFINE(HAVE_DSTCOMPOSITEOP)
-fi
-
-AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompositeOp,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompositeOperator x; x = ColorDodgeCompositeOp],
-     rm_cv_enum_ColorDodgeCompositeOp='yes',
-     rm_cv_enum_ColorDodgeCompositeOp='no')])
-
-if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
-  AC_DEFINE(HAVE_COLORDODGECOMPOSITEOP)
-fi
-
-AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ChannelType x; x = IndexChannel],
-     rm_cv_enum_indexchannel='yes',
-     rm_cv_enum_indexchannel='no')])
-
-if test "$rm_cv_enum_indexchannel" = yes; then
-  AC_DEFINE(HAVE_INDEXCHANNEL)
-fi
-
-AC_CACHE_CHECK(for GrayChannel enum value, rm_cv_enum_graychannel,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ChannelType x; x = GrayChannel],
-     rm_cv_enum_graychannel='yes',
-     rm_cv_enum_graychannel='no')])
-
-if test "$rm_cv_enum_graychannel" = yes; then
-  AC_DEFINE(HAVE_GRAYCHANNEL)
-fi
-
-AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ChannelType x; x = AllChannels],
-     rm_cv_enum_allchannels='yes',
-     rm_cv_enum_allchannels='no')])
-
-if test "$rm_cv_enum_allchannels" = yes; then
-  AC_DEFINE(HAVE_ALLCHANNELS)
-fi
-
-AC_CACHE_CHECK(for JPEG2000Compression enum value, rm_cv_enum_jpeg2000compression,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [CompressionType x; x = JPEG2000Compression],
-     rm_cv_enum_jpeg2000compression='yes',
-     rm_cv_enum_jpeg2000compression='no')])
-
-if test "$rm_cv_enum_jpeg2000compression" = yes; then
-  AC_DEFINE(HAVE_JPEG2000COMPRESSION)
-fi
-
-AC_CACHE_CHECK(for UndefinedGravity enum value, rm_cv_enum_undefinedgravity,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [GravityType x; x = UndefinedGravity],
-     rm_cv_enum_undefinedgravity='yes',
-     rm_cv_enum_undefinedgravity='no')])
-
-if test "$rm_cv_enum_undefinedgravity" = yes; then
-  AC_DEFINE(HAVE_UNDEFINEDGRAVITY)
-fi
-
-AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [StorageType x; x = QuantumPixel],
-     rm_cv_enum_quantumpixel='yes',
-     rm_cv_enum_quantumpixel='no')])
-if test "$rm_cv_enum_quantumpixel" = yes; then
-  AC_DEFINE(HAVE_QUANTUMPIXEL)
-fi
 
 AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
   [AC_TRY_COMPILE(
@@ -430,20 +240,6 @@ if test "$rm_cv_enum_coalescelayer" = yes; then
   AC_DEFINE(HAVE_COALESCELAYER)
 fi
 
-AC_CACHE_CHECK(for MaxEvaluateOperator enum value, rm_cv_enum_maxevaluateoperator,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [MagickEvaluateOperator x; x = MaxEvaluateOperator],
-     rm_cv_enum_maxevaluateoperator='yes',
-     rm_cv_enum_maxevaluateoperator='no')])
-
-if test "$rm_cv_enum_maxevaluateoperator" = yes; then
-  AC_DEFINE(HAVE_MAXEVALUATEOPERATOR)
-fi
 
 AC_CACHE_CHECK(for PaletteBilevelMatteType enum value, rm_cv_enum_palettebilevelmattetype,
   [AC_TRY_COMPILE(
@@ -461,24 +257,22 @@ if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
 fi
 
 
-# The MagickPixelPacket type was introduced in IM 6.0.0. The GetMagickPixelPacket
+# The GetMagickPixelPacket
 # function was introduced in 6.2.0. IM 6.3.0 changed the type of the 'color'
 # member of the ColorInfo structure from PixelPacket to MagickPixelPacket.
-if test "$rm_have_getmagickpixelpacket" = yes; then
-   AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_info_color,
-     [AC_TRY_COMPILE(
-   [#include <stdio.h>
-   #if HAVE_SYS_TYPES_H
-   #include <sys/types.h>
-   #endif
-   #include "magick/api.h"],
-        [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
-        rv_cv_struct_color_info_color='yes',
-        rv_cv_struct_color_info_color='no')])
+AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_info_color,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
+     rv_cv_struct_color_info_color='yes',
+     rv_cv_struct_color_info_color='no')])
 
-   if test "$rv_cv_struct_color_info_color" = yes; then
-      AC_DEFINE(HAVE_NEW_COLORINFO)
-   fi
+if test "$rv_cv_struct_color_info_color" = yes; then
+   AC_DEFINE(HAVE_NEW_COLORINFO)
 fi
 
 # Where is ImageMagick installed?

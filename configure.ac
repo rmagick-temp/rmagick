@@ -57,8 +57,8 @@ LIBS="${LIBS} `Magick-config --libs`"
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
 AC_CHECK_FUNCS([AdaptiveThresholdImage])
-AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
-AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
+AC_CHECK_FUNCS([AddNoiseImageChannel])
+AC_CHECK_FUNCS([ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
 AC_CHECK_FUNCS([FxImageChannel GammaImageChannel])

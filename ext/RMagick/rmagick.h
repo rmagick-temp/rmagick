@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.160 2007/01/28 20:19:03 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.161 2007/01/28 23:49:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -221,9 +221,7 @@ EXTERN VALUE Class_Primary;
 EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
-#if defined(HAVE_COMPAREIMAGECHANNELS)
 EXTERN VALUE Class_MetricType;
-#endif
 #if defined(HAVE_EVALUATEIMAGECHANNEL)
 EXTERN VALUE Class_QuantumExpressionOperator;
 #endif

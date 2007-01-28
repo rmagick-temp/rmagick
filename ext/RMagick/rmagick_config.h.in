@@ -6,18 +6,12 @@
 #undef HAVE_ADAPTIVESHARPENIMAGE
 /* Introduced in IM 6.2.5 */
 #undef HAVE_ADDNOISEIMAGECHANNEL
-/* Introduced in IM 6.0.0 */
-#undef HAVE_BILEVELIMAGECHANNEL
-/* Introduced in IM 5.5.7, GM 1.1 */
-#undef HAVE_BLACKTHRESHOLDIMAGE
 /* Introduced in IM 6.0.1 */
 #undef HAVE_BLURIMAGECHANNEL
 /* Introduced in IM 6.2.7 */
 #undef HAVE_COALESCELAYER
 /* Introduced in IM 6.2.6 - Not available in GM */
 #undef HAVE_CLEARMAGICKEXCEPTION
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_COMPAREIMAGECHANNELS
 /* Introduced in IM 6.2.6 */
 #undef HAVE_COMPAREIMAGELAYERS
 /* Introduced in IM 6.2.6 */

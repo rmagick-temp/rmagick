@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.201 2007/01/28 20:18:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.202 2007/01/28 23:49:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -885,7 +885,6 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
 VALUE
 Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_BILEVELIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
 
@@ -907,11 +906,6 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -970,12 +964,7 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
 VALUE
 Image_black_threshold(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_BLACKTHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, BlackThresholdImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1303,7 +1292,6 @@ DEF_ATTR_ACCESSOR(Image, blur, dbl)
 VALUE
 Image_blur_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_BLURIMAGECHANNEL)
      Image *image, *new_image;
      ExceptionInfo exception;
      ChannelType channels;
@@ -1335,10 +1323,6 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
      rm_ensure_result(new_image);
 
      return rm_image_new(new_image);
-#else
-     rm_not_implemented();
-     return (VALUE)0;
-#endif
 }
 
 
@@ -2401,8 +2385,6 @@ VALUE Image_compare_channel(
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_COMPAREIMAGECHANNELS)
-
     Image *image, *r_image, *difference_image;
     double distortion;
     volatile VALUE ary;
@@ -2442,10 +2424,6 @@ VALUE Image_compare_channel(
     rb_ary_store(ary, 1, rb_float_new(distortion));
 
     return ary;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

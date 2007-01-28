@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.169 2007/01/28 20:18:34 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.170 2007/01/28 23:49:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1447,7 +1447,6 @@ Init_RMagick(void)
     END_ENUM
 #endif
 
-#if defined(HAVE_COMPAREIMAGECHANNELS)
     DEF_ENUM(MetricType)
         ENUMERATOR(UndefinedMetric)
         ENUMERATOR(MeanAbsoluteErrorMetric)
@@ -1456,7 +1455,6 @@ Init_RMagick(void)
         ENUMERATOR(PeakSignalToNoiseRatioMetric)
         ENUMERATOR(RootMeanSquaredErrorMetric)
     END_ENUM
-#endif
 
     // NoiseType constants
     DEF_ENUM(NoiseType)
@@ -1752,7 +1750,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/28 20:18:34 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/28 23:49:18 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

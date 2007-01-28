@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.199 2007/01/27 23:10:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.200 2007/01/28 00:35:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2096,9 +2096,6 @@ VALUE
 Image_color_profile(VALUE self)
 {
     Image *image;
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
-
     const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
@@ -2110,22 +2107,6 @@ Image_color_profile(VALUE self)
 
     return rb_str_new((char *)profile->datum, (long)profile->length);
 
-#else
-
-    const unsigned char *profile;
-    size_t length;
-
-    Data_Get_Struct(self, Image, image);
-
-    profile = GetImageProfile(image, "ICM", &length);
-    if (!profile)
-    {
-        return Qnil;
-    }
-
-    return rb_str_new((char *)profile, (long)length);
-
-#endif
 }
 
 /*
@@ -3813,6 +3794,7 @@ Image_each_profile(VALUE self)
     Image *image;
     volatile VALUE ary, val;
     char *name;
+    const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
 
@@ -3824,36 +3806,16 @@ Image_each_profile(VALUE self)
     while (name)
     {
         rb_ary_store(ary, 0, rb_str_new2(name));
-#if defined(HAVE_ACQUIRESTRINGINFO)
-        {
-            const StringInfo *profile;
 
-            profile = GetImageProfile(image, name);
-            if (!profile)
-            {
-                rb_ary_store(ary, 1, Qnil);
-            }
-            else
-            {
-                rb_ary_store(ary, 1, rb_str_new((char *)profile->datum, (long)profile->length));
-            }
-        }
-#else
+        profile = GetImageProfile(image, name);
+        if (!profile)
         {
-            unsigned char *profile;
-            size_t length;
-
-            profile = GetImageProfile(image, "iptc", &length);
-            if (!profile)
-            {
-                rb_ary_store(ary, 1, Qnil);
-            }
-            else
-            {
-                rb_ary_store(ary, 1, rb_string_new((char *)profile, (long)length));
-            }
+            rb_ary_store(ary, 1, Qnil);
         }
-#endif
+        else
+        {
+            rb_ary_store(ary, 1, rb_str_new((char *)profile->datum, (long)profile->length));
+        }
         val = rb_yield(ary);
         name = GetNextImageProfile(image);
     }
@@ -5331,8 +5293,6 @@ VALUE
 Image_iptc_profile(VALUE self)
 {
     Image *image;
-
-#if defined(HAVE_ACQUIRESTRINGINFO)
     const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
@@ -5345,22 +5305,6 @@ Image_iptc_profile(VALUE self)
 
     return rb_str_new((char *)profile->datum, (long)profile->length);
 
-#else
-
-    const unsigned char *profile;
-    size_t length;
-
-    Data_Get_Struct(self, Image, image);
-
-    profile = GetImageProfile(image, "iptc", &length);
-    if (!profile)
-    {
-        return Qnil;
-    }
-
-    return rb_str_new((char *)profile, (long)length);
-
-#endif
 }
 
 

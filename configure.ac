@@ -51,9 +51,6 @@ AC_CHECK_FUNCS([snprintf])
 # Append ImageMagick's lists of libs to the user's list (if any)
 LIBS="${LIBS} `Magick-config --libs`"
 
-# What ImageMagick/GraphicsMagick functions?
-AC_CHECK_FUNCS([AcquireMagickMemory])
-
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.
 AC_CHECK_FUNC(AcquireStringInfo,
@@ -492,7 +489,7 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
    fi
 fi
 
-# Where is ****Magick installed?
+# Where is ImageMagick installed?
 MAGICKPREFIX=`Magick-config --prefix`
 
 # Options to pass to ruby config step

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.96 2007/01/27 21:55:21 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.97 2007/01/28 00:10:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -20,51 +20,11 @@ static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 #endif
 
-#if !defined(HAVE_ACQUIREMAGICKMEMORY)
-/*
-    Dummy versions of ImageMagick memory routines for use with GraphicsMagick.
-*/
-static void *AcquireMagickMemory(const size_t size)
-{
-    assert(size > 0);
-    return malloc(size);
-}
-
-static void *RelinquishMagickMemory(void *memory)
-{
-    if (memory)
-    {
-        free(memory);
-    }
-    return NULL;
-}
-
-static void *ResizeMagickMemory(void *memory, const size_t size)
-{
-    void *new;
-
-    if (!memory)
-    {
-        return malloc(size);
-    }
-    if (size == 0)
-    {
-        free(memory);
-        return NULL;
-    }
-    new = realloc(memory, size);
-    if (!new)
-    {
-        free(memory);
-    }
-    return new;
-}
-#endif
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
-    Purpose:    ****Magick versions of standard memory routines.
-    Notes:      use when managing memory that ****Magick may have
+    Purpose:    ImageMagick versions of standard memory routines.
+    Notes:      use when managing memory that ImageMagick may have
                 allocated or may free.
                 If malloc fails, it raises an exception
 */

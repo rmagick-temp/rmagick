@@ -51,14 +51,6 @@ AC_CHECK_FUNCS([snprintf])
 # Append ImageMagick's lists of libs to the user's list (if any)
 LIBS="${LIBS} `Magick-config --libs`"
 
-# We need to be able to query this later in the configure script, so set a shell variable here
-# as well as defining a symbol.
-AC_CHECK_FUNC(AcquireStringInfo,
-              rm_have_acquirestringinfo=yes,
-              rm_have_acquirestringinfo=no)
-if test "$rm_have_acquirestringinfo" = yes; then
-   AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
-fi
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
 AC_CHECK_FUNCS([AdaptiveThresholdImage])

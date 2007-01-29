@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.161 2007/01/28 23:49:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.162 2007/01/29 23:05:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -145,7 +145,6 @@ typedef struct
 
 #define MAX_GEOM_STR 51                 // max length of a geometry string
 
-#if defined(HAVE_EVALUATEIMAGECHANNEL)
 /*
  * Both ImageMagick and GraphicsMagick define an enum type for quantum-level
  * expressions, but they're different types. The QuantumExpressionOperator
@@ -166,7 +165,6 @@ typedef enum _QuantumExpressionOperator
     SubtractQuantumOperator,
     XorQuantumOperator
 } QuantumExpressionOperator ;
-#endif
 
 
 #if !defined(HAVE_SETIMAGEINFOFILE)
@@ -222,9 +220,7 @@ EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
 EXTERN VALUE Class_MetricType;
-#if defined(HAVE_EVALUATEIMAGECHANNEL)
 EXTERN VALUE Class_QuantumExpressionOperator;
-#endif
 
 // Enum classes
 EXTERN VALUE Class_Enum;

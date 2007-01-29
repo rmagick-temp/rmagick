@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.202 2007/01/28 23:49:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.203 2007/01/29 23:07:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3055,7 +3055,6 @@ Image_convolve_channel(
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_CONVOLVEIMAGECHANNEL)
     Image *image, *new_image;
     volatile double *kernel;
     volatile VALUE ary;
@@ -3101,10 +3100,6 @@ Image_convolve_channel(
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -3472,13 +3467,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
-    okay =
-#if defined(HAVE_EXPORTIMAGEPIXELS)
-           ExportImagePixels
-#else
-           DispatchImage
-#endif
-                        (image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
+    okay = ExportImagePixels(image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
 
     if (!okay)
     {
@@ -3977,7 +3966,6 @@ Image_erase_bang(VALUE self)
 VALUE
 Image_export_pixels(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_EXPORTIMAGEPIXELS)
     Image *image;
     long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
@@ -4051,11 +4039,6 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     xfree((unsigned int *)pixels);
 
     return ary;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -4066,7 +4049,6 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_EXPORTIMAGEPIXELS)
     Image *image;
     long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
@@ -4164,11 +4146,6 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return string;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -6919,7 +6896,6 @@ Image_quantum_depth(VALUE self)
 VALUE
 Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_EVALUATEIMAGECHANNEL)
     Image *image;
     QuantumExpressionOperator operator;
     MagickEvaluateOperator qop;
@@ -7000,11 +6976,6 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

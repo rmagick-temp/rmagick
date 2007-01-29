@@ -60,7 +60,6 @@ AC_CHECK_FUNCS([AdaptiveThresholdImage])
 AC_CHECK_FUNCS([AddNoiseImageChannel])
 AC_CHECK_FUNCS([ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
 AC_CHECK_FUNCS([FxImageChannel GammaImageChannel])
 AC_CHECK_FUNCS([GaussianBlurImageChannel])
 

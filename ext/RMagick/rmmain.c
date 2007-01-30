@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.171 2007/01/29 23:06:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.172 2007/01/30 00:06:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -34,8 +34,6 @@ static VALUE Magick_Monitor;
 VALUE
 Magick_colors(VALUE class)
 {
-#if defined(HAVE_GETCOLORINFOLIST)    // ImageMagick 6.0.0
-
     const ColorInfo **color_info_list;
     unsigned long number_colors, x;
     volatile VALUE ary;
@@ -68,45 +66,6 @@ Magick_colors(VALUE class)
         magick_free(color_info_list);
         return ary;
     }
-
-#else   // ImageMagick < 6.0.0
-
-    const ColorInfo *color_list;
-    ColorInfo *color;
-    ExceptionInfo exception;
-    volatile VALUE ary, el;
-
-    GetExceptionInfo(&exception);
-
-    color_list = GetColorInfo("*", &exception);
-    (void) DestroyExceptionInfo(&exception);
-
-    // The order of the colors list can change in mid-iteration,
-    // so the only way we can guarantee a single pass thru the list
-    // is to copy the elements into an array without returning to
-    // IM. So, we always create a Ruby array and either return it
-    // or iterate over it.
-    ary = rb_ary_new();
-    for (color = (ColorInfo *)color_list; color; color = color->next)
-    {
-        rb_ary_push(ary, Color_from_ColorInfo(color));
-    }
-
-    // If block, iterate over colors
-    if (rb_block_given_p())
-    {
-        while ((el = rb_ary_shift(ary)) != Qnil)
-        {
-            rb_yield(el);
-        }
-        return class;
-    }
-    else
-    {
-        return ary;
-    }
-
-#endif
 }
 
 /*
@@ -1748,7 +1707,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/29 23:06:20 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/01/30 00:06:54 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

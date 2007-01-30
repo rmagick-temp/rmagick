@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.203 2007/01/29 23:07:30 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.204 2007/01/30 00:06:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4536,7 +4536,6 @@ DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 VALUE
 Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GAMMAIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
 
@@ -4559,11 +4558,6 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -4640,7 +4634,6 @@ Image_gaussian_blur(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GAUSSIANBLURIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     ExceptionInfo exception;
@@ -4672,11 +4665,6 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

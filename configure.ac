@@ -60,18 +60,7 @@ AC_CHECK_FUNCS([AdaptiveThresholdImage])
 AC_CHECK_FUNCS([AddNoiseImageChannel])
 AC_CHECK_FUNCS([ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-AC_CHECK_FUNCS([FxImageChannel GammaImageChannel])
-AC_CHECK_FUNCS([GaussianBlurImageChannel])
-
-# We need to be able to query these symbols later in the configure script, so set a shell
-# variable here as well as defining symbols.
-AC_CHECK_FUNC(GetColorInfoList,
-              rm_have_getcolorinfolist=yes,
-              rm_have_getcolorinfolist=no)
-if test "$rm_have_getcolorinfolist" = yes; then
-   AC_DEFINE(HAVE_GETCOLORINFOLIST)
-fi
-
+AC_CHECK_FUNCS([FxImageChannel])
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
 AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean GetImageClipMask])
 AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])

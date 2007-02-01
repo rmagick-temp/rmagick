@@ -1,3 +1,6 @@
+RMagick 1.15.1
+    o Fix compatibility problems with older (6.0.x) versions of ImageMagick
+
 RMagick 1.15.0
     o Added fx method to ImageList class
     o Added wet_floor method to the Image class

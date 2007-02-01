@@ -12,55 +12,108 @@ rm_saved_CFLAGS=${CFLAGS}
 # Check for required programs
 AC_PROG_CC
 AC_PROG_CC_STDC
-
 AC_PATH_PROG(RUBY, ruby,)
 if test -z "$RUBY"; then
     AC_MSG_ERROR([Can't install RMagick. Ruby must be installed first.])
 fi
 
-AC_PATH_PROG(MAGICKCONFIG, Magick-config)
-if test -z "$MAGICKCONFIG"; then
-    AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config in PATH.])
+# See if user prefers GraphicsMagick over ImageMagick
+AC_ARG_WITH(graphics-magick,
+    AS_HELP_STRING([--with-graphics-magick], [configure RMagick with GraphicsMagick]),
+    [with_graphics_magick=$withval],
+    [with_graphics_magick='no'])
+
+if test "$with_graphics_magick" != 'no' ; then
+    AC_CHECK_PROGS(MAGICKCONFIG, GraphicsMagick-config)
+    if test -z "$MAGICKCONFIG"; then
+        AC_MSG_ERROR([Can't install RMagick. Can't find GraphicsMagick-config program.])
+    fi
+    MAGICKNAME=GraphicsMagick
+    MAGICKLIB=GraphicsMagick
+    AC_DEFINE(GRAPHICSMAGICK,1)
+
+# Otherwise see which one is installed
+else
+    AC_CHECK_PROGS(MAGICKCONFIG, [Magick-config GraphicsMagick-config])
+    if test -z "$MAGICKCONFIG"; then
+        AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config or GraphicsMagick-config program.])
+    else
+        case "$MAGICKCONFIG" in
+            Magick-config )
+                MAGICKNAME=ImageMagick
+                MAGICKLIB=Magick
+                MAGICKVERS=`${MAGICKCONFIG} --version | tr -d .`
+                if test $MAGICKVERS -lt 600; then
+                   MAGICKVERS=`${MAGICKCONFIG} --version`
+                   AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.0.0 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
+                fi
+                ;;
+            GraphicsMagick-config )
+                MAGICKNAME=GraphicsMagick
+                MAGICKLIB=GraphicsMagick
+                AC_DEFINE(GRAPHICSMAGICK,1)
+                ;;
+        esac
+    fi
 fi
 
-AC_MSG_CHECKING([ImageMagick version])
-MAGICKVERS=`Magick-config --version`
-AC_MSG_RESULT($MAGICKVERS)
-
-MAGICKVERS=`echo ${MAGICKVERS} | tr -d .`
-if test $MAGICKVERS -lt 626; then
-    AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.2.6 or later.])
-fi
-
-
-# Append ImageMagick's lists of flags to the user's lists (if any)
-LDFLAGS="${LDFLAGS} `Magick-config --ldflags`"
-CPPFLAGS="${CPPFLAGS} `Magick-config --cppflags`"
+# Append ***Magick's lists of flags to the user's lists (if any)
+LDFLAGS="${LDFLAGS} `${MAGICKCONFIG} --ldflags`"
+CPPFLAGS="${CPPFLAGS} `${MAGICKCONFIG} --cppflags`"
 
 AC_SUBST(LDFLAGS, ${LDFLAGS})
 AC_SUBST(CFLAGS, ${rm_saved_CFLAGS})
 AC_SUBST(CPPFLAGS, ${CPPFLAGS})
-AC_SUBST(LOCAL_LIBS, `Magick-config --libs`)
+AC_SUBST(LOCAL_LIBS, `${MAGICKCONFIG} --libs`)
 
-AC_CHECK_LIB(Magick, InitializeMagick, [],
-    [AC_MSG_ERROR([Can't install RMagick. Can't find libMagick or one of the dependent libraries.
+AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
+    [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB} or one of the dependent libraries.
                   Check the config.log file for more detailed information.])],
-    [`Magick-config --libs`])
+    [`${MAGICKCONFIG} --libs`])
 
+
+AC_SUBST(MAGICKLIB)
+AC_SUBST(MAGICKNAME)
+AC_SUBST(MAGICKCONFIG)
+AC_DEFINE_UNQUOTED(MAGICKNAME, $MAGICKNAME)
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
+AC_CHECK_HEADERS(sys/types.h)
 
-# Append ImageMagick's lists of libs to the user's list (if any)
-LIBS="${LIBS} `Magick-config --libs`"
+# Append ***Magick's lists of libs to the user's list (if any)
+LIBS="${LIBS} `${MAGICKCONFIG} --libs`"
 
+# What ImageMagick/GraphicsMagick functions?
+AC_CHECK_FUNCS([AcquireMagickMemory])
+
+# We need to be able to query this later in the configure script, so set a shell variable here
+# as well as defining a symbol.
+AC_CHECK_FUNC(AcquireStringInfo,
+              rm_have_acquirestringinfo=yes,
+              rm_have_acquirestringinfo=no)
+if test "$rm_have_acquirestringinfo" = yes; then
+   AC_DEFINE(HAVE_ACQUIRESTRINGINFO)
+fi
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
-AC_CHECK_FUNCS([AdaptiveThresholdImage])
-AC_CHECK_FUNCS([AddNoiseImageChannel])
-AC_CHECK_FUNCS([ClearMagickException])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions])
+AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
+AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-AC_CHECK_FUNCS([FxImageChannel])
+AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
+AC_CHECK_FUNCS([FuzzyColorCompare FxImageChannel GammaImageChannel])
+AC_CHECK_FUNCS([GaussianBlurImageChannel GetColorHistogram GetColorInfoArray])
+
+# We need to be able to query these symbols later in the configure script, so set a shell
+# variable here as well as defining symbols.
+AC_CHECK_FUNC(GetColorInfoList,
+              rm_have_getcolorinfolist=yes,
+              rm_have_getcolorinfolist=no)
+if test "$rm_have_getcolorinfolist" = yes; then
+   AC_DEFINE(HAVE_GETCOLORINFOLIST)
+fi
+
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
 AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean GetImageClipMask])
 AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])
@@ -73,6 +126,8 @@ AC_CHECK_FUNC(GetImageQuantumDepth,
 if test "$rm_have_getimagequantumdepth" = yes; then
    AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
 fi
+
+AC_CHECK_FUNCS([GetImageStatistics GetMagickInfoArray])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
               rm_have_getmagickpixelpacket=yes,
@@ -97,12 +152,12 @@ if test "$rm_have_gettypeinfolist" = yes; then
    AC_DEFINE(HAVE_GETTYPEINFOLIST)
 fi
 
-AC_CHECK_FUNCS([ImagesToBlob ImportImagePixels])
-AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes])
+AC_CHECK_FUNCS([GrayscalePseudoClassImage ImagesToBlob ImportImagePixels])
+AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes IsColorSimilar])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
 AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([ParseSizeGeometry PolaroidImage PosterizeImage PreviewImage])
-AC_CHECK_FUNCS([RadialBlurImage RadialBlurImageChannel])
+AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])
@@ -114,13 +169,100 @@ AC_CHECK_FUNCS([UnsharpMaskImageChannel VignetteImage WhiteThresholdImage XImpor
 
 # What typedefs?
 
-AC_CHECK_MEMBERS([Image.transparent_color],,,
+# Need a separate test for this so we can set an env. variable to test below.
+AC_CHECK_TYPE(MagickBooleanType,
+              rm_have_magickbooleantype=yes,
+              rm_have_magickbooleantype=no,
+              [#include <stdio.h>
+               #if HAVE_SYS_TYPES_H
+               #include <sys/types.h>
+               #endif
+               #include "magick/api.h"])
+if test "$rm_have_magickbooleantype" = yes; then
+   AC_DEFINE(HAVE_MAGICKBOOLEANTYPE)
+fi
+
+AC_CHECK_TYPES([magick_int64_t,
+                magick_uint64_t,
+                ExtendedSignedIntegralType,
+                ExtendedUnsignedIntegralType,
+                MagickOffsetType,
+                MagickSizeType,
+                MagickPixelPacket],
+                [], [],
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
                  #include "magick/api.h"])
 
+
+AC_CHECK_MEMBERS([ExceptionInfo.module],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
+AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
+AC_CHECK_MEMBERS([ImageInfo.orientation, ImageInfo.channel],,,
+                [#include <stdio.h>
+                 #if HAVE_SYS_TYPES_H
+                 #include <sys/types.h>
+                 #endif
+                 #include "magick/api.h"])
+
+
+# Don't use AC_CHECK_MEMBERS!
+AC_CACHE_CHECK(for Image.extract_info, rm_cv_member_Image_extract_info,
+  AC_TRY_COMPILE([
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include <stdio.h>
+#include "magick/api.h"],
+    [Image i; i.extract_info.x = 0;],
+    rm_cv_member_Image_extract_info=yes,
+    rm_cv_member_Image_extract_info=no))
+if test "$rm_cv_member_Image_extract_info" = yes; then
+  AC_DEFINE(HAVE_IMAGE_EXTRACT_INFO)
+fi
+
+AC_CACHE_CHECK(for CineonLogRGBColorspace enum value, rm_cv_enum_cineonlogrgbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = CineonLogRGBColorspace],
+     rm_cv_enum_cineonlogrgbcolorspace='yes',
+     rm_cv_enum_cineonlogrgbcolorspace='no')])
+
+if test "$rm_cv_enum_cineonlogrgbcolorspace" = yes; then
+  AC_DEFINE(HAVE_CINEONLOGRGBCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for HSBColorspace enum value, rm_cv_enum_hsbcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = HSBColorspace],
+     rm_cv_enum_hsbcolorspace='yes',
+     rm_cv_enum_hsbcolorspace='no')])
+
+if test "$rm_cv_enum_hsbcolorspace" = yes; then
+  AC_DEFINE(HAVE_HSBCOLORSPACE)
+fi
 
 AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
   [AC_TRY_COMPILE(
@@ -197,6 +339,154 @@ if test "$rm_cv_enum_rec709ycbcrcolorspace" = yes; then
   AC_DEFINE(HAVE_REC709YCBCRCOLORSPACE)
 fi
 
+AC_CACHE_CHECK(for LogColorspace enum value, rm_cv_enum_logcolorspace,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ColorspaceType x; x = LogColorspace],
+     rm_cv_enum_logcolorspace='yes',
+     rm_cv_enum_logcolorspace='no')])
+
+if test "$rm_cv_enum_logcolorspace" = yes; then
+  AC_DEFINE(HAVE_LOGCOLORSPACE)
+fi
+
+AC_CACHE_CHECK(for ReplaceCompositeOp enum value, rm_cv_enum_replacecompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = ReplaceCompositeOp],
+     rm_cv_enum_replacecompositeop='yes',
+     rm_cv_enum_replacecompositeop='no')])
+
+if test "$rm_cv_enum_replacecompositeop" = yes; then
+  AC_DEFINE(HAVE_REPLACECOMPOSITEOP)
+fi
+
+AC_CACHE_CHECK(for DstCompositeOp enum value, rm_cv_enum_dstcompositeop,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = DstCompositeOp],
+     rm_cv_enum_dstcompositeop='yes',
+     rm_cv_enum_dstcompositeop='no')])
+
+if test "$rm_cv_enum_dstcompositeop" = yes; then
+  AC_DEFINE(HAVE_DSTCOMPOSITEOP)
+fi
+
+AC_CACHE_CHECK(for ColorDodgeCompositeOp enum value, rm_cv_enum_ColorDodgeCompositeOp,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompositeOperator x; x = ColorDodgeCompositeOp],
+     rm_cv_enum_ColorDodgeCompositeOp='yes',
+     rm_cv_enum_ColorDodgeCompositeOp='no')])
+
+if test "$rm_cv_enum_ColorDodgeCompositeOp" = yes; then
+  AC_DEFINE(HAVE_COLORDODGECOMPOSITEOP)
+fi
+
+AC_CACHE_CHECK(for IndexChannel enum value, rm_cv_enum_indexchannel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = IndexChannel],
+     rm_cv_enum_indexchannel='yes',
+     rm_cv_enum_indexchannel='no')])
+
+if test "$rm_cv_enum_indexchannel" = yes; then
+  AC_DEFINE(HAVE_INDEXCHANNEL)
+fi
+
+AC_CACHE_CHECK(for GrayChannel enum value, rm_cv_enum_graychannel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = GrayChannel],
+     rm_cv_enum_graychannel='yes',
+     rm_cv_enum_graychannel='no')])
+
+if test "$rm_cv_enum_graychannel" = yes; then
+  AC_DEFINE(HAVE_GRAYCHANNEL)
+fi
+
+AC_CACHE_CHECK(for AllChannels enum value, rm_cv_enum_allchannels,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [ChannelType x; x = AllChannels],
+     rm_cv_enum_allchannels='yes',
+     rm_cv_enum_allchannels='no')])
+
+if test "$rm_cv_enum_allchannels" = yes; then
+  AC_DEFINE(HAVE_ALLCHANNELS)
+fi
+
+AC_CACHE_CHECK(for JPEG2000Compression enum value, rm_cv_enum_jpeg2000compression,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [CompressionType x; x = JPEG2000Compression],
+     rm_cv_enum_jpeg2000compression='yes',
+     rm_cv_enum_jpeg2000compression='no')])
+
+if test "$rm_cv_enum_jpeg2000compression" = yes; then
+  AC_DEFINE(HAVE_JPEG2000COMPRESSION)
+fi
+
+AC_CACHE_CHECK(for UndefinedGravity enum value, rm_cv_enum_undefinedgravity,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [GravityType x; x = UndefinedGravity],
+     rm_cv_enum_undefinedgravity='yes',
+     rm_cv_enum_undefinedgravity='no')])
+
+if test "$rm_cv_enum_undefinedgravity" = yes; then
+  AC_DEFINE(HAVE_UNDEFINEDGRAVITY)
+fi
+
+AC_CACHE_CHECK(for QuantumPixel enum value, rm_cv_enum_quantumpixel,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [StorageType x; x = QuantumPixel],
+     rm_cv_enum_quantumpixel='yes',
+     rm_cv_enum_quantumpixel='no')])
+if test "$rm_cv_enum_quantumpixel" = yes; then
+  AC_DEFINE(HAVE_QUANTUMPIXEL)
+fi
 
 AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
   [AC_TRY_COMPILE(
@@ -228,6 +518,20 @@ if test "$rm_cv_enum_coalescelayer" = yes; then
   AC_DEFINE(HAVE_COALESCELAYER)
 fi
 
+AC_CACHE_CHECK(for MaxEvaluateOperator enum value, rm_cv_enum_maxevaluateoperator,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [MagickEvaluateOperator x; x = MaxEvaluateOperator],
+     rm_cv_enum_maxevaluateoperator='yes',
+     rm_cv_enum_maxevaluateoperator='no')])
+
+if test "$rm_cv_enum_maxevaluateoperator" = yes; then
+  AC_DEFINE(HAVE_MAXEVALUATEOPERATOR)
+fi
 
 AC_CACHE_CHECK(for PaletteBilevelMatteType enum value, rm_cv_enum_palettebilevelmattetype,
   [AC_TRY_COMPILE(
@@ -244,27 +548,120 @@ if test "$rm_cv_enum_palettebilevelmattetype" = yes; then
   AC_DEFINE(HAVE_PALETTEBILEVELMATTETYPE)
 fi
 
+if test "$rm_have_getimagequantumdepth" = yes; then
+   # IM 6.0.5 changed the number of arguments to GetImageQuantumDepth.
+   AC_CACHE_CHECK(if GetImageQuantumDepth has only 1 argument, rm_cv_args_get_image_quantum_depth,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [Image *image; (void)GetImageQuantumDepth(image)],
+        rm_cv_args_get_image_quantum_depth='yes',
+        rm_cv_args_get_image_quantum_depth='no')])
 
-# The GetMagickPixelPacket
-# function was introduced in 6.2.0. IM 6.3.0 changed the type of the 'color'
-# member of the ColorInfo structure from PixelPacket to MagickPixelPacket.
-AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_info_color,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
-     rv_cv_struct_color_info_color='yes',
-     rv_cv_struct_color_info_color='no')])
-
-if test "$rv_cv_struct_color_info_color" = yes; then
-   AC_DEFINE(HAVE_NEW_COLORINFO)
+   if test "$rm_cv_args_get_image_quantum_depth" = yes; then
+      AC_DEFINE(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+   fi
 fi
 
-# Where is ImageMagick installed?
-MAGICKPREFIX=`Magick-config --prefix`
+if test "$rm_have_getcolorinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetColorInfoList
+   AC_CACHE_CHECK(if GetColorInfoList has only 2 arguments, rm_cv_args_get_color_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetColorInfoList(pattern, &ncolors)],
+        rm_cv_args_get_color_info_list='yes',
+        rm_cv_args_get_color_info_list='no')])
+
+   if test "$rm_cv_args_get_color_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETCOLORINFOLIST)
+   fi
+fi
+
+if test "$rm_have_gettypeinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetTypeInfoList
+   AC_CACHE_CHECK(if GetTypeInfoList has only 2 arguments, rm_cv_args_get_type_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetTypeInfoList(pattern, &ncolors)],
+        rm_cv_args_get_type_info_list='yes',
+        rm_cv_args_get_type_info_list='no')])
+
+   if test "$rm_cv_args_get_type_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETTYPEINFOLIST)
+   fi
+fi
+
+if test "$rm_have_getmagickinfolist" = yes; then
+   # IM 6.1.3 changed the number of arguments to GetMagickInfoList
+   AC_CACHE_CHECK(if GetMagickInfoList has only 2 arguments, rm_cv_args_get_magick_info_list,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [const char *pattern; unsigned long ncolors; (void)GetMagickInfoList(pattern, &ncolors)],
+        rm_cv_args_get_magick_info_list='yes',
+        rm_cv_args_get_magick_info_list='no')])
+
+   if test "$rm_cv_args_get_magick_info_list" = yes; then
+      AC_DEFINE(HAVE_OLD_GETMAGICKINFOLIST)
+   fi
+fi
+
+# IM 6.2.1 changed the return value from RemoveImageProfile from StringInfo * to
+# MagickBooleanType. The presence of StringInfo implies RemoveImageProfile.
+if test "$rm_have_acquirestringinfo" = yes -a "$rm_have_magickbooleantype" = yes; then
+   AC_CACHE_CHECK(if RemoveImageProfile returns MagickBooleanType, rv_cv_args_remove_image_profile,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [MagickBooleanType bool; Image *image; bool=RemoveImageProfile(image, "icc")],
+        rv_cv_args_remove_image_profile='yes',
+        rv_cv_args_remove_image_profile='no')])
+
+   if test "$rv_cv_args_remove_image_profile" = yes; then
+      AC_DEFINE(HAVE_NEW_REMOVEIMAGEPROFILE)
+   fi
+fi
+
+
+# The MagickPixelPacket type was introduced in IM 6.0.0. The GetMagickPixelPacket
+# function was introduced in 6.2.0. IM 6.3.0 changed the type of the 'color'
+# member of the ColorInfo structure from PixelPacket to MagickPixelPacket.
+if test "$rm_have_getmagickpixelpacket" = yes; then
+   AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_info_color,
+     [AC_TRY_COMPILE(
+   [#include <stdio.h>
+   #if HAVE_SYS_TYPES_H
+   #include <sys/types.h>
+   #endif
+   #include "magick/api.h"],
+        [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
+        rv_cv_struct_color_info_color='yes',
+        rv_cv_struct_color_info_color='no')])
+
+   if test "$rv_cv_struct_color_info_color" = yes; then
+      AC_DEFINE(HAVE_NEW_COLORINFO)
+   fi
+fi
+
+# Where is ****Magick installed?
+MAGICKPREFIX=`${MAGICKCONFIG} --prefix`
 
 # Options to pass to ruby config step
 
@@ -351,6 +748,6 @@ AC_OUTPUT
 echo ""
 echo ""
 echo "This installation of $PACKAGE_STRING is configured for"
-echo "$RUBY_VERSION_STRING and ImageMagick `Magick-config --version`."
+echo "$RUBY_VERSION_STRING and $MAGICKNAME `$MAGICKCONFIG --version`."
 
 

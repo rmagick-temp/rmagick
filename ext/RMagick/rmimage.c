@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.204 2007/01/30 00:06:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.205 2007/02/02 23:12:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1638,7 +1638,6 @@ Image_channel(VALUE self, VALUE channel_arg)
 VALUE
 Image_channel_depth(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELDEPTH)
     Image *image;
     ChannelType channels;
     unsigned long channel_depth;
@@ -1660,10 +1659,6 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return ULONG2NUM(channel_depth);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1680,7 +1675,6 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELEXTREMA)    // ImageMagick 6.0.0
     Image *image;
     ChannelType channels;
     ExceptionInfo exception;
@@ -1708,11 +1702,6 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     rb_ary_store(ary, 1, ULONG2NUM(max));
 
     return ary;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1723,7 +1712,6 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_channel_mean(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELMEAN)   // ImageMagick 6.0.0
     Image *image;
     ChannelType channels;
     ExceptionInfo exception;
@@ -1751,11 +1739,6 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     rb_ary_store(ary, 1, rb_float_new(stddev));
 
     return ary;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1859,13 +1842,12 @@ Image_clone(VALUE self)
 
 /*
     Method:     Image_color_histogram(VALUE self);
-    Purpose:    Call GetImageHistogram (>= IM 5.5.8)
+    Purpose:    Call GetImageHistogram
     Notes:      returns hash {aPixel=>count}
 */
 VALUE
 Image_color_histogram(VALUE self)
 {
-#if defined(HAVE_GETIMAGEHISTOGRAM)
     Image *image, *dc_copy = NULL;
     volatile VALUE hash, pixel;
     unsigned long x, colors;
@@ -1922,10 +1904,6 @@ Image_color_histogram(VALUE self)
     }
 
     return hash;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -5125,11 +5103,7 @@ Image_inspect(VALUE self)
     }
 
     // Print bit depth
-#if defined(HAVE_GETIMAGEQUANTUMDEPTH)
     quantum_depth = GetImageQuantumDepth(image, MagickTrue);
-#else
-    quantum_depth = image->depth;
-#endif
     x += sprintf(buffer+x, "%lu-bit", quantum_depth);
 
     // Print blob info if appropriate.
@@ -6854,7 +6828,6 @@ DEF_ATTR_READER(Image, quality, ulong)
 VALUE
 Image_quantum_depth(VALUE self)
 {
-#if defined(HAVE_GETIMAGEQUANTUMDEPTH)
     Image *image;
     unsigned long quantum_depth;
 
@@ -6864,10 +6837,6 @@ Image_quantum_depth(VALUE self)
     rm_check_image_exception(image, RetainOnError);
 
     return ULONG2NUM(quantum_depth);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

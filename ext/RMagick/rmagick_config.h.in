@@ -20,24 +20,14 @@
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
 /* Introduced in IM 6.2.0 */
 #undef HAVE_FXIMAGECHANNEL
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_GETIMAGECHANNELDEPTH
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_GETIMAGECHANNELEXTREMA
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_GETIMAGECHANNELMEAN
 /* Introduced in IM 6.2.0 */
 #undef HAVE_GETIMAGECHANNELDISTORTION
 /* Not available in GM */
 #undef HAVE_GETIMAGECLIPMASK
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_GETIMAGEHISTOGRAM
 /* Introduced in IM 6.1.5 */
 #undef HAVE_IMAGESTOBLOB
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGEPROFILE
-/* Introduced in IM 6.0.0 */
-#undef HAVE_GETIMAGEQUANTUMDEPTH
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETMAGICKINFOLIST
 /* Introduced in IM 6.3.0 */

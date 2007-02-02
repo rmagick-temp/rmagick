@@ -50,6 +50,7 @@ AC_CHECK_LIB(Magick, InitializeMagick, [],
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
+AC_CHECK_HEADERS(sys/types.h)
 
 # Append ImageMagick's lists of libs to the user's list (if any)
 LIBS="${LIBS} `Magick-config --libs`"
@@ -61,18 +62,9 @@ AC_CHECK_FUNCS([AddNoiseImageChannel])
 AC_CHECK_FUNCS([ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 AC_CHECK_FUNCS([FxImageChannel])
-AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
-AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean GetImageClipMask])
-AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])
-
-# We need to be able to query this later in the configure script, so set a shell variable here
-# as well as defining a symbol.
-AC_CHECK_FUNC(GetImageQuantumDepth,
-              rm_have_getimagequantumdepth=yes,
-              rm_have_getimagequantumdepth=no)
-if test "$rm_have_getimagequantumdepth" = yes; then
-   AC_DEFINE(HAVE_GETIMAGEQUANTUMDEPTH)
-fi
+AC_CHECK_FUNCS([GetImageChannelDistortion])
+AC_CHECK_FUNCS([GetImageClipMask])
+AC_CHECK_FUNCS([GetImageProfile])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
               rm_have_getmagickpixelpacket=yes,

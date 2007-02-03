@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.205 2007/02/02 23:12:31 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.206 2007/02/03 01:17:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -388,7 +388,6 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_add_profile(VALUE self, VALUE name)
 {
-#if defined(HAVE_GETNEXTIMAGEPROFILE)
     // ImageMagick code based on the code for the "-profile" option in mogrify.c
     Image *image, *profile_image;
     ImageInfo *info;
@@ -436,75 +435,6 @@ Image_add_profile(VALUE self, VALUE name)
     (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
-#else
-
-    // GraphicsMagick code based on the code for the "-profile" option in command.c
-    Image *image, *profile_image;
-    ImageInfo *info;
-    ExceptionInfo exception;
-    char *profile_filename = NULL;
-    long profile_filename_l = 0;
-    ProfileInfo *generic;
-    const unsigned char *profile;
-    size_t profile_l;
-    long x;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    // ProfileImage issues a warning if something goes wrong.
-    profile_filename = STRING_PTR_LEN(name, profile_filename_l);
-
-    info = CloneImageInfo(NULL);
-    info->client_data= (void *) &image->iptc_profile;
-    strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
-    info->filename[MaxTextExtent-1] = '\0';
-
-    GetExceptionInfo(&exception);
-    profile_image = ReadImage(info, &exception);
-    (void) DestroyImageInfo(info);
-    rm_check_exception(&exception, profile_image, DestroyOnError);
-    (void) DestroyExceptionInfo(&exception);
-    rm_ensure_result(profile_image);
-
-    /* IPTC NewsPhoto Profile */
-    profile = GetImageProfile(profile_image, "IPTC", &profile_l);
-    if (profile)
-    {
-        (void)SetImageProfile(image, "IPTC", profile, profile_l);
-        if (image->exception.severity >= ErrorException)
-        {
-            goto done;
-        }
-    }
-
-    /* ICC ICM Profile */
-    profile = GetImageProfile(profile_image, "ICM", &profile_l);
-    if (profile)
-    {
-        (void)SetImageProfile(image, "ICM", profile, profile_l);
-        if (image->exception.severity >= ErrorException)
-        {
-            goto done;
-        }
-    }
-
-    /* Generic Profiles */
-    for (x = 0; x < (long)profile_image->generic_profiles; x++)
-    {
-        generic = profile_image->generic_profile + x;
-        (void)SetImageProfile(image, generic->name, generic->info, generic->length);
-        if (image->exception.severity >= ErrorException)
-        {
-            break;
-        }
-    }
-
-done:
-    (void) DestroyImage(profile_image);
-    rm_check_image_exception(image, RetainOnError);
-
-#endif
 
     return self;
 }
@@ -1916,7 +1846,6 @@ Image_color_histogram(VALUE self)
 */
 static VALUE set_profile(VALUE self, const char *name, VALUE profile)
 {
-#if defined(HAVE_GETNEXTIMAGEPROFILE)
     Image *image, *profile_image;
     ImageInfo *info;
     const MagickInfo *m;
@@ -1972,59 +1901,6 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
 
     (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
-
-#else
-
-    Image *image, *profile_image;
-    ImageInfo *info;
-    ExceptionInfo exception;
-    const MagickInfo *m;
-    char *profile_blob;
-    long profile_length;
-    const unsigned char *profile_data;
-    size_t profile_data_l;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    profile_blob = STRING_PTR_LEN(profile, profile_length);
-
-    GetExceptionInfo(&exception);
-    m = GetMagickInfo(name, &exception);
-    CHECK_EXCEPTION()
-
-    info = CloneImageInfo(NULL);
-    if (!info)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
-
-    strncpy(info->magick, m->name, MaxTextExtent);
-    info->magick[MaxTextExtent-1] = '\0';
-
-    profile_image = BlobToImage(info, profile_blob, profile_length, &exception);
-    (void) DestroyImageInfo(info);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    // GraphicsMagick uses "ICM" to refer to the ICC profile.
-    if (rm_strcasecmp(name, "ICC") == 0)
-    {
-        profile_data = GetImageProfile(profile_image, "ICM", &profile_data_l);
-    }
-    else
-    {
-        profile_data = GetImageProfile(profile_image, name, &profile_data_l);
-    }
-    if (profile_data)
-    {
-        (void)SetImageProfile(image, name, profile_data, profile_data_l);
-    }
-
-    (void) DestroyImage(profile_image);
-    rm_check_image_exception(image, RetainOnError);
-
-#endif
 
     return self;
 }
@@ -3709,7 +3585,6 @@ Image_dup(VALUE self)
 VALUE
 Image_each_profile(VALUE self)
 {
-#if defined(HAVE_GETNEXTIMAGEPROFILE)
     Image *image;
     volatile VALUE ary, val;
     char *name;
@@ -3740,10 +3615,6 @@ Image_each_profile(VALUE self)
     }
 
     return val;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.44 2007/01/25 00:26:44 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.45 2007/02/03 01:15:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -706,12 +706,7 @@ Draw_get_multiline_type_metrics(
      VALUE *argv,
      VALUE self)
 {
-#if defined(HAVE_GETMULTILINETYPEMETRICS)
      return get_type_metrics(argc, argv, self, GetMultilineTypeMetrics);
-#else
-     rm_not_implemented();
-     return (VALUE)0;
-#endif
 }
 
 /*

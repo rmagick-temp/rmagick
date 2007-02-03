@@ -74,11 +74,11 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
 fi
 
 AC_CHECK_FUNCS([GetMagickResourceLimit GetNextImageAttribute])
-AC_CHECK_FUNCS([ImagesToBlob ImportImagePixels])
-AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes])
-AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])
-AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])
-AC_CHECK_FUNCS([ParseSizeGeometry PolaroidImage PosterizeImage PreviewImage])
+AC_CHECK_FUNCS([ImagesToBlob])
+AC_CHECK_FUNCS([InterpolatePixelColor InterpretImageAttributes])
+AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage])
+AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
+AC_CHECK_FUNCS([PolaroidImage PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])

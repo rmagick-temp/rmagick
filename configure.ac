@@ -50,7 +50,7 @@ AC_CHECK_LIB(Magick, InitializeMagick, [],
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
-AC_CHECK_HEADERS(sys/types.h)
+AC_CHECK_HEADER(sys/types.h)
 
 # Append ImageMagick's lists of libs to the user's list (if any)
 LIBS="${LIBS} `Magick-config --libs`"
@@ -73,22 +73,7 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
    AC_DEFINE(HAVE_GETMAGICKPIXELPACKET)
 fi
 
-AC_CHECK_FUNC(GetMagickInfoList,
-              rm_have_getmagickinfolist=yes,
-              rm_have_getmagickinfolist=no)
-if test "$rm_have_getmagickinfolist" = yes; then
-   AC_DEFINE(HAVE_GETMAGICKINFOLIST)
-fi
-
-AC_CHECK_FUNCS([GetMagickResourceLimit GetMultilineTypeMetrics GetNextImageAttribute GetNextImageProfile])
-
-AC_CHECK_FUNC(GetTypeInfoList,
-              rm_have_gettypeinfolist=yes,
-              rm_have_gettypeinfolist=no)
-if test "$rm_have_gettypeinfolist" = yes; then
-   AC_DEFINE(HAVE_GETTYPEINFOLIST)
-fi
-
+AC_CHECK_FUNCS([GetMagickResourceLimit GetNextImageAttribute])
 AC_CHECK_FUNCS([ImagesToBlob ImportImagePixels])
 AC_CHECK_FUNCS([InheritException InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage NegateImageChannel])

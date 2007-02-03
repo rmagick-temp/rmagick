@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.98 2007/01/28 20:18:35 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.99 2007/02/03 22:10:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2973,12 +2973,7 @@ rm_split(Image *image)
  *              clear_exception
  *  Purpose:    Define alternative implementations of ImageMagick's
  *              InheritException and ClearMagickException.
- *  Notes:      InheritException is ALWAYS defined in ImageMagick and
- *              NEVER defined in GraphicsMagick. ClearMagickException
- *              is defined in ImageMagick 6.2.6 and later and NEVER
- *              defined in GraphicsMagick.
- *
- *              The purpose of InheritException is to copy the exception
+ *  Notes:      The purpose of InheritException is to copy the exception
  *              information from a "related" exception to a destination
  *              exception if the related exception is more severe than the
  *              destination exception.
@@ -2987,70 +2982,26 @@ rm_split(Image *image)
  *              structure to its initial format.
  */
 
-#if defined(HAVE_INHERITEXCEPTION)
 
-    // This is ImageMagick - InheritException is always defined
-    static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
-    {
-        InheritException(exception, relative);
-    }
+static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
+{
+    InheritException(exception, relative);
+}
 
-    // ImageMagick < 6.2.6 had a different kind of ExceptionInfo struct
-    // and doesn't define ClearMagickException.
-    #if defined(HAVE_CLEARMAGICKEXCEPTION)
-        static void clear_exception(ExceptionInfo *exception)
-        {
-           ClearMagickException(exception);
-        }
-    #else
+// ImageMagick < 6.2.6 had a different kind of ExceptionInfo struct
+// and doesn't define ClearMagickException.
+#if defined(HAVE_CLEARMAGICKEXCEPTION)
+static void clear_exception(ExceptionInfo *exception)
+{
+   ClearMagickException(exception);
+}
+#else
 
-        static void clear_exception(ExceptionInfo *exception)
-        {
-            DestroyExceptionInfo(exception);
-            GetExceptionInfo(exception);
-        }
-
-    #endif
-
-
-#else   // !defined(HAVE_INHERITEXCEPTION)
-
-    // This is GraphicsMagick. Very old versions don't support the
-    // module, function, and line fields in the ExceptionInfo struct.
-
-    static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
-    {
-        assert(exception != NULL);
-        assert(exception->signature == MagickSignature);
-        assert(relative != NULL);
-
-        if (relative->severity < exception->severity)
-        {
-          return;
-        }
-
-        DestroyExceptionInfo(exception);
-        GetExceptionInfo(exception);
-
-        exception->severity = relative->severity;
-        if (relative->reason)
-        {
-          magick_clone_string(&exception->reason, relative->reason);
-        }
-
-        if (relative->description)
-        {
-          magick_clone_string(&exception->description, relative->description);
-        }
-
-    }
-
-
-    static void clear_exception(ExceptionInfo *exception)
-    {
-        DestroyExceptionInfo(exception);
-        GetExceptionInfo(exception);
-    }
+static void clear_exception(ExceptionInfo *exception)
+{
+    DestroyExceptionInfo(exception);
+    GetExceptionInfo(exception);
+}
 
 #endif
 

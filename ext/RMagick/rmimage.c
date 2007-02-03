@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.206 2007/02/03 01:17:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.207 2007/02/03 22:12:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1458,7 +1458,6 @@ Image_capture(
 VALUE
 Image_change_geometry(VALUE self, VALUE geom_arg)
 {
-#if defined(HAVE_PARSESIZEGEOMETRY)
     Image *image;
     RectangleInfo rect = {0};
     volatile VALUE geom_str;
@@ -1482,37 +1481,6 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     rb_ary_store(ary, 2, self);
 
     return rb_yield(ary);
-
-#else
-    Image *image;
-    char *geometry;
-    unsigned int flags;
-    long x, y;
-    unsigned long width, height;
-    volatile VALUE ary;
-    volatile VALUE geom_str;
-
-    Data_Get_Struct(self, Image, image);
-    geom_str = rb_funcall(geom_arg, ID_to_s, 0);
-    geometry = STRING_PTR(geom_str);
-
-    width = image->columns;
-    height = image->rows;
-
-    flags = GetMagickGeometry(geometry, &x, &y, &width, &height);
-    if (flags == NoValue)
-    {
-       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
-    }
-
-    ary = rb_ary_new2(3);
-    rb_ary_store(ary, 0, ULONG2NUM(width));
-    rb_ary_store(ary, 1, ULONG2NUM(height));
-    rb_ary_store(ary, 2, self);
-
-    return rb_yield(ary);
-
-#endif
 }
 
 
@@ -2699,8 +2667,6 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     // Release the pixel buffer before any exception can be raised.
     GetExceptionInfo(&exception);
 
-#if defined(HAVE_IMPORTIMAGEPIXELS)
-
     // This is based on ConstituteImage in IM 5.5.7
     image = AllocateImage(NULL);
     if (!image)
@@ -2712,10 +2678,6 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
 
     (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
     rm_check_image_exception(image, DestroyOnError);
-#else
-    image = ConstituteImage(width, height, map, stg_type, (void *)pixels.v, &exception);
-    rm_check_exception(&exception, image, DestroyOnError);
-#endif
 
     (void) DestroyExceptionInfo(&exception);
     DestroyConstitute();
@@ -4712,7 +4674,6 @@ Image_implode(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_import_pixels(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_IMPORTIMAGEPIXELS)
     Image *image;
     long x_off, y_off;
     unsigned long cols, rows;
@@ -4870,11 +4831,6 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     }
 
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -5896,7 +5852,6 @@ Image_negate(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_negate_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_NEGATEIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     unsigned int grayscale = False;
@@ -5921,11 +5876,6 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -6048,7 +5998,6 @@ Image_normalize(VALUE self)
 VALUE
 Image_normalize_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_NORMALIZEIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
 
@@ -6067,10 +6016,6 @@ Image_normalize_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 DEF_ATTR_READERF(Image, normalized_mean_error, error.normalized_mean_error, dbl)

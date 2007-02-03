@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.172 2007/01/30 00:06:54 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.173 2007/02/03 01:16:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -76,8 +76,6 @@ Magick_colors(VALUE class)
 VALUE
 Magick_fonts(VALUE class)
 {
-#if defined(HAVE_GETTYPEINFOLIST)   // ImageMagick 6.0.0
-
     const TypeInfo **type_info;
     unsigned long number_types, x;
     volatile VALUE ary;
@@ -108,44 +106,6 @@ Magick_fonts(VALUE class)
         return ary;
     }
 
-#else
-
-    const TypeInfo *type_list;
-    TypeInfo *type, *next;
-    ExceptionInfo exception;
-    volatile VALUE ary;
-
-    GetExceptionInfo(&exception);
-
-    type_list = GetTypeInfo("*", &exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    // If block, iterate over fonts
-    if (rb_block_given_p())
-    {
-        for (type = (TypeInfo *)type_list; type; type = next)
-        {
-            next = type->next;  // Protect against recursive calls to GetTypeInfo
-            if (! type->stealth)
-            {
-                rb_yield(Font_from_TypeInfo(type));
-            }
-        }
-
-        return class;
-    }
-    else
-    {
-        ary = rb_ary_new();
-        for (type = (TypeInfo *)type_list; type; type = type->next)
-        {
-            rb_ary_push(ary, Font_from_TypeInfo(type));
-        }
-        return ary;
-    }
-
-#endif
 }
 
 
@@ -180,8 +140,6 @@ static VALUE MagickInfo_to_format(MagickInfo *magick_info)
 VALUE
 Magick_init_formats(VALUE class)
 {
-#if defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
-
     const MagickInfo **magick_info;
     unsigned long number_formats, x;
     volatile VALUE formats;
@@ -204,30 +162,6 @@ Magick_init_formats(VALUE class)
                           , MagickInfo_to_format((MagickInfo *)magick_info[x]));
     }
     return formats;
-
-#else
-
-    MagickInfo *m;
-    volatile VALUE formats;
-    ExceptionInfo exception;
-
-    class = class;      // defeat "never referenced" message from icc
-
-    formats = rb_hash_new();
-
-    GetExceptionInfo(&exception);
-    m = (MagickInfo *)GetMagickInfo("*", &exception);
-    CHECK_EXCEPTION()
-    (void) DestroyExceptionInfo(&exception);
-
-    for ( ; m != NULL; m = m->next)
-    {
-        rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
-    }
-
-    return formats;
-
-#endif
 }
 
 
@@ -1707,7 +1641,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/30 00:06:54 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/03 01:16:03 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.162 2007/01/29 23:05:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.1 2007/02/04 13:13:33 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -40,6 +40,18 @@
 
 
 #include "rmagick_config.h"
+
+// Define a pair of macros that make it easier to code
+// 1.6 and 1.8 alternatives. Code enclosed in RUBY18()
+// is present when compiled for 1.8.0 and later. Code
+// enclosed in RUBY16 is present for 1.6 versions.
+#if RUBY_VERSION >= 0x180
+#define RUBY18(d) d
+#define RUBY16(d)
+#else
+#define RUBY18(d)
+#define RUBY16(d) d
+#endif
 
 // Backport these definitions to Ruby 1.6.7
 #if !defined(ULONG2NUM)
@@ -145,6 +157,7 @@ typedef struct
 
 #define MAX_GEOM_STR 51                 // max length of a geometry string
 
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
 /*
  * Both ImageMagick and GraphicsMagick define an enum type for quantum-level
  * expressions, but they're different types. The QuantumExpressionOperator
@@ -165,11 +178,60 @@ typedef enum _QuantumExpressionOperator
     SubtractQuantumOperator,
     XorQuantumOperator
 } QuantumExpressionOperator ;
+#endif
+
+
+/*
+    ImageMagick used simply size_t and off_t in 5.5.1, then defined the
+    Extended(Un)SignedIntegralType from 5.5.2 thru 5.5.7. The 5.5.8 release
+    deprecates these types and uses Magick(Un)SignedType instead.
+    Prior to 1.1, GraphicsMagick defined the Extended(Un)SignedIntegralType(s).
+    GraphicsMagick 1.1. introduced the magick_(u)int64_t types.
+
+    Here, if we don't already have magick_(u)int64_t, define them in terms
+    of whatever other types are defined.
+*/
+#if !defined(HAVE_MAGICK_INT64_T)
+    #if defined(HAVE_MAGICKOFFSETTYPE)
+        typedef MagickOffsetType magick_int64_t;
+    #elif defined(HAVE_EXTENDEDSIGNEDINTEGRALTYPE)
+        typedef ExtendedSignedIntegralType magick_int64_t;
+    #else
+        typedef off_t magick_int64_t;
+    #endif
+#endif
+
+#if !defined(HAVE_MAGICK_UINT64_T)
+    #if defined(HAVE_MAGICKSIZETYPE)
+        typedef MagickSizeType magick_uint64_t;
+    #elif defined(HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE)
+        typedef ExtendedUnsignedIntegralType magick_uint64_t;
+    #else
+        typedef size_t magick_uint64_t;
+    #endif
+#endif
+
+// IM < 6.2.0 and GM don't have MagickBooleanType
+#if !defined(HAVE_MAGICKBOOLEANTYPE)
+typedef unsigned int MagickBooleanType;
+#if !defined(MagickTrue)
+#define MagickTrue 1
+#endif
+#if !defined(MagickFalse)
+#define MagickFalse 0
+#endif
+#endif
+
+#if !defined(HAVE_UNDEFINEDGRAVITY)
+#define UndefinedGravity 0
+#endif
 
 
 #if !defined(HAVE_SETIMAGEINFOFILE)
 #define SetImageInfoFile(info, fptr) (info)->file = (fptr)
 #endif
+
+#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
 
 #if !defined(HAVE_SETIMAGEEXTENT)
 #define SetImageExtent(img, c, r) \
@@ -219,8 +281,16 @@ EXTERN VALUE Class_Primary;
 EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
+#if defined(HAVE_COMPAREIMAGECHANNELS)
 EXTERN VALUE Class_MetricType;
+#endif
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
 EXTERN VALUE Class_QuantumExpressionOperator;
+#endif
+#if defined(HAVE_GETIMAGESTATISTICS)
+EXTERN VALUE Class_Statistics;
+EXTERN VALUE Class_StatisticsChannel;
+#endif
 
 // Enum classes
 EXTERN VALUE Class_Enum;
@@ -246,7 +316,9 @@ EXTERN VALUE Class_InterpolatePixelMethod;
 EXTERN VALUE Class_MagickLayerMethod;
 #endif
 EXTERN VALUE Class_NoiseType;
+#if defined(HAVE_IMAGE_ORIENTATION)
 EXTERN VALUE Class_OrientationType;
+#endif
 EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
@@ -287,6 +359,9 @@ EXTERN ID ID_y;                 // "y"
 
 #define min(a,b) ((a)<(b)?(a):(b))
 #define max(a,b) ((a)>(b)?(a):(b))
+
+#define Q(N) Q2(N)
+#define Q2(N) #N
 
 /*
    Handle warnings & errors
@@ -508,8 +583,13 @@ extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_init_copy(VALUE, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Draw_alloc(VALUE);
 extern VALUE DrawOptions_alloc(VALUE);
+#else
+extern VALUE Draw_new(VALUE);
+extern VALUE DrawOptions_new(VALUE);
+#endif
 extern VALUE Draw_primitive(VALUE, VALUE);
 extern VALUE DrawOptions_initialize(VALUE);
 
@@ -532,11 +612,18 @@ ATTR_WRITER(Montage, texture)
 ATTR_WRITER(Montage, tile)
 ATTR_WRITER(Montage, title)
 extern VALUE Montage_initialize(VALUE);
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Montage_alloc(VALUE);
+#else
+extern VALUE Montage_new(VALUE);
+#endif
 extern VALUE rm_montage_new(void);
 
 
 extern VALUE PolaroidOptions_alloc(VALUE);
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+extern VALUE PolaroidOptions_new(VALUE);
+#endif
 extern VALUE PolaroidOptions_initialize(VALUE);
 extern VALUE rm_polaroid_new(void);
 ATTR_WRITER(PolaroidOptions, shadow_color);
@@ -619,7 +706,11 @@ ATTR_ACCESSOR(Info, units)
 ATTR_ACCESSOR(Info, view)
 //ATTR_ACCESSOR(Info, verbose)
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Info_alloc(VALUE);
+#else
+extern VALUE Info_new(VALUE);
+#endif
 
 extern VALUE Info_define(int, VALUE *, VALUE);
 extern VALUE Info_aset(VALUE, VALUE, VALUE, VALUE);
@@ -699,8 +790,14 @@ ATTR_ACCESSOR(Image, y_resolution)
 extern ChannelType extract_channels(int *, VALUE *);
 extern void raise_ChannelType_error(VALUE);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE Image_alloc(VALUE);
 extern VALUE Image_initialize(int, VALUE *, VALUE);
+#else
+extern VALUE Image_new(int, VALUE *, VALUE);
+extern VALUE Image_initialize(VALUE, VALUE, VALUE, VALUE, VALUE);
+#endif
+
 extern VALUE Image_adaptive_blur(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_adaptive_resize(int, VALUE *, VALUE);
@@ -785,6 +882,7 @@ extern VALUE Image_gaussian_blur(int, VALUE *, VALUE);
 extern VALUE Image_gaussian_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_get_pixels(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_gray_q(VALUE);
+extern VALUE Image_grayscale_pseudo_class(int, VALUE *, VALUE);
 extern VALUE Image_implode(int, VALUE *, VALUE);
 extern VALUE Image_import_pixels(int, VALUE *, VALUE);
 extern VALUE Image_init_copy(VALUE, VALUE);
@@ -856,6 +954,7 @@ extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
 extern VALUE Image_splice(int, VALUE *, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
+extern VALUE Image_statistics(VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);
 extern VALUE Image_stereo(VALUE, VALUE);
 extern VALUE Image_store_pixels(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
@@ -889,11 +988,21 @@ extern VALUE rm_image_new(Image *);
 
 
 // rmfill.c
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  GradientFill_alloc(VALUE);
+#else
+extern VALUE  GradientFill_new(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
+#endif
+
 extern VALUE  GradientFill_initialize(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE  GradientFill_fill(VALUE, VALUE);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  TextureFill_alloc(VALUE);
+#else
+extern VALUE  TextureFill_new(VALUE, VALUE);
+#endif
+
 extern VALUE  TextureFill_initialize(VALUE, VALUE);
 extern VALUE  TextureFill_fill(VALUE, VALUE);
 
@@ -917,8 +1026,11 @@ extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE  ImageType_new(ImageType);
 extern VALUE  InterlaceType_new(InterlaceType);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE   Pixel_alloc(VALUE);
-
+#else
+extern VALUE   Pixel_new(int, VALUE *, VALUE);
+#endif
 ATTR_ACCESSOR(Pixel, red)
 ATTR_ACCESSOR(Pixel, green)
 ATTR_ACCESSOR(Pixel, blue)
@@ -962,7 +1074,9 @@ extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
 #if defined(HAVE_INTERPOLATEPIXELCOLOR)
 extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);
 #endif
+#if defined(HAVE_IMAGE_ORIENTATION)
 extern VALUE  OrientationType_new(OrientationType);
+#endif
 extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
 extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
 extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);
@@ -971,10 +1085,17 @@ extern void   TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
 extern VALUE  Font_from_TypeInfo(TypeInfo *);
 extern VALUE  TypeMetric_to_s(VALUE);
 extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
+#if defined(HAVE_GETIMAGESTATISTICS)
+extern VALUE  Statistics_new(ImageStatistics *);
+#endif
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 extern VALUE  Enum_alloc(VALUE);
+#else
+extern VALUE  Enum_new(VALUE, VALUE, VALUE);
+#endif
 extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
 extern VALUE  Enum_to_s(VALUE);
 extern VALUE  Enum_to_i(VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.98 2007/01/28 20:18:35 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.1 2007/02/04 13:16:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -20,11 +20,51 @@ static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 #endif
 
+#if !defined(HAVE_ACQUIREMAGICKMEMORY)
+/*
+    Dummy versions of ImageMagick memory routines for use with GraphicsMagick.
+*/
+static void *AcquireMagickMemory(const size_t size)
+{
+    assert(size > 0);
+    return malloc(size);
+}
+
+static void *RelinquishMagickMemory(void *memory)
+{
+    if (memory)
+    {
+        free(memory);
+    }
+    return NULL;
+}
+
+static void *ResizeMagickMemory(void *memory, const size_t size)
+{
+    void *new;
+
+    if (!memory)
+    {
+        return malloc(size);
+    }
+    if (size == 0)
+    {
+        free(memory);
+        return NULL;
+    }
+    new = realloc(memory, size);
+    if (!new)
+    {
+        free(memory);
+    }
+    return new;
+}
+#endif
 
 /*
     Extern:     magick_malloc, magick_free, magick_realloc
-    Purpose:    ImageMagick versions of standard memory routines.
-    Notes:      use when managing memory that ImageMagick may have
+    Purpose:    ****Magick versions of standard memory routines.
+    Notes:      use when managing memory that ****Magick may have
                 allocated or may free.
                 If malloc fails, it raises an exception
 */
@@ -617,8 +657,10 @@ Pixel_eql_q(VALUE self, VALUE other)
 VALUE
 Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_FUZZYCOLORCOMPARE)
     Image *image;
     Info *info;
+#endif
 
     Pixel *this, *that;
     ColorspaceType colorspace = RGBColorspace;
@@ -642,7 +684,8 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Pixel, this);
     Data_Get_Struct(argv[0], Pixel, that);
 
-    // The IsColorSimilar function expects to get the
+#if defined(HAVE_FUZZYCOLORCOMPARE) || defined(HAVE_ISCOLORSIMILAR)
+    // The FuzzyColorCompare function expects to get the
     // colorspace and fuzz parameters from an Image structure.
 
     info = CloneImageInfo(NULL);
@@ -652,20 +695,25 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     }
 
     image = AllocateImage(info);
-
-    // Delete Info now in case we have to raise an exception
-    (void) DestroyImageInfo(info);
-
     if (!image)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
+    (void) DestroyImageInfo(info);
 
     image->colorspace = colorspace;
     image->fuzz = fuzz;
 
+#if defined(HAVE_ISCOLORSIMILAR)
     equal = IsColorSimilar(image, this, that);
+#else
+    equal = FuzzyColorCompare(image, this, that);
+#endif
     (void) DestroyImage(image);
+
+#else
+    equal = FuzzyColorMatch(this, that, fuzz);
+#endif
 
     return equal ? Qtrue : Qfalse;
 }
@@ -706,9 +754,9 @@ Pixel_intensity(VALUE self)
 
     Data_Get_Struct(self, Pixel, pixel);
 
-    intensity = RoundToQuantum((0.299*pixel->red)
-                             + (0.587*pixel->green)
-                             + (0.114*pixel->blue));
+    intensity = ROUND_TO_QUANTUM((0.299*pixel->red)
+                                + (0.587*pixel->green)
+                                + (0.114*pixel->blue));
 
     return ULONG2NUM((unsigned long) intensity);
 }
@@ -792,6 +840,7 @@ destroy_Pixel(Pixel *pixel)
 }
 
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:     Pixel_alloc
     Purpose:    Allocate a Pixel object
@@ -805,6 +854,27 @@ Pixel_alloc(VALUE class)
     memset(pixel, '\0', sizeof(Pixel));
     return Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
 }
+
+#else
+
+/*
+    Method:     Pixel.new
+    Purpose:    Construct a new Pixel object
+*/
+VALUE
+Pixel_new(int argc, VALUE *argv, VALUE class)
+{
+    Pixel *pixel;
+    volatile VALUE pixel_obj;
+
+    pixel = ALLOC(Pixel);
+    memset(pixel, '\0', sizeof(Pixel));
+    pixel_obj = Data_Wrap_Struct(class, NULL, destroy_Pixel, pixel);
+
+    rb_obj_call_init(pixel_obj, argc, argv);
+    return pixel_obj;
+}
+#endif
 
 
 /*
@@ -1165,12 +1235,19 @@ ColorspaceType_new(ColorspaceType cs)
         case HWBColorspace:
             name = "HWBColorspace";
             break;
+#if defined(HAVE_HSBCOLORSPACE)
         case HSBColorspace:
             name = "HSBColorspace";
             break;
+#endif
 #if defined(HAVE_LABCOLORSPACE)
         case LABColorspace:
             name = "LABColorspace";
+            break;
+#endif
+#if defined(HAVE_CINEONLOGRGBCOLORSPACE)
+        case CineonLogRGBColorspace:
+            name = "CineonLogRGBColorspace";
             break;
 #endif
 #if defined(HAVE_REC601LUMACOLORSPACE)
@@ -1188,9 +1265,11 @@ ColorspaceType_new(ColorspaceType cs)
             name = "Rec709YCbCrColorspace";
             break;
 #endif
+#if defined(HAVE_LOGCOLORSPACE)
         case LogColorspace:
             name = "LogColorspace";
             break;
+#endif
     }
 
     return rm_enum_new(Class_ColorspaceType, ID2SYM(rb_intern(name)), INT2FIX(cs));
@@ -1229,12 +1308,14 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(AtopCompositeOp)
         ENUM_TO_NAME(BumpmapCompositeOp)
         ENUM_TO_NAME(ClearCompositeOp)
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
         ENUM_TO_NAME(ColorBurnCompositeOp)
         ENUM_TO_NAME(BlendCompositeOp)
         ENUM_TO_NAME(ColorDodgeCompositeOp)
         ENUM_TO_NAME(ExclusionCompositeOp)
         ENUM_TO_NAME(HardLightCompositeOp)
         ENUM_TO_NAME(SoftLightCompositeOp)
+#endif
         ENUM_TO_NAME(ColorizeCompositeOp)
         ENUM_TO_NAME(CopyBlueCompositeOp)
         ENUM_TO_NAME(CopyCompositeOp)
@@ -1246,11 +1327,13 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)
         ENUM_TO_NAME(DarkenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
         ENUM_TO_NAME(DstAtopCompositeOp)
         ENUM_TO_NAME(DstCompositeOp)
         ENUM_TO_NAME(DstInCompositeOp)
         ENUM_TO_NAME(DstOutCompositeOp)
         ENUM_TO_NAME(DstOverCompositeOp)
+#endif
         ENUM_TO_NAME(DifferenceCompositeOp)
         ENUM_TO_NAME(DisplaceCompositeOp)
         ENUM_TO_NAME(DissolveCompositeOp)
@@ -1265,14 +1348,18 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(OverCompositeOp)
         ENUM_TO_NAME(OverlayCompositeOp)
         ENUM_TO_NAME(PlusCompositeOp)
+#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUM_TO_NAME(ReplaceCompositeOp)
+#endif
         ENUM_TO_NAME(SaturateCompositeOp)
         ENUM_TO_NAME(ScreenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
         ENUM_TO_NAME(SrcAtopCompositeOp)
         ENUM_TO_NAME(SrcCompositeOp)
         ENUM_TO_NAME(SrcInCompositeOp)
         ENUM_TO_NAME(SrcOutCompositeOp)
         ENUM_TO_NAME(SrcOverCompositeOp)
+#endif
         ENUM_TO_NAME(SubtractCompositeOp)
         ENUM_TO_NAME(ThresholdCompositeOp)
         ENUM_TO_NAME(XorCompositeOp)
@@ -1655,6 +1742,7 @@ ResolutionType_new(ResolutionType type)
 
 
 
+#if defined(HAVE_IMAGE_ORIENTATION)
 /*
     Static:     OrientationType_name
     Purpose:    Return the name of a OrientationType enum as a string
@@ -1690,6 +1778,7 @@ OrientationType_new(OrientationType type)
     name = OrientationType_name(type);
     return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
+#endif
 
 
 /*
@@ -1837,10 +1926,10 @@ Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
     Pixel *pixel;
 
     pixel          = ALLOC(Pixel);
-    pixel->red     = RoundToQuantum(pp->red);
-    pixel->green   = RoundToQuantum(pp->green);
-    pixel->blue    = RoundToQuantum(pp->blue);
-    pixel->opacity = RoundToQuantum(pp->opacity);
+    pixel->red     = ROUND_TO_QUANTUM(pp->red);
+    pixel->green   = ROUND_TO_QUANTUM(pp->green);
+    pixel->blue    = ROUND_TO_QUANTUM(pp->blue);
+    pixel->opacity = ROUND_TO_QUANTUM(pp->opacity);
 
     return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
@@ -2426,11 +2515,13 @@ VALUE rm_define_enum_type(char *tag)
 
     rb_define_singleton_method(class, "values", Enum_type_values, 0);
     rb_define_method(class, "initialize", Enum_type_initialize, 2);
+    RUBY16(rb_enable_super(class, "initialize");)
     rb_define_method(class, "inspect", Enum_type_inspect, 0);
     return class;
 }
 
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
 /*
     Extern:  rm_enum_new (1.8)
     Purpose: Construct a new Enum subclass instance
@@ -2458,6 +2549,38 @@ VALUE Enum_alloc(VALUE class)
    return enumr;
 }
 
+
+#else
+/*
+    Extern:  rm_enum_new (1.6)
+    Purpose: Construct a new Enum subclass instance
+*/
+VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
+{
+    return Enum_new(class, sym, val);
+}
+
+/*
+    Method:  Enum.new
+    Purpose: Construct a new Enum object
+    Notes:   `class' can be an Enum subclass
+*/
+VALUE Enum_new(VALUE class, VALUE sym, VALUE val)
+{
+    volatile VALUE new_enum;
+    volatile VALUE argv[2];
+    MagickEnum *magick_enum;
+
+    new_enum = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
+    argv[0] = sym;
+    argv[1] = val;
+
+    rb_obj_call_init(new_enum, 2, argv);
+    OBJ_FREEZE(new_enum);
+    return new_enum;
+}
+
+#endif
 
 /*
     Method:  Enum#initialize
@@ -2565,7 +2688,8 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 
     if (rb_cvar_defined(CLASS_OF(self), ID_enumerators) != Qtrue)
     {
-        rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new(), 0);
+        RUBY18(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new(), 0));
+        RUBY16(rb_cvar_set(CLASS_OF(self), ID_enumerators, rb_ary_new()));
     }
 
     enumerators = rb_cvar_get(CLASS_OF(self), ID_enumerators);
@@ -2670,6 +2794,51 @@ ComplianceType_name(ComplianceType *c)
 }
 
 
+#if defined(HAVE_GETIMAGESTATISTICS)
+/*
+    Extern:     Statistics_new(stats)
+    Purpose:    Create a Magick::Statistics object from an
+                ImageStatistics structure.
+*/
+VALUE
+Statistics_new(ImageStatistics *stats)
+{
+    volatile VALUE red, green, blue, opacity;
+    volatile VALUE min, max, mean, stddev, var;
+
+    min = rb_float_new(stats->red.minimum);
+    max = rb_float_new(stats->red.maximum);
+    mean = rb_float_new(stats->red.mean);
+    stddev = rb_float_new(stats->red.standard_deviation);
+    var = rb_float_new(stats->red.variance);
+    red = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->green.minimum);
+    max = rb_float_new(stats->green.maximum);
+    mean = rb_float_new(stats->green.mean);
+    stddev = rb_float_new(stats->green.standard_deviation);
+    var = rb_float_new(stats->green.variance);
+    green = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->blue.minimum);
+    max = rb_float_new(stats->blue.maximum);
+    mean = rb_float_new(stats->blue.mean);
+    stddev = rb_float_new(stats->blue.standard_deviation);
+    var = rb_float_new(stats->blue.variance);
+    blue = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    min = rb_float_new(stats->opacity.minimum);
+    max = rb_float_new(stats->opacity.maximum);
+    mean = rb_float_new(stats->opacity.mean);
+    stddev = rb_float_new(stats->opacity.standard_deviation);
+    var = rb_float_new(stats->opacity.variance);
+    opacity = rb_funcall(Class_StatisticsChannel, ID_new, 5, max, min, mean, stddev, var);
+
+    return rb_funcall(Class_Statistics, ID_new, 4, red, green, blue, opacity);
+
+}
+#endif  // HAVE_GETIMAGESTATISTICS
+
 /*
     Extern:     StorageType_name
     Purpose:    Return the string representation of a StorageType value
@@ -2684,10 +2853,16 @@ StorageType_name(StorageType type)
         ENUM_TO_NAME(FloatPixel)
         ENUM_TO_NAME(IntegerPixel)
         ENUM_TO_NAME(LongPixel)
+#if defined(HAVE_QUANTUMPIXEL)
         ENUM_TO_NAME(QuantumPixel)
+#endif
         ENUM_TO_NAME(ShortPixel)
         default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedPixel)
+#else
+        return "UndefinedPixel";
+#endif
     }
 }
 
@@ -2711,7 +2886,11 @@ StretchType_name(StretchType stretch)
         ENUM_TO_NAME(UltraExpandedStretch)
         ENUM_TO_NAME(AnyStretch)
         default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStretch were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedStretch)
+#else
+        return "UndefinedStretch";
+#endif
     }
 }
 
@@ -2730,7 +2909,11 @@ StyleType_name(StyleType style)
         ENUM_TO_NAME(ObliqueStyle)
         ENUM_TO_NAME(AnyStyle)
         default:
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedStyle were both introduced in IM 6.0.0
         ENUM_TO_NAME(UndefinedStyle)
+#else
+        return "UndefinedStyle";
+#endif
     }
 }
 
@@ -2780,13 +2963,16 @@ rm_delete_temp_image(char *tmpnam)
     Purpose:    raise NotImplementedError
     Notes:      Called when a xMagick API is not available.
                 Replaces Ruby's rb_notimplement function.
+    Notes:      The MagickPackageName macro is not available
+                until 5.5.7. Use MAGICKNAME instead.
 */
 void
 rm_not_implemented(void)
 {
 
-    rb_raise(rb_eNotImpError, "the `%s' method is not supported by ImageMagick "
-            MagickLibVersionText, rb_id2name(rb_frame_last_func()));
+    rb_raise(rb_eNotImpError, "the `%s' method is not supported by "
+                              Q(MAGICKNAME) " " MagickLibVersionText
+                              , rb_id2name(rb_frame_last_func()));
 }
 
 /*
@@ -3043,6 +3229,19 @@ rm_split(Image *image)
           magick_clone_string(&exception->description, relative->description);
         }
 
+
+        #if defined(HAVE_EXCEPTIONINFO_MODULE)
+            if (relative->module)
+            {
+              magick_clone_string(&exception->module, relative->module);
+            }
+            if (relative->function)
+            {
+              magick_clone_string(&exception->function, relative->function);
+            }
+
+            exception->line = relative->line;
+        #endif
     }
 
 
@@ -3132,6 +3331,13 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
     char desc[500];
     char msg[sizeof(reason)+sizeof(desc)+20];
 
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+    char module[200], function[200];
+    char extra[sizeof(module)+sizeof(function)+20];
+    unsigned long line;
+#endif
+
+
     memset(msg, 0, sizeof(msg));
 
 
@@ -3203,8 +3409,40 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 
     msg[sizeof(msg)-1] = '\0';
 
-    (void) DestroyExceptionInfo(exception);
-    rm_magick_error(msg, NULL);
+
+#if defined(HAVE_EXCEPTIONINFO_MODULE)
+
+    memset(module, 0, sizeof(module));
+    memset(function, 0, sizeof(function));
+    memset(extra, 0, sizeof(extra));
+
+    if (exception->module)
+    {
+        strncpy(module, exception->module, sizeof(module)-1);
+        module[sizeof(module)-1] = '\0';
+    }
+    if (exception->function)
+    {
+        strncpy(function, exception->function, sizeof(function)-1);
+        function[sizeof(function)-1] = '\0';
+    }
+    line = exception->line;
+
+#if defined(HAVE_SNPRINTF)
+     snprintf(extra, sizeof(extra)-1, "%s at %s:%lu", function, module, line);
+#else
+     sprintf(extra, "%.*s at %.*s:%lu", sizeof(function), function, sizeof(module), module, line);
+#endif
+
+     extra[sizeof(extra)-1] = '\0';
+
+     (void) DestroyExceptionInfo(exception);
+     rm_magick_error(msg, extra);
+
+#else
+     (void) DestroyExceptionInfo(exception);
+     rm_magick_error(msg, NULL);
+#endif
 
 }
 

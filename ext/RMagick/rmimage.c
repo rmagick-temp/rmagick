@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.204 2007/01/30 00:06:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.1 2007/02/04 13:16:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -858,15 +858,21 @@ VALUE Image_base_rows(VALUE self)
 */
 VALUE Image_bias(VALUE self)
 {
+#if defined(HAVE_IMAGE_BIAS)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return rb_float_new(image->bias);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
 VALUE Image_bias_eq(VALUE self, VALUE pct)
 {
+#if defined(HAVE_IMAGE_BIAS)
     Image *image;
     double bias;
 
@@ -876,6 +882,12 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     image->bias = bias * MaxRGB;
 
     return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+
 }
 
 /*
@@ -885,6 +897,7 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
 VALUE
 Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_BILEVELIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
 
@@ -906,6 +919,11 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -964,7 +982,12 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
 VALUE
 Image_black_threshold(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_BLACKTHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, BlackThresholdImage);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1240,6 +1263,7 @@ special_composite(
 VALUE
 Image_blend(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
     Image *image, *overlay;
     double src_percent, dst_percent;
     long x_offset = 0L, y_offset = 0L;
@@ -1279,6 +1303,10 @@ Image_blend(int argc, VALUE *argv, VALUE self)
     return special_composite(image, overlay, src_percent, dst_percent
                            , x_offset, y_offset, BlendCompositeOp);
 
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1292,6 +1320,7 @@ DEF_ATTR_ACCESSOR(Image, blur, dbl)
 VALUE
 Image_blur_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_BLURIMAGECHANNEL)
      Image *image, *new_image;
      ExceptionInfo exception;
      ChannelType channels;
@@ -1323,6 +1352,10 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
      rm_ensure_result(new_image);
 
      return rm_image_new(new_image);
+#else
+     rm_not_implemented();
+     return (VALUE)0;
+#endif
 }
 
 
@@ -1709,6 +1742,71 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 
     return ary;
 
+#elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
+    Image *image;
+    ChannelType channel;
+    ImageStatistics stats;
+    ExceptionInfo exception;
+    volatile VALUE ary;
+    volatile VALUE type_name;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick requires at least one channel argument.");
+    }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+    VALUE_TO_ENUM(argv[0], channel, ChannelType);
+    if (channel == AllChannels)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    (void) GetImageStatistics(image, &stats, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    ary = rb_ary_new2(2);
+    switch(channel)
+    {
+        case RedChannel:
+        case CyanChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.red.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.red.maximum)));
+            break;
+        case GreenChannel:
+        case MagentaChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.green.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.green.maximum)));
+            break;
+        case BlueChannel:
+        case YellowChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.blue.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.blue.maximum)));
+            break;
+        case OpacityChannel:
+        case BlackChannel:
+        case MatteChannel:
+            rb_ary_store(ary, 0, ULONG2NUM((unsigned long)(MaxRGB*stats.opacity.minimum)));
+            rb_ary_store(ary, 1, ULONG2NUM((unsigned long)(MaxRGB*stats.opacity.maximum)));
+            break;
+        default:
+            type_name = Enum_to_s(argv[0]);
+            rb_raise(rb_eArgError, "unsupported channel type: %s",
+                    STRING_PTR(type_name));
+    }
+
+    return ary;
+
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -1752,6 +1850,72 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 
     return ary;
 
+#elif defined(HAVE_GETIMAGESTATISTICS)  // GraphicsMagick 1.1
+    Image *image;
+    ChannelType channel;
+    ImageStatistics stats;
+    ExceptionInfo exception;
+    volatile VALUE ary;
+    volatile VALUE type_name;
+
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick requires at least one channel argument.");
+    }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+    VALUE_TO_ENUM(argv[0], channel, ChannelType);
+    if (channel == AllChannels)
+    {
+        rb_raise(rb_eArgError, "GraphicsMagick does not support multi-channel statistics."
+                               " Specify only 1 channel.");
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+
+    (void) GetImageStatistics(image, &stats, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    ary = rb_ary_new2(2);
+    switch(channel)
+    {
+        case RedChannel:
+        case CyanChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.red.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.red.standard_deviation));
+            break;
+        case GreenChannel:
+        case MagentaChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.green.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.green.standard_deviation));
+            break;
+        case BlueChannel:
+        case YellowChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.blue.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.blue.standard_deviation));
+            break;
+        case OpacityChannel:
+        case BlackChannel:
+        case MatteChannel:
+            rb_ary_store(ary, 0, rb_float_new(stats.opacity.mean));
+            rb_ary_store(ary, 1, rb_float_new(stats.opacity.standard_deviation));
+            break;
+        default:
+            type_name = Enum_to_s(argv[0]);
+            rb_raise(rb_eArgError, "unsupported channel type: %s",
+                    STRING_PTR(type_name));
+    }
+
+    return ary;
+
+
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -1769,7 +1933,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_channel_threshold(int argc, VALUE *argv, VALUE self)
 {
-    rb_warning("This method is deprecated in this release of ImageMagick"
+    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
                ". Use bilevel_channel instead.");
     return threshold_image(argc, argv, self,
 #if defined(HAVE_THRESHOLDIMAGECHANNEL)
@@ -1859,13 +2023,45 @@ Image_clone(VALUE self)
 
 /*
     Method:     Image_color_histogram(VALUE self);
-    Purpose:    Call GetImageHistogram (>= IM 5.5.8)
+    Purpose:    Call GetColorHistogram (>= GM 1.1)
+                     GetImageHistogram (>= IM 5.5.8)
     Notes:      returns hash {aPixel=>count}
 */
 VALUE
 Image_color_histogram(VALUE self)
 {
-#if defined(HAVE_GETIMAGEHISTOGRAM)
+#if defined(HAVE_GETCOLORHISTOGRAM)
+    Image *image;
+    volatile VALUE hash, pixel;
+    unsigned long x, colors;
+    HistogramColorPacket *histogram;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+    histogram = GetColorHistogram(image, &colors, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    hash = rb_hash_new();
+    for (x = 0; x < colors; x++)
+    {
+        pixel = Pixel_from_PixelPacket(&histogram[x].pixel);
+        rb_hash_aset(hash, pixel, ULONG2NUM(histogram[x].count));
+    }
+
+    /*
+        The histogram array is specifically allocated by malloc because it is
+        supposed to be freed by the caller.
+    */
+    free(histogram);
+
+    return hash;
+
+
+#elif defined(HAVE_GETIMAGEHISTOGRAM)
     Image *image, *dc_copy = NULL;
     volatile VALUE hash, pixel;
     unsigned long x, colors;
@@ -2063,6 +2259,9 @@ VALUE
 Image_color_profile(VALUE self)
 {
     Image *image;
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
+
     const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
@@ -2074,6 +2273,22 @@ Image_color_profile(VALUE self)
 
     return rb_str_new((char *)profile->datum, (long)profile->length);
 
+#else
+
+    const unsigned char *profile;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = GetImageProfile(image, "ICM", &length);
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new((char *)profile, (long)length);
+
+#endif
 }
 
 /*
@@ -2385,6 +2600,8 @@ VALUE Image_compare_channel(
     VALUE *argv,
     VALUE self)
 {
+#if defined(HAVE_COMPAREIMAGECHANNELS)
+
     Image *image, *r_image, *difference_image;
     double distortion;
     volatile VALUE ary;
@@ -2424,6 +2641,10 @@ VALUE Image_compare_channel(
     rb_ary_store(ary, 1, rb_float_new(distortion));
 
     return ary;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -2612,16 +2833,25 @@ VALUE Image_composite_bang(
     VALUE *argv,
     VALUE self)
 {
-    return composite(True, argc, argv, self, DefaultChannels);
+#if defined(HAVE_ALLCHANNELS)
+        ChannelType channels = (AllChannels &~ OpacityChannel);
+#else
+        ChannelType channels = (0xff &~ OpacityChannel);
+#endif
+    return composite(True, argc, argv, self, channels);
 }
-
 
 VALUE Image_composite(
     int argc,
     VALUE *argv,
     VALUE self)
 {
-    return composite(False, argc, argv, self, DefaultChannels);
+#if defined(HAVE_ALLCHANNELS)
+        ChannelType channels = (AllChannels &~ OpacityChannel);
+#else
+        ChannelType channels = (0xff &~ OpacityChannel);
+#endif
+    return composite(False, argc, argv, self, channels);
 }
 
 
@@ -3055,6 +3285,7 @@ Image_convolve_channel(
     VALUE *argv,
     VALUE self)
 {
+#if defined(HAVE_CONVOLVEIMAGECHANNEL)
     Image *image, *new_image;
     volatile double *kernel;
     volatile VALUE ary;
@@ -3100,6 +3331,10 @@ Image_convolve_channel(
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -3467,7 +3702,13 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
-    okay = ExportImagePixels(image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
+    okay =
+#if defined(HAVE_EXPORTIMAGEPIXELS)
+           ExportImagePixels
+#else
+           DispatchImage
+#endif
+                        (image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
 
     if (!okay)
     {
@@ -3553,6 +3794,48 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 }
 
 
+
+#if defined(GRAPHICSMAGICK)
+/*
+    Static:     create_mattes
+    Purpose:    GraphicsMagick establishes the source image mattes in
+                command.c, before calling CompositeImage. This function does
+                that step for Image_dissolve when we're built for GraphicsMagick.
+*/
+static void
+create_mattes(Image *image, double src_percent)
+{
+    long x, y;
+    PixelPacket *q;
+
+    if (!image->matte)
+    {
+        SetImageOpacity(image,OpaqueOpacity);
+    }
+
+    for (y = 0; y < (long) image->rows; y++)
+    {
+      q = GetImagePixels(image, 0, y, image->columns, 1);
+
+      if (q == NULL)
+      {
+          break;
+      }
+
+      for (x = 0; x < (long) image->columns; x++)
+      {
+        q->opacity = (Quantum) (((MaxRGB - q->opacity) * src_percent) / 100.0);
+        q += 1;
+      }
+
+      if (!SyncImagePixels(image))
+      {
+          break;
+      }
+    }
+}
+#endif
+
 /*
     Method:     Image#dissolve(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
                 Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
@@ -3598,8 +3881,18 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
 
+    // GraphicsMagick needs an extra step (ref: GM's command.c)
+#if defined(GRAPHICSMAGICK)
+    overlay = rm_clone_image(overlay);
+    create_mattes(overlay, src_percent);
+#endif
+
     composite =  special_composite(image, overlay, src_percent, dst_percent
                                  , x_offset, y_offset, DissolveCompositeOp);
+
+#if defined(GRAPHICSMAGICK)
+    (void) DestroyImage(overlay);
+#endif
 
     return composite;
 }
@@ -3735,7 +4028,6 @@ Image_each_profile(VALUE self)
     Image *image;
     volatile VALUE ary, val;
     char *name;
-    const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
 
@@ -3747,16 +4039,36 @@ Image_each_profile(VALUE self)
     while (name)
     {
         rb_ary_store(ary, 0, rb_str_new2(name));
+#if defined(HAVE_ACQUIRESTRINGINFO)
+        {
+            const StringInfo *profile;
 
-        profile = GetImageProfile(image, name);
-        if (!profile)
-        {
-            rb_ary_store(ary, 1, Qnil);
+            profile = GetImageProfile(image, name);
+            if (!profile)
+            {
+                rb_ary_store(ary, 1, Qnil);
+            }
+            else
+            {
+                rb_ary_store(ary, 1, rb_str_new((char *)profile->datum, (long)profile->length));
+            }
         }
-        else
+#else
         {
-            rb_ary_store(ary, 1, rb_str_new((char *)profile->datum, (long)profile->length));
+            unsigned char *profile;
+            size_t length;
+
+            profile = GetImageProfile(image, "iptc", &length);
+            if (!profile)
+            {
+                rb_ary_store(ary, 1, Qnil);
+            }
+            else
+            {
+                rb_ary_store(ary, 1, rb_string_new((char *)profile, (long)length));
+            }
         }
+#endif
         val = rb_yield(ary);
         name = GetNextImageProfile(image);
     }
@@ -3966,6 +4278,7 @@ Image_erase_bang(VALUE self)
 VALUE
 Image_export_pixels(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_EXPORTIMAGEPIXELS)
     Image *image;
     long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
@@ -4039,6 +4352,11 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     xfree((unsigned int *)pixels);
 
     return ary;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*
@@ -4049,6 +4367,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_EXPORTIMAGEPIXELS)
     Image *image;
     long x_off = 0L, y_off = 0L;
     unsigned long cols, rows;
@@ -4115,9 +4434,11 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
         case LongPixel:
             sz = sizeof(unsigned long);
             break;
+#if defined(HAVE_QUANTUMPIXEL)
         case QuantumPixel:
             sz = sizeof(Quantum);
             break;
+#endif
         case UndefinedPixel:
         default:
             rb_raise(rb_eArgError, "undefined storage type");
@@ -4146,6 +4467,11 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return string;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*
@@ -4158,7 +4484,12 @@ Image_extract_info(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
+#ifdef HAVE_IMAGE_EXTRACT_INFO
     return Rectangle_from_RectangleInfo(&image->extract_info);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 VALUE
@@ -4168,8 +4499,13 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
+#ifdef HAVE_IMAGE_EXTRACT_INFO
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
     return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -4536,6 +4872,7 @@ DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 VALUE
 Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_GAMMAIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
 
@@ -4558,6 +4895,11 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -4634,6 +4976,7 @@ Image_gaussian_blur(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_GAUSSIANBLURIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     ExceptionInfo exception;
@@ -4665,6 +5008,11 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -4819,6 +5167,44 @@ Image_gray_q(VALUE self)
     return r ? Qtrue : Qfalse;
 }
 
+/*
+    Method:     Image#grayscale_pseudo_class
+    Purpose:    Call GrayscalePseudoClassImage
+*/
+VALUE
+Image_grayscale_pseudo_class(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_GRAYSCALEPSEUDOCLASSIMAGE)
+    Image *image, *new_image;
+    unsigned int optimize = True;
+
+    switch(argc)
+    {
+        case 1:
+           optimize = RTEST(argv[0]);
+           /* Fall thru */
+        case 0:
+           break;
+        default:
+           rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    new_image = rm_clone_image(image);
+
+    GrayscalePseudoClassImage(new_image, optimize);
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+
+}
+
 
 /*
     Method:     Image#implode(amount=0.50)
@@ -4932,9 +5318,11 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case FloatPixel:
                 type_sz = sizeof(float);
                 break;
+#if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
                 break;
+#endif
             default:
                 rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
                 break;
@@ -5126,7 +5514,11 @@ Image_inspect(VALUE self)
 
     // Print bit depth
 #if defined(HAVE_GETIMAGEQUANTUMDEPTH)
+#if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+    quantum_depth = GetImageQuantumDepth(image);
+#else
     quantum_depth = GetImageQuantumDepth(image, MagickTrue);
+#endif
 #else
     quantum_depth = image->depth;
 #endif
@@ -5196,6 +5588,8 @@ VALUE
 Image_iptc_profile(VALUE self)
 {
     Image *image;
+
+#if defined(HAVE_ACQUIRESTRINGINFO)
     const StringInfo *profile;
 
     Data_Get_Struct(self, Image, image);
@@ -5208,6 +5602,22 @@ Image_iptc_profile(VALUE self)
 
     return rb_str_new((char *)profile->datum, (long)profile->length);
 
+#else
+
+    const unsigned char *profile;
+    size_t length;
+
+    Data_Get_Struct(self, Image, image);
+
+    profile = GetImageProfile(image, "iptc", &length);
+    if (!profile)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new((char *)profile, (long)length);
+
+#endif
 }
 
 
@@ -6085,6 +6495,88 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
+    Method:     Image.new(cols, rows<, fill>) <{info block}>
+    Purpose:    Create a new Image with "cols" columns and "rows" rows.
+                If the fill argument is omitted, fill with the background color
+    Returns:    A new Image
+    Note:       This routine creates an Info structure to use when allocating
+                the Image structure. The caller can supply an info parm block to
+                use for initializing the Info.
+*/
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE
+Image_new(int argc, VALUE *argv, VALUE class)
+{
+    Info *info;
+    Image *image;
+    volatile VALUE info_obj;
+    volatile VALUE new_image;
+    VALUE init_arg[4];
+
+    if (argc < 2 || argc > 3)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+    }
+
+    // Create a new Info object to use when creating this image.
+    info_obj = rm_info_new();
+    Data_Get_Struct(info_obj, Info, info);
+
+    image = AllocateImage(info);
+    new_image = Data_Wrap_Struct(class, NULL, DestroyImage, image);
+    init_arg[0] = info_obj;
+    init_arg[1] = argv[0];
+    init_arg[2] = argv[1];
+    init_arg[3] = argc == 3 ? argv[2] : 0;
+
+    rb_obj_call_init((VALUE)new_image, 4, init_arg);
+    return new_image;
+}
+
+/*
+    Method:     Image#initialize
+    Purpose:    initialize a new Image object
+                If the fill argument is omitted, fill with the background color
+*/
+VALUE
+Image_initialize(VALUE self, VALUE info_obj, VALUE width, VALUE height, VALUE fill)
+{
+    Image *image;
+    Info *info;
+    unsigned long cols, rows;
+
+    cols = NUM2ULONG(width);
+    rows = NUM2ULONG(height);
+
+    if (cols <= 0 || rows <= 0)
+    {
+        rb_raise(rb_eArgError, "invalid image size (%dx%d)", cols, rows);
+    }
+
+    Data_Get_Struct(info_obj, Info, info);
+    Data_Get_Struct(self, Image, image);
+
+    SetImageExtent(image, cols, rows);
+
+    // If the caller did not supply a fill argument, call SetImage to fill the
+    // image using the background color. The background color can be set by
+    // specifying it when creating the Info parm block.
+    if (!fill)
+    {
+        SetImageBackgroundColor(image);
+    }
+    // fillobj.fill(self)
+    else
+    {
+        (void) rb_funcall(fill, ID_fill, 1, self);
+    }
+
+    return self;
+}
+#else
+
+
+/*
     Extern:     Image_alloc(cols,rows,[fill])
     Purpose:    "allocate" a new Image object
     Note:       actually we defer allocating the image
@@ -6157,6 +6649,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
 
     return self;
 }
+#endif
 
 
 /*
@@ -6419,10 +6912,15 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_orientation(VALUE self)
 {
+#if defined(HAVE_IMAGE_ORIENTATION)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return OrientationType_new(image->orientation);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -6433,12 +6931,18 @@ Image_orientation(VALUE self)
 VALUE
 Image_orientation_eq(VALUE self, VALUE orientation)
 {
+#if defined(HAVE_IMAGE_ORIENTATION)
     Image *image;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(orientation, image->orientation, OrientationType);
     return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -6841,7 +7345,11 @@ Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 }
 
 
+
+#if defined(HAVE_IMAGE_QUALITY)
 DEF_ATTR_READER(Image, quality, ulong)
+#endif
+
 
 
 /*
@@ -6859,7 +7367,11 @@ Image_quantum_depth(VALUE self)
     unsigned long quantum_depth;
 
     Data_Get_Struct(self, Image, image);
+#if defined(HAVE_OLD_GETIMAGEQUANTUMDEPTH)
+    quantum_depth = GetImageQuantumDepth(image);
+#else
     quantum_depth = GetImageQuantumDepth(image, MagickFalse);
+#endif
 
     rm_check_image_exception(image, RetainOnError);
 
@@ -6873,17 +7385,94 @@ Image_quantum_depth(VALUE self)
 
 /*
     Method:     Image#quantum_operator(operator, rvalue[, channel] )
-    Purpose:    This method is an adapter method that calls the
-                    EvaluateImageChannel method
-    Note 1:     Historically this method used QuantumOperatorRegionImage
-                in GraphicsMagick. By necessity this method implements
-                the "lowest common denominator" of the two implementations.
+    Purpose:    This method is an adapter method that calls either the
+                    QuantumOperatorRegionImage method (GraphicsMagick 1.1) or the
+                    EvaluateImageChannel method (ImageMagick 6.0.0)
+    Note 1:     By necessity this method implements the "lowest common denominator"
+                of the two implementations.
 
     Note 2:     If the channel argument is omitted, the default is AllChannels.
 */
 VALUE
 Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE)
+    Image *image;
+    QuantumExpressionOperator operator;
+    QuantumOperator qop;
+    ChannelType channel;
+    double rvalue;
+    ExceptionInfo exception;
+
+    Data_Get_Struct(self, Image, image);
+
+    // The default channel is AllChannels
+    channel = AllChannels;
+
+    /*
+        If there are 3 arguments, argument 2 is a ChannelType argument.
+        Arguments 1 and 0 are required and are the rvalue and operator,
+        respectively.
+    */
+    switch(argc)
+    {
+        case 3:
+            VALUE_TO_ENUM(argv[2], channel, ChannelType);
+            /* Fall through */
+        case 2:
+            rvalue = NUM2DBL(argv[1]);
+            VALUE_TO_ENUM(argv[0], operator, QuantumExpressionOperator);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
+    }
+
+    // Map QuantumExpressionOperator to QuantumOperator
+    switch(operator)
+    {
+        default:
+        case UndefinedQuantumOperator:
+            qop = UndefinedQuantumOp;
+            break;
+        case AddQuantumOperator:
+            qop = AddQuantumOp;
+            break;
+        case AndQuantumOperator:
+            qop = AndQuantumOp;
+            break;
+        case DivideQuantumOperator:
+            qop = DivideQuantumOp;
+            break;
+        case LShiftQuantumOperator:
+            qop = LShiftQuantumOp;
+            break;
+        case MultiplyQuantumOperator:
+            qop = MultiplyQuantumOp;
+            break;
+        case OrQuantumOperator:
+            qop = OrQuantumOp;
+            break;
+        case RShiftQuantumOperator:
+            qop = RShiftQuantumOp;
+            break;
+        case SubtractQuantumOperator:
+            qop = SubtractQuantumOp;
+            break;
+        case XorQuantumOperator:
+            qop = XorQuantumOp;
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    (void) QuantumOperatorImage(image, channel, qop, rvalue, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    return self;
+
+#elif defined(HAVE_EVALUATEIMAGECHANNEL)
     Image *image;
     QuantumExpressionOperator operator;
     MagickEvaluateOperator qop;
@@ -6934,12 +7523,14 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
         case LShiftQuantumOperator:
             qop = LeftShiftEvaluateOperator;
             break;
+#if defined(HAVE_MAXEVALUATEOPERATOR)
         case MaxQuantumOperator:
             qop = MaxEvaluateOperator;
             break;
         case MinQuantumOperator:
             qop = MinEvaluateOperator;
             break;
+#endif
         case MultiplyQuantumOperator:
             qop = MultiplyEvaluateOperator;
             break;
@@ -6964,6 +7555,11 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -7110,8 +7706,8 @@ Image_random_channel_threshold(
     ExceptionInfo exception;
 
 #if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
-    rb_warning("This method is deprecated in this release of ImageMagick."
-               " Use Image#random_threshold_channel instead.");
+    rb_warning("This method is deprecated in this release of " Q(MAGICKNAME)
+               ". Use Image#random_threshold_channel instead.");
 #endif
 
     Data_Get_Struct(self, Image, image);
@@ -8492,6 +9088,34 @@ DEF_ATTR_ACCESSOR(Image, start_loop, bool)
 
 
 /*
+    Method:     Image#statistics
+    Notes:      Only supported in GM 1.1
+*/
+VALUE
+Image_statistics(VALUE self)
+{
+#if defined(HAVE_GETIMAGESTATISTICS)
+    Image *image;
+    ExceptionInfo exception;
+    ImageStatistics stats;
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    (void) GetImageStatistics(image, &stats, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    return Statistics_new(&stats);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
     Method:     Image#stegano(watermark, offset)
     Purpose:    hides a digital watermark within the image. Recover the hidden
                 watermark later to prove that the authenticity of an image.
@@ -8785,7 +9409,7 @@ Image_texture_flood_fill(
     // the fill color even though the fill color isn't used.
     if (method == FillToBorderMethod)
     {
-        draw_info->fill.red = RoundToQuantum(color.red + new_image->fuzz + 1);
+        draw_info->fill.red = ROUND_TO_QUANTUM(color.red + new_image->fuzz + 1);
         draw_info->fill.green = color.green;
         draw_info->fill.blue = color.blue;
     }
@@ -8961,22 +9585,32 @@ Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_ticks_per_second(VALUE self)
 {
+#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->ticks_per_second);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
 VALUE
 Image_ticks_per_second_eq(VALUE self, VALUE tps)
 {
+#if defined(HAVE_IMAGE_TICKS_PER_SECOND)
     Image *image;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     image->ticks_per_second = NUM2ULONG(tps);
     return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -8990,10 +9624,13 @@ Image_tile_info(VALUE self)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-
+#ifdef HAVE_IMAGE_EXTRACT_INFO
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info is deprecated in this release of ImageMagick. Use extract_info instead.");
     return Rectangle_from_RectangleInfo(&image->extract_info);
+#else
+    return Rectangle_from_RectangleInfo(&image->tile_info);
+#endif
 }
 
 VALUE
@@ -9002,11 +9639,15 @@ Image_tile_info_eq(VALUE self, VALUE rect)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
-
+#ifdef HAVE_IMAGE_EXTRACT_INFO
     // Deprecated in 5.5.6 and later
     rb_warning("RMagick: tile_info= is deprecated in this release of ImageMagick. Use extract_info= instead.");
     rm_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
+#else
+    rm_check_frozen(self);
+    Rectangle_to_RectangleInfo(&image->tile_info, rect);
+#endif
     return self;
 }
 
@@ -10264,7 +10905,7 @@ xform_image(
     Purpose:    Remove all the ChannelType arguments from the
                 end of the argument list.
     Returns:    A ChannelType value suitable for passing into
-                an xMagick function. Returns DefaultChannels if
+                an xMagick function. Returns AllChannels if
                 no channel arguments were found. Returns the
                 number of remaining arguments.
 */
@@ -10292,7 +10933,11 @@ ChannelType extract_channels(
 
     if (channels == 0)
     {
-        channels = DefaultChannels;
+#if defined(HAVE_ALLCHANNELS)
+        channels = AllChannels & ~OpacityChannel;
+#else
+        channels = 0xf7;
+#endif
     }
 
     return channels;

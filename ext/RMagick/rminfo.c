@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.48 2007/01/28 20:18:33 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.49 2007/02/08 23:37:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1038,7 +1038,6 @@ Info_matte_color_eq(VALUE self, VALUE matte_arg)
 VALUE
 Info_monitor_eq(VALUE self, VALUE monitor)
 {
-#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
@@ -1054,10 +1053,6 @@ Info_monitor_eq(VALUE self, VALUE monitor)
 
 
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

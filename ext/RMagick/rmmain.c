@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.173 2007/02/03 01:16:03 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.174 2007/02/08 23:37:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -303,10 +303,7 @@ Magick_set_monitor(VALUE class, VALUE monitor)
         Magick_Monitor = rb_intern(MAGICK_MONITOR_CVAR);
         rb_define_class_variable(Module_Magick, MAGICK_MONITOR_CVAR, monitor);
 
-#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
         rb_warning("Magick.set_monitor is deprecated; use Image#monitor= or Image::Info#monitor= instead.");
-#endif
-
     }
 
     // If nil, turn off monitoring.
@@ -1641,7 +1638,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/03 01:16:03 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/08 23:37:36 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.207 2007/02/03 22:12:25 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.208 2007/02/08 23:39:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5666,7 +5666,6 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_monitor_eq(VALUE self, VALUE monitor)
 {
-#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
     Image *image;
 
     rm_check_frozen(self);
@@ -5683,10 +5682,6 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 
 
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -6545,7 +6540,6 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_posterize(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_POSTERIZEIMAGE)
     Image *image, *new_image;
     MagickBooleanType dither = MagickFalse;
     unsigned long levels = 4;
@@ -6571,11 +6565,6 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -6585,7 +6574,6 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_preview(VALUE self, VALUE preview)
 {
-#if defined(HAVE_PREVIEWIMAGE)
     Image *image, *new_image;
     PreviewType preview_type;
     ExceptionInfo exception;
@@ -6603,10 +6591,6 @@ Image_preview(VALUE self, VALUE preview)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -7585,7 +7569,6 @@ DEF_ATTR_READER(Image, scene, ulong)
 VALUE
 Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 {
-#if defined(HAVE_SETIMAGECHANNELDEPTH)
      Image *image;
      ChannelType channel;
      unsigned long channel_depth;
@@ -7599,10 +7582,6 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
      rm_check_image_exception(image, RetainOnError);
 
      return self;
-#else
-     rm_not_implemented();
-     return (VALUE)0;
-#endif
 }
 
 
@@ -7843,7 +7822,6 @@ Image_shade(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_shadow(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SHADOWIMAGE)
     Image *image, *new_image;
     double opacity = 100.0;
     double sigma = 4.0;
@@ -7886,10 +7864,6 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -8570,7 +8544,7 @@ Image_texture_flood_fill(
     // the fill color even though the fill color isn't used.
     if (method == FillToBorderMethod)
     {
-        draw_info->fill.red = RoundToQuantum(color.red + new_image->fuzz + 1);
+        draw_info->fill.red = ROUND_TO_QUANTUM(color.red + new_image->fuzz + 1);
         draw_info->fill.green = color.green;
         draw_info->fill.blue = color.blue;
     }

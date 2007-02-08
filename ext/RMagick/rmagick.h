@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.162 2007/01/29 23:05:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.163 2007/02/08 23:35:02 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -170,6 +170,8 @@ typedef enum _QuantumExpressionOperator
 #if !defined(HAVE_SETIMAGEINFOFILE)
 #define SetImageInfoFile(info, fptr) (info)->file = (fptr)
 #endif
+
+#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
 
 #if !defined(HAVE_SETIMAGEEXTENT)
 #define SetImageExtent(img, c, r) \
@@ -1020,9 +1022,7 @@ extern void   rm_check_image_exception(Image *, ErrorRetention);
 extern void   rm_check_exception(ExceptionInfo *, Image *, ErrorRetention);
 extern void   rm_ensure_result(Image *);
 extern Image *rm_clone_image(Image *);
-#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
-#endif
 
 #endif
 

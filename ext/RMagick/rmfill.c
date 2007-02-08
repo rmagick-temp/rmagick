@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.18 2007/01/25 00:26:44 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.19 2007/02/08 23:35:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -104,9 +104,9 @@ point_fill(
         for (x = 0; x < image->columns; x++)
         {
             distance = sqrt((double)((x-x0)*(x-x0)+(y-y0)*(y-y0)));
-            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
-            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
-            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
+            row_pixels[x].red     = ROUND_TO_QUANTUM(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = ROUND_TO_QUANTUM(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = ROUND_TO_QUANTUM(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))
@@ -164,9 +164,9 @@ vertical_fill(
     for (x = 0; x < image->columns; x++)
     {
         double distance   = fabs(x1 - x);
-        master[x].red     = RoundToQuantum(start_color->red   + (red_step * distance));
-        master[x].green   = RoundToQuantum(start_color->green + (green_step * distance));
-        master[x].blue    = RoundToQuantum(start_color->blue  + (blue_step * distance));
+        master[x].red     = ROUND_TO_QUANTUM(start_color->red   + (red_step * distance));
+        master[x].green   = ROUND_TO_QUANTUM(start_color->green + (green_step * distance));
+        master[x].blue    = ROUND_TO_QUANTUM(start_color->blue  + (blue_step * distance));
         master[x].opacity = OpaqueOpacity;
     }
 
@@ -235,9 +235,9 @@ horizontal_fill(
     for (y = 0; y < image->rows; y++)
     {
         double distance   = fabs(y1 - y);
-        master[y].red     = RoundToQuantum(start_color->red   + (distance * red_step));
-        master[y].green   = RoundToQuantum(start_color->green + (distance * green_step));
-        master[y].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
+        master[y].red     = ROUND_TO_QUANTUM(start_color->red   + (distance * red_step));
+        master[y].green   = ROUND_TO_QUANTUM(start_color->green + (distance * green_step));
+        master[y].blue    = ROUND_TO_QUANTUM(start_color->blue  + (distance * blue_step));
         master[y].opacity = OpaqueOpacity;
     }
 
@@ -326,9 +326,9 @@ v_diagonal_fill(
         for (x = 0; x < image->columns; x++)
         {
             double distance = (double) abs((int)(y-(m * x + b)));
-            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
-            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
-            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
+            row_pixels[x].red     = ROUND_TO_QUANTUM(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = ROUND_TO_QUANTUM(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = ROUND_TO_QUANTUM(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))
@@ -407,9 +407,9 @@ h_diagonal_fill(
         for (x = 0; x < image->columns; x++)
         {
             double distance = (double) abs((int)(x-((y-b)/m)));
-            row_pixels[x].red     = RoundToQuantum(start_color->red   + (distance * red_step));
-            row_pixels[x].green   = RoundToQuantum(start_color->green + (distance * green_step));
-            row_pixels[x].blue    = RoundToQuantum(start_color->blue  + (distance * blue_step));
+            row_pixels[x].red     = ROUND_TO_QUANTUM(start_color->red   + (distance * red_step));
+            row_pixels[x].green   = ROUND_TO_QUANTUM(start_color->green + (distance * green_step));
+            row_pixels[x].blue    = ROUND_TO_QUANTUM(start_color->blue  + (distance * blue_step));
             row_pixels[x].opacity = OpaqueOpacity;
         }
         if (!SyncImagePixels(image))

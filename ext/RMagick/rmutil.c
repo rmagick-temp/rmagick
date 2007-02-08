@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.99 2007/02/03 22:10:43 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.100 2007/02/08 23:36:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -706,9 +706,9 @@ Pixel_intensity(VALUE self)
 
     Data_Get_Struct(self, Pixel, pixel);
 
-    intensity = RoundToQuantum((0.299*pixel->red)
-                             + (0.587*pixel->green)
-                             + (0.114*pixel->blue));
+    intensity = ROUND_TO_QUANTUM((0.299*pixel->red)
+                                + (0.587*pixel->green)
+                                + (0.114*pixel->blue));
 
     return ULONG2NUM((unsigned long) intensity);
 }
@@ -1837,10 +1837,10 @@ Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
     Pixel *pixel;
 
     pixel          = ALLOC(Pixel);
-    pixel->red     = RoundToQuantum(pp->red);
-    pixel->green   = RoundToQuantum(pp->green);
-    pixel->blue    = RoundToQuantum(pp->blue);
-    pixel->opacity = RoundToQuantum(pp->opacity);
+    pixel->red     = ROUND_TO_QUANTUM(pp->red);
+    pixel->green   = ROUND_TO_QUANTUM(pp->green);
+    pixel->blue    = ROUND_TO_QUANTUM(pp->blue);
+    pixel->opacity = ROUND_TO_QUANTUM(pp->opacity);
 
     return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
@@ -2919,7 +2919,6 @@ Image *rm_clone_image(Image *image)
     Purpose:    SetImage(Info)ProgressMonitor exit
     Notes:      ImageMagick's "tag" argument is unused. We pass along the method name instead.
 */
-#if defined(HAVE_SETIMAGEPROGRESSMONITOR)
 MagickBooleanType rm_progress_monitor(
     const char *tag,
     const MagickOffsetType of,
@@ -2943,7 +2942,6 @@ MagickBooleanType rm_progress_monitor(
 
     return RTEST(rval) ? MagickTrue : MagickFalse;
 }
-#endif
 
 
 /*

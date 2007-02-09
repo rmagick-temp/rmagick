@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.46 2007/01/12 00:11:16 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.47 2007/02/09 23:30:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -220,7 +220,6 @@ ImageList_flatten_images(VALUE self)
 VALUE
 ImageList_fx(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_FXIMAGECHANNEL)
     Image *images, *new_image;
     char *expression;
     ChannelType channels;
@@ -251,10 +250,6 @@ ImageList_fx(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -705,11 +700,7 @@ ImageList_to_blob(VALUE self)
     // can happen is that there's only one image or the format
     // doesn't support multi-image files.
     info->adjoin = MagickTrue;
-#if defined(HAVE_IMAGESTOBLOB)
     blob = ImagesToBlob(info, images, &length, &exception);
-#else
-    blob = ImageToBlob(info, images, &length, &exception);
-#endif
     if (exception.severity != UndefinedException)
     {
         magick_free((void*)blob);

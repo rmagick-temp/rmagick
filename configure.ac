@@ -50,7 +50,7 @@ AC_CHECK_LIB(Magick, InitializeMagick, [],
 
 # What standard functions?
 AC_CHECK_FUNCS([snprintf])
-AC_CHECK_HEADER(sys/types.h)
+AC_CHECK_HEADERS([sys/types.h magick/MagickCore.h])
 
 # Append ImageMagick's lists of libs to the user's list (if any)
 LIBS="${LIBS} `Magick-config --libs`"

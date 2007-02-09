@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.163 2007/02/08 23:35:02 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.164 2007/02/09 23:42:35 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -28,8 +28,11 @@
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_TARNAME
 
-
+#if defined(HAVE_MAGICK_MAGICKCORE_H)
+#include "magick/MagickCore.h"
+#else
 #include "magick/api.h"
+#endif
 
 // Undef ImageMagick's versions of these symbols
 #undef PACKAGE_VERSION

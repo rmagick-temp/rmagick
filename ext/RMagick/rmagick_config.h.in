@@ -30,6 +30,8 @@
 #undef HAVE_ISIMAGESIMILAR
 /* Introduced in IM 6.3.1 */
 #undef HAVE_LINEARSTRETCHIMAGE
+/* Introduced in IM 6.2.6 */
+#undef HAVE_MAGICK_MAGICKCORE_H
 /* ColorInfo changed in 6.3.0 */
 #undef HAVE_NEW_COLORINFO
 /* Introduced in IM 6.3.0 */

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.209 2007/02/09 00:24:32 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.210 2007/02/09 23:32:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3410,7 +3410,6 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_distortion_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_GETIMAGECHANNELDISTORTION)
     Image *image, *reconstruct;
     ChannelType channels;
     ExceptionInfo exception;
@@ -3439,10 +3438,6 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rb_float_new(distortion);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -5313,15 +5308,9 @@ Image_mask(VALUE self)
 
     GetExceptionInfo(&exception);
 
-#if defined(HAVE_GETIMAGECLIPMASK)
-
     // The returned clip mask is a clone, ours to keep.
     mask = GetImageClipMask(image, &exception);
     rm_check_exception(&exception, mask, DestroyOnError);
-
-#else
-    mask = image->clip_mask;
-#endif
 
     (void) DestroyExceptionInfo(&exception);
 
@@ -7699,7 +7688,6 @@ Image_properties(VALUE self)
     {
         volatile VALUE ary = rb_ary_new2(2);
 
-#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
         ResetImageAttributeIterator(image);
         attr = GetNextImageAttribute(image);
         while (attr)
@@ -7709,17 +7697,6 @@ Image_properties(VALUE self)
             (void) rb_yield(ary);
             attr = GetNextImageAttribute(image);
         }
-#else
-        for (attr = image->attributes; attr; attr = Next_Attribute)
-        {
-            // Store the next ptr where Image#aset can see it.
-            // The app may decide to delete that attribute.
-            Next_Attribute = attr->next;
-            rb_ary_store(ary, 0, rb_str_new2(attr->key));
-            rb_ary_store(ary, 1, rb_str_new2(attr->value));
-            rb_yield(ary);
-        }
-#endif
         return self;
     }
 
@@ -7727,7 +7704,6 @@ Image_properties(VALUE self)
     else
     {
         attr_hash = rb_hash_new();
-#if defined(HAVE_GETNEXTIMAGEATTRIBUTE)
         ResetImageAttributeIterator(image);
         attr = GetNextImageAttribute(image);
         while (attr)
@@ -7735,12 +7711,6 @@ Image_properties(VALUE self)
             (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
             attr = GetNextImageAttribute(image);
         }
-#else
-        for (attr = image->attributes; attr; attr = attr->next)
-        {
-            (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
-        }
-#endif
         return attr_hash;
     }
 }

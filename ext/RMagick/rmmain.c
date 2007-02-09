@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.174 2007/02/08 23:37:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.175 2007/02/09 23:30:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1115,10 +1115,8 @@ Init_RMagick(void)
                       , INT2FIX(sRGBColorspace)));
         ENUMERATOR(HSLColorspace)
         ENUMERATOR(HWBColorspace)
-        ENUMERATOR(HSBColorspace)           // IM 6.0.0
-#if defined(HAVE_LABCOLORSPACE)
-        ENUMERATOR(LABColorspace)           // GM 1.2
-#endif
+        ENUMERATOR(HSBColorspace)
+        ENUMERATOR(LABColorspace)
 #if defined(HAVE_REC601LUMACOLORSPACE)
         ENUMERATOR(Rec601LumaColorspace)    // GM 1.2 && IM 6.2.2
 #endif
@@ -1638,7 +1636,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/08 23:37:36 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/09 23:30:57 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

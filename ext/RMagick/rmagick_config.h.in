@@ -14,26 +14,12 @@
 #undef HAVE_COMPAREIMAGELAYERS
 /* Introduced in IM 6.2.6 */
 #undef HAVE_COMPOSITEIMAGECHANNEL
-/* Introduced in IM 6.2.6 */
+/* Introduced in IM 6.2.8 */
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
-/* Introduced in IM 6.2.0 */
-#undef HAVE_FXIMAGECHANNEL
-/* Introduced in IM 6.2.0 */
-#undef HAVE_GETIMAGECHANNELDISTORTION
-/* Not available in GM */
-#undef HAVE_GETIMAGECLIPMASK
-/* Introduced in IM 6.1.5 */
-#undef HAVE_IMAGESTOBLOB
-/* Introduced in IM 6.0.0, GM 1.1 */
-#undef HAVE_GETIMAGEPROFILE
-/* Introduced in IM 6.0.1 */
-#undef HAVE_GETMAGICKINFOLIST
 /* Introduced in IM 6.3.0 */
 #undef HAVE_GETMAGICKPIXELPACKET
 /* Introduced in IM 6.2.5 */
 #undef HAVE_GETMAGICKRESOURCELIMIT
-/* Introduced in IM 6.2.1 */
-#undef HAVE_GETNEXTIMAGEATTRIBUTE
 /* Introduced in IM 6.2.9 */
 #undef HAVE_IMAGE_TRANSPARENT_COLOR
 /* Introduced in IM 6.2.9 */
@@ -42,8 +28,6 @@
 #undef HAVE_INTERPRETIMAGEATTRIBUTES
 /* Introduced in IM 6.2.8 */
 #undef HAVE_ISIMAGESIMILAR
-/* Introduced in GM 1.2 */
-#undef HAVE_LABCOLORSPACE
 /* Introduced in IM 6.3.1 */
 #undef HAVE_LINEARSTRETCHIMAGE
 /* ColorInfo changed in 6.3.0 */

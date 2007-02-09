@@ -61,10 +61,6 @@ AC_CHECK_FUNCS([AdaptiveThresholdImage])
 AC_CHECK_FUNCS([AddNoiseImageChannel])
 AC_CHECK_FUNCS([ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-AC_CHECK_FUNCS([FxImageChannel])
-AC_CHECK_FUNCS([GetImageChannelDistortion])
-AC_CHECK_FUNCS([GetImageClipMask])
-AC_CHECK_FUNCS([GetImageProfile])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
               rm_have_getmagickpixelpacket=yes,
@@ -73,8 +69,7 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
    AC_DEFINE(HAVE_GETMAGICKPIXELPACKET)
 fi
 
-AC_CHECK_FUNCS([GetMagickResourceLimit GetNextImageAttribute])
-AC_CHECK_FUNCS([ImagesToBlob])
+AC_CHECK_FUNCS([GetMagickResourceLimit])
 AC_CHECK_FUNCS([InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage])
 AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
@@ -96,22 +91,6 @@ AC_CHECK_MEMBERS([Image.transparent_color],,,
                  #include <sys/types.h>
                  #endif
                  #include "magick/api.h"])
-
-
-AC_CACHE_CHECK(for LABColorspace enum value, rm_cv_enum_labcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = LABColorspace],
-     rm_cv_enum_labcolorspace='yes',
-     rm_cv_enum_labcolorspace='no')])
-
-if test "$rm_cv_enum_labcolorspace" = yes; then
-  AC_DEFINE(HAVE_LABCOLORSPACE)
-fi
 
 AC_CACHE_CHECK(for Rec601LumaColorspace enum value, rm_cv_enum_rec601lumacolorspace,
   [AC_TRY_COMPILE(

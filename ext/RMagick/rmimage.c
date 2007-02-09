@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.208 2007/02/08 23:39:27 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.209 2007/02/09 00:24:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7,14 +7,7 @@
 \============================================================================*/
 
 #include "rmagick.h"
-
-// magick_config.h in GraphicsMagick doesn't define HasX11
-#if defined(HAVE_XIMPORTIMAGE)
-#if !defined(HasX11)
-#define HasX11
-#endif
 #include "magick/xwindow.h"     // XImageInfo
-#endif
 
 typedef Image *(effector_t)(const Image *, const double, const double, ExceptionInfo *);
 typedef Image *(flipper_t)(const Image *, ExceptionInfo *);
@@ -1402,7 +1395,6 @@ Image_capture(
     VALUE *argv,
     VALUE self)
 {
-#ifdef HAVE_XIMPORTIMAGE
     Image *image;
     ImageInfo *image_info;
     volatile VALUE info_obj;
@@ -1444,10 +1436,6 @@ Image_capture(
     rm_ensure_result(image);
 
     return rm_image_new(image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1652,13 +1640,7 @@ Image_channel_threshold(int argc, VALUE *argv, VALUE self)
 {
     rb_warning("This method is deprecated in this release of ImageMagick"
                ". Use bilevel_channel instead.");
-    return threshold_image(argc, argv, self,
-#if defined(HAVE_THRESHOLDIMAGECHANNEL)
-                         ThresholdImageChannel
-#else
-                         ChannelThresholdImage
-#endif
-                                              );
+    return threshold_image(argc, argv, self, ThresholdImageChannel);
 }
 
 
@@ -7885,7 +7867,6 @@ Image_sharpen(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SHARPENIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     ExceptionInfo exception;
@@ -7919,10 +7900,6 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -8444,17 +8421,12 @@ Image_store_pixels(
 VALUE
 Image_strip_bang(VALUE self)
 {
-#if defined(HAVE_STRIPIMAGE)
     Image *image;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) StripImage(image);
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9348,7 +9320,6 @@ Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_UNSHARPMASKIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     double radius = 0.0, sigma = 1.0, amount = 1.0, threshold = 0.05;
@@ -9373,10 +9344,6 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9720,12 +9687,7 @@ error:
 VALUE
 Image_white_threshold(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_WHITETHRESHOLDIMAGE)
     return threshold_image(argc, argv, self, WhiteThresholdImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

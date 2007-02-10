@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.164 2007/02/09 23:42:35 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.165 2007/02/10 23:51:09 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -170,18 +170,7 @@ typedef enum _QuantumExpressionOperator
 } QuantumExpressionOperator ;
 
 
-#if !defined(HAVE_SETIMAGEINFOFILE)
-#define SetImageInfoFile(info, fptr) (info)->file = (fptr)
-#endif
-
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
-
-#if !defined(HAVE_SETIMAGEEXTENT)
-#define SetImageExtent(img, c, r) \
-    (img)->columns = (c); \
-    (img)->rows = (r)
-#endif
-
 
 #if !defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
 #define SetImageBackgroundColor(img) SetImage((img), OpaqueOpacity)

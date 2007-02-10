@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.49 2007/02/08 23:37:10 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.50 2007/02/10 00:19:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -23,7 +23,6 @@ DEF_ATTR_ACCESSOR(Info, antialias, bool)
 VALUE
 Info_aref(VALUE self, VALUE format, VALUE key)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *format_p, *key_p;
     long format_l, key_l;
@@ -48,11 +47,6 @@ Info_aref(VALUE self, VALUE format, VALUE key)
     }
 
     return rb_str_new2(value);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -65,7 +59,6 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 VALUE
 Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *format_p, *key_p, *value_p = "";
     long format_l, key_l;
@@ -97,11 +90,6 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
     }
 
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -304,7 +292,6 @@ Info_compression_eq(VALUE self, VALUE type)
 VALUE
 Info_define(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *format, *key, *value = "";
     long format_l, key_l;
@@ -342,11 +329,6 @@ Info_define(int argc, VALUE *argv, VALUE self)
     }
 
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -357,7 +339,6 @@ Info_define(int argc, VALUE *argv, VALUE self)
 VALUE
 Info_delay(VALUE self)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     const char *delay;
     char *p;
@@ -376,16 +357,11 @@ Info_delay(VALUE self)
         return LONG2NUM(d);
     }
     return Qnil;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
  * Will raise an exception if `arg' can't be converted to an int.
 */
-#if defined(HAVE_SETIMAGEOPTION)
 static VALUE
 arg_is_integer(VALUE arg)
 {
@@ -393,7 +369,6 @@ arg_is_integer(VALUE arg)
     d = d;      // satisfy icc
     return arg;
 }
-#endif
 
 /*
     Method:     Info#delay=
@@ -403,7 +378,6 @@ arg_is_integer(VALUE arg)
 VALUE
 Info_delay_eq(VALUE self, VALUE string)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     int delay;
     int not_num;
@@ -428,10 +402,6 @@ Info_delay_eq(VALUE self, VALUE string)
         (void) SetImageOption(info, "delay", dstr);
     }
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 DEF_ATTR_READER(Info, density, str)
@@ -508,7 +478,6 @@ Info_depth_eq(VALUE self, VALUE depth)
     Purpose:    Retrieve a dispose option string and convert it to
                 a DisposeType enumerator
 */
-#if defined(HAVE_SETIMAGEOPTION)
 static struct
 {
     char *string;
@@ -525,12 +494,10 @@ static struct
     { "3",          "PreviousDispose",   PreviousDispose },
     };
 #define N_DISPOSE_OPTIONS (sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
-#endif
 
 VALUE
 Info_dispose(VALUE self)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     int x;
     ID dispose_id;
@@ -555,10 +522,6 @@ Info_dispose(VALUE self)
     }
 
     return rb_const_get(Module_Magick, dispose_id);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -569,7 +532,6 @@ Info_dispose(VALUE self)
 VALUE
 Info_dispose_eq(VALUE self, VALUE disp)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     DisposeType dispose;
     char *option;
@@ -597,11 +559,6 @@ Info_dispose_eq(VALUE self, VALUE disp)
 
     (void) SetImageOption(info, "dispose", option);
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 DEF_ATTR_ACCESSOR(Info, dither, bool)
@@ -837,7 +794,6 @@ VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
     Purpose:    Return the value of the gravity option as a GravityType enumerator
 */
 
-#if defined(HAVE_SETIMAGEOPTION)
 static struct
 {
     char *string;
@@ -859,11 +815,9 @@ static struct
     { "Static",     "StaticGravity",    StaticGravity }
     };
 #define N_GRAVITY_OPTIONS (sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
-#endif
 
 VALUE Info_gravity(VALUE self)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     const char *gravity;
     int x;
@@ -888,11 +842,6 @@ VALUE Info_gravity(VALUE self)
     }
 
     return rb_const_get(Module_Magick, gravity_id);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -903,7 +852,6 @@ VALUE Info_gravity(VALUE self)
 VALUE
 Info_gravity_eq(VALUE self, VALUE grav)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     GravityType gravity;
     char *option;
@@ -931,11 +879,6 @@ Info_gravity_eq(VALUE self, VALUE grav)
 
     (void) SetImageOption(info, "gravity", option);
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1119,7 +1062,6 @@ Info_orientation_eq(VALUE self, VALUE inter)
 VALUE
 Info_origin(VALUE self)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     const char *origin;
 
@@ -1127,11 +1069,6 @@ Info_origin(VALUE self)
 
     origin = GetImageOption(info, "origin");
     return origin ? rb_str_new2(origin) : Qnil;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1143,7 +1080,6 @@ Info_origin(VALUE self)
 VALUE
 Info_origin_eq(VALUE self, VALUE origin_arg)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     volatile VALUE origin_str;
     char *origin;
@@ -1166,11 +1102,6 @@ Info_origin_eq(VALUE self, VALUE origin_arg)
 
     (void) SetImageOption(info, "origin", origin);
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -1181,11 +1112,7 @@ Info_page(VALUE self)
     const char *page;
 
     Data_Get_Struct(self, Info, info);
-#if defined(HAVE_SETIMAGEOPTION)
     page = GetImageOption(info, "page");
-#else
-    page = (const char *)info->page;
-#endif
     return page ? rb_str_new2(page) : Qnil;
 
 }
@@ -1217,9 +1144,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     magick_clone_string(&info->page, geometry);
-#if defined(HAVE_SETIMAGEOPTION)
     (void) SetImageOption(info, "page", STRING_PTR(geom_str));
-#endif
 
     return self;
 }
@@ -1464,7 +1389,6 @@ Info_texture_eq(VALUE self, VALUE texture)
 VALUE
 Info_undefine(VALUE self, VALUE format, VALUE key)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *format_p, *key_p;
     long format_l, key_l;
@@ -1484,12 +1408,8 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     /* Depending on the IM version, RemoveImageOption returns either */
     /* char * or MagickBooleanType. Ignore the return value.         */
     (void) RemoveImageOption(info, fkey);
-    return self;
 
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
+    return self;
 }
 
 /*
@@ -1627,7 +1547,6 @@ Info_initialize(VALUE self)
 static VALUE
 get_option(VALUE self, char *key)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     const char *value;
 
@@ -1639,10 +1558,6 @@ get_option(VALUE self, char *key)
         return rb_str_new2(value);
     }
     return Qnil;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -1653,7 +1568,6 @@ get_option(VALUE self, char *key)
 static VALUE
 set_option(VALUE self, char *key, VALUE string)
 {
-#if defined(HAVE_SETIMAGEOPTION)
     Info *info;
     char *value;
 
@@ -1669,9 +1583,5 @@ set_option(VALUE self, char *key, VALUE string)
         (void) SetImageOption(info, key, value);
     }
     return self;
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 

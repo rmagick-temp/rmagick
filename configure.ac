@@ -57,9 +57,7 @@ LIBS="${LIBS} `Magick-config --libs`"
 
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
-AC_CHECK_FUNCS([AdaptiveThresholdImage])
-AC_CHECK_FUNCS([AddNoiseImageChannel])
-AC_CHECK_FUNCS([ClearMagickException])
+AC_CHECK_FUNCS([AdaptiveThresholdImage AddNoiseImageChannel ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 
 AC_CHECK_FUNC(GetMagickPixelPacket,
@@ -72,15 +70,12 @@ fi
 AC_CHECK_FUNCS([GetMagickResourceLimit])
 AC_CHECK_FUNCS([InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage])
-AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
-AC_CHECK_FUNCS([PolaroidImage])
-AC_CHECK_FUNCS([RadialBlurImage RadialBlurImageChannel])
+AC_CHECK_FUNCS([OrderedPosterizeImageChannel PolaroidImage])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
-AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
-AC_CHECK_FUNCS([SetImageBackgroundColor SetImageColorspace SetImageExtent])
-AC_CHECK_FUNCS([SetImageInfoFile SetImageStorageClass])
-AC_CHECK_FUNCS([SigmoidalContrastImageChannel SketchImage SpliceImage])
-AC_CHECK_FUNCS([TintImage TransposeImage TransverseImage UniqueImageColors])
+AC_CHECK_FUNCS([RecolorImage SeparateImageChannel])
+AC_CHECK_FUNCS([SetImageBackgroundColor SetImageColorspace])
+AC_CHECK_FUNCS([SetImageStorageClass SketchImage])
+AC_CHECK_FUNCS([TransposeImage TransverseImage UniqueImageColors])
 AC_CHECK_FUNCS([VignetteImage])
 
 # What typedefs?

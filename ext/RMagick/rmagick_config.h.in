@@ -40,10 +40,6 @@
 #undef HAVE_PALETTEBILEVELMATTETYPE
 /* Introduced in IM 6.3.1-6 */
 #undef HAVE_POLAROIDIMAGE
-/* Not available in GM */
-#undef HAVE_RADIALBLURIMAGE
-/* Introduced in IM 6.2.4 */
-#undef HAVE_RADIALBLURIMAGECHANNEL
 #undef HAVE_RANDOMCHANNELTHRESHOLDIMAGE
 #undef HAVE_RANDOMTHRESHOLDIMAGECHANNEL
 /* Introduced in GM 1.2 & IM 6.2.2 */
@@ -55,24 +51,14 @@
 #undef HAVE_RECOLORIMAGE
 #undef HAVE_SEPARATEIMAGECHANNEL
 /* Introduced in IM 6.2.1 */
-#undef HAVE_SEPIATONEIMAGE
-/* Introduced in IM 6.2.1 */
 #undef HAVE_SETIMAGEBACKGROUNDCOLOR
 #undef HAVE_SETIMAGECOLORSPACE
-/* Introduced in IM 6.2.4 */
-#undef HAVE_SETIMAGEEXTENT
-/* Introduced in IM 6.2.1 */
-#undef HAVE_SETIMAGEINFOFILE
 /* Introduced in IM 6.2.6 */
 #undef HAVE_SETIMAGESTORAGECLASS
-/* Introduced in IM 6.2.1 */
-#undef HAVE_SIGMOIDALCONTRASTIMAGECHANNEL
 /* Introduced in IM 6.2.8 */
 #undef HAVE_SKETCHIMAGE
 #undef HAVE_SNPRINTF
-#undef HAVE_SPLICEIMAGE
 #undef HAVE_SYS_TYPES_H
-#undef HAVE_TINTIMAGE
 /* Introduced in IM 6.2.4 */
 #undef HAVE_TRANSPARENTVIRTUALPIXELMETHOD
 /* Introduced in IM 6.2.8 */

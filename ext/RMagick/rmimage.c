@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.210 2007/02/09 23:32:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.211 2007/02/10 23:52:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6758,7 +6758,6 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_radial_blur(VALUE self, VALUE angle)
 {
-#if defined(HAVE_RADIALBLURIMAGE)
     Image *image, *new_image;
     ExceptionInfo exception;
 
@@ -6773,10 +6772,6 @@ Image_radial_blur(VALUE self, VALUE angle)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -6790,7 +6785,6 @@ Image_radial_blur_channel(
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_RADIALBLURIMAGECHANNEL)
     Image *image, *new_image;
     ExceptionInfo exception;
     ChannelType channels;
@@ -6817,11 +6811,6 @@ Image_radial_blur_channel(
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -7563,7 +7552,6 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 VALUE
 Image_sepiatone(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SEPIATONEIMAGE)
     Image *image, *new_image;
     double threshold = (double) MaxRGB;
     ExceptionInfo exception;
@@ -7590,10 +7578,6 @@ Image_sepiatone(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -7938,7 +7922,6 @@ Image_shear(
 VALUE
 Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SIGMOIDALCONTRASTIMAGECHANNEL)
     Image *image, *new_image;
     MagickBooleanType sharpen = MagickFalse;
     double contrast = 3.0;
@@ -7970,10 +7953,6 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -8109,7 +8088,6 @@ Image_spaceship(VALUE self, VALUE other)
 VALUE
 Image_splice(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SPLICEIMAGE)
     Image *image, *new_image;
     PixelPacket color, old_color;
     RectangleInfo rectangle;
@@ -8152,12 +8130,6 @@ Image_splice(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -8715,13 +8687,11 @@ Image_tile_info_eq(VALUE self, VALUE rect)
 /*
     Method:     Image#tint
     Purpose:    Call TintImage
-    Notes:      New for 5.5.8
-                Opacity values are percentages: 0.10 -> 10%.
+    Notes:      Opacity values are percentages: 0.10 -> 10%.
 */
 VALUE
 Image_tint(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_TINTIMAGE)
     Image *image, *new_image;
     Pixel *tint;
     double red_pct_opaque, green_pct_opaque, blue_pct_opaque;
@@ -8782,10 +8752,6 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*

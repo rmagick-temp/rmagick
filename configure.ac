@@ -59,19 +59,10 @@ LIBS="${LIBS} `Magick-config --libs`"
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
 AC_CHECK_FUNCS([AdaptiveThresholdImage AddNoiseImageChannel ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-
-AC_CHECK_FUNC(GetMagickPixelPacket,
-              rm_have_getmagickpixelpacket=yes,
-              rm_have_getmagickpixelpacket=no)
-if test "$rm_have_getmagickpixelpacket" = yes; then
-   AC_DEFINE(HAVE_GETMAGICKPIXELPACKET)
-fi
-
 AC_CHECK_FUNCS([GetMagickResourceLimit])
 AC_CHECK_FUNCS([InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage])
 AC_CHECK_FUNCS([OrderedPosterizeImageChannel PolaroidImage])
-AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageColorspace])
 AC_CHECK_FUNCS([SetImageStorageClass SketchImage])

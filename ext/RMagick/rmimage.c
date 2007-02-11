@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.211 2007/02/10 23:52:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.212 2007/02/11 21:16:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6153,12 +6153,9 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_ORDEREDPOSTERIZEIMAGECHANNEL)
     // ImageMagick >= 6.3.0
     (void) OrderedPosterizeImage(new_image, threshold_map, &exception);
-#elif defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
+#else
     // ImageMagick 6.0.0 thru 6.3.0
     (void) RandomThresholdImageChannel(new_image, AllChannels, threshold_map, &exception);
-#else
-    // GraphicsMagick
-    (void) RandomChannelThresholdImage(new_image, "all", threshold_map, &exception);
 #endif
     rm_check_exception(&exception, new_image, DestroyOnError);
 
@@ -6833,15 +6830,11 @@ Image_random_channel_threshold(
     VALUE channel_arg,
     VALUE thresholds_arg)
 {
-#if defined(HAVE_RANDOMCHANNELTHRESHOLDIMAGE)
     Image *image, *new_image;
     char *channel, *thresholds;
     ExceptionInfo exception;
 
-#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
-    rb_warning("This method is deprecated in this release of ImageMagick."
-               " Use Image#random_threshold_channel instead.");
-#endif
+    rb_warning("This method is deprecated. Use Image#random_threshold_channel instead.");
 
     Data_Get_Struct(self, Image, image);
 
@@ -6857,10 +6850,6 @@ Image_random_channel_threshold(
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -6876,7 +6865,6 @@ Image_random_threshold_channel(
     VALUE *argv,
     VALUE self)
 {
-#if defined(HAVE_RANDOMTHRESHOLDIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     char *thresholds;
@@ -6912,11 +6900,6 @@ Image_random_threshold_channel(
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

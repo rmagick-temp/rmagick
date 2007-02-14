@@ -78,66 +78,6 @@ AC_CHECK_MEMBERS([Image.transparent_color],,,
                  #endif
                  #include "magick/api.h"])
 
-AC_CACHE_CHECK(for Rec601LumaColorspace enum value, rm_cv_enum_rec601lumacolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = Rec601LumaColorspace],
-     rm_cv_enum_rec601lumacolorspace='yes',
-     rm_cv_enum_rec601lumacolorspace='no')])
-
-if test "$rm_cv_enum_rec601lumacolorspace" = yes; then
-  AC_DEFINE(HAVE_REC601LUMACOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for Rec601YCbCrColorspace enum value, rm_cv_enum_rec601ycbcrcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = Rec601YCbCrColorspace],
-     rm_cv_enum_rec601ycbcrcolorspace='yes',
-     rm_cv_enum_rec601ycbcrcolorspace='no')])
-
-if test "$rm_cv_enum_rec601ycbcrcolorspace" = yes; then
-  AC_DEFINE(HAVE_REC601YCBCRCOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for Rec709LumaColorspace enum value, rm_cv_enum_rec709lumacolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = Rec709LumaColorspace],
-     rm_cv_enum_rec709lumacolorspace='yes',
-     rm_cv_enum_rec709lumacolorspace='no')])
-
-if test "$rm_cv_enum_rec709lumacolorspace" = yes; then
-  AC_DEFINE(HAVE_REC709LUMACOLORSPACE)
-fi
-
-AC_CACHE_CHECK(for Rec709YCbCrColorspace enum value, rm_cv_enum_rec709ycbcrcolorspace,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [ColorspaceType x; x = Rec709YCbCrColorspace],
-     rm_cv_enum_rec709ycbcrcolorspace='yes',
-     rm_cv_enum_rec709ycbcrcolorspace='no')])
-
-if test "$rm_cv_enum_rec709ycbcrcolorspace" = yes; then
-  AC_DEFINE(HAVE_REC709YCBCRCOLORSPACE)
-fi
-
 
 AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
   [AC_TRY_COMPILE(

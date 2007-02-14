@@ -57,9 +57,8 @@ LIBS="${LIBS} `Magick-config --libs`"
 
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
-AC_CHECK_FUNCS([AdaptiveThresholdImage AddNoiseImageChannel ClearMagickException])
+AC_CHECK_FUNCS([AdaptiveThresholdImage ClearMagickException])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
-AC_CHECK_FUNCS([GetMagickResourceLimit])
 AC_CHECK_FUNCS([InterpolatePixelColor InterpretImageAttributes])
 AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage])
 AC_CHECK_FUNCS([OrderedPosterizeImageChannel PolaroidImage])
@@ -78,21 +77,6 @@ AC_CHECK_MEMBERS([Image.transparent_color],,,
                  #endif
                  #include "magick/api.h"])
 
-
-AC_CACHE_CHECK(for TransparentVirtualPixelMethod enum value, rm_cv_enum_transparentvirtualpixelmethod,
-  [AC_TRY_COMPILE(
-[#include <stdio.h>
-#if HAVE_SYS_TYPES_H
-#include <sys/types.h>
-#endif
-#include "magick/api.h"],
-     [VirtualPixelMethod x; x = TransparentVirtualPixelMethod],
-     rm_cv_enum_transparentvirtualpixelmethod='yes',
-     rm_cv_enum_transparentvirtualpixelmethod='no')])
-
-if test "$rm_cv_enum_transparentvirtualpixelmethod" = yes; then
-  AC_DEFINE(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
-fi
 
 AC_CACHE_CHECK(for CoalesceLayer enum value, rm_cv_enum_coalescelayer,
   [AC_TRY_COMPILE(

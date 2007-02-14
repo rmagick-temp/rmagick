@@ -4,8 +4,6 @@
 #undef HAVE_ADAPTIVERESIZEIMAGE
 /* Introduced in IM 6.2.7 */
 #undef HAVE_ADAPTIVESHARPENIMAGE
-/* Introduced in IM 6.2.5 */
-#undef HAVE_ADDNOISEIMAGECHANNEL
 /* Introduced in IM 6.2.7 */
 #undef HAVE_COALESCELAYER
 /* Introduced in IM 6.2.6 - Not available in GM */
@@ -16,8 +14,6 @@
 #undef HAVE_COMPOSITEIMAGECHANNEL
 /* Introduced in IM 6.2.8 */
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
-/* Introduced in IM 6.2.5 */
-#undef HAVE_GETMAGICKRESOURCELIMIT
 /* Introduced in IM 6.2.9 */
 #undef HAVE_IMAGE_TRANSPARENT_COLOR
 /* Introduced in IM 6.2.9 */
@@ -50,8 +46,6 @@
 #undef HAVE_SKETCHIMAGE
 #undef HAVE_SNPRINTF
 #undef HAVE_SYS_TYPES_H
-/* Introduced in IM 6.2.4 */
-#undef HAVE_TRANSPARENTVIRTUALPIXELMETHOD
 /* Introduced in IM 6.2.8 */
 #undef HAVE_TRANSPOSEIMAGE
 /* Introduced in IM 6.2.8 */

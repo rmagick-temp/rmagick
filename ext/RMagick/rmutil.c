@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.101 2007/02/09 23:30:58 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.102 2007/02/14 22:58:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1104,19 +1104,6 @@ ColorspaceType_new(ColorspaceType cs)
 {
     const char *name;
 
-#if defined(HAVE_REC601YCBCRCOLORSPACE)
-    // GM 1.2  defines this symbol to be equal to YCbCrColorspace,  so we
-    // can't use it as a case label.  GM wants the string version of this
-    // enumerator to be Rec601YCbCrColorspace (see ColorspaceTypeToString
-    // in colorspace.c) so that's what we return for both versions of the
-    // enumerator.
-    if (cs == Rec601YCbCrColorspace)
-    {
-        return rm_enum_new(Class_ColorspaceType
-            , ID2SYM(rb_intern("Rec601YCbCrColorspace")), INT2FIX(cs));
-    }
-#endif
-
     switch(cs)
     {
         default:
@@ -1171,21 +1158,18 @@ ColorspaceType_new(ColorspaceType cs)
         case LABColorspace:
             name = "LABColorspace";
             break;
-#if defined(HAVE_REC601LUMACOLORSPACE)
+        case Rec601YCbCrColorspace:
+            name = "Rec601YCbCrColorspace";
+            break;
         case Rec601LumaColorspace:
             name = "Rec601LumaColorspace";
             break;
-#endif
-#if defined(HAVE_REC709LUMACOLORSPACE)
         case Rec709LumaColorspace:
             name = "Rec709LumaColorspace";
             break;
-#endif
-#if defined(HAVE_REC709YCBCRCOLORSPACE)
         case Rec709YCbCrColorspace:
             name = "Rec709YCbCrColorspace";
             break;
-#endif
         case LogColorspace:
             name = "LogColorspace";
             break;

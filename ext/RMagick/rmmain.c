@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.175 2007/02/09 23:30:57 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.176 2007/02/14 22:58:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1117,19 +1117,11 @@ Init_RMagick(void)
         ENUMERATOR(HWBColorspace)
         ENUMERATOR(HSBColorspace)
         ENUMERATOR(LABColorspace)
-#if defined(HAVE_REC601LUMACOLORSPACE)
-        ENUMERATOR(Rec601LumaColorspace)    // GM 1.2 && IM 6.2.2
-#endif
-#if defined(HAVE_REC601YCBCRCOLORSPACE)
-        ENUMERATOR(Rec601YCbCrColorspace)   // GM 1.2 && IM 6.2.2
-#endif
-#if defined(HAVE_REC709LUMACOLORSPACE)
-        ENUMERATOR(Rec709LumaColorspace)    // GM 1.2 && IM 6.2.2
-#endif
-#if defined(HAVE_REC709YCBCRCOLORSPACE)
-        ENUMERATOR(Rec709YCbCrColorspace)   // GM 1.2 && IM 6.2.2
-#endif
-        ENUMERATOR(LogColorspace)           // IM 6.2.3
+        ENUMERATOR(Rec601LumaColorspace)
+        ENUMERATOR(Rec601YCbCrColorspace)
+        ENUMERATOR(Rec709LumaColorspace)
+        ENUMERATOR(Rec709YCbCrColorspace)
+        ENUMERATOR(LogColorspace)
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -1636,7 +1628,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/09 23:30:57 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/14 22:58:06 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

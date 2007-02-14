@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.102 2007/02/14 22:58:07 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.103 2007/02/14 23:52:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2374,10 +2374,8 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
         ENUM_TO_NAME(EdgeVirtualPixelMethod)
         ENUM_TO_NAME(MirrorVirtualPixelMethod)
         ENUM_TO_NAME(TileVirtualPixelMethod)
-#if defined(HAVE_TRANSPARENTVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(TransparentVirtualPixelMethod)
         ENUM_TO_NAME(BackgroundVirtualPixelMethod)
-#endif
     }
 }
 

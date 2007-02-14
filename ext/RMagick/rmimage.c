@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.212 2007/02/11 21:16:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.213 2007/02/14 23:53:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -333,7 +333,6 @@ Image_add_noise(VALUE self, VALUE noise)
 VALUE
 Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADDNOISEIMAGECHANNEL)
     Image *image, *new_image;
     NoiseType noise_type;
     ExceptionInfo exception;
@@ -365,11 +364,6 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

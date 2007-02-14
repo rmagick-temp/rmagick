@@ -5,14 +5,12 @@ require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 require 'fileutils'
 
-# TODO: fill in test_statistics for GraphicsMagick
-
 ColorspaceTypes = [
   Magick::RGBColorspace,
   Magick::GRAYColorspace,
   Magick::TransparentColorspace,
   Magick::OHTAColorspace,
-# Magick::LABColorspace,
+  Magick::LABColorspace,
   Magick::XYZColorspace,
   Magick::YCbCrColorspace,
   Magick::YCCColorspace,
@@ -21,12 +19,15 @@ ColorspaceTypes = [
   Magick::YUVColorspace,
   Magick::CMYKColorspace,
   Magick::SRGBColorspace,
-  Magick::HSBColorspace,
   Magick::HSLColorspace,
   Magick::HWBColorspace,
-# Magick::Rec601LumaColorspace,
-# Magick::Recc709LumaColorspace,
-# LogColorspace
+  Magick::HSBColorspace,
+  Magick::LABColorspace,
+  Magick::Rec601LumaColorspace,
+  Magick::Rec601YCbCrColorspace,
+  Magick::Rec709LumaColorspace,
+  Magick::Rec709YCbCrColorspace,
+  Magick::LogColorspace
 ]
 
 class Image3_UT < Test::Unit::TestCase

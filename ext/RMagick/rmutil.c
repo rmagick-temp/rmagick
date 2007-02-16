@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.103 2007/02/14 23:52:21 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.104 2007/02/16 00:14:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1538,7 +1538,6 @@ InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
     External:   MagickLayerMethod_new
     Purpose:    Construct an MagickLayerMethod enum object for the specified value.
 */
-#if defined(HAVE_COMPAREIMAGELAYERS)
 static const char *
 MagickLayerMethod_name(MagickLayerMethod method)
 {
@@ -1566,7 +1565,6 @@ MagickLayerMethod_new(MagickLayerMethod method)
     name = MagickLayerMethod_name(method);
     return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
 }
-#endif
 
 
 /*
@@ -2945,45 +2943,6 @@ rm_split(Image *image)
 }
 
 
-
-/*
- *  Static:     copy_exception
- *              clear_exception
- *  Purpose:    Define alternative implementations of ImageMagick's
- *              InheritException and ClearMagickException.
- *  Notes:      The purpose of InheritException is to copy the exception
- *              information from a "related" exception to a destination
- *              exception if the related exception is more severe than the
- *              destination exception.
- *
- *              The purpose of ClearException is to reset the ExceptionInfo
- *              structure to its initial format.
- */
-
-
-static void copy_exception(ExceptionInfo *exception, ExceptionInfo *relative)
-{
-    InheritException(exception, relative);
-}
-
-// ImageMagick < 6.2.6 had a different kind of ExceptionInfo struct
-// and doesn't define ClearMagickException.
-#if defined(HAVE_CLEARMAGICKEXCEPTION)
-static void clear_exception(ExceptionInfo *exception)
-{
-   ClearMagickException(exception);
-}
-#else
-
-static void clear_exception(ExceptionInfo *exception)
-{
-    DestroyExceptionInfo(exception);
-    GetExceptionInfo(exception);
-}
-
-#endif
-
-
 /*
     Extern:     rm_check_image_exception
     Purpose:    If an ExceptionInfo struct in a list of images indicates a warning,
@@ -3013,10 +2972,10 @@ rm_check_image_exception(Image *imglist, ErrorRetention retention)
             if (!badboy || image->exception.severity > badboy->exception.severity)
             {
                 badboy = image;
-                copy_exception(&exception, &badboy->exception);
+                InheritException(&exception, &badboy->exception);
             }
 
-            clear_exception(&image->exception);
+            ClearMagickException(&image->exception);
         }
         image = GetNextImageInList(image);
     }

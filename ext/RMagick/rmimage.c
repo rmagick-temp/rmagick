@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.213 2007/02/14 23:53:22 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.214 2007/02/16 00:19:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1498,11 +1498,7 @@ Image_channel(VALUE self, VALUE channel_arg)
 
     new_image = rm_clone_image(image);
 
-#if defined(HAVE_SEPARATEIMAGECHANNEL)
     (void) SeparateImageChannel(new_image, channel);
-#else
-    (void) ChannelImage(new_image, channel);
-#endif
 
     rm_check_image_exception(new_image, DestroyOnError);
     rm_ensure_result(new_image);
@@ -2124,37 +2120,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
 
-#if defined(HAVE_SETIMAGECOLORSPACE)
-
-    // SetImageColorspace was introduced in 5.5.7. It is essentially
-    // identical to the code below. It either works or throws an exception.
     (void) SetImageColorspace(image, new_cs);
-    // No need to check for errors
-
-#else
-
-    if (new_cs == image->colorspace)
-    {
-        return self;
-    }
-
-    if (new_cs != RGBColorspace &&
-        new_cs != TransparentColorspace &&
-        new_cs != GRAYColorspace)
-    {
-        if (image->colorspace != RGBColorspace &&
-            image->colorspace != TransparentColorspace &&
-            image->colorspace != GRAYColorspace)
-        {
-           TransformRGBImage(image, image->colorspace);
-        }
-        RGBTransformImage(image, new_cs);
-    }
-    else if (new_cs == RGBColorspace || new_cs == TransparentColorspace || new_cs == GRAYColorspace)
-    {
-        TransformRGBImage(image, image->colorspace);
-    }
-#endif
 
     return self;
 }
@@ -2381,23 +2347,16 @@ static VALUE composite(
     if (bang)
     {
         rm_check_frozen(self);
-#if defined(HAVE_COMPOSITEIMAGECHANNEL)
         (void) CompositeImageChannel(image, channels, operator, comp_image, x_offset, y_offset);
-#else
-        (void) CompositeImage(image, operator, comp_image, x_offset, y_offset);
-#endif
         rm_check_image_exception(image, RetainOnError);
+
         return self;
     }
     else
     {
         new_image = rm_clone_image(image);
 
-#if defined(HAVE_COMPOSITEIMAGECHANNEL)
         (void) CompositeImageChannel(new_image, channels, operator, comp_image, x_offset, y_offset);
-#else
-        (void) CompositeImage(new_image, operator, comp_image, x_offset, y_offset);
-#endif
         rm_check_image_exception(new_image, DestroyOnError);
 
         return rm_image_new(new_image);
@@ -2458,7 +2417,6 @@ Image_composite_affine(
 static VALUE
 composite_channel(int bang, int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_COMPOSITEIMAGECHANNEL)
     ChannelType channels;
 
     channels = extract_channels(&argc, argv);
@@ -2474,12 +2432,8 @@ composite_channel(int bang, int argc, VALUE *argv, VALUE self)
     }
 
     return composite(bang, argc, argv, self, channels);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
+
 
 VALUE Image_composite_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -2764,7 +2718,6 @@ static void get_black_white_point(
 VALUE
 Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_CONTRASTSTRETCHIMAGECHANNEL)
     Image *image, *new_image;
     ChannelType channels;
     double black_point, white_point;
@@ -2785,11 +2738,6 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 /*
@@ -5376,19 +5324,11 @@ Image_mask_eq(VALUE self, VALUE mask)
           }
         }
 
-#if defined(HAVE_SETIMAGESTORAGECLASS)
         if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
         {
             (void) (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
         }
-#else
-        if (clip_mask->storage_class == PseudoClass)
-        {
-            SyncImage(clip_mask);
-            clip_mask->storage_class = DirectClass;
-        }
-#endif
 
         clip_mask->matte = MagickTrue;
 
@@ -8260,11 +8200,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
         (void) QuantizeImage(&qinfo, image);
     }
 
-#if defined(HAVE_SETIMAGESTORAGECLASS)
     (void) SetImageStorageClass(image, class_type);
-#else
-    image->storage_class = class_type;
-#endif
     return self;
 }
 
@@ -9268,7 +9204,6 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_vignette(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_VIGNETTEIMAGE)
     Image *image, *new_image;
     long horz_radius, vert_radius;
     double radius = 0.0, sigma = 10.0;
@@ -9306,11 +9241,6 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9532,16 +9462,8 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     CHECK_EXCEPTION();
 
 
-#if defined(HAVE_SETIMAGESTORAGECLASS)
     (void) SetImageStorageClass(reflection, DirectClass);
     rm_check_image_exception(reflection, DestroyOnError);
-#else
-    if (reflection->storage_class == PseudoClass)
-    {
-        SyncImage(reflection);
-        reflection->storage_class = DirectClass;
-    }
-#endif
 
 
     reflection->matte = MagickTrue;

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.165 2007/02/10 23:51:09 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.166 2007/02/16 00:13:04 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -172,9 +172,6 @@ typedef enum _QuantumExpressionOperator
 
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
 
-#if !defined(HAVE_SETIMAGEBACKGROUNDCOLOR)
-#define SetImageBackgroundColor(img) SetImage((img), OpaqueOpacity)
-#endif
 
 // This implements the "omitted storage class model" for external variables.
 // (Ref: Harbison & Steele.) The rmmain.c file defines MAIN, which causes
@@ -236,9 +233,7 @@ EXTERN VALUE Class_InterlaceType;
 #if defined(HAVE_INTERPOLATEPIXELCOLOR)
 EXTERN VALUE Class_InterpolatePixelMethod;
 #endif
-#if defined(HAVE_COMPAREIMAGELAYERS)
 EXTERN VALUE Class_MagickLayerMethod;
-#endif
 EXTERN VALUE Class_NoiseType;
 EXTERN VALUE Class_OrientationType;
 EXTERN VALUE Class_PaintMethod;

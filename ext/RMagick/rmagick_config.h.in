@@ -6,20 +6,10 @@
 #undef HAVE_ADAPTIVESHARPENIMAGE
 /* Introduced in IM 6.2.7 */
 #undef HAVE_COALESCELAYER
-/* Introduced in IM 6.2.6 - Not available in GM */
-#undef HAVE_CLEARMAGICKEXCEPTION
-/* Introduced in IM 6.2.6 */
-#undef HAVE_COMPAREIMAGELAYERS
-/* Introduced in IM 6.2.6 */
-#undef HAVE_COMPOSITEIMAGECHANNEL
-/* Introduced in IM 6.2.8 */
-#undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
 /* Introduced in IM 6.2.9 */
 #undef HAVE_IMAGE_TRANSPARENT_COLOR
 /* Introduced in IM 6.2.9 */
 #undef HAVE_INTERPOLATEPIXELCOLOR
-/* Introduced in IM 6.2.6-1 */
-#undef HAVE_INTERPRETIMAGEATTRIBUTES
 /* Introduced in IM 6.2.8 */
 #undef HAVE_ISIMAGESIMILAR
 /* Introduced in IM 6.3.1 */
@@ -36,12 +26,6 @@
 #undef HAVE_POLAROIDIMAGE
 /* Introduced in IM 6.3.1-3 */
 #undef HAVE_RECOLORIMAGE
-#undef HAVE_SEPARATEIMAGECHANNEL
-/* Introduced in IM 6.2.1 */
-#undef HAVE_SETIMAGEBACKGROUNDCOLOR
-#undef HAVE_SETIMAGECOLORSPACE
-/* Introduced in IM 6.2.6 */
-#undef HAVE_SETIMAGESTORAGECLASS
 /* Introduced in IM 6.2.8 */
 #undef HAVE_SKETCHIMAGE
 #undef HAVE_SNPRINTF
@@ -53,8 +37,6 @@
 /* Introduced in IM 6.2.9 */
 #undef HAVE_UNIQUEIMAGECOLORS
 #undef HAVE_UNISTD_H
-/* Introduced in IM 6.2.6 */
-#undef HAVE_VIGNETTEIMAGE
 #undef MAGICKNAME
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_NAME

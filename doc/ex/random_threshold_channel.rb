@@ -7,12 +7,8 @@ include Magick
 
 img = Image.read('images/Flower_Hat.jpg').first
 
-begin
-    geom = Geometry.new(MaxRGB/2)
-    img2 = img.random_threshold_channel(geom, RedChannel)
-rescue NotImplementedError
-    img2 = Image.read('images/notimplemented.gif').first
-end
+geom = Geometry.new(MaxRGB/2)
+img2 = img.random_threshold_channel(geom, RedChannel)
 
 img2.write('random_threshold_channel.jpg')
 exit

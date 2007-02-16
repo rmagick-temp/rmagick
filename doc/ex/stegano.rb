@@ -41,18 +41,10 @@ begin
 
     stegano = Magick::Image.read('stegano:img.miff') do
         self.size = Magick::Geometry.new(wmcols, wmrows, 91)
-        begin
-            self.monitor = monitor
-        rescue NotImplementedError
-            Magick.set_monitor(monitor)
-        end
+        self.monitor = monitor
     end
 
-    begin
-        stegano[0].monitor = nil
-    rescue NotImplementedError
-        Magick.set_monitor(nil)
-    end
+    stegano[0].monitor = nil
 
     # We don't need this any more.
     File.delete('img.miff')

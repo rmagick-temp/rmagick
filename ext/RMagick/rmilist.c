@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.47 2007/02/09 23:30:20 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.48 2007/02/16 00:15:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -430,7 +430,6 @@ ImageList_mosaic(VALUE self)
 VALUE
 ImageList_optimize_layers(VALUE self, VALUE method)
 {
-#if defined(HAVE_COMPAREIMAGELAYERS)
     Image *images, *new_images;
     MagickLayerMethod mthd;
     ExceptionInfo exception;
@@ -472,11 +471,6 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

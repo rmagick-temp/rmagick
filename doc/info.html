@@ -98,13 +98,13 @@
         <li><a href="#dispose">dispose</a></li>
 
         <li><a href="#dither">dither</a></li>
+
+        <li><a href="#extract">extract</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#extract">extract</a></li>
-
         <li><a href="#filename">filename</a></li>
 
         <li><a href="#fill">fill</a></li>
@@ -126,15 +126,15 @@
         <li><a href="#matte_color">matte_color</a></li>
 
         <li><a href="#monitor">monitor</a></li>
+
+        <li><a href="#monochrome">monochrome</a></li>
+
+        <li><a href="#orientation">orientation</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#monochrome">monochrome</a></li>
-
-        <li><a href="#orientation">orientation</a></li>
-
         <li><a href="#origin">origin</a></li>
 
         <li><a href="#page">page</a></li>
@@ -149,7 +149,11 @@
 
         <li><a href="#size">size</a></li>
 
+        <li><a href="#stroke">stroke</a></li>
+
         <li><a href="#texture">texture</a></li>
+
+        <li><a href="#undercolor">undercolor</a></li>
 
         <li><a href="#units">units</a></li>
 
@@ -199,26 +203,30 @@
     <p><span class="arg">self</span>[<span class=
     "arg">format</span>, <span class="arg">key</span>] =
     <span class="arg">value</span> -&gt; <span class=
+    "arg">self</span><br />
+    <span class="arg">self</span>[<span class="arg">key</span>] =
+    <span class="arg">value</span> -&gt; <span class=
     "arg">self</span></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Define a format-specific option. An alternative to <a href=
+    <p>Define an option. An alternative to <a href=
     "#define">define</a>, below. Use this method to set options for
     reading or writing certain image formats. The list of supported
     options changes from release to release. For a list of the
     valid image formats, keys, and values, refer to the
-    documentation for the -define option for the specific release
-    of the library you're using.</p>
+    documentation for the -define option for the release of
+    ImageMagick installed on your system.</p>
 
     <h4>Arguments</h4>
 
     <dl>
       <dt>format</dt>
 
-      <dd>An image format name such as "ps" or "tiff".</dd>
+      <dd>An image format name such as "ps" or "tiff". (Depending
+      on the key, this argument may be omitted.)</dd>
 
       <dt>key</dt>
 
@@ -250,7 +258,9 @@ self["tiff", "bits-per-sample"] = 2
 
     <p><span class="arg">self</span>[<span class=
     "arg">format</span>, <span class="arg">key</span>] -&gt;
-    <span class="arg">value</span></p>
+    <em>value</em><br />
+    <span class="arg">self</span>[<span class="arg">key</span>]
+    -&gt; <em>value</em></p>
   </div>
 
   <div class="desc">
@@ -264,7 +274,8 @@ self["tiff", "bits-per-sample"] = 2
     <dl>
       <dt>format</dt>
 
-      <dd>An image format name such as "ps" or "tiff".</dd>
+      <dd>An image format name such as "ps" or "tiff". (Depending
+      on the key, this argument may be omitted.)</dd>
 
       <dt>key</dt>
 
@@ -829,9 +840,8 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In the <code>Image::Info</code> class, the <code>fill</code>
-    attribute specifies the fill color to use when creating an
-    image with the "caption:" format..</p>
+    <p>Specifies the fill color to use when creating an image with
+    the "caption:" format..</p>
 
     <h4>Arguments</h4>
 
@@ -1203,8 +1213,27 @@ self.undefine("tiff", "bits-per-sample")
 
     <h4>Arguments</h4>
 
-    <p>A g<a href="imusage.html#geometry_string">eometry string</a>
+    <p>A <a href="imusage.html#geometry_string">geometry string</a>
     or a <a href="struct.html#Geometry">Geometry</a> object.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="stroke">stroke</h3>
+
+    <p><span class="arg">self.</span>stroke= <span class=
+    "arg">aString</span> or <span class="arg">aPixel</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specifies the stroke color to use when creating an image
+    with the "caption:" format..</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#color_names">color name</a> or a
+    <a href="struct.html#Pixel">aPixel</a>.</p>
   </div>
 
   <div class="sig">
@@ -1224,6 +1253,25 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Argument</h4>
 
     <p>An image</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="undercolor">undercolor</h3>
+
+    <p><span class="arg">self.</span>undercolor= <span class=
+    "arg">aString</span> or <span class="arg">aPixel</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specifies the undercolor color to use when creating an image
+    with the "caption:" format..</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#color_names">color name</a> or a
+    <a href="struct.html#Pixel">aPixel</a>.</p>
   </div>
 
   <div class="sig">

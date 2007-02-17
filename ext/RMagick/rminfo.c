@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.53 2007/02/17 18:27:36 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.54 2007/02/17 22:14:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1533,7 +1533,7 @@ Info_stroke_width_eq(VALUE self, VALUE stroke_width)
     }
     else
     {
-        sw = NUM2DBL(rb_Float(stroke_width));
+        sw = NUM2DBL(stroke_width);
         sprintf(buff, "%-10.2f", sw);
         (void) RemoveImageOption(info, "strokewidth");
         (void) SetImageOption(info, "strokewidth", buff);

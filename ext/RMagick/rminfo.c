@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.54 2007/02/17 22:14:30 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.55 2007/02/17 22:19:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -536,6 +536,7 @@ Info_delay_eq(VALUE self, VALUE string)
         }
         delay = NUM2INT(string);
         sprintf(dstr, "%d", delay);
+        (void) RemoveImageOption(info, "delay");
         (void) SetImageOption(info, "delay", dstr);
     }
     return self;

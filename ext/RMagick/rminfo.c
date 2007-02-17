@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.48 2007/01/28 20:18:33 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.45.2.1 2007/02/17 14:18:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -49,6 +49,19 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 
     return rb_str_new2(value);
 
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    const char *value;
+
+    Data_Get_Struct(self, Info, info);
+    value = AccessDefinition(info, STRING_PTR(format), STRING_PTR(key));
+
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(value);
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -58,7 +71,7 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 
 /*
     Method:     Info[format, key] = value
-    Purpose:    Call SetImageOption
+    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
     Note:       Essentially the same function as Info#define but paired
                 with Info#[]=
 */
@@ -93,6 +106,46 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
     if (!okay)
     {
         rb_warn("%.60s:%.1024s not defined - SetImageOption failed.", format_p, key_p);
+        return Qnil;
+    }
+
+    return self;
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    char *format_p, *key_p, *value_p = NULL;
+    long format_l, key_l, value_l = 0;
+    unsigned int okay;
+    ExceptionInfo exception;
+    char definitions[MaxTextExtent*2];/* Make this buffer longer than the buffer used   */
+                                      /* for SetImageOptions since AddDefinitions cats  */
+                                      /* the value onto the format:key pair.            */
+
+    Data_Get_Struct(self, Info, info);
+
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+    value = rb_funcall(value, ID_to_s, 0);
+    value_p = STRING_PTR_LEN(value, value_l);
+
+    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
+    {
+        rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
+    }
+    (void)sprintf(definitions, "%s:%s=", format_p, key_p);
+    if (value_l > 0)
+    {
+        strcat(definitions, value_p);
+    }
+
+    GetExceptionInfo(&exception);
+    okay = AddDefinitions(info, definitions, &exception);
+    CHECK_EXCEPTION()
+    (void) DestroyExceptionInfo(&exception);
+
+    if (!okay)
+    {
+        rb_warn("%.60s:%.1024s not defined - AddDefinitions failed.", format_p, key_p);
         return Qnil;
     }
 
@@ -218,6 +271,7 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
 VALUE
 Info_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_IMAGEINFO_CHANNEL)
     Info *info;
     ChannelType channels;
 
@@ -233,6 +287,10 @@ Info_channel(int argc, VALUE *argv, VALUE self)
 
     info->channel = channels;
     return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -297,7 +355,7 @@ Info_compression_eq(VALUE self, VALUE type)
 
 /*
     Method:     Info#define(format, key[, value])
-    Purpose:    Call SetImageOption
+    Purpose:    Call AddDefinitions (GM) or SetImageOption (IM)
     Note:       The only method in Info that is not an
                 attribute accessor.
 */
@@ -338,6 +396,59 @@ Info_define(int argc, VALUE *argv, VALUE self)
     if (!okay)
     {
         rb_warn("%.20s=\"%.78s\" not defined - SetImageOption failed.", ckey, value);
+        return Qnil;
+    }
+
+    return self;
+
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    char *format, *key, *value = NULL;
+    long format_l, key_l, value_l = 0;
+    unsigned int okay;
+    volatile VALUE fmt_arg;
+    ExceptionInfo exception;
+    char definitions[200];      /* Make this buffer longer than the buffer used   */
+                                /* for SetImageOptions since AddDefinitions cats  */
+                                /* the value onto the format:key pair.            */
+
+    Data_Get_Struct(self, Info, info);
+
+    switch(argc)
+    {
+        case 3:
+            /* Allow any argument that supports to_s */
+            fmt_arg = rb_funcall(argv[2], ID_to_s, 0);
+            value = STRING_PTR_LEN(fmt_arg, value_l);
+            /* Fall through */
+        case 2:
+            key = STRING_PTR_LEN(argv[1], key_l);
+            format = STRING_PTR_LEN(argv[0], format_l);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
+    }
+
+
+    if ((3 + format_l + key_l + value_l) > sizeof(definitions))
+    {
+        rb_raise(rb_eArgError, "%.20s:%.20s not defined - too long", format, key);
+    }
+    (void)sprintf(definitions, "%s:%s=", format, key);
+    if (value)
+    {
+        strcat(definitions, value);
+    }
+
+    GetExceptionInfo(&exception);
+    okay = AddDefinitions(info, definitions, &exception);
+    CHECK_EXCEPTION()
+    (void) DestroyExceptionInfo(&exception);
+
+    if (!okay)
+    {
+        rb_warn("%.*s not defined - AddDefinitions failed.", sizeof(definitions), definitions);
         return Qnil;
     }
 
@@ -606,6 +717,7 @@ Info_dispose_eq(VALUE self, VALUE disp)
 
 DEF_ATTR_ACCESSOR(Info, dither, bool)
 
+#ifdef HAVE_IMAGE_EXTRACT_INFO
 
 /*
     Method:     aString=Info#extract
@@ -666,6 +778,66 @@ Info_tile_eq(VALUE self, VALUE tile)
     return Info_extract_eq(self, tile);
 }
 
+#else
+
+/*
+    Method:     aString=Info#extract
+                Info#extract=aString
+    Purpose:    Get/set the extract string, e.g. "200x200+100+100"
+    Raise:      ArgumentError
+    Notes:      defined for IM 5.5.6 and later
+*/
+VALUE
+Info_extract(VALUE self)
+{
+    rm_not_implemented();
+    return (VALUE)0;
+}
+VALUE
+Info_extract_eq(VALUE self, VALUE extr)
+{
+    rm_not_implemented();
+    return (VALUE)0;
+}
+
+/*
+    Method:     aString = Info#tile
+                Info#tile=aString
+    Purpose:    Get/set the tile string, e.g. "200x200+100+100"
+    Raise:      ArgumentError
+    Notes:      defined for IM 5.5.5 and earlier, before the tile field was
+                deprecated and replaced by extract
+*/
+DEF_ATTR_READER(Info, tile, str)
+
+VALUE
+Info_tile_eq(VALUE self, VALUE tile_arg)
+{
+    Info *info;
+    char *til;
+    volatile VALUE tile;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(tile_arg))
+    {
+        magick_free(info->tile);
+        info->tile = NULL;
+        return self;
+    }
+
+    tile = rb_funcall(tile_arg, ID_to_s, 0);
+    til = STRING_PTR(tile);
+    if (!IsGeometry(til))
+    {
+        rb_raise(rb_eArgError, "invalid tile geometry: %s", til);
+    }
+
+    magick_clone_string(&info->tile, til);
+
+    return self;
+}
+#endif
 
 /*
     Methods:    aString=Info#filename
@@ -714,10 +886,19 @@ Info_filename_eq(VALUE self, VALUE filename)
 VALUE
 Info_fill(VALUE self)
 {
+#if defined(HAVE_SETIMAGEOPTION)
+    Info *info;
+    const char *fill;
+
+    Data_Get_Struct(self, Info, info);
+    fill = GetImageOption(info, "fill");
+    return fill ? rb_str_new2(fill) : Qnil;
+#else
     Info *info;
 
     Data_Get_Struct(self, Info, info);
     return PixelPacket_to_Color_Name_Info(info, &info->pen);
+#endif
 }
 
 /*
@@ -732,6 +913,13 @@ Info_fill_eq(VALUE self, VALUE color)
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->pen, color);
+
+#if defined(HAVE_SETIMAGEOPTION)
+    // Color_to_PixelPacket will raise an exception if `color' isn't a real color.
+    (void) RemoveImageOption(info, "fill");
+    (void) SetImageOption(info, "fill", STRING_PTR(color));
+#endif
+
     return self;
 }
 
@@ -1094,10 +1282,15 @@ Info_number_scenes_eq(VALUE self, VALUE nscenes)
 VALUE
 Info_orientation(VALUE self)
 {
+#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
     return OrientationType_new(info->orientation);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1109,11 +1302,16 @@ Info_orientation(VALUE self)
 VALUE
 Info_orientation_eq(VALUE self, VALUE inter)
 {
+#if defined(HAVE_IMAGEINFO_ORIENTATION)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
     VALUE_TO_ENUM(inter, info->orientation, OrientationType);
     return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1491,6 +1689,31 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     (void) RemoveImageOption(info, fkey);
     return self;
 
+#elif defined(HAVE_ADDDEFINITIONS)
+    Info *info;
+    unsigned int okay;
+    char *format_p, *key_p;
+    long format_l, key_l;
+    char fkey[MaxTextExtent];
+
+    format_p = STRING_PTR_LEN(format, format_l);
+    key_p = STRING_PTR_LEN(key, key_l);
+
+    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
+    {
+        rb_raise(rb_eArgError, "can't undefine %.60s:%.1024s - too long", format_p, key_p);
+    }
+
+    sprintf(fkey, "%.60s:%.*s", format_p, MaxTextExtent-61, key_p);
+
+    Data_Get_Struct(self, Info, info);
+    okay = RemoveDefinitions(info, fkey);
+    if (!okay)
+    {
+        rb_raise(rb_eArgError, "no such key: `%s'", fkey);
+    }
+    return self;
+
 #else
     rm_not_implemented();
     return (VALUE)0;
@@ -1573,6 +1796,38 @@ destroy_Info(void *infoptr)
     (void) DestroyImageInfo(info);
 }
 
+/*
+    Method:     Info.new
+    Purpose:    Create an Info object by calling CloneInfo
+*/
+#if !defined(HAVE_RB_DEFINE_ALLOC_FUNC)
+VALUE
+Info_new(VALUE class)
+{
+    Info *info;
+    volatile VALUE new_obj;
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
+    }
+    new_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
+    rb_obj_call_init(new_obj, 0, NULL);
+    return new_obj;
+}
+
+/*
+    Extern:     rm_info_new
+    Purpose:    provide a Info.new method for internal use
+    Notes:      takes no parameters, but runs the parm block if present
+*/
+VALUE
+rm_info_new()
+{
+    return Info_new(Class_Info);
+}
+#else
 
 /*
     Extern:     Info_alloc
@@ -1592,8 +1847,6 @@ Info_alloc(VALUE class)
     info_obj = Data_Wrap_Struct(class, NULL, destroy_Info, info);
     return info_obj;
 }
-
-
 /*
     Extern:     rm_info_new
     Purpose:    provide a Info.new method for internal use
@@ -1607,7 +1860,7 @@ rm_info_new()
     info_obj = Info_alloc(Class_Info);
     return Info_initialize(info_obj);
 }
-
+#endif
 
 /*
     Method:     Info#initialize

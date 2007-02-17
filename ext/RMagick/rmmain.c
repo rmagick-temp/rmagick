@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.178 2007/02/16 00:15:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.179 2007/02/17 15:08:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -902,14 +902,14 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
     DCL_ATTR_ACCESSOR(Info, colorspace)
-    DCL_ATTR_ACCESSOR(Info, comment)        // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, comment)
     DCL_ATTR_ACCESSOR(Info, compression)
-    DCL_ATTR_ACCESSOR(Info, delay)          // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, delay)
     DCL_ATTR_ACCESSOR(Info, density)
     DCL_ATTR_ACCESSOR(Info, depth)
-    DCL_ATTR_ACCESSOR(Info, dispose)        // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, dispose)
     DCL_ATTR_ACCESSOR(Info, dither)
-    DCL_ATTR_ACCESSOR(Info, extract)    // new in 5.5.6, replaces tile
+    DCL_ATTR_ACCESSOR(Info, extract)
     DCL_ATTR_ACCESSOR(Info, filename)
     DCL_ATTR_ACCESSOR(Info, fill)
     DCL_ATTR_ACCESSOR(Info, font)
@@ -918,25 +918,27 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, gravity)
     DCL_ATTR_ACCESSOR(Info, group)
     DCL_ATTR_ACCESSOR(Info, interlace)
-    DCL_ATTR_ACCESSOR(Info, label)          // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, label)
     DCL_ATTR_ACCESSOR(Info, matte_color)
     DCL_ATTR_WRITER(Info, monitor)
     DCL_ATTR_ACCESSOR(Info, monochrome)
-    DCL_ATTR_ACCESSOR(Info, number_scenes)  // new in 5.5.6, replaces subrange
-    DCL_ATTR_ACCESSOR(Info, orientation)    // new in 6.0.0
+    DCL_ATTR_ACCESSOR(Info, number_scenes)
+    DCL_ATTR_ACCESSOR(Info, orientation)
     DCL_ATTR_ACCESSOR(Info, origin)         // new in 6.3.1
     DCL_ATTR_ACCESSOR(Info, page)
     DCL_ATTR_ACCESSOR(Info, pointsize)
     DCL_ATTR_ACCESSOR(Info, quality)
     DCL_ATTR_ACCESSOR(Info, sampling_factor)
-    DCL_ATTR_ACCESSOR(Info, scene)      // new in 5.5.6, replaces subimage
+    DCL_ATTR_ACCESSOR(Info, scene)
     DCL_ATTR_ACCESSOR(Info, server_name)
     DCL_ATTR_ACCESSOR(Info, size)
-    DCL_ATTR_ACCESSOR(Info, subimage)   // deprecated >=5.5.6, replaced by scene
-    DCL_ATTR_ACCESSOR(Info, subrange)   // deprecated >=5.5.6, replaced by number_scenes
+    DCL_ATTR_ACCESSOR(Info, stroke)
+    DCL_ATTR_ACCESSOR(Info, subimage)   // deprecated
+    DCL_ATTR_ACCESSOR(Info, subrange)   // deprecated
     DCL_ATTR_WRITER(Info, texture)
-    DCL_ATTR_ACCESSOR(Info, tile)       // deprecated >=5.5.6, replaced by extract and scenes
+    DCL_ATTR_ACCESSOR(Info, tile)       // deprecated
     DCL_ATTR_ACCESSOR(Info, image_type)
+    DCL_ATTR_ACCESSOR(Info, undercolor)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
 
@@ -1619,7 +1621,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/16 00:15:59 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/17 15:08:41 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

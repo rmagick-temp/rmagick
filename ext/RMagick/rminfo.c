@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.50 2007/02/10 00:19:56 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.51 2007/02/17 15:08:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -8,8 +8,92 @@
 
 #include "rmagick.h"
 
-static VALUE get_option(VALUE, char *);
-static VALUE set_option(VALUE, char *, VALUE);
+
+
+
+
+/*
+    Method:     Info#get_option
+    Purpose:    Return the value of the specified option
+*/
+static VALUE
+get_option(VALUE self, const char *key)
+{
+    Info *info;
+    const char *value;
+
+    Data_Get_Struct(self, Info, info);
+
+    value = GetImageOption(info, key);
+    if (value)
+    {
+        return rb_str_new2(value);
+    }
+    return Qnil;
+}
+
+/*
+    Method:     Info#set_option
+    Purpose:    Set the specified option to this value.
+                If the value is nil just unset any current value
+*/
+static VALUE
+set_option(VALUE self, const char *key, VALUE string)
+{
+    Info *info;
+    char *value;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(string))
+    {
+        (void) RemoveImageOption(info, key);
+    }
+    else
+    {
+        value = STRING_PTR(string);
+        (void) SetImageOption(info, key, value);
+    }
+    return self;
+}
+
+
+/*
+    Static:     set_color_option
+    Purpose:    Set a color name as the value of the specified option
+    Note:       Call QueryColorDatabase to validate color name
+*/
+static VALUE set_color_option(VALUE self, const char *option, VALUE color)
+{
+    Info *info;
+    char *name;
+    PixelPacket pp;
+    ExceptionInfo exception;
+    MagickBooleanType okay;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(color))
+    {
+        (void) RemoveImageOption(info, option);
+    }
+    else
+    {
+        GetExceptionInfo(&exception);
+        name = STRING_PTR(color);
+        okay = QueryColorDatabase(name, &pp, &exception);
+        (void) DestroyExceptionInfo(&exception);
+        if (!okay)
+        {
+            rb_raise(rb_eArgError, "invalid color name `%s'", name);
+        }
+
+        (void) RemoveImageOption(info, option);
+        (void) SetImageOption(info, option, name);
+    }
+
+    return self;
+}
 
 
 DEF_ATTR_ACCESSOR(Info, antialias, bool)
@@ -665,31 +749,23 @@ Info_filename_eq(VALUE self, VALUE filename)
 
 /*
     Method:     Info#fill
-    Purpose:    return the fill (a.k.a pen) color as a String
-    Note:       Compare with Image#fill!
+    Purpose:    return the fill color as a String
 */
 VALUE
 Info_fill(VALUE self)
 {
-    Info *info;
-
-    Data_Get_Struct(self, Info, info);
-    return PixelPacket_to_Color_Name_Info(info, &info->pen);
+    return get_option(self, "fill");
 }
 
 /*
     Method:     Info#fill=<aString>
-    Purpose:    set the fill (a.k.a. pen) color
+    Purpose:    set the fill color
     Raises:     ArgumentError
 */
 VALUE
 Info_fill_eq(VALUE self, VALUE color)
 {
-    Info *info;
-
-    Data_Get_Struct(self, Info, info);
-    Color_to_PixelPacket(&info->pen, color);
-    return self;
+    return set_color_option(self, "fill", color);
 }
 
 
@@ -1345,6 +1421,28 @@ Info_size_eq(VALUE self, VALUE size_arg)
 
 
 /*
+    Method:     Info#stroke
+    Purpose:    return the stroke color as a String
+*/
+VALUE
+Info_stroke(VALUE self)
+{
+    return get_option(self, "stroke");
+}
+
+/*
+    Method:     Info#stroke=<aString>
+    Purpose:    set the stroke color
+    Raises:     ArgumentError
+*/
+VALUE
+Info_stroke_eq(VALUE self, VALUE color)
+{
+    return set_color_option(self, "stroke", color);
+}
+
+
+/*
     Method:     Image::Info#texture=texture_image
     Purpose:    Set name of texture to tile onto the image background
 */
@@ -1410,6 +1508,28 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     (void) RemoveImageOption(info, fkey);
 
     return self;
+}
+
+
+/*
+    Method:     Info#undercolor
+    Purpose:    return the undercolor color as a String
+*/
+VALUE
+Info_undercolor(VALUE self)
+{
+    return get_option(self, "undercolor");
+}
+
+/*
+    Method:     Info#undercolor=<aString>
+    Purpose:    set the undercolor color
+    Raises:     ArgumentError
+*/
+VALUE
+Info_undercolor_eq(VALUE self, VALUE color)
+{
+    return set_color_option(self, "undercolor", color);
 }
 
 /*
@@ -1535,52 +1655,6 @@ Info_initialize(VALUE self)
     {
         // Run the block in self's context
         (void) rb_obj_instance_eval(0, NULL, self);
-    }
-    return self;
-}
-
-
-/*
-    Method:     Info#get_option
-    Purpose:    Return the value of the specified option
-*/
-static VALUE
-get_option(VALUE self, char *key)
-{
-    Info *info;
-    const char *value;
-
-    Data_Get_Struct(self, Info, info);
-
-    value = GetImageOption(info, key);
-    if (value)
-    {
-        return rb_str_new2(value);
-    }
-    return Qnil;
-}
-
-/*
-    Method:     Info#set_option
-    Purpose:    Set the specified option to this value.
-                If the value is nil just unset any current value
-*/
-static VALUE
-set_option(VALUE self, char *key, VALUE string)
-{
-    Info *info;
-    char *value;
-
-    Data_Get_Struct(self, Info, info);
-
-    if (NIL_P(string))
-    {
-        (void) RemoveImageOption(info, key);
-    }
-    else
-    {
-        value = STRING_PTR(string);
-        (void) SetImageOption(info, key, value);
     }
     return self;
 }

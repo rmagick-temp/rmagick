@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.168 2007/02/17 16:17:55 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.169 2007/02/17 18:27:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -600,6 +600,7 @@ ATTR_ACCESSOR(Info, sampling_factor)
 ATTR_ACCESSOR(Info, scene)
 ATTR_ACCESSOR(Info, server_name)
 ATTR_ACCESSOR(Info, stroke)
+ATTR_ACCESSOR(Info, stroke_width)
 ATTR_ACCESSOR(Info, subimage)
 ATTR_ACCESSOR(Info, subrange)
 ATTR_WRITER(Info, texture)

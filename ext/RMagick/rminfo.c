@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.52 2007/02/17 16:17:55 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.53 2007/02/17 18:27:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1492,6 +1492,54 @@ VALUE
 Info_stroke_eq(VALUE self, VALUE color)
 {
     return set_color_option(self, "stroke", color);
+}
+
+
+/*
+    Method:     Info#stroke_width
+    Purpose:    Support for caption: format
+    Notes:      Supported >= 6.3.2-6
+*/
+VALUE
+Info_stroke_width(VALUE self)
+{
+    Info *info;
+    const char *sw;
+
+    Data_Get_Struct(self, Info, info);
+
+    sw = GetImageOption(info, "strokewidth");
+    return sw ? rb_float_new(atof(sw)) : Qnil;
+}
+
+
+/*
+    Method:     Info#stroke_width=
+    Purpose:    Support for caption: format
+    Notes:      Supported >= 6.3.2-6
+*/
+VALUE
+Info_stroke_width_eq(VALUE self, VALUE stroke_width)
+{
+    Info *info;
+    char buff[11];
+    double sw;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(stroke_width))
+    {
+        (void) RemoveImageOption(info, "strokewidth");
+    }
+    else
+    {
+        sw = NUM2DBL(rb_Float(stroke_width));
+        sprintf(buff, "%-10.2f", sw);
+        (void) RemoveImageOption(info, "strokewidth");
+        (void) SetImageOption(info, "strokewidth", buff);
+    }
+
+    return self;
 }
 
 

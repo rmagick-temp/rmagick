@@ -1,16 +1,15 @@
 #! /usr/local/bin/ruby -w
 
 require 'RMagick'
-include Magick
 
-img = Image.new(40, 40) {self.background_color = 'lightcyan2'}
+img = Magick::Image.new(40, 40) {self.background_color = 'lightcyan2'}
 
 # The view is 400 pixels square, starting
 # column 10, row 5 from the top of the image.
 img.view( 10, 5, 20, 20) do |view|
 
     # Set all the pixels in the view to green.
-    view[][] = Pixel.new(0, MaxRGB)
+    view[][] = Magick::Pixel.new(0, Magick::MaxRGB)
 
     # Change the top and bottom rows to red.
     view[0][] = 'red'
@@ -24,11 +23,11 @@ img.view( 10, 5, 20, 20) do |view|
 
     # Change the green channel of all the
     # pixels on row 8.
-    view[8][].green = MaxRGB/2
+    view[8][].green = Magick::MaxRGB/2
 
     # Change the blue channel of 8 pixels
     # on column 10.
-    view[4,8][10].blue = MaxRGB
+    view[4,8][10].blue = Magick::MaxRGB
 end
 
 img.scale(5).write("viewex.gif")

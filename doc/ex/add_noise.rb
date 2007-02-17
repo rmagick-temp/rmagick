@@ -1,12 +1,11 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
-include Magick
 
 # Demonstrate the Image#add_noise method
-NOISE_TYPES = [UniformNoise, GaussianNoise,
-               MultiplicativeGaussianNoise,
-               ImpulseNoise, LaplacianNoise,
-               PoissonNoise]
+NOISE_TYPES = [Magick::UniformNoise, Magick::GaussianNoise,
+               Magick::MultiplicativeGaussianNoise,
+               Magick::ImpulseNoise, Magick::LaplacianNoise,
+               Magick::PoissonNoise]
 
 img = Magick::Image.read('images/Flower_Hat.jpg').first
 

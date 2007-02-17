@@ -1,16 +1,13 @@
 #! /usr/local/bin/ruby -w
 
 require 'RMagick'
-include Magick
 
-img = Image.new(200,200)
-img.compression = LZWCompression
+img = Magick::Image.new(200,200)
+img.compression = Magick::LZWCompression
 
-bg = Image.read('plasma:fractal') {
-    self.size = '200x200'
-    }
+bg = Magick::Image.read('plasma:fractal') { self.size = '200x200' }
 
-gc = Draw.new
+gc = Magick::Draw.new
 gc.stroke_width(2)
 gc.stroke('black')
 gc.fill('white')
@@ -28,7 +25,7 @@ img = img.matte_floodfill(100, 100)
 
 # Composite the image over a nice bright background
 # so that the transparent pixels will be obvious.
-img = bg[0].composite(img, CenterGravity, OverCompositeOp)
+img = bg[0].composite(img, Magick::CenterGravity, Magick::OverCompositeOp)
 
 img.write('matte_floodfill_after.gif')
 exit

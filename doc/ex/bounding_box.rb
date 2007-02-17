@@ -1,11 +1,10 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
-include Magick
 
-img = Image.new(200,200) { self.background_color = "#ffffcc" }
+img = Magick::Image.new(200,200) { self.background_color = "#ffffcc" }
 
 # Draw a blue circle.
-gc = Draw.new
+gc = Magick::Draw.new
 gc.stroke_width(5)
 gc.stroke("blue")
 gc.fill_opacity(0)
@@ -17,7 +16,7 @@ gc.draw(img)
 # the corners with tiny red circles.
 
 bb = img.bounding_box
-gc = Draw.new
+gc = Magick::Draw.new
 gc.stroke("gray50")
 gc.fill_opacity(0)
 gc.rectangle(bb.x, bb.y, bb.x+bb.width, bb.y+bb.height)

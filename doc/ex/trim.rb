@@ -1,10 +1,9 @@
 require 'RMagick'
-include Magick
 
 # Demonstrate the trim method
 
 # Read the Flower_Hat image and reduce it to 80% of its original size.
-img = Image.read('images/Flower_Hat.jpg').first
+img = Magick::Image.read('images/Flower_Hat.jpg').first
 cols = img.columns
 rows = img.rows
 img.resize!(0.80)

@@ -1,10 +1,8 @@
 #! /usr/local/bin/ruby -w
-
 require 'RMagick'
-include Magick
 
-canvas = Image.new(260, 125)
-gc = Draw.new
+canvas = Magick::Image.new(260, 125)
+gc = Magick::Draw.new
 gc.fill('black')
 gc.rectangle(10,20, 250,90)
 
@@ -26,7 +24,7 @@ gc.roundrectangle(200,20, 240,90, 5,5)
 
 gc.stroke('transparent')
 gc.fill('black')
-gc.gravity(SouthGravity)
+gc.gravity(Magick::SouthGravity)
 gc.text(-90,20, '"25%%"')
 gc.text(-30,20, '"50%%"')
 gc.text( 30,20, '"75%%"')

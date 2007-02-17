@@ -1,6 +1,5 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
-include Magick
 
 # Add a method for drawing braces.
 module Magick
@@ -32,11 +31,11 @@ Origin_y = 230
 Glyph = 'g'
 Face = ARGV[0] ? ARGV[0] : "Times"
 
-canvas = Image.new(410,320,HatchFill.new('white', 'lightcyan2'))
+canvas = Magick::Image.new(410, 320, Magick::HatchFill.new('white', 'lightcyan2'))
 
 # Draw a big lowercase 'g' on the canvas. Leave room on all sides for
 # the labels. Use 'undercolor' to set off the glyph.
-glyph = Draw.new
+glyph = Magick::Draw.new
 glyph.annotate(canvas, 0, 0, Origin_x, Origin_y, Glyph) do |opts|
     opts.pointsize = 124
     opts.stroke = 'none'
@@ -48,7 +47,7 @@ end
 # Call get_type_metrics. This is what this example's all about.
 metrics = glyph.get_type_metrics(canvas, Glyph)
 
-gc = Draw.new
+gc = Magick::Draw.new
 gc.translate(Origin_x, Origin_y)
 
 # Draw the origin as a big red dot.
@@ -89,7 +88,7 @@ gc.draw(canvas)
 
 # Draw the braces and labels. Position the braces by transforming the
 # user coordinate system with translate and rotate methods.
-gc = Draw.new
+gc = Magick::Draw.new
 gc.font_family('Times')
 gc.pointsize(13)
 gc.fill('none')

@@ -1,17 +1,16 @@
 #! /usr/local/bin/ruby -w
 
 require 'RMagick'
-include Magick
 
-img = Image.read('images/Flower_Hat.jpg').first
-imgs = ImageList.new
+img = Magick::Image.read('images/Flower_Hat.jpg').first
+imgs = Magick::ImageList.new
 
 imgs << img
-imgs << img.channel(RedChannel)
+imgs << img.channel(Magick::RedChannel)
 imgs.cur_image['Label'] = 'RedChannel'
-imgs <<  img.channel(GreenChannel)
+imgs <<  img.channel(Magick::GreenChannel)
 imgs.cur_image['Label'] = 'GreenChannel'
-imgs << img.channel(BlueChannel)
+imgs << img.channel(Magick::BlueChannel)
 imgs.cur_image['Label'] = 'BlueChannel'
 
 result = imgs.montage {
@@ -19,7 +18,7 @@ result = imgs.montage {
     self.background_color = 'black'
     self.stroke = 'transparent'
     self.fill = 'white'
-    self.geometry = Geometry.new(img.columns/2, img.rows/2, 5, 5)
+    self.geometry = Magick::Geometry.new(img.columns/2, img.rows/2, 5, 5)
     }
 
 result.write('channel.jpg')

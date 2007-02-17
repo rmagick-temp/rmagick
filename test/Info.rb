@@ -13,9 +13,22 @@ class Info_UT < Test::Unit::TestCase
     end
 
     def test_options
+
+        # 1-argument form
+        assert_nothing_raised { @info['fill'] }
+        assert_nil(@info['fill'])
+
+        assert_nothing_raised { @info['fill'] = 'red' }
+        assert_equal("red", @info['fill'])
+
+        assert_nothing_raised { @info['fill'] = nil }
+        assert_nil(@info['fill'])
+
+        # 2-argument form
         assert_nothing_raised { @info['tiff', 'bits-per-sample'] = 2 }
         assert_equal("2", @info['tiff', 'bits-per-sample'])
 
+        # define and undefine
         assert_nothing_raised { @info.define('tiff', 'bits-per-sample', 4) }
         assert_equal("4", @info['tiff', 'bits-per-sample'])
 

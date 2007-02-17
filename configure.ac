@@ -57,10 +57,9 @@ LIBS="${LIBS} `Magick-config --libs`"
 
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
-AC_CHECK_FUNCS([AdaptiveThresholdImage InterpolatePixelColor])
-AC_CHECK_FUNCS([IsImageSimilar LinearStretchImage OrderedPosterizeImageChannel])
-AC_CHECK_FUNCS([PolaroidImage RecolorImage])
-AC_CHECK_FUNCS([SketchImage])
+AC_CHECK_FUNCS([InterpolatePixelColor IsImageSimilar LinearStretchImage])
+AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
+AC_CHECK_FUNCS([PolaroidImage RecolorImage SketchImage])
 AC_CHECK_FUNCS([TransposeImage TransverseImage UniqueImageColors])
 
 # What typedefs?

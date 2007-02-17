@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.179 2007/02/17 15:08:41 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.180 2007/02/17 16:17:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -893,8 +893,8 @@ Init_RMagick(void)
     rb_define_method(Class_Info, "channel", Info_channel, -1);
     rb_define_method(Class_Info, "freeze", rm_no_freeze, 0);
     rb_define_method(Class_Info, "define", Info_define, -1);
-    rb_define_method(Class_Info, "[]=", Info_aset, 3);
-    rb_define_method(Class_Info, "[]", Info_aref, 2);
+    rb_define_method(Class_Info, "[]=", Info_aset, -1);
+    rb_define_method(Class_Info, "[]", Info_aref, -1);
     rb_define_method(Class_Info, "undefine", Info_undefine, 2);
 
     DCL_ATTR_ACCESSOR(Info, antialias)
@@ -1621,7 +1621,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/17 15:08:41 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/17 16:17:55 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

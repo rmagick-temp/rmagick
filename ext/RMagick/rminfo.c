@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.51 2007/02/17 15:08:41 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.52 2007/02/17 16:17:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -99,13 +99,18 @@ static VALUE set_color_option(VALUE self, const char *option, VALUE color)
 DEF_ATTR_ACCESSOR(Info, antialias, bool)
 
 /*
- * Method:  value = Info[format, key]
- * Purpose: get the value of an option set by Info[]=
+   Method:  value = Info[format, key]
+            value = Info[key]
+   Purpose: get the value of an option set by Info[]=
+            The 2 argument form is the original form. Added support for a
+            single argument after ImageMagick started using Set/GetImageOption
+            for options that aren't represented by fields in the ImageInfo
+            structure.
 */
 #define MAX_FORMAT_LEN 60
 
 VALUE
-Info_aref(VALUE self, VALUE format, VALUE key)
+Info_aref(int argc, VALUE *argv, VALUE self)
 {
     Info *info;
     char *format_p, *key_p;
@@ -113,15 +118,29 @@ Info_aref(VALUE self, VALUE format, VALUE key)
     const char *value;
     char fkey[MaxTextExtent];
 
-    format_p = STRING_PTR_LEN(format, format_l);
-    key_p = STRING_PTR_LEN(key, key_l);
-
-    if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent-1)
+    switch (argc)
     {
-        rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
-    }
+        case 2:
+            format_p = STRING_PTR_LEN(argv[0], format_l);
+            key_p = STRING_PTR_LEN(argv[1], key_l);
+            if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent-1)
+            {
+                rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
+            }
 
-    sprintf(fkey, "%.60s:%.*s", STRING_PTR(format), (int)(MaxTextExtent-61), STRING_PTR(key));
+            sprintf(fkey, "%.60s:%.*s", format_p, (int)(MaxTextExtent-61), key_p);
+            break;
+
+        case 1:
+            strncpy(fkey, STRING_PTR(argv[0]), sizeof(fkey)-1);
+            fkey[sizeof(fkey)-1] = '\0';
+            break;
+
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+
+    }
 
     Data_Get_Struct(self, Info, info);
     value = GetImageOption(info, fkey);
@@ -137,13 +156,19 @@ Info_aref(VALUE self, VALUE format, VALUE key)
 /*
     Method:     Info[format, key] = value
     Purpose:    Call SetImageOption
-    Note:       Essentially the same function as Info#define but paired
-                with Info#[]=
+    Note:       Essentially the same function as Info#define but paired with Info#[]=
+                If the value is nil it is equivalent to #undefine.
+
+                The 2 argument form is the original form. Added support for a
+                single argument after ImageMagick started using Set/GetImageOption
+                for options that aren't represented by fields in the ImageInfo
+                structure.
 */
 VALUE
-Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
+Info_aset(int argc, VALUE *argv, VALUE self)
 {
     Info *info;
+    volatile VALUE value;
     char *format_p, *key_p, *value_p = "";
     long format_l, key_l;
     char ckey[MaxTextExtent];
@@ -152,26 +177,53 @@ Info_aset(VALUE self, VALUE format, VALUE key, VALUE value)
 
     Data_Get_Struct(self, Info, info);
 
-    format_p = STRING_PTR_LEN(format, format_l);
-    key_p = STRING_PTR_LEN(key, key_l);
-
-    /* Allow any argument that supports to_s */
-    value = rb_funcall(value, ID_to_s, 0);
-    value_p = STRING_PTR(value);
-
-    if (format_l > MAX_FORMAT_LEN || format_l+key_l > MaxTextExtent-1)
+    switch (argc)
     {
-        rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
+        case 3:
+            format_p = STRING_PTR_LEN(argv[0], format_l);
+            key_p = STRING_PTR_LEN(argv[1], key_l);
+
+            if (format_l > MAX_FORMAT_LEN || format_l+key_l > MaxTextExtent-1)
+            {
+                rb_raise(rb_eArgError, "%.60s:%.1024s not defined - too long", format_p, key_p);
+            }
+
+            (void) sprintf(ckey, "%.60s:%.*s", format_p, (int)(sizeof(ckey)-MAX_FORMAT_LEN), key_p);
+
+            value = argv[2];
+            break;
+
+        case 2:
+            strncpy(ckey, STRING_PTR(argv[0]), sizeof(ckey)-1);
+            ckey[sizeof(ckey)-1] = '\0';
+
+            value = argv[1];
+            break;
+
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
+            break;
     }
 
-    (void) sprintf(ckey, "%.60s:%.*s", format_p, (int)(sizeof(ckey)-MAX_FORMAT_LEN), key_p);
-
-    okay = SetImageOption(info, ckey, value_p);
-    if (!okay)
+    if (NIL_P(value))
     {
-        rb_warn("%.60s:%.1024s not defined - SetImageOption failed.", format_p, key_p);
-        return Qnil;
+        (void) RemoveImageOption(info, ckey);
     }
+    else
+    {
+        /* Allow any argument that supports to_s */
+        value = rb_funcall(value, ID_to_s, 0);
+        value_p = STRING_PTR(value);
+
+        (void) RemoveImageOption(info, ckey);
+        okay = SetImageOption(info, ckey, value_p);
+        if (!okay)
+        {
+            rb_warn("`%s' not defined - SetImageOption failed.", ckey);
+            return Qnil;
+        }
+    }
+
 
     return self;
 }
@@ -405,6 +457,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     }
     (void) sprintf(ckey, "%s:%s", format, key);
 
+    (void) RemoveImageOption(info, ckey);
     okay = SetImageOption(info, ckey, value);
     if (!okay)
     {

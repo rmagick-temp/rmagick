@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.167 2007/02/17 15:08:40 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.168 2007/02/17 16:17:55 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -613,8 +613,8 @@ ATTR_ACCESSOR(Info, view)
 extern VALUE Info_alloc(VALUE);
 
 extern VALUE Info_define(int, VALUE *, VALUE);
-extern VALUE Info_aset(VALUE, VALUE, VALUE, VALUE);
-extern VALUE Info_aref(VALUE, VALUE, VALUE);
+extern VALUE Info_aset(int, VALUE *, VALUE);
+extern VALUE Info_aref(int, VALUE *, VALUE);
 extern VALUE Info_channel(int, VALUE *, VALUE);
 extern VALUE Info_undefine(VALUE, VALUE, VALUE);
 extern VALUE Info_initialize(VALUE);

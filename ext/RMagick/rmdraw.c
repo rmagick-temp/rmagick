@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.46 2007/02/16 00:13:45 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.47 2007/02/18 16:46:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -108,6 +108,35 @@ Draw_fill_eq(VALUE self, VALUE fill)
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->info->fill, fill);
+    return self;
+}
+
+/*
+    Method:     Draw#fill_pattern=
+    Purpose:    Accept an image as a fill pattern
+    Notes:      See also stroke_pattern=, tile=
+*/
+VALUE
+Draw_fill_pattern_eq(VALUE self, VALUE pattern)
+{
+    Draw *draw;
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+
+    if (draw->info->fill_pattern != NULL)
+    {
+        DestroyImage(draw->info->fill_pattern);
+        draw->info->fill_pattern = NULL;
+    }
+
+    if (!NIL_P(pattern))
+    {
+        Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        draw->info->fill_pattern = rm_clone_image(image);
+    }
+
     return self;
 }
 
@@ -330,6 +359,36 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
 }
 
 /*
+    Method:     Draw#stroke_pattern=
+    Purpose:    Accept an image as a stroke pattern
+    Notes:      See also fill_pattern=
+*/
+VALUE
+Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
+{
+    Draw *draw;
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+
+    if (draw->info->stroke_pattern != NULL)
+    {
+        DestroyImage(draw->info->stroke_pattern);
+        draw->info->stroke_pattern = NULL;
+    }
+
+    if (!NIL_P(pattern))
+    {
+        // DestroyDrawInfo destroys the clone
+        Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        draw->info->stroke_pattern = rm_clone_image(image);
+    }
+
+    return self;
+}
+
+/*
     Method:     Draw#stroke_width=
     Purpose:    stroke_width attribute writer
 */
@@ -366,27 +425,7 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 VALUE
 Draw_tile_eq(VALUE self, VALUE image)
 {
-    Draw *draw;
-    Image *tile;
-
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Draw, draw);
-
-    if (draw->info->fill_pattern)
-    {
-        (void) DestroyImage(draw->info->fill_pattern);
-        draw->info->fill_pattern = NULL;
-    }
-
-    if (image == Qnil)
-    {
-        return self;
-    }
-
-    Data_Get_Struct(ImageList_cur_image(image), Image, tile);
-    draw->info->fill_pattern = rm_clone_image(tile);
-
-    return self;
+    return Draw_fill_pattern_eq(self, image);
 }
 
 /*

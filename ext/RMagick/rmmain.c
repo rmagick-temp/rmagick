@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.181 2007/02/17 18:27:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.182 2007/02/18 16:46:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -746,6 +746,7 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Draw, density)
     DCL_ATTR_WRITER(Draw, encoding)
     DCL_ATTR_WRITER(Draw, fill)
+    DCL_ATTR_WRITER(Draw, fill_pattern)
     DCL_ATTR_WRITER(Draw, font)
     DCL_ATTR_WRITER(Draw, font_family)
     DCL_ATTR_WRITER(Draw, font_stretch)
@@ -755,6 +756,7 @@ Init_RMagick(void)
     DCL_ATTR_WRITER(Draw, pointsize)
     DCL_ATTR_WRITER(Draw, rotation)
     DCL_ATTR_WRITER(Draw, stroke)
+    DCL_ATTR_WRITER(Draw, stroke_pattern)
     DCL_ATTR_WRITER(Draw, stroke_width)
     DCL_ATTR_WRITER(Draw, text_antialias)
     DCL_ATTR_WRITER(Draw, tile)
@@ -790,6 +792,7 @@ Init_RMagick(void)
     SHARE_ATTR_WRITER(DrawOptions, Draw, density)
     SHARE_ATTR_WRITER(DrawOptions, Draw, encoding)
     SHARE_ATTR_WRITER(DrawOptions, Draw, fill)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, fill_pattern)
     SHARE_ATTR_WRITER(DrawOptions, Draw, font)
     SHARE_ATTR_WRITER(DrawOptions, Draw, font_family)
     SHARE_ATTR_WRITER(DrawOptions, Draw, font_stretch)
@@ -799,6 +802,7 @@ Init_RMagick(void)
     SHARE_ATTR_WRITER(DrawOptions, Draw, pointsize)
     SHARE_ATTR_WRITER(DrawOptions, Draw, rotation)
     SHARE_ATTR_WRITER(DrawOptions, Draw, stroke)
+    SHARE_ATTR_WRITER(DrawOptions, Draw, stroke_pattern)
     SHARE_ATTR_WRITER(DrawOptions, Draw, stroke_width)
     SHARE_ATTR_WRITER(DrawOptions, Draw, text_antialias)
     SHARE_ATTR_WRITER(DrawOptions, Draw, tile)
@@ -961,6 +965,7 @@ Init_RMagick(void)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, density)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, encoding)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, fill)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, fill_pattern)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, font)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_family)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, font_stretch)
@@ -969,6 +974,7 @@ Init_RMagick(void)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, gravity)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, pointsize)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, stroke)
+    SHARE_ATTR_WRITER(PolaroidOptions, Draw, stroke_pattern)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, stroke_width)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, text_antialias)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, undercolor)
@@ -1622,7 +1628,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/17 18:27:36 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/02/18 16:46:57 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

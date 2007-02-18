@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.214 2007/02/16 00:19:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.215 2007/02/18 16:48:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6393,8 +6393,6 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     Draw *draw;
     ExceptionInfo exception;
 
-    GetExceptionInfo(&exception);
-
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -6411,14 +6409,13 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     options = rm_polaroid_new();
     Data_Get_Struct(options, Draw, draw);
 
-    clone = CloneImage(image, 0, 0, MagickTrue, &exception);
-    rm_check_exception(&exception, clone, DestroyOnError);
-
+    clone = rm_clone_image(image);
     clone->background_color = draw->shadow_color;
 
+    GetExceptionInfo(&exception);
     new_image = PolaroidImage(clone, draw->info, angle, &exception);
-
     rm_check_exception(&exception, clone, DestroyOnError);
+
     (void) DestroyImage(clone);
     (void) DestroyExceptionInfo(&exception);
 

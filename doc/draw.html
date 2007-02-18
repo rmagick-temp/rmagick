@@ -200,6 +200,8 @@
         <li><a href="#encoding_eq">encoding</a></li>
 
         <li><a href="#fill_eq">fill</a></li>
+
+        <li><a href="#fill_pattern_eq">fill_pattern</a></li>
       </ul>
     </div>
 
@@ -216,16 +218,18 @@
         <li><a href="#font_weight_eq">font_weight</a></li>
 
         <li><a href="#gravity_eq">gravity</a></li>
+
+        <li><a href="#pointsize_eq">pointsize</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#pointsize_eq">pointsize</a></li>
-
         <li><a href="#rotation_eq">rotation</a></li>
 
         <li><a href="#stroke_eq">stroke</a></li>
+
+        <li><a href="#stroke_pattern_eq">stroke_pattern</a></li>
 
         <li><a href="#stroke_width_eq">stroke_width</a></li>
 
@@ -2760,10 +2764,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h4>Argument</h4>
 
     <p>An <a href="struct.html#AffineMatrix">AffineMatrix</a>.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2783,10 +2783,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#AlignType">AlignType</a>
     constant.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2806,10 +2802,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#DecorationType">DecorationType</a>
     constant.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2823,10 +2815,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>The text density in the x and y directions. The default is
     "72x72".</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2846,10 +2834,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <p>See the ImageMagick documentation for the
     <code>-encoding</code> option to the <code>mogrify</code>
     command.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2866,10 +2850,28 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>May be a <a href="imusage.html#color_names">color name</a>
     or a <a href="struct.html#Pixel">Pixel</a> object.</p>
+  </div>
 
-    <h4>Returns</h4>
+  <div class="sig">
+    <h3 id="fill_pattern_eq">fill_pattern=</h3>
 
-    <p>self</p>
+    <p><span class="arg">draw</span>.fill_pattern =
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Specify an image to use for the fill.
+
+    <h4>Argument</h4>
+
+    <p>An image.</p>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('fill_pattern.rb.html')" title=
+    "Click to see the example script"><img src=
+    "ex/fill_pattern.gif" alt=
+    "fill_pattern and stroke_pattern example" /></a></p>
   </div>
 
   <div class="sig">
@@ -2883,10 +2885,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>The font name. The default is "Helvetica". See <a href=
     "#font">font</a> for more information about font names.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2901,10 +2899,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>The font family name. For example, "arial" or
     "helvetica".</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2921,10 +2915,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <h4>Argument</h4>A <a href=
     "constants.html#StretchType">StretchType</a> constant.
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2943,10 +2933,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#StyleType">StyleType</a>
     constant.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2966,10 +2952,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <p>A <a href="constants.html#WeightType">WeightType</a>
     constant or one of the numbers 100, 200, 300, 400, 500, 600,
     700, 800, or 900.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -2989,10 +2971,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#GravityType">GravityType</a>
     constant.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3006,12 +2984,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h4>Description</h4>
 
     <p>The font size in points. The default is 12.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
-
-    <h4>Example</h4>
   </div>
 
   <div class="sig">
@@ -3029,10 +3001,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h4>Arguments</h4>
 
     <p>The amount of rotation in degrees.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3050,10 +3018,25 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <h4>Arguments</h4>A <a href="imusage.html#color_names">color
     name</a> or <a href="struct.html#Pixel">Pixel</a> object.
+  </div>
 
-    <h4>Returns</h4>
+  <div class="sig">
+    <h3 id="stroke_pattern_eq">stroke_pattern=</h3>
 
-    <p>self</p>
+    <p><span class="arg">draw</span>.stroke_pattern =
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Specify an image to use for the stroke.
+
+    <h4>Argument</h4>
+
+    <p>An image.</p>
+
+    <h4>Example</h4>
+
+    <p>See <a href="#fill_pattern_eq">fill_pattern</a></p>
   </div>
 
   <div class="sig">
@@ -3067,10 +3050,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h4>Description</h4>
 
     <p>The stroke width in pixels. The default is 1.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3085,10 +3064,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>Whether the text is antialiased or not. The default is
     <code>true</code>.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3105,10 +3080,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h4>Arguments</h4>
 
     <p>An image</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3126,10 +3097,6 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <h4>Arguments</h4>A <a href="imusage.html#color_names">color
     name</a> or a <a href="struct.html#Pixel">Pixel</a> object.
-
-    <h4>Returns</h4>
-
-    <p>self</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

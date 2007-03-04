@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.55 2007/02/17 22:19:28 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.56 2007/03/04 01:17:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -212,7 +212,7 @@ Info_aset(int argc, VALUE *argv, VALUE self)
     else
     {
         /* Allow any argument that supports to_s */
-        value = rb_funcall(value, ID_to_s, 0);
+        value = rb_funcall(value, rm_ID_to_s, 0);
         value_p = STRING_PTR(value);
 
         (void) RemoveImageOption(info, ckey);
@@ -441,7 +441,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     {
         case 3:
             /* Allow any argument that supports to_s */
-            fmt_arg = rb_funcall(argv[2], ID_to_s, 0);
+            fmt_arg = rb_funcall(argv[2], rm_ID_to_s, 0);
             value = STRING_PTR(fmt_arg);
         case 2:
             key = STRING_PTR_LEN(argv[1], key_l);
@@ -565,7 +565,7 @@ Info_density_eq(VALUE self, VALUE density_arg)
         return self;
     }
 
-    density = rb_funcall(density_arg, ID_to_s, 0);
+    density = rb_funcall(density_arg, rm_ID_to_s, 0);
     dens = STRING_PTR(density);
     if (!IsGeometry(dens))
     {
@@ -727,7 +727,7 @@ Info_extract_eq(VALUE self, VALUE extract_arg)
         return self;
     }
 
-    extract = rb_funcall(extract_arg, ID_to_s, 0);
+    extract = rb_funcall(extract_arg, rm_ID_to_s, 0);
     extr = STRING_PTR(extract);
     if (!IsGeometry(extr))
     {
@@ -1222,7 +1222,7 @@ Info_origin_eq(VALUE self, VALUE origin_arg)
         return self;
     }
 
-    origin_str = rb_funcall(origin_arg, ID_to_s, 0);
+    origin_str = rb_funcall(origin_arg, rm_ID_to_s, 0);
     origin = GetPageGeometry(STRING_PTR(origin_str));
 
     if (IsGeometry(origin) == MagickFalse)
@@ -1265,7 +1265,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         info->page = NULL;
         return self;
     }
-    geom_str = rb_funcall(page_arg, ID_to_s, 0);
+    geom_str = rb_funcall(page_arg, rm_ID_to_s, 0);
     geometry=GetPageGeometry(STRING_PTR(geom_str));
     if (*geometry == '\0')
     {
@@ -1461,7 +1461,7 @@ Info_size_eq(VALUE self, VALUE size_arg)
         return self;
     }
 
-    size = rb_funcall(size_arg, ID_to_s, 0);
+    size = rb_funcall(size_arg, rm_ID_to_s, 0);
     sz = STRING_PTR(size);
     if (!IsGeometry(sz))
     {

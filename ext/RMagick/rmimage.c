@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.215 2007/02/18 16:48:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.216 2007/03/04 01:17:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1448,7 +1448,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     volatile VALUE ary;
 
     Data_Get_Struct(self, Image, image);
-    geom_str = rb_funcall(geom_arg, ID_to_s, 0);
+    geom_str = rb_funcall(geom_arg, rm_ID_to_s, 0);
     geometry = STRING_PTR(geom_str);
 
     flags = ParseSizeGeometry(image, geometry, &rect);
@@ -2851,7 +2851,7 @@ Image_convolve_channel(
 VALUE
 Image_copy(VALUE self)
 {
-    return rb_funcall(self, ID_dup, 0);
+    return rb_funcall(self, rm_ID_dup, 0);
 }
 
 /*
@@ -2957,15 +2957,15 @@ Image_density_eq(VALUE self, VALUE density_arg)
     // Get the Class ID for the Geometry class.
     if (!Class_Geometry)
     {
-        Class_Geometry = rb_const_get(Module_Magick, ID_Geometry);
+        Class_Geometry = rb_const_get(Module_Magick, rm_ID_Geometry);
     }
 
     // Geometry object. Width and height attributes are always positive.
     if (CLASS_OF(density_arg) == Class_Geometry)
     {
-        x_val = rb_funcall(density_arg, ID_width, 0);
+        x_val = rb_funcall(density_arg, rm_ID_width, 0);
         x_res = NUM2DBL(x_val);
-        y_val = rb_funcall(density_arg, ID_height, 0);
+        y_val = rb_funcall(density_arg, rm_ID_height, 0);
         y_res = NUM2DBL(y_val);
         if(x_res == 0.0)
         {
@@ -3455,7 +3455,7 @@ Image_dup(VALUE self)
     {
         (void) rb_obj_taint(dup);
     }
-    return rb_funcall(dup, ID_initialize_copy, 1, self);
+    return rb_funcall(dup, rm_ID_initialize_copy, 1, self);
 }
 
 /*
@@ -4423,7 +4423,7 @@ Image_geometry_eq(
     }
 
 
-    geom_str = rb_funcall(geometry, ID_to_s, 0);
+    geom_str = rb_funcall(geometry, rm_ID_to_s, 0);
     geom = STRING_PTR(geom_str);
     if (!IsGeometry(geom))
     {
@@ -5847,7 +5847,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     // fillobj.fill(self)
     else
     {
-        (void) rb_funcall(fill, ID_fill, 1, self);
+        (void) rb_funcall(fill, rm_ID_fill, 1, self);
     }
 
     return self;
@@ -6818,7 +6818,7 @@ Image_random_threshold_channel(
     }
 
     // Accept any argument that has a to_s method.
-    geom_str = rb_funcall(argv[0], ID_to_s, 0);
+    geom_str = rb_funcall(argv[0], rm_ID_to_s, 0);
     thresholds = STRING_PTR(geom_str);
 
     new_image = rm_clone_image(image);

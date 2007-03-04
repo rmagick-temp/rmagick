@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.182 2007/02/18 16:46:57 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.183 2007/03/04 01:17:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -276,7 +276,7 @@ monitor_handler(
         args[2] = UINT2NUM((unsigned long) span);
 
         monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2((VALUE)monitor, ID_call, 3, (VALUE *)args);
+        (void) rb_funcall2((VALUE)monitor, rm_ID_call, 3, (VALUE *)args);
     }
 
     return True;
@@ -401,29 +401,29 @@ Init_RMagick(void)
     /* Create IDs for frequently used methods, etc.                          */
     /*-----------------------------------------------------------------------*/
 
-    ID__dummy_img_      = rb_intern("_dummy_img_");
-    ID_call             = rb_intern("call");
-    ID_changed          = rb_intern("changed");
-    ID_cur_image        = rb_intern("cur_image");
-    ID_dup              = rb_intern("dup");
-    ID_enumerators      = rb_intern("enumerators");
-    ID_fill             = rb_intern("fill");
-    ID_flag             = rb_intern("flag");
-    ID_from_s           = rb_intern("from_s");
-    ID_Geometry         = rb_intern("Geometry");
-    ID_GeometryValue    = rb_intern("GeometryValue");
-    ID_height           = rb_intern("height");
-    ID_initialize_copy  = rb_intern("initialize_copy");
-    ID_length           = rb_intern("length");
-    ID_notify_observers = rb_intern("notify_observers");
-    ID_new              = rb_intern("new");
-    ID_push             = rb_intern("push");
-    ID_spaceship        = rb_intern("<=>");
-    ID_to_s             = rb_intern("to_s");
-    ID_values           = rb_intern("values");
-    ID_width            = rb_intern("width");
-    ID_x                = rb_intern("x");
-    ID_y                = rb_intern("y");
+    rm_ID__dummy_img_      = rb_intern("_dummy_img_");
+    rm_ID_call             = rb_intern("call");
+    rm_ID_changed          = rb_intern("changed");
+    rm_ID_cur_image        = rb_intern("cur_image");
+    rm_ID_dup              = rb_intern("dup");
+    rm_ID_enumerators      = rb_intern("enumerators");
+    rm_ID_fill             = rb_intern("fill");
+    rm_ID_flag             = rb_intern("flag");
+    rm_ID_from_s           = rb_intern("from_s");
+    rm_ID_Geometry         = rb_intern("Geometry");
+    rm_ID_GeometryValue    = rb_intern("GeometryValue");
+    rm_ID_height           = rb_intern("height");
+    rm_ID_initialize_copy  = rb_intern("initialize_copy");
+    rm_ID_length           = rb_intern("length");
+    rm_ID_notify_observers = rb_intern("notify_observers");
+    rm_ID_new              = rb_intern("new");
+    rm_ID_push             = rb_intern("push");
+    rm_ID_spaceship        = rb_intern("<=>");
+    rm_ID_to_s             = rb_intern("to_s");
+    rm_ID_values           = rb_intern("values");
+    rm_ID_width            = rb_intern("width");
+    rm_ID_x                = rb_intern("x");
+    rm_ID_y                = rb_intern("y");
 
     /*-----------------------------------------------------------------------*/
     /* Module Magick methods                                                 */
@@ -1628,7 +1628,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/02/18 16:46:57 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/03/04 01:17:42 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

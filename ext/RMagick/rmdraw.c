@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.47 2007/02/18 16:46:57 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.48 2007/03/04 01:17:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -713,7 +713,7 @@ Draw_dup(VALUE self)
     {
         (void)rb_obj_taint(dup);
     }
-    return rb_funcall(dup, ID_initialize_copy, 1, self);
+    return rb_funcall(dup, rm_ID_initialize_copy, 1, self);
 }
 
 
@@ -1060,7 +1060,7 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
     volatile VALUE frame;
 
     Data_Get_Struct(self, Montage, montage);
-    frame = rb_funcall(frame_arg, ID_to_s, 0);
+    frame = rb_funcall(frame_arg, rm_ID_to_s, 0);
     magick_clone_string(&montage->info->frame, STRING_PTR(frame));
 
     return self;
@@ -1077,7 +1077,7 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
     volatile VALUE geometry;
 
     Data_Get_Struct(self, Montage, montage);
-    geometry = rb_funcall(geometry_arg, ID_to_s, 0);
+    geometry = rb_funcall(geometry_arg, rm_ID_to_s, 0);
     magick_clone_string(&montage->info->geometry, STRING_PTR(geometry));
 
     return self;
@@ -1273,7 +1273,7 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
     volatile VALUE tile;
 
     Data_Get_Struct(self, Montage, montage);
-    tile = rb_funcall(tile_arg, ID_to_s, 0);
+    tile = rb_funcall(tile_arg, rm_ID_to_s, 0);
     magick_clone_string(&montage->info->tile, STRING_PTR(tile));
 
     return self;
@@ -1379,7 +1379,7 @@ static VALUE get_dummy_tm_img(VALUE klass)
     Info *info;
     Image *image;
 
-    if (rb_cvar_defined(klass, ID__dummy_img_) != Qtrue)
+    if (rb_cvar_defined(klass, rm_ID__dummy_img_) != Qtrue)
     {
 
         info = CloneImageInfo(NULL);
@@ -1395,9 +1395,9 @@ static VALUE get_dummy_tm_img(VALUE klass)
         (void) DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
 
-        rb_cvar_set(klass, ID__dummy_img_, dummy_img, 0);
+        rb_cvar_set(klass, rm_ID__dummy_img_, dummy_img, 0);
     }
-    dummy_img = rb_cvar_get(klass, ID__dummy_img_);
+    dummy_img = rb_cvar_get(klass, rm_ID__dummy_img_);
 
     return dummy_img;
 }

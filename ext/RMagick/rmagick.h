@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.170 2007/02/18 16:46:57 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.171 2007/03/04 01:17:41 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -249,29 +249,29 @@ EXTERN VALUE Class_VirtualPixelMethod;
 /*
 *   Commonly-used IDs
 */
-EXTERN ID ID__dummy_img_;       // "_dummy_img_"
-EXTERN ID ID_call;              // "call"
-EXTERN ID ID_changed;           // "changed"
-EXTERN ID ID_cur_image;         // "cur_image"
-EXTERN ID ID_dup;               // "dup"
-EXTERN ID ID_enumerators;       // "enumerators"
-EXTERN ID ID_fill;              // "fill"
-EXTERN ID ID_flag;              // "flag"
-EXTERN ID ID_from_s;            // "from_s"
-EXTERN ID ID_Geometry;          // "Geometry"
-EXTERN ID ID_GeometryValue;     // "GeometryValue"
-EXTERN ID ID_height;            // "height"
-EXTERN ID ID_initialize_copy;   // "initialize_copy"
-EXTERN ID ID_length;            // "length"
-EXTERN ID ID_notify_observers;  // "notify_observers"
-EXTERN ID ID_new;               // "new"
-EXTERN ID ID_push;              // "push"
-EXTERN ID ID_spaceship;         // "<=>
-EXTERN ID ID_to_s;              // "to_s"
-EXTERN ID ID_values;            // "values"
-EXTERN ID ID_width;             // "width"
-EXTERN ID ID_x;                 // "x"
-EXTERN ID ID_y;                 // "y"
+EXTERN ID rm_ID__dummy_img_;       // "_dummy_img_"
+EXTERN ID rm_ID_call;              // "call"
+EXTERN ID rm_ID_changed;           // "changed"
+EXTERN ID rm_ID_cur_image;         // "cur_image"
+EXTERN ID rm_ID_dup;               // "dup"
+EXTERN ID rm_ID_enumerators;       // "enumerators"
+EXTERN ID rm_ID_fill;              // "fill"
+EXTERN ID rm_ID_flag;              // "flag"
+EXTERN ID rm_ID_from_s;            // "from_s"
+EXTERN ID rm_ID_Geometry;          // "Geometry"
+EXTERN ID rm_ID_GeometryValue;     // "GeometryValue"
+EXTERN ID rm_ID_height;            // "height"
+EXTERN ID rm_ID_initialize_copy;   // "initialize_copy"
+EXTERN ID rm_ID_length;            // "length"
+EXTERN ID rm_ID_notify_observers;  // "notify_observers"
+EXTERN ID rm_ID_new;               // "new"
+EXTERN ID rm_ID_push;              // "push"
+EXTERN ID rm_ID_spaceship;         // "<=>
+EXTERN ID rm_ID_to_s;              // "to_s"
+EXTERN ID rm_ID_values;            // "values"
+EXTERN ID rm_ID_width;             // "width"
+EXTERN ID rm_ID_x;                 // "x"
+EXTERN ID rm_ID_y;                 // "y"
 
 
 #define min(a,b) ((a)<(b)?(a):(b))
@@ -394,8 +394,8 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_channel_ = (Quantum) NUM2UINT(v); \
-    (void) rb_funcall(self, ID_changed, 0); \
-    (void) rb_funcall(self, ID_notify_observers, 1, self); \
+    (void) rb_funcall(self, rm_ID_changed, 0); \
+    (void) rb_funcall(self, rm_ID_notify_observers, 1, self); \
     return UINT2NUM((unsigned int)(pixel->_channel_)); \
 }
 
@@ -412,8 +412,8 @@ Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_rgb_channel_ = (Quantum) NUM2UINT(v); \
-    (void) rb_funcall(self, ID_changed, 0); \
-    (void) rb_funcall(self, ID_notify_observers, 1, self); \
+    (void) rb_funcall(self, rm_ID_changed, 0); \
+    (void) rb_funcall(self, rm_ID_notify_observers, 1, self); \
     return UINT2NUM((unsigned int)pixel->_rgb_channel_); \
 } \
  \

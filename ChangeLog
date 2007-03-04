@@ -1,3 +1,28 @@
+RMagick 2.0.0
+    o Removed support for Ruby 1.6
+    o Removed support for GraphicsMagick
+    o Removed support for all releases of ImageMagick earlier than 6.2.6-8.
+    o Added Image::Info.stroke=, stroke_width= and undercolor= attributes
+    o Added Draw#fill_pattern= and #stroke_pattern annotate attributes
+    o Changed Image::Info[] and Image::Info[]= to allow an omitted "format"
+      argument
+
+RMagick 1.15.4
+    o Fix bug #8927, RMagick and rbgsl both export the name ID_call (bug report
+      from Shin Enomoto)
+
+RMagick 1.15.3
+    o Fix bug #8697, Image::Info.fill= doesn't work when creating "caption:"
+      format images (bug report from choonkeat)
+
+RMagick 1.15.2
+    o Fix bug #8408, a compatibility problem with some versions of ImageMagick
+      before 6.2.5 (bug report from Geir Gluckstad)
+
+RMagick 1.15.1
+    o Fix bug #8307, compatibility problems with older (6.0.x) versions of
+      ImageMagick (bug report from Chris Taggart)
+
 RMagick 1.15.0
     o Added fx method to ImageList class
     o Added wet_floor method to the Image class

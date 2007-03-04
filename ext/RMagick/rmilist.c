@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.46 2007/01/12 00:11:16 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.46.2.1 2007/03/04 00:05:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -493,7 +493,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 VALUE
 rm_imagelist_new()
 {
-    return rb_funcall(Class_ImageList, ID_new, 0);
+    return rb_funcall(Class_ImageList, rm_ID_new, 0);
 }
 
 
@@ -579,7 +579,7 @@ rm_imagelist_length(VALUE imagelist)
 {
     volatile VALUE len;
 
-    len = rb_funcall(imagelist, ID_length, 0);
+    len = rb_funcall(imagelist, rm_ID_length, 0);
     return FIX2INT(len);
 }
 
@@ -591,7 +591,7 @@ void
 rm_imagelist_push(VALUE imagelist, VALUE image)
 {
     rm_check_frozen(imagelist);
-    (void) rb_funcall(imagelist, ID_push, 1, image);
+    (void) rb_funcall(imagelist, rm_ID_push, 1, image);
 }
 
 /*

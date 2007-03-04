@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.172 2007/01/30 00:06:54 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.159.2.1 2007/03/04 00:05:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -34,9 +34,55 @@ static VALUE Magick_Monitor;
 VALUE
 Magick_colors(VALUE class)
 {
+#if defined(HAVE_GETCOLORINFOARRAY) // GraphicsMagick
+    ColorInfo **color_ary;
+    ExceptionInfo exception;
+    volatile VALUE ary;
+    int x;
+
+    GetExceptionInfo(&exception);
+
+    color_ary = GetColorInfoArray(&exception);
+    CHECK_EXCEPTION()
+    (void) DestroyExceptionInfo(&exception);
+
+
+    if (rb_block_given_p())
+    {
+        x = 0;
+        while(color_ary[x])
+        {
+            rb_yield(Color_from_ColorInfo(color_ary[x]));
+            x += 1;
+        }
+        magick_free(color_ary);
+        return class;
+    }
+    else
+    {
+        ary = rb_ary_new();
+
+        x = 0;
+        while (color_ary[x])
+        {
+            rb_ary_push(ary, Color_from_ColorInfo(color_ary[x]));
+            x += 1;
+        }
+        magick_free(color_ary);
+        return ary;
+    }
+
+#elif defined(HAVE_GETCOLORINFOLIST)    // ImageMagick 6.0.0
+
     const ColorInfo **color_info_list;
     unsigned long number_colors, x;
     volatile VALUE ary;
+
+#if defined(HAVE_OLD_GETCOLORINFOLIST)
+    color_info_list = GetColorInfoList("*", &number_colors);
+
+#else
+    // IM 6.1.3 added an exception parm to GetColorInfoList
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
@@ -44,6 +90,8 @@ Magick_colors(VALUE class)
     color_info_list = GetColorInfoList("*", &number_colors, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
+
+#endif
 
 
     if (rb_block_given_p())
@@ -66,6 +114,45 @@ Magick_colors(VALUE class)
         magick_free(color_info_list);
         return ary;
     }
+
+#else   // ImageMagick < 6.0.0
+
+    const ColorInfo *color_list;
+    ColorInfo *color;
+    ExceptionInfo exception;
+    volatile VALUE ary, el;
+
+    GetExceptionInfo(&exception);
+
+    color_list = GetColorInfo("*", &exception);
+    (void) DestroyExceptionInfo(&exception);
+
+    // The order of the colors list can change in mid-iteration,
+    // so the only way we can guarantee a single pass thru the list
+    // is to copy the elements into an array without returning to
+    // IM. So, we always create a Ruby array and either return it
+    // or iterate over it.
+    ary = rb_ary_new();
+    for (color = (ColorInfo *)color_list; color; color = color->next)
+    {
+        rb_ary_push(ary, Color_from_ColorInfo(color));
+    }
+
+    // If block, iterate over colors
+    if (rb_block_given_p())
+    {
+        while ((el = rb_ary_shift(ary)) != Qnil)
+        {
+            rb_yield(el);
+        }
+        return class;
+    }
+    else
+    {
+        return ary;
+    }
+
+#endif
 }
 
 /*
@@ -81,12 +168,20 @@ Magick_fonts(VALUE class)
     const TypeInfo **type_info;
     unsigned long number_types, x;
     volatile VALUE ary;
+
+#if defined(HAVE_OLD_GETTYPEINFOLIST)
+    type_info = GetTypeInfoList("*", &number_types);
+
+#else
+    // IM 6.1.3 added an exception argument to GetTypeInfoList
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
     type_info = GetTypeInfoList("*", &number_types, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
+
+#endif
 
     if (rb_block_given_p())
     {
@@ -180,22 +275,52 @@ static VALUE MagickInfo_to_format(MagickInfo *magick_info)
 VALUE
 Magick_init_formats(VALUE class)
 {
-#if defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
+#if defined(HAVE_GETMAGICKINFOARRAY)    // GraphicsMagick
 
-    const MagickInfo **magick_info;
-    unsigned long number_formats, x;
+    MagickInfo *magick_info, *m;
     volatile VALUE formats;
     ExceptionInfo exception;
 
     class = class;      // defeat "never referenced" message from icc
+
     formats = rb_hash_new();
 
+    GetExceptionInfo(&exception);
+    magick_info = (MagickInfo *)GetMagickInfoArray(&exception);
+    CHECK_EXCEPTION()
+    (void) DestroyExceptionInfo(&exception);
+
+    for(m = magick_info; m != NULL; m = m->next)
+    {
+        rb_hash_aset(formats, rb_str_new2(m->name), MagickInfo_to_format(m));
+    }
+
+    magick_free(magick_info);
+    return formats;
+
+#elif defined(HAVE_GETMAGICKINFOLIST)    // ImageMagick 6.0.0
+
+    const MagickInfo **magick_info;
+    unsigned long number_formats, x;
+    volatile VALUE formats;
+#if !defined(HAVE_OLD_GETMAGICKINFOLIST)
+    ExceptionInfo exception;
+#endif
+
+    class = class;      // defeat "never referenced" message from icc
+    formats = rb_hash_new();
+
+#if defined(HAVE_OLD_GETMAGICKINFOLIST)
+    magick_info = GetMagickInfoList("*", &number_formats);
+
+#else
     // IM 6.1.3 added an exception argument to GetMagickInfoList
     GetExceptionInfo(&exception);
     magick_info = GetMagickInfoList("*", &number_formats, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
 
+#endif
 
     for(x = 0; x < number_formats; x++)
     {
@@ -326,11 +451,11 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
     This is the exit known to ImageMagick. Retrieve the monitor
     proc and call it, passing the 3 exit arguments.
 */
-static MagickBooleanType
+static unsigned int
 monitor_handler(
     const char *text,
-    const MagickOffsetType quantum,
-    const MagickSizeType span,
+    const magick_int64_t quantum,
+    const magick_uint64_t span,
     ExceptionInfo *exception)
 {
     volatile VALUE monitor;
@@ -347,7 +472,7 @@ monitor_handler(
         args[2] = UINT2NUM((unsigned long) span);
 
         monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2((VALUE)monitor, ID_call, 3, (VALUE *)args);
+        (void) rb_funcall2((VALUE)monitor, rm_ID_call, 3, (VALUE *)args);
     }
 
     return True;
@@ -383,8 +508,12 @@ Magick_set_monitor(VALUE class, VALUE monitor)
     else
     // Otherwise, store monitor in @@__MAGICK_MONITOR__
     {
-        rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);
-        (void) SetMonitorHandler(monitor_handler);
+        // 1.8.0 deletes rb_cvar_declare and adds another
+        // parm to rb_cvar_set - if rb_cvar_declare is
+        // available, use the 3-parm version of rb_cvar_set.
+        RUBY18(rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);)
+        RUBY16(rb_cvar_set(Module_Magick, Magick_Monitor, monitor);)
+        (void) SetMonitorHandler((MonitorHandler)&monitor_handler);
     }
 
     return class;
@@ -475,29 +604,29 @@ Init_RMagick(void)
     /* Create IDs for frequently used methods, etc.                          */
     /*-----------------------------------------------------------------------*/
 
-    ID__dummy_img_      = rb_intern("_dummy_img_");
-    ID_call             = rb_intern("call");
-    ID_changed          = rb_intern("changed");
-    ID_cur_image        = rb_intern("cur_image");
-    ID_dup              = rb_intern("dup");
-    ID_enumerators      = rb_intern("enumerators");
-    ID_fill             = rb_intern("fill");
-    ID_flag             = rb_intern("flag");
-    ID_from_s           = rb_intern("from_s");
-    ID_Geometry         = rb_intern("Geometry");
-    ID_GeometryValue    = rb_intern("GeometryValue");
-    ID_height           = rb_intern("height");
-    ID_initialize_copy  = rb_intern("initialize_copy");
-    ID_length           = rb_intern("length");
-    ID_notify_observers = rb_intern("notify_observers");
-    ID_new              = rb_intern("new");
-    ID_push             = rb_intern("push");
-    ID_spaceship        = rb_intern("<=>");
-    ID_to_s             = rb_intern("to_s");
-    ID_values           = rb_intern("values");
-    ID_width            = rb_intern("width");
-    ID_x                = rb_intern("x");
-    ID_y                = rb_intern("y");
+    rm_ID__dummy_img_      = rb_intern("_dummy_img_");
+    rm_ID_call             = rb_intern("call");
+    rm_ID_changed          = rb_intern("changed");
+    rm_ID_cur_image        = rb_intern("cur_image");
+    rm_ID_dup              = rb_intern("dup");
+    rm_ID_enumerators      = rb_intern("enumerators");
+    rm_ID_fill             = rb_intern("fill");
+    rm_ID_flag             = rb_intern("flag");
+    rm_ID_from_s           = rb_intern("from_s");
+    rm_ID_Geometry         = rb_intern("Geometry");
+    rm_ID_GeometryValue    = rb_intern("GeometryValue");
+    rm_ID_height           = rb_intern("height");
+    rm_ID_initialize_copy  = rb_intern("initialize_copy");
+    rm_ID_length           = rb_intern("length");
+    rm_ID_notify_observers = rb_intern("notify_observers");
+    rm_ID_new              = rb_intern("new");
+    rm_ID_push             = rb_intern("push");
+    rm_ID_spaceship        = rb_intern("<=>");
+    rm_ID_to_s             = rb_intern("to_s");
+    rm_ID_values           = rb_intern("values");
+    rm_ID_width            = rb_intern("width");
+    rm_ID_x                = rb_intern("x");
+    rm_ID_y                = rb_intern("y");
 
     /*-----------------------------------------------------------------------*/
     /* Module Magick methods                                                 */
@@ -521,8 +650,13 @@ Init_RMagick(void)
     // Define an alias for Object#display before we override it
     rb_define_alias(Class_Image, "__display__", "display");
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Image, Image_alloc);
     rb_define_method(Class_Image, "initialize", Image_initialize, -1);
+#else
+    rb_define_singleton_method(Class_Image, "new", Image_new, -1);
+    rb_define_method(Class_Image, "initialize", Image_initialize, 4);
+#endif
 
     rb_define_singleton_method(Class_Image, "constitute", Image_constitute, 4);
     rb_define_singleton_method(Class_Image, "_load", Image__load, 1);
@@ -581,7 +715,9 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, orientation)
     DCL_ATTR_ACCESSOR(Image, page)
     DCL_ATTR_ACCESSOR(Image, pixel_interpolation_method)
+#if defined(HAVE_IMAGE_QUALITY)
     DCL_ATTR_READER(Image, quality)
+#endif
     DCL_ATTR_READER(Image, quantum_depth)
     DCL_ATTR_ACCESSOR(Image, rendering_intent)
     DCL_ATTR_READER(Image, rows)
@@ -682,6 +818,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "get_pixels", Image_get_pixels, 4);
     rb_define_method(Class_Image, "gray?", Image_gray_q, 0);
     rb_define_method(Class_Image, "grey?", Image_gray_q, 0);
+    rb_define_method(Class_Image, "grayscale_pseudo_class", Image_grayscale_pseudo_class, -1);
     rb_define_method(Class_Image, "implode", Image_implode, -1);
     rb_define_method(Class_Image, "import_pixels", Image_import_pixels, -1);
     rb_define_method(Class_Image, "initialize_copy", Image_init_copy, 1);
@@ -749,6 +886,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
     rb_define_method(Class_Image, "splice", Image_splice, -1);
     rb_define_method(Class_Image, "spread", Image_spread, -1);
+    rb_define_method(Class_Image, "statistics", Image_statistics, 0);
     rb_define_method(Class_Image, "stegano", Image_stegano, 2);
     rb_define_method(Class_Image, "stereo", Image_stereo, 1);
     rb_define_method(Class_Image, "strip!", Image_strip_bang, 0);
@@ -812,7 +950,11 @@ Init_RMagick(void)
     /*-----------------------------------------------------------------------*/
 
     Class_Draw = rb_define_class_under(Module_Magick, "Draw", rb_cObject);
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Draw, Draw_alloc);
+#else
+    rb_define_singleton_method(Class_Draw, "new", Draw_new, 0);
+#endif
 
     DCL_ATTR_WRITER(Draw, affine)
     DCL_ATTR_WRITER(Draw, align)
@@ -854,7 +996,11 @@ Init_RMagick(void)
 
     Class_DrawOptions = rb_define_class_under(Class_Image, "DrawOptions", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_DrawOptions, DrawOptions_alloc);
+#else
+    rb_define_singleton_method(Class_DrawOptions, "new", DrawOptions_new, 0);
+#endif
 
     rb_define_method(Class_DrawOptions, "initialize", DrawOptions_initialize, 0);
 
@@ -893,7 +1039,11 @@ Init_RMagick(void)
     rb_include_module(Class_Pixel, rb_mComparable);
 
     // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Pixel, Pixel_alloc);
+#else
+    rb_define_singleton_method(Class_Pixel, "new", Pixel_new, -1);
+#endif
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
 
@@ -931,7 +1081,11 @@ Init_RMagick(void)
 
     Class_Montage = rb_define_class_under(Class_ImageList, "Montage", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Montage, Montage_alloc);
+#else
+    rb_define_singleton_method(Class_Montage, "new", Montage_new, 0);
+#endif
 
     rb_define_method(Class_Montage, "initialize", Montage_initialize, 0);
     rb_define_method(Class_Montage, "freeze", rm_no_freeze, 0);
@@ -961,7 +1115,11 @@ Init_RMagick(void)
 
     Class_Info = rb_define_class_under(Class_Image, "Info", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Info, Info_alloc);
+#else
+    rb_define_singleton_method(Class_Info, "new", Info_new, 0);
+#endif
 
     rb_define_method(Class_Info, "initialize", Info_initialize, 0);
     rb_define_method(Class_Info, "channel", Info_channel, -1);
@@ -1021,7 +1179,11 @@ Init_RMagick(void)
 
     Class_PolaroidOptions = rb_define_class_under(Class_Image, "PolaroidOptions", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_PolaroidOptions, PolaroidOptions_alloc);
+#else
+    rb_define_singleton_method(Class_PolaroidOptions, "new", PolaroidOptions_new, 0);
+#endif
 
     rb_define_method(Class_PolaroidOptions, "initialize", PolaroidOptions_initialize, 0);
 
@@ -1052,7 +1214,11 @@ Init_RMagick(void)
     // class Magick::GradientFill
     Class_GradientFill = rb_define_class_under(Module_Magick, "GradientFill", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_GradientFill, GradientFill_alloc);
+#else
+    rb_define_singleton_method(Class_GradientFill, "new", GradientFill_new, 6);
+#endif
 
     rb_define_method(Class_GradientFill, "initialize", GradientFill_initialize, 6);
     rb_define_method(Class_GradientFill, "fill", GradientFill_fill, 1);
@@ -1060,7 +1226,11 @@ Init_RMagick(void)
     // class Magick::TextureFill
     Class_TextureFill = rb_define_class_under(Module_Magick, "TextureFill", rb_cObject);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_TextureFill, TextureFill_alloc);
+#else
+    rb_define_singleton_method(Class_TextureFill, "new", TextureFill_new, 1);
+#endif
 
     rb_define_method(Class_TextureFill, "initialize", TextureFill_initialize, 1);
     rb_define_method(Class_TextureFill, "fill", TextureFill_fill, 1);
@@ -1071,6 +1241,7 @@ Init_RMagick(void)
 
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, -1);
+    RUBY16(rb_enable_super(Class_ImageMagickError, "initialize");)
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
 
@@ -1092,7 +1263,11 @@ Init_RMagick(void)
     Class_Enum = rb_define_class_under(Module_Magick, "Enum", rb_cObject);
     rb_include_module(Class_Enum, rb_mComparable);
 
+#if defined(HAVE_RB_DEFINE_ALLOC_FUNC)
     rb_define_alloc_func(Class_Enum, Enum_alloc);
+#else
+    rb_define_singleton_method(Class_Enum, "new", Enum_new, 2);
+#endif
 
     rb_define_method(Class_Enum, "initialize", Enum_initialize, 2);
     rb_define_method(Class_Enum, "to_s", Enum_to_s, 0);
@@ -1129,9 +1304,15 @@ Init_RMagick(void)
 
         ENUMERATOR(BlackChannel)
         ENUMERATOR(MatteChannel)
-        ENUMERATOR(IndexChannel)
+#if defined(HAVE_INDEXCHANNEL)
+        ENUMERATOR(IndexChannel)    // 5.5.8
+#endif
+#if defined(HAVE_GRAYCHANNEL)
         ENUMERATOR(GrayChannel)
+#endif
+#if defined(HAVE_ALLCHANNELS)
         ENUMERATOR(AllChannels)
+#endif
 
         // Define alternate names for ChannelType enums for Image::Info#channel=
         // AlphaChannel == OpacityChannel
@@ -1184,7 +1365,12 @@ Init_RMagick(void)
                       , INT2FIX(sRGBColorspace)));
         ENUMERATOR(HSLColorspace)
         ENUMERATOR(HWBColorspace)
+#if defined(HAVE_HSBCOLORSPACE)
         ENUMERATOR(HSBColorspace)           // IM 6.0.0
+#endif
+#if defined(HAVE_CINEONLOGRGBCOLORSPACE)
+        ENUMERATOR(CineonLogRGBColorspace)  // GM 1.2
+#endif
 #if defined(HAVE_LABCOLORSPACE)
         ENUMERATOR(LABColorspace)           // GM 1.2
 #endif
@@ -1200,7 +1386,9 @@ Init_RMagick(void)
 #if defined(HAVE_REC709YCBCRCOLORSPACE)
         ENUMERATOR(Rec709YCbCrColorspace)   // GM 1.2 && IM 6.2.2
 #endif
+#if defined(HAVE_LOGCOLORSPACE)
         ENUMERATOR(LogColorspace)           // IM 6.2.3
+#endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -1241,11 +1429,13 @@ Init_RMagick(void)
         ENUMERATOR(DifferenceCompositeOp)
         ENUMERATOR(DisplaceCompositeOp)
         ENUMERATOR(DissolveCompositeOp)
-        ENUMERATOR(DstAtopCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
+        ENUMERATOR(DstAtopCompositeOp)    // Added 6.0.2?
         ENUMERATOR(DstCompositeOp)
         ENUMERATOR(DstInCompositeOp)
         ENUMERATOR(DstOutCompositeOp)
         ENUMERATOR(DstOverCompositeOp)
+#endif
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
@@ -1257,23 +1447,30 @@ Init_RMagick(void)
         ENUMERATOR(OverCompositeOp)
         ENUMERATOR(OverlayCompositeOp)
         ENUMERATOR(PlusCompositeOp)
+#if defined(HAVE_REPLACECOMPOSITEOP)    // Added 5.5.8
         ENUMERATOR(ReplaceCompositeOp)    // synonym for CopyCompositeOp
+#endif
         ENUMERATOR(SaturateCompositeOp)
         ENUMERATOR(ScreenCompositeOp)
+#if defined(HAVE_DSTCOMPOSITEOP)
         ENUMERATOR(SrcAtopCompositeOp)
         ENUMERATOR(SrcCompositeOp)
         ENUMERATOR(SrcInCompositeOp)
         ENUMERATOR(SrcOutCompositeOp)
         ENUMERATOR(SrcOverCompositeOp)
+#endif
         ENUMERATOR(SubtractCompositeOp)
         ENUMERATOR(ThresholdCompositeOp)
         ENUMERATOR(XorCompositeOp)
+
+#if defined(HAVE_COLORDODGECOMPOSITEOP)
         ENUMERATOR(BlendCompositeOp)
         ENUMERATOR(ColorBurnCompositeOp)
         ENUMERATOR(ColorDodgeCompositeOp)
         ENUMERATOR(ExclusionCompositeOp)
         ENUMERATOR(HardLightCompositeOp)
         ENUMERATOR(SoftLightCompositeOp)
+#endif
     END_ENUM
 
     // CompressionType constants
@@ -1284,7 +1481,9 @@ Init_RMagick(void)
         ENUMERATOR(FaxCompression)
         ENUMERATOR(Group4Compression)
         ENUMERATOR(JPEGCompression)
+#if defined(HAVE_JPEG2000COMPRESSION)
         ENUMERATOR(JPEG2000Compression)
+#endif
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
         ENUMERATOR(RLECompression)              // preferred
@@ -1336,7 +1535,13 @@ Init_RMagick(void)
 
     // GravityType constants
     DEF_ENUM(GravityType)
+#if defined(HAVE_UNDEFINEDGRAVITY)
         ENUMERATOR(UndefinedGravity)
+#else
+        // Provide this enumerator in older (pre 6.0.0) versions of ImageMagick
+        _enum = rm_enum_new(_cls, ID2SYM(rb_intern("UndefinedGravity")), INT2FIX(0));\
+        rb_define_const(Module_Magick, "UndefinedGravity", _enum);
+#endif
         ENUMERATOR(ForgetGravity)
         ENUMERATOR(NorthWestGravity)
         ENUMERATOR(NorthGravity)
@@ -1406,6 +1611,7 @@ Init_RMagick(void)
     END_ENUM
 #endif
 
+#if defined(HAVE_COMPAREIMAGECHANNELS)
     DEF_ENUM(MetricType)
         ENUMERATOR(UndefinedMetric)
         ENUMERATOR(MeanAbsoluteErrorMetric)
@@ -1414,6 +1620,7 @@ Init_RMagick(void)
         ENUMERATOR(PeakSignalToNoiseRatioMetric)
         ENUMERATOR(RootMeanSquaredErrorMetric)
     END_ENUM
+#endif
 
     // NoiseType constants
     DEF_ENUM(NoiseType)
@@ -1425,6 +1632,7 @@ Init_RMagick(void)
         ENUMERATOR(PoissonNoise)
     END_ENUM
 
+#if defined(HAVE_IMAGE_ORIENTATION)
     // Orientation constants
     DEF_ENUM(OrientationType)
         ENUMERATOR(UndefinedOrientation)
@@ -1437,6 +1645,7 @@ Init_RMagick(void)
         ENUMERATOR(RightBottomOrientation)
         ENUMERATOR(LeftBottomOrientation)
     END_ENUM
+#endif
 
     // Paint method constants
     DEF_ENUM(PaintMethod)
@@ -1481,20 +1690,24 @@ Init_RMagick(void)
         ENUMERATOR(JPEGPreview)
     END_ENUM
 
+#if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)
     DEF_ENUM(QuantumExpressionOperator)
         ENUMERATOR(UndefinedQuantumOperator)
         ENUMERATOR(AddQuantumOperator)
         ENUMERATOR(AndQuantumOperator)
         ENUMERATOR(DivideQuantumOperator)
         ENUMERATOR(LShiftQuantumOperator)
+#if defined(HAVE_MAXEVALUATEOPERATOR)
         ENUMERATOR(MaxQuantumOperator)
         ENUMERATOR(MinQuantumOperator)
+#endif
         ENUMERATOR(MultiplyQuantumOperator)
         ENUMERATOR(OrQuantumOperator)
         ENUMERATOR(RShiftQuantumOperator)
         ENUMERATOR(SubtractQuantumOperator)
         ENUMERATOR(XorQuantumOperator)
     END_ENUM
+#endif
 
     // RenderingIntent
     DEF_ENUM(RenderingIntent)
@@ -1514,13 +1727,17 @@ Init_RMagick(void)
 
     // StorageType
     DEF_ENUM(StorageType)
+#if defined(HAVE_UNDEFINEDGRAVITY)      // UndefinedGravity & UndefinedPixel were both introduced in IM 6.0.0
         ENUMERATOR(UndefinedPixel)
+#endif
         ENUMERATOR(CharPixel)
         ENUMERATOR(DoublePixel)
         ENUMERATOR(FloatPixel)
         ENUMERATOR(IntegerPixel)
         ENUMERATOR(LongPixel)
+#if defined(HAVE_QUANTUMPIXEL)
         ENUMERATOR(QuantumPixel)
+#endif
         ENUMERATOR(ShortPixel)
     END_ENUM
 
@@ -1577,6 +1794,18 @@ Init_RMagick(void)
     // Magick::AffineMatrix
     Class_AffineMatrix = rb_struct_define(NULL, "sx", "rx", "ry", "sy", "tx", "ty", NULL);
     rb_define_const(Module_Magick, "AffineMatrix", Class_AffineMatrix);
+
+#if defined(HAVE_GETIMAGESTATISTICS)
+    // These classes are defined for >= GM 1.1.
+
+    // Magick::Statistics
+    Class_Statistics = rb_struct_define(NULL, "red", "green", "blue", "opacity", NULL);
+    rb_define_const(Module_Magick, "Statistics", Class_Statistics);
+    // Magick::ChannelStatistics
+    Class_StatisticsChannel = rb_struct_define(NULL, "max", "min", "mean", "stddev", "var", NULL);
+    rb_define_const(Class_Statistics, "Channel", Class_StatisticsChannel);
+#endif
+
 
     // Magick::Primary
     Class_Primary = rb_struct_define(NULL, "x", "y", "z", NULL);
@@ -1707,7 +1936,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/01/30 00:06:54 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/03/04 00:05:36 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

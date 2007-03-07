@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.48 2007/03/04 01:17:41 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.49 2007/03/07 23:38:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -127,6 +127,7 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
 
     if (draw->info->fill_pattern != NULL)
     {
+        // Do not trace destruction
         DestroyImage(draw->info->fill_pattern);
         draw->info->fill_pattern = NULL;
     }
@@ -134,6 +135,7 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
     if (!NIL_P(pattern))
     {
         Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        // Do not trace creation
         draw->info->fill_pattern = rm_clone_image(image);
     }
 
@@ -374,6 +376,7 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
 
     if (draw->info->stroke_pattern != NULL)
     {
+        // Do not trace destruction
         DestroyImage(draw->info->stroke_pattern);
         draw->info->stroke_pattern = NULL;
     }
@@ -382,6 +385,7 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
     {
         // DestroyDrawInfo destroys the clone
         Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        // Do not trace creation
         draw->info->stroke_pattern = rm_clone_image(image);
     }
 

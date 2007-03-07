@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.105 2007/03/04 01:17:42 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.106 2007/03/07 23:38:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -543,7 +543,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     (void) DestroyImageInfo(info);
     GetExceptionInfo(&exception);
     (void) QueryColorname(image, pixel, compliance, name, &exception);
-    (void) DestroyImage(image);
+    (void) rm_image_destroy(image);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
 
@@ -665,7 +665,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     image->fuzz = fuzz;
 
     equal = IsColorSimilar(image, this, that);
-    (void) DestroyImage(image);
+    (void) rm_image_destroy(image);
 
     return equal ? Qtrue : Qfalse;
 }
@@ -1005,7 +1005,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
     image = AllocateImage(info);
     image->matte = MagickFalse;
     color_name = PixelPacket_to_Color_Name(image, color);
-    (void) DestroyImage(image);
+    (void) rm_image_destroy(image);
     if (!info)
     {
         (void) DestroyImageInfo(my_info);
@@ -2873,6 +2873,8 @@ rm_get_geometry(
 /*
  *  Extern:     rm_clone_image
  *  Purpose:    clone an image, handle errors
+ *  Notes:      don't trace creation - the clone may not be used as an Image
+ *              object. Let the caller do the trace if desired.
  */
 Image *rm_clone_image(Image *image)
 {

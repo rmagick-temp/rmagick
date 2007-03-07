@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.216 2007/03/04 01:17:42 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.217 2007/03/07 23:38:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -26,6 +26,7 @@ static VALUE scale(int, int, VALUE *, VALUE, scaler_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
+static void call_trace_proc(Image *, char *);
 
 static ImageAttribute *Next_Attribute;
 
@@ -419,7 +420,7 @@ Image_add_profile(VALUE self, VALUE name)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    (void) DestroyImage(profile_image);
+    (void) rm_image_destroy(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 
@@ -599,8 +600,8 @@ crisscross(
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -1293,8 +1294,8 @@ static VALUE border(
     if (bang)
     {
         new_image->border_color = old_border;
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -1744,7 +1745,7 @@ Image_color_histogram(VALUE self)
     {
         if (dc_copy)
         {
-            (void) DestroyImage(dc_copy);
+            (void) rm_image_destroy(dc_copy);
         }
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
@@ -1770,6 +1771,7 @@ Image_color_histogram(VALUE self)
 
     if (dc_copy)
     {
+        // Do not trace destruction
         (void) DestroyImage(dc_copy);
     }
 
@@ -1839,7 +1841,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    (void) DestroyImage(profile_image);
+    (void) rm_image_destroy(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
     return self;
@@ -2861,10 +2863,11 @@ Image_copy(VALUE self)
 VALUE
 Image_init_copy(VALUE copy, VALUE orig)
 {
-    Image *image;
+    Image *image, *new_image;
 
     Data_Get_Struct(orig, Image, image);
-    DATA_PTR(copy) = rm_clone_image(image);
+    new_image = rm_clone_image(image);
+    UPDATE_DATA_PTR(copy, new_image);
 
     return copy;
 }
@@ -3450,7 +3453,7 @@ Image_dup(VALUE self)
 {
     volatile VALUE dup;
 
-    dup = Data_Wrap_Struct(CLASS_OF(self), NULL, DestroyImage, NULL);
+    dup = Data_Wrap_Struct(CLASS_OF(self), NULL, rm_image_destroy, NULL);
     if (rb_obj_tainted(self))
     {
         (void) rb_obj_taint(dup);
@@ -4025,8 +4028,8 @@ flipflop(int bang, VALUE self, flipper_t flipflopper)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -4760,23 +4763,18 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     Notes:      this is essentially the DescribeImage except the description is
                 built in a char buffer instead of being written to a file.
 */
-VALUE
-Image_inspect(VALUE self)
+static void build_inspect_string(Image *image, char *buffer, size_t len)
 {
-    Image *image;
     unsigned long quantum_depth;
     int x = 0;                  // # bytes used in buffer
-    char buffer[2048];          // image description buffer
-
-    Data_Get_Struct(self, Image, image);
 
     // Print magick filename if different from current filename.
     if (*image->magick_filename != '\0' && strcmp(image->magick_filename, image->filename) != 0)
     {
-        x += sprintf(buffer+x, "%s=>", image->magick_filename);
+        x += sprintf(buffer+x, "%.1024s=>", image->magick_filename);
     }
     // Print current filename.
-    x += sprintf(buffer+x, "%s", image->filename);
+    x += sprintf(buffer+x, "%.1024s", image->filename);
     // Print scene number.
     if ((GetPreviousImageInList(image) != NULL) && (GetNextImageInList(image) != NULL) && image->scene > 0)
     {
@@ -4869,9 +4867,22 @@ Image_inspect(VALUE self)
         }
     }
 
-    assert(x < sizeof(buffer)-1);
+    assert(x < len-1);
     buffer[x] = '\0';
 
+exit:
+    return;
+}
+
+
+VALUE
+Image_inspect(VALUE self)
+{
+    Image *image;
+    char buffer[MaxTextExtent];          // image description buffer
+
+    Data_Get_Struct(self, Image, image);
+    build_inspect_string(image, buffer, sizeof(buffer));
     return rb_str_new2(buffer);
 }
 
@@ -5174,8 +5185,8 @@ magnify(int bang, VALUE self, magnifier_t magnifier)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -5294,7 +5305,7 @@ Image_mask_eq(VALUE self, VALUE mask)
             rm_check_exception(&exception, resized_image, DestroyOnError);
             (void) DestroyExceptionInfo(&exception);
             rm_ensure_result(resized_image);
-            (void) (void) DestroyImage(clip_mask);
+            (void) DestroyImage(clip_mask);
             clip_mask = resized_image;
         }
 
@@ -5319,14 +5330,14 @@ Image_mask_eq(VALUE self, VALUE mask)
           }
           if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
           {
-              (void) (void) DestroyImage(clip_mask);
+              (void) (void) rm_image_destroy(clip_mask);
               rm_magick_error("SyncImagePixels failed", NULL);
           }
         }
 
         if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
         {
-            (void) (void) DestroyImage(clip_mask);
+            (void) (void) rm_image_destroy(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
         }
 
@@ -5336,7 +5347,7 @@ Image_mask_eq(VALUE self, VALUE mask)
         // destroy our copy after SetImageClipMask is done with it.
 
         (void) SetImageClipMask(image, clip_mask);
-        (void) (void) DestroyImage(clip_mask);
+        (void) DestroyImage(clip_mask);
     }
     else
     {
@@ -5791,7 +5802,7 @@ Image_alloc(VALUE class)
 {
     volatile VALUE image_obj;
 
-    image_obj = Data_Wrap_Struct(class, NULL, DestroyImage, NULL);
+    image_obj = Data_Wrap_Struct(class, NULL, rm_image_destroy, NULL);
     return image_obj;
 }
 
@@ -5833,7 +5844,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     }
 
     // NOW store a real image in the image object.
-    DATA_PTR(self) = image;
+    UPDATE_DATA_PTR(self, image);
 
     SetImageExtent(image, cols, rows);
 
@@ -5867,7 +5878,10 @@ rm_image_new(Image *image)
     {
         rb_bug("rm_image_new called with NULL argument");
     }
-    return Data_Wrap_Struct(Class_Image, NULL, DestroyImage, image);
+
+    (void) rm_trace_creation(image);
+
+    return Data_Wrap_Struct(Class_Image, NULL, rm_image_destroy, image);
 }
 
 /*
@@ -7208,8 +7222,8 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
     return rm_image_new(new_image);
@@ -7307,8 +7321,8 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
     return rm_image_new(new_image);
@@ -7425,8 +7439,8 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -8515,8 +8529,8 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -8960,8 +8974,8 @@ trimmer(int bang, VALUE self)
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -9455,7 +9469,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     geometry.width = image->columns;
     geometry.height = max_rows;
     reflection = CropImage(flip_image, &geometry, &exception);
-    (void) DestroyImage(flip_image);
+    (void) rm_image_destroy(flip_image);
     CHECK_EXCEPTION();
 
 
@@ -9505,7 +9519,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
 
 error:
     (void) DestroyExceptionInfo(&exception);
-    (void) DestroyImage(reflection);
+    (void) rm_image_destroy(reflection);
     rb_raise(rb_eRuntimeError, "%s failed on row %lu", func, y);
     return (VALUE)0;
 }
@@ -9802,8 +9816,8 @@ xform_image(
 
     if (bang)
     {
-        DATA_PTR(self) = new_image;
-        (void) DestroyImage(image);
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
         return self;
     }
 
@@ -9863,3 +9877,78 @@ raise_ChannelType_error(VALUE arg)
     rb_raise(rb_eTypeError, "argument needs to be a ChannelType (%s given)"
             , rb_class2name(CLASS_OF(arg)));
 }
+
+
+
+/*
+    Static:     call_trace_proc
+    Purpose:    If Magick.set_trace_proc is not nil, build an argument
+                list and call the proc.
+*/
+static void call_trace_proc(Image *image, char *which)
+{
+    volatile VALUE trace;
+    volatile VALUE trace_args[4];
+
+    if (rb_ivar_defined(Module_Magick, rm_ID_set_trace_proc) == Qtrue)
+    {
+        trace = rb_ivar_get(Module_Magick, rm_ID_set_trace_proc);
+        if (!NIL_P(trace))
+        {
+            // Maybe the stack won't get extended until we need the space.
+            char buffer[MaxTextExtent];
+            int n;
+
+            trace_args[0] = ID2SYM(rb_intern(which));
+
+            build_inspect_string(image, buffer, sizeof(buffer));
+            trace_args[1] = rb_str_new2(buffer);
+
+#if SIZEOF_IMAGE_P > 4
+#if HAVE_UNSIGNED_LONG_LONG
+            n = sprintf(buffer, "%016llx", (unsigned long long)image);
+#elif HAVE_UINT64_T
+            n = sprintf(buffer, "%016llx", (uint64_t)image);
+#elif HAVE___INT64
+            n = sprintf(buffer, "%016llx", (__int64)image);
+#else
+#error Can't find a 64-bit type.
+#endif
+#else
+            n = sprintf(buffer, "%08lx", (unsigned long)image);
+#endif
+            buffer[n] = '\0';
+            trace_args[2] = rb_str_new2(buffer);
+            trace_args[3] = ID2SYM(rb_frame_last_func());
+            (void) rb_funcall2(trace, rm_ID_call, 4, (VALUE *)trace_args);
+        }
+    }
+
+}
+
+
+/*
+    External:   rm_trace_creation
+    Purpose:    should be obvious
+*/
+void rm_trace_creation(Image *image)
+{
+    call_trace_proc(image, "c");
+}
+
+
+
+/*
+    External:   rm_image_destroy
+    Purpose:    Called from GC when all references to the image have gone out
+                of scope.
+*/
+void rm_image_destroy(void *img)
+{
+    Image *image = (Image *)img;
+
+    call_trace_proc(image, "d");
+    (void) DestroyImage(image);
+}
+
+

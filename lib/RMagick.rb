@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.51 2007/01/20 23:13:50 rmagick Exp $
+# $Id: RMagick.rb,v 1.52 2007/03/07 23:38:27 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -23,6 +23,9 @@ def Magick.formats(&block)
     end
 end
 
+class << self
+    attr_writer :set_trace_proc
+end
 
 # Geometry class and related enum constants
 class GeometryValue < Enum
@@ -1766,3 +1769,4 @@ class HatchFill
 end
 
 end # Magick
+

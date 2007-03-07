@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.171 2007/03/04 01:17:41 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.172 2007/03/07 23:38:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -172,6 +172,12 @@ typedef enum _QuantumExpressionOperator
 
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
 
+#define UPDATE_DATA_PTR(_obj_, _new_) \
+    do { void *old = DATA_PTR(_obj_);\
+    (void) rm_trace_creation(_new_);\
+    DATA_PTR(_obj_) = (void *)(_new_);\
+    } while(0)
+
 
 // This implements the "omitted storage class model" for external variables.
 // (Ref: Harbison & Steele.) The rmmain.c file defines MAIN, which causes
@@ -249,6 +255,7 @@ EXTERN VALUE Class_VirtualPixelMethod;
 /*
 *   Commonly-used IDs
 */
+EXTERN ID rm_ID_set_trace_proc;    // "@set_trace_proc"
 EXTERN ID rm_ID__dummy_img_;       // "_dummy_img_"
 EXTERN ID rm_ID_call;              // "call"
 EXTERN ID rm_ID_changed;           // "changed"
@@ -880,6 +887,8 @@ extern VALUE Image_white_threshold(int, VALUE *, VALUE);
 extern VALUE Image_write(VALUE, VALUE);
 
 extern VALUE rm_image_new(Image *);
+extern void  rm_image_destroy(void *);
+extern void  rm_trace_creation(Image *);
 
 
 // rmfill.c

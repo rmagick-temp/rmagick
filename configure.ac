@@ -62,6 +62,15 @@ AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([PolaroidImage RecolorImage SketchImage])
 AC_CHECK_FUNCS([TransposeImage TransverseImage UniqueImageColors])
 
+AC_CHECK_TYPES([unsigned long long, uint64_t, __int64])
+
+AC_CHECK_SIZEOF(Image *,,
+               [#include <stdio.h>
+                #if HAVE_SYS_TYPES_H
+                #include <sys/types.h>
+                #endif
+                #include "magick/MagickCore.h"])
+
 # What typedefs?
 
 AC_CHECK_MEMBERS([Image.transparent_color],,,
@@ -69,7 +78,7 @@ AC_CHECK_MEMBERS([Image.transparent_color],,,
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>
                  #endif
-                 #include "magick/api.h"])
+                 #include "magick/MagickCore.h"])
 
 
 AC_CACHE_CHECK(for CoalesceLayer enum value, rm_cv_enum_coalescelayer,
@@ -78,7 +87,7 @@ AC_CACHE_CHECK(for CoalesceLayer enum value, rm_cv_enum_coalescelayer,
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "magick/api.h"],
+#include "magick/MagickCore.h"],
      [MagickLayerMethod x; x = CoalesceLayer],
      rm_cv_enum_coalescelayer='yes',
      rm_cv_enum_coalescelayer='no')])
@@ -94,7 +103,7 @@ AC_CACHE_CHECK(for PaletteBilevelMatteType enum value, rm_cv_enum_palettebilevel
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "magick/api.h"],
+#include "magick/MagickCore.h"],
      [ImageType x; x = PaletteBilevelMatteType],
      rm_cv_enum_palettebilevelmattetype='yes',
      rm_cv_enum_palettebilevelmattetype='no')])
@@ -113,7 +122,7 @@ AC_CACHE_CHECK(if ColorInfo.color is a MagickPixelPacket, rv_cv_struct_color_inf
 #if HAVE_SYS_TYPES_H
 #include <sys/types.h>
 #endif
-#include "magick/api.h"],
+#include "magick/MagickCore.h"],
      [ColorInfo color_info; MagickPixelPacket p; color_info.color = p],
      rv_cv_struct_color_info_color='yes',
      rv_cv_struct_color_info_color='no')])

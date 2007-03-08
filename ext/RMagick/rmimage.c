@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.217 2007/03/07 23:38:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.218 2007/03/08 22:36:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4870,7 +4870,6 @@ static void build_inspect_string(Image *image, char *buffer, size_t len)
     assert(x < len-1);
     buffer[x] = '\0';
 
-exit:
     return;
 }
 

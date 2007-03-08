@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.172 2007/03/07 23:38:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.173 2007/03/08 22:36:24 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -173,8 +173,7 @@ typedef enum _QuantumExpressionOperator
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
 
 #define UPDATE_DATA_PTR(_obj_, _new_) \
-    do { void *old = DATA_PTR(_obj_);\
-    (void) rm_trace_creation(_new_);\
+    do { (void) rm_trace_creation(_new_);\
     DATA_PTR(_obj_) = (void *)(_new_);\
     } while(0)
 

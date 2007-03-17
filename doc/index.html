@@ -358,54 +358,46 @@
   Tracker</a> or the <a href=
   "http://rubyforge.org/projects/rmagick">Feature Request
   Tracker</a> on RubyForge, or email me at <code>rmagick at
-  rubyforge.org</code>.</p>
+  rubyforge dot org</code>.</p>
 
   <h3><a name="bugs" id="bugs">Reporting bugs</a></h3>
 
   <p>Please report problems with RMagick installation and usage to
   the <a href="http://rubyforge.org/projects/rmagick/">Bug
   Tracker</a> at RubyForge, or email me at <code>rmagick at
-  rubyforge.org</code>.</p>
+  rubyforge dot org</code>.</p>
 
   <p>For quickest results, include the RMagick, ImageMagick and
   Ruby version numbers, along with a thorough description of the
   problem. RMagick will tell you both its version number and
   ImageMagick's version number. Simply bring up irb and run this
-  command: <code>ruby -r RMagick -e "puts
-  Magick::Long_version"</code></p>
+  command:</p>
   <pre class="example" id="version">
-This is RMagick 1.15.0 ($Date: 2007/01/26 23:41:21 $) Copyright (C) 2007 by Timothy P. Hunter
-Built with ImageMagick 6.3.1 01/13/07 Q16 http://www.imagemagick.org
-Built for ruby 1.8.5 (2006-08-25) [i686-linux]
+$ ruby -r RMagick -e "puts Magick::Long_version"
+This is RMagick 1.15.4 ($Date: 2007/03/17 22:57:20 $) Copyright (C) 2007 by Timothy P. Hunter
+Built with ImageMagick 6.3.3 03/15/07 Q16 http://www.imagemagick.org
+Built for ruby 1.8.6 (2007-03-13 patchlevel 0) [i686-linux]
 Web page: http://rmagick.rubyforge.org
 Email: rmagick@rubyforge.org
 </pre>
 
+<p>(Using RubyGems?&nbsp;&nbsp;If you haven't added <code>rubygems</code> to your RUBYOPT
+environment variable you may need to use this command instead:
+<code>ruby -rubygems -r RMagick -e "puts Magick::Long_version"</code>.)</p>
+
   <p>It will help a lot if you supply a small Ruby program that
-  reproduces the problem. (Don't forget to include any input image
-  files!).</p>
+  reproduces the problem. Don't forget to include any input image
+  files!</p>
 
   <p>Please remember I can't help with Ruby or ImageMagick
   installation and configuration problems. For help with Ruby, post
   your questions to <code>comp.lang.ruby</code>. For help with
-  ImageMagick, join the ImageMagick mailing list. See the
-  instructions at <a href=
-  "http://www.imagemagick.org/script/mailing-list.php">http://www.imagemagick.org/script/mailing-list.php</a>
-  .</p>
+  ImageMagick, you can post to the <a href="http://www.imagemagick.org/discourse-server/">ImageMagick Discourse Server</a>.</p>
 
   <p>I'm not an image processing guru, either, so I probably won't
   be able to help with questions about specific image formats and
   transformations. I will be glad, however, to intermediate between
   RMagick users and the ImageMagick developers.</p>
-
-  <h3>Contributions</h3>
-
-  <p>If you have a script or an image using RMagick that you're
-  particularly proud of, let me know. I'd like to collect your
-  contributions, along with other users' contributions, and put
-  them in a <code>contrib</code> directory to distribute with
-  RMagick. I'm particularly interested in getting examples for the
-  RMagick methods that currently have no examples.</p>
 
   <h3><a name="copyrights" id="copyrights">Copyright
   Notices</a></h3>

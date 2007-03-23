@@ -34,6 +34,7 @@ NFRAMES.times do |x|
     angle = x * (360/NFRAMES)
     NFRAMES.times do
         gc.rotate(angle)
+        intensity = [intensity, Magick::QuantumRange].min
         fill_color = Magick::Pixel.new(intensity, intensity, intensity).to_color
         gc.fill(fill_color)
         gc.roundrectangle(7, -1, 15, 0, 1, 1)

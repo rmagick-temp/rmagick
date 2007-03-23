@@ -17,12 +17,12 @@ Font = "Helvetica"
 begin
     puts "Read images..."
 
-    model = ImageList.new("images/model.miff")
+    model = ImageList.new("../doc/ex/images/model.miff")
     model.border_color = "black"
     model.background_color = "black"
     model.cur_image[:Label] = "RMagick"
 
-    smile = ImageList.new("images/smile.miff")
+    smile = ImageList.new("../doc/ex/images/smile.miff")
     smile.border_color = "black"
     smile.cur_image[:Label] = "Smile"
 

@@ -10,7 +10,7 @@
 require 'RMagick'
 include Magick
 
-shorts = Image.read('images/Shorts.jpg').first
+shorts = Image.read('../doc/ex/images/Shorts.jpg').first
 
 regwidth = shorts.columns/2
 regheight = shorts.rows/2

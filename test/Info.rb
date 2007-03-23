@@ -49,19 +49,6 @@ class Info_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @info.fill = 'xxx' }
     end
 
-    def test_fill
-        assert_nothing_raised { @info.fill }
-        assert_nil(@info.fill)
-
-        assert_nothing_raised { @info.fill = 'white' }
-        assert_equal("white", @info.fill)
-
-        assert_nothing_raised { @info.fill = nil }
-        assert_nil(@info.fill)
-
-        assert_raise(ArgumentError) { @info.fill = 'xxx' }
-    end
-
     def test_stroke
         assert_nothing_raised { @info.stroke }
         assert_nil(@info.stroke)

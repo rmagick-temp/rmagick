@@ -62,6 +62,7 @@ AC_CHECK_FUNCS([OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([PolaroidImage RecolorImage SketchImage])
 AC_CHECK_FUNCS([TransposeImage TransverseImage UniqueImageColors])
 
+AC_C_LONG_DOUBLE
 AC_CHECK_TYPES([unsigned long long, uint64_t, __int64])
 
 AC_CHECK_SIZEOF(Image *,,

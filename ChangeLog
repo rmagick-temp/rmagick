@@ -8,6 +8,8 @@ RMagick 2.0.0
       argument
     o Support Image object creation/destruction tracing with the
       Magick.set_trace_proc method
+    o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
+    o RMagick works with Q32 version of ImageMagick
 
 RMagick 1.15.4
     o Fix bug #8927, RMagick and rbgsl both export the name ID_call (bug report

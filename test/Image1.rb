@@ -343,8 +343,8 @@ class Image1_UT < Test::Unit::TestCase
             res = @img.channel_extrema
             assert_instance_of(Array, res)
             assert_equal(2, res.length)
-            assert_instance_of(Fixnum, res[0])
-            assert_instance_of(Fixnum, res[1])
+            assert_kind_of(Integer, res[0])
+            assert_kind_of(Integer, res[1])
         end
         assert_nothing_raised { @img.channel_extrema(Magick::RedChannel) }
         assert_nothing_raised { @img.channel_extrema(Magick::RedChannel, Magick::BlueChannel) }

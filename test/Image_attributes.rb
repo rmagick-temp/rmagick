@@ -28,8 +28,8 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal("white", @img.background_color)
         assert_nothing_raised { @img.background_color = "#dfdfdf" }
         assert_equal("rgb(223,223,223)", @img.background_color)
-        assert_nothing_raised { @img.background_color = Magick::Pixel.new(100, 150, 200) }
-        assert_equal("rgb(0.15259%,0.228885%,0.30518%)", @img.background_color)
+        assert_nothing_raised { @img.background_color = Magick::Pixel.new(Magick::MaxRGB, Magick::MaxRGB/2, Magick::MaxRGB/2) }
+        assert_equal("rgb(100%,50%,50%)", @img.background_color)
         assert_raise(TypeError) { @img.background_color = 2 }
     end
 
@@ -70,7 +70,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.black_point_compensation = true }
         assert(@img.black_point_compensation)
         assert_nothing_raised { @img.black_point_compensation = false }
-        assert { ! @img.black_point_compensation }
+        assert_equal(false, @img.black_point_compensation)
     end
 
     def test_blur
@@ -85,8 +85,8 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal("rgb(223,223,223)", @img.border_color)
         assert_nothing_raised { @img.border_color = "red" }
         assert_equal("red", @img.border_color)
-        assert_nothing_raised { @img.border_color = Magick::Pixel.new(100, 150, 200) }
-        assert_equal("rgb(0.15259%,0.228885%,0.30518%)", @img.border_color)
+        assert_nothing_raised { @img.border_color = Magick::Pixel.new(Magick::MaxRGB, Magick::MaxRGB/2, Magick::MaxRGB/2) }
+        assert_equal("rgb(100%,50%,50%)", @img.border_color)
         assert_raise(TypeError) { @img.border_color = 2 }
     end
 

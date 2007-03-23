@@ -37,6 +37,7 @@
 /* Introduced in IM 6.2.9 */
 #undef HAVE_UNIQUEIMAGECOLORS
 #undef SIZEOF_IMAGE_P
+#undef HAVE_LONG_DOUBLE
 #undef HAVE_UNSIGNED_LONG_LONG
 #undef HAVE_UINT64_T
 #undef HAVE___INT64

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.218 2007/03/08 22:36:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.219 2007/03/23 22:24:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2521,11 +2521,11 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     long map_l;
     union
     {
-       volatile float *f;
+       volatile double *f;
        volatile Quantum *i;
        volatile void *v;
     } pixels;
-    int type;
+    volatile VALUE pixel_class;
     StorageType stg_type;
 
     class = class;  // Suppress "never referenced" message from icc
@@ -2554,35 +2554,37 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     // Inspect the first element in the pixels array to determine the expected
     // type of all the elements. Allocate the pixel buffer.
     pixel0 = rb_ary_entry(pixels_arg, 0);
-    if (TYPE(pixel0) == T_FLOAT)
+    if (rb_obj_is_kind_of(pixel0, rb_cFloat) == Qtrue)
     {
-        pixels.f = ALLOC_N(volatile float, npixels);
-        stg_type = FloatPixel;
+        pixels.f = ALLOC_N(volatile double, npixels);
+        stg_type = DoublePixel;
+        pixel_class = rb_cFloat;
     }
-    else if (TYPE(pixel0) == T_FIXNUM)
+    else if (rb_obj_is_kind_of(pixel0, rb_cInteger) == Qtrue)
     {
         pixels.i = ALLOC_N(volatile Quantum, npixels);
-        stg_type = FIX_STG_TYPE;
+        stg_type = QuantumPixel;
+        pixel_class = rb_cInteger;
     }
     else
     {
-        rb_raise(rb_eTypeError, "element 0 in pixel array is %s, must be Fixnum or Double"
+        rb_raise(rb_eTypeError, "element 0 in pixel array is %s, must be numeric"
                , rb_class2name(CLASS_OF(pixel0)));
     }
 
-    type = TYPE(pixel0);
+
 
     // Convert the array elements to the appropriate C type, store in pixel
     // buffer.
     for (x = 0; x < npixels; x++)
     {
         pixel = rb_ary_entry(pixels_arg, x);
-        if (TYPE(pixel) != type)
+        if (rb_obj_is_kind_of(pixel, pixel_class) != Qtrue)
         {
             rb_raise(rb_eTypeError, "element %d in pixel array is %s, expected %s"
                    , x, rb_class2name(CLASS_OF(pixel)),rb_class2name(CLASS_OF(pixel0)));
         }
-        if (type == T_FLOAT)
+        if (pixel_class == rb_cFloat)
         {
             pixels.f[x] = (float) NUM2DBL(pixel);
             if (pixels.f[x] < 0.0 || pixels.f[x] > 1.0)
@@ -2592,7 +2594,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         }
         else
         {
-            pixels.i[x] = (Quantum)FIX2LONG(pixel);
+            pixels.i[x] = NUM2QUANTUM(pixel);
         }
     }
 
@@ -3172,7 +3174,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     long x, y;
     unsigned long columns, rows, n, npixels;
     volatile VALUE pixels_ary;
-    StorageType stg_type = FIX_STG_TYPE;
+    StorageType stg_type = QuantumPixel;
     char *map;
     long mapL;
     MagickBooleanType okay;
@@ -3196,12 +3198,12 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     map     = STRING_PTR_LEN(argv[4], mapL);
     if (argc == 6)
     {
-        stg_type = RTEST(argv[5]) ? DoublePixel : FIX_STG_TYPE;
+        stg_type = RTEST(argv[5]) ? DoublePixel : QuantumPixel;
     }
 
     // Compute the size of the pixel array and allocate the memory.
     npixels = columns * rows * mapL;
-    pixels.v = stg_type == FIX_STG_TYPE ? (void *) ALLOC_N(Quantum, npixels)
+    pixels.v = stg_type == QuantumPixel ? (void *) ALLOC_N(Quantum, npixels)
                                         : (void *) ALLOC_N(double, npixels);
 
     // Create the Ruby array for the pixels. Return this even if DispatchImage fails.
@@ -3222,18 +3224,18 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     // Convert the pixel data to the appropriate Ruby type
-    if (stg_type == FIX_STG_TYPE)
+    if (stg_type == QuantumPixel)
     {
         for (n = 0; n < npixels; n++)
         {
-            (void) rb_ary_push(pixels_ary, UINT2NUM((unsigned int) pixels.i[n]));
+            (void) rb_ary_push(pixels_ary, QUANTUM2NUM(pixels.i[n]));
         }
     }
     else
     {
         for (n = 0; n < npixels; n++)
         {
-            (void) rb_ary_push(pixels_ary, rb_float_new((double)pixels.f[n]));
+            (void) rb_ary_push(pixels_ary, rb_float_new(pixels.f[n]));
         }
     }
 
@@ -3705,7 +3707,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     long n, npixels;
     unsigned int okay;
     char *map = "RGB";
-    volatile unsigned int *pixels;
+    Quantum *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
@@ -3742,7 +3744,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 
 
     npixels = (long)(cols * rows * strlen(map));
-    pixels = ALLOC_N(unsigned int, npixels);
+    pixels = ALLOC_N(Quantum, npixels);
     if (!pixels)    // app recovered from exception
     {
         return rb_ary_new2(0L);
@@ -3750,7 +3752,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, IntegerPixel, (void *)pixels, &exception);
+    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, QuantumPixel, (void *)pixels, &exception);
     if (!okay)
     {
         xfree((unsigned int *)pixels);
@@ -3765,8 +3767,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     ary = rb_ary_new2(npixels);
     for (n = 0; n < npixels; n++)
     {
-        Quantum p = ScaleLongToQuantum(pixels[n]);
-        (void) rb_ary_push(ary, UINT2NUM(p));
+        (void) rb_ary_push(ary, QUANTUM2NUM(pixels[n]));
     }
 
     xfree((unsigned int *)pixels);
@@ -4605,7 +4606,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile VALUE pixel_arg, pixel_ary;
     StorageType stg_type = CharPixel;
     size_t type_sz, map_l;
-    volatile int *pixels = NULL;
+    volatile Quantum *pixels = NULL;
     volatile double *fpixels = NULL;
     volatile void *buffer;
     unsigned int okay;
@@ -4718,17 +4719,16 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         }
         else
         {
-            // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
+            // Get array for Quantum pixels. Use Ruby's memory so GC will clean up after us
             // in case of an exception.
-            pixels = ALLOC_N(int, npixels);
+            pixels = ALLOC_N(Quantum, npixels);
             for (n = 0; n < npixels; n++)
             {
                 volatile VALUE p = rb_ary_entry(pixel_ary, n);
-                unsigned long q = ScaleQuantumToLong((Quantum)NUM2LONG(p));
-                pixels[n] = (int) q;
+                pixels[n] = NUM2QUANTUM(p);
             }
             buffer = (void *) pixels;
-            stg_type = IntegerPixel;
+            stg_type = QuantumPixel;
         }
     }
 
@@ -5402,7 +5402,7 @@ Image_matte_flood_fill(
 {
     Image *image, *new_image;
     PixelPacket target;
-    unsigned long op;
+    Quantum op;
     long x, y;
     PaintMethod pm;
 
@@ -5410,11 +5410,7 @@ Image_matte_flood_fill(
 
     Color_to_PixelPacket(&target, color);
 
-    op = NUM2ULONG(opacity);
-    if (op > MaxRGB)
-    {
-        rb_raise(rb_eArgError, "opacity (%lu) exceeds MaxRGB", op);
-    }
+    op = APP2QUANTUM(opacity);
 
     VALUE_TO_ENUM(method, pm, PaintMethod);
     if (!(pm == FloodfillMethod || pm == FillToBorderMethod))
@@ -5433,7 +5429,7 @@ Image_matte_flood_fill(
 
     new_image = rm_clone_image(image);
 
-    (void) MatteFloodfillImage(new_image, target, (Quantum)op, x, y, pm);
+    (void) MatteFloodfillImage(new_image, target, op, x, y, pm);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -7561,17 +7557,13 @@ VALUE
 Image_opacity_eq(VALUE self, VALUE opacity_arg)
 {
     Image *image;
-    unsigned int opacity;
+    Quantum opacity;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
-    opacity = NUM2UINT(opacity_arg);
-    if (opacity > MaxRGB)
-    {
-        rb_raise(rb_eArgError, "opacity level (%d) exceeds MaxRGB", opacity);
-    }
+    opacity = APP2QUANTUM(opacity_arg);
 
-    (void) SetImageOpacity(image, (Quantum)opacity);
+    (void) SetImageOpacity(image, opacity);
     return self;
 }
 
@@ -8816,18 +8808,14 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     PixelPacket color;
-    unsigned int opacity = TransparentOpacity;
+    Quantum opacity = TransparentOpacity;
 
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
     {
         case 2:
-            opacity = NUM2UINT(argv[1]);
-            if (opacity > TransparentOpacity)
-            {
-                opacity = TransparentOpacity;
-            }
+            opacity = APP2QUANTUM(argv[1]);
         case 1:
             Color_to_PixelPacket(&color, argv[0]);
             break;
@@ -8838,7 +8826,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    (void) TransparentImage(new_image, color, (Quantum)opacity);
+    (void) TransparentImage(new_image, color, opacity);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);

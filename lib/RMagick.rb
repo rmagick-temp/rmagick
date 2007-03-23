@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.52 2007/03/07 23:38:27 rmagick Exp $
+# $Id: RMagick.rb,v 1.53 2007/03/23 22:14:33 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -94,10 +94,10 @@ class Geometry
     # Convert object to a geometry string
     def to_s
         str = ''
-        str << sprintf("%g", @width) if @width > 0
+        str << sprintf("%d", @width+0.5) if @width > 0
         str << 'x' if (@width > 0 || @height > 0)
-        str << sprintf("%g", @height) if @height > 0
-        str << sprintf("%+d%+d", @x, @y) if (@x != 0 || @y != 0)
+        str << sprintf("%d", @height+0.5) if @height > 0
+        str << sprintf("%+d%+d", @x+0.5, @y+0.5) if (@x != 0 || @y != 0)
         str << FLAGS[@flag.to_i]
     end
 end

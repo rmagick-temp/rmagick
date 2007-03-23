@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.106 2007/03/07 23:38:21 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.107 2007/03/23 22:18:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -387,6 +387,29 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
 
 
 /*
+    Extern:     rm_app2quantum
+    Purpose:    Convert a application-supplied number to a Quantum. If the object
+                is a Float, truncate it before converting.
+    Notes:      Ruby says that 2147483647.5 doesn't fit into an unsigned long.
+                If you truncate it, it works.
+                Should use this only when the input value is possibly subject
+                to this problem.
+*/
+Quantum
+rm_app2quantum(VALUE obj)
+{
+    volatile VALUE v = obj;
+
+    if (TYPE(obj) == T_FLOAT)
+    {
+        v = rb_funcall(obj, rm_ID_to_i, 0);
+    }
+
+    return NUM2QUANTUM(v);
+}
+
+
+/*
     Extern:     ImageList_cur_image
     Purpose:    Sends the "cur_image" method to the object. If 'img'
                 is an ImageList, then cur_image is self[@scene].
@@ -448,8 +471,8 @@ Pixel_to_s(VALUE self)
     char buff[100];
 
     Data_Get_Struct(self, Pixel, pixel);
-    sprintf(buff, "red=%d, green=%d, blue=%d, opacity=%d"
-          , (int)pixel->red, (int)pixel->green, (int)pixel->blue, (int)pixel->opacity);
+    sprintf(buff, "red=" QuantumFormat ", green=" QuantumFormat ", blue=" QuantumFormat ", opacity=" QuantumFormat
+          , pixel->red, pixel->green, pixel->blue, pixel->opacity);
     return rb_str_new2(buff);
 }
 
@@ -710,7 +733,7 @@ Pixel_intensity(VALUE self)
                                 + (0.587*pixel->green)
                                 + (0.114*pixel->blue));
 
-    return ULONG2NUM((unsigned long) intensity);
+    return QUANTUM2NUM((unsigned long) intensity);
 }
 
 
@@ -823,22 +846,22 @@ Pixel_initialize(int argc, VALUE *argv, VALUE self)
         case 4:
             if (argv[3] != Qnil)
             {
-                pixel->opacity = (Quantum) NUM2UINT(argv[3]);
+                pixel->opacity = APP2QUANTUM(argv[3]);
             }
         case 3:
             if (argv[2] != Qnil)
             {
-                pixel->blue = (Quantum) NUM2UINT(argv[2]);
+                pixel->blue = APP2QUANTUM(argv[2]);
             }
         case 2:
             if (argv[1] != Qnil)
             {
-                pixel->green = (Quantum) NUM2UINT(argv[1]);
+                pixel->green = APP2QUANTUM(argv[1]);
             }
         case 1:
             if (argv[0] != Qnil)
             {
-                pixel->red = (Quantum) NUM2UINT(argv[0]);
+                pixel->red = APP2QUANTUM(argv[0]);
             }
         case 0:
             break;
@@ -1773,7 +1796,11 @@ Color_to_s(VALUE self)
 
 #if defined(HAVE_NEW_COLORINFO)
     sprintf(buff, "name=%s, compliance=%s, "
+#if (QuantumDepth == 32 || QuantumDepth == 64) && defined(HAVE_LONG_DOUBLE)
+                  "color.red=%Lg, color.green=%Lg, color.blue=%Lg, color.opacity=%Lg ",
+#else
                   "color.red=%g, color.green=%g, color.blue=%g, color.opacity=%g ",
+#endif
                   ci.name,
                   ComplianceType_name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);

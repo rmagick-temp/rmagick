@@ -339,7 +339,7 @@ class Image2_UT < Test::Unit::TestCase
             assert_instance_of(Array, res)
             assert_equal(@img.columns*@img.rows*"RGB".length, res.length)
             res.each do |p|
-                assert_instance_of(Fixnum, p)
+                assert_kind_of(Integer, p)
             end
         end
         assert_nothing_raised { res = @img.export_pixels(0) }
@@ -618,70 +618,6 @@ class Image2_UT < Test::Unit::TestCase
         pixels.shift
         assert_raise(ArgumentError) { @img.import_pixels(0, 0, @img.columns, 1, "RGB", pixels) }
     end
-
-    def test_import_pixels_string
-        # accept string as pixel argument
-        pixels = @img.export_pixels(0, 0, @img.columns, @img.rows, "RGB")
-        p = pixels.pack("C*")
-        img = Magick::Image.new(@img.columns, @img.rows)
-        assert_nothing_raised do
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::CharPixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-        assert_nothing_raised do
-            spixels = pixels.collect {|p| p*257}
-            sp = spixels.pack("S*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", sp, Magick::ShortPixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-        assert_nothing_raised do
-            ipixels = pixels.collect {|p| p * 16843009}
-            ip = ipixels.pack("I*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", ip, Magick::IntegerPixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-        assert_nothing_raised do
-            lpixels = pixels.collect {|p| p * 16843009}
-            lp = lpixels.pack("L*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", lp, Magick::LongPixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-        if Magick::MaxRGB == 255   # test depend on an 8-bit pixel
-            assert_nothing_raised do
-                qp = pixels.pack("C*")
-                res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::QuantumPixel)
-                _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-                assert_equal(diff, 0.0)
-            end
-        end
-        assert_nothing_raised do
-            qp = pixels.pack("D*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::DoublePixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-        assert_nothing_raised do
-            qp = pixels.pack("F*")
-            res = img.import_pixels(0, 0, img.columns, img.rows, "RGB", qp, Magick::FloatPixel)
-            _, diff = img.compare_channel(res, Magick::MeanSquaredErrorMetric)
-            assert_equal(diff, 0.0)
-        end
-
-        assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::DoublePixel) }
-        assert_raise(TypeError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, 2) }
-
-        # pixel buffer too small
-        assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", "xxxx") }
-
-        # pixel buffer doesn't contain a multiple of the map length
-        p = pixels[0..(pixels.length-2)]
-        assert_raise(ArgumentError) { img.import_pixels(0, 0, img.columns, img.rows, "RGB", p, Magick::CharPixel) }
-    end
-
 
     def test_level
         assert_nothing_raised do

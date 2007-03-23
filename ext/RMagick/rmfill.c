@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.20 2007/03/07 23:38:17 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.21 2007/03/23 22:20:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -85,13 +85,14 @@ point_fill(
 {
     double steps, distance;
     unsigned long x, y;
-    double red_step, green_step, blue_step;
+    MagickRealType red_step, green_step, blue_step;
 
     steps = sqrt((double)((image->columns-x0)*(image->columns-x0)
                 + (image->rows-y0)*(image->rows-y0)));
-    red_step = ((double)(stop_color->red - start_color->red)) / steps;
-    green_step = ((double)(stop_color->green - start_color->green)) / steps;
-    blue_step = ((double)(stop_color->blue - start_color->blue)) / steps;
+
+    red_step   = ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
+    green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
+    blue_step  = ((MagickRealType)stop_color->blue  - (MagickRealType)start_color->blue)  / steps;
 
     for (y = 0; y < image->rows; y++)
     {
@@ -131,7 +132,7 @@ vertical_fill(
     double steps;
     unsigned long x, y;
     volatile PixelPacket *master;
-    double red_step, green_step, blue_step;
+    MagickRealType red_step, green_step, blue_step;
 
     // Keep in mind that x1 could be < 0 or > image->columns. If steps
     // is negative, swap the start and end colors and use the absolute
@@ -153,9 +154,9 @@ vertical_fill(
         steps -= x1;
     }
 
-    red_step = (stop_color->red - start_color->red) / steps;
-    green_step = (stop_color->green - start_color->green) / steps;
-    blue_step = (stop_color->blue - start_color->blue) / steps;
+    red_step   = ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
+    green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
+    blue_step  = ((MagickRealType)stop_color->blue  - (MagickRealType)start_color->blue)  / steps;
 
     // All the rows are the same. Make a "master row" and simply copy
     // it to each actual row.
@@ -204,7 +205,7 @@ horizontal_fill(
     double steps;
     unsigned long x, y;
     volatile PixelPacket *master;
-    double red_step, green_step, blue_step;
+    MagickRealType red_step, green_step, blue_step;
 
     // Bear in mind that y1 could be < 0 or > image->rows. If steps is
     // negative, swap the start and end colors and use the absolute value.
@@ -224,9 +225,9 @@ horizontal_fill(
         steps -= y1;
     }
 
-    red_step = (stop_color->red - start_color->red) / steps;
-    green_step = (stop_color->green - start_color->green) / steps;
-    blue_step = (stop_color->blue - start_color->blue) / steps;
+    red_step   = ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
+    green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
+    blue_step  = ((MagickRealType)stop_color->blue  - (MagickRealType)start_color->blue)  / steps;
 
     // All the columns are the same, so make a master column and copy it to
     // each of the "real" columns.
@@ -275,7 +276,7 @@ v_diagonal_fill(
     PixelPacket *stop_color)
 {
     unsigned long x, y;
-    double red_step, green_step, blue_step;
+    MagickRealType red_step, green_step, blue_step;
     double m, b, steps = 0.0;
     double d1, d2;
 
@@ -311,9 +312,9 @@ v_diagonal_fill(
         steps = -steps;
     }
 
-    red_step = (stop_color->red - start_color->red) / steps;
-    green_step = (stop_color->green - start_color->green) / steps;
-    blue_step = (stop_color->blue - start_color->blue) / steps;
+    red_step =   ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
+    green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
+    blue_step =  ((MagickRealType)stop_color->blue  - (MagickRealType)start_color->blue)  / steps;
 
     for (y = 0; y < image->rows; y++)
     {
@@ -355,7 +356,7 @@ h_diagonal_fill(
 {
     unsigned long x, y;
     double m, b, steps = 0.0;
-    double red_step, green_step, blue_step;
+    MagickRealType red_step, green_step, blue_step;
     double d1, d2;
 
     // Compute the equation of the line: y=mx+b
@@ -392,9 +393,9 @@ h_diagonal_fill(
         steps = -steps;
     }
 
-    red_step = (stop_color->red - start_color->red) / steps;
-    green_step = (stop_color->green - start_color->green) / steps;
-    blue_step = (stop_color->blue - start_color->blue) / steps;
+    red_step =   ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
+    green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
+    blue_step =  ((MagickRealType)stop_color->blue  - (MagickRealType)start_color->blue)  / steps;
 
     for (y = 0; y < image->rows; y++)
     {

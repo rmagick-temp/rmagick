@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.173 2007/03/08 22:36:24 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.174 2007/03/23 22:22:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -64,6 +64,29 @@
 // Safe replacement for rb_str2cstr
 #define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
 
+// Trace new image creation in bang methods
+#define UPDATE_DATA_PTR(_obj_, _new_) \
+    do { (void) rm_trace_creation(_new_);\
+    DATA_PTR(_obj_) = (void *)(_new_);\
+    } while(0)
+
+
+// Handle Quantum <-> Ruby Numeric object conversion
+#if (QuantumDepth == 8 || QuantumDepth == 16)
+#define QUANTUM2NUM(q) INT2FIX((q))
+#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n))
+#elif (QuantumDepth == 32)
+#define QUANTUM2NUM(q) UINT2NUM((q))
+#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n))
+#elif (QuantumDepth == 64)
+#define QUANTUM2NUM(q) ULL2NUM((q))
+#define NUM2QUANTUM(n) (Quantum)NUM2ULL((n))
+#else
+#error Specified QuantumDepth is not supported.
+#endif
+// Convert user-supplied objects to Quantum
+#define APP2QUANTUM(n) rm_app2quantum((n))
+
 #undef DegreesToRadians     // defined in ImageMagick.h in 6.0.2
 #define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
 
@@ -74,6 +97,9 @@
 #define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
 #define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
 #define RMAGICK_PI 3.14159265358979
+#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > (Quantum)QuantumRange ? MaxRGB : (value) + 0.5))
+
+
 
 typedef ImageInfo Info; // Make type name match class name
 typedef PixelPacket Pixel;
@@ -168,14 +194,6 @@ typedef enum _QuantumExpressionOperator
     SubtractQuantumOperator,
     XorQuantumOperator
 } QuantumExpressionOperator ;
-
-
-#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))
-
-#define UPDATE_DATA_PTR(_obj_, _new_) \
-    do { (void) rm_trace_creation(_new_);\
-    DATA_PTR(_obj_) = (void *)(_new_);\
-    } while(0)
 
 
 // This implements the "omitted storage class model" for external variables.
@@ -273,6 +291,7 @@ EXTERN ID rm_ID_notify_observers;  // "notify_observers"
 EXTERN ID rm_ID_new;               // "new"
 EXTERN ID rm_ID_push;              // "push"
 EXTERN ID rm_ID_spaceship;         // "<=>
+EXTERN ID rm_ID_to_i;              // "to_i"
 EXTERN ID rm_ID_to_s;              // "to_s"
 EXTERN ID rm_ID_values;            // "values"
 EXTERN ID rm_ID_width;             // "width"
@@ -287,17 +306,6 @@ EXTERN ID rm_ID_y;                 // "y"
    Handle warnings & errors
 */
 #define CHECK_EXCEPTION() rm_check_exception(&exception, NULL, RetainOnError);
-
-/*
-    Map the QuantumDepth to a StorageType.
-*/
-#if QuantumDepth == 8
-#define FIX_STG_TYPE CharPixel
-#elif QuantumDepth == 16
-#define FIX_STG_TYPE ShortPixel
-#else   // QuantumDepth == 32
-#define FIX_STG_TYPE LongPixel
-#endif
 
 
 /*
@@ -399,10 +407,10 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
  \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
-    pixel->_channel_ = (Quantum) NUM2UINT(v); \
+    pixel->_channel_ = APP2QUANTUM(v); \
     (void) rb_funcall(self, rm_ID_changed, 0); \
     (void) rb_funcall(self, rm_ID_notify_observers, 1, self); \
-    return UINT2NUM((unsigned int)(pixel->_channel_)); \
+    return QUANTUM2NUM((pixel->_channel_)); \
 }
 
 
@@ -417,10 +425,10 @@ Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
  \
     rm_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
-    pixel->_rgb_channel_ = (Quantum) NUM2UINT(v); \
+    pixel->_rgb_channel_ = APP2QUANTUM(v); \
     (void) rb_funcall(self, rm_ID_changed, 0); \
     (void) rb_funcall(self, rm_ID_notify_observers, 1, self); \
-    return UINT2NUM((unsigned int)pixel->_rgb_channel_); \
+    return QUANTUM2NUM(pixel->_rgb_channel_); \
 } \
  \
 extern VALUE \
@@ -448,7 +456,11 @@ Pixel_##_cmyk_channel_(VALUE self) \
 #define END_ENUM }
 
 //  Define a Magick module constant
-#define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, INT2FIX(constant))
+#if QuantumDepth == 64
+#define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, ULL2NUM(constant))
+#else   // QuantumDepth == 8, 16, 32
+#define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, UINT2NUM(constant))
+#endif
 
 
 // Convert a Ruby enum constant back to a C enum member.
@@ -1001,6 +1013,7 @@ extern void   rm_check_ary_len(VALUE, long);
 extern void   rm_check_frozen(VALUE);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
+extern Quantum rm_app2quantum(VALUE);
 extern double rm_percentage(VALUE);
 extern double rm_str_to_pct(VALUE);
 extern VALUE  rm_define_enum_type(char *);

@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.56 2007/03/04 01:17:42 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.57 2007/03/23 23:03:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -595,11 +595,15 @@ Info_depth_eq(VALUE self, VALUE depth)
     switch (d)
     {
         case 8:                     // always okay
-#if QuantumDepth == 16 || QuantumDepth == 32
+#if QuantumDepth == 16 || QuantumDepth == 32 || QuantumDepth == 64
         case 16:
-#endif
-#if QuantumDepth == 32
+#if QuantumDepth == 32 || QuantumDepth == 64
         case 32:
+#if QuantumDepth == 64
+        case 64:
+#endif
+#endif
+#endif
 #endif
             break;
         default:

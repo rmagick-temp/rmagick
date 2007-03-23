@@ -9,14 +9,14 @@ class PixelColumn < Array
         super
         fill {Magick::Pixel.new}
     end
-    
+
     def reset(bg)
         each {|pixel| pixel.reset(bg)}
     end
 end
 
 module Magick
-    
+
     class Pixel
         def reset(bg)
             self.red = bg.red
@@ -25,7 +25,7 @@ module Magick
             self.opacity = bg.opacity
         end
     end
-    
+
     class Image
 
       private
@@ -82,28 +82,28 @@ module Magick
 
                     yf = Float(y)
                     if yf >= HISTOGRAM_ROWS - (red[x] * scale)
-                        red_column[y].red = MaxRGB
+                        red_column[y].red = QuantumRange
                         red_column[y].green = 0
                         red_column[y].blue = 0
-                        rgb_column[y].red = MaxRGB
+                        rgb_column[y].red = QuantumRange
                     end
                     if yf >= HISTOGRAM_ROWS - (green[x] * scale)
-                        green_column[y].green = MaxRGB
+                        green_column[y].green = QuantumRange
                         green_column[y].red = 0
                         green_column[y].blue = 0
-                        rgb_column[y].green = MaxRGB
+                        rgb_column[y].green = QuantumRange
                     end
                     if yf >= HISTOGRAM_ROWS - (blue[x] * scale)
-                        blue_column[y].blue = MaxRGB
+                        blue_column[y].blue = QuantumRange
                         blue_column[y].red = 0
                         blue_column[y].green = 0
-                        rgb_column[y].blue = MaxRGB
+                        rgb_column[y].blue = QuantumRange
                     end
                     if yf >= HISTOGRAM_ROWS - (int[x] * scale)
                         int_column[y].opacity = TransparentOpacity
                     end
                 end
-    
+
                 rgb_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, rgb_column)
                 red_histogram.store_pixels(  x, 0, 1, HISTOGRAM_ROWS, red_column)
                 green_histogram.store_pixels(x, 0, 1, HISTOGRAM_ROWS, green_column)
@@ -228,7 +228,7 @@ Colors: #{number_colors}
             # Scale to chart size. When computing the scale, add some "air" between
             # the max frequency and the top of the histogram. This makes a prettier chart.
             # The RGBA and intensity histograms are all drawn to the same scale.
-            
+
             max = [red.max, green.max, blue.max, alpha.max, int.max].max
             scale = HISTOGRAM_ROWS / (max*AIR_FACTOR)
 

@@ -24,7 +24,7 @@ gc.annotate(q, 0, 0, 0, 0, "Flower Hat") do
 end
 
 # Set the matte attribute to false, indicating the absence of an alpha channel
-# in the mask image. Assign the mask image to the mask= attribute of the image 
+# in the mask image. Assign the mask image to the mask= attribute of the image
 # being masked.
 
 q.matte = false
@@ -32,6 +32,6 @@ img.mask = q
 
 # Use the #level method to darken the image under the black part of the mask.
 
-img = img.level(0, Magick::MaxRGB, 0.50)
+img = img.level(0, Magick::QuantumRange, 0.50)
 img.write('mask.jpg')
 

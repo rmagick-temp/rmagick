@@ -490,7 +490,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.frame(50, 50, 25, 25, 6) }
         assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6) }
         assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6, 'red') }
-        red = Magick::Pixel.new(Magick::MaxRGB)
+        red = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.frame(50, 50, 25, 25, 6, 6, red) }
         assert_raise(TypeError) { @img.frame(50, 50, 25, 25, 6, 6, 2) }
     end
@@ -626,8 +626,8 @@ class Image2_UT < Test::Unit::TestCase
         end
         assert_nothing_raised { @img.level(0.0) }
         assert_nothing_raised { @img.level(0.0, 1.0) }
-        assert_nothing_raised { @img.level(0.0, 1.0, Magick::MaxRGB) }
-        assert_raise(ArgumentError) { @img.level(0.0, 1.0, Magick::MaxRGB, 2) }
+        assert_nothing_raised { @img.level(0.0, 1.0, Magick::QuantumRange) }
+        assert_raise(ArgumentError) { @img.level(0.0, 1.0, Magick::QuantumRange, 2) }
         assert_raise(ArgumentError) { @img.level('x') }
         assert_raise(ArgumentError) { @img.level(0.0, 'x') }
         assert_raise(ArgumentError) { @img.level(0.0, 1.0, 'x') }
@@ -653,9 +653,9 @@ class Image2_UT < Test::Unit::TestCase
 
         assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0) }
         assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0, 1.0) }
-        assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::MaxRGB) }
+        assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::QuantumRange) }
 
-        assert_raise(ArgumentError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::MaxRGB, 2) }
+        assert_raise(ArgumentError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, Magick::QuantumRange, 2) }
         assert_raise(TypeError) { @img.level_channel(2) }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 'x') }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 'x') }
@@ -819,8 +819,8 @@ class Image2_UT < Test::Unit::TestCase
             res = @img.opaque('white', 'red')
             assert_instance_of(Magick::Image, res)
         end
-        red = Magick::Pixel.new(Magick::MaxRGB)
-        blue = Magick::Pixel.new(0, 0, Magick::MaxRGB)
+        red = Magick::Pixel.new(Magick::QuantumRange)
+        blue = Magick::Pixel.new(0, 0, Magick::QuantumRange)
         assert_nothing_raised { @img.opaque(red, blue) }
         assert_raise(TypeError) { @img.opaque(red, 2) }
         assert_raise(TypeError) { @img.opaque(2, blue) }
@@ -868,7 +868,7 @@ class Image2_UT < Test::Unit::TestCase
         res = @img.pixel_color(0, 0)
         assert_equal('red', res.to_color)
 
-        blue = Magick::Pixel.new(0, 0, Magick::MaxRGB)
+        blue = Magick::Pixel.new(0, 0, Magick::QuantumRange)
         assert_nothing_raised { @img.pixel_color(0,0, blue) }
         # If args are out-of-bounds return the background color
         img = Magick::Image.new(10, 10) { self.background_color = 'blue' }

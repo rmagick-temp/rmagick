@@ -9,7 +9,7 @@ img = Magick::Image.new(40, 40) {self.background_color = 'lightcyan2'}
 img.view( 10, 5, 20, 20) do |view|
 
     # Set all the pixels in the view to green.
-    view[][] = Magick::Pixel.new(0, Magick::MaxRGB)
+    view[][] = Magick::Pixel.new(0, Magick::QuantumRange)
 
     # Change the top and bottom rows to red.
     view[0][] = 'red'
@@ -23,11 +23,11 @@ img.view( 10, 5, 20, 20) do |view|
 
     # Change the green channel of all the
     # pixels on row 8.
-    view[8][].green = Magick::MaxRGB/2
+    view[8][].green = Magick::QuantumRange/2
 
     # Change the blue channel of 8 pixels
     # on column 10.
-    view[4,8][10].blue = Magick::MaxRGB
+    view[4,8][10].blue = Magick::QuantumRange
 end
 
 img.scale(5).write("viewex.gif")

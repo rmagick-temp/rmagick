@@ -326,8 +326,8 @@
       <h5>Examples</h5>
       <pre>
   # Set the red channel of all the pixels in the 2nd
-  # row of the view to MaxRGB
-  view[1][].red = MaxRGB
+  # row of the view to QuantumRange
+  view[1][].red = QuantumRange
   # Set the green channel of the pixel at [20][30] to
   # half that of its left-hand neighbor.
   view[20][30].green = view[20][29].green * 0.5
@@ -586,7 +586,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       CMYK colorspace a pixel's color is described by its intensity
       in the cyan, magenta, yellow and black (K) channels.
       Intensity is a value between 0 and <a href=
-      "constants.html#MaxRGB">MaxRGB</a>.</p>
+      "constants.html#QuantumRange">QuantumRange</a>.</p>
 
       <p>Usually, RMagick methods operate on entire images or on
       groups of pixels that have been selected by their position or
@@ -615,7 +615,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <p>Constructs a pixel object from the specified red, green,
       blue, and opacity intensities. The intensity is a number
       between 0 and <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a>.</p>
+      "constants.html#Miscellaneous_constants">QuantumRange</a>.</p>
 
       <h5>Attributes</h5>
 

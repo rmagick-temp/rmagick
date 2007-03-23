@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.53 2007/03/23 22:14:33 rmagick Exp $
+# $Id: RMagick.rb,v 1.54 2007/03/23 23:04:08 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -844,7 +844,7 @@ class Image
     def level(black_point=0.0, white_point=nil, gamma=nil)
         black_point = Float(black_point)
 
-        white_point ||= Magick::MaxRGB - black_point
+        white_point ||= Magick::QuantumRange - black_point
         white_point = Float(white_point)
 
         gamma_arg = gamma
@@ -854,7 +854,7 @@ class Image
         if gamma.abs > 10.0 || white_point.abs <= 10.0 || white_point.abs < gamma.abs
             gamma, white_point = white_point, gamma
             unless gamma_arg
-                white_point = Magick::MaxRGB - black_point
+                white_point = Magick::QuantumRange - black_point
             end
         end
 

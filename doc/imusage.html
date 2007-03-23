@@ -233,7 +233,7 @@
       <td>cmyk(c,m,y,k)</td>
 
       <td>CMYK functional notation. c, m, y, and k are either 4
-      integers 0-MaxRGB or 4 percentages 0%-100%.</td>
+      integers 0-QuantumRange or 4 percentages 0%-100%.</td>
     </tr>
 
     <tr class="evenrow">
@@ -246,7 +246,7 @@
       <td>rgb(r,g,b)</td>
 
       <td>SVG functional notation. r, g, and b are either 3
-      integers 0-MaxRGB or 3 percentages 0%-100%.</td>
+      integers 0-QuantumRange or 3 percentages 0%-100%.</td>
     </tr>
 
     <tr class="evenrow">
@@ -273,7 +273,7 @@
   </table>
 
   <p>The alpha channel is the opacity of the image, which can range
-  from 0 (Magick::OpaqueOpacity) to MaxRGB
+  from 0 (Magick::OpaqueOpacity) to QuantumRange
   (Magick::TransparentOpacity).</p>
 
   <p>A <code>Pixel</code> object contains the numeric

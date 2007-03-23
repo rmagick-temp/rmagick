@@ -38,7 +38,7 @@
   }
 
   /*
-   *  Modify .simple_table for the MaxRGB/QuantumDepth table.
+   *  Modify .simple_table for the QuantumRange/QuantumDepth table.
    *  The major differences are the centered text and the auto width.
    */
   #maxrgb {
@@ -155,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.15.0 ($Date: 2007/02/10 00:13:43 $)
+    <code>This is RMagick 1.15.0 ($Date: 2007/03/23 23:02:14 $)
     Copyright (C) 2007 by Timothy P. Hunter<br />
     Built with ImageMagick 6.2.5 03/05/06 Q8
     http://www.imagemagick.org<br />
@@ -169,24 +169,28 @@
     <code>@(#)ImageMagick X.Y.Z MM/DD/YY Q:16
     http://www.imagemagick.org</code></dd>
 
-    <dt>MaxRGB</dt>
+    <dt>QuantumRange</dt>
 
     <dd>The maximum value of a <em>Quantum</em>. A quantum is one
     of the red, green, blue, or opacity elements of a pixel in the
     RGB colorspace, or cyan, yellow, magenta, or black elements in
     the CYMK colorspace.</dd>
 
+    <dt>MaxRGB <i>(deprecated)</i></dt>
+
+    <dd>Same as QuantumRange.</dd>
+
     <dt>QuantumDepth</dt>
 
     <dd>
       The number of bits in a quantum. The relationship between
-      QuantumDepth and MaxRGB is summarized in this table.
+      QuantumDepth and QuantumRange is summarized in this table.
 
       <table summary="number of bits in a quantum" id="maxrgb">
         <tr>
           <th>QuantumDepth</th>
 
-          <th>MaxRGB</th>
+          <th>QuantumRange</th>
         </tr>
 
         <tr>
@@ -1303,7 +1307,7 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dt>QuantumPixel</dt>
 
     <dd>corresponds to the Quantum type used by ImageMagick, range
-    0-MaxRGB.</dd>
+    0-QuantumRange.</dd>
   </dl>
 
   <h3 class="const" id="StyleType">StyleType</h3>

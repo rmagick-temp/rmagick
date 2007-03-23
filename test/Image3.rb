@@ -324,8 +324,8 @@ class Image3_UT < Test::Unit::TestCase
             res = @img.sepiatone
             assert_instance_of(Magick::Image, res)
         end
-        assert_nothing_raised { @img.sepiatone(Magick::MaxRGB*0.80) }
-        assert_raise(ArgumentError) { @img.sepiatone(Magick::MaxRGB, 2) }
+        assert_nothing_raised { @img.sepiatone(Magick::QuantumRange*0.80) }
+        assert_raise(ArgumentError) { @img.sepiatone(Magick::QuantumRange, 2) }
         assert_raise(TypeError) { @img.sepiatone('x') }
     end
 
@@ -475,7 +475,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
         assert_nothing_raised { @img.splice(0, 0, 2, 2, 'red') }
-        red = Magick::Pixel.new(Magick::MaxRGB)
+        red = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.splice(0, 0, 2, 2, red) }
         assert_raise(ArgumentError) { @img.splice(0,0, 2, 2, red, 'x') }
         assert_raise(TypeError) { @img.splice([], 0, 2, 2, red) }
@@ -596,7 +596,7 @@ class Image3_UT < Test::Unit::TestCase
     end
 
     def test_to_color
-        red = Magick::Pixel.new(Magick::MaxRGB)
+        red = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised do
             res = @img.to_color(red)
             assert_equal('red', res)
@@ -612,7 +612,7 @@ class Image3_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.transparent(pixel) }
         assert_nothing_raised { @img.transparent('white', Magick::TransparentOpacity) }
         assert_raise(ArgumentError) { @img.transparent('white', Magick::TransparentOpacity, 2) }
-        assert_nothing_raised { @img.transparent('white', Magick::MaxRGB/2) }
+        assert_nothing_raised { @img.transparent('white', Magick::QuantumRange/2) }
         assert_raise(TypeError) { @img.transparent(2) }
     end
 

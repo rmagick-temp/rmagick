@@ -134,7 +134,7 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_nothing_thrown do
             montage = ilist.montage do
                 self.background_color = 'black'
-                self.background_color = Magick::Pixel.new(Magick::MaxRGB, 0, 0)
+                self.background_color = Magick::Pixel.new(Magick::QuantumRange, 0, 0)
                 self.border_color = 'red'
                 self.border_color = Magick::Pixel.new(0, 0, 0)
                 self.border_width = 2

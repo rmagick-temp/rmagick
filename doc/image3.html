@@ -454,7 +454,7 @@
 
       <dd>The maximum number of colors in the result image. Must be
       &lt;= <a href=
-      "constants.html#Miscellaneous_constants">MaxRGB</a>.</dd>
+      "constants.html#Miscellaneous_constants">QuantumRange</a>.</dd>
 
       <dt>colorspace</dt>
 
@@ -764,8 +764,8 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
       <dd><span class="imquote">A geometry string containing
       LOWxHIGH thresholds.</span> The string is in the form `XxY'.
       The Y value may be omitted, in which case it is assigned the
-      value MaxRGB-X. If an % appears in the string then the values
-      are assumed to be percentages of MaxRGB. <span class=
+      value QuantumRange-X. If an % appears in the string then the values
+      are assumed to be percentages of QuantumRange. <span class=
       "imquote">If the string contains 2x2, 3x3, or 4x4, then an
       ordered dither of order 2, 3, or 4 will be performed
       instead.</span> A <a href="struct.html#Geometry">Geometry</a>
@@ -785,7 +785,7 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
 
     <h4>Example</h4>
     <pre>
-geom = Geometry.new(MaxRGB/2)
+geom = Geometry.new(QuantumRange/2)
 random_threshold_channel(geom, RedChannel)
 </pre>
 
@@ -1432,7 +1432,7 @@ random_threshold_channel(geom, RedChannel)
     <h3 id="sepiatone">sepiatone</h3>
 
     <p><span class="arg">image</span>.sepiatone(<span class=
-    "arg">threshold</span>=MaxRGB) -&gt; <span class=
+    "arg">threshold</span>=QuantumRange) -&gt; <span class=
     "arg">anImage</span></p>
   </div>
 
@@ -1449,9 +1449,9 @@ random_threshold_channel(geom, RedChannel)
       <dt>threshold</dt>
 
       <dd class="imquote"><span class="arg">Threshold</span> ranges
-      from 0 to <code>MaxRGB</code> and is a measure of the extent
+      from 0 to QuantumRange and is a measure of the extent
       of the sepia toning. A threshold of 80% is a good starting
-      point for a reasonable tone. The default is MaxRGB.</dd>
+      point for a reasonable tone. The default is QuantumRange.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2038,7 +2038,7 @@ img.properties &raquo;
 
     <h4>Arguments</h4>
 
-    <p><span class="imquote">Ranges from 0 to MaxRGB and is a
+    <p><span class="imquote">Ranges from 0 to QuantumRange and is a
     measure of the extent of the solarization.</span> The default
     is 50.</p>
 
@@ -2529,7 +2529,7 @@ img.properties &raquo;
 
     <h4>Arguments</h4>
 
-    <p>A value between 0 and MaxRGB.</p>
+    <p>A value between 0 and QuantumRange.</p>
 
     <h4>Returns</h4>
 
@@ -2755,7 +2755,7 @@ img.to_color(pixel)
 
       <dd>The new opacity value, either an <a href=
       "constants.html#Opacity">opacity</a> value or a number
-      between 0 and MaxRGB. The default is TransparentOpacity.</dd>
+      between 0 and QuantumRange. The default is TransparentOpacity.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -3195,7 +3195,7 @@ img = Image.new(40, 40) {self.background_color = 'lightcyan2'}
 img.view( 10, 5, 20, 20) do |view|
 
     # Set all the pixels in the view to green.
-    view[][] = Pixel.new(0, MaxRGB)
+    view[][] = Pixel.new(0, QuantumRange)
 
     # Change the top and bottom rows to red.
     view[0][] = 'red'
@@ -3209,11 +3209,11 @@ img.view( 10, 5, 20, 20) do |view|
 
     # Change the green channel of all the
     # pixels on row 8.
-    view[8][].green = MaxRGB/2
+    view[8][].green = QuantumRange/2
 
     # Change the blue channel of 8 pixels
     # on column 10.
-    view[4,8][10].blue = MaxRGB
+    view[4,8][10].blue = QuantumRange
 end
 </pre>
 
@@ -3602,7 +3602,7 @@ end
 
     <h4>Arguments</h4>
 
-    <p>Each channel argument is a number between 0 and MaxRGB. All
+    <p>Each channel argument is a number between 0 and QuantumRange. All
     arguments except the first may be omitted. If the <span class=
     "arg">green_channel</span> or <span class=
     "arg">blue_channel</span> argument is omitted, the default

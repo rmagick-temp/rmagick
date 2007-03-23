@@ -368,7 +368,7 @@ img = Magick::Image.capture {
       The elements in the array must be either all
       <code>Integers</code> or all <code>Floats</code>. If the
       elements are <code>Integers</code>, the <code>Integers</code>
-      must be in the range [0..MaxRGB]. If the elements are
+      must be in the range [0..QuantumRange]. If the elements are
       <code>Floats</code>, they must be in the range [0..1].</dd>
     </dl>
 
@@ -1376,7 +1376,7 @@ img = Magick::Image.read_inline(content)
       <dt>threshold</dt>
 
       <dd>The threshold value, a number between 0 and
-      <code>MaxRGB</code>.</dd>
+      QuantumRange.</dd>
 
       <dt>channel...</dt>
 
@@ -1392,7 +1392,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Example</h4>
 
-    <p><code>bilevel_channel(2*MaxRGB/3, RedChannel)</code></p>
+    <p><code>bilevel_channel(2*QuantumRange/3, RedChannel)</code></p>
 
     <p class="rollover"><a href=
     "javascript:popup('bilevel_channel.rb.html')"><img onmouseover=
@@ -1433,7 +1433,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Arguments</h4>
 
-    <p>Each channel argument is a number between 0 and MaxRGB. All
+    <p>Each channel argument is a number between 0 and QuantumRange. All
     arguments except the first may be omitted. If the <span class=
     "arg">green_channel</span> or <span class=
     "arg">blue_channel</span> argument is omitted, the default
@@ -3487,7 +3487,7 @@ cropped = img.crop(x, y, width, height, true)
       <dd>If <code>true</code>, the returned array elements will be
       <code>Float</code> values in the range 0..1. If
       <code>false</code>, the returned array elements will be
-      <code>Integer</code> values in the range 0..MaxRGB.</dd>
+      <code>Integer</code> values in the range 0..QuantumRange.</dd>
     </dl>
 
     <h4>Returns</h4>An array

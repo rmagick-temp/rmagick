@@ -22,13 +22,13 @@ frame = Magick::Image.new(DIM, DIM) {self.background_color = 'transparent'}
 spinner = Magick::ImageList.new
 
 # 'level' is the change from darkest gray to white
-level = Magick::MaxRGB / 2 / NFRAMES
+level = Magick::QuantumRange / 2 / NFRAMES
 
 NFRAMES.times do |x|
     gc = Magick::Draw.new
     gc.translate(DIM/2, DIM/2)
     gc.stroke('none')
-    intensity = 0.58 * Magick::MaxRGB
+    intensity = 0.58 * Magick::QuantumRange
     fill_color = Magick::Pixel.new(intensity, intensity, intensity).to_color
     gc.fill(fill_color)
     angle = x * (360/NFRAMES)

@@ -52,7 +52,7 @@ class Image1_UT < Test::Unit::TestCase
             # can't compare it directly to the original image.
             assert_equal(@img.columns, res.columns)
             assert_equal(@img.rows, res.rows)
-            assert_block { pixels.all? { |v| 0 <= v && v <= Magick::MaxRGB } }
+            assert_block { pixels.all? { |v| 0 <= v && v <= Magick::QuantumRange } }
         end
 
         pixels = @img.dispatch(0, 0, @img.columns, @img.rows, 'RGBA', true)
@@ -409,7 +409,7 @@ class Image1_UT < Test::Unit::TestCase
             res = @img.color_fill_to_border(@img.columns/2, @img.rows/2, 'red')
             assert_instance_of(Magick::Image, res)
         end
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.color_fill_to_border(@img.columns/2, @img.rows/2, pixel) }
     end
 
@@ -420,7 +420,7 @@ class Image1_UT < Test::Unit::TestCase
             res = @img.color_floodfill(@img.columns/2, @img.rows/2, 'red')
             assert_instance_of(Magick::Image, res)
         end
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.color_floodfill(@img.columns/2, @img.rows/2, pixel) }
     end
 
@@ -437,7 +437,7 @@ class Image1_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
         assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, 0.25, 'red') }
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, pixel) }
         assert_nothing_raised { @img.colorize(0.25, 0.25, 0.25, 0.25, pixel) }
         assert_raise(ArgumentError) { @img.colorize }
@@ -472,7 +472,7 @@ class Image1_UT < Test::Unit::TestCase
             res = pc_img.colormap(0)
             assert_equal('red', res)
         end
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { pc_img.colormap(0, pixel) }
         assert_raise(TypeError) { pc_img.colormap(0, [2]) }
         pc_img.freeze
@@ -485,7 +485,7 @@ class Image1_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
             assert_not_same(@img, res)
         end
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.color_point(0, 0, pixel) }
     end
 
@@ -494,7 +494,7 @@ class Image1_UT < Test::Unit::TestCase
             res = @img.color_reset!('red')
             assert_same(@img, res)
         end
-        pixel = Magick::Pixel.new(Magick::MaxRGB)
+        pixel = Magick::Pixel.new(Magick::QuantumRange)
         assert_nothing_raised { @img.color_reset!(pixel) }
         assert_raise(TypeError) { @img.color_reset!([2]) }
         assert_raise(ArgumentError)  { @img.color_reset!('x') }

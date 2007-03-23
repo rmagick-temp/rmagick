@@ -12,11 +12,11 @@ module Magick
             puts "\tGeometry: #{columns}x#{rows}\n"
             puts "\tClass: #{class_type.to_s}\n"
             puts "\tType: #{image_type.to_s}\n"
-            puts "\tEndianess: #{endian}\n" 
+            puts "\tEndianess: #{endian}\n"
             puts "\tColorspace: #{colorspace}\n"
             puts "\tChannelDepth:\n"
             color_space = gray? ? Magick::GrayColorspace : colorspace
-            case color_space 
+            case color_space
             when Magick::RGBColorspace
                 puts "\t\tRed: #{channel_depth(Magick::RedChannel)}-bits\n"
                 puts "\t\tGreen: #{channel_depth(Magick::GreenChannel)}-bits\n"
@@ -32,59 +32,59 @@ module Magick
                 puts "\t\tGray: #{channel_depth(Magick::GrayChannel)}-bits\n"
                 puts "\t\tOpacity: #{channel_depth(Magick::OpacityChannel)}-bits\n" if matte
             end
-            scale = Magick::MaxRGB / (Magick::MaxRGB >> (Magick::QuantumDepth-channel_depth))
+            scale = Magick::QuantumRange / (Magick::QuantumRange >> (Magick::QuantumDepth-channel_depth))
             puts "\tChannel statistics:\n"
             case color_space
             when Magick::RGBColorspace
                 puts "\t\tRed:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::RedChannel)[0]/scale, channel_extrema(Magick::RedChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::RedChannel)[1]/scale, channel_extrema(Magick::RedChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::RedChannel)[0]/scale, channel_mean(Magick::RedChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::RedChannel)[1]/scale, channel_mean(Magick::RedChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::RedChannel)[0]/scale, channel_extrema(Magick::RedChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::RedChannel)[1]/scale, channel_extrema(Magick::RedChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::RedChannel)[0]/scale, channel_mean(Magick::RedChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::RedChannel)[1]/scale, channel_mean(Magick::RedChannel)[1]/Magick::QuantumRange)
                 puts "\t\tGreen:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::GreenChannel)[0]/scale, channel_extrema(Magick::GreenChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::GreenChannel)[1]/scale, channel_extrema(Magick::GreenChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::GreenChannel)[0]/scale, channel_mean(Magick::GreenChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::GreenChannel)[1]/scale, channel_mean(Magick::GreenChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::GreenChannel)[0]/scale, channel_extrema(Magick::GreenChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::GreenChannel)[1]/scale, channel_extrema(Magick::GreenChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::GreenChannel)[0]/scale, channel_mean(Magick::GreenChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::GreenChannel)[1]/scale, channel_mean(Magick::GreenChannel)[1]/Magick::QuantumRange)
                 puts "\t\tBlue:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlueChannel)[0]/scale, channel_extrema(Magick::BlueChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlueChannel)[1]/scale, channel_extrema(Magick::BlueChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::BlueChannel)[0]/scale, channel_mean(Magick::BlueChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::BlueChannel)[1]/scale, channel_mean(Magick::BlueChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlueChannel)[0]/scale, channel_extrema(Magick::BlueChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlueChannel)[1]/scale, channel_extrema(Magick::BlueChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::BlueChannel)[0]/scale, channel_mean(Magick::BlueChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::BlueChannel)[1]/scale, channel_mean(Magick::BlueChannel)[1]/Magick::QuantumRange)
             when Magick::CMYKColorspace
                 puts "\t\tCyan:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::CyanChannel)[0]/scale, channel_extrema(Magick::CyanChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::CyanChannel)[1]/scale, channel_extrema(Magick::CyanChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::CyanChannel)[0]/scale, channel_mean(Magick::CyanChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::CyanChannel)[1]/scale, channel_mean(Magick::CyanChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::CyanChannel)[0]/scale, channel_extrema(Magick::CyanChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::CyanChannel)[1]/scale, channel_extrema(Magick::CyanChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::CyanChannel)[0]/scale, channel_mean(Magick::CyanChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::CyanChannel)[1]/scale, channel_mean(Magick::CyanChannel)[1]/Magick::QuantumRange)
                 puts "\t\tMagenta:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::MagentaChannel)[0]/scale, channel_extrema(Magick::MagentaChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::MagentaChannel)[1]/scale, channel_extrema(Magick::MagentaChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::MagentaChannel)[0]/scale, channel_mean(Magick::MagentaChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::MagentaChannel)[1]/scale, channel_mean(Magick::MagentaChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::MagentaChannel)[0]/scale, channel_extrema(Magick::MagentaChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::MagentaChannel)[1]/scale, channel_extrema(Magick::MagentaChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::MagentaChannel)[0]/scale, channel_mean(Magick::MagentaChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::MagentaChannel)[1]/scale, channel_mean(Magick::MagentaChannel)[1]/Magick::QuantumRange)
                 puts "\t\tYellow:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::YellowChannel)[0]/scale, channel_extrema(Magick::YellowChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::YellowChannel)[1]/scale, channel_extrema(Magick::YellowChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::YellowChannel)[0]/scale, channel_mean(Magick::YellowChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::YellowChannel)[1]/scale, channel_mean(Magick::YellowChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::YellowChannel)[0]/scale, channel_extrema(Magick::YellowChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::YellowChannel)[1]/scale, channel_extrema(Magick::YellowChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::YellowChannel)[0]/scale, channel_mean(Magick::YellowChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::YellowChannel)[1]/scale, channel_mean(Magick::YellowChannel)[1]/Magick::QuantumRange)
                 puts "\t\tBlack:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlackChannel)[0]/scale, channel_extrema(Magick::BlackChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlackChannel)[1]/scale, channel_extrema(Magick::BlackChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::BlackChannel)[0]/scale, channel_mean(Magick::BlackChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::BlackChannel)[1]/scale, channel_mean(Magick::BlackChannel)[1]/Magick::MaxRGB)             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlackChannel)[0]/scale, channel_extrema(Magick::BlackChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::BlackChannel)[1]/scale, channel_extrema(Magick::BlackChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::BlackChannel)[0]/scale, channel_mean(Magick::BlackChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::BlackChannel)[1]/scale, channel_mean(Magick::BlackChannel)[1]/Magick::QuantumRange)
             when Magick::GrayColorspace
                 puts "\t\tGray:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::GrayChannel)[0]/scale, channel_extrema(Magick::GrayChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::GrayChannel)[1]/scale, channel_extrema(Magick::GrayChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::GrayChannel)[0]/scale, channel_mean(Magick::GrayChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::GrayChannel)[1]/scale, channel_mean(Magick::GrayChannel)[1]/Magick::MaxRGB)                             
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::GrayChannel)[0]/scale, channel_extrema(Magick::GrayChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::GrayChannel)[1]/scale, channel_extrema(Magick::GrayChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean: " + sprintf("%g (%g)\n", channel_mean(Magick::GrayChannel)[0]/scale, channel_mean(Magick::GrayChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation: " + sprintf("%g (%g)\n", channel_mean(Magick::GrayChannel)[1]/scale, channel_mean(Magick::GrayChannel)[1]/Magick::QuantumRange)
             end
             if matte
                 puts "\t\tOpacity:\n"
-                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::OpacityChannel)[0]/scale, channel_extrema(Magick::OpacityChannel)[0]/Magick::MaxRGB) 
-                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::OpacityChannel)[1]/scale, channel_extrema(Magick::OpacityChannel)[1]/Magick::MaxRGB)
-                puts "\t\t\tMean:" + sprintf("%u (%g)\n", channel_mean(Magick::OpacityChannel)[0]/scale, channel_mean(Magick::OpacityChannel)[0]/Magick::MaxRGB)
-                puts "\t\t\tStandard deviation:" + sprintf("%u (%g)\n", channel_mean(Magick::OpacityChannel)[1]/scale, channel_mean(Magick::OpacityChannel)[1]/Magick::MaxRGB)                         
+                puts "\t\t\tMin: " + sprintf("%u (%g)\n", channel_extrema(Magick::OpacityChannel)[0]/scale, channel_extrema(Magick::OpacityChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tMax: " + sprintf("%u (%g)\n", channel_extrema(Magick::OpacityChannel)[1]/scale, channel_extrema(Magick::OpacityChannel)[1]/Magick::QuantumRange)
+                puts "\t\t\tMean:" + sprintf("%u (%g)\n", channel_mean(Magick::OpacityChannel)[0]/scale, channel_mean(Magick::OpacityChannel)[0]/Magick::QuantumRange)
+                puts "\t\t\tStandard deviation:" + sprintf("%u (%g)\n", channel_mean(Magick::OpacityChannel)[1]/scale, channel_mean(Magick::OpacityChannel)[1]/Magick::QuantumRange)
             end
             if class_type == Magick::DirectClass
                 puts "\tColors: #{total_colors}\n"
@@ -157,21 +157,21 @@ module Magick
                     exif_attrs.each do |attr|
                         puts "\t\t#{attr[0]}: #{attr[1]}\n"
                     end
-                end                 
+                end
             end
             puts "\tTainted: True\n" if changed?
             puts "\tTainted: False\n" unless changed?
             puts "\tVersion: #{Magick::Version}\n"
             puts "\t         #{Magick::Magick_version}\n"
-        end        
+        end
     end
 end
 
 if ARGV.length == 0
     puts <<-'END_USAGE'
-    This example displays information about the specified image file(s) 
-    that is similar to ImageMagick/GraphicsMagick's identify command. 
-    
+    This example displays information about the specified image file(s)
+    that is similar to ImageMagick/GraphicsMagick's identify command.
+
     Usage:
     ruby identify.rb filename [filename...]
     END_USAGE
@@ -183,5 +183,5 @@ ilist.each do |img|
     img.identify
 end
 
-exit    
+exit
 

@@ -28,7 +28,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal("white", @img.background_color)
         assert_nothing_raised { @img.background_color = "#dfdfdf" }
         assert_equal("rgb(223,223,223)", @img.background_color)
-        assert_nothing_raised { @img.background_color = Magick::Pixel.new(Magick::MaxRGB, Magick::MaxRGB/2, Magick::MaxRGB/2) }
+        assert_nothing_raised { @img.background_color = Magick::Pixel.new(Magick::QuantumRange, Magick::QuantumRange/2, Magick::QuantumRange/2) }
         assert_equal("rgb(100%,50%,50%)", @img.background_color)
         assert_raise(TypeError) { @img.background_color = 2 }
     end
@@ -57,10 +57,10 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_instance_of(Float, @img.bias)
 
         assert_nothing_raised { @img.bias = 0.1 }
-        assert_in_delta(Magick::MaxRGB * 0.1, @img.bias, 0.1)
+        assert_in_delta(Magick::QuantumRange * 0.1, @img.bias, 0.1)
 
         assert_nothing_raised { @img.bias = '10%' }
-        assert_in_delta(Magick::MaxRGB * 0.10, @img.bias, 0.1)
+        assert_in_delta(Magick::QuantumRange * 0.10, @img.bias, 0.1)
 
         assert_raise(TypeError) { @img.bias = [] }
         assert_raise(ArgumentError) { @img.bias = 'x' }
@@ -85,7 +85,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal("rgb(223,223,223)", @img.border_color)
         assert_nothing_raised { @img.border_color = "red" }
         assert_equal("red", @img.border_color)
-        assert_nothing_raised { @img.border_color = Magick::Pixel.new(Magick::MaxRGB, Magick::MaxRGB/2, Magick::MaxRGB/2) }
+        assert_nothing_raised { @img.border_color = Magick::Pixel.new(Magick::QuantumRange, Magick::QuantumRange/2, Magick::QuantumRange/2) }
         assert_equal("rgb(100%,50%,50%)", @img.border_color)
         assert_raise(TypeError) { @img.border_color = 2 }
     end
@@ -361,7 +361,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.fuzz = 50 }
         assert_equal(50.0, @img.fuzz)
         assert_nothing_raised { @img.fuzz = '50%' }
-        assert_in_delta(Magick::MaxRGB * 0.50, @img.fuzz, 0.1)
+        assert_in_delta(Magick::QuantumRange * 0.50, @img.fuzz, 0.1)
         assert_raise(TypeError) { @img.fuzz = [] }
         assert_raise(ArgumentError) { @img.fuzz = 'xxx' }
     end

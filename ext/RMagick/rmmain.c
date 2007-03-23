@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.184 2007/03/07 23:38:21 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.185 2007/03/23 22:19:38 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -420,6 +420,7 @@ Init_RMagick(void)
     rm_ID_new              = rb_intern("new");
     rm_ID_push             = rb_intern("push");
     rm_ID_spaceship        = rb_intern("<=>");
+    rm_ID_to_i             = rb_intern("to_i");
     rm_ID_to_s             = rb_intern("to_s");
     rm_ID_values           = rb_intern("values");
     rm_ID_width            = rb_intern("width");
@@ -1011,8 +1012,9 @@ Init_RMagick(void)
 
 
     // Miscellaneous constants
-    rb_define_const(Module_Magick, "MaxRGB", INT2FIX(MaxRGB));
-    rb_define_const(Module_Magick, "QuantumDepth", INT2FIX(QuantumDepth));
+    DEF_CONST(MaxRGB);
+    DEF_CONST(QuantumRange);
+    DEF_CONST(QuantumDepth);
 
     version_constants();
 
@@ -1629,7 +1631,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/03/07 23:38:21 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/03/23 22:19:38 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

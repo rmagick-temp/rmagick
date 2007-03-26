@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.57 2007/03/23 23:03:27 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.58 2007/03/26 14:37:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -601,7 +601,6 @@ Info_depth_eq(VALUE self, VALUE depth)
         case 32:
 #if QuantumDepth == 64
         case 64:
-#endif
 #endif
 #endif
 #endif

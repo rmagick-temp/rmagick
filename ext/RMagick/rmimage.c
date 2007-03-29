@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.2 2007/03/04 00:05:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.3 2007/03/29 22:49:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4285,7 +4285,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     long n, npixels;
     unsigned int okay;
     char *map = "RGB";
-    volatile unsigned int *pixels;
+    volatile Quantum *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
@@ -4322,7 +4322,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 
 
     npixels = (long)(cols * rows * strlen(map));
-    pixels = ALLOC_N(unsigned int, npixels);
+    pixels = ALLOC_N(Quantum, npixels);
     if (!pixels)    // app recovered from exception
     {
         return rb_ary_new2(0L);
@@ -4330,7 +4330,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, IntegerPixel, (void *)pixels, &exception);
+    okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, QuantumPixel, (void *)pixels, &exception);
     if (!okay)
     {
         xfree((unsigned int *)pixels);
@@ -4345,8 +4345,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     ary = rb_ary_new2(npixels);
     for (n = 0; n < npixels; n++)
     {
-        Quantum p = ScaleLongToQuantum(pixels[n]);
-        (void) rb_ary_push(ary, UINT2NUM(p));
+        (void) rb_ary_push(ary, UINT2NUM((unsigned int)pixels[n]));
     }
 
     xfree((unsigned int *)pixels);
@@ -5259,7 +5258,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile VALUE pixel_arg, pixel_ary;
     StorageType stg_type = CharPixel;
     size_t type_sz, map_l;
-    volatile int *pixels = NULL;
+    volatile Quantum *pixels = NULL;
     volatile double *fpixels = NULL;
     volatile void *buffer;
     unsigned int okay;
@@ -5318,11 +5317,9 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case FloatPixel:
                 type_sz = sizeof(float);
                 break;
-#if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
                 break;
-#endif
             default:
                 rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
                 break;
@@ -5374,17 +5371,17 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         }
         else
         {
-            // Get array for integer pixels. Use Ruby's memory so GC will clean up after us
+            // Get array for Quantum pixels. Use Ruby's memory so GC will clean up after us
             // in case of an exception.
-            pixels = ALLOC_N(int, npixels);
+            pixels = ALLOC_N(Quantum, npixels);
             for (n = 0; n < npixels; n++)
             {
                 volatile VALUE p = rb_ary_entry(pixel_ary, n);
-                unsigned long q = ScaleQuantumToLong((Quantum)NUM2LONG(p));
+                unsigned long q = (Quantum)NUM2UINT(p);
                 pixels[n] = (int) q;
             }
             buffer = (void *) pixels;
-            stg_type = IntegerPixel;
+            stg_type = QuantumPixel;
         }
     }
 

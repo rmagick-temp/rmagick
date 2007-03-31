@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152.2.2 2007/03/04 00:05:27 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.3 2007/03/31 13:43:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -226,6 +226,13 @@ typedef unsigned int MagickBooleanType;
 #define UndefinedGravity 0
 #endif
 
+#if !defined(HAVE_QUANTUMPIXEL)
+#if QuantumDepth == 8
+#define QuantumPixel CharPixel
+#else
+#define QuantumPixel ShortPixel
+#endif
+#endif
 
 #if !defined(HAVE_SETIMAGEINFOFILE)
 #define SetImageInfoFile(info, fptr) (info)->file = (fptr)

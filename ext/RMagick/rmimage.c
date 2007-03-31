@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.3 2007/03/29 22:49:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.4 2007/03/31 13:45:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5317,9 +5317,11 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             case FloatPixel:
                 type_sz = sizeof(float);
                 break;
+#if defined(HAVE_QUANTUMPIXEL)
             case QuantumPixel:
                 type_sz = sizeof(Quantum);
                 break;
+#endif
             default:
                 rb_raise(rb_eArgError, "unsupported storage type %s", StorageType_name(stg_type));
                 break;

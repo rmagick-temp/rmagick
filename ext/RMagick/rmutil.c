@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.107 2007/03/23 22:18:37 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.108 2007/04/01 13:31:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2934,6 +2934,8 @@ MagickBooleanType rm_progress_monitor(
 {
     volatile VALUE rval;
     volatile VALUE method, offset, span;
+
+	tag = tag;		// defeat gcc message
 
 #if defined(HAVE_LONG_LONG)     // defined in Ruby's defines.h
     offset = rb_ll2inum(of);

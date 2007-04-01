@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.58 2007/03/26 14:37:42 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.59 2007/04/01 13:31:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -451,7 +451,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
     }
 
-    if (2 + format_l + key_l > sizeof(ckey))
+    if (2 + format_l + key_l > (long)sizeof(ckey))
     {
         rb_raise(rb_eArgError, "%.20s:%.20s not defined - format or key too long", format, key);
     }
@@ -634,7 +634,7 @@ static struct
     { "2",          "BackgroundDispose", BackgroundDispose },
     { "3",          "PreviousDispose",   PreviousDispose },
     };
-#define N_DISPOSE_OPTIONS (sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
+#define N_DISPOSE_OPTIONS (int)(sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
 
 VALUE
 Info_dispose(VALUE self)
@@ -947,7 +947,7 @@ static struct
     { "West",       "WestGravity",      WestGravity },
     { "Static",     "StaticGravity",    StaticGravity }
     };
-#define N_GRAVITY_OPTIONS (sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
+#define N_GRAVITY_OPTIONS (int)(sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
 
 VALUE Info_gravity(VALUE self)
 {

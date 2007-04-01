@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.219 2007/03/23 22:24:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.220 2007/04/01 13:31:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4225,6 +4225,9 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     void *blob;
     long length;
 
+	class = class;			// defeat gcc message
+	blob_arg = blob_arg;	// defeat gcc message
+
     blob = (void *) STRING_PTR_LEN(blob_arg, length);
 
     // Get a new Info object - run the parm block if supplied
@@ -4470,7 +4473,7 @@ Image_get_pixels(
     columns = NUM2ULONG(cols_arg);
     rows    = NUM2ULONG(rows_arg);
 
-    if ((x+columns) > image->columns || (y+rows) > image->rows || columns < 0 || rows < 0)
+    if ((x+columns) > image->columns || (y+rows) > image->rows)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , columns, rows, x, y);
@@ -4867,7 +4870,7 @@ static void build_inspect_string(Image *image, char *buffer, size_t len)
         }
     }
 
-    assert(x < len-1);
+    assert(x < (int)(len-1));
     buffer[x] = '\0';
 
     return;
@@ -5106,7 +5109,7 @@ Image__load(VALUE class, VALUE str)
     blob = STRING_PTR_LEN(str, length);
 
     // Must be as least as big as the 1st 4 fields in DumpedImage
-    if (length <= sizeof(DumpedImage)-MaxTextExtent)
+    if (length <= (long)(sizeof(DumpedImage)-MaxTextExtent))
     {
         rb_raise(rb_eTypeError, "image is invalid or corrupted (too short)");
     }
@@ -5132,7 +5135,7 @@ Image__load(VALUE class, VALUE str)
     mi.len = ((DumpedImage *)blob)->len;
 
     // Must be bigger than the header
-    if (length <= mi.len+sizeof(DumpedImage)-MaxTextExtent)
+    if (length <= (long)(mi.len+sizeof(DumpedImage)-MaxTextExtent))
     {
         rb_raise(rb_eTypeError, "image is invalid or corrupted (too short)");
     }
@@ -6928,6 +6931,8 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     Image *images;
     ExceptionInfo exception;
 
+	class = class;	// defeat gcc message
+
     // Create a new Info structure for this read/ping
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
@@ -7020,53 +7025,55 @@ Image_recolor(VALUE self, VALUE color_matrix)
 VALUE
 Image_read_inline(VALUE self, VALUE content)
 {
-     volatile VALUE info_obj;
-     Image *images;
-     ImageInfo *info;
-     char *image_data;
-     long x, image_data_l;
-     unsigned char *blob;
-     size_t blob_l;
-     ExceptionInfo exception;
+    volatile VALUE info_obj;
+    Image *images;
+    ImageInfo *info;
+    char *image_data;
+    long x, image_data_l;
+    unsigned char *blob;
+    size_t blob_l;
+    ExceptionInfo exception;
 
-     image_data = STRING_PTR_LEN(content, image_data_l);
+	self = self;	// defeat gcc message
 
-     // Search for a comma. If found, we'll set the start of the
-     // image data just following the comma. Otherwise we'll assume
-     // the image data starts with the first byte.
-     for(x = 0; x < image_data_l; x++)
-     {
-          if (image_data[x] == ',')
-          {
-               break;
-          }
-     }
-     if (x < image_data_l)
-     {
-          image_data += x + 1;
-     }
+    image_data = STRING_PTR_LEN(content, image_data_l);
 
-     blob = Base64Decode(image_data, &blob_l);
-     if (blob_l == 0)
-     {
-          rb_raise(rb_eArgError, "can't decode image");
-     }
+    // Search for a comma. If found, we'll set the start of the
+    // image data just following the comma. Otherwise we'll assume
+    // the image data starts with the first byte.
+    for(x = 0; x < image_data_l; x++)
+    {
+         if (image_data[x] == ',')
+         {
+              break;
+         }
+    }
+    if (x < image_data_l)
+    {
+         image_data += x + 1;
+    }
 
-     GetExceptionInfo(&exception);
+    blob = Base64Decode(image_data, &blob_l);
+    if (blob_l == 0)
+    {
+         rb_raise(rb_eArgError, "can't decode image");
+    }
 
-     // Create a new Info structure for this read. About the
-     // only useful attribute that can be set is `format'.
-     info_obj = rm_info_new();
-     Data_Get_Struct(info_obj, Info, info);
+    GetExceptionInfo(&exception);
 
-     images = BlobToImage(info, blob, blob_l, &exception);
-     magick_free((void *)blob);
+    // Create a new Info structure for this read. About the
+    // only useful attribute that can be set is `format'.
+    info_obj = rm_info_new();
+    Data_Get_Struct(info_obj, Info, info);
 
-     rm_check_exception(&exception, images, DestroyOnError);
+    images = BlobToImage(info, blob, blob_l, &exception);
+    magick_free((void *)blob);
 
-     (void) DestroyExceptionInfo(&exception);
+    rm_check_exception(&exception, images, DestroyOnError);
 
-     return array_from_images(images);
+    (void) DestroyExceptionInfo(&exception);
+
+    return array_from_images(images);
 }
 
 
@@ -8846,6 +8853,7 @@ Image_transparent_color(VALUE self)
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->transparent_color);
 #else
+	self = self;		// defeat gcc message
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -8867,6 +8875,8 @@ Image_transparent_color_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&image->transparent_color, color);
     return self;
 #else
+	self = self;		// defeat gcc message
+	color = color;		// defeat gcc message
     rm_not_implemented();
     return (VALUE)0;
 #endif

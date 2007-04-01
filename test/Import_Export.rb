@@ -112,5 +112,3 @@ IMAGES_DIR = '../doc/ex/images'
 Test::Unit::UI::Console::TestRunner.run(Import_Export_UT)
 end
 
-exit
-

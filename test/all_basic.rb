@@ -23,7 +23,6 @@ IMAGES_DIR = '../doc/ex/images'
 FILES = Dir[IMAGES_DIR+'/Button_*.gif']
 FLOWER_HAT = IMAGES_DIR+'/Flower_Hat.jpg'
 
-
 require 'Image1.rb'
 require 'Image2.rb'
 require 'Image3.rb'
@@ -35,3 +34,4 @@ require 'Pixel.rb'
 require 'Info.rb'
 require 'Magick.rb'
 require 'Draw.rb'
+

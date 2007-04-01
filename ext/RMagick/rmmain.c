@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.185 2007/03/23 22:19:38 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.186 2007/04/01 20:45:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1011,16 +1011,14 @@ Init_RMagick(void)
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
 
 
-    // Miscellaneous constants
+    // Miscellaneous fixed-point constants
     DEF_CONST(MaxRGB);
     DEF_CONST(QuantumRange);
     DEF_CONST(QuantumDepth);
-
-    version_constants();
-
-    // Opacity constants
     DEF_CONST(OpaqueOpacity);
     DEF_CONST(TransparentOpacity);
+
+    version_constants();
 
     /*-----------------------------------------------------------------------*/
     /* Class Magick::Enum                                                    */
@@ -1631,7 +1629,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/03/23 22:19:38 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/04/01 20:45:59 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

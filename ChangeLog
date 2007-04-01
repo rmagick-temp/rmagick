@@ -1,15 +1,20 @@
 RMagick 2.0.0
-    o Removed support for Ruby 1.6
+    o Replaced configure/make/make install with standard Ruby setup.rb,
+      extconf.rb
+    o Removed support for Ruby earlier than 1.8.2
     o Removed support for GraphicsMagick
     o Removed support for all releases of ImageMagick earlier than 6.2.6-8.
     o Added Image::Info.stroke=, stroke_width= and undercolor= attributes
-    o Added Draw#fill_pattern= and #stroke_pattern annotate attributes
+    o Added Draw#fill_pattern= and #stroke_pattern= annotate attributes
     o Changed Image::Info[] and Image::Info[]= to allow an omitted "format"
       argument
     o Support Image object creation/destruction tracing with the
       Magick.set_trace_proc method
     o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
     o RMagick works with Q32 version of ImageMagick
+
+RMagick 1.15.5
+    o Fix bug #9637, export_pixels always exports all 0's for 1-bit images (bug
 
 RMagick 1.15.4
     o Fix bug #8927, RMagick and rbgsl both export the name ID_call (bug report

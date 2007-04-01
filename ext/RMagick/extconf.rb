@@ -96,7 +96,8 @@ $CPPFLAGS = `Magick-config --cppflags`.chomp
 $LDFLAGS = `Magick-config --ldflags`.chomp
 $LOCAL_LIBS = `Magick-config --libs`.chomp
 
-headers = ['stdio.h', 'stdint.h']
+#headers = %w{assert.h ctype.h errno.h float.h limits.h math.h stdarg.h stddef.h stdint.h stdio.h stdlib.h string.h time.h}
+headers = %w{assert.h ctype.h stdint.h stdio.h stdlib.h math.h time.h}
 headers << 'sys/types.h' if have_header('sys/types.h')
 
 
@@ -112,7 +113,7 @@ unless have_library('Magick', 'InitializeMagick', headers)
                "Check the mkmf.log file for more detailed information."
 end
 
-have_func('snprintf', ['stdio.h'])
+have_func('snprintf', headers)
 
 
   ['AdaptiveBlurImageChannel',       # 6.2.8-5

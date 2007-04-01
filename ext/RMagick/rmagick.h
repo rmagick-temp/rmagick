@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.174 2007/03/23 22:22:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.175 2007/04/01 20:47:26 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -12,10 +12,13 @@
 #include <assert.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#if defined(HAVE_SYS_TYPES_H)
 #include <sys/types.h>
+#endif
 #include "ruby.h"
 #include "intern.h"
 #include "rubyio.h"
@@ -28,18 +31,10 @@
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_TARNAME
 
-#if defined(HAVE_MAGICK_MAGICKCORE_H)
 #include "magick/MagickCore.h"
-#else
-#include "magick/api.h"
-#endif
 
 // Undef ImageMagick's versions of these symbols
-#undef PACKAGE_VERSION
-#undef PACKAGE_NAME
 #undef PACKAGE_STRING
-#undef PACKAGE_BUGREPORT
-#undef PACKAGE_TARNAME
 
 
 #include "rmagick_config.h"

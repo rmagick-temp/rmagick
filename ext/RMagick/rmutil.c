@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.108 2007/04/01 13:31:55 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.109 2007/04/01 20:46:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -286,6 +286,7 @@ check_num2dbl(VALUE obj)
 static VALUE
 rescue_not_dbl(VALUE ignored)
 {
+    ignored = ignored;      // defeat gcc message
     return INT2FIX(0);
 }
 
@@ -603,10 +604,11 @@ Pixel_to_HSL(VALUE self)
 VALUE
 Pixel_from_HSL(VALUE class, VALUE hsl)
 {
-    PixelPacket rgb = {0};
+    PixelPacket rgb;
     double hue, saturation, luminosity;
 
     class = class;      // defeat "never referenced" message from icc
+    memset(&rgb, 0, sizeof(rgb));
 
     hsl = rb_Array(hsl);    // Ensure array
     if (RARRAY(hsl)->len < 3)
@@ -1796,7 +1798,7 @@ Color_to_s(VALUE self)
 
 #if defined(HAVE_NEW_COLORINFO)
     sprintf(buff, "name=%s, compliance=%s, "
-#if (QuantumDepth == 32 || QuantumDepth == 64) && defined(HAVE_LONG_DOUBLE)
+#if (QuantumDepth == 32 || QuantumDepth == 64) && defined(HAVE_TYPE_LONG_DOUBLE)
                   "color.red=%Lg, color.green=%Lg, color.blue=%Lg, color.opacity=%Lg ",
 #else
                   "color.red=%g, color.green=%g, color.blue=%g, color.opacity=%g ",
@@ -2935,7 +2937,7 @@ MagickBooleanType rm_progress_monitor(
     volatile VALUE rval;
     volatile VALUE method, offset, span;
 
-	tag = tag;		// defeat gcc message
+    tag = tag;      // defeat gcc message
 
 #if defined(HAVE_LONG_LONG)     // defined in Ruby's defines.h
     offset = rb_ll2inum(of);

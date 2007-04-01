@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.files = Dir.glob('**/*')
   s.require_paths = %w{lib .}
   s.rubyforge_project = %q{rmagick}
-  s.extensions = %w{extconf.rb}
+  s.extensions = %w{ext/RMagick/extconf.rb}
   s.has_rdoc = false
   s.required_ruby_version = '>= 1.8.2'
   s.requirements << 'ImageMagick 6.2.6 or later'

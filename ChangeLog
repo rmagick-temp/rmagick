@@ -15,6 +15,7 @@ RMagick 2.0.0
 
 RMagick 1.15.5
     o Fix bug #9637, export_pixels always exports all 0's for 1-bit images (bug
+      report from Doug Patterson)
 
 RMagick 1.15.4
     o Fix bug #8927, RMagick and rbgsl both export the name ID_call (bug report

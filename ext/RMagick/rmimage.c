@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.220 2007/04/01 13:31:55 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.221 2007/04/01 20:45:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1272,10 +1272,11 @@ static VALUE border(
     Image *image, *new_image;
     PixelPacket old_border;
     ExceptionInfo exception;
-    RectangleInfo rect = {0};
+    RectangleInfo rect;
 
     Data_Get_Struct(self, Image, image);
 
+    memset(&rect, 0, sizeof(rect));
     rect.width = NUM2UINT(width);
     rect.height = NUM2UINT(height);
 
@@ -1442,7 +1443,7 @@ VALUE
 Image_change_geometry(VALUE self, VALUE geom_arg)
 {
     Image *image;
-    RectangleInfo rect = {0};
+    RectangleInfo rect;
     volatile VALUE geom_str;
     char *geometry;
     unsigned int flags;
@@ -1451,6 +1452,8 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     Data_Get_Struct(self, Image, image);
     geom_str = rb_funcall(geom_arg, rm_ID_to_s, 0);
     geometry = STRING_PTR(geom_str);
+
+    memset(&rect, 0, sizeof(rect));
 
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
@@ -2061,8 +2064,10 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     // Handle no colormap or current colormap too small.
     if (!image->colormap || index > image->colors-1)
     {
-        PixelPacket black = {0};
+        PixelPacket black;
         unsigned long i;
+
+        memset(&black, 0, sizeof(black));
 
         if (!image->colormap)
         {
@@ -3707,7 +3712,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     long n, npixels;
     unsigned int okay;
     char *map = "RGB";
-    Quantum *pixels;
+    volatile Quantum *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
@@ -4225,8 +4230,8 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     void *blob;
     long length;
 
-	class = class;			// defeat gcc message
-	blob_arg = blob_arg;	// defeat gcc message
+    class = class;          // defeat gcc message
+    blob_arg = blob_arg;    // defeat gcc message
 
     blob = (void *) STRING_PTR_LEN(blob_arg, length);
 
@@ -6221,11 +6226,13 @@ Image_pixel_color(
     VALUE self)
 {
     Image *image;
-    PixelPacket old_color = {0}, new_color, *pixel;
+    PixelPacket old_color, new_color, *pixel;
     ExceptionInfo exception;
     long x, y;
     unsigned int set = False;
     unsigned int okay;
+
+    memset(&old_color, 0, sizeof(old_color));
 
     switch (argc)
     {
@@ -6859,9 +6866,10 @@ VALUE
 Image_raise(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    RectangleInfo rect = {0};
+    RectangleInfo rect;
     int raised = True;      // default
 
+    memset(&rect, 0, sizeof(rect));
     rect.width = 6;         // default
     rect.height = 6;        // default
 
@@ -6931,7 +6939,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
     Image *images;
     ExceptionInfo exception;
 
-	class = class;	// defeat gcc message
+    class = class;  // defeat gcc message
 
     // Create a new Info structure for this read/ping
     info_obj = rm_info_new();
@@ -7034,7 +7042,7 @@ Image_read_inline(VALUE self, VALUE content)
     size_t blob_l;
     ExceptionInfo exception;
 
-	self = self;	// defeat gcc message
+    self = self;    // defeat gcc message
 
     image_data = STRING_PTR_LEN(content, image_data_l);
 
@@ -8847,13 +8855,13 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_transparent_color(VALUE self)
 {
-#if defined(HAVE_IMAGE_TRANSPARENT_COLOR)
+#if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->transparent_color);
 #else
-	self = self;		// defeat gcc message
+    self = self;        // defeat gcc message
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -8867,7 +8875,7 @@ Image_transparent_color(VALUE self)
 VALUE
 Image_transparent_color_eq(VALUE self, VALUE color)
 {
-#if defined(HAVE_IMAGE_TRANSPARENT_COLOR)
+#if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
     rm_check_frozen(self);
@@ -8875,8 +8883,8 @@ Image_transparent_color_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&image->transparent_color, color);
     return self;
 #else
-	self = self;		// defeat gcc message
-	color = color;		// defeat gcc message
+    self = self;        // defeat gcc message
+    color = color;      // defeat gcc message
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -9901,12 +9909,12 @@ static void call_trace_proc(Image *image, char *which)
             build_inspect_string(image, buffer, sizeof(buffer));
             trace_args[1] = rb_str_new2(buffer);
 
-#if SIZEOF_IMAGE_P > 4
-#if HAVE_UNSIGNED_LONG_LONG
+#if SIZEOF_IMAGE_ > 4
+#if HAVE_TYPE_UNSIGNED_LONG_LONG
             n = sprintf(buffer, "%016llx", (unsigned long long)image);
-#elif HAVE_UINT64_T
+#elif HAVE_TYPE_UINT64_T
             n = sprintf(buffer, "%016llx", (uint64_t)image);
-#elif HAVE___INT64
+#elif HAVE_TYPE___INT64
             n = sprintf(buffer, "%016llx", (__int64)image);
 #else
 #error Can't find a 64-bit type.

@@ -27,9 +27,9 @@ def have_enum_value(enum, value, headers=nil, &b)
 #{COMMON_HEADERS}
 #{cpp_include(headers)}
 /*top*/
-int main(){ #{enum} x = #{value}; x = x; return 0; }
+int main() { #{enum} t = #{value}; t = t; return 0; }
 SRC
-      $defs.push(format("-DHAVE_%s", value.upcase))
+      $defs.push(format("-DHAVE_ENUM_%s", value.upcase))
       true
     else
       false

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.109 2007/04/01 20:46:50 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.110 2007/04/02 23:26:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1466,7 +1466,7 @@ ImageType_name(ImageType type)
         ENUM_TO_NAME(ColorSeparationType)
         ENUM_TO_NAME(ColorSeparationMatteType)
         ENUM_TO_NAME(OptimizeType)
-#if defined(HAVE_PALETTEBILEVELMATTETYPE)
+#if defined(HAVE_ENUM_PALETTEBILEVELMATTETYPE)
         ENUM_TO_NAME(PaletteBilevelMatteType)
 #endif
     }
@@ -1575,7 +1575,7 @@ MagickLayerMethod_name(MagickLayerMethod method)
         ENUM_TO_NAME(CompareOverlayLayer)
         ENUM_TO_NAME(OptimizeLayer)
         ENUM_TO_NAME(OptimizePlusLayer)
-#if defined(HAVE_COALESCELAYER)
+#if defined(HAVE_ENUM_COALESCELAYER)
         ENUM_TO_NAME(CoalesceLayer)
         ENUM_TO_NAME(DisposeLayer)
 #endif

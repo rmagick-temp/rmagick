@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.49 2007/03/04 01:17:41 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.50 2007/04/02 23:26:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -440,7 +440,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
     switch (mthd)
     {
-#if defined(HAVE_COALESCELAYER)
+#if defined(HAVE_ENUM_COALESCELAYER)
         case CoalesceLayer:
             new_images = CoalesceImages(images, &exception);
             break;

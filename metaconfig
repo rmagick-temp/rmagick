@@ -1,4 +1,3 @@
-# metaconfig.in -> metaconfig
 # define additional install.rb config options
 # add --allow-example-errors - default is false (only allow 5 examples to fail)
 add_bool_config('allow-example-errors', false, 'Allow installation to proceed even if a lot of examples fail')

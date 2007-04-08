@@ -2,6 +2,8 @@ require 'mkmf'
 require 'date'
 
 RMAGICK_VERS = '0.0.0'
+MIN_RUBY_VERS = "1.8.2"
+MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(',','').to_i
 MIN_IM_VERS = '6.2.6'
 MIN_IM_VERS_NO = MIN_IM_VERS.tr('.','').to_i
 
@@ -40,25 +42,6 @@ end
 
 
 
-# Create a config.h file from the $defs array.
-def create_config_file(file)
-  message "creating #{file}\n"
-  File.open(file, "w") do |f|
-    while (sym = $defs.shift)
-      define = sym.sub(/\A-D/, '#define ')
-      if define['=']
-        define['='] = ' '   # symbols with values
-      else
-        define << ' 1'      # symbols without values
-      end
-      f.puts define
-    end
-  end
-end
-
-
-
-
 def exit_failure(msg)
   Logging::message msg
   message msg+"\n"
@@ -68,11 +51,11 @@ end
 
 
 
-unless checking_for("Ruby version >= 1.8.2") do
+unless checking_for("Ruby version >= #{MIN_RUBY_VERS}") do
   version = RUBY_VERSION.tr('.','').to_i
-  version >= 182
+  version >= MIN_RUBY_VERS_NO
 end
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Ruby 1.8.2 or later required."
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Ruby #{MIN_RUBY_VERS} or later required."
 end
 
 
@@ -134,10 +117,10 @@ have_func('snprintf', headers)
   end
 
 
-have_type('long double')
-have_type('unsigned long long')
+have_type('long double', headers)
+have_type('unsigned long long', headers)
 have_type('uint64_t', headers)
-have_type('__int64')
+have_type('__int64', headers)
 check_sizeof('Image *', headers)
 
 
@@ -169,13 +152,12 @@ end
 
 # Miscellaneous constants
 $defs.push("-DRUBY_VERSION_STRING=\"ruby #{RUBY_VERSION}\"")
-$defs.push("-DPACKAGE_STRING=\"RMagick #{RMAGICK_VERS}\"")
+$defs.push("-DRMAGICK_VERSION_STRING=\"RMagick #{RMAGICK_VERS}\"")
 
-create_config_file('rmagick_config.h')
+create_header()
 
-# Force re-compilation if the generated Makefile or
-# rmagick_config.h changed.
-$config_h = 'Makefile rmagick_config.h'
+# Force re-compilation if the generated Makefile changed.
+$config_h = 'Makefile'
 
 create_makefile("RMagick")
 

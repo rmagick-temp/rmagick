@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.176 2007/04/08 22:16:09 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.177 2007/04/08 22:18:54 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.175 2007/04/01 20:47:26 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.176 2007/04/08 22:16:09 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -37,7 +37,7 @@
 #undef PACKAGE_STRING
 
 
-#include "rmagick_config.h"
+#include "extconf.h"
 
 // Backport these definitions to Ruby 1.6.7
 #if !defined(ULONG2NUM)
@@ -48,6 +48,8 @@
 #define LONG2NUM(v) INT2NUM(v)
 #endif
 
+// For quoting preprocessor symbols
+#define Q(q) #q
 
 // Define a version of StringValuePtr that works in both 1.6 and 1.8.
 #if !defined(StringValuePtr)

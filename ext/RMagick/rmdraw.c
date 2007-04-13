@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.49 2007/03/07 23:38:16 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.50 2007/04/13 00:14:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -515,6 +515,8 @@ VALUE Draw_annotate(
 
     (void) AnnotateImage(image, draw->info);
 
+    magick_free(draw->info->text);
+    draw->info->text = NULL;
     draw->info->affine = keep;
 
     rm_check_image_exception(image, RetainOnError);
@@ -1478,6 +1480,9 @@ get_type_metrics(
      }
 
      okay = (*getter)(image, draw->info, &metrics);
+
+     magick_free(draw->info->text);
+     draw->info->text = NULL;
 
      if (!okay)
      {

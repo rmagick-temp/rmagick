@@ -68,7 +68,7 @@ begin
         }
     }
 
-    puts "Writing image \"rb_gravity_out.miff\"..."
+    puts "Writing image \"rm_gravity_out.miff\"..."
     pic.delay = 20
     pic.write "./rm_gravity_out.miff"
 

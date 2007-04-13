@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.43.2.1 2007/03/04 00:05:30 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.43.2.2 2007/04/13 00:13:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -476,6 +476,8 @@ VALUE Draw_annotate(
 
     (void) AnnotateImage(image, draw->info);
 
+    magick_free(draw->info->text);
+    draw->info->text = NULL;
     draw->info->affine = keep;
 
     rm_check_image_exception(image, RetainOnError);
@@ -1445,6 +1447,7 @@ get_type_metrics(
      Image *image;
      Draw *draw;
      TypeMetric metrics;
+     volatile VALUE img;
      char *text = NULL;
      long text_l;
      long x;
@@ -1475,10 +1478,12 @@ get_type_metrics(
                  }
              }
 
-             Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
+             img = get_dummy_tm_img(CLASS_OF(self));
+             Data_Get_Struct(img, Image, image);
              break;
          case 2:
-             Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
+             img = ImageList_cur_image(argv[0]);
+             Data_Get_Struct(img, Image, image);
              text = STRING_PTR_LEN(argv[1], text_l);
              break;                  // okay
          default:
@@ -1503,6 +1508,9 @@ get_type_metrics(
      }
 
      okay = (*getter)(image, draw->info, &metrics);
+
+     magick_free(draw->info->text);
+     draw->info->text = NULL;
 
      if (!okay)
      {

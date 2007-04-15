@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.177 2007/04/08 22:18:54 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.178 2007/04/15 23:47:34 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1032,6 +1032,7 @@ extern void   rm_check_image_exception(Image *, ErrorRetention);
 extern void   rm_check_exception(ExceptionInfo *, Image *, ErrorRetention);
 extern void   rm_ensure_result(Image *);
 extern Image *rm_clone_image(Image *);
+extern Image *rm_clone_imagelist(Image *, int);
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
 
 #endif

@@ -61,7 +61,7 @@ end
 
 # Check for Magick-config
 unless find_executable('Magick-config')
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in your PATH"
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}"
 end
 
 
@@ -127,6 +127,11 @@ check_sizeof('Image *', headers)
 have_struct_member('Image', 'transparent_color', headers)         # 6.2.9
 have_enum_value('MagickLayerMethod', 'CoalesceLayer', headers)    # 6.2.7
 have_enum_value('ImageType', 'PaletteBilevelMatteType', headers)  # 6.2.9
+have_enum_value('MagickLayerMethod', 'OptimizeTransLayer', headers) # 6.3.?
+have_enum_value('MagickLayerMethod', 'RemoveDupsLayer', headers)  # 6.3.3-6
+have_enum_value('MagickLayerMethod', 'RemoveZeroLayer', headers)  # 6.3.3-6
+have_enum_value('MagickLayerMethod', 'CompositeLayer', headers)   # 6.3.3-6
+
 
 
 # ColorInfo.color changed in 6.3.0

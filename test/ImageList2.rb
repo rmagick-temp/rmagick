@@ -246,9 +246,12 @@ class ImageList2_UT < Test::Unit::TestCase
            Magick::OptimizeLayer,
            Magick::OptimizePlusLayer,
            Magick::CoalesceLayer,
-           Magick::DisposeLayer
+           Magick::DisposeLayer,
+           Magick::OptimizeTransLayer,
+           Magick::RemoveDupsLayer,
+           Magick::RemoveZeroLayer
            ]
-        @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_0.gif')
+        @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_1.gif')
         layer_methods.each do |method|
             assert_nothing_raised do
                 res = @ilist.optimize_layers(method)

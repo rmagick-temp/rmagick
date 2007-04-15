@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.50 2007/04/02 23:26:19 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.51 2007/04/15 23:46:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -446,6 +446,29 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
         case DisposeLayer:
             new_images = DisposeImages(images, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
+ 	    case OptimizeTransLayer:
+			new_images = rm_clone_imagelist(images, MagickTrue);
+			OptimizeImageTransparency(new_images, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_REMOVEDUPSLAYER)
+	    case RemoveDupsLayer:
+			new_images = rm_clone_imagelist(images, MagickTrue);
+			RemoveDuplicateLayers(&new_images, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_REMOVEZEROLAYER)
+	    case RemoveZeroLayer:
+			new_images = rm_clone_imagelist(images, MagickTrue);
+			RemoveZeroDelayLayers(&new_images, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_COMPOSITELAYER)
+	    case CompositeLayer:
+		rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
             break;
 #endif
         case OptimizeLayer:

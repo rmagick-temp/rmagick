@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.110 2007/04/02 23:26:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.111 2007/04/15 23:46:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1579,6 +1579,19 @@ MagickLayerMethod_name(MagickLayerMethod method)
         ENUM_TO_NAME(CoalesceLayer)
         ENUM_TO_NAME(DisposeLayer)
 #endif
+#if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
+	    ENUM_TO_NAME(OptimizeTransLayer)
+#endif
+#if defined(HAVE_ENUM_REMOVEDUPSLAYER)
+	    ENUM_TO_NAME(RemoveDupsLayer)
+#endif
+#if defined(HAVE_ENUM_REMOVEZEROLAYER)
+	    ENUM_TO_NAME(RemoveZeroLayer)
+#endif
+#if defined(HAVE_ENUM_COMPOSITELAYER)
+	    ENUM_TO_NAME(CompositeLayer)
+#endif
+
     }
 }
 
@@ -2920,6 +2933,30 @@ Image *rm_clone_image(Image *image)
     (void) DestroyExceptionInfo(&exception);
 
     return clone;
+}
+
+
+/*
+ *	Extern:		rm_clone_imagelist
+ *	Purpose:    clone a list of images, handle errors
+ */
+Image *rm_clone_imagelist(Image *images, int trace)
+{
+	Image *new_images = NULL, *img, *clone;
+	
+	img = GetFirstImageInList(images);
+	while (img)
+	{
+		clone = rm_clone_image(img);
+		if (trace)
+		{
+			(void) rm_trace_creation(img);
+		}
+		AppendImageToList(&new_images, clone);
+		img = GetNextImageInList(img);
+	}
+	
+	return new_images;
 }
 
 

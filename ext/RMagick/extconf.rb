@@ -42,6 +42,16 @@ end
 
 
 
+# Test for multiple values of the same enum type
+def have_enum_values(enum, values, headers=nil, &b)
+  values.each do |value|
+    have_enum_value(enum, value, headers, &b)
+  end
+end
+
+
+
+
 def exit_failure(msg)
   Logging::message msg
   message msg+"\n"
@@ -124,13 +134,13 @@ have_type('__int64', headers)
 check_sizeof('Image *', headers)
 
 
-have_struct_member('Image', 'transparent_color', headers)         # 6.2.9
-have_enum_value('MagickLayerMethod', 'CoalesceLayer', headers)    # 6.2.7
-have_enum_value('ImageType', 'PaletteBilevelMatteType', headers)  # 6.2.9
-have_enum_value('MagickLayerMethod', 'OptimizeTransLayer', headers) # 6.3.?
-have_enum_value('MagickLayerMethod', 'RemoveDupsLayer', headers)  # 6.3.3-6
-have_enum_value('MagickLayerMethod', 'RemoveZeroLayer', headers)  # 6.3.3-6
-have_enum_value('MagickLayerMethod', 'CompositeLayer', headers)   # 6.3.3-6
+have_struct_member('Image', 'transparent_color', headers)            # 6.2.9
+have_enum_value('MagickLayerMethod', 'CoalesceLayer', headers)       # 6.2.7
+have_enum_value('ImageType', 'PaletteBilevelMatteType', headers)     # 6.2.9
+have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',         # 6.3.?
+                                       'RemoveDupsLayer',            # 6.3.3-6
+                                       'RemoveZeroLayer',            # 6.3.3-6
+                                       'CompositeLayer'], headers)   # 6.3.3-6
 
 
 
@@ -162,7 +172,7 @@ $defs.push("-DRMAGICK_VERSION_STRING=\"RMagick #{RMAGICK_VERS}\"")
 create_header()
 
 # Force re-compilation if the generated Makefile changed.
-$config_h = 'Makefile'
+$config_h = 'Makefile rmagick.h'
 
 create_makefile("RMagick")
 

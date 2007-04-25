@@ -1,3 +1,10 @@
+RMagick 1.15.6
+    o Fix bug #10070, memory leak in Draw#get_type_metrics,
+      Draw#get_multiline_type_metrics, Draw#annotate (bug report from Sinclair
+      Bain)
+    o Fix bug #10080, scripts in examples directory should not be marked
+      executable (bug report from Lucas Nussbaum)
+
 RMagick 1.15.5
     o Fix bug #9637, export_pixels always exports all 0's for 1-bit images (bug
       report from Doug Patterson)

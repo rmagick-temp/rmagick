@@ -1,3 +1,7 @@
+RMagick 1.15.7
+	o Fix bug #11033, make distclean misses some files
+	o Work around SetMagickRegistry problem in ImageMagick 6.3.4-7
+
 RMagick 1.15.6
     o Fix bug #10070, memory leak in Draw#get_type_metrics,
       Draw#get_multiline_type_metrics, Draw#annotate (bug report from Sinclair

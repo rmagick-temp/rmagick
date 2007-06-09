@@ -11,9 +11,21 @@ RMagick 2.0.0
     o Support Image object creation/destruction tracing with the
       Magick.set_trace_proc method
     o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
-	o Added OptimizeTransLayer, RemoveDupsLayer, RemoveZeroLayer LayerMethods
-	  (available with ImageMagick 6.3.3)
+    o Added OptimizeTransLayer, RemoveDupsLayer, RemoveZeroLayer LayerMethods
+      (available with ImageMagick 6.3.3)
     o RMagick works with Q32 version of ImageMagick
+
+RMagick 1.15.7
+    o Fix bug #11033, make distclean misses some files (bug report from Lucas
+      Nussbaum)
+    o Work around SetMagickRegistry problem in ImageMagick 6.3.4-7
+
+RMagick 1.15.6
+    o Fix bug #10070, memory leak in Draw#get_type_metrics,
+      Draw#get_multiline_type_metrics, Draw#annotate (bug report from Sinclair
+      Bain)
+    o Fix bug #10080, scripts in examples directory should not be marked
+      executable (bug report from Lucas Nussbaum)
 
 RMagick 1.15.5
     o Fix bug #9637, export_pixels always exports all 0's for 1-bit images (bug

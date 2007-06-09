@@ -1,25 +1,72 @@
+#undef GRAPHICSMAGICK
+/* Introduced in IM 6.0.0, GM 1.1 */
+#undef HAVE_ACQUIREMAGICKMEMORY
 /* Introduced in IM 6.2.8-5 */
 #undef HAVE_ADAPTIVEBLURIMAGECHANNEL
 /* Introduced in IM 6.2.9 */
 #undef HAVE_ADAPTIVERESIZEIMAGE
 /* Introduced in IM 6.2.7 */
 #undef HAVE_ADAPTIVESHARPENIMAGE
+/* Introduced in IM 6.0.0 */
+#undef HAVE_ACQUIRESTRINGINFO
+/* GraphicsMagick only */
+#undef HAVE_ADDDEFINITIONS
 /* Introduced in IM 6.2.5 */
 #undef HAVE_ADDNOISEIMAGECHANNEL
+/* Introduced in IM 6.0.0, GM 1.1 */
+#undef HAVE_ALLCHANNELS
+/* Introduced in IM 6.0.0 */
+#undef HAVE_BILEVELIMAGECHANNEL
+/* Introduced in IM 5.5.7, GM 1.1 */
+#undef HAVE_BLACKTHRESHOLDIMAGE
 /* Introduced in IM 6.0.1 */
 #undef HAVE_BLURIMAGECHANNEL
 /* Introduced in IM 6.2.7 */
 #undef HAVE_COALESCELAYER
+/* Introduced in GM 1.2 */
+#undef HAVE_CINEONLOGRGBCOLORSPACE
 /* Introduced in IM 6.2.6 - Not available in GM */
 #undef HAVE_CLEARMAGICKEXCEPTION
+/* Introduced in IM 6.0.0 */
+#undef HAVE_COLORDODGECOMPOSITEOP
+/* Introduced in IM 6.0.0, GM 1.1 */
+#undef HAVE_COMPAREIMAGECHANNELS
 /* Introduced in IM 6.2.6 */
 #undef HAVE_COMPAREIMAGELAYERS
 /* Introduced in IM 6.2.6 */
 #undef HAVE_COMPOSITEIMAGECHANNEL
 /* Introduced in IM 6.2.6 */
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
+/* Introduced in IM 6.0.1 */
+#undef HAVE_CONVOLVEIMAGECHANNEL
+/* Introduced in IM 6.0.0 */
+#undef HAVE_DSTCOMPOSITEOP
+/* Introduced in IM 6.0.1 */
+#undef HAVE_EVALUATEIMAGECHANNEL
+/* Introduced in GM 1.1 */
+#undef HAVE_EXCEPTIONINFO_MODULE
+/* Introduced in IM 5.5.7, GM 1.1 */
+#undef HAVE_EXPORTIMAGEPIXELS
+/* Introduced in GM 1.0, deprecated in GM 1.1.3 */
+/* Introduced in IM 5.5.2, deprecated in IM 6.0.0 */
+#undef HAVE_EXTENDEDSIGNEDINTEGRALTYPE
+#undef HAVE_EXTENDEDUNSIGNEDINTEGRALTYPE
+/* Introduced in IM 5.5.5 - Not defined in GraphicsMagick */
+#undef HAVE_FUZZYCOLORCOMPARE
 /* Introduced in IM 6.2.0 */
 #undef HAVE_FXIMAGECHANNEL
+/* Introduced in IM 6.0.0, GM 1.1 */
+#undef HAVE_GAMMAIMAGECHANNEL
+/* Introduced in IM 6.0.1 */
+#undef HAVE_GAUSSIANBLURIMAGECHANNEL
+/* Introduced in GM 1.1 */
+#undef HAVE_GETCOLORHISTOGRAM
+/* Introduced in IM 6.0.1 */
+#undef HAVE_GETCOLORINFOLIST
+/* API changed in IM 6.1.3 */
+#undef HAVE_OLD_GETCOLORINFOLIST
+/* Introduced in GM 1.1 */
+#undef HAVE_GETCOLORINFOARRAY
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_GETIMAGECHANNELDEPTH
 /* Introduced in IM 6.0.0, GM 1.1 */
@@ -38,8 +85,16 @@
 #undef HAVE_GETIMAGEPROFILE
 /* Introduced in IM 6.0.0 */
 #undef HAVE_GETIMAGEQUANTUMDEPTH
+/* Introduced in IM 6.0.0, signature changed in 6.0.5 */
+#undef HAVE_OLD_GETIMAGEQUANTUMDEPTH
+/* Introduced in GM 1.1 */
+#undef HAVE_GETIMAGESTATISTICS
+/* Introduced in GM 1.1 */
+#undef HAVE_GETMAGICKINFOARRAY
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETMAGICKINFOLIST
+/* API changed in IM 6.1.3 */
+#undef HAVE_OLD_GETMAGICKINFOLIST
 /* Introduced in IM 6.3.0 */
 #undef HAVE_GETMAGICKPIXELPACKET
 /* Introduced in IM 6.2.5 */
@@ -52,22 +107,64 @@
 #undef HAVE_GETNEXTIMAGEPROFILE
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETTYPEINFOLIST
+/* API changed in IM 6.1.3 */
+#undef HAVE_OLD_GETTYPEINFOLIST
+#undef HAVE_GRAYCHANNEL
+/* Introduced in GM 1.0 */
+#undef HAVE_GRAYSCALEPSEUDOCLASSIMAGE
+/* Introduced in IM 6.0.0 - Not available in GM */
+#undef HAVE_HSBCOLORSPACE
 /* Introduced in IM 6.0.0 - Not available in GM */
 #undef HAVE_INHERITEXCEPTION
+#undef HAVE_INDEXCHANNEL
+/* Introduced in IM 6.2.0 */
+#undef HAVE_IMAGE_BIAS
+/* Introduced in IM 5.5.6 - Not available in GM */
+#undef HAVE_IMAGE_EXTRACT_INFO
+/* Introduced in IM 6.0.0 */
+#undef HAVE_IMAGE_QUALITY
+/* Introduced in IM 6.0.0 */
+#undef HAVE_IMAGE_ORIENTATION
+#undef HAVE_IMAGEINFO_ORIENTATION
+/* Introduced in IM 6.2.4 */
+#undef HAVE_IMAGE_TICKS_PER_SECOND
 /* Introduced in IM 6.2.9 */
 #undef HAVE_IMAGE_TRANSPARENT_COLOR
+/* Introduced in IM 6.2.0? */
+#undef HAVE_IMAGEINFO_CHANNEL
 /* Introduced in IM 5.5.7, GM 1.1 */
 #undef HAVE_IMPORTIMAGEPIXELS
 /* Introduced in IM 6.2.9 */
 #undef HAVE_INTERPOLATEPIXELCOLOR
 /* Introduced in IM 6.2.6-1 */
 #undef HAVE_INTERPRETIMAGEATTRIBUTES
+#undef HAVE_INTTYPES_H
+/* Introduced in IM 6.2.5 */
+#undef HAVE_ISCOLORSIMILAR
 /* Introduced in IM 6.2.8 */
 #undef HAVE_ISIMAGESIMILAR
+/* Introduced in IM 6.2.2 */
+#undef HAVE_JPEG2000COMPRESSION
 /* Introduced in GM 1.2 */
 #undef HAVE_LABCOLORSPACE
 /* Introduced in IM 6.3.1 */
 #undef HAVE_LINEARSTRETCHIMAGE
+/* Introduced in IM 6.2.3 */
+#undef HAVE_LOGCOLORSPACE
+/* Introduced in IM 6.0.2 */
+#undef HAVE_MAGICKBOOLEANTYPE
+/* Introduced in IM 5.5.3, GM 1.0 */
+#undef HAVE_MAGICK_INT64_T
+#undef HAVE_MAGICK_UINT64_T
+/* Introduced in IM 6.0.0 */
+#undef HAVE_MAGICKOFFSETTYPE
+/* Only in ImageMagick */
+#undef HAVE_MAGICKPIXELPACKET
+/* Introduced in IM 6.0.0, GM 1.1 */
+#undef HAVE_MAGICKSIZETYPE
+/* Introduced in IM 6.2.0 */
+#undef HAVE_MAXEVALUATEOPERATOR
+#undef HAVE_MEMORY_H
 /* Introduced in IM 6.0.0, GM 1.1 */
 #undef HAVE_NEGATEIMAGECHANNEL
 /* ColorInfo changed in 6.3.0 */
@@ -86,6 +183,9 @@
 #undef HAVE_POSTERIZEIMAGE
 /* Introduced in IM 5.5.1? Not available in GM */
 #undef HAVE_PREVIEWIMAGE
+#undef HAVE_QUANTUMOPERATORREGIONIMAGE
+/* Introduced in IM 6.2.0 */
+#undef HAVE_QUANTUMPIXEL
 /* Not available in GM */
 #undef HAVE_RADIALBLURIMAGE
 /* Introduced in IM 6.2.4 */
@@ -99,6 +199,9 @@
 #undef HAVE_REC709YCBCRCOLORSPACE
 /* Introduced in IM 6.3.1-3 */
 #undef HAVE_RECOLORIMAGE
+/* Introduced in IM 6.2.1 */
+#undef HAVE_NEW_REMOVEIMAGEPROFILE
+#undef HAVE_REPLACECOMPOSITEOP
 #undef HAVE_SEPARATEIMAGECHANNEL
 /* Introduced in IM 6.2.1 */
 #undef HAVE_SEPIATONEIMAGE
@@ -112,6 +215,8 @@
 /* Introduced in IM 6.2.1 */
 #undef HAVE_SETIMAGEINFOFILE
 #undef HAVE_SETIMAGEOPTION
+/* Introduced in IM 6.3.4 */
+#undef HAVE_SETIMAGEREGISTRY
 /* Introduced in IM 6.1.0 */
 #undef HAVE_SETIMAGEPROGRESSMONITOR
 /* Introduced in IM 6.2.6 */
@@ -126,7 +231,12 @@
 #undef HAVE_SKETCHIMAGE
 #undef HAVE_SNPRINTF
 #undef HAVE_SPLICEIMAGE
+#undef HAVE_STDINT_H
+#undef HAVE_STDLIB_H
+#undef HAVE_STRING_H
+#undef HAVE_STRINGS_H
 #undef HAVE_STRIPIMAGE
+#undef HAVE_SYS_STAT_H
 #undef HAVE_SYS_TYPES_H
 #undef HAVE_THRESHOLDIMAGECHANNEL
 #undef HAVE_TINTIMAGE
@@ -136,6 +246,8 @@
 #undef HAVE_TRANSPOSEIMAGE
 /* Introduced in IM 6.2.8 */
 #undef HAVE_TRANSVERSEIMAGE
+/* Introduced in IM 6.0.0 */
+#undef HAVE_UNDEFINEDGRAVITY
 /* Introduced in IM 6.2.9 */
 #undef HAVE_UNIQUEIMAGECOLORS
 #undef HAVE_UNISTD_H

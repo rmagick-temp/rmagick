@@ -161,7 +161,7 @@ AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChanne
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])
-AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageStorageClass])
+AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageRegistry SetImageStorageClass])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
 AC_CHECK_FUNCS([SigmoidalContrastImageChannel SketchImage SpliceImage StripImage])
 AC_CHECK_FUNCS([ThresholdImageChannel TintImage TransposeImage TransverseImage UniqueImageColors])

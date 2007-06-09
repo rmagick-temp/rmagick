@@ -118,6 +118,7 @@ have_func('snprintf', headers)
    'OrderedPosterizeImageChannel',   # 6.3.0
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3
+   'SetImageRegistry',               # 6.3.4-?
    'SketchImage',                    # 6.2.8
    'TransposeImage',                 # 6.2.8
    'TransverseImage',                # 6.2.8

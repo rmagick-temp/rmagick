@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.51 2007/04/15 23:46:10 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.52 2007/06/09 23:06:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -238,7 +238,7 @@ ImageList_fx(int argc, VALUE *argv, VALUE self)
         raise_ChannelType_error(argv[argc-1]);
     }
 
-    expression = STRING_PTR(argv[0]);
+    expression = StringValuePtr(argv[0]);
 
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
@@ -449,26 +449,26 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
 #endif
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
- 	    case OptimizeTransLayer:
-			new_images = rm_clone_imagelist(images, MagickTrue);
-			OptimizeImageTransparency(new_images, &exception);
+        case OptimizeTransLayer:
+            new_images = rm_clone_imagelist(images, MagickTrue);
+            OptimizeImageTransparency(new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEDUPSLAYER)
-	    case RemoveDupsLayer:
-			new_images = rm_clone_imagelist(images, MagickTrue);
-			RemoveDuplicateLayers(&new_images, &exception);
+        case RemoveDupsLayer:
+            new_images = rm_clone_imagelist(images, MagickTrue);
+            RemoveDuplicateLayers(&new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEZEROLAYER)
-	    case RemoveZeroLayer:
-			new_images = rm_clone_imagelist(images, MagickTrue);
-			RemoveZeroDelayLayers(&new_images, &exception);
+        case RemoveZeroLayer:
+            new_images = rm_clone_imagelist(images, MagickTrue);
+            RemoveZeroDelayLayers(&new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
-	    case CompositeLayer:
-		rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
+        case CompositeLayer:
+        rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
             break;
 #endif
         case OptimizeLayer:
@@ -788,7 +788,7 @@ ImageList_write(VALUE self, VALUE file)
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         // Copy the filename to the Info and to the Image.
-        filename = STRING_PTR_LEN(file, filenameL);
+        filename = rb_str2cstr(file, &filenameL);
         filenameL = min(filenameL, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filenameL);
         info->filename[filenameL] = '\0';

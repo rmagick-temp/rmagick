@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.221 2007/04/01 20:45:25 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.222 2007/06/09 23:07:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -389,7 +389,7 @@ Image_add_profile(VALUE self, VALUE name)
     Data_Get_Struct(self, Image, image);
 
     // ProfileImage issues a warning if something goes wrong.
-    profile_filename = STRING_PTR_LEN(name, profile_filename_l);
+    profile_filename = rb_str2cstr(name, &profile_filename_l);
 
     info = CloneImageInfo(NULL);
     info->client_data= (void *)GetImageProfile(image,"8bim");
@@ -481,7 +481,7 @@ Image_aref(VALUE self, VALUE key_arg)
             break;
 
         default:
-            key = STRING_PTR(key_arg);
+            key = StringValuePtr(key_arg);
             if (*key == '\0')
             {
                 return Qnil;
@@ -520,7 +520,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 
     rm_check_frozen(self);
 
-    attr = attr_arg == Qnil ? NULL : STRING_PTR(attr_arg);
+    attr = attr_arg == Qnil ? NULL : StringValuePtr(attr_arg);
 
     switch (TYPE(key_arg))
     {
@@ -532,7 +532,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
             break;
 
         default:
-            key = STRING_PTR(key_arg);
+            key = StringValuePtr(key_arg);
             if (*key == '\0')
             {
                 return self;
@@ -1451,7 +1451,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 
     Data_Get_Struct(self, Image, image);
     geom_str = rb_funcall(geom_arg, rm_ID_to_s, 0);
-    geometry = STRING_PTR(geom_str);
+    geometry = StringValuePtr(geom_str);
 
     memset(&rect, 0, sizeof(rect));
 
@@ -1803,7 +1803,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    profile_blob = STRING_PTR_LEN(profile, profile_length);
+    profile_blob = rb_str2cstr(profile, &profile_length);
 
     GetExceptionInfo(&exception);
     m = GetMagickInfo(name, &exception);
@@ -2547,7 +2547,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         rb_raise(rb_eArgError, "width and height must be non-zero");
     }
 
-    map = STRING_PTR_LEN(map_arg, map_l);
+    map = rb_str2cstr(map_arg, &map_l);
 
     npixels = (long)(width * height * map_l);
     if (RARRAY(pixels_arg)->len != npixels)
@@ -2988,7 +2988,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
     // Convert the argument to a string
     else
     {
-        density = STRING_PTR(density_arg);
+        density = StringValuePtr(density_arg);
         if (!IsGeometry(density))
         {
             rb_raise(rb_eArgError, "invalid density geometry %s", density);
@@ -3047,7 +3047,7 @@ Image_delete_profile(VALUE self, VALUE name)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    (void) ProfileImage(image, STRING_PTR(name), NULL, 0, MagickTrue);
+    (void) ProfileImage(image, StringValuePtr(name), NULL, 0, MagickTrue);
     rm_check_image_exception(image, RetainOnError);
 
     return self;
@@ -3200,7 +3200,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     y       = NUM2LONG(argv[1]);
     columns = NUM2ULONG(argv[2]);
     rows    = NUM2ULONG(argv[3]);
-    map     = STRING_PTR_LEN(argv[4], mapL);
+    map     = rb_str2cstr(argv[4], &mapL);
     if (argc == 6)
     {
         stg_type = RTEST(argv[5]) ? DoublePixel : QuantumPixel;
@@ -3724,7 +3724,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 5:
-            map   = STRING_PTR(argv[4]);
+            map   = StringValuePtr(argv[4]);
         case 4:
             rows  = NUM2ULONG(argv[3]);
         case 3:
@@ -3809,7 +3809,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
         case 6:
             VALUE_TO_ENUM(argv[5], type, StorageType);
         case 5:
-            map   = STRING_PTR(argv[4]);
+            map   = StringValuePtr(argv[4]);
         case 4:
             rows  = NUM2ULONG(argv[3]);
         case 3:
@@ -3867,7 +3867,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     // Get a pointer to the buffer.
     string = rb_str_new2("");
     (void) rb_str_resize(string, (long)(sz * npixels));
-    str = STRING_PTR(string);
+    str = StringValuePtr(string);
 
     GetExceptionInfo(&exception);
 
@@ -4120,7 +4120,7 @@ Image_format_eq(VALUE self, VALUE magick)
 
     GetExceptionInfo(&exception);
 
-    mgk = STRING_PTR(magick);
+    mgk = StringValuePtr(magick);
     m = GetMagickInfo(mgk, &exception);
     CHECK_EXCEPTION()
 
@@ -4233,7 +4233,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     class = class;          // defeat gcc message
     blob_arg = blob_arg;    // defeat gcc message
 
-    blob = (void *) STRING_PTR_LEN(blob_arg, length);
+    blob = (void *) rb_str2cstr(blob_arg, &length);
 
     // Get a new Info object - run the parm block if supplied
     info_obj = rm_info_new();
@@ -4436,7 +4436,7 @@ Image_geometry_eq(
 
 
     geom_str = rb_funcall(geometry, rm_ID_to_s, 0);
-    geom = STRING_PTR(geom_str);
+    geom = StringValuePtr(geom_str);
     if (!IsGeometry(geom))
     {
         rb_raise(rb_eTypeError, "invalid geometry: %s", geom);
@@ -4630,7 +4630,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             y_off = NUM2LONG(argv[1]);
             cols = NUM2ULONG(argv[2]);
             rows = NUM2ULONG(argv[3]);
-            map = STRING_PTR(argv[4]);
+            map = StringValuePtr(argv[4]);
             pixel_arg = argv[5];
             break;
         default:
@@ -4652,7 +4652,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     // binary pixel data.
     if (rb_respond_to(pixel_arg, rb_intern("to_str")))
     {
-        buffer = (void *)STRING_PTR_LEN(pixel_arg, buffer_l);
+        buffer = (void *)rb_str2cstr(pixel_arg, &buffer_l);
         switch (stg_type)
         {
             case CharPixel:
@@ -5111,7 +5111,7 @@ Image__load(VALUE class, VALUE str)
 
     info = CloneImageInfo(NULL);
 
-    blob = STRING_PTR_LEN(str, length);
+    blob = rb_str2cstr(str, &length);
 
     // Must be as least as big as the 1st 4 fields in DumpedImage
     if (length <= (long)(sizeof(DumpedImage)-MaxTextExtent))
@@ -5654,7 +5654,7 @@ Image_montage_eq(
         image->montage = NULL;
         return self;
     }
-    magick_clone_string(&image->montage, STRING_PTR(montage));
+    magick_clone_string(&image->montage, StringValuePtr(montage));
     return self;
 }
 
@@ -6074,7 +6074,7 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
     {
         if (TYPE(argv[0]) == T_STRING)
         {
-            threshold_map = STRING_PTR(argv[0]);
+            threshold_map = StringValuePtr(argv[0]);
         }
         else
         {
@@ -6527,7 +6527,7 @@ Image_profile_bang(VALUE self, VALUE name, VALUE profile)
     }
     else
     {
-        return set_profile(self, STRING_PTR(name), profile);
+        return set_profile(self, StringValuePtr(name), profile);
     }
 
 }
@@ -6788,8 +6788,8 @@ Image_random_channel_threshold(
 
     Data_Get_Struct(self, Image, image);
 
-    channel = STRING_PTR(channel_arg);
-    thresholds = STRING_PTR(thresholds_arg);
+    channel = StringValuePtr(channel_arg);
+    thresholds = StringValuePtr(thresholds_arg);
 
     new_image = rm_clone_image(image);
 
@@ -6838,7 +6838,7 @@ Image_random_threshold_channel(
 
     // Accept any argument that has a to_s method.
     geom_str = rb_funcall(argv[0], rm_ID_to_s, 0);
-    thresholds = STRING_PTR(geom_str);
+    thresholds = StringValuePtr(geom_str);
 
     new_image = rm_clone_image(image);
 
@@ -6959,7 +6959,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
         // Convert arg to string. If an exception occurs raise an error condition.
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
-        filename = STRING_PTR_LEN(file, filename_l);
+        filename = rb_str2cstr(file, &filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
@@ -7044,7 +7044,7 @@ Image_read_inline(VALUE self, VALUE content)
 
     self = self;    // defeat gcc message
 
-    image_data = STRING_PTR_LEN(content, image_data_l);
+    image_data = rb_str2cstr(content, &image_data_l);
 
     // Search for a comma. If found, we'll set the start of the
     // image data just following the comma. Otherwise we'll assume
@@ -7299,7 +7299,7 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 2:
-            arrow = STRING_PTR_LEN(argv[1], arrow_l);
+            arrow = rb_str2cstr(argv[1], &arrow_l);
             if (arrow_l != 1 || (*arrow != '<' && *arrow != '>'))
             {
                 rb_raise(rb_eArgError, "second argument must be '<' or '>', '%s' given", arrow);
@@ -9579,7 +9579,7 @@ Image_write(VALUE self, VALUE file)
         // Convert arg to string. If an exception occurs raise an error condition.
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
-        filename = STRING_PTR_LEN(file, filename_l);
+        filename = rb_str2cstr(file, &filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';

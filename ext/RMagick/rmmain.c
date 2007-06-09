@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.190 2007/04/15 23:46:10 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.191 2007/06/09 23:06:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -212,7 +212,7 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
             break;
 
         default:
-            str = STRING_PTR(resource);
+            str = StringValuePtr(resource);
             if (*str == '\0')
             {
                 return class;
@@ -267,7 +267,7 @@ monitor_handler(
 
     exception = exception;  // defeat "never referenced" message from icc
 
-    if (rb_cvar_defined(Module_Magick, Magick_Monitor))
+    if (rb_cvar_defined(Module_Magick, Magick_Monitor) == Qtrue)
     {
         args[0] = rb_str_new2(text);
         // Convert these possibly-64-bit types to 32-bit types that
@@ -352,7 +352,7 @@ Magick_set_log_event_mask(int argc, VALUE *argv, VALUE class)
     }
     for (x = 0; x < argc; x++)
     {
-        (void) SetLogEventMask(STRING_PTR(argv[x]));
+        (void) SetLogEventMask(StringValuePtr(argv[x]));
     }
     return class;
 }
@@ -374,7 +374,7 @@ Magick_set_log_event_mask(int argc, VALUE *argv, VALUE class)
 static VALUE
 Magick_set_log_format(VALUE class, VALUE format)
 {
-    SetLogFormat(STRING_PTR(format));
+    SetLogFormat(StringValuePtr(format));
     return class;
 }
 
@@ -420,6 +420,7 @@ Init_RMagick(void)
     rm_ID_new              = rb_intern("new");
     rm_ID_push             = rb_intern("push");
     rm_ID_spaceship        = rb_intern("<=>");
+    rm_ID__tmpnam_         = rb_intern("_tmpnam_");
     rm_ID_to_i             = rb_intern("to_i");
     rm_ID_to_s             = rb_intern("to_s");
     rm_ID_values           = rb_intern("values");
@@ -1324,20 +1325,21 @@ Init_RMagick(void)
         ENUMERATOR(OptimizeLayer)
         ENUMERATOR(OptimizePlusLayer)
 #if defined(HAVE_ENUM_COALESCELAYER)
+        // Introduced in IM 6.2.7-0
         ENUMERATOR(CoalesceLayer)
         ENUMERATOR(DisposeLayer)
 #endif
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
-	    ENUMERATOR(OptimizeTransLayer)
+        ENUMERATOR(OptimizeTransLayer)
 #endif
 #if defined(HAVE_ENUM_REMOVEDUPSLAYER)
-	    ENUMERATOR(RemoveDupsLayer)
+        ENUMERATOR(RemoveDupsLayer)
 #endif
 #if defined(HAVE_ENUM_REMOVEZEROLAYER)
-	    ENUMERATOR(RemoveZeroLayer)
+        ENUMERATOR(RemoveZeroLayer)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
-	    ENUMERATOR(CompositeLayer)
+        ENUMERATOR(CompositeLayer)
 #endif
     END_ENUM
 
@@ -1640,12 +1642,12 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/04/15 23:46:10 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/09 23:06:35 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"
         "Email: rmagick@rubyforge.org\n",
-        Q(RMAGIC_VERSION_STRING), mgk_version, Q(RUBY_VERSION_STRING));
+        Q(RMAGICK_VERSION_STRING), mgk_version, Q(RUBY_VERSION_STRING));
 
     str = rb_str_new2(long_version);
     (void) rb_obj_freeze(str);

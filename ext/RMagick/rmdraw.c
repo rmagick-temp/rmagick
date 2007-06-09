@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.50 2007/04/13 00:14:54 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.51 2007/06/09 23:03:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -75,7 +75,7 @@ Draw_density_eq(VALUE self, VALUE density)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->density, STRING_PTR(density));
+    magick_clone_string(&draw->info->density, StringValuePtr(density));
 
     return self;
 }
@@ -91,7 +91,7 @@ Draw_encoding_eq(VALUE self, VALUE encoding)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->encoding, STRING_PTR(encoding));
+    magick_clone_string(&draw->info->encoding, StringValuePtr(encoding));
 
     return self;
 }
@@ -153,7 +153,7 @@ Draw_font_eq(VALUE self, VALUE font)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->font, STRING_PTR(font));
+    magick_clone_string(&draw->info->font, StringValuePtr(font));
 
     return self;
 }
@@ -169,7 +169,7 @@ Draw_font_family_eq(VALUE self, VALUE family)
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    magick_clone_string(&draw->info->family, STRING_PTR(family));
+    magick_clone_string(&draw->info->family, StringValuePtr(family));
 
     return self;
 }
@@ -487,7 +487,7 @@ VALUE Draw_annotate(
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Translate & store in Draw structure
-    draw->info->text = InterpretImageAttributes(NULL, image, STRING_PTR(text));
+    draw->info->text = InterpretImageAttributes(NULL, image, StringValuePtr(text));
     if (!draw->info->text)
     {
            rb_raise(rb_eArgError, "no text");
@@ -689,7 +689,7 @@ Draw_draw(VALUE self, VALUE image_arg)
     Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Point the DrawInfo structure at the current set of primitives.
-    magick_clone_string(&(draw->info->primitive), STRING_PTR(draw->primitives));
+    magick_clone_string(&(draw->info->primitive), StringValuePtr(draw->primitives));
 
     (void) DrawImage(image, draw->info);
     rm_check_image_exception(image, RetainOnError);
@@ -1019,7 +1019,7 @@ Montage_filename_eq(VALUE self, VALUE filename)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    strncpy(montage->info->filename, STRING_PTR(filename), MaxTextExtent-1);
+    strncpy(montage->info->filename, StringValuePtr(filename), MaxTextExtent-1);
     return self;
 }
 
@@ -1047,7 +1047,7 @@ Montage_font_eq(VALUE self, VALUE font)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    magick_clone_string(&montage->info->font, STRING_PTR(font));
+    magick_clone_string(&montage->info->font, StringValuePtr(font));
 
     return self;
 }
@@ -1067,7 +1067,7 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
 
     Data_Get_Struct(self, Montage, montage);
     frame = rb_funcall(frame_arg, rm_ID_to_s, 0);
-    magick_clone_string(&montage->info->frame, STRING_PTR(frame));
+    magick_clone_string(&montage->info->frame, StringValuePtr(frame));
 
     return self;
 }
@@ -1084,7 +1084,7 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
 
     Data_Get_Struct(self, Montage, montage);
     geometry = rb_funcall(geometry_arg, rm_ID_to_s, 0);
-    magick_clone_string(&montage->info->geometry, STRING_PTR(geometry));
+    magick_clone_string(&montage->info->geometry, StringValuePtr(geometry));
 
     return self;
 }
@@ -1280,7 +1280,7 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
 
     Data_Get_Struct(self, Montage, montage);
     tile = rb_funcall(tile_arg, rm_ID_to_s, 0);
-    magick_clone_string(&montage->info->tile, STRING_PTR(tile));
+    magick_clone_string(&montage->info->tile, StringValuePtr(tile));
 
     return self;
 }
@@ -1295,7 +1295,7 @@ Montage_title_eq(VALUE self, VALUE title)
     Montage *montage;
 
     Data_Get_Struct(self, Montage, montage);
-    magick_clone_string(&montage->info->title, STRING_PTR(title));
+    magick_clone_string(&montage->info->title, StringValuePtr(title));
     return self;
 }
 
@@ -1434,7 +1434,7 @@ get_type_metrics(
      switch (argc)
      {
          case 1:                   // use default image
-             text = STRING_PTR_LEN(argv[0], text_l);
+             text = rb_str2cstr(argv[0], &text_l);
 
              for (x = 0; x < text_l; x++)
              {
@@ -1460,7 +1460,7 @@ get_type_metrics(
              break;
          case 2:
              Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
-             text = STRING_PTR_LEN(argv[1], text_l);
+             text = rb_str2cstr(argv[1], &text_l);
              break;                  // okay
          default:
              rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);

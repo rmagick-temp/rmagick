@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.59 2007/04/01 13:31:55 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.60 2007/06/09 23:08:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -51,7 +51,7 @@ set_option(VALUE self, const char *key, VALUE string)
     }
     else
     {
-        value = STRING_PTR(string);
+        value = StringValuePtr(string);
         (void) SetImageOption(info, key, value);
     }
     return self;
@@ -80,7 +80,7 @@ static VALUE set_color_option(VALUE self, const char *option, VALUE color)
     else
     {
         GetExceptionInfo(&exception);
-        name = STRING_PTR(color);
+        name = StringValuePtr(color);
         okay = QueryColorDatabase(name, &pp, &exception);
         (void) DestroyExceptionInfo(&exception);
         if (!okay)
@@ -121,8 +121,8 @@ Info_aref(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 2:
-            format_p = STRING_PTR_LEN(argv[0], format_l);
-            key_p = STRING_PTR_LEN(argv[1], key_l);
+            format_p = rb_str2cstr(argv[0], &format_l);
+            key_p = rb_str2cstr(argv[1], &key_l);
             if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent-1)
             {
                 rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
@@ -132,7 +132,7 @@ Info_aref(int argc, VALUE *argv, VALUE self)
             break;
 
         case 1:
-            strncpy(fkey, STRING_PTR(argv[0]), sizeof(fkey)-1);
+            strncpy(fkey, StringValuePtr(argv[0]), sizeof(fkey)-1);
             fkey[sizeof(fkey)-1] = '\0';
             break;
 
@@ -180,8 +180,8 @@ Info_aset(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            format_p = STRING_PTR_LEN(argv[0], format_l);
-            key_p = STRING_PTR_LEN(argv[1], key_l);
+            format_p = rb_str2cstr(argv[0], &format_l);
+            key_p = rb_str2cstr(argv[1], &key_l);
 
             if (format_l > MAX_FORMAT_LEN || format_l+key_l > MaxTextExtent-1)
             {
@@ -194,7 +194,7 @@ Info_aset(int argc, VALUE *argv, VALUE self)
             break;
 
         case 2:
-            strncpy(ckey, STRING_PTR(argv[0]), sizeof(ckey)-1);
+            strncpy(ckey, StringValuePtr(argv[0]), sizeof(ckey)-1);
             ckey[sizeof(ckey)-1] = '\0';
 
             value = argv[1];
@@ -213,7 +213,7 @@ Info_aset(int argc, VALUE *argv, VALUE self)
     {
         /* Allow any argument that supports to_s */
         value = rb_funcall(value, rm_ID_to_s, 0);
-        value_p = STRING_PTR(value);
+        value_p = StringValuePtr(value);
 
         (void) RemoveImageOption(info, ckey);
         okay = SetImageOption(info, ckey, value_p);
@@ -257,7 +257,7 @@ Info_authenticate_eq(VALUE self, VALUE passwd)
 
     if (!NIL_P(passwd))
     {
-        passwd_p = STRING_PTR_LEN(passwd, passwd_len);
+        passwd_p = rb_str2cstr(passwd, &passwd_len);
     }
 
     if (info->authenticate)
@@ -442,10 +442,10 @@ Info_define(int argc, VALUE *argv, VALUE self)
         case 3:
             /* Allow any argument that supports to_s */
             fmt_arg = rb_funcall(argv[2], rm_ID_to_s, 0);
-            value = STRING_PTR(fmt_arg);
+            value = StringValuePtr(fmt_arg);
         case 2:
-            key = STRING_PTR_LEN(argv[1], key_l);
-            format = STRING_PTR_LEN(argv[0], format_l);
+            key = rb_str2cstr(argv[1], &key_l);
+            format = rb_str2cstr(argv[0], &format_l);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
@@ -566,7 +566,7 @@ Info_density_eq(VALUE self, VALUE density_arg)
     }
 
     density = rb_funcall(density_arg, rm_ID_to_s, 0);
-    dens = STRING_PTR(density);
+    dens = StringValuePtr(density);
     if (!IsGeometry(dens))
     {
         rb_raise(rb_eArgError, "invalid density geometry: %s", dens);
@@ -731,7 +731,7 @@ Info_extract_eq(VALUE self, VALUE extract_arg)
     }
 
     extract = rb_funcall(extract_arg, rm_ID_to_s, 0);
-    extr = STRING_PTR(extract);
+    extr = StringValuePtr(extract);
     if (!IsGeometry(extr))
     {
         rb_raise(rb_eArgError, "invalid extract geometry: %s", extr);
@@ -790,14 +790,14 @@ Info_filename_eq(VALUE self, VALUE filename)
     Data_Get_Struct(self, Info, info);
 
     // Allow "nil" - remove current filename
-    if (NIL_P(filename) || STRING_PTR(filename) == NULL)
+    if (NIL_P(filename) || StringValuePtr(filename) == NULL)
     {
         info->filename[0] = '\0';
     }
     else
     {
         // Otherwise copy in filename
-        fname = STRING_PTR(filename);
+        fname = StringValuePtr(filename);
         strncpy(info->filename, fname, MaxTextExtent);
     }
     return self;
@@ -840,14 +840,14 @@ Info_font_eq(VALUE self, VALUE font_arg)
     char *font;
 
     Data_Get_Struct(self, Info, info);
-    if (NIL_P(font_arg) || STRING_PTR(font_arg) == NULL)
+    if (NIL_P(font_arg) || StringValuePtr(font_arg) == NULL)
     {
         magick_free(info->font);
         info->font = NULL;
     }
     else
     {
-        font = STRING_PTR(font_arg);
+        font = StringValuePtr(font_arg);
         magick_clone_string(&info->font, font);
     }
     return self;
@@ -892,7 +892,7 @@ Info_format_eq(VALUE self, VALUE magick)
 
     GetExceptionInfo(&exception);
 
-    mgk = STRING_PTR(magick);
+    mgk = StringValuePtr(magick);
     m = GetMagickInfo(mgk, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
@@ -1226,7 +1226,7 @@ Info_origin_eq(VALUE self, VALUE origin_arg)
     }
 
     origin_str = rb_funcall(origin_arg, rm_ID_to_s, 0);
-    origin = GetPageGeometry(STRING_PTR(origin_str));
+    origin = GetPageGeometry(StringValuePtr(origin_str));
 
     if (IsGeometry(origin) == MagickFalse)
     {
@@ -1269,7 +1269,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     geom_str = rb_funcall(page_arg, rm_ID_to_s, 0);
-    geometry=GetPageGeometry(STRING_PTR(geom_str));
+    geometry=GetPageGeometry(StringValuePtr(geom_str));
     if (*geometry == '\0')
     {
         magick_free(info->page);
@@ -1277,7 +1277,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     magick_clone_string(&info->page, geometry);
-    (void) SetImageOption(info, "page", STRING_PTR(geom_str));
+    (void) SetImageOption(info, "page", StringValuePtr(geom_str));
 
     return self;
 }
@@ -1317,7 +1317,7 @@ Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
 
     if (!NIL_P(sampling_factor))
     {
-        sampling_factor_p = STRING_PTR_LEN(sampling_factor, sampling_factor_len);
+        sampling_factor_p = rb_str2cstr(sampling_factor, &sampling_factor_len);
     }
 
     if (info->sampling_factor)
@@ -1427,14 +1427,14 @@ Info_server_name_eq(VALUE self, VALUE server_arg)
     char *server;
 
     Data_Get_Struct(self, Info, info);
-    if (NIL_P(server_arg) || STRING_PTR(server_arg) == NULL)
+    if (NIL_P(server_arg) || StringValuePtr(server_arg) == NULL)
     {
         magick_free(info->server_name);
         info->server_name = NULL;
     }
     else
     {
-        server = STRING_PTR(server_arg);
+        server = StringValuePtr(server_arg);
         magick_clone_string(&info->server_name, server);
     }
     return self;
@@ -1465,7 +1465,7 @@ Info_size_eq(VALUE self, VALUE size_arg)
     }
 
     size = rb_funcall(size_arg, rm_ID_to_s, 0);
-    sz = STRING_PTR(size);
+    sz = StringValuePtr(size);
     if (!IsGeometry(sz))
     {
         rb_raise(rb_eArgError, "invalid size geometry: %s", sz);
@@ -1597,8 +1597,8 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     long format_l, key_l;
     char fkey[MaxTextExtent];
 
-    format_p = STRING_PTR_LEN(format, format_l);
-    key_p = STRING_PTR_LEN(key, key_l);
+    format_p = rb_str2cstr(format, &format_l);
+    key_p = rb_str2cstr(key, &key_l);
 
     if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
     {
@@ -1679,14 +1679,14 @@ Info_view_eq(VALUE self, VALUE view_arg)
 
     Data_Get_Struct(self, Info, info);
 
-    if (NIL_P(view_arg) || STRING_PTR(view_arg) == NULL)
+    if (NIL_P(view_arg) || StringValuePtr(view_arg) == NULL)
     {
        magick_free(info->view);
        info->view = NULL;
     }
     else
     {
-        view = STRING_PTR(view_arg);
+        view = StringValuePtr(view_arg);
         magick_clone_string(&info->view, view);
     }
     return self;

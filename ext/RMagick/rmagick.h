@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.178 2007/04/15 23:47:34 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.179 2007/06/09 23:02:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -49,17 +49,9 @@
 #endif
 
 // For quoting preprocessor symbols
-#define Q(q) #q
+#define Q2(q) #q
+#define Q(q) Q2(q)
 
-// Define a version of StringValuePtr that works in both 1.6 and 1.8.
-#if !defined(StringValuePtr)
-#define STRING_PTR(v) rm_string_value_ptr(&(v))
-#else
-#define STRING_PTR(v) StringValuePtr(v)
-#endif
-
-// Safe replacement for rb_str2cstr
-#define STRING_PTR_LEN(v,l) rm_string_value_ptr_len(&(v), &(l))
 
 // Trace new image creation in bang methods
 #define UPDATE_DATA_PTR(_obj_, _new_) \
@@ -288,6 +280,7 @@ EXTERN ID rm_ID_notify_observers;  // "notify_observers"
 EXTERN ID rm_ID_new;               // "new"
 EXTERN ID rm_ID_push;              // "push"
 EXTERN ID rm_ID_spaceship;         // "<=>
+EXTERN ID rm_ID__tmpnam_;          // "_tmpnam_"
 EXTERN ID rm_ID_to_i;              // "to_i"
 EXTERN ID rm_ID_to_s;              // "to_s"
 EXTERN ID rm_ID_values;            // "values"

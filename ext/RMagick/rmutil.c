@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.111 2007/04/15 23:46:55 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.112 2007/06/09 23:09:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -67,57 +67,6 @@ void *magick_realloc(void *ptr, const size_t size)
 void magick_clone_string(char **new_str, const char *str)
 {
     (void) CloneString(new_str, str);
-}
-
-
-
-/*
-    Extern:     rm_string_value_ptr(VALUE*)
-    Purpose:    emulate Ruby 1.8's rb_string_value_ptr
-    Notes:      This is essentially 1.8's rb_string_value_ptr
-                with a few minor changes to make it work in 1.6.
-                Always called via STRING_PTR
-*/
-#if !defined StringValuePtr
-char *
-rm_string_value_ptr(volatile VALUE *ptr)
-{
-    volatile VALUE s = *ptr;
-
-    // If VALUE is not a string, call to_str on it
-    if (TYPE(s) != T_STRING)
-    {
-       s = rb_str_to_str(s);
-       *ptr = s;
-    }
-    // If ptr == NULL, allocate a 1 char array
-    if (!RSTRING(s)->ptr)
-    {
-        RSTRING(s)->ptr = ALLOC_N(char, 1);
-        (RSTRING(s)->ptr)[0] = 0;
-        RSTRING(s)->orig = 0;
-    }
-    return RSTRING(s)->ptr;
-}
-#endif
-
-/*
-    Extern:     rm_string_value_ptr_len
-    Purpose:    safe replacement for rb_str2cstr
-    Returns:    stores string length in 2nd arg, returns ptr to C string
-    Notes:      Uses rb/rm_string_value_ptr to ensure correct String
-                argument.
-                Always called via STRING_PTR_LEN
-*/
-char *rm_string_value_ptr_len(volatile VALUE *ptr, long *len)
-{
-    volatile VALUE v = *ptr;
-    char *str;
-
-    str = STRING_PTR(v);
-    *ptr = v;
-    *len = RSTRING(v)->len;
-    return str;
 }
 
 
@@ -229,7 +178,7 @@ rm_percentage(VALUE arg)
     if (not_num)
     {
         arg = rb_rescue(rb_str_to_str, arg, rescue_not_str, arg);
-        pct_str = STRING_PTR(arg);
+        pct_str = StringValuePtr(arg);
         errno = 0;
         pct_long = strtol(pct_str, &end, 10);
         if (errno == ERANGE)
@@ -312,7 +261,7 @@ double rm_str_to_pct(VALUE str)
     char *pct_str, *end;
 
     str = rb_rescue(rb_str_to_str, str, rescue_not_str, str);
-    pct_str = STRING_PTR(str);
+    pct_str = StringValuePtr(str);
     errno = 0;
     pct = strtol(pct_str, &end, 10);
 
@@ -354,7 +303,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
     {
         // Convert to string, issue error message if failure.
         fuzz_arg = rb_rescue(rb_str_to_str, fuzz_arg, rescue_not_str, fuzz_arg);
-        fuzz_str = STRING_PTR(fuzz_arg);
+        fuzz_str = StringValuePtr(fuzz_arg);
         errno = 0;
         fuzz = strtod(fuzz_str, &end);
         if (errno == ERANGE)
@@ -496,13 +445,13 @@ Pixel_from_color(VALUE class, VALUE name)
     class = class;      // defeat "never referenced" message from icc
 
     GetExceptionInfo(&exception);
-    okay = QueryColorDatabase(STRING_PTR(name), &pp, &exception);
+    okay = QueryColorDatabase(StringValuePtr(name), &pp, &exception);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
 
     if (!okay)
     {
-        rb_raise(rb_eArgError, "invalid color name: %s", STRING_PTR(name));
+        rb_raise(rb_eArgError, "invalid color name: %s", StringValuePtr(name));
     }
 
     return Pixel_from_PixelPacket(&pp);
@@ -1052,7 +1001,7 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
-    name = STRING_PTR(name_arg);
+    name = StringValuePtr(name_arg);
     okay = QueryColorDatabase(name, color, &exception);
     (void) DestroyExceptionInfo(&exception);
     if (!okay)
@@ -1760,7 +1709,7 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
-        (void) CloneString((char **)&(ci->name), STRING_PTR(m));
+        (void) CloneString((char **)&(ci->name), StringValuePtr(m));
     }
     m = rb_ary_entry(members, 1);
     if (m != Qnil)
@@ -2215,17 +2164,17 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
     m = rb_ary_entry(members, 0);
     if (m != Qnil)
     {
-        (void) CloneString((char **)&(ti->name), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->name), StringValuePtr(m));
     }
     m = rb_ary_entry(members, 1);
     if (m != Qnil)
     {
-        (void) CloneString((char **)&(ti->description), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->description), StringValuePtr(m));
     }
     m = rb_ary_entry(members, 2);
     if (m != Qnil)
     {
-        (void) CloneString((char **)&(ti->family), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->family), StringValuePtr(m));
     }
     m = rb_ary_entry(members, 3); ti->style   = m == Qnil ? 0 : FIX2INT(m);
     m = rb_ary_entry(members, 4); ti->stretch = m == Qnil ? 0 : FIX2INT(m);
@@ -2233,13 +2182,13 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
 
     m = rb_ary_entry(members, 6);
     if (m != Qnil)
-        (void) CloneString((char **)&(ti->encoding), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->encoding), StringValuePtr(m));
     m = rb_ary_entry(members, 7);
     if (m != Qnil)
-        (void) CloneString((char **)&(ti->foundry), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->foundry), StringValuePtr(m));
     m = rb_ary_entry(members, 8);
     if (m != Qnil)
-        (void) CloneString((char **)&(ti->format), STRING_PTR(m));
+        (void) CloneString((char **)&(ti->format), StringValuePtr(m));
 }
 
 
@@ -2765,6 +2714,44 @@ StyleType_name(StyleType style)
 void
 rm_write_temp_image(Image *image, char *tmpnam)
 {
+
+#if defined(HAVE_SETIMAGEREGISTRY)
+    MagickBooleanType okay;
+    ExceptionInfo exception;
+    volatile VALUE id_value;
+    int id;
+
+    GetExceptionInfo(&exception);
+
+
+    // 'id' is always the value of its previous use
+    if (rb_cvar_defined(Module_Magick, rm_ID__tmpnam_) == Qtrue)
+    {
+        id_value = rb_cvar_get(Module_Magick, rm_ID__tmpnam_);
+        id = FIX2INT(id_value);
+    }
+    else
+    {
+        id = 0;
+        rb_define_class_variable(Module_Magick, "@@__tmpnam__", INT2FIX(id));
+    }
+
+    id += 1;
+    rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id), 0);
+
+    sprintf(tmpnam, "mpri:%d", id);
+
+    // Omit "mpri:" from filename to form the key
+    okay = SetImageRegistry(ImageRegistryType, tmpnam+5, image, &exception);
+    CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "SetImageRegistry failed.");
+    }
+
+#else
+
     long registry_id;
 
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
@@ -2775,6 +2762,8 @@ rm_write_temp_image(Image *image, char *tmpnam)
     }
 
     sprintf(tmpnam, "mpri:%ld", registry_id);
+#endif
+
 }
 
 /*

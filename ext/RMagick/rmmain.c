@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.159.2.1 2007/03/04 00:05:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.159.2.2 2007/06/09 16:45:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -463,7 +463,7 @@ monitor_handler(
 
     exception = exception;  // defeat "never referenced" message from icc
 
-    if (rb_cvar_defined(Module_Magick, Magick_Monitor))
+    if (rb_cvar_defined(Module_Magick, Magick_Monitor) == Qtrue)
     {
         args[0] = rb_str_new2(text);
         // Convert these possibly-64-bit types to 32-bit types that
@@ -622,6 +622,7 @@ Init_RMagick(void)
     rm_ID_new              = rb_intern("new");
     rm_ID_push             = rb_intern("push");
     rm_ID_spaceship        = rb_intern("<=>");
+    rm_ID__tmpnam_         = rb_intern("@@_tmpnam_");
     rm_ID_to_s             = rb_intern("to_s");
     rm_ID_values           = rb_intern("values");
     rm_ID_width            = rb_intern("width");
@@ -1936,7 +1937,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/03/04 00:05:36 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/09 16:45:25 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

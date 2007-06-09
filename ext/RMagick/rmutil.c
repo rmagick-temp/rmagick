@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90.2.2 2007/03/04 00:05:37 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.3 2007/06/09 16:45:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2928,6 +2928,45 @@ StyleType_name(StyleType style)
 void
 rm_write_temp_image(Image *image, char *tmpnam)
 {
+
+#if defined(HAVE_SETIMAGEREGISTRY)
+    MagickBooleanType okay;
+    ExceptionInfo exception;
+    volatile VALUE id_value;
+    int id;
+
+    GetExceptionInfo(&exception);
+
+
+    // 'id' is always the value of its previous use
+    if (rb_cvar_defined(Module_Magick, rm_ID__tmpnam_) == Qtrue)
+    {
+        id_value = rb_cvar_get(Module_Magick, rm_ID__tmpnam_);
+        id = FIX2INT(id_value);
+    }
+    else
+    {
+        id = 0;
+        rb_define_class_variable(Module_Magick, "@@__tmpnam__", INT2FIX(id));
+    }
+
+    id += 1;
+    RUBY16(rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id));)
+    RUBY18(rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id), 0);)
+
+    sprintf(tmpnam, "mpri:%d", id);
+
+    // Omit "mpri:" from filename to form the key
+    okay = SetImageRegistry(ImageRegistryType, tmpnam+5, image, &exception);
+    CHECK_EXCEPTION()
+    DestroyExceptionInfo(&exception);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "SetImageRegistry failed.");
+    }
+
+#else
+
     long registry_id;
 
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
@@ -2936,8 +2975,9 @@ rm_write_temp_image(Image *image, char *tmpnam)
     {
         rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
     }
-
     sprintf(tmpnam, "mpri:%ld", registry_id);
+#endif
+
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152.2.3 2007/03/31 13:43:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.4 2007/06/09 16:44:30 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -357,6 +357,7 @@ EXTERN ID rm_ID_notify_observers;  // "notify_observers"
 EXTERN ID rm_ID_new;               // "new"
 EXTERN ID rm_ID_push;              // "push"
 EXTERN ID rm_ID_spaceship;         // "<=>
+EXTERN ID rm_ID__tmpnam_;          // "_tmpnam"
 EXTERN ID rm_ID_to_s;              // "to_s"
 EXTERN ID rm_ID_values;            // "values"
 EXTERN ID rm_ID_width;             // "width"

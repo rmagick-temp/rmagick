@@ -1375,76 +1375,132 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     the <code>-layers</code> option in ImageMagick's
     <code>mogrify</code> command.</p>
 
-    <p>With the CompareAnyLayer, CompareClearLayer, and
-    CompareOverlayLayer arguments, <code>optimize_layers</code>
-    <span class="imquote">compares each image with the next in a
-    sequence and returns the minimum bounding region of all the
-    pixel differences (of the <code>LayerMethod</code> specified)
-    it discovers.</span></p>
-
-    <p class="imquote">The images in the list <span class=
-    "imquote">do NOT have to be the same size, though it is best
-    that all the images are fully 'coalesced' (images are all the
-    same size, on a flattened canvas, and represent how an specific
-    frame should look is animatated)</span></p>
-
-    <p class="imquote">If images are not the same size as the page
-    canvas size of first image, then it is alpha composed using
-    'Copy' onto the previous frame compared. That is the
-    differences only within the overlay area are looked at.</p>
-
-    <p class="imquote">No dispose methods are applied, though this
-    does not matter for animations which are a fully coalesced
-    sequence of images.</p>
-
-    <p>With OptimizeLayer, <code>optimize_layers</code>
-    <span class="imquote">compares each image the GIF disposed
-    forms of the previous image in the sequence. From this it
-    attempts to select the smallest cropped image to replace each
-    frame, while preserving the results of the
-    animation.</span></p>
-
-    <p>OptimizePlusLayer is the same as OptimizeLayers,
-    <span class="imquote">but may also add or even remove extra
-    frames in the animation, if it improves the total number of
-    pixels in the resulting GIF animation.</span></p>
-
-    <p>With DisposeLayer, <code>optimize_layers</code> <span class=
-    "imquote">returns the coalesced frames of a GIF animation as it
-    would appear after the GIF dispose method of that frame has
-    been applied. That is it returns the appearance of each frame
-    before the next is overlaid.</span></p>
-
     <p>The <code>optimize_layers</code> method corresponds to the
     <code>-layers</code> option on ImageMagick's
     <code>convert</code> and <code>mogrify</code> commands. Anthony
     Thyssen's excellent <a href=
-    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6">Examples
-    of ImageMagick Usage</a> site has very detailed <a href=
-    "http://www.cit.gu.edu.au/~anthony/graphics/imagick6/anim_basics/#optimize">
-    information and examples</a> of the <code>-layers</code> option
-    and and the optimization methods .</p>
+    "http://www.imagemagick.org/Usage/">Examples of ImageMagick
+    Usage</a> site has very detailed <a href=
+    "http://www.imagemagick.org/Usage/anim_opt/">information and
+    examples</a> of the <code>-layers</code> option and and the
+    optimization methods .</p>
 
     <h4>Arguments</h4>
 
-    <p>One of the following <code>MagickLayerMethod</code>
-    values:</p>
+    <p>One of the following MagickLayerMethod enum values:</p>
 
-    <ul>
-      <li>CoalesceLayer</li>
+    <dl>
+      <dt>CompareAnyLayer</dt>
 
-      <li>CompareAnyLayer</li>
+      <dd class="imquote">Crop the second and later frames to the
+      smallest rectangle that contains all the differences between
+      the two images. No GIF disposal methods are taken into
+      account. This is exactly the same as [<a href=
+      "#deconstruct">deconstruct</a>], and does not preserve a
+      animation's normal working, especially when a animation used
+      GIF disposal methods such as 'Previous' or 'Background'.</dd>
 
-      <li>CompareClearLayer</li>
+      <dt>CompareClearLayer</dt>
 
-      <li>CompareOverlayLayer</li>
+      <dd class="imquote">As [CompareAnyLayer] but crop to the
+      bounds of any opaque pixels which become transparent in the
+      second frame. That is the smallest image needed to mask or
+      erase pixels for the next frame.</dd>
 
-      <li>DisposeLayer</li>
+      <dt>CompareOverlayLayer</dt>
 
-      <li>OptimizeLayer</li>
+      <dd class="imquote">As [CompareAnyLayer] but crop to pixels
+      that add extra color to the next image, as a result of
+      overlaying color pixels. That is the smallest single overlaid
+      image to add or change colors. This can, be used with the
+      -compose alpha composition method 'change-mask', to reduce
+      the image to just the pixels that need to be overlaid.</dd>
 
-      <li>OptimizePlusLayer</li>
-    </ul>
+      <dt>OptimizeLayer</dt>
+
+      <dd class="imquote">Optimize a coalesced animation into GIF
+      animation using a number of general techniques. This is
+      currently a short cut to apply both the [OptimizeImageLayer]
+      and [OptimizeTransLayer] methods but will expand to include
+      other methods.</dd>
+
+      <dt>OptimizeImageLayer</dt>
+
+      <dd class="imquote">Optimize a coalesced animation into GIF
+      animation by reducing the number of pixels per frame as much
+      as possible by attempting to pick the best GIF disposal
+      method to use, while ensuring the result will continue to
+      animate properly. There is no guarantee that the best
+      optimization will be found. But then no reasonably fast GIF
+      optimization algorithm can do this. However this does seem to
+      do better than most other GIF frame optimizers seen.</dd>
+
+      <dt>OptimizePlusLayer</dt>
+
+      <dd class="imquote">As [OptimizeImageLayer] but attempt to
+      improve the overall optimization by adding extra frames to
+      the animation, without changing the final look or timing of
+      the animation. The frames are added to attempt to separate
+      the clearing of pixels from the overlaying of new additional
+      pixels from one animation frame to the next. If this does not
+      improve the optimization (for the next frame only), it will
+      fall back to the results of the previous normal
+      [OptimizeImageLayer] technique. There is the possibility that the
+      change in the disposal style will result in a worsening in
+      the optimization of later frames, though this is unlikely. In
+      other words there no guarantee that it is better than the
+      normal 'optimize-frame' technique.</dd>
+
+      <dt>CoalesceLayer</dt>
+
+      <dd class="imquote">Equivalent to [<a href=
+      "#coalesce">coalesce</a>]. Apply the GIF disposal methods set
+      in the current image sequence to form a fully defined
+      animation sequence without, as it should be displayed.
+      Effectively converting a GIF animation into a 'film strip'
+      like animation.</dd>
+
+      <dt>DisposeLayer</dt>
+
+      <dd class="imquote">This is like [CoalesceLayer] but shows
+      the look of the animation after the GIF disposal method has
+      been applied, before the next sub-frame image is overlaid.
+      That is the 'dispose' image that results from the application
+      of the GIF disposal method. This allows you to check what is
+      going wrong with a particular animation you may be
+      developing.</dd>
+
+      <dt>OptimizeTransLayer</dt>
+
+      <dd class="imquote">Given a GIF animation, replace any pixel
+      in the sub-frame overlay images with transparency, if it does
+      not change the resulting animation by more than the current
+      fuzz factor. This should allow a existing frame optimized GIF
+      animation to compress into a smaller file size due to larger
+      areas of one (transparent) color rather than a pattern of
+      multiple colors repeating the current disposed image of the
+      last frame.</dd>
+
+      <dt>RemoveDupsLayer</dt>
+
+      <dd class="imquote">Remove (and merge time delays) of
+      duplicate consecutive images, so as to simplify layer
+      overlays of coalesced animations. Usally this is a result of
+      using a constant time delay across the whole animation, or
+      after a larger animation was split into smaller
+      sub-animations. The duplicate frames could also have been
+      used as part of some frame optimization methods.</dd>
+
+      <dt>RemoveZeroLayer</dt>
+
+      <dd class="imquote">Remove any image with a zero time delay,
+      unless ALL the images have a zero time delay (and is not a
+      proper timed animation, a warning is then issued). In a GIF
+      animation, such images are usually frames which provide
+      partial intermediary updates between the frames that are
+      actually displayed to users. These frames are usally added
+      for improved frame optimization in GIF animations.</dd>
+    </dl>
 
     <h4>Returns</h4>
 

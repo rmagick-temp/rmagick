@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.112 2007/06/09 23:09:44 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.113 2007/06/12 23:18:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1529,16 +1529,19 @@ MagickLayerMethod_name(MagickLayerMethod method)
         ENUM_TO_NAME(DisposeLayer)
 #endif
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
-	    ENUM_TO_NAME(OptimizeTransLayer)
+        ENUM_TO_NAME(OptimizeTransLayer)
+#endif
+#if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
+        ENUM_TO_NAME(OptimizeImageLayer)
 #endif
 #if defined(HAVE_ENUM_REMOVEDUPSLAYER)
-	    ENUM_TO_NAME(RemoveDupsLayer)
+        ENUM_TO_NAME(RemoveDupsLayer)
 #endif
 #if defined(HAVE_ENUM_REMOVEZEROLAYER)
-	    ENUM_TO_NAME(RemoveZeroLayer)
+        ENUM_TO_NAME(RemoveZeroLayer)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
-	    ENUM_TO_NAME(CompositeLayer)
+        ENUM_TO_NAME(CompositeLayer)
 #endif
 
     }
@@ -2926,26 +2929,26 @@ Image *rm_clone_image(Image *image)
 
 
 /*
- *	Extern:		rm_clone_imagelist
- *	Purpose:    clone a list of images, handle errors
+ *  Extern:     rm_clone_imagelist
+ *  Purpose:    clone a list of images, handle errors
  */
 Image *rm_clone_imagelist(Image *images, int trace)
 {
-	Image *new_images = NULL, *img, *clone;
-	
-	img = GetFirstImageInList(images);
-	while (img)
-	{
-		clone = rm_clone_image(img);
-		if (trace)
-		{
-			(void) rm_trace_creation(img);
-		}
-		AppendImageToList(&new_images, clone);
-		img = GetNextImageInList(img);
-	}
-	
-	return new_images;
+    Image *new_images = NULL, *img, *clone;
+
+    img = GetFirstImageInList(images);
+    while (img)
+    {
+        clone = rm_clone_image(img);
+        if (trace)
+        {
+            (void) rm_trace_creation(img);
+        }
+        AppendImageToList(&new_images, clone);
+        img = GetNextImageInList(img);
+    }
+
+    return new_images;
 }
 
 

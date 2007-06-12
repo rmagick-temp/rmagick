@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.52 2007/06/09 23:06:35 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.53 2007/06/12 23:18:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -430,9 +430,11 @@ ImageList_mosaic(VALUE self)
 VALUE
 ImageList_optimize_layers(VALUE self, VALUE method)
 {
-    Image *images, *new_images;
+    Image *images, *new_images, *new_images2;
     MagickLayerMethod mthd;
     ExceptionInfo exception;
+
+    new_images2 = NULL;     // defeat "unused variable" message
 
     GetExceptionInfo(&exception);
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
@@ -468,12 +470,33 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         case CompositeLayer:
-        rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
+            rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
             break;
 #endif
+#if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
+        // In 6.3.4-ish, OptimizeImageLayer replaced OptimizeLayer
+        case OptimizeImageLayer:
+            new_images = OptimizeImageLayers(images, &exception);
+            break;
+        // and OptimizeLayer became a "General Purpose, GIF Animation Optimizer" (ref. mogrify.c)
+        case OptimizeLayer:
+            new_images = CoalesceImages(images, &exception);
+            rm_split(images);
+            rm_check_exception(&exception, new_images, DestroyOnError);
+            new_images2 = OptimizeImageLayers(new_images, &exception);
+            DestroyImageList(new_images);
+            rm_check_exception(&exception, new_images2, DestroyOnError);
+            new_images = new_images2;
+            OptimizeImageTransparency(new_images, &exception);
+            rm_check_exception(&exception, new_images, DestroyOnError);
+            // mogrify supports -dither here. We don't.
+            (void) MapImages(new_images, NULL, 0);
+            break;
+#else
         case OptimizeLayer:
             new_images = OptimizeImageLayers(images, &exception);
             break;
+#endif
         case OptimizePlusLayer:
             new_images = OptimizePlusImageLayers(images, &exception);
             break;

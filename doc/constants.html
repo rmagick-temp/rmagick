@@ -155,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.15.0 ($Date: 2007/03/23 23:02:14 $)
+    <code>This is RMagick 1.15.0 ($Date: 2007/06/14 23:19:16 $)
     Copyright (C) 2007 by Timothy P. Hunter<br />
     Built with ImageMagick 6.2.5 03/05/06 Q8
     http://www.imagemagick.org<br />
@@ -593,7 +593,11 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>ThresholdCompositeOp</dt>
 
+    <dd>?</dd>
+
     <dt>NoCompositeOp</dt>
+
+    <dd>No composite operator has been specified.</dd>
 
     <dt>DarkenCompositeOp</dt>
 
@@ -638,6 +642,12 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>OverlayCompositeOp</dt>
 
+    <dd class="imquote">Multiplies or screens the colors, dependent
+    on the destination color. Source colors overlay the destination
+    whilst preserving its highlights and shadows. The destination
+    color is not replaced, but is mixed with the source color to
+    reflect the lightness or darkness of the destination.</dd>
+
     <dt>CopyCyanCompositeOp</dt>
 
     <dd>Copy the cyan channel from the composite image to the
@@ -660,23 +670,53 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dt>DstAtopCompositeOp</dt>
 
+    <dd class="imquote">The part of the destination lying inside of
+    the source is composited over the source and replaces the
+    destination.</dd>
+
     <dt>DstCompositeOp</dt>
+
+    <dd class="imquote">The destination is left untouched.</dd>
 
     <dt>DstInCompositeOp</dt>
 
+    <dd class="imquote">The part of the destination lying inside of
+    the source replaces the destination.</dd>
+
     <dt>DstOutCompositeOp</dt>
+
+    <dd class="imquote">The part of the destination lying outside
+    of the source replaces the destination.</dd>
 
     <dt>DstOverCompositeOp</dt>
 
+    <dd class="imquote">The destination is composited over the
+    source and the result replaces the destination.</dd>
+
     <dt>SrcAtopCompositeOp</dt>
+
+    <dd class="imquote">The part of the source lying inside of the
+    destination is composited onto the destination.</dd>
 
     <dt>SrcCompositeOp</dt>
 
+    <dd class="imquote">The source is copied to the destination.
+    The destination is not used as input.</dd>
+
     <dt>SrcInCompositeOp</dt>
+
+    <dd class="imquote">he part of the source lying inside of the
+    destination replaces the destination.</dd>
 
     <dt>SrcOutCompositeOp</dt>
 
+    <dd class="imquote">The part of the source lying outside of the
+    destination replaces the destination.</dd>
+
     <dt>SrcOverCompositeOp</dt>
+
+    <dd class="imquote">The source is composited over the
+    destination.</dd>
 
     <dt>ColorDodgeCompositeOp</dt>
 
@@ -684,6 +724,11 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     the source color. Painting with black produces no change.</dd>
 
     <dt>ExclusionCompositeOp</dt>
+
+    <dd class="imquote">Produces an effect similar to that of
+    'difference', but appears as lower contrast. Painting with
+    white inverts the destination color. Painting with black
+    produces no change.</dd>
 
     <dt>HardLightCompositeOp</dt>
 
@@ -709,6 +754,12 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     Painting with pure black or white produces a distinctly darker
     or lighter area, but does not result in pure black or
     white.</dd>
+
+    <dt>ChangeMaskCompositeOp</dt>
+
+    <dd class="imquote">Replace any destination pixel that is the
+    simular to the source images pixel (as defined by the current
+    fuzz factor), with transparency.</dd>
   </dl>
 
   <h3 class="const" id="CompressionType">CompressionType</h3>

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.192 2007/06/12 23:18:08 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.193 2007/06/14 23:20:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1152,27 +1152,35 @@ Init_RMagick(void)
         ENUMERATOR(NoCompositeOp)
         ENUMERATOR(AddCompositeOp)
         ENUMERATOR(AtopCompositeOp)
+        ENUMERATOR(BlendCompositeOp)
         ENUMERATOR(BumpmapCompositeOp)
+#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
+        ENUMERATOR(ChangeMaskCompositeOp)
+#endif
         ENUMERATOR(ClearCompositeOp)
+        ENUMERATOR(ColorBurnCompositeOp)
+        ENUMERATOR(ColorDodgeCompositeOp)
         ENUMERATOR(ColorizeCompositeOp)
+        ENUMERATOR(CopyBlackCompositeOp)
         ENUMERATOR(CopyBlueCompositeOp)
         ENUMERATOR(CopyCompositeOp)
+        ENUMERATOR(CopyCyanCompositeOp)
         ENUMERATOR(CopyGreenCompositeOp)
+        ENUMERATOR(CopyMagentaCompositeOp)
         ENUMERATOR(CopyOpacityCompositeOp)
         ENUMERATOR(CopyRedCompositeOp)
-        ENUMERATOR(CopyCyanCompositeOp)
-        ENUMERATOR(CopyMagentaCompositeOp)
         ENUMERATOR(CopyYellowCompositeOp)
-        ENUMERATOR(CopyBlackCompositeOp)
         ENUMERATOR(DarkenCompositeOp)
-        ENUMERATOR(DifferenceCompositeOp)
-        ENUMERATOR(DisplaceCompositeOp)
-        ENUMERATOR(DissolveCompositeOp)
         ENUMERATOR(DstAtopCompositeOp)
         ENUMERATOR(DstCompositeOp)
         ENUMERATOR(DstInCompositeOp)
         ENUMERATOR(DstOutCompositeOp)
         ENUMERATOR(DstOverCompositeOp)
+        ENUMERATOR(DifferenceCompositeOp)
+        ENUMERATOR(DisplaceCompositeOp)
+        ENUMERATOR(DissolveCompositeOp)
+        ENUMERATOR(ExclusionCompositeOp)
+        ENUMERATOR(HardLightCompositeOp)
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
@@ -1187,6 +1195,7 @@ Init_RMagick(void)
         ENUMERATOR(ReplaceCompositeOp)    // synonym for CopyCompositeOp
         ENUMERATOR(SaturateCompositeOp)
         ENUMERATOR(ScreenCompositeOp)
+        ENUMERATOR(SoftLightCompositeOp)
         ENUMERATOR(SrcAtopCompositeOp)
         ENUMERATOR(SrcCompositeOp)
         ENUMERATOR(SrcInCompositeOp)
@@ -1195,12 +1204,6 @@ Init_RMagick(void)
         ENUMERATOR(SubtractCompositeOp)
         ENUMERATOR(ThresholdCompositeOp)
         ENUMERATOR(XorCompositeOp)
-        ENUMERATOR(BlendCompositeOp)
-        ENUMERATOR(ColorBurnCompositeOp)
-        ENUMERATOR(ColorDodgeCompositeOp)
-        ENUMERATOR(ExclusionCompositeOp)
-        ENUMERATOR(HardLightCompositeOp)
-        ENUMERATOR(SoftLightCompositeOp)
     END_ENUM
 
     // CompressionType constants
@@ -1645,7 +1648,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/12 23:18:08 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/14 23:20:07 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

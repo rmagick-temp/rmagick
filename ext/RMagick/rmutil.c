@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.113 2007/06/12 23:18:08 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.114 2007/06/14 23:20:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1184,6 +1184,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(AddCompositeOp)
         ENUM_TO_NAME(AtopCompositeOp)
         ENUM_TO_NAME(BumpmapCompositeOp)
+#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
+        ENUM_TO_NAME(ChangeMaskCompositeOp)
+#endif
         ENUM_TO_NAME(ClearCompositeOp)
         ENUM_TO_NAME(ColorBurnCompositeOp)
         ENUM_TO_NAME(BlendCompositeOp)

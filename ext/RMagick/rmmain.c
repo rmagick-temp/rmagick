@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.193 2007/06/14 23:20:07 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.194 2007/06/17 22:26:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -453,6 +453,7 @@ Init_RMagick(void)
     rb_define_alloc_func(Class_Image, Image_alloc);
     rb_define_method(Class_Image, "initialize", Image_initialize, -1);
 
+    rb_define_singleton_method(Class_Image, "combine", Image_combine, -1);
     rb_define_singleton_method(Class_Image, "constitute", Image_constitute, 4);
     rb_define_singleton_method(Class_Image, "_load", Image__load, 1);
     rb_define_singleton_method(Class_Image, "capture", Image_capture, -1);
@@ -1648,7 +1649,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/14 23:20:07 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/17 22:26:25 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

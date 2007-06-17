@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.222 2007/06/09 23:07:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.223 2007/06/17 22:26:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -420,7 +420,7 @@ Image_add_profile(VALUE self, VALUE name)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    (void) rm_image_destroy(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
 
@@ -1748,7 +1748,7 @@ Image_color_histogram(VALUE self)
     {
         if (dc_copy)
         {
-            (void) rm_image_destroy(dc_copy);
+            (void) DestroyImage(dc_copy);
         }
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
@@ -1844,7 +1844,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
         profile_name = GetNextImageProfile(profile_image);
     }
 
-    (void) rm_image_destroy(profile_image);
+    (void) DestroyImage(profile_image);
     rm_check_image_exception(image, RetainOnError);
 
     return self;
@@ -2134,6 +2134,76 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
 
 
 DEF_ATTR_READER(Image, columns, int)
+
+
+/*
+    Method:     new_image = Image.combine(red[, green[, blue]])
+    Purpose:    Combines the Red channel of the first image with the Green
+                channel of the 2nd image and the Blue channel of the 3rd
+                image. Any of the image arguments may be omitted or replaced
+                by nil.
+
+                Calls CombineImages
+*/
+VALUE Image_combine(int argc, VALUE *argv, VALUE self)
+{
+    ChannelType channel = 0;
+    Image *image, *images = NULL, *new_image;
+    ExceptionInfo exception;
+
+    self = self;        // defeat "unreferenced argument" message
+
+    switch (argc)
+    {
+        case 4:
+            if (argv[3] != Qnil)
+            {
+                channel |= OpacityChannel;
+                Data_Get_Struct(argv[3], Image, image);
+                AppendImageToList(&images, image);
+            }
+        case 3:
+            if (argv[2] != Qnil)
+            {
+                channel |= BlueChannel;
+                Data_Get_Struct(argv[2], Image, image);
+                AppendImageToList(&images, image);
+            }
+        case 2:
+            if (argv[1] != Qnil)
+            {
+                channel |= GreenChannel;
+                Data_Get_Struct(argv[1], Image, image);
+                AppendImageToList(&images, image);
+            }
+        case 1:
+            if (argv[0] != Qnil)
+            {
+                channel |= RedChannel;
+                Data_Get_Struct(argv[0], Image, image);
+                AppendImageToList(&images, image);
+            }
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (1 to 4 expected, got %d)", argc);
+    }
+
+    if (channel == 0)
+    {
+        rb_raise(rb_eArgError, "no images to combine");
+    }
+
+    GetExceptionInfo(&exception);
+    ReverseImageList(&images);
+    new_image = CombineImages(images, channel, &exception);
+    rm_check_exception(&exception, images, RetainOnError);
+    rm_split(images);
+
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
+}
 
 
 /*
@@ -5337,14 +5407,14 @@ Image_mask_eq(VALUE self, VALUE mask)
           }
           if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
           {
-              (void) (void) rm_image_destroy(clip_mask);
+              (void) DestroyImage(clip_mask);
               rm_magick_error("SyncImagePixels failed", NULL);
           }
         }
 
         if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
         {
-            (void) (void) rm_image_destroy(clip_mask);
+            (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
         }
 
@@ -9474,7 +9544,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     geometry.width = image->columns;
     geometry.height = max_rows;
     reflection = CropImage(flip_image, &geometry, &exception);
-    (void) rm_image_destroy(flip_image);
+    DestroyImage(flip_image);
     CHECK_EXCEPTION();
 
 
@@ -9524,7 +9594,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
 
 error:
     (void) DestroyExceptionInfo(&exception);
-    (void) rm_image_destroy(reflection);
+    (void) DestroyImage(reflection);
     rb_raise(rb_eRuntimeError, "%s failed on row %lu", func, y);
     return (VALUE)0;
 }

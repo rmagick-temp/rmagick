@@ -15,6 +15,7 @@ RMagick 2.0.0
       OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3)
     o RMagick works with Q32 version of ImageMagick
     o Added ChangeMaskCompositeOp CompositeOperator enum value
+    o Added Image.combine
 
 RMagick 1.15.7
     o Fix bug #11033, make distclean misses some files (bug report from Lucas

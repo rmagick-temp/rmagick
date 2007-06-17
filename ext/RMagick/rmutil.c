@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.114 2007/06/14 23:20:07 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.115 2007/06/17 22:24:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -516,7 +516,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     (void) DestroyImageInfo(info);
     GetExceptionInfo(&exception);
     (void) QueryColorname(image, pixel, compliance, name, &exception);
-    (void) rm_image_destroy(image);
+    (void) DestroyImage(image);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);
 
@@ -639,7 +639,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
     image->fuzz = fuzz;
 
     equal = IsColorSimilar(image, this, that);
-    (void) rm_image_destroy(image);
+    (void) DestroyImage(image);
 
     return equal ? Qtrue : Qfalse;
 }
@@ -979,7 +979,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
     image = AllocateImage(info);
     image->matte = MagickFalse;
     color_name = PixelPacket_to_Color_Name(image, color);
-    (void) rm_image_destroy(image);
+    (void) DestroyImage(image);
     if (!info)
     {
         (void) DestroyImageInfo(my_info);

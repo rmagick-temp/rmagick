@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.21 2007/03/23 22:20:20 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.22 2007/06/17 22:25:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -498,7 +498,8 @@ free_TextureFill(void *fill_obj)
 {
     rm_TextureFill *fill = (rm_TextureFill *)fill_obj;
 
-    (void) rm_image_destroy(fill->texture);
+    // Do not trace destruction
+    (void) DestroyImage(fill->texture);
     xfree(fill);
 }
 

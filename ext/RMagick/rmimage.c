@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.223 2007/06/17 22:26:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.224 2007/06/18 23:16:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2137,7 +2137,7 @@ DEF_ATTR_READER(Image, columns, int)
 
 
 /*
-    Method:     new_image = Image.combine(red[, green[, blue]])
+    Method:     new_image = Image.combine(red[, green[, blue[, opacity]]])
     Purpose:    Combines the Red channel of the first image with the Green
                 channel of the 2nd image and the Blue channel of the 3rd
                 image. Any of the image arguments may be omitted or replaced
@@ -7550,6 +7550,47 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
      rm_check_image_exception(image, RetainOnError);
 
      return self;
+}
+
+
+/*
+    Method:     separate(channel[, channel...])
+    Purpose:    call SeparateImages
+    Returns:    returns a new ImageList
+*/
+VALUE
+Image_separate(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SEPARATEIMAGES)
+    Image *image, *new_images;
+    ChannelType channels = 0;
+    ExceptionInfo exception;
+
+    channels = extract_channels(&argc, argv);
+
+    // All arguments are ChannelType enums
+    if (argc > 0)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+    new_images = SeparateImages(image, channels, &exception);
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_images);
+
+    return rm_imagelist_from_images(new_images);
+#else
+    argc = argc;
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+
 }
 
 

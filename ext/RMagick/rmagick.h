@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.180 2007/06/17 22:26:24 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.181 2007/06/18 23:16:23 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -843,6 +843,7 @@ extern VALUE Image_sample_bang(int, VALUE *, VALUE);
 extern VALUE Image_scale(int, VALUE *, VALUE);
 extern VALUE Image_scale_bang(int, VALUE *, VALUE);
 extern VALUE Image_segment(int, VALUE *, VALUE);
+extern VALUE Image_separate(int, VALUE *, VALUE);
 extern VALUE Image_sepiatone(int, VALUE *, VALUE);
 extern VALUE Image_set_channel_depth(VALUE, VALUE, VALUE);
 extern VALUE Image_shade(int, VALUE *, VALUE);

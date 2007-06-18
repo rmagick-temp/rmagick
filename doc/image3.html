@@ -126,6 +126,8 @@
         <ul>
           <li><a href="#segment">segment</a></li>
 
+          <li><a href="#separate">separate</a></li>
+
           <li><a href="#sepiatone">sepiatone</a></li>
 
           <li><a href=
@@ -170,14 +172,14 @@
 
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
-
-          <li><a href=
-          "#texture_floodfill">texture_floodfill</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#texture_floodfill">texture_floodfill</a></li>
+
           <li><a href="#threshold">threshold</a></li>
 
           <li><a href="#thumbnail">thumbnail</a></li>
@@ -596,7 +598,9 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
     well as operations on channels within pixels. See <a href=
     "#view">view</a>, below.</p>
 
-    <h4>Magick API</h4><p>EvaluateImageChannel</p>
+    <h4>Magick API</h4>
+
+    <p>EvaluateImageChannel</p>
   </div>
 
   <div class="sig">
@@ -764,12 +768,13 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
       <dd><span class="imquote">A geometry string containing
       LOWxHIGH thresholds.</span> The string is in the form `XxY'.
       The Y value may be omitted, in which case it is assigned the
-      value QuantumRange-X. If an % appears in the string then the values
-      are assumed to be percentages of QuantumRange. <span class=
-      "imquote">If the string contains 2x2, 3x3, or 4x4, then an
-      ordered dither of order 2, 3, or 4 will be performed
-      instead.</span> A <a href="struct.html#Geometry">Geometry</a>
-      object may be used as well.</dd>
+      value QuantumRange-X. If an % appears in the string then the
+      values are assumed to be percentages of QuantumRange.
+      <span class="imquote">If the string contains 2x2, 3x3, or
+      4x4, then an ordered dither of order 2, 3, or 4 will be
+      performed instead.</span> A <a href=
+      "struct.html#Geometry">Geometry</a> object may be used as
+      well.</dd>
 
       <dt>channel...</dt>
 
@@ -1179,12 +1184,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example" /></a>
+    "ex/rotate_f.jpg" alt="rotate example"  /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1429,6 +1434,44 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="separate">separate</h3>
+
+    <p><span class="arg">Image</span>.separate(<span class=
+    "arg">channel</span>...) -&gt; <span class=
+    "arg">anImageList</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Constructs a grayscale image for each channel specified.</p>
+
+    <h4>Arguments</h4>
+
+    <p>0 or more <a href=
+    "constants.html#ChannelType">ChannelType</a> arguments. If no
+    channels are specified, constructs an image for each of the
+    red, green, and blue channels.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new imagelist containing the new images.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#channel">channel</a></p>
+
+    <h4>Notes</h4>
+
+    <p>If the image does not have an opacity channel an
+    OpacityChannel argument is ignored.</p>
+
+    <h4>Magick API</h4>
+
+    <p>SeparateImages</p>
+  </div>
+
+  <div class="sig">
     <h3 id="sepiatone">sepiatone</h3>
 
     <p><span class="arg">image</span>.sepiatone(<span class=
@@ -1449,9 +1492,9 @@ random_threshold_channel(geom, RedChannel)
       <dt>threshold</dt>
 
       <dd class="imquote"><span class="arg">Threshold</span> ranges
-      from 0 to QuantumRange and is a measure of the extent
-      of the sepia toning. A threshold of 80% is a good starting
-      point for a reasonable tone. The default is QuantumRange.</dd>
+      from 0 to QuantumRange and is a measure of the extent of the
+      sepia toning. A threshold of 80% is a good starting point for
+      a reasonable tone. The default is QuantumRange.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1631,7 +1674,7 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
@@ -1849,13 +1892,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script" /> <!--
+    "Click to see the example script"  /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2108,12 +2151,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example" /></a>
+    "ex/splice.jpg" alt="splice example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2755,7 +2798,8 @@ img.to_color(pixel)
 
       <dd>The new opacity value, either an <a href=
       "constants.html#Opacity">opacity</a> value or a number
-      between 0 and QuantumRange. The default is TransparentOpacity.</dd>
+      between 0 and QuantumRange. The default is
+      TransparentOpacity.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -3497,13 +3541,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" />
+    "ex/images/Flower_Hat.jpg" alt="wave example"  />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example" /></a> <img src=
+    "ex/wave.jpg" alt="wave example"  /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3602,9 +3646,9 @@ end
 
     <h4>Arguments</h4>
 
-    <p>Each channel argument is a number between 0 and QuantumRange. All
-    arguments except the first may be omitted. If the <span class=
-    "arg">green_channel</span> or <span class=
+    <p>Each channel argument is a number between 0 and
+    QuantumRange. All arguments except the first may be omitted. If
+    the <span class="arg">green_channel</span> or <span class=
     "arg">blue_channel</span> argument is omitted, the default
     value is the <span class="arg">red_channel</span> value. If the
     <span class="arg">opacity_channel</span> argument is omitted,

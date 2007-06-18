@@ -65,21 +65,35 @@ float: left;
 
     <h3>class methods</h3>
 
-    <ul>
-      <li><a href="#capture">capture</a></li>
+    <div>
+      <div class="toccol">
+        <ul>
+          <li><a href="#capture">capture</a></li>
 
-      <li><a href="#constitute">constitute</a></li>
+          <li><a href="#combine">combine</a></li>
 
-      <li><a href="#from_blob">from_blob</a></li>
+          <li><a href="#constitute">constitute</a></li>
+        </ul>
+      </div>
 
-      <li><a href="#new">new</a></li>
+      <div class="toccol">
+        <ul>
+          <li><a href="#from_blob">from_blob</a></li>
 
-      <li><a href="#ping">ping</a></li>
+          <li><a href="#new">new</a></li>
 
-      <li><a href="#read">read</a></li>
+          <li><a href="#ping">ping</a></li>
+        </ul>
+      </div>
 
-      <li><a href="#read_inline">read_inline</a></li>
-    </ul>
+      <div class="toccol">
+        <ul>
+          <li><a href="#read">read</a></li>
+
+          <li><a href="#read_inline">read_inline</a></li>
+        </ul>
+      </div>
+    </div>
 
     <h3>instance methods</h3>
 
@@ -326,6 +340,52 @@ img = Magick::Image.capture {
  self.filename = "root"
  }
 </pre>
+  </div>
+
+  <div class="sig">
+    <h3 id="combine">combine</h3>
+
+    <p>Image.combine(<span class="arg">red_ch</span>=nil[,
+    <span class="arg">green_ch</span>=nil[, <span class=
+    "arg">blue_ch</span>=nil[<span class="arg">,
+    opacity_ch</span>=nil]]]) -&gt;<em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Combines the grayscale value of the pixels in each image to
+    form a new image.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The red channel of the image specified in the first argument
+    is used as the red channel in the new image. The green channel
+    of the image specified in the second argument is used as the
+    green channel in the new image. The blue channel of the image
+    specified in the third argument is used as the blue channel in
+    the new image. The opacity channel of the image specified in
+    the fourth argument is used as the opacity channel in the new
+    image.</p>
+
+    <p>Any of the arguments may be nil. Trailing nil arguments may
+    be omitted. You must specify at least one image argument.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p>The same results can be obtained using the <a href=
+    "#composite">composite</a> method and the
+    CopyRed/Green/Blue/OpacityCompositeOp <a href=
+    "constants.html#CompositeOperator">CompositeOperator</a> enum
+    values.</p>
+
+    <h4>Magick API</h4>
+
+    <p>CombineImages</p>
   </div>
 
   <div class="sig">
@@ -1095,7 +1155,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-      /></a>
+       /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1392,7 +1452,8 @@ img = Magick::Image.read_inline(content)
 
     <h4>Example</h4>
 
-    <p><code>bilevel_channel(2*QuantumRange/3, RedChannel)</code></p>
+    <p><code>bilevel_channel(2*QuantumRange/3,
+    RedChannel)</code></p>
 
     <p class="rollover"><a href=
     "javascript:popup('bilevel_channel.rb.html')"><img onmouseover=
@@ -1433,9 +1494,9 @@ img = Magick::Image.read_inline(content)
 
     <h4>Arguments</h4>
 
-    <p>Each channel argument is a number between 0 and QuantumRange. All
-    arguments except the first may be omitted. If the <span class=
-    "arg">green_channel</span> or <span class=
+    <p>Each channel argument is a number between 0 and
+    QuantumRange. All arguments except the first may be omitted. If
+    the <span class="arg">green_channel</span> or <span class=
     "arg">blue_channel</span> argument is omitted, the default
     value is the <span class="arg">red_channel</span> value. If the
     <span class="arg">opacity_channel</span> argument is omitted,
@@ -1677,7 +1738,7 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
+    "Click to see the example script"  /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
@@ -3258,7 +3319,7 @@ cropped = img.crop(x, y, width, height, true)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example" /></a>
+    "ex/crop_resized.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3487,7 +3548,8 @@ cropped = img.crop(x, y, width, height, true)
       <dd>If <code>true</code>, the returned array elements will be
       <code>Float</code> values in the range 0..1. If
       <code>false</code>, the returned array elements will be
-      <code>Integer</code> values in the range 0..QuantumRange.</dd>
+      <code>Integer</code> values in the range
+      0..QuantumRange.</dd>
     </dl>
 
     <h4>Returns</h4>An array

@@ -1184,12 +1184,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="notrotated" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example"  /></a>
+    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1674,13 +1674,13 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="shadowless" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
-    "ex/shadow_after.gif" alt="shadow example"
-    /></a> <img src="ex/images/spin.gif" alt="" style=
+    "ex/shadow_after.gif" alt="shadow example" name=
+    "shadowed" /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1892,13 +1892,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script"  /> <!--
+    "Click to see the example script" name="noshear" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example" name=
+    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2151,12 +2151,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" name="nosplice" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example"  /></a>
+    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -2954,8 +2954,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="trim">trim</h3>
 
-    <p><span class="arg">image</span>.trim -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">image</span>.trim(<span class=
+    "arg">reset</span>=false) -&gt; <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -2966,6 +2966,16 @@ img.to_color(pixel)
     "imageattrs.html#fuzz">fuzz</a> attribute to make
     <code>trim</code> remove edges that are nearly the same color
     as the corner pixels.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The trim method retains the offset information in the
+    cropped image. This may cause the image to appear to be
+    surrounded by blank or black space when viewed with an external
+    viewer. This only occurs when the image is saved in a format
+    (such as GIF) that saves offset information. To reset the
+    offset data, use true as the argument to trim. See also
+    <a href="image1.html#crop">crop</a>.</p>
 
     <h4>Returns</h4>
 
@@ -2981,6 +2991,10 @@ img.to_color(pixel)
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the image to see the original image" /></p>
 
+    <h4>See also</h4>
+
+    <p><a href="image1.html#crop">crop</a></p>
+
     <h4>Magick API</h4>
 
     <p>CropImage</p>
@@ -2989,7 +3003,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="trim_bang">trim!</h3>
 
-    <p><span class="arg">image</span>.trim! -&gt; <em>self</em></p>
+    <p><span class="arg">image</span>.trim!(<span class=
+    "arg">reset</span>=false) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -3541,13 +3556,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
+    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

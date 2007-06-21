@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.224 2007/06/18 23:16:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.225 2007/06/21 23:36:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9068,11 +9068,23 @@ Image_transverse_bang(VALUE self)
  */
 
 static VALUE
-trimmer(int bang, VALUE self)
+trimmer(int bang, int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     RectangleInfo geometry;
     ExceptionInfo exception;
+    int reset_page = 0;
+
+    switch (argc)
+    {
+        case 1:
+            reset_page = RTEST(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (expecting 0 or 1, got %d)", argc);
+            break;
+    }
 
     Data_Get_Struct(self, Image, image);
 
@@ -9088,6 +9100,12 @@ trimmer(int bang, VALUE self)
 
     rm_ensure_result(new_image);
 
+    if (reset_page)
+    {
+        new_image->page.x = new_image->page.y = 0L;
+        new_image->page.width = new_image->page.height = 0UL;
+    }
+
     if (bang)
     {
         UPDATE_DATA_PTR(self, new_image);
@@ -9100,15 +9118,15 @@ trimmer(int bang, VALUE self)
 
 
 VALUE
-Image_trim(VALUE self)
+Image_trim(int argc, VALUE *argv, VALUE self)
 {
-    return trimmer(False, self);
+    return trimmer(False, argc, argv, self);
 }
 
 VALUE
-Image_trim_bang(VALUE self)
+Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
-    return trimmer(True, self);
+    return trimmer(True, argc, argv, self);
 }
 
 

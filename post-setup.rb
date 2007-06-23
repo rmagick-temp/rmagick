@@ -86,9 +86,8 @@ class ExampleSet
       @errs += 1 unless ALLOW_EXAMPLE_ERRORS
       if @errs > 4
          err(<<-END_EXFAIL
-            Too many examples failed. The RMagick documentation cannot be installed
-            successfully. Consult the README.txt file and try again, or send email
-            to rmagick@rubyforge.org.
+            Too many examples failed. Search for "Help!" at
+            http://rmagick.rubyforge.org/install-faq.html.
             END_EXFAIL
             )
       end

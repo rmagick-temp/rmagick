@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.196 2007/06/21 23:36:07 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.197 2007/06/27 23:19:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -588,6 +588,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "displace", Image_displace, -1);
     rb_define_method(Class_Image, "display", Image_display, 0);
     rb_define_method(Class_Image, "dissolve", Image_dissolve, -1);
+    rb_define_method(Class_Image, "distort", Image_distort, 2);
     rb_define_method(Class_Image, "distortion_channel", Image_distortion_channel, -1);
     rb_define_method(Class_Image, "_dump", Image__dump, 1);
     rb_define_method(Class_Image, "dup", Image_dup, 0);
@@ -1240,6 +1241,15 @@ Init_RMagick(void)
         ENUMERATOR(PreviousDispose)
     END_ENUM
 
+#if defined(HAVE_DISTORTIMAGE)
+    // DistortImage "type" argument values
+    DEF_ENUM(DistortImageType)
+        ENUMERATOR(UndefinedDistortion)
+        ENUMERATOR(BilinearDistortion)
+        ENUMERATOR(PerspectiveDistortion)
+    END_ENUM
+#endif
+
     DEF_ENUM(EndianType)
         ENUMERATOR(UndefinedEndian)
         ENUMERATOR(LSBEndian)
@@ -1650,7 +1660,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/21 23:36:07 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/27 23:19:46 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

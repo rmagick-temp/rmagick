@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.182 2007/06/21 23:36:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.183 2007/06/27 23:19:45 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -237,6 +237,9 @@ EXTERN VALUE Class_CompositeOperator;
 EXTERN VALUE Class_CompressionType;
 EXTERN VALUE Class_DecorationType;
 EXTERN VALUE Class_DisposeType;
+#if defined(HAVE_DISTORTIMAGE)
+EXTERN VALUE Class_DistortImageType;
+#endif
 EXTERN VALUE Class_EndianType;
 EXTERN VALUE Class_FilterTypes;
 EXTERN VALUE Class_GravityType;
@@ -764,6 +767,7 @@ extern VALUE Image_dispatch(int, VALUE *, VALUE);
 extern VALUE Image_displace(int, VALUE *, VALUE);
 extern VALUE Image_display(VALUE);
 extern VALUE Image_dissolve(int, VALUE *, VALUE);
+extern VALUE Image_distort(VALUE, VALUE, VALUE);
 extern VALUE Image_distortion_channel(int, VALUE *, VALUE);
 extern VALUE Image__dump(VALUE, VALUE);
 extern VALUE Image_dup(VALUE);

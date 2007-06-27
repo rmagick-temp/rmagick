@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.225 2007/06/21 23:36:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.226 2007/06/27 23:19:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3422,6 +3422,51 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
                                  , x_offset, y_offset, DissolveCompositeOp);
 
     return composite;
+}
+
+
+/*
+ *  Method:     Image#distort(type, points)
+ *  Purpose:    Call DistortImage
+ *  Notes:      points is an Array of PointInfo objects
+*/
+VALUE
+Image_distort(VALUE self, VALUE type, VALUE pts)
+{
+#if defined(HAVE_DISTORTIMAGE)
+    Image *image, *new_image;
+    unsigned long n, npoints;
+    DistortImageType distortion_type;
+    PointInfo *points;
+    ExceptionInfo exception;
+
+    VALUE_TO_ENUM(type, distortion_type, DistortImageType);
+    Data_Get_Struct(self, Image, image);
+
+    // Ensure pts is an array
+    pts = rb_Array(pts);
+    npoints = RARRAY(pts)->len;
+    // Allocate points array from Ruby's memory. If an error occurs Ruby will
+    // be able to clean it up.
+    points = ALLOC_N(PointInfo, npoints);
+
+    for (n = 0; n < npoints; n++)
+    {
+        Point_to_PointInfo(&points[n], rb_ary_entry(pts, n));
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = DistortImage(image, distortion_type, npoints, points, &exception);
+    xfree(points);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    (void) DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

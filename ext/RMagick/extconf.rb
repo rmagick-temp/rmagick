@@ -112,6 +112,7 @@ have_func('snprintf', headers)
   ['AdaptiveBlurImageChannel',       # 6.2.8-5
    'AdaptiveResizeImage',            # 6.2.9
    'AdaptiveSharpenImage',           # 6.2.7
+   'DistortImage',                   # 6.3.5
    'InterpolatePixelColor',          # 6.2.9
    'IsImageSimilar',                 # 6.2.8
    'LinearStretchImage',             # 6.3.1

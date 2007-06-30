@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.54 2007/03/23 23:04:08 rmagick Exp $
+# $Id: RMagick.rb,v 1.55 2007/06/30 20:58:49 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -709,6 +709,7 @@ class Image
     # Provide an alternate version of Draw#annotate, for folks who
     # want to find it in this class.
     def annotate(draw, width, height, x, y, text, &block)
+      check_destroyed
       draw.annotate(self, width, height, x, y, text, &block)
       self
     end
@@ -904,6 +905,7 @@ class Image
 
     # Make all pixels transparent.
     def matte_reset!
+        check_destroyed
         self.opacity = Magick::TransparentOpacity
         self
     end
@@ -966,6 +968,7 @@ class Image
         attr_accessor :dirty
 
         def initialize(img, x, y, width, height)
+            img.check_destroyed
             if width <= 0 || height <= 0
                 Kernel.raise ArgumentError, "invalid geometry (#{width}x#{height}+#{x}+#{y})"
             end

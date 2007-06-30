@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.183 2007/06/27 23:19:45 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.184 2007/06/30 20:54:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -207,6 +207,7 @@ EXTERN VALUE Class_DrawOptions;
 EXTERN VALUE Class_Image;
 EXTERN VALUE Class_Montage;
 EXTERN VALUE Class_ImageMagickError;
+EXTERN VALUE Class_DestroyedImageError;
 EXTERN VALUE Class_GradientFill;
 EXTERN VALUE Class_TextureFill;
 EXTERN VALUE Class_AffineMatrix;
@@ -334,6 +335,9 @@ EXTERN ID rm_ID_y;                 // "y"
     VALUE class##_##attr(VALUE self)\
     {\
         class *ptr;\
+        if (rb_obj_is_kind_of(self, Class_Image) == Qtrue) {\
+            rm_check_destroyed(self); \
+        }\
         Data_Get_Struct(self, class, ptr);\
         return C_##type##_to_R_##type(ptr->attr);\
     }
@@ -343,6 +347,7 @@ EXTERN ID rm_ID_y;                 // "y"
     VALUE class##_##attr(VALUE self)\
     {\
         class *ptr;\
+        rm_check_destroyed(self); \
         Data_Get_Struct(self, class, ptr);\
         return C_##type##_to_R_##type(ptr->field);\
     }
@@ -350,6 +355,9 @@ EXTERN ID rm_ID_y;                 // "y"
     VALUE class##_##attr##_eq(VALUE self, VALUE val)\
     {\
         class *ptr;\
+        if (rb_obj_is_kind_of(self, Class_Image) == Qtrue) {\
+            rm_check_destroyed(self); \
+        }\
         rm_check_frozen(self);\
         Data_Get_Struct(self, class, ptr);\
         ptr->attr = R_##type##_to_C_##type(val);\
@@ -732,6 +740,7 @@ extern VALUE Image_capture(int, VALUE *, VALUE);
 extern VALUE Image_change_geometry(VALUE, VALUE);
 extern VALUE Image_changed_q(VALUE);
 extern VALUE Image_channel(VALUE, VALUE);
+extern VALUE Image_check_destroyed(VALUE);
 extern VALUE Image_compare_channel(int, VALUE *, VALUE);
 extern VALUE Image_channel_depth(int, VALUE *, VALUE);
 extern VALUE Image_channel_extrema(int, VALUE *, VALUE);
@@ -762,6 +771,8 @@ extern VALUE Image_crop_bang(int, VALUE *, VALUE);
 extern VALUE Image_cycle_colormap(VALUE, VALUE);
 extern VALUE Image_delete_profile(VALUE, VALUE);
 extern VALUE Image_despeckle(VALUE);
+extern VALUE Image_destroy_bang(VALUE);
+extern VALUE Image_destroyed_q(VALUE);
 extern VALUE Image_difference(VALUE, VALUE);
 extern VALUE Image_dispatch(int, VALUE *, VALUE);
 extern VALUE Image_displace(int, VALUE *, VALUE);
@@ -1007,6 +1018,7 @@ extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
 extern void   rm_check_ary_len(VALUE, long);
 extern void   rm_check_frozen(VALUE);
+extern void   rm_check_destroyed(VALUE);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
 extern Quantum rm_app2quantum(VALUE);

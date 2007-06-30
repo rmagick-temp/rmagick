@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.61 2007/06/30 20:57:17 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.62 2007/06/30 23:59:38 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -741,28 +741,6 @@ Info_extract_eq(VALUE self, VALUE extract_arg)
 
     return self;
 }
-/*
-    Method:     aString=Info#tile
-                Info#tile=aString
-    Purpose:    Get/set the "tile" string, e.g. "200x200+100+100"
-    Raise:      ArgumentError
-    Notes:      defined for IM 5.5.6 and later. Actually these are effectively
-                aliases for extract & extract= but with warning messages.
-*/
-
-VALUE
-Info_tile(VALUE self)
-{
-    rb_warning("RMagick: tile is deprecated in this release of ImageMagick. Use extract instead.");
-    return Info_extract(self);
-}
-
-VALUE
-Info_tile_eq(VALUE self, VALUE tile)
-{
-    rb_warning("RMagick: tile= is deprecated in this release of ImageMagick. Use extract= instead.");
-    return Info_extract_eq(self, tile);
-}
 
 
 /*
@@ -1136,27 +1114,7 @@ Info_monitor_eq(VALUE self, VALUE monitor)
 
 DEF_ATTR_ACCESSOR(Info, monochrome, bool)
 
-#ifdef HAVE_IMAGEINFO_NUMBER_SCENES
 DEF_ATTR_ACCESSOR(Info, number_scenes, ulong)
-#else
-
-/*
-    Methods:    num = Info#number_scenes
-                Info#number_scenes = num
-    Purpose:    alias for subrange when IM < 5.5.6
-*/
-VALUE
-Info_number_scenes(VALUE self)
-{
-    return Info_subrange(self);
-}
-
-VALUE
-Info_number_scenes_eq(VALUE self, VALUE nscenes)
-{
-    return Info_subrange_eq(self, nscenes);
-}
-#endif
 
 /*
     Method:     Info#orientation
@@ -1333,87 +1291,7 @@ Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
     return self;
 }
 
-#ifdef HAVE_IMAGEINFO_NUMBER_SCENES
-
-// Info#scene, scene= is the IM >= 5.5.6 version of the now-deprecated
-// subimage accessors.
 DEF_ATTR_ACCESSOR(Info, scene, ulong)
-
-/*
-    Methods:    num=Info#subimage
-                Info#subimage=num
-    Purpose:    Get/set the "subimage" value, for IM >= 5.5.6
-    Raises:     ArgumentError
-    Notes:      synonyms for Info#scene, Info#scene=
-*/
-VALUE
-Info_subimage(VALUE self)
-{
-    rb_warning("RMagick: subimage is deprecated in this release of ImageMagick. Use scene instead.");
-    return Info_scene(self);
-}
-
-VALUE
-Info_subimage_eq(VALUE self, VALUE subimage)
-{
-    rb_warning("RMagick: subimage= is deprecated in this release of ImageMagick. Use scene= instead.");
-    return Info_scene_eq(self, subimage);
-}
-
-/*
-    Methods:    num=Info#subrange
-                Info#subrange=num
-    Purpose:    Get/set the "subrange" value, for IM >= 5.5.6
-    Raises:     ArgumentError
-    Notes:      synonyms for Info#number_scenes, Info#number_scenes=
-*/
-VALUE
-Info_subrange(VALUE self)
-{
-    rb_warning("RMagick: subrange is deprecated in this release of ImageMagick. Use number_scenes instead.");
-    return Info_number_scenes(self);
-}
-
-VALUE
-Info_subrange_eq(VALUE self, VALUE subrange)
-{
-    rb_warning("RMagick: subrange= is deprecated in this release of ImageMagick. Use number_scenes= instead.");
-    return Info_number_scenes_eq(self, subrange);
-}
-
-#else
-
-/*
-    Methods:    num=Info#scene
-                Info#scene=num
-    Purpose:    Get/set the scene number, for IM < 5.5.6
-    Raises:     ArgumentError
-    Notes:      synonyms for Info#subimage, Info#subimage=
-*/
-VALUE
-Info_scene(VALUE self)
-{
-    Info *info;
-
-    Data_Get_Struct(self, Info, info);
-    return UINT2NUM(info->subimage);
-}
-
-VALUE
-Info_scene_eq(VALUE self, VALUE scene)
-{
-    Info *info;
-
-    Data_Get_Struct(self, Info, info);
-    info->subimage = NUM2ULONG(scene);
-    return self;
-}
-
-DEF_ATTR_ACCESSOR(Info, subimage, ulong)
-DEF_ATTR_ACCESSOR(Info, subrange, ulong)
-
-#endif
-
 DEF_ATTR_READER(Info, server_name, str)
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.51 2007/06/09 23:03:37 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.52 2007/06/30 20:57:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -134,7 +134,9 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
 
     if (!NIL_P(pattern))
     {
-        Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        pattern = ImageList_cur_image(pattern);
+        rm_check_destroyed(pattern);
+        Data_Get_Struct(pattern, Image, image);
         // Do not trace creation
         draw->info->fill_pattern = rm_clone_image(image);
     }
@@ -384,7 +386,9 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
     if (!NIL_P(pattern))
     {
         // DestroyDrawInfo destroys the clone
-        Data_Get_Struct(ImageList_cur_image(pattern), Image, image);
+        pattern = ImageList_cur_image(pattern);
+        rm_check_destroyed(pattern);
+        Data_Get_Struct(pattern, Image, image);
         // Do not trace creation
         draw->info->stroke_pattern = rm_clone_image(image);
     }
@@ -476,15 +480,17 @@ VALUE Draw_annotate(
     Data_Get_Struct(self, Draw, draw);
     keep = draw->info->affine;
 
+    image_arg = ImageList_cur_image(image_arg);
+    rm_check_destroyed(image_arg);
+    rm_check_frozen(image_arg);
+    Data_Get_Struct(image_arg, Image, image);
+
     // If we have an optional parm block, run it in self's context,
     // allowing the app a chance to modify the object's attributes
     if (rb_block_given_p())
     {
         (void)rb_obj_instance_eval(0, NULL, self);
     }
-
-    rm_check_frozen(ImageList_cur_image(image_arg));
-    Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Translate & store in Draw structure
     draw->info->text = InterpretImageAttributes(NULL, image, StringValuePtr(text));
@@ -569,6 +575,10 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 5 or 6)", argc);
     }
 
+    // Retrieve the image to composite
+    image = ImageList_cur_image(argv[4]);
+    rm_check_destroyed(image);
+
     x = NUM2DBL(argv[0]);
     y = NUM2DBL(argv[1]);
     width  = NUM2DBL(argv[2]);
@@ -643,9 +653,6 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(self, Draw, draw);
 
-    // Retrieve the image to composite
-    image = ImageList_cur_image(argv[4]);
-
     // Create a temp copy of the composite image
     Data_Get_Struct(image, Image, comp_img);
     rm_write_temp_image(comp_img, name);
@@ -679,14 +686,16 @@ Draw_draw(VALUE self, VALUE image_arg)
     Draw *draw;
     Image *image;
 
+    image_arg = ImageList_cur_image(image_arg);
+    rm_check_destroyed(image_arg);
+    rm_check_frozen(image_arg);
+    Data_Get_Struct(image_arg, Image, image);
+
     Data_Get_Struct(self, Draw, draw);
     if (draw->primitives == 0)
     {
         rb_raise(rb_eArgError, "nothing to draw");
     }
-
-    rm_check_frozen(ImageList_cur_image(image_arg));
-    Data_Get_Struct(ImageList_cur_image(image_arg), Image, image);
 
     // Point the DrawInfo structure at the current set of primitives.
     magick_clone_string(&(draw->info->primitive), StringValuePtr(draw->primitives));
@@ -1259,7 +1268,9 @@ Montage_texture_eq(VALUE self, VALUE texture)
         montage->info->texture = NULL;
     }
 
-    Data_Get_Struct(ImageList_cur_image(texture), Image, texture_image);
+    texture = ImageList_cur_image(texture);
+    rm_check_destroyed(texture);
+    Data_Get_Struct(texture, Image, texture_image);
 
     // Write a temp copy of the image & save its name.
     rm_write_temp_image(texture_image, tmpnam);
@@ -1425,6 +1436,7 @@ get_type_metrics(
  #define ATTRS_L ((int)(sizeof(attrs)-1))
      Image *image;
      Draw *draw;
+     volatile VALUE t;
      TypeMetric metrics;
      char *text = NULL;
      long text_l;
@@ -1459,7 +1471,9 @@ get_type_metrics(
              Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
              break;
          case 2:
-             Data_Get_Struct(ImageList_cur_image(argv[0]), Image, image);
+             t = ImageList_cur_image(argv[0]);
+             rm_check_destroyed(t);
+             Data_Get_Struct(t, Image, image);
              text = rb_str2cstr(argv[1], &text_l);
              break;                  // okay
          default:

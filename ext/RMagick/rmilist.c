@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.53 2007/06/12 23:18:08 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.54 2007/06/30 20:57:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -265,7 +265,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     Image *images, *new_images = NULL;
     Image *map;
     unsigned int dither = False;
-    volatile VALUE scene, new_imagelist;
+    volatile VALUE scene, new_imagelist, t;
     ExceptionInfo exception;
 
     switch (argc)
@@ -273,7 +273,9 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
         case 2:
             dither = RTEST(argv[1]);
         case 1:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, map);
+            t = ImageList_cur_image(argv[0]);
+            rm_check_destroyed(t);
+            Data_Get_Struct(t, Image, map);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
@@ -573,6 +575,7 @@ rm_images_from_imagelist(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
+    volatile VALUE t;
 
     Check_Type(imagelist, T_ARRAY);
     len = rm_imagelist_length(imagelist);
@@ -585,7 +588,9 @@ rm_images_from_imagelist(VALUE imagelist)
     {
         Image *image;
 
-        Data_Get_Struct(rb_ary_entry(imagelist, x), Image, image);
+        t = rb_ary_entry(imagelist, x);
+        rm_check_destroyed(t);
+        Data_Get_Struct(t, Image, image);
         AppendImageToList(&head, image);
     }
 

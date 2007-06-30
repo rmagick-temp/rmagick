@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.22 2007/06/17 22:25:02 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.23 2007/06/30 20:57:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -435,6 +435,7 @@ GradientFill_fill(VALUE self, VALUE image_obj)
     double x1, y1, x2, y2;          // points on the line
 
     Data_Get_Struct(self, rm_GradientFill, fill);
+    rm_check_destroyed(image_obj);
     Data_Get_Struct(image_obj, Image, image);
 
     x1 = fill->x1;
@@ -535,6 +536,7 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
     texture_image = ImageList_cur_image(texture_arg);
 
     // Bump the reference count on the texture image.
+    rm_check_destroyed(texture_image);
     Data_Get_Struct(texture_image, Image, texture);
     (void) ReferenceImage(texture);
 
@@ -552,6 +554,7 @@ TextureFill_fill(VALUE self, VALUE image_obj)
     rm_TextureFill *fill;
     Image *image;
 
+    rm_check_destroyed(image_obj);
     Data_Get_Struct(image_obj, Image, image);
     Data_Get_Struct(self, rm_TextureFill, fill);
 

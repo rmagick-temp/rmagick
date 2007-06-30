@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.60 2007/06/09 23:08:26 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.61 2007/06/30 20:57:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1575,6 +1575,7 @@ Info_texture_eq(VALUE self, VALUE texture)
     }
 
     // Create a temp copy of the texture and store its name in the texture field
+    rm_check_destroyed(texture);
     Data_Get_Struct(texture, Image, image);
     rm_write_temp_image(image, name);
 

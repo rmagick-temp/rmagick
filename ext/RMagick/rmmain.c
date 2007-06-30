@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.197 2007/06/27 23:19:46 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.198 2007/06/30 20:55:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -555,6 +555,7 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "channel", Image_channel, 1);
     // An alias for compare_channel
     rb_define_method(Class_Image, "channel_compare", Image_compare_channel, -1);
+    rb_define_method(Class_Image, "check_destroyed", Image_check_destroyed, 0);
     rb_define_method(Class_Image, "compare_channel", Image_compare_channel, -1);
     rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
     rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
@@ -583,6 +584,8 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "cycle_colormap", Image_cycle_colormap, 1);
     rb_define_method(Class_Image, "delete_profile", Image_delete_profile, 1);
     rb_define_method(Class_Image, "despeckle", Image_despeckle, 0);
+    rb_define_method(Class_Image, "destroy!", Image_destroy_bang, 0);
+    rb_define_method(Class_Image, "destroyed?", Image_destroyed_q, 0);
     rb_define_method(Class_Image, "difference", Image_difference, 1);
     rb_define_method(Class_Image, "dispatch", Image_dispatch, -1);
     rb_define_method(Class_Image, "displace", Image_displace, -1);
@@ -1013,6 +1016,12 @@ Init_RMagick(void)
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, -1);
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
+
+
+    /*-----------------------------------------------------------------------*/
+    /* Class Magick::DestroyedImageError < StandardError                     */
+    /*-----------------------------------------------------------------------*/
+    Class_DestroyedImageError = rb_define_class_under(Module_Magick, "DestroyedImageError", rb_eStandardError);
 
 
     // Miscellaneous fixed-point constants
@@ -1660,7 +1669,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/27 23:19:46 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/06/30 20:55:35 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.115 2007/06/17 22:24:33 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.116 2007/06/30 20:53:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -116,6 +116,22 @@ rm_check_frozen(VALUE obj)
     if (OBJ_FROZEN(obj))
     {
         rb_error_frozen(rb_class2name(CLASS_OF(obj)));
+    }
+}
+
+
+/*
+    Extern:     rm_check_destroyed
+    Purpose:    raise an error if the image has been destroyed
+*/
+void
+rm_check_destroyed(VALUE obj)
+{
+    Image *image;
+    Data_Get_Struct(obj, Image, image);
+    if (!image)
+    {
+        rb_raise(Class_DestroyedImageError, "destroyed image");
     }
 }
 

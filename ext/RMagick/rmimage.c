@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.226 2007/06/27 23:19:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.227 2007/06/30 20:58:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -51,6 +51,8 @@ static VALUE adaptive_method(
     double sigma = 1.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
+
     switch (argc)
     {
         case 2:
@@ -65,7 +67,6 @@ static VALUE adaptive_method(
     }
 
     Data_Get_Struct(self, Image, image);
-
     GetExceptionInfo(&exception);
 
     new_image = (fp)(image, radius, sigma, &exception);
@@ -96,6 +97,7 @@ static VALUE adaptive_channel_method(
     ExceptionInfo exception;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     switch (argc)
@@ -175,6 +177,7 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
     double scale, drows, dcols;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -272,6 +275,8 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     long offset = 0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
+
     switch (argc)
     {
         case 3:
@@ -311,6 +316,7 @@ Image_add_noise(VALUE self, VALUE noise)
     NoiseType noise_type;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     VALUE_TO_ENUM(noise, noise_type, NoiseType);
@@ -339,6 +345,7 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There must be 1 remaining argument.
@@ -385,6 +392,7 @@ Image_add_profile(VALUE self, VALUE name)
     long profile_filename_l = 0;
     const StringInfo *profile;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -440,6 +448,7 @@ Image_affine_transform(VALUE self, VALUE affine)
     ExceptionInfo exception;
     AffineMatrix matrix;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // Convert Magick::AffineMatrix to AffineMatrix structure.
@@ -470,6 +479,8 @@ Image_aref(VALUE self, VALUE key_arg)
     Image *image;
     char *key;
     const ImageAttribute *attr;
+
+    rm_check_destroyed(self);
 
     switch (TYPE(key_arg))
     {
@@ -518,6 +529,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     const ImageAttribute *attribute;
     unsigned int okay;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
 
     attr = attr_arg == Qnil ? NULL : StringValuePtr(attr_arg);
@@ -586,7 +598,6 @@ crisscross(
 {
     Image *image, *new_image;
     ExceptionInfo exception;
-
 
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
@@ -680,6 +691,7 @@ static VALUE auto_orient(int bang, VALUE self)
 VALUE
 Image_auto_orient(VALUE self)
 {
+    rm_check_destroyed(self);
     return auto_orient(False, self);
 }
 
@@ -689,6 +701,7 @@ Image_auto_orient(VALUE self)
 VALUE
 Image_auto_orient_bang(VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return auto_orient(True, self);
 }
@@ -703,6 +716,7 @@ Image_background_color(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->background_color);
 }
@@ -717,6 +731,7 @@ Image_background_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->background_color, color);
@@ -732,6 +747,7 @@ VALUE Image_base_columns(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->magick_columns);
 }
@@ -745,6 +761,7 @@ VALUE Image_base_filename(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     if (*image->magick_filename)
     {
@@ -764,6 +781,7 @@ VALUE Image_base_rows(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->magick_rows);
 }
@@ -778,6 +796,7 @@ VALUE Image_bias(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return rb_float_new(image->bias);
 }
@@ -788,6 +807,7 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     Image *image;
     double bias;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     bias = rm_percentage(pct);
@@ -806,6 +826,7 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     if (argc > 1)
@@ -838,6 +859,7 @@ Image_black_point_compensation(VALUE self)
     const ImageAttribute *attr;
     volatile VALUE value;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     attr = GetImageAttribute(image, BlackPointCompensationKey);
@@ -863,6 +885,7 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
     Image *image;
     char *value;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -1158,10 +1181,12 @@ special_composite(
 VALUE
 Image_blend(int argc, VALUE *argv, VALUE self)
 {
+    volatile VALUE ovly;
     Image *image, *overlay;
     double src_percent, dst_percent;
     long x_offset = 0L, y_offset = 0L;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     if (argc < 1)
@@ -1169,9 +1194,12 @@ Image_blend(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
+    ovly = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(ovly);
+    Data_Get_Struct(ovly, Image, overlay);
+
     if (argc > 3)
     {
-        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
         get_composite_offsets(argc-3, &argv[3], image, overlay, &x_offset, &y_offset);
         // There must be 3 arguments left
         argc = 3;
@@ -1191,8 +1219,6 @@ Image_blend(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
             break;
     }
-
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
 
     return special_composite(image, overlay, src_percent, dst_percent
                            , x_offset, y_offset, BlendCompositeOp);
@@ -1215,6 +1241,7 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
      ChannelType channels;
      double radius = 0.0, sigma = 1.0;
 
+     rm_check_destroyed(self);
      Data_Get_Struct(self, Image, image);
 
      channels = extract_channels(&argc, argv);
@@ -1311,6 +1338,7 @@ Image_border_bang(
     VALUE height,
     VALUE color)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return border(True, self, width, height, color);
 }
@@ -1323,6 +1351,7 @@ Image_border(
     VALUE height,
     VALUE color)
 {
+    rm_check_destroyed(self);
     return border(False, self, width, height, color);
 }
 
@@ -1336,6 +1365,7 @@ Image_border_color(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->border_color);
 }
@@ -1349,6 +1379,7 @@ Image_border_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->border_color, color);
@@ -1366,6 +1397,7 @@ VALUE Image_bounding_box(VALUE self)
     RectangleInfo box;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
     box = GetImageBoundingBox(image, &exception);
@@ -1449,6 +1481,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     unsigned int flags;
     volatile VALUE ary;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     geom_str = rb_funcall(geom_arg, rm_ID_to_s, 0);
     geometry = StringValuePtr(geom_str);
@@ -1480,6 +1513,7 @@ Image_changed_q(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return IsTaintImage(image) ? Qtrue : Qfalse;
 }
@@ -1496,6 +1530,7 @@ Image_channel(VALUE self, VALUE channel_arg)
     Image *image, *new_image;
     ChannelType channel;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     VALUE_TO_ENUM(channel_arg, channel, ChannelType);
@@ -1523,6 +1558,7 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
     unsigned long channel_depth;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // Ensure all arguments consumed.
@@ -1561,6 +1597,7 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
     unsigned long min, max;
     volatile VALUE ary;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channels = extract_channels(&argc, argv);
@@ -1598,6 +1635,7 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     double mean, stddev;
     volatile VALUE ary;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channels = extract_channels(&argc, argv);
@@ -1649,6 +1687,19 @@ Image_charcoal(int argc, VALUE *argv, VALUE self)
     return effect_image(self, argc, argv, CharcoalImage);
 }
 
+
+/*
+    Method:     Image#check_destroyed
+    Purpose:    If the target image has been destroyed, raises Magick::DestroyedImageError
+*/
+VALUE
+Image_check_destroyed(VALUE self)
+{
+    rm_check_destroyed(self);
+    return Qnil;
+}
+
+
 /*
     Method:     Image#chop
     Purpose:    removes a region of an image and collapses the image to occupy
@@ -1662,6 +1713,7 @@ Image_chop(
     VALUE width,
     VALUE height)
 {
+    rm_check_destroyed(self);
     return xform_image(False, self, x, y, width, height, ChopImage);
 }
 
@@ -1675,6 +1727,7 @@ Image_chromaticity(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return ChromaticityInfo_new(&image->chromaticity);
 }
@@ -1689,6 +1742,7 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     ChromaticityInfo_to_ChromaticityInfo(&image->chromaticity, chroma);
@@ -1728,6 +1782,7 @@ Image_color_histogram(VALUE self)
     ColorPacket *histogram;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // If image not DirectClass make a DirectClass copy.
@@ -1800,6 +1855,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
     long profile_length;
     const StringInfo *profile_data;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -1864,6 +1920,7 @@ Image_color_profile(VALUE self)
     Image *image;
     const StringInfo *profile;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     profile = GetImageProfile(image, "icc");
     if (!profile)
@@ -1915,6 +1972,7 @@ Image_color_flood_fill(
     long x, y;
     int fill_method;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // The target and fill args can be either a color name or
@@ -1971,6 +2029,7 @@ Image_colorize(
     PixelPacket target;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     if (argc == 4)
@@ -2023,6 +2082,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     unsigned long index;
     PixelPacket color, new_color;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // We can handle either 1 or 2 arguments. Nothing else.
@@ -2108,6 +2168,7 @@ Image_colorspace(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return ColorspaceType_new(image->colorspace);
 }
@@ -2123,9 +2184,11 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     Image *image;
     ColorspaceType new_cs;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
-    VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     Data_Get_Struct(self, Image, image);
+
+    VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
 
     (void) SetImageColorspace(image, new_cs);
 
@@ -2159,6 +2222,7 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
             if (argv[3] != Qnil)
             {
                 channel |= OpacityChannel;
+                rm_check_destroyed(argv[3]);
                 Data_Get_Struct(argv[3], Image, image);
                 AppendImageToList(&images, image);
             }
@@ -2166,6 +2230,7 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
             if (argv[2] != Qnil)
             {
                 channel |= BlueChannel;
+                rm_check_destroyed(argv[2]);
                 Data_Get_Struct(argv[2], Image, image);
                 AppendImageToList(&images, image);
             }
@@ -2173,6 +2238,7 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
             if (argv[1] != Qnil)
             {
                 channel |= GreenChannel;
+                rm_check_destroyed(argv[1]);
                 Data_Get_Struct(argv[1], Image, image);
                 AppendImageToList(&images, image);
             }
@@ -2180,6 +2246,7 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
             if (argv[0] != Qnil)
             {
                 channel |= RedChannel;
+                rm_check_destroyed(argv[0]);
                 Data_Get_Struct(argv[0], Image, image);
                 AppendImageToList(&images, image);
             }
@@ -2228,12 +2295,16 @@ VALUE Image_compare_channel(
 {
     Image *image, *r_image, *difference_image;
     double distortion;
-    volatile VALUE ary;
+    volatile VALUE ary, ref;
     MetricType metric_type;
     ChannelType channels;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
+    Data_Get_Struct(self, Image, image);
+
     channels = extract_channels(&argc, argv);
+
     if (argc > 2)
     {
         raise_ChannelType_error(argv[argc-1]);
@@ -2243,8 +2314,10 @@ VALUE Image_compare_channel(
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
 
-    Data_Get_Struct(self, Image, image);
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, r_image);
+    ref = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(ref);
+    Data_Get_Struct(ref, Image, r_image);
+
     VALUE_TO_ENUM(argv[1], metric_type, MetricType);
 
     GetExceptionInfo(&exception);
@@ -2276,6 +2349,7 @@ VALUE Image_compose(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     return CompositeOperator_new(image->compose);
@@ -2292,6 +2366,7 @@ VALUE Image_compose_eq(
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
@@ -2323,15 +2398,30 @@ static VALUE composite(
     CompositeOperator operator;
     GravityType gravity;
     MagickEnum *magick_enum;
+    volatile VALUE comp;
     signed long x_offset;
     signed long y_offset;
 
+    rm_check_destroyed(self);
+
+    if (bang)
+    {
+        rm_check_frozen(self);
+    }
+    if (argc < 3 || argc > 5)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
+    }
+
     Data_Get_Struct(self, Image, image);
+
+    comp = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(comp);
+    Data_Get_Struct(comp, Image, comp_image);
 
     switch (argc)
     {
         case 3:                 // argv[1] is gravity, argv[2] is composite_op
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             VALUE_TO_ENUM(argv[1], gravity, GravityType);
             VALUE_TO_ENUM(argv[2], operator, CompositeOperator);
 
@@ -2382,14 +2472,12 @@ static VALUE composite(
 
         case 4:                 // argv[1], argv[2] is x_off, y_off,
                                 // argv[3] is composite_op
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
             VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
             break;
 
         case 5:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, comp_image);
             VALUE_TO_ENUM(argv[1], gravity, GravityType);
             x_offset = NUM2LONG(argv[2]);
             y_offset = NUM2LONG(argv[3]);
@@ -2415,15 +2503,10 @@ static VALUE composite(
                     break;
             }
             break;
-
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3, 4, or 5)", argc);
-            break;
     }
 
     if (bang)
     {
-        rm_check_frozen(self);
         (void) CompositeImageChannel(image, channels, operator, comp_image, x_offset, y_offset);
         rm_check_image_exception(image, RetainOnError);
 
@@ -2473,6 +2556,8 @@ Image_composite_affine(
     Image *image, *composite, *new_image;
     AffineMatrix affine;
 
+    rm_check_destroyed(self);
+    rm_check_destroyed(source);
     Data_Get_Struct(self, Image, image);
     Data_Get_Struct(source, Image, composite);
 
@@ -2496,6 +2581,8 @@ composite_channel(int bang, int argc, VALUE *argv, VALUE self)
 {
     ChannelType channels;
 
+    // Check destroyed before validating the arguments
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There must be 3, 4, or 5 remaining arguments.
@@ -2534,6 +2621,7 @@ Image_compression(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return CompressionType_new(image->compression);
 }
@@ -2543,6 +2631,7 @@ Image_compression_eq(VALUE self, VALUE compression)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(compression, image->compression, CompressionType);
@@ -2559,6 +2648,7 @@ Image_compress_colormap_bang(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) CompressImageColormap(image);
@@ -2710,6 +2800,7 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     unsigned int sharpen = 0;
 
+    rm_check_destroyed(self);
     if (argc > 1)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
@@ -2801,6 +2892,7 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
     ChannelType channels;
     double black_point, white_point;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
     if (argc > 2)
     {
@@ -2836,6 +2928,7 @@ Image_convolve(
     unsigned int x, order;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     order = NUM2UINT(order_arg);
@@ -2881,6 +2974,7 @@ Image_convolve_channel(
     ChannelType channels;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channels = extract_channels(&argc, argv);
@@ -2942,6 +3036,7 @@ Image_init_copy(VALUE copy, VALUE orig)
 {
     Image *image, *new_image;
 
+    rm_check_destroyed(orig);
     Data_Get_Struct(orig, Image, image);
     new_image = rm_clone_image(image);
     UPDATE_DATA_PTR(copy, new_image);
@@ -2960,12 +3055,14 @@ Image_init_copy(VALUE copy, VALUE orig)
 VALUE
 Image_crop(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return cropper(False, argc, argv, self);
 }
 
 VALUE
 Image_crop_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return cropper(True, argc, argv, self);
 }
@@ -2980,6 +3077,7 @@ Image_cycle_colormap(VALUE self, VALUE amount)
     Image *image, *new_image;
     int amt;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -3001,6 +3099,7 @@ Image_density(VALUE self)
     Image *image;
     char density[128];
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     sprintf(density, "%gx%g", image->x_resolution, image->y_resolution);
@@ -3031,6 +3130,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
     int count;
     double x_res, y_res;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -3089,6 +3189,7 @@ Image_depth(VALUE self)
     unsigned long depth = 0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -3114,6 +3215,7 @@ Image_delete_profile(VALUE self, VALUE name)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -3136,6 +3238,7 @@ Image_despeckle(VALUE self)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -3148,6 +3251,36 @@ Image_despeckle(VALUE self)
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#destroy!
+    Purpose:    Free all the memory associated with an image
+*/
+VALUE Image_destroy_bang(VALUE self)
+{
+    Image *image;
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    rm_image_destroy(image);
+    DATA_PTR(self) = NULL;
+    return self;
+}
+
+
+/*
+    Method:     Image#destroyed?
+    Purpose:    Returns true if the image has been destroyed, false otherwise
+*/
+VALUE Image_destroyed_q(VALUE self)
+{
+    Image *image;
+
+    Data_Get_Struct(self, Image, image);
+    return image ? Qfalse : Qtrue;
+}
+
 
 /*
     Method:     Image#difference
@@ -3164,8 +3297,11 @@ VALUE Image_difference(VALUE self, VALUE other)
     Image *image2;
     volatile VALUE mean, nmean, nmax;
 
+    other = ImageList_cur_image(other);
+    rm_check_destroyed(other);
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
-    Data_Get_Struct(ImageList_cur_image(other), Image, image2);
+    Data_Get_Struct(other, Image, image2);
 
     (void) IsImagesEqual(image, image2);
     // No need to check for error
@@ -3189,11 +3325,12 @@ DEF_ATTR_READER(Image, directory, str)
 VALUE
 Image_displace(int argc, VALUE *argv, VALUE self)
 {
-
     Image *image, *displacement_map;
+    volatile VALUE dmap;
     double x_amplitude = 0.0, y_amplitude = 0.0;
     long x_offset = 0L, y_offset = 0L;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     if (argc < 2)
@@ -3201,9 +3338,12 @@ Image_displace(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
+    dmap = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(dmap);
+    Data_Get_Struct(dmap, Image, displacement_map);
+
     if (argc > 3)
     {
-        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, displacement_map);
         get_composite_offsets(argc-3, &argv[3], image, displacement_map, &x_offset, &y_offset);
         // There must be 3 arguments left
         argc = 3;
@@ -3221,7 +3361,6 @@ Image_displace(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, displacement_map);
     return special_composite(image, displacement_map, x_amplitude, y_amplitude
                            , x_offset, y_offset, DisplaceCompositeOp);
 }
@@ -3260,6 +3399,8 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
         volatile double *f;
         volatile void *v;
     } pixels;
+
+    rm_check_destroyed(self);
 
     if (argc < 5 || argc > 6)
     {
@@ -3329,6 +3470,7 @@ VALUE Image_display(VALUE self)
     Info *info;
     volatile VALUE info_obj;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     if (image->rows == 0 || image->columns == 0)
     {
@@ -3353,6 +3495,7 @@ Image_dispose(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return DisposeType_new(image->dispose);
 }
@@ -3366,6 +3509,7 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(dispose, image->dispose, DisposeType);
@@ -3387,8 +3531,9 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     Image *image, *overlay;
     double src_percent, dst_percent = -1.0;
     long x_offset = 0L, y_offset = 0L;
-    volatile VALUE composite;
+    volatile VALUE composite, ovly;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     if (argc < 1)
@@ -3396,9 +3541,12 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
+    ovly = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(ovly);
+    Data_Get_Struct(ovly, Image, overlay);
+
     if (argc > 3)
     {
-        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
         get_composite_offsets(argc-3, &argv[3], image, overlay, &x_offset, &y_offset);
         // There must be 3 arguments left
         argc = 3;
@@ -3415,8 +3563,6 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
             break;
     }
-
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
 
     composite =  special_composite(image, overlay, src_percent, dst_percent
                                  , x_offset, y_offset, DissolveCompositeOp);
@@ -3440,8 +3586,9 @@ Image_distort(VALUE self, VALUE type, VALUE pts)
     PointInfo *points;
     ExceptionInfo exception;
 
-    VALUE_TO_ENUM(type, distortion_type, DistortImageType);
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(type, distortion_type, DistortImageType);
 
     // Ensure pts is an array
     pts = rb_Array(pts);
@@ -3481,10 +3628,10 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
     ChannelType channels;
     ExceptionInfo exception;
     MetricType metric;
+    volatile VALUE rec;
     double distortion;
 
-    Data_Get_Struct(self, Image, image);
-
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
     if (argc > 2)
     {
@@ -3495,7 +3642,11 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
 
-    Data_Get_Struct(ImageList_cur_image(argv[0]), Image, reconstruct);
+    Data_Get_Struct(self, Image, image);
+
+    rec = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(rec);
+    Data_Get_Struct(rec, Image, reconstruct);
     VALUE_TO_ENUM(argv[1], metric, MetricType);
     GetExceptionInfo(&exception);
     (void) GetImageChannelDistortion(image, reconstruct, channels
@@ -3527,6 +3678,7 @@ Image__dump(VALUE self, VALUE depth)
 
     depth = depth;  // Suppress "never referenced" message from icc
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     info = CloneImageInfo(NULL);
@@ -3575,6 +3727,7 @@ Image_dup(VALUE self)
 {
     volatile VALUE dup;
 
+    rm_check_destroyed(self);
     dup = Data_Wrap_Struct(CLASS_OF(self), NULL, rm_image_destroy, NULL);
     if (rb_obj_tainted(self))
     {
@@ -3596,6 +3749,7 @@ Image_each_profile(VALUE self)
     char *name;
     const StringInfo *profile;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     ResetImageProfileIterator(image);
@@ -3637,6 +3791,7 @@ Image_edge(int argc, VALUE *argv, VALUE self)
     double radius = 0.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
@@ -3675,6 +3830,8 @@ effect_image(
     Image *image, *new_image;
     ExceptionInfo exception;
     double radius = 0.0, sigma = 1.0;
+
+    rm_check_destroyed(self);
 
     switch (argc)
     {
@@ -3727,6 +3884,7 @@ Image_endian(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return EndianType_new(image->endian);
 }
@@ -3741,6 +3899,7 @@ Image_endian_eq(VALUE self, VALUE type)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(type, image->endian, EndianType);
@@ -3757,6 +3916,7 @@ Image_enhance(VALUE self)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
@@ -3781,7 +3941,9 @@ Image_equalize(VALUE self)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
+
     GetExceptionInfo(&exception);
     new_image = rm_clone_image(image);
 
@@ -3804,6 +3966,7 @@ Image_erase_bang(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -3832,6 +3995,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     cols = image->columns;
     rows = image->rows;
@@ -3915,6 +4079,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     char *str;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     cols = image->columns;
     rows = image->rows;
@@ -4011,6 +4176,7 @@ Image_extract_info(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return Rectangle_from_RectangleInfo(&image->extract_info);
 }
@@ -4020,6 +4186,7 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
@@ -4038,6 +4205,7 @@ VALUE Image_filesize(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return INT2FIX(GetBlobSize(image));
 }
@@ -4052,6 +4220,7 @@ Image_filter(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return FilterTypes_new(image->filter);
 }
@@ -4061,6 +4230,7 @@ Image_filter_eq(VALUE self, VALUE filter)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(filter, image->filter, FilterTypes);
@@ -4078,11 +4248,12 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_ISIMAGESIMILAR)
     Image *image, *target;
-    volatile VALUE region;
+    volatile VALUE region, targ;
     long x = 0L, y = 0L;
     ExceptionInfo exception;
     unsigned int okay;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -4092,7 +4263,9 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
         case 2:
             x = NUM2LONG(argv[1]);
         case 1:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, target);
+            targ = ImageList_cur_image(argv[0]);
+            rm_check_destroyed(targ);
+            Data_Get_Struct(targ, Image, target);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 3)", argc);
@@ -4160,12 +4333,14 @@ flipflop(int bang, VALUE self, flipper_t flipflopper)
 VALUE
 Image_flip(VALUE self)
 {
+    rm_check_destroyed(self);
     return flipflop(False, self, FlipImage);
 }
 
 VALUE
 Image_flip_bang(VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return flipflop(True, self, FlipImage);
 }
@@ -4181,12 +4356,14 @@ Image_flip_bang(VALUE self)
 VALUE
 Image_flop(VALUE self)
 {
+    rm_check_destroyed(self);
     return flipflop(False, self, FlopImage);
 }
 
 VALUE
 Image_flop_bang(VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return flipflop(True, self, FlopImage);
 }
@@ -4204,6 +4381,7 @@ Image_format(VALUE self)
     const MagickInfo *magick_info;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     if (*image->magick)
     {
@@ -4230,6 +4408,7 @@ Image_format_eq(VALUE self, VALUE magick)
     char *mgk;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -4287,6 +4466,7 @@ Image_frame(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     FrameInfo frame_info;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     frame_info.width = image->columns + 50;
@@ -4376,6 +4556,7 @@ VALUE Image_fuzz_eq(VALUE self, VALUE fuzz)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     image->fuzz = rm_fuzz_to_dbl(fuzz);
@@ -4396,6 +4577,7 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There must be exactly one remaining argument.
@@ -4432,6 +4614,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
     double red_gamma, green_gamma, blue_gamma;
     char gamma[50];
 
+    rm_check_destroyed(self);
     switch(argc)
     {
         case 1:
@@ -4496,6 +4679,7 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     double radius = 0.0, sigma = 1.0;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There can be 0, 1, or 2 remaining arguments.
@@ -4540,6 +4724,7 @@ Image_geometry_eq(
     volatile VALUE geom_str;
     char *geom;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     if (geometry == Qnil)
@@ -4587,6 +4772,7 @@ Image_get_pixels(
     long size, n;
     VALUE pixel_ary;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     x       = NUM2LONG(x_arg);
     y       = NUM2LONG(y_arg);
@@ -4626,32 +4812,6 @@ Image_get_pixels(
     return pixel_ary;
 }
 
-#if 0
-
-Removed: given Image#pixel_color, this is redundant
-/*
-    Method:     Image#get_one_pixel
-    Purpose:    Call AcquireOnePixel
-    Returns:    the x,y pixel as a Magick::Pixel
-    See also:   pixel_color
-*/
-VALUE
-Image_get_one_pixel(VALUE self, VALUE x, VALUE y)
-{
-    Image *image;
-    PixelPacket pixel;
-    ExceptionInfo exception;
-
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-    pixel = AcquireOnePixel(image, NUM2LONG(x), NUM2LONG(y), &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return Pixel_from_PixelPacket(&pixel);
-}
-#endif
 
 /*
     Method:     Image#gray?
@@ -4665,6 +4825,7 @@ Image_gray_q(VALUE self)
     ExceptionInfo exception;
     unsigned int r;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -4699,6 +4860,7 @@ Image_implode(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
     }
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -4734,7 +4896,9 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile void *buffer;
     unsigned int okay;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
 
     switch (argc)
     {
@@ -4752,8 +4916,6 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 6 or 7)", argc);
             break;
     }
-
-    Data_Get_Struct(self, Image, image);
 
     if (x_off < 0 || y_off < 0 || cols <= 0 || rows <= 0)
     {
@@ -5004,6 +5166,10 @@ Image_inspect(VALUE self)
     char buffer[MaxTextExtent];          // image description buffer
 
     Data_Get_Struct(self, Image, image);
+    if (!image)
+    {
+        return rb_str_new2("#<Magick::Image: (destroyed)>");
+    }
     build_inspect_string(image, buffer, sizeof(buffer));
     return rb_str_new2(buffer);
 }
@@ -5018,6 +5184,7 @@ Image_interlace(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     return InterlaceType_new(image->interlace);
@@ -5033,6 +5200,7 @@ Image_interlace_eq(VALUE self, VALUE interlace)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
@@ -5051,6 +5219,7 @@ Image_iptc_profile(VALUE self)
     Image *image;
     const StringInfo *profile;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     profile = GetImageProfile(image, "iptc");
@@ -5100,6 +5269,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
     double black_point = 0.0, gamma = 1.0, white_point = (double)MaxRGB;
     char level[50];
 
+    rm_check_destroyed(self);
     switch(argc)
     {
         case 0:             // take all the defaults
@@ -5145,6 +5315,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     double black_point = 0.0, gamma = 1.0, white_point = (double)MaxRGB;
     ChannelType channel;
 
+    rm_check_destroyed(self);
     switch(argc)
     {
         case 1:             // take all the defaults
@@ -5168,6 +5339,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     }
 
     VALUE_TO_ENUM(argv[0], channel, ChannelType);
+
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -5191,6 +5363,7 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     double black_point, white_point;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     get_black_white_point(image, argc, argv, &black_point, &white_point);
@@ -5318,12 +5491,14 @@ magnify(int bang, VALUE self, magnifier_t magnifier)
 VALUE
 Image_magnify(VALUE self)
 {
+    rm_check_destroyed(self);
     return magnify(False, self, MagnifyImage);
 }
 
 VALUE
 Image_magnify_bang(VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return magnify(True, self, MagnifyImage);
 }
@@ -5342,6 +5517,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     volatile VALUE map_obj, map_arg;
     unsigned int dither = False;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 2:
@@ -5359,6 +5535,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     new_image = rm_clone_image(image);
 
     map_obj = ImageList_cur_image(map_arg);
+    rm_check_destroyed(map_obj);
     Data_Get_Struct(map_obj, Image, map);
     (void) MapImage(new_image, map, dither);
     rm_check_image_exception(new_image, DestroyOnError);
@@ -5379,6 +5556,7 @@ Image_mask(VALUE self)
     Image *image, *mask;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
@@ -5410,12 +5588,15 @@ Image_mask_eq(VALUE self, VALUE mask)
     PixelPacket *q;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
     if (mask != Qnil)
     {
-        Data_Get_Struct(ImageList_cur_image(mask), Image, mask_image);
+        mask = ImageList_cur_image(mask);
+        rm_check_destroyed(mask);
+        Data_Get_Struct(mask, Image, mask_image);
         clip_mask = rm_clone_image(mask_image);
 
         // Resize if necessary
@@ -5491,6 +5672,7 @@ Image_matte_color(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->matte_color);
 }
@@ -5504,6 +5686,7 @@ Image_matte_color_eq(VALUE self, VALUE color)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->matte_color, color);
@@ -5529,6 +5712,7 @@ Image_matte_flood_fill(
     long x, y;
     PaintMethod pm;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     Color_to_PixelPacket(&target, color);
@@ -5572,6 +5756,7 @@ Image_median_filter(int argc, VALUE *argv, VALUE self)
     double radius = 0.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
@@ -5610,6 +5795,7 @@ Image_mime_type(VALUE self)
     char *type;
     volatile VALUE mime_type;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     type = MagickToMime(image->magick);
     if (!type)
@@ -5634,12 +5820,14 @@ Image_mime_type(VALUE self)
 VALUE
 Image_minify(VALUE self)
 {
+    rm_check_destroyed(self);
     return magnify(False, self, MinifyImage);
 }
 
 VALUE
 Image_minify_bang(VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return magnify(True, self, MinifyImage);
 }
@@ -5658,6 +5846,7 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
            pct_hue        = 100.0;
     char modulate[100];
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 3:
@@ -5679,6 +5868,7 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "brightness is %g%%, must be positive", pct_brightness);
     }
     sprintf(modulate, "%f%%,%f%%,%f%%", pct_brightness, pct_saturation, pct_hue);
+
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -5702,6 +5892,7 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -5734,6 +5925,7 @@ Image_monochrome_q(VALUE self)
     ExceptionInfo exception;
     unsigned int r;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -5760,6 +5952,7 @@ Image_montage_eq(
     Image *image;
 
     rb_warning("montage= is deprecated. It has no purpose.");
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
@@ -5836,6 +6029,7 @@ motion_blur(
 VALUE
 Image_motion_blur(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return motion_blur(argc, argv, self, MotionBlurImage);
 }
 
@@ -5853,6 +6047,7 @@ Image_negate(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     unsigned int grayscale = False;
 
+    rm_check_destroyed(self);
     if (argc == 1)
     {
         grayscale = RTEST(argv[0]);
@@ -5885,6 +6080,7 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
     ChannelType channels;
     unsigned int grayscale = False;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There can be at most 1 remaining argument.
@@ -6012,6 +6208,7 @@ Image_normalize(VALUE self)
 {
     Image *image, *new_image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -6033,6 +6230,7 @@ Image_normalize_channel(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
     // Ensure all arguments consumed.
     if (argc > 0)
@@ -6064,6 +6262,7 @@ Image_number_colors(VALUE self)
     ExceptionInfo exception;
     unsigned long n = 0;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -6088,6 +6287,7 @@ Image_oil_paint(int argc, VALUE *argv, VALUE self)
     double radius = 3.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
@@ -6126,6 +6326,7 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
     PixelPacket target_pp;
     PixelPacket fill_pp;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -6152,6 +6353,7 @@ Image_opaque_q(VALUE self)
     ExceptionInfo exception;
     unsigned int r = 0;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -6181,6 +6383,8 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
     const char *threshold_map = "2x2";
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
+
     if (argc > 1)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
@@ -6208,7 +6412,6 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
             }
         }
     }
-
 
     Data_Get_Struct(self, Image, image);
 
@@ -6240,6 +6443,7 @@ Image_orientation(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return OrientationType_new(image->orientation);
 }
@@ -6254,6 +6458,7 @@ Image_orientation_eq(VALUE self, VALUE orientation)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(orientation, image->orientation, OrientationType);
@@ -6270,6 +6475,7 @@ Image_page(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return Rectangle_from_RectangleInfo(&image->page);
 }
@@ -6284,6 +6490,7 @@ Image_page_eq(VALUE self, VALUE rect)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Rectangle_to_RectangleInfo(&image->page, rect);
@@ -6302,6 +6509,7 @@ Image_palette_q(VALUE self)
     ExceptionInfo exception;
     unsigned int r = 0;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -6348,6 +6556,8 @@ Image_pixel_color(
     unsigned int okay;
 
     memset(&old_color, 0, sizeof(old_color));
+
+    rm_check_destroyed(self);
 
     switch (argc)
     {
@@ -6439,6 +6649,7 @@ Image_pixel_interpolation_method(VALUE self)
 #if defined(HAVE_INTERPOLATEPIXELCOLOR)
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return InterpolatePixelMethod_new(image->interpolate);
 
@@ -6455,6 +6666,7 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 #if defined(HAVE_INTERPOLATEPIXELCOLOR)
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(method, image->interpolate, InterpolatePixelMethod);
@@ -6527,6 +6739,7 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     Draw *draw;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -6577,6 +6790,7 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
     MagickBooleanType dither = MagickFalse;
     unsigned long levels = 4;
 
+    rm_check_destroyed(self);
     switch(argc)
     {
         case 2:
@@ -6612,10 +6826,10 @@ Image_preview(VALUE self, VALUE preview)
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
-
+    rm_check_destroyed(self);
     VALUE_TO_ENUM(preview, preview_type, PreviewType);
-
     Data_Get_Struct(self, Image, image);
+
     new_image = PreviewImage(image, preview_type, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
@@ -6664,6 +6878,7 @@ Image_quantum_depth(VALUE self)
     Image *image;
     unsigned long quantum_depth;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     quantum_depth = GetImageQuantumDepth(image, MagickFalse);
 
@@ -6693,6 +6908,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     ChannelType channel;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // The default channel is AllChannels
@@ -6780,6 +6996,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     QuantizeInfo quantize_info;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetQuantizeInfo(&quantize_info);
 
@@ -6823,6 +7040,7 @@ Image_radial_blur(VALUE self, VALUE angle)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -6851,6 +7069,7 @@ Image_radial_blur_channel(
     ExceptionInfo exception;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There must be 1 remaining argument.
@@ -6901,6 +7120,7 @@ Image_random_channel_threshold(
 
     rb_warning("This method is deprecated. Use Image#random_threshold_channel instead.");
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channel = StringValuePtr(channel_arg);
@@ -6936,7 +7156,7 @@ Image_random_threshold_channel(
     volatile VALUE geom_str;
     ExceptionInfo exception;
 
-
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channels = extract_channels(&argc, argv);
@@ -6988,6 +7208,7 @@ Image_raise(int argc, VALUE *argv, VALUE self)
     rect.width = 6;         // default
     rect.height = 6;        // default
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 3:
@@ -7106,6 +7327,7 @@ Image_recolor(VALUE self, VALUE color_matrix)
     double *matrix;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     GetExceptionInfo(&exception);
 
     // Allocate color matrix from Ruby's memory
@@ -7236,6 +7458,7 @@ Image_reduce_noise(VALUE self, VALUE radius)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -7256,6 +7479,7 @@ Image_rendering_intent(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return RenderingIntent_new(image->rendering_intent);
 }
@@ -7269,6 +7493,7 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
@@ -7357,12 +7582,14 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
 VALUE
 Image_resize(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return resize(False, argc, argv, self);
 }
 
 VALUE
 Image_resize_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return resize(True, argc, argv, self);
 }
@@ -7378,6 +7605,7 @@ Image_roll(VALUE self, VALUE x_offset, VALUE y_offset)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -7456,12 +7684,14 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
 VALUE
 Image_rotate(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return rotate(False, argc, argv, self);
 }
 
 VALUE
 Image_rotate_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return rotate(True, argc, argv, self);
 }
@@ -7478,12 +7708,14 @@ DEF_ATTR_READER(Image, rows, int)
 VALUE
 Image_sample(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return scale(False, argc, argv, self, SampleImage);
 }
 
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return scale(True, argc, argv, self, SampleImage);
 }
@@ -7498,12 +7730,14 @@ Image_sample_bang(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_scale(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return scale(False, argc, argv, self, ScaleImage);
 }
 
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return scale(True, argc, argv, self, ScaleImage);
 }
@@ -7586,6 +7820,7 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
      ChannelType channel;
      unsigned long channel_depth;
 
+     rm_check_destroyed(self);
      rm_check_frozen(self);
      Data_Get_Struct(self, Image, image);
      VALUE_TO_ENUM(channel_arg, channel, ChannelType);
@@ -7611,6 +7846,7 @@ Image_separate(int argc, VALUE *argv, VALUE self)
     ChannelType channels = 0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // All arguments are ChannelType enums
@@ -7650,6 +7886,7 @@ Image_sepiatone(int argc, VALUE *argv, VALUE self)
     double threshold = (double) MaxRGB;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -7692,6 +7929,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
     double cluster_threshold    = 1.0;
     double smoothing_threshold  = 1.5;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 4:
@@ -7730,6 +7968,7 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
     Image *image;
     Quantum opacity;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     opacity = APP2QUANTUM(opacity_arg);
@@ -7755,6 +7994,7 @@ Image_properties(VALUE self)
     const ImageAttribute *attr;
     volatile VALUE attr_hash;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // If block, iterate over attributes
@@ -7806,6 +8046,7 @@ Image_shade(int argc, VALUE *argv, VALUE self)
     unsigned int shading=False;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 3:
@@ -7855,6 +8096,7 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     long y_offset = 4L;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch(argc)
     {
         case 4:
@@ -7916,6 +8158,7 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     double radius = 0.0, sigma = 1.0;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
     // There must be 0, 1, or 2 remaining arguments.
@@ -7961,6 +8204,7 @@ Image_shave(
     VALUE width,
     VALUE height)
 {
+    rm_check_destroyed(self);
     return xform_image(False, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
 }
 
@@ -7971,6 +8215,7 @@ Image_shave_bang(
     VALUE width,
     VALUE height)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
 }
@@ -7991,6 +8236,7 @@ Image_shear(
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -8018,6 +8264,7 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
     double midpoint = 50.0;
     ChannelType channels;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     channels = extract_channels(&argc, argv);
@@ -8056,6 +8303,7 @@ Image_signature(VALUE self)
     Image *image;
     const ImageAttribute *signature;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     (void) SignatureImage(image);
     signature = GetImageAttribute(image, "signature");
@@ -8076,6 +8324,7 @@ VALUE
 Image_sketch(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_SKETCHIMAGE)
+    rm_check_destroyed(self);
     return motion_blur(argc, argv, self, SketchImage);
 #else
     rm_not_implemented();
@@ -8097,6 +8346,7 @@ Image_solarize(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     double threshold = 50.0;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
@@ -8134,6 +8384,8 @@ Image_spaceship(VALUE self, VALUE other)
     const ImageAttribute *sigA, *sigB;
     int res;
 
+    rm_check_destroyed(self);
+
     // If the other object isn't a Image object, then they can't be equal.
     if (!rb_obj_is_kind_of(other, Class_Image))
     {
@@ -8148,6 +8400,7 @@ Image_spaceship(VALUE self, VALUE other)
 #endif
     }
 
+    rm_check_destroyed(other);
     Data_Get_Struct(self, Image, imageA);
     Data_Get_Struct(other, Image, imageB);
 
@@ -8183,6 +8436,7 @@ Image_splice(int argc, VALUE *argv, VALUE self)
     RectangleInfo rectangle;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch(argc)
@@ -8234,6 +8488,7 @@ Image_spread(int argc, VALUE *argv, VALUE self)
     unsigned int radius = 3;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
@@ -8244,6 +8499,7 @@ Image_spread(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
             break;
     }
+
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -8278,9 +8534,11 @@ Image_stegano(
     Image *watermark;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     wm_image = ImageList_cur_image(watermark_image);
+    rm_check_destroyed(wm_image);
     Data_Get_Struct(wm_image, Image, watermark);
 
     image->offset = NUM2LONG(offset);
@@ -8314,9 +8572,11 @@ Image_stereo(
     Image *offset;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     offset_image = ImageList_cur_image(offset_image_arg);
+    rm_check_destroyed(offset_image);
     Data_Get_Struct(offset_image, Image, offset);
 
     GetExceptionInfo(&exception);
@@ -8339,6 +8599,8 @@ VALUE
 Image_class_type(VALUE self)
 {
     Image *image;
+
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     return ClassType_new(image->storage_class);
@@ -8356,6 +8618,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     ClassType class_type;
     QuantizeInfo qinfo;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(new_class_type, class_type, ClassType);
@@ -8402,6 +8665,7 @@ Image_store_pixels(
     unsigned long cols, rows;
     unsigned int okay;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     x = NUM2LONG(x_arg);
@@ -8451,6 +8715,7 @@ Image_strip_bang(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     (void) StripImage(image);
@@ -8470,6 +8735,7 @@ Image_swirl(VALUE self, VALUE degrees)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -8511,9 +8777,13 @@ Image_texture_flood_fill(
     long x, y;
     PaintMethod method;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&color, color_obj);
     texture = ImageList_cur_image(texture_obj);
+    rm_check_destroyed(texture);
+    Data_Get_Struct(texture, Image, texture_image);
+
     x = NUM2LONG(x_obj);
     y = NUM2LONG(y_obj);
 
@@ -8535,7 +8805,6 @@ Image_texture_flood_fill(
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    Data_Get_Struct(texture, Image, texture_image);
 
     draw_info->fill_pattern = rm_clone_image(texture_image);
     new_image = rm_clone_image(image);
@@ -8569,6 +8838,7 @@ Image_threshold(VALUE self, VALUE threshold)
 {
     Image *image, *new_image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     new_image = rm_clone_image(image);
@@ -8595,6 +8865,7 @@ VALUE threshold_image(
     double red, green, blue, opacity;
     char ctarg[200];
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -8702,12 +8973,14 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 VALUE
 Image_thumbnail(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return thumbnail(False, argc, argv, self);
 }
 
 VALUE
 Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return thumbnail(True, argc, argv, self);
 }
@@ -8722,6 +8995,7 @@ Image_ticks_per_second(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return INT2FIX(image->ticks_per_second);
 }
@@ -8732,6 +9006,7 @@ Image_ticks_per_second_eq(VALUE self, VALUE tps)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     image->ticks_per_second = NUM2ULONG(tps);
@@ -8748,6 +9023,7 @@ Image_tile_info(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // Deprecated in 5.5.6 and later
@@ -8760,6 +9036,7 @@ Image_tile_info_eq(VALUE self, VALUE rect)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // Deprecated in 5.5.6 and later
@@ -8784,6 +9061,8 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     double alpha_pct_opaque = 1.0;
     char opacity[50];
     ExceptionInfo exception;
+
+    rm_check_destroyed(self);
 
     switch(argc)
     {
@@ -8859,14 +9138,13 @@ Image_to_blob(VALUE self)
     size_t length = 2048;       // Do what Magick++ does
     ExceptionInfo exception;
 
-    Data_Get_Struct(self, Image, image);
-
     // The user can specify the depth (8 or 16, if the format supports
     // both) and the image format by setting the depth and format
     // values in the info parm block.
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     // Copy the depth and magick fields to the Image
@@ -8935,8 +9213,9 @@ Image_to_color(VALUE self, VALUE pixel_arg)
     ExceptionInfo exception;
     char name[MaxTextExtent];
 
-    Data_Get_Struct(pixel_arg, Pixel, pixel);
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
+    Data_Get_Struct(pixel_arg, Pixel, pixel);
     GetExceptionInfo(&exception);
 
     // QueryColorname returns False if the color represented by the PixelPacket
@@ -8981,6 +9260,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     PixelPacket color;
     Quantum opacity = TransparentOpacity;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     switch (argc)
@@ -9014,6 +9294,7 @@ Image_transparent_color(VALUE self)
 #if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->transparent_color);
 #else
@@ -9034,6 +9315,7 @@ Image_transparent_color_eq(VALUE self, VALUE color)
 #if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->transparent_color, color);
@@ -9056,6 +9338,7 @@ VALUE
 Image_transpose(VALUE self)
 {
 #if defined(HAVE_TRANSPOSEIMAGE)
+    rm_check_destroyed(self);
     return crisscross(False, self, TransposeImage);
 #else
     rm_not_implemented();
@@ -9068,6 +9351,7 @@ VALUE
 Image_transpose_bang(VALUE self)
 {
 #if defined(HAVE_TRANSPOSEIMAGE)
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return crisscross(True, self, TransposeImage);
 #else
@@ -9086,6 +9370,7 @@ VALUE
 Image_transverse(VALUE self)
 {
 #if defined(HAVE_TRANSVERSEIMAGE)
+    rm_check_destroyed(self);
     return crisscross(False, self, TransverseImage);
 #else
     rm_not_implemented();
@@ -9097,6 +9382,7 @@ VALUE
 Image_transverse_bang(VALUE self)
 {
 #if defined(HAVE_TRANSVERSEIMAGE)
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     return crisscross(True, self, TransverseImage);
 #else
@@ -9165,12 +9451,15 @@ trimmer(int bang, int argc, VALUE *argv, VALUE self)
 VALUE
 Image_trim(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
     return trimmer(False, argc, argv, self);
 }
 
 VALUE
 Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
+    rm_check_destroyed(self);
+    rm_check_frozen(self);
     return trimmer(True, argc, argv, self);
 }
 
@@ -9188,6 +9477,7 @@ VALUE Image_image_type_eq(VALUE self, VALUE type)
     Image *image;
     ImageType it;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(type, it, ImageType);
@@ -9206,6 +9496,7 @@ VALUE Image_image_type(VALUE self)
     ImageType type;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
     type = GetImageType(image, &exception);
@@ -9228,6 +9519,7 @@ Image_unique_colors(VALUE self)
     Image *image, *new_image;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
@@ -9254,6 +9546,7 @@ Image_units(VALUE self)
 {
     Image *image;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return ResolutionType_new(image->units);
 }
@@ -9269,6 +9562,7 @@ Image_units_eq(
 {
     Image *image;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(restype, image->units, ResolutionType);
@@ -9335,6 +9629,7 @@ Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
     double radius = 0.0, sigma = 1.0, amount = 1.0, threshold = 0.05;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     unsharp_mask_args(argc, argv, &radius, &sigma, &amount, &threshold);
@@ -9364,6 +9659,7 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
     double radius = 0.0, sigma = 1.0, amount = 1.0, threshold = 0.05;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
     if (argc > 4)
     {
@@ -9399,6 +9695,7 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
     double radius = 0.0, sigma = 10.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     horz_radius = (long)(image->columns * 0.10 + 0.5);
@@ -9444,6 +9741,7 @@ Image_virtual_pixel_method(VALUE self)
     Image *image;
     VirtualPixelMethod vpm;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     vpm = GetImageVirtualPixelMethod(image);
 
@@ -9461,6 +9759,7 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
     Image *image;
     VirtualPixelMethod vpm;
 
+    rm_check_destroyed(self);
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(method, vpm, VirtualPixelMethod);
@@ -9485,7 +9784,9 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
     double src_percent = 100.0, dst_percent = 100.0;
     long x_offset = 0L, y_offset = 0L;
     char geometry[20];
+    volatile VALUE ovly;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     if (argc < 1)
@@ -9493,9 +9794,12 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
+    ovly = ImageList_cur_image(argv[0]);
+    rm_check_destroyed(ovly);
+    Data_Get_Struct(ovly, Image, overlay);
+
     if (argc > 3)
     {
-        Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
         get_composite_offsets(argc-3, &argv[3], image, overlay, &x_offset, &y_offset);
         // There must be 3 arguments left
         argc = 3;
@@ -9508,7 +9812,6 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
         case 2:
             src_percent = rm_percentage(argv[1]) * 100.0;
         case 1:
-            Data_Get_Struct(ImageList_cur_image(argv[0]), Image, overlay);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
@@ -9540,6 +9843,7 @@ Image_wave(int argc, VALUE *argv, VALUE self)
     double amplitude = 25.0, wavelength = 150.0;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 2:
@@ -9596,6 +9900,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     char *func;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     switch (argc)
     {
         case 2:
@@ -9731,6 +10036,7 @@ Image_write(VALUE self, VALUE file)
     long filename_l;
     ExceptionInfo exception;
 
+    rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
     info_obj = rm_info_new();
@@ -10121,13 +10427,18 @@ void rm_trace_creation(Image *image)
     External:   rm_image_destroy
     Purpose:    Called from GC when all references to the image have gone out
                 of scope.
+    Notes:      A NULL Image pointer indicates that the image has already been
+                destroyed by Image#destroy!
 */
 void rm_image_destroy(void *img)
 {
     Image *image = (Image *)img;
 
-    call_trace_proc(image, "d");
-    (void) DestroyImage(image);
+    if (img != NULL)
+    {
+        call_trace_proc(image, "d");
+        (void) DestroyImage(image);
+    }
 }
 
 

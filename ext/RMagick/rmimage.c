@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.227 2007/06/30 20:58:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.228 2007/07/01 00:02:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1657,22 +1657,6 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
     rb_ary_store(ary, 1, rb_float_new(stddev));
 
     return ary;
-}
-
-
-
-/*
-    Method:     Image#channel_threshold(red_channel, green_channel=MaxRGB,
-                                        blue_channel=MaxRGB, opacity_channel=MaxRGB)
-    Purpose:    Same as Image#threshold except that you can specify
-                a separate threshold for each channel
-*/
-VALUE
-Image_channel_threshold(int argc, VALUE *argv, VALUE self)
-{
-    rb_warning("This method is deprecated in this release of ImageMagick"
-               ". Use bilevel_channel instead.");
-    return threshold_image(argc, argv, self, ThresholdImageChannel);
 }
 
 
@@ -5938,33 +5922,11 @@ Image_monochrome_q(VALUE self)
 }
 
 /*
-    Method:     Image#montage, montage=
+    Method:     Image#montage
     Purpose:    Tile size and offset within an image montage.
                 Only valid for montage images.
 */
 DEF_ATTR_READER(Image, montage, str)
-
-VALUE
-Image_montage_eq(
-    VALUE self,
-    VALUE montage)
-{
-    Image *image;
-
-    rb_warning("montage= is deprecated. It has no purpose.");
-    rm_check_destroyed(self);
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-
-    if (montage == Qnil)
-    {
-        magick_free(image->montage);
-        image->montage = NULL;
-        return self;
-    }
-    magick_clone_string(&image->montage, StringValuePtr(montage));
-    return self;
-}
 
 
 /*
@@ -7096,53 +7058,8 @@ Image_radial_blur_channel(
 
 
 /*
-    Method:     Image#random_channel_threshold
-    Purpose:    changes the value of individual pixels based on the intensity of
-                each pixel compared to a random threshold. The result is a
-                low-contrast, two color image.
-    Args:       `channel_arg' can be "all", "intensity", "opacity", "matte"
-                `thresholds' can be '2x2', '3x3', '4x4', a single digit,
-                (treated as 'X', and Y=MaxRGB-X), 'XxY'. If the thresholds
-                string includes a '%', the number(s) is/are treated as percentage(s)
-                of MaxRGB.
-    Notes:      Christy says TO DO: red, green, blue, cyan, magenta, yellow, black.
-                Added in 5.5.7, deprecated in 6.0.0.
-*/
-VALUE
-Image_random_channel_threshold(
-    VALUE self,
-    VALUE channel_arg,
-    VALUE thresholds_arg)
-{
-    Image *image, *new_image;
-    char *channel, *thresholds;
-    ExceptionInfo exception;
-
-    rb_warning("This method is deprecated. Use Image#random_threshold_channel instead.");
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-
-    channel = StringValuePtr(channel_arg);
-    thresholds = StringValuePtr(thresholds_arg);
-
-    new_image = rm_clone_image(image);
-
-    GetExceptionInfo(&exception);
-    (void) RandomChannelThresholdImage(new_image, channel, thresholds, &exception);
-    rm_check_exception(&exception, new_image, DestroyOnError);
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return rm_image_new(new_image);
-}
-
-
-/*
     Method:     Image#random_threshold_channel
     PUrpose:    Call RandomThresholdImageChannel
-    Notes:      Very similar to above. This method was added in IM 6.0.0
-                and the RandomChannelThresholdImage method was deprecated.
 */
 VALUE
 Image_random_threshold_channel(
@@ -9015,39 +8932,6 @@ Image_ticks_per_second_eq(VALUE self, VALUE tps)
 
 
 /*
-    Method:     Image#tile_info, tile_info=
-    Purpose:    the tile_info attribute accessors
-*/
-VALUE
-Image_tile_info(VALUE self)
-{
-    Image *image;
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-
-    // Deprecated in 5.5.6 and later
-    rb_warning("RMagick: tile_info is deprecated in this release of ImageMagick. Use extract_info instead.");
-    return Rectangle_from_RectangleInfo(&image->extract_info);
-}
-
-VALUE
-Image_tile_info_eq(VALUE self, VALUE rect)
-{
-    Image *image;
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-
-    // Deprecated in 5.5.6 and later
-    rb_warning("RMagick: tile_info= is deprecated in this release of ImageMagick. Use extract_info= instead.");
-    rm_check_frozen(self);
-    Rectangle_to_RectangleInfo(&image->extract_info, rect);
-    return self;
-}
-
-
-/*
     Method:     Image#tint
     Purpose:    Call TintImage
     Notes:      Opacity values are percentages: 0.10 -> 10%.
@@ -9463,28 +9347,6 @@ Image_trim_bang(int argc, VALUE *argv, VALUE self)
     return trimmer(True, argc, argv, self);
 }
 
-
-
-/*
-    Method:     Image#image_type=(type)
-    Purpose:    Call SetImageType to set the type of the image
-    Note:       Can't use type & type= b/c of Object#type.
-                This setter is useless. Leave for backward compatibility
-                but don't document it.
-*/
-VALUE Image_image_type_eq(VALUE self, VALUE type)
-{
-    Image *image;
-    ImageType it;
-
-    rm_check_destroyed(self);
-    rm_check_frozen(self);
-    Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(type, it, ImageType);
-    (void) SetImageType(image, it);
-
-    return self;
-}
 
 /*
     Method:     Image#image_type

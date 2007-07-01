@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.198 2007/06/30 20:55:35 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.199 2007/07/01 00:02:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -21,8 +21,6 @@ static void test_Magick_version(void);
 static void version_constants(void);
 
 
-#define MAGICK_MONITOR_CVAR "@@__rmagick_monitor__"
-static VALUE Magick_Monitor;
 
 /*
     Method:     Magick::colors [ { |colorinfo| } ]
@@ -251,70 +249,6 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 }
 
 
-/*
-    This is the exit known to ImageMagick. Retrieve the monitor
-    proc and call it, passing the 3 exit arguments.
-*/
-static MagickBooleanType
-monitor_handler(
-    const char *text,
-    const MagickOffsetType quantum,
-    const MagickSizeType span,
-    ExceptionInfo *exception)
-{
-    volatile VALUE monitor;
-    volatile VALUE args[3];
-
-    exception = exception;  // defeat "never referenced" message from icc
-
-    if (rb_cvar_defined(Module_Magick, Magick_Monitor) == Qtrue)
-    {
-        args[0] = rb_str_new2(text);
-        // Convert these possibly-64-bit types to 32-bit types that
-        // Ruby can handle.
-        args[1] = INT2NUM((long) quantum);
-        args[2] = UINT2NUM((unsigned long) span);
-
-        monitor = rb_cvar_get(Module_Magick, Magick_Monitor);
-        (void) rb_funcall2((VALUE)monitor, rm_ID_call, 3, (VALUE *)args);
-    }
-
-    return True;
-}
-
-/*
-    Method:     Magick.set_monitor(&monitor)
-    Purpose:    Establish MagickMonitor exit
-    Notes:      use nil argument to turn off monitoring
-*/
-static VALUE
-Magick_set_monitor(VALUE class, VALUE monitor)
-{
-
-    // 1st time: establish ID, define @@__MAGICK_MONITOR__
-    // class variable, stow monitor VALUE in it.
-    if (!Magick_Monitor)
-    {
-        Magick_Monitor = rb_intern(MAGICK_MONITOR_CVAR);
-        rb_define_class_variable(Module_Magick, MAGICK_MONITOR_CVAR, monitor);
-
-        rb_warning("Magick.set_monitor is deprecated; use Image#monitor= or Image::Info#monitor= instead.");
-    }
-
-    // If nil, turn off monitoring.
-    if (monitor == Qnil)
-    {
-        (void) SetMonitorHandler(NULL);
-    }
-    else
-    // Otherwise, store monitor in @@__MAGICK_MONITOR__
-    {
-        rb_cvar_set(Module_Magick, Magick_Monitor, monitor, 0);
-        (void) SetMonitorHandler(monitor_handler);
-    }
-
-    return class;
-}
 
 /*
     Method      Magick.set_cache_threshold(megabytes)
@@ -322,8 +256,6 @@ Magick_set_monitor(VALUE class, VALUE monitor)
                 pixel cache.  Once this threshold is exceeded, all
                 subsequent pixels cache operations are to/from disk.
     Notes:      singleton method
-                Pre-5.5.1 this method called the SetCacheThreshold
-                function, which is deprecated in 5.5.1.
 */
 static VALUE
 Magick_set_cache_threshold(VALUE class, VALUE threshold)
@@ -436,7 +368,6 @@ Init_RMagick(void)
     rb_define_module_function(Module_Magick, "fonts", Magick_fonts, 0);
     rb_define_module_function(Module_Magick, "init_formats", Magick_init_formats, 0);
     rb_define_module_function(Module_Magick, "limit_resource", Magick_limit_resource, -1);
-    rb_define_module_function(Module_Magick, "set_monitor", Magick_set_monitor, 1);
     rb_define_module_function(Module_Magick, "set_cache_threshold", Magick_set_cache_threshold, 1);
     rb_define_module_function(Module_Magick, "set_log_event_mask", Magick_set_log_event_mask, -1);
     rb_define_module_function(Module_Magick, "set_log_format", Magick_set_log_format, 1);
@@ -492,7 +423,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, fuzz)
     DCL_ATTR_ACCESSOR(Image, gamma)
     DCL_ATTR_ACCESSOR(Image, geometry)
-    DCL_ATTR_ACCESSOR(Image, image_type)
+    DCL_ATTR_READER(Image, image_type)
     DCL_ATTR_ACCESSOR(Image, interlace)
     DCL_ATTR_ACCESSOR(Image, iptc_profile)
     DCL_ATTR_ACCESSOR(Image, iterations)        // do not document! Only used by Image#iterations=
@@ -502,7 +433,7 @@ Init_RMagick(void)
     DCL_ATTR_READER(Image, mean_error_per_pixel)
     DCL_ATTR_READER(Image, mime_type)
     DCL_ATTR_WRITER(Image, monitor)
-    DCL_ATTR_ACCESSOR(Image, montage)
+    DCL_ATTR_READER(Image, montage)
     DCL_ATTR_READER(Image, normalized_mean_error)
     DCL_ATTR_READER(Image, normalized_maximum_error)
     DCL_ATTR_READER(Image, number_colors)
@@ -519,7 +450,6 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Image, start_loop)
     DCL_ATTR_ACCESSOR(Image, class_type)
     DCL_ATTR_ACCESSOR(Image, ticks_per_second)
-    DCL_ATTR_ACCESSOR(Image, tile_info)
     DCL_ATTR_READER(Image, total_colors)
     DCL_ATTR_ACCESSOR(Image, transparent_color)
     DCL_ATTR_ACCESSOR(Image, units)
@@ -560,7 +490,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "channel_depth", Image_channel_depth, -1);
     rb_define_method(Class_Image, "channel_extrema", Image_channel_extrema, -1);
     rb_define_method(Class_Image, "channel_mean", Image_channel_mean, -1);
-    rb_define_method(Class_Image, "channel_threshold", Image_channel_threshold, -1);
     rb_define_method(Class_Image, "charcoal", Image_charcoal, -1);
     rb_define_method(Class_Image, "chop", Image_chop, 4);
     rb_define_method(Class_Image, "clone", Image_clone, 0);
@@ -653,7 +582,6 @@ Init_RMagick(void)
     rb_define_method(Class_Image, "radial_blur", Image_radial_blur, 1);
     rb_define_method(Class_Image, "radial_blur_channel", Image_radial_blur_channel, -1);
     rb_define_method(Class_Image, "raise", Image_raise, -1);
-    rb_define_method(Class_Image, "random_channel_threshold", Image_random_channel_threshold, 2);
     rb_define_method(Class_Image, "random_threshold_channel", Image_random_threshold_channel, -1);
     rb_define_method(Class_Image, "recolor", Image_recolor, 1);
     rb_define_method(Class_Image, "reduce_noise", Image_reduce_noise, 1);
@@ -947,10 +875,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, size)
     DCL_ATTR_ACCESSOR(Info, stroke)
     DCL_ATTR_ACCESSOR(Info, stroke_width)
-    DCL_ATTR_ACCESSOR(Info, subimage)   // deprecated
-    DCL_ATTR_ACCESSOR(Info, subrange)   // deprecated
     DCL_ATTR_WRITER(Info, texture)
-    DCL_ATTR_ACCESSOR(Info, tile)       // deprecated
     DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, undercolor)
     DCL_ATTR_ACCESSOR(Info, units)
@@ -1229,8 +1154,7 @@ Init_RMagick(void)
         ENUMERATOR(JPEG2000Compression)
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
-        ENUMERATOR(RLECompression)              // preferred
-        ENUMERATOR(RunlengthEncodedCompression) // deprecated
+        ENUMERATOR(RLECompression)
         ENUMERATOR(ZipCompression)
     END_ENUM
 
@@ -1669,7 +1593,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/30 20:55:35 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/07/01 00:02:27 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

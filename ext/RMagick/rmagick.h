@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.184 2007/06/30 20:54:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.185 2007/07/01 00:02:46 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -622,10 +622,7 @@ ATTR_ACCESSOR(Info, scene)
 ATTR_ACCESSOR(Info, server_name)
 ATTR_ACCESSOR(Info, stroke)
 ATTR_ACCESSOR(Info, stroke_width)
-ATTR_ACCESSOR(Info, subimage)
-ATTR_ACCESSOR(Info, subrange)
 ATTR_WRITER(Info, texture)
-ATTR_ACCESSOR(Info, tile)
 ATTR_ACCESSOR(Info, size)
 ATTR_ACCESSOR(Info, undercolor)
 ATTR_ACCESSOR(Info, units)
@@ -675,7 +672,7 @@ ATTR_ACCESSOR(Image, format)
 ATTR_ACCESSOR(Image, fuzz)
 ATTR_ACCESSOR(Image, gamma)
 ATTR_ACCESSOR(Image, geometry)
-ATTR_ACCESSOR(Image, image_type)
+ATTR_READER(Image, image_type)
 ATTR_ACCESSOR(Image, interlace)
 ATTR_ACCESSOR(Image, iptc_profile)
 ATTR_ACCESSOR(Image, iterations)
@@ -685,7 +682,7 @@ ATTR_ACCESSOR(Image, matte_color)
 ATTR_READER(Image, mean_error_per_pixel)
 ATTR_READER(Image, mime_type)
 ATTR_WRITER(Image, monitor)
-ATTR_ACCESSOR(Image, montage)
+ATTR_READER(Image, montage)
 ATTR_READER(Image, normalized_mean_error)
 ATTR_READER(Image, normalized_maximum_error)
 ATTR_READER(Image, number_colors)
@@ -701,7 +698,6 @@ ATTR_READER(Image, rows)
 ATTR_READER(Image, scene)
 ATTR_ACCESSOR(Image, start_loop)
 ATTR_ACCESSOR(Image, ticks_per_second)
-ATTR_ACCESSOR(Image, tile_info)
 ATTR_READER(Image, total_colors)
 ATTR_ACCESSOR(Image, transparent_color)
 ATTR_ACCESSOR(Image, units)
@@ -745,7 +741,6 @@ extern VALUE Image_compare_channel(int, VALUE *, VALUE);
 extern VALUE Image_channel_depth(int, VALUE *, VALUE);
 extern VALUE Image_channel_extrema(int, VALUE *, VALUE);
 extern VALUE Image_channel_mean(int, VALUE *, VALUE);
-extern VALUE Image_channel_threshold(int, VALUE *, VALUE);
 extern VALUE Image_charcoal(int, VALUE *, VALUE);
 extern VALUE Image_chop(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_clone(VALUE);
@@ -842,7 +837,6 @@ extern VALUE Image_quantum_operator(int, VALUE *, VALUE);
 extern VALUE Image_radial_blur(VALUE, VALUE);
 extern VALUE Image_radial_blur_channel(int, VALUE *, VALUE);
 extern VALUE Image_raise(int, VALUE *, VALUE);
-extern VALUE Image_random_channel_threshold(VALUE, VALUE, VALUE);
 extern VALUE Image_random_threshold_channel(int, VALUE *, VALUE);
 extern VALUE Image_read(VALUE, VALUE);
 extern VALUE Image_read_inline(VALUE, VALUE);

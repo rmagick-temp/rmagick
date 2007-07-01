@@ -54,6 +54,8 @@
       <li><a href="#set_log_event_mask">set_log_event_mask</a></li>
 
       <li><a href="#set_log_format">set_log_format</a></li>
+
+      <li><a href="#trace_proc">trace_proc</a></li>
     </ul>
   </div>
 
@@ -533,6 +535,59 @@ convert -list log
 
       <dd>carriage return</dd>
     </dl>
+  </div>
+
+  <div class="sig">
+    <h3 id="trace_proc">trace_proc</h3>
+
+    <p>Magick.trace_proc = <span class="arg">proc</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>If the Magick module attribute <code>trace_proc</code> is
+    set to a Proc object, RMagick calls the proc whenever an image
+    is created or destroyed. You can use this proc to keep track of
+    which images your program has created and which have been
+    destroyed.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The proc should accept these four arguments:</p>
+
+    <dl>
+      <dt>which</dt>
+
+      <dd>A symbol that indicates which operation the proc is being
+      called for. If the proc is called for an image creation, the
+      value is :c. If called for an image destruction, the value is
+      :d.</dd>
+
+      <dt>description</dt>
+
+      <dd>A string describing the image. This is the same string
+      that would be returned by calling the image's inspect
+      method.</dd>
+
+      <dt>id</dt>
+
+      <dd>A unique identifier for the image. This identifier is not
+      the same as the object's object_id. No two images will have
+      the same id at the same time. However, the id of an image
+      that has been destroyed may be reused for a subsequent
+      image.</dd>
+
+      <dt>method</dt>
+
+      <dd>The name of the method responsible for creating or
+      destroying the image.</dd>
+    </dl>
+
+    <h4>Notes</h4>
+
+    <p>If called while Ruby is cleaning up after the program has
+    finished, any methods the proc calls may not be executed.</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

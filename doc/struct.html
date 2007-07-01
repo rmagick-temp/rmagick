@@ -90,6 +90,7 @@
 
     <ul>
       <li><a href="#MagickError">ImageMagickError</a></li>
+      <li><a href="#DestroyedImageError">DestroyedImageError</a></li>
     </ul>
   </div>
 
@@ -413,7 +414,7 @@
       <h3>Introduction</h3>
 
       <p>The Geometry class contains the same information as an
-      &times;Magick <a href="imusage.html#geometry">geometry
+      ImageMagick <a href="imusage.html#geometry">geometry
       string</a>. Geometry objects are interchangable with geometry
       strings.</p>
     </div>
@@ -803,8 +804,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
         <dt>depth</dt>
 
         <dd>An image depth. The default is the quantum depth used
-        when &times;Magick was compiled. The values 16 and 32 can
-        be used only when &times;Magick was compiled with the
+        when ImageMagick was compiled. The values 16 and 32 can
+        be used only when ImageMagick was compiled with the
         appropriate QuantumDepth.</dd>
       </dl>
 
@@ -1249,10 +1250,18 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="desc">
       <h4>Description</h4>
 
-      <p>When an &times;Magick function returns an error condition,
-      RMagick raises an <code>ImageMagickError</code>
+      <p>When an ImageMagick function returns an error condition,
+      RMagick raises this
       exception.</p>
     </div>
+
+    <h3 id="DestroyedImageError">class DestroyedImageError
+    <span class="superclass">&lt; StandardError</span></h3>
+    <div class="desc">
+    <h4>Description</h4>
+    <p>When any Image method (except <a href="image1.html#destroyed_q">destroyed?</a> and <a href="image2.html#inspect">inspect</a>) is
+called after an image has been <a href="image1.html#destroy_bang">destroyed</a>, RMagick raises this
+exception.</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

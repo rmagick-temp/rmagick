@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.56 2007/07/01 21:26:54 rmagick Exp $
+# $Id: RMagick.rb,v 1.57 2007/07/01 23:19:41 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -905,7 +905,6 @@ class Image
 
     # Make all pixels transparent.
     def matte_reset!
-        check_destroyed
         self.opacity = Magick::TransparentOpacity
         self
     end

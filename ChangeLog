@@ -4,12 +4,29 @@ RMagick 2.0.0
     o Removed support for Ruby earlier than 1.8.2
     o Removed support for GraphicsMagick
     o Removed support for all releases of ImageMagick earlier than 6.2.6-8.
+    o Removed deprecated Image#random_channel_threshold. Use
+      Image#random_threshold_channel instead
+    o Removed deprecated Image#channel_threshold. Use
+      Image#random_threshold_channel instead
+    o Removed unecessary Image#montage=
+    o Removed deprecated Image::Info#tile_info, tile_info= attributes.
+    o Removed deprecated Image::Info#tile, tile= attributes. Use #extract,
+      #extract= instead
+    o Removed deprecated Image::Info#subimage, subimage= attributes. Use
+      scene, scene= instead
+    o Removed deprecated Image::Info#subrange, subrange= attributes. Use
+      number_scenes, number_scenes= instead
+    o Removed deprecated Magick.set_monitor. Use Image#set_monitor,
+      Image::Info#set_monitor instead
+    o Removed deprecated RunlengthEncodedCompression CompressionType. Use
+      RLECompression instead
     o Added Image::Info.stroke=, stroke_width= and undercolor= attributes
     o Added Draw#fill_pattern= and #stroke_pattern= annotate attributes
     o Changed Image::Info[] and Image::Info[]= to allow an omitted "format"
       argument
+    o Added Image#destroy!, destroyed?, check_destroyed methods
     o Support Image object creation/destruction tracing with the
-      Magick.set_trace_proc method
+      Magick.trace_proc attribute
     o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
     o Added OptimizeTransLayer, RemoveDupsLayer, RemoveZeroLayer,
       OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3)
@@ -17,7 +34,7 @@ RMagick 2.0.0
     o Added ChangeMaskCompositeOp CompositeOperator enum value
     o Added Image.combine
     o Added Image#separate (available with ImageMagick 6.2.9)
-    o Added Image#destroy!, destroyed?, check_destroyed
+    o Added Image#distort (available with ImageMagick 6.3.5)
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
 

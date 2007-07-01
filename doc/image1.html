@@ -147,13 +147,13 @@ float: left;
           <li><a href="#blur_image">blur_image</a></li>
 
           <li><a href="#border">border</a></li>
+
+          <li><a href="#border_bang">border!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#border_bang">border!</a></li>
-
           <li><a href="#change_geometry">change_geometry</a></li>
 
           <li><a href="#changed_q">changed?</a></li>
@@ -167,6 +167,8 @@ float: left;
           <li><a href="#channel_mean">channel_mean</a></li>
 
           <li><a href="#charcoal">charcoal</a></li>
+
+          <li><a href="#check_destroyed">check_destroyed</a></li>
 
           <li><a href="#chop">chop</a></li>
 
@@ -199,14 +201,14 @@ float: left;
           "#compress_colormap_bang">compress_colormap!</a></li>
 
           <li><a href="#contrast">contrast</a></li>
+
+          <li><a href=
+          "#contrast_stretch_channel">contrast_stretch_channel</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href=
-          "#contrast_stretch_channel">contrast_stretch_channel</a></li>
-
           <li><a href="#convolve">convolve</a></li>
 
           <li><a href="#convolve_channel">convolve_channel</a></li>
@@ -226,6 +228,10 @@ float: left;
           <li><a href="#delete_profile">delete_profile</a></li>
 
           <li><a href="#despeckle">despeckle</a></li>
+
+          <li><a href="#destroy_bang">destroy!</a></li>
+
+          <li><a href="#destroyed_q">destroyed?</a></li>
 
           <li><a href="#difference">difference</a></li>
 
@@ -1157,7 +1163,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-      /></a>
+       /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1740,11 +1746,11 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script"  /> <img id=
+    "Click to see the example script" /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2040,6 +2046,25 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Magick API</h4>
 
     <p>CharcoalImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="check_destroyed">check_destroyed</h3>
+
+    <p><span class="arg">image</span>.check_destroyed -&gt;
+    <code>nil</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Raises Magick::DestroyedImageError if the image has been
+    destroyed. Returns nil otherwise.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#destroy_bang">destroy!</a>, <a href=
+    "#destroyed_q">destroyed?</a></p>
   </div>
 
   <div class="sig">
@@ -3445,6 +3470,53 @@ cropped = img.crop(x, y, width, height, true)
     <h4>Magick API</h4>
 
     <p>DespeckleImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="destroy_bang">destroy!</h3>
+
+    <p><span class="arg">image</span>.destroy! -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns all the memory associated with the image to the
+    system. After an image has been destroyed, all Image methods
+    (except <a href="image1.html#destroyed_q">destroyed?</a> and
+    <a href="image2.html#inspect">inspect</a>) called on the image
+    will raise a Magick::DestroyedImageError.</p>
+
+    <p>It is not possible to recover a destroyed image.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#check_destroyed">check_destroyed</a>, <a href=
+    "#destroyed_q">destroyed?</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="destroyed_q">destroyed?</h3>
+
+    <p><span class="arg">image</span>.destroyed? -&gt;
+    <code>true</code> or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns true if the image has been destroyed, false
+    otherwise.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#check_destroyed">check_destroyed</a>, <a href=
+    "#destroy_bang">destroy!</a></p>
   </div>
 
   <div class="sig">

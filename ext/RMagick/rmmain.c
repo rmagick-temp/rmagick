@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.199 2007/07/01 00:02:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.200 2007/07/01 21:26:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -333,7 +333,7 @@ Init_RMagick(void)
     /* Create IDs for frequently used methods, etc.                          */
     /*-----------------------------------------------------------------------*/
 
-    rm_ID_set_trace_proc   = rb_intern("@set_trace_proc");
+    rm_ID_trace_proc       = rb_intern("@trace_proc");
     rm_ID__dummy_img_      = rb_intern("_dummy_img_");
     rm_ID_call             = rb_intern("call");
     rm_ID_changed          = rb_intern("changed");
@@ -1593,7 +1593,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/07/01 00:02:27 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/07/01 21:26:47 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.228 2007/07/01 00:02:46 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.229 2007/07/01 21:26:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10229,7 +10229,7 @@ raise_ChannelType_error(VALUE arg)
 
 /*
     Static:     call_trace_proc
-    Purpose:    If Magick.set_trace_proc is not nil, build an argument
+    Purpose:    If Magick.trace_proc is not nil, build an argument
                 list and call the proc.
 */
 static void call_trace_proc(Image *image, char *which)
@@ -10237,9 +10237,9 @@ static void call_trace_proc(Image *image, char *which)
     volatile VALUE trace;
     volatile VALUE trace_args[4];
 
-    if (rb_ivar_defined(Module_Magick, rm_ID_set_trace_proc) == Qtrue)
+    if (rb_ivar_defined(Module_Magick, rm_ID_trace_proc) == Qtrue)
     {
-        trace = rb_ivar_get(Module_Magick, rm_ID_set_trace_proc);
+        trace = rb_ivar_get(Module_Magick, rm_ID_trace_proc);
         if (!NIL_P(trace))
         {
             // Maybe the stack won't get extended until we need the space.

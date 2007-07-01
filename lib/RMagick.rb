@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.55 2007/06/30 20:58:49 rmagick Exp $
+# $Id: RMagick.rb,v 1.56 2007/07/01 21:26:54 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -24,7 +24,7 @@ def Magick.formats(&block)
 end
 
 class << self
-    attr_writer :set_trace_proc
+    attr_writer :trace_proc
 end
 
 # Geometry class and related enum constants

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.185 2007/07/01 00:02:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.186 2007/07/01 21:26:47 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -265,7 +265,7 @@ EXTERN VALUE Class_VirtualPixelMethod;
 /*
 *   Commonly-used IDs
 */
-EXTERN ID rm_ID_set_trace_proc;    // "@set_trace_proc"
+EXTERN ID rm_ID_trace_proc;        // "@trace_proc"
 EXTERN ID rm_ID__dummy_img_;       // "_dummy_img_"
 EXTERN ID rm_ID_call;              // "call"
 EXTERN ID rm_ID_changed;           // "changed"

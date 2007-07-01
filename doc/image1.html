@@ -197,13 +197,13 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
+
+          <li><a href="#contrast">contrast</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#contrast">contrast</a></li>
-
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
 
@@ -236,6 +236,8 @@ float: left;
           <li><a href="#display">display</a></li>
 
           <li><a href="#dissolve">dissolve</a></li>
+
+          <li><a href="#distort">distort</a></li>
 
           <li><a href=
           "#distortion_channel">distortion_channel</a></li>
@@ -1155,7 +1157,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-       /></a>
+      /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -3313,13 +3315,13 @@ cropped = img.crop(x, y, width, height, true)
      <img id="cropless" style="display: none" onmouseout=
     "this.style.display='none';cropped.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script"  />
+    "Click to see the example script" />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example"  /></a>
+    "ex/crop_resized.jpg" alt="frame example" /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3789,6 +3791,52 @@ exit
 
     <p><a href="#blend">blend</a>, <a href=
     "#composite">composite</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="distort">distort</h3>
+
+    <p><span class="arg">image</span>.distort(<span class=
+    "arg">type</span>, <span class="arg">points</span>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Distort an image using the specified distortion type and its
+    required arguments. This method is the equivalent of
+    ImageMagick's -distort option.</p>
+
+    <h4>Arguments</h4>
+
+    <p>Specify one of the following values for the distortion
+    <span class="arg">type</span>:</p>
+
+    <ul>
+      <li>BilinearDistortion</li>
+
+      <li>PerspectiveDistortion</li>
+    </ul>
+
+    <p>The <span class="arg">points</span> argument is an array of
+    <a href="struct.html#Point">Point</a> objects. Each Point
+    object defines two values. That is, when the ImageMagick
+    documentation says that the BilinearDistortion type requires 16
+    values, specify those values using an array of 8 Point
+    objects.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Note</h4>
+
+    <p>See <a href=
+    "http://www.imagemagick.org/Usage/distorts/#distort">Distortion
+    Operator</a> in Anthony Thyssen's excellent <a href=
+    "http://www.imagemagick.org/Usage/">Examples of ImageMagick
+    Usage</a> for more information about distortion operations.</p>
   </div>
 
   <div class="sig">

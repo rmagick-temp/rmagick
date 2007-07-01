@@ -54,8 +54,6 @@
       <li><a href="#set_log_event_mask">set_log_event_mask</a></li>
 
       <li><a href="#set_log_format">set_log_format</a></li>
-
-      <li><a href="#set_monitor">set_monitor</a></li>
     </ul>
   </div>
 
@@ -535,93 +533,6 @@ convert -list log
 
       <dd>carriage return</dd>
     </dl>
-  </div>
-
-  <div class="sig">
-    <h3 id="set_monitor">set_monitor</h3>
-
-    <p>Magick.set_monitor(<span class="arg">aProc</span>)</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p><strong>Note:</strong> <em>This method is deprecated.
-    Use <a href=
-    "imageattrs.html#monitor">Image#monitor=</a> and <a href=
-    "info.html#monitor">Image::Info#monitor=</a> instead.</em></p>
-
-    <p>Establish a monitor exit block. Some (see <a href=
-    "#monitor_notes">below</a>) RMagick methods will call the
-    monitor event block, passing parameters that describe how much
-    work there is to be done and how much of that work has already
-    been accomplished.</p>
-
-    <p>There can be at most one monitor block defined at a time. To
-    turn off monitoring, call
-    <code>Magick.set_monitor(nil)</code>.</p>
-
-    <h4>Arguments</h4>
-
-    <p>The argument is a <code>Proc</code> object. The Proc should
-    accept 3 arguments:</p>
-
-    <dl>
-      <dt>text</dt>
-
-      <dd>a String that describes the operation being
-      monitored.</dd>
-
-      <dt>quantum</dt>
-
-      <dd>a value between 0 and <code>span</code> that represents
-      the number of events that have been performed, images that
-      have been processed, etc.</dd>
-
-      <dt>span</dt>
-
-      <dd>The total number of events to be performed, images to be
-      processed, etc.</dd>
-    </dl>
-
-    <h4>Example</h4>
-    <pre>
-monitor = Proc.new { |text, quantum, span|
-    printf("%s %3.0f%% complete\n", text, ((quantum/span.to_f)*100.0))
-    }
-Magick.set_monitor(monitor)
-</pre>
-
-    <h4>Magick API</h4>
-
-    <p>SetMonitorHandler</p>
-
-    <h4 id="monitor_notes">Note</h4>
-
-    <p>The list of methods which call the monitor block is
-    difficult to determine. The only sure way to find out is to
-    read the source code. In the Image class the list includes
-    <code>add_noise</code>, <code>blur_image</code>,
-    <code>channel</code>, <code>chop</code>, <code>colorize</code>,
-    <code>crop</code>, <code>colors</code>, <code>despeckle</code>,
-    <code>enhance</code>, <code>equalize</code>, <code>flip</code>,
-    <code>flop</code>, <code>frame</code>,
-    <code>gamma_correct</code>, <code>implode</code>,
-    <code>level</code>, <code>magnify</code>,
-    <code>median_filter</code>, <code>minify</code>,
-    <code>modulate</code>, <code>morph</code>, <code>negate</code>,
-    <code>normalize</code>, <code>oil_paint</code>,
-    <code>opaque</code>, <code>raise</code>,
-    <code>reduce_noise</code>, <code>resize</code>,
-    <code>roll</code>, <code>rotate</code>, <code>sample</code>,
-    <code>scale</code>, <code>segment</code>, <code>shade</code>,
-    <code>sharpen</code>, <code>shear</code>,
-    <code>solarize</code>, <code>spread</code>,
-    <code>stegano</code>, <code>stereo</code>, <code>swirl</code>,
-    <code>texture</code> <code>threshold</code>,
-    <code>transparent</code>, and <code>wave</code>. In the
-    ImageList class, the list includes <code>append</code>,
-    <code>average</code>, and <code>montage</code>.</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

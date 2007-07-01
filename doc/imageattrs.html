@@ -899,7 +899,7 @@
 
     <p>The image type classification. For example, GrayscaleType.
     Don't confuse this attribute with the <a href=
-    "#format">format</a>, that is "GIF" or "JPG".</p>
+    "#format">format</a>, that is "GIF" or "JPG". Get-only.</p>
 
     <h4>Returns</h4>
 
@@ -1170,8 +1170,7 @@ blur_image is 100% complete.
     <h3 id="montage">montage</h3>
 
     <p><span class="arg">image.</span>montage -&gt;
-    <em>aString</em><br />
-    <span class="arg">image.</span>montage = <code>nil</code></p>
+    <em>aString</em><br /></p>
   </div>
 
   <div class="desc">
@@ -1181,12 +1180,8 @@ blur_image is 100% complete.
     montage. Only valid for</span> [images produced by <a href=
     "ilist.html#montage">montage</a>.] <span class="imquote">The
     string is in the form of a <a href=
-    "imusage.html#geometry">geometry</a> string.</span></p>
-
-    <h4>Arguments</h4>
-
-    <p>To release the montage string, set this attribute to
-    <code>nil</code>.</p>
+    "imusage.html#geometry">geometry</a> string.</span>
+    Get-only.</p>
   </div>
 
   <div class="sig">
@@ -1273,8 +1268,8 @@ blur_image is 100% complete.
     are blended with the supplied transparency value.</span>
     Set-only.</p>
 
-    <h4>Arguments</h4>A number between 0 and QuantumRange. Higher numbers
-    increase transparency.
+    <h4>Arguments</h4>A number between 0 and QuantumRange. Higher
+    numbers increase transparency.
   </div>
 
   <div class="sig">
@@ -1493,7 +1488,6 @@ blur_image is 100% complete.
     <h4>Returns</h4>
 
     <p>The current number of ticks per second</p>
-
   </div>
 
   <div class="sig">

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.57 2007/07/01 23:19:41 rmagick Exp $
+# $Id: RMagick.rb,v 1.58 2007/07/18 23:33:46 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1199,24 +1199,21 @@ class Image
 
 end # class Magick::Image
 
-class ImageList < Array
+class ImageList
 
     include Comparable
-
-    undef_method :assoc
-    undef_method :flatten!      # These methods are undefined
-    undef_method :flatten       # because they're not useful
-    undef_method :join          # for an ImageList object
-    undef_method :pack
-    undef_method :rassoc
-    undef_method :transpose if Array.instance_methods(false).include? 'transpose'
-    undef_method :zip if Array.instance_methods(false).include? 'zip'
-
+    include Enumerable
     attr_reader :scene
+
+private
+
+    def get_current()
+        return @images[@scene].__id__ rescue nil
+    end
 
 protected
 
-    def is_a_image(obj)
+    def is_an_image(obj)
         unless obj.kind_of? Magick::Image
             Kernel.raise ArgumentError, "Magick::Image required (#{obj.class} given)"
         end
@@ -1224,33 +1221,36 @@ protected
     end
 
     # Ensure array is always an array of Magick::Image objects
-    def is_a_image_array(ary)
-        unless ary.respond_to? :each
-            Kernel.raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{ary.class} given)"
+    def is_an_image_array(obj)
+        unless obj.respond_to? :each
+            Kernel.raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{obj.class} given)"
         end
-        ary.each { |obj| is_a_image obj }
+        obj.each { |obj| is_an_image obj }
         true
     end
 
-    # Find old current image, update @scene
-    # cfid is the id of the old current image.
-    def set_cf(cfid)
-        if length == 0
-            @scene = nil
+    # Find old current image, update scene number
+    # current is the id of the old current image.
+    def set_current(current)
+        if length() == 0
+            self.scene = nil
             return
         # Don't bother looking for current image
-        elsif @scene == nil || @scene >= length
-            @scene = length - 1
+        elsif scene() == nil || scene() >= length()
+            self.scene = length() - 1
             return
-        elsif cfid != nil
+        elsif current != nil
+            # Find last instance of "current" in the list.
+            # If "current" isn't in the list, set current to last image.
+            self.scene = length() - 1
             each_with_index do |f,i|
-                if f.__id__ == cfid
-                    @scene = i
-                    return
+                if f.__id__ == current
+                    self.scene = i
                 end
             end
+            return
         end
-        @scene = length - 1
+        self.scene = length() - 1
     end
 
 public
@@ -1258,10 +1258,10 @@ public
     # Allow scene to be set to nil
     def scene=(n)
         if n.nil?
-            Kernel.raise IndexError, "scene number out of bounds" unless length == 0
+            Kernel.raise IndexError, "scene number out of bounds" unless @images.length == 0
             @scene = nil
             return @scene
-        elsif length == 0
+        elsif @images.length == 0
             Kernel.raise IndexError, "scene number out of bounds"
         end
 
@@ -1273,305 +1273,44 @@ public
         return @scene
     end
 
-    def [](*args)
-        if (args.length > 1) || args[0].kind_of?(Range)
-            self.class.new.replace super
-        else
-            super
-        end
-    end
-
-    def []=(*args)
-        if args.length == 3             # f[start,length] = [f1,f2...]
-            args[2].kind_of?(Magick::Image) || is_a_image_array(args[2])
-            super
-            args[0] = args[0] + length if (args[0] < 0)
-            args[1] = length - args[0] if (args[0] + args[1] > length)
-            if args[2].kind_of?(Magick::Image)
-                @scene = args[0]
-            else
-                @scene = args[0] + args[2].length - 1
+    # All the binary operators work the same way.
+    # 'other' should be either an ImageList or an Array
+    %w{& + - |}.each do |op|
+        module_eval <<-END_BINOPS
+            def #{op}(other)
+                ilist = self.class.new
+                begin
+                    a = other #{op} @images
+                rescue TypeError
+                    Kernel.raise ArgumentError, "Magick::ImageList expected, got " + other.class.to_s
+                end
+                current = get_current()
+                a.each do |image|
+                    is_an_image image
+                    ilist << image
+                end
+                ilist.set_current current
+                return ilist
             end
-        elsif args[0].kind_of? Range    # f[first..last] = [f1,f2...]
-            args[1].kind_of?(Magick::Image) || is_a_image_array(args[1])
-            super
-            @scene = args[0].end
-        else                            # f[index] = f1
-            is_a_image args[1]
-            super                       # index can be negative
-            @scene = args[0] < 0 ? length + args[0] : args[0]
-        end
-        args.last                       # return value is always assigned value
-    end
-
-    def &(other)
-        is_a_image_array other
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
+        END_BINOPS
     end
 
     def *(n)
         unless n.kind_of? Integer
             Kernel.raise ArgumentError, "Integer required (#{n.class} given)"
         end
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def +(other)
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def -(other)
-        is_a_image_array other
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
+        current = get_current()
+        ilist = self.class.new
+        (@images * n).each {|image| ilist << image}
+        ilist.set_current current
+        return ilist
     end
 
     def <<(obj)
-        is_a_image obj
-        a = super
-        @scene = length-1
-        return a
-    end
-
-    def |(other)
-        is_a_image_array other
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def clear
-        @scene = nil
-        super
-    end
-
-    def collect(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def collect!(&block)
-        super
-        is_a_image_array self
+        is_an_image obj
+        @images << obj
+        @scene = @images.length - 1
         self
-    end
-
-    def compact
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def compact!
-        cfid = self[@scene].__id__ rescue nil
-        a = super          # returns nil if no changes were made
-        set_cf cfid
-        return a
-    end
-
-    def concat(other)
-        is_a_image_array other
-        a = super
-        @scene = length-1
-        return a
-    end
-
-    def delete(obj, &block)
-        is_a_image obj
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    def delete_at(ndx)
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    def delete_if(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    def fill(*args, &block)
-        is_a_image args[0] unless block_given?
-        cfid = self[@scene].__id__ rescue nil
-        super
-        is_a_image_array self
-        set_cf cfid
-        return self
-    end
-
-    def find_all(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        a.set_cf cfid
-        return a
-    end
-
-    if self.superclass.instance_methods(true).include? 'insert' then
-        def insert(*args)
-            Kernel.raise(ArgumentError, "can't insert nil") unless args.length > 1
-            is_a_image_array args[1,args.length-1]
-            cfid = self[@scene].__id__ rescue nil
-            super
-            set_cf cfid
-            return self
-        end
-    end
-
-    # Enumerable (or Array) has a #map method that conflicts with our
-    # own #map method. RMagick.so has defined a synonym for that #map
-    # called Array#__ary_map__. Here, we define Magick::ImageList#__map__
-    # to allow the use of the Enumerable/Array#map method on ImageList objects.
-    def __map__(&block)
-        cfid = self[@scene].__id__ rescue nil
-        ensure_image = Proc.new do |img|
-            rv = block.call(img)
-            is_a_image rv
-            return rv
-        end
-        a = self.class.new.replace __ary_map__(&ensure_image)
-        a.set_cf cfid
-        return a
-    end
-
-    def map!(&block)
-        ensure_image = Proc.new do |img|
-            rv = block.call(img)
-            is_a_image rv
-            return rv
-        end
-        super(&ensure_image)
-    end
-
-    def pop
-        cfid = self[@scene].__id__ rescue nil
-        a = super       # can return nil
-        set_cf cfid
-        return a
-    end
-
-    def push(*objs)
-        objs.each { |o| is_a_image o }
-        super
-        @scene = length - 1
-        self
-    end
-
-    def reject(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def reject!(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = super       # can return nil
-        set_cf cfid
-        return a
-    end
-
-    def replace(other)
-        is_a_image_array other
-        # Since replace gets called so frequently when @scene == nil
-        # test for it instead of letting rescue catch it.
-        cfid = nil
-        if @scene then
-            cfid = self[@scene].__id__ rescue nil
-        end
-        super
-        # set_cf will fail if the new list has fewer images
-        # than the scene number indicates.
-        @scene = self.length == 0 ? nil : 0
-        set_cf cfid
-        self
-    end
-
-    def reverse
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def reverse!
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    def select(&block)
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def shift
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    def slice(*args)
-        self[*args]
-    end
-
-    def slice!(*args)
-        cfid = self[@scene].__id__ rescue nil
-        if args.length > 1 || args[0].kind_of?(Range)
-            a = self.class.new.replace super
-        else
-            a = super
-        end
-        set_cf cfid
-        return a
-    end
-
-    def uniq
-        cfid = self[@scene].__id__ rescue nil
-        a = self.class.new.replace super
-        a.set_cf cfid
-        return a
-    end
-
-    def uniq!(*args)
-        cfid = self[@scene].__id__ rescue nil
-        a = super
-        set_cf cfid
-        return a
-    end
-
-    # @scene -> new object
-    def unshift(obj)
-        is_a_image obj
-        a = super
-        @scene = 0
-        return a
     end
 
     # Compare ImageLists
@@ -1600,16 +1339,71 @@ public
         return self.length <=> other.length
     end
 
+    def [](*args)
+        a = @images[*args]
+        if a.respond_to?(:each) then
+            ilist = self.class.new
+            a.each {|image| ilist << image}
+            a = ilist
+        end
+        return a
+    end
+
+    def []=(*args)
+        obj = @images.[]=(*args)
+        if obj && obj.respond_to?(:each) then
+            is_an_image_array(obj)
+            set_current obj.last.__id__
+        elsif obj
+            is_an_image(obj)
+            set_current obj.__id__
+        else
+            set_current nil
+        end
+        return obj
+    end
+
+    [:at, :each, :each_index, :empty?, :fetch,
+     :first, :include?, :index, :length, :nitems, :rindex, :sort!].each do |mth|
+        module_eval <<-END_SIMPLE_DELEGATES
+            def #{mth}(*args, &block)
+                @images.#{mth}(*args, &block)
+            end
+        END_SIMPLE_DELEGATES
+    end
+    alias_method :size, :length
+
+    def clear
+        @scene = nil
+        @images.clear
+    end
+
     def clone
         ditto = dup
         ditto.freeze if frozen?
         return ditto
     end
 
+    # override Enumerable#collect
+    def collect(&block)
+        current = get_current()
+        a = @images.collect(&block)
+        ilist = self.class.new
+        a.each {|image| ilist << image}
+        ilist.set_current current
+        return ilist
+    end
+
+    def collect!(&block)
+        @images.collect!(&block)
+        is_an_image_array @images
+        self
+    end
+
     # Make a deep copy
     def copy
         ditto = self.class.new
-        each { |f| ditto << f.copy }
+        @images.each { |f| ditto << f.copy }
         ditto.scene = @scene
         ditto.taint if tainted?
         return ditto
@@ -1620,7 +1414,35 @@ public
         if ! @scene
             Kernel.raise IndexError, "no images in this list"
         end
-        self[@scene]
+        @images[@scene]
+    end
+
+    # ImageList#map took over the "map" name. Use alternatives.
+    alias_method :__map__, :collect
+    alias_method :map!, :collect!
+    alias_method :__map__!, :collect!
+
+    def compact
+        current = get_current()
+        ilist = self.class.new
+        a = @images.compact
+        a.each {|image| ilist << image}
+        ilist.set_current current
+        return ilist
+    end
+
+    def compact!
+        current = get_current()
+        a = @images.compact!    # returns nil if no changes were made
+        set_current current
+        return a.nil? ? nil : self
+    end
+
+    def concat(other)
+        is_an_image_array other
+        other.each {|image| @images << image}
+        @scene = length-1
+        return self
     end
 
     # Set same delay for all images
@@ -1628,30 +1450,76 @@ public
         if Integer(d) < 0
             raise ArgumentError, "delay must be greater than or equal to 0"
         end
-        each { |f| f.delay = Integer(d) }
+        @images.each { |f| f.delay = Integer(d) }
     end
 
-    def ticks_per_second=(t)
-        if Integer(t) < 0
-            Kernel.raise ArgumentError, "ticks_per_second must be greater than or equal to 0"
-        end
-        each { |f| f.ticks_per_second = Integer(t) }
+    def delete(obj, &block)
+        is_an_image obj
+        current = get_current()
+        a = @images.delete(obj, &block)
+        set_current current
+        return a
+    end
+
+    def delete_at(ndx)
+        current = get_current()
+        a = @images.delete_at(ndx)
+        set_current current
+        return a
+    end
+
+    def delete_if(&block)
+        current = get_current()
+        @images.delete_if(&block)
+        set_current current
+        self
     end
 
     def dup
         ditto = self.class.new
-        each {|img| ditto << img}
+        @images.each {|img| ditto << img}
         ditto.scene = @scene
         ditto.taint if tainted?
         return ditto
     end
+
+    def eql?(other)
+      is_an_image_array other
+      eql = other.eql?(@images)
+      begin # "other" is another ImageList
+        eql &&= @scene == other.scene
+      rescue NoMethodError
+        # "other" is a plain Array
+      end
+      return eql
+    end
+
+    def fill(*args, &block)
+        is_an_image args[0] unless block_given?
+        current = get_current()
+        @images.fill(*args, &block)
+        is_an_image_array self
+        set_current current
+        self
+    end
+
+    # Override Enumerable's find_all
+    def find_all(&block)
+        current = get_current()
+        a = @images.find_all(&block)
+        ilist = self.class.new
+        a.each {|image| ilist << image}
+        ilist.set_current current
+        return ilist
+    end
+    alias_method :select, :find_all
 
     def from_blob(*blobs, &block)
         if (blobs.length == 0)
             Kernel.raise ArgumentError, "no blobs given"
         end
         blobs.each { |b|
-            Magick::Image.from_blob(b, &block).each { |n| self << n  }
+            Magick::Image.from_blob(b, &block).each { |n| @images << n  }
             }
         @scene = length - 1
         self
@@ -1659,9 +1527,10 @@ public
 
     # Initialize new instances
     def initialize(*filenames)
+        @images = []
         @scene = nil
         filenames.each { |f|
-            Magick::Image.read(f).each { |n| self << n }
+            Magick::Image.read(f).each { |n| @images << n }
             }
         if length > 0
             @scene = length - 1     # last image in array
@@ -1669,11 +1538,19 @@ public
         self
     end
 
+    def insert(index, *args)
+        args.each {|image| is_an_image image}
+        current = get_current()
+        @images.insert(index, *args)
+        set_current current
+        return self
+    end
+
     # Call inspect for all the images
     def inspect
-        ins = '['
-        each {|image| ins << image.inspect << "\n"}
-        ins.chomp("\n") + "]\nscene=#{@scene}"
+        img = []
+        @images.each {|image| img << image.inspect }
+        img = "[" + img.join(",\n") + "]\nscene=#{@scene}"
     end
 
     # Set the number of iterations of an animated GIF
@@ -1682,8 +1559,21 @@ public
         if n < 0 || n > 65535
             Kernel.raise ArgumentError, "iterations must be between 0 and 65535"
         end
-        each {|f| f.iterations=n}
+        @images.each {|f| f.iterations=n}
         self
+    end
+
+    def last(*args)
+        if args.length == 0
+          a = @images.last
+        else
+          a = @images.last(*args)
+          ilist = self.class.new
+          a.each {|img| ilist << img}
+          @scene = a.length - 1
+          a = ilist
+        end
+        return a
     end
 
     # The ImageList class supports the Magick::Image class methods by simply sending
@@ -1693,7 +1583,7 @@ public
     def method_missing(methID, *args, &block)
         begin
             if @scene
-                self[@scene].send(methID, *args, &block)
+                @images[@scene].send(methID, *args, &block)
             else
                 super
             end
@@ -1705,20 +1595,20 @@ public
         end
     end
 
-    # Ensure respond_to? answers correctly when we are delegating to Image
-    alias_method :__respond_to__?, :respond_to?
-    def respond_to?(methID, priv=false)
-        return true if __respond_to__?(methID, priv)
-        if @scene
-            self[@scene].respond_to?(methID, priv)
-        else
-            super
-        end
-    end
-
     # Create a new image and add it to the end
     def new_image(cols, rows, *fill, &info_blk)
         self << Magick::Image.new(cols, rows, *fill, &info_blk)
+    end
+
+    def partition(&block)
+      a = @images.partition(&block)
+      t = self.class.new
+      a[0].each { |img| t << img}
+      t.set_current nil
+      f = self.class.new
+      a[1].each { |img| f << img}
+      f.set_current nil
+      [t, f]
     end
 
     # Ping files and concatenate the new images
@@ -1727,8 +1617,24 @@ public
             Kernel.raise ArgumentError, "no files given"
         end
         files.each { |f|
-            Magick::Image.ping(f, &block).each { |n| self << n }
+            Magick::Image.ping(f, &block).each { |n| @images << n }
             }
+        @scene = length - 1
+        self
+    end
+
+    def pop
+        current = get_current()
+        a = @images.pop       # can return nil
+        set_current current
+        return a
+    end
+
+    def push(*objs)
+        objs.each do |image|
+            is_an_image image
+            @images << image
+        end
         @scene = length - 1
         self
     end
@@ -1739,11 +1645,147 @@ public
             Kernel.raise ArgumentError, "no files given"
         end
         files.each { |f|
-            Magick::Image.read(f, &block).each { |n| self << n }
+            Magick::Image.read(f, &block).each { |n| @images << n }
             }
         @scene = length - 1
         self
     end
+
+    # override Enumerable's reject
+    def reject(&block)
+        current = get_current()
+        ilist = self.class.new
+        a = @images.reject(&block)
+        a.each {|image| ilist << image}
+        ilist.set_current current
+        return ilist
+    end
+
+    def reject!(&block)
+        current = get_current()
+        a = @images.reject!(&block)
+        @images = a if !a.nil?
+        set_current current
+        return a.nil? ? nil : self
+    end
+
+    def replace(other)
+        is_an_image_array other
+        current = get_current()
+        @images.clear
+        other.each {|image| @images << image}
+        @scene = self.length == 0 ? nil : 0
+        set_current current
+        self
+    end
+
+    # Ensure respond_to? answers correctly when we are delegating to Image
+    alias_method :__respond_to__?, :respond_to?
+    def respond_to?(methID, priv=false)
+        return true if __respond_to__?(methID, priv)
+        if @scene
+            @images[@scene].respond_to?(methID, priv)
+        else
+            super
+        end
+    end
+
+    def reverse
+        current = get_current()
+        a = self.class.new
+        @images.reverse_each {|image| a << image}
+        a.set_current current
+        return a
+    end
+
+    def reverse!
+        current = get_current()
+        @images.reverse!
+        set_current current
+        self
+    end
+
+    def reverse_each
+        @images.reverse_each {|image| yield(image)}
+        self
+    end
+
+    def shift
+        current = get_current()
+        a = @images.shift
+        set_current current
+        return a
+    end
+
+    def slice(*args)
+        current = get_current()
+        slice = @images.slice(*args)
+        if slice
+            ilist = self.class.new
+            if slice.respond_to?(:each) then
+                slice.each {|image| ilist << image}
+            else
+                ilist << slice
+            end
+        else
+            ilist = nil
+        end
+        return ilist
+    end
+
+    def slice!(*args)
+        current = get_current()
+        a = @images.slice!(*args)
+        set_current current
+        return a
+    end
+
+    def ticks_per_second=(t)
+        if Integer(t) < 0
+            Kernel.raise ArgumentError, "ticks_per_second must be greater than or equal to 0"
+        end
+        @images.each { |f| f.ticks_per_second = Integer(t) }
+    end
+
+    def to_a
+        a = Array.new
+        @images.each {|image| a << image}
+        return a
+    end
+
+    def uniq
+        current = get_current()
+        a = self.class.new
+        @images.uniq.each {|image| a << image}
+        a.set_current current
+        return a
+    end
+
+    def uniq!(*args)
+        current = get_current()
+        a = @images.uniq!
+        set_current current
+        return a.nil? ? nil : self
+    end
+
+    # @scene -> new object
+    def unshift(obj)
+        is_an_image obj
+        @images.unshift(obj)
+        @scene = 0
+        self
+    end
+
+    def values_at(*args)
+        a = @images.values_at(*args)
+        a = self.class.new
+        @images.values_at(*args).each {|image| a << image}
+        a.scene = a.length - 1
+        return a
+    end
+    alias_method :indexes, :values_at
+    alias_method :indices, :values_at
+
 end # Magick::ImageList
 
 # Example fill class. Fills the image with the specified background

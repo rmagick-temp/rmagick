@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.186 2007/07/01 21:26:47 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.187 2007/07/18 23:38:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -239,7 +239,7 @@ EXTERN VALUE Class_CompressionType;
 EXTERN VALUE Class_DecorationType;
 EXTERN VALUE Class_DisposeType;
 #if defined(HAVE_DISTORTIMAGE)
-EXTERN VALUE Class_DistortImageType;
+EXTERN VALUE Class_DistortImageMethod;
 #endif
 EXTERN VALUE Class_EndianType;
 EXTERN VALUE Class_FilterTypes;
@@ -578,7 +578,7 @@ extern VALUE rm_imagelist_new(void);
 extern VALUE rm_imagelist_from_images(Image *);
 extern Image *rm_images_from_imagelist(VALUE);
 extern VALUE rm_imagelist_scene_eq(VALUE, VALUE);
-extern int rm_imagelist_length(VALUE);
+extern long rm_imagelist_length(VALUE);
 extern void rm_imagelist_push(VALUE, VALUE);
 
 

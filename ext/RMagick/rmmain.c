@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.200 2007/07/01 21:26:47 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.201 2007/07/18 23:36:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -645,14 +645,10 @@ Init_RMagick(void)
     /* Class Magick::ImageList methods (see also RMagick.rb)                 */
     /*-----------------------------------------------------------------------*/
 
-    Class_ImageList = rb_define_class_under(Module_Magick, "ImageList", rb_cArray);
+    Class_ImageList = rb_define_class_under(Module_Magick, "ImageList", rb_cObject);
 
     // Define an alias for Object#display before we override it
     rb_define_alias(Class_ImageList, "__display__", "display");
-
-    // Define an alias for Array's "map" method.
-    rb_define_alias(Class_ImageList, "__ary_map__", "map");
-
     rb_define_method(Class_ImageList, "animate", ImageList_animate, -1);
     rb_define_method(Class_ImageList, "append", ImageList_append, 1);
     rb_define_method(Class_ImageList, "average", ImageList_average, 0);
@@ -1175,11 +1171,14 @@ Init_RMagick(void)
     END_ENUM
 
 #if defined(HAVE_DISTORTIMAGE)
-    // DistortImage "type" argument values
-    DEF_ENUM(DistortImageType)
+    // DistortImage "method" argument values
+    DEF_ENUM(DistortImageMethod)
         ENUMERATOR(UndefinedDistortion)
+        ENUMERATOR(AffineDistortion)
+        ENUMERATOR(AffineProjectionDistortion)
         ENUMERATOR(BilinearDistortion)
         ENUMERATOR(PerspectiveDistortion)
+        ENUMERATOR(ScaleRotateTranslateDistortion)
     END_ENUM
 #endif
 
@@ -1593,7 +1592,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/07/01 21:26:47 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/07/18 23:36:23 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.54 2007/06/30 20:57:17 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.55 2007/07/18 23:40:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -283,7 +283,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     }
 
 
-    if (rm_imagelist_length(self) == 0)
+    if (rm_imagelist_length(self) == 0L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
@@ -376,7 +376,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     ExceptionInfo exception;
     long number_images;
 
-    if (rm_imagelist_length(self) < 1)
+    if (rm_imagelist_length(self) < 1L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
@@ -575,20 +575,20 @@ rm_images_from_imagelist(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
-    volatile VALUE t;
+    volatile VALUE images, t;
 
-    Check_Type(imagelist, T_ARRAY);
     len = rm_imagelist_length(imagelist);
     if (len == 0)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
 
+    images = rb_iv_get(imagelist, "@images");
     for (x = 0; x < len; x++)
     {
         Image *image;
 
-        t = rb_ary_entry(imagelist, x);
+        t = rb_ary_entry(images, x);
         rm_check_destroyed(t);
         Data_Get_Struct(t, Image, image);
         AppendImageToList(&head, image);
@@ -614,13 +614,11 @@ rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
     External:   rm_imagelist_length
     Purpose:    return the # of images in an imagelist
 */
-int
+long
 rm_imagelist_length(VALUE imagelist)
 {
-    volatile VALUE len;
-
-    len = rb_funcall(imagelist, rm_ID_length, 0);
-    return FIX2INT(len);
+    volatile VALUE images = rb_iv_get(imagelist, "@images");
+    return RARRAY(images)->len;
 }
 
 /*
@@ -671,7 +669,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    if (rm_imagelist_length(self) == 0)
+    if (rm_imagelist_length(self) == 0L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
@@ -846,7 +844,7 @@ ImageList_write(VALUE self, VALUE file)
     (void) DestroyExceptionInfo(&exception);
 
     // Tell WriteImage if we want a multi-images file.
-    if (rm_imagelist_length(self) > 1 && m->adjoin)
+    if (rm_imagelist_length(self) > 1L && m->adjoin)
     {
         info->adjoin = MagickTrue;
     }

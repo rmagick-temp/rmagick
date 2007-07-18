@@ -28,9 +28,8 @@
     "imageattrs.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <h1>class ImageList <span class="superclass">&lt;
-  Array</span><br />
-  <span class="mixin">mixes in Comparable</span></h1>
+  <h1>class ImageList<br />
+  <span class="mixin">mixes in Comparable, Enumerable</span></h1>
 
   <div id="toc">
     <h2>Table of Contents</h2>
@@ -116,6 +115,8 @@
         <li><a href="#quantize">quantize</a></li>
 
         <li><a href="#read">read</a></li>
+
+        <li><a href="#to_a">to_a</a></li>
 
         <li><a href="#to_blob">to_blob</a></li>
 
@@ -303,16 +304,16 @@ imagelist.ticks_per_second = 1000
   <div class="desc">
     <h4>Description</h4>
 
-    <p><code>ImageList</code> is a subclass of <code>Array</code>,
-    so you can manipulate the images in an imagelist using almost
-    all of the methods defined in <code>Array</code>. Typically
-    these methods also update the scene number. The scene number
-    will never exceed the number of images in the list, and if the
-    imagelist contains no images the scene number will be
-    <code>nil</code>.</p>
+    <p><code>ImageList</code> delegates many methods to
+    <code>Array</code>, so you can manipulate the images in an
+    imagelist using almost all of the methods defined in
+    <code>Array</code>. Typically these methods also update the
+    scene number. The scene number will never exceed the number of
+    images in the list, and if the imagelist contains no images the
+    scene number will be <code>nil</code>.</p>
 
-    <p>Array methods defined in the ImageList class that would
-    normally return an array return an ImageList.</p>
+    <p>Array methods that would normally return an array return an
+    ImageList.</p>
 
     <p>Most array methods keep the current image current. If the
     method moves the current image to a new position, the method
@@ -370,7 +371,12 @@ imagelist.ticks_per_second = 1000
 
     <p>Adding anything other than a image to an imagelist has
     undefined results. Most of the time RMagick will raise an
-    ArgumentError exception.</p>
+    ArgumentError exception. For example, if you call
+    <code>collect!</code> on an imagelist you should make sure that
+    the members of theimagelist remain images. If you need to
+    replace images in an imagelist with non-image objects, convert
+    the imagelist to an array with the <code>to_a</code> method,
+    then modify the array.</p>
 
     <p>The <code>assoc</code>, <code>flatten</code>,
     <code>flatten!</code>, <code>join</code>, <code>pack</code>,
@@ -1445,10 +1451,10 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
       pixels from one animation frame to the next. If this does not
       improve the optimization (for the next frame only), it will
       fall back to the results of the previous normal
-      [OptimizeImageLayer] technique. There is the possibility that the
-      change in the disposal style will result in a worsening in
-      the optimization of later frames, though this is unlikely. In
-      other words there no guarantee that it is better than the
+      [OptimizeImageLayer] technique. There is the possibility that
+      the change in the disposal style will result in a worsening
+      in the optimization of later frames, though this is unlikely.
+      In other words there no guarantee that it is better than the
       normal 'optimize-frame' technique.</dd>
 
       <dt>CoalesceLayer</dt>
@@ -1764,6 +1770,23 @@ s = i.to_blob &raquo; a string representing the image.
     <h4>Magick API</h4>
 
     <p>ImageListToBlob</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="to_a">to_a</h3>
+
+    <p><span class="arg">imagelist</span>.to_a -&gt;
+    <em>anArray</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns an array containing all the images in the list.</p>
+
+    <h4>Returns</h4>
+
+    <p>An array</p>
   </div>
 
   <div class="sig">

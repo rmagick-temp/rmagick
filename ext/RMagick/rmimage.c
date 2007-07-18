@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.229 2007/07/01 21:26:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.230 2007/07/18 23:38:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3558,7 +3558,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 /*
  *  Method:     Image#distort(type, points)
  *  Purpose:    Call DistortImage
- *  Notes:      points is an Array of PointInfo objects
+ *  Notes:      points is an Array of Numeric values
 */
 VALUE
 Image_distort(VALUE self, VALUE type, VALUE pts)
@@ -3566,28 +3566,28 @@ Image_distort(VALUE self, VALUE type, VALUE pts)
 #if defined(HAVE_DISTORTIMAGE)
     Image *image, *new_image;
     unsigned long n, npoints;
-    DistortImageType distortion_type;
-    PointInfo *points;
+    DistortImageMethod distortion_method;
+    double *points;
     ExceptionInfo exception;
 
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(type, distortion_type, DistortImageType);
+    VALUE_TO_ENUM(type, distortion_method, DistortImageMethod);
 
     // Ensure pts is an array
     pts = rb_Array(pts);
     npoints = RARRAY(pts)->len;
     // Allocate points array from Ruby's memory. If an error occurs Ruby will
     // be able to clean it up.
-    points = ALLOC_N(PointInfo, npoints);
+    points = ALLOC_N(double, npoints);
 
     for (n = 0; n < npoints; n++)
     {
-        Point_to_PointInfo(&points[n], rb_ary_entry(pts, n));
+        points[n] = NUM2DBL(rb_ary_entry(pts, n));
     }
 
     GetExceptionInfo(&exception);
-    new_image = DistortImage(image, distortion_type, npoints, points, &exception);
+    new_image = DistortImage(image, distortion_method, npoints, points, &exception);
     xfree(points);
     rm_check_exception(&exception, new_image, DestroyOnError);
     (void) DestroyExceptionInfo(&exception);

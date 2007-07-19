@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.201 2007/07/18 23:36:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.202 2007/07/19 23:14:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1310,6 +1310,9 @@ Init_RMagick(void)
         ENUMERATOR(ImpulseNoise)
         ENUMERATOR(LaplacianNoise)
         ENUMERATOR(PoissonNoise)
+#if defined(HAVE_ENUM_RANDOMNOISE)
+        ENUMERATOR(RandomNoise)
+#endif
     END_ENUM
 
     // Orientation constants
@@ -1592,7 +1595,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/07/18 23:36:23 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/07/19 23:14:33 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

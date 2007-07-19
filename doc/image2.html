@@ -1715,9 +1715,10 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
           "arg">pixels</span> is an array or an object that can be
           converted to an array by the <code>Kernel::Array</code>
           method. The elements in the array must be
-          <code>Numeric</code> values in the range [0..QuantumRange]. In
-          either case, the pixel data must be stored in scanline
-          order: left-to-right and top-to-bottom.</dd>
+          <code>Numeric</code> values in the range
+          [0..QuantumRange]. In either case, the pixel data must be
+          stored in scanline order: left-to-right and
+          top-to-bottom.</dd>
         </dl>
       </dd>
 
@@ -1842,8 +1843,9 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
 
     <p><span class="arg">image</span>.level(<span class=
     "arg">black_point</span>=<code>0.0</code>, <span class=
-    "arg">white_point</span>=<code>QuantumRange</code>, <span class=
-    "arg">gamma</span>=<code>1.0</code>) -&gt; <em>anImage</em></p>
+    "arg">white_point</span>=<code>QuantumRange</code>,
+    <span class="arg">gamma</span>=<code>1.0</code>) -&gt;
+    <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1865,13 +1867,14 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
       <dt>black_point</dt>
 
       <dd>A black point level in the range 0-<a href=
-      "constants.html#Miscellaneous_constants">QuantumRange</a>. The
-      default is 0.0.</dd>
+      "constants.html#Miscellaneous_constants">QuantumRange</a>.
+      The default is 0.0.</dd>
 
       <dt>mid_point</dt>
 
-      <dd>A white point level in the range 0..QuantumRange. The default is
-      <a href="constants.html#Miscellaneous_constants">QuantumRange</a> -
+      <dd>A white point level in the range 0..QuantumRange. The
+      default is <a href=
+      "constants.html#Miscellaneous_constants">QuantumRange</a> -
       <span class="arg">black_point</span>.</dd>
 
       <dt>gamma</dt>
@@ -1933,8 +1936,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
 
     <p><span class="arg">image</span>.level_channel(<span class=
     "arg">channel</span>, <span class="arg">black_point</span>=0,
-    <span class="arg">white_point</span>=QuantumRange - black_point,
-    <span class="arg">gamma</span>=1.0) -&gt; <em>anImage</em></p>
+    <span class="arg">white_point</span>=QuantumRange -
+    black_point, <span class="arg">gamma</span>=1.0) -&gt;
+    <em>anImage</em></p>
   </div>
 
   <div class="desc">
@@ -1952,13 +1956,14 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
       <dt>black_point</dt>
 
       <dd>A black point level in the range 0-<a href=
-      "constants.html#Miscellaneous_constants">QuantumRange</a>. The
-      default is 0.0.</dd>
+      "constants.html#Miscellaneous_constants">QuantumRange</a>.
+      The default is 0.0.</dd>
 
       <dt>mid_point</dt>
 
-      <dd>A white point level in the range 0..QuantumRange. The default is
-      <a href="constants.html#Miscellaneous_constants">QuantumRange</a> -
+      <dd>A white point level in the range 0..QuantumRange. The
+      default is <a href=
+      "constants.html#Miscellaneous_constants">QuantumRange</a> -
       <span class="arg">black_point</span>.</dd>
 
       <dt>gamma</dt>
@@ -2466,8 +2471,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
     <h4>Description</h4>
 
     <p>Returns true if all the pixels have the same red, green, and
-    blue values and the values are either 0 or QuantumRange. That is, the
-    image is black-and-white.</p>
+    blue values and the values are either 0 or QuantumRange. That
+    is, the image is black-and-white.</p>
 
     <h4>See also</h4>
 
@@ -2838,11 +2843,14 @@ img = img.opaque('white', 'red')
 convert -list Thresholds
 </pre>
 
-    <p>Older releases of ImageMagick do not accept threshold map
-    strings and will not respond to that command. In these cases
-    <span class="arg">threshold_map</span> should be one of the
-    numbers 2, 3, or 4. These numbers correspond to the threshold
-    maps "o2x2", "o3x3", and "o4x4", respectively.</p>
+    <p>If you have a sufficiently new version of ImageMagick, you
+    can add a <span class="imquote">a uniform color map with the
+    number of levels per color channel</span> immediately following
+    the <span class="arg">threshold_map</span>, separated by a
+    comma. See the documentation for <a href=
+    "http://redux.imagemagick.org/script/command-line-options.php#ordered-dither">
+    ImageMagick's -ordered-dither option</a> for more
+    information.</p>
 
     <h4>Returns</h4>
 

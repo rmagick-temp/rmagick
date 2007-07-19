@@ -472,20 +472,22 @@
 
       <dt>dither</dt>
 
-      <dd class="imquote">Set to <code>true</code> to apply
-      Floyd/Steinberg error diffusion to the image. When the size
-      of the color palette is less than the image colors, this
-      trades off spacial resolution for color resolution by
-      dithering to achieve a similar looking image.</dd>
+      <dd>Set to <code>false</code> to disable dithering. See the
+      documentation for the <a href=
+      "http://redux.imagemagick.org/script/command-line-options.php#dither">
+      ImageMagick -dither option</a> for more information.</dd>
 
       <dt>tree_depth</dt>
 
-      <dd class="imquote">The tree depth to use while quantizing.
-      The values 0 and 1 support automatic tree depth
+      <dd><span class="imquote">The tree depth to use while
+      quantizing. The values 0 and 1 support automatic tree depth
       determination. The tree depth may be forced via values
       ranging from 2 to 8. The ideal tree depth depends on the
       characteristics of the input image, and may be determined
-      through experimentation.</dd>
+      through experimentation.</span> See the documentation for the
+      <a href=
+      "http://redux.imagemagick.org/script/command-line-options.php#treedepth">
+      ImageMagick -treedepth option</a> for more information.</dd>
 
       <dt>measure_error</dt>
 
@@ -1184,12 +1186,12 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" name="notrotated" /><!--
+    "Click to see the example script"  /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example" name="rotated" /></a>
+    "ex/rotate_f.jpg" alt="rotate example"  /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1674,13 +1676,13 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script" name="shadowless" /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
-    "ex/shadow_after.gif" alt="shadow example" name=
-    "shadowed" /></a> <img src="ex/images/spin.gif" alt="" style=
+    "ex/shadow_after.gif" alt="shadow example"
+     /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1892,13 +1894,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script" name="noshear" /> <!--
+    "Click to see the example script"  /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example" name=
-    "sheared" /></a><img src="ex/images/spin.gif" alt="" class=
+    "ex/shear.jpg" alt="shear example"
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -2151,12 +2153,12 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" name="nosplice" /><!--
+    "Click to see the example script" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example" name="spliced" /></a>
+    "ex/splice.jpg" alt="splice example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3556,13 +3558,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example" name="nowave" /> 
+    "ex/images/Flower_Hat.jpg" alt="wave example"  />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example" name="waved" /></a> <img src=
+    "ex/wave.jpg" alt="wave example"  /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

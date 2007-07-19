@@ -146,6 +146,7 @@ have_enum_values('MagickLayerMethod', ['CoalesceLayer',                 # 6.2.7
                                        'RemoveZeroLayer',               # 6.3.3-6
                                        'CompositeLayer',                # 6.3.3-6
                                        'OptimizeImageLayer'], headers)  # 6.3.3-?
+have_enum_value('NoiseType', 'RandomNoise', headers)                    # 6.3.5-0
 
 
 

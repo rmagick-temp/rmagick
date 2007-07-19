@@ -1163,7 +1163,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-       /></a>
+      /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -1191,6 +1191,10 @@ img = Magick::Image.read_inline(content)
     </div>
 
     <div style="clear: both;"></div>
+
+    <h4>Notes</h4>
+
+    <p>The RandomNoise type was added in ImageMagick 6.3.5.</p>
 
     <h4>Magick API</h4>
 
@@ -2348,8 +2352,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
     <h4>Example</h4>
 
-    <p>This example converts a color image to sepia-tone using the
-    <a href="image3.htlm#quantize">quantize</a> and
+    <p>This example converts a color image to a "sepia-tone-ish"
+    image using the <a href="image3.htlm#quantize">quantize</a> and
     <code>colorize</code> methods.</p>
 
     <p class="rollover"><a href=
@@ -3886,9 +3890,15 @@ exit
     <span class="arg">type</span>:</p>
 
     <ul>
+      <li>AffineDistortion</li>
+
+      <li>AffineProjectionDistortion</li>
+
       <li>BilinearDistortion</li>
 
       <li>PerspectiveDistortion</li>
+
+      <li>ScaleRotateTranslateDistortion</li>
     </ul>
 
     <p>The <span class="arg">points</span> argument is an array of

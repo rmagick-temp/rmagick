@@ -149,13 +149,13 @@ float: left;
           <li><a href="#border">border</a></li>
 
           <li><a href="#border_bang">border!</a></li>
+
+          <li><a href="#change_geometry">change_geometry</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#change_geometry">change_geometry</a></li>
-
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
@@ -204,13 +204,13 @@ float: left;
 
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
+
+          <li><a href="#convolve">convolve</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#convolve">convolve</a></li>
-
           <li><a href="#convolve_channel">convolve_channel</a></li>
 
           <li><a href="#copy">copy</a></li>
@@ -252,6 +252,8 @@ float: left;
 
           <li><a href=
           "#each_iptc_dataset">each_iptc_dataset</a></li>
+
+          <li><a href="#each_pixel">each_pixel</a></li>
 
           <li><a href="#each_profile">each_profile</a></li>
 
@@ -615,7 +617,13 @@ p cheetah[0].columns &raquo; 1024
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Creates one or more images from the image file.</p>
+    <p>Reads all the images from the specified file.</p>
+
+    <p><span style="font-style:italic">Note:</span> Because an
+    image file can contain multiple images or multiple image
+    layers, <code>read</code> always returns an array containing 0
+    or more elements, one element for each image or image layer in
+    the file.</p>
 
     <h4>Arguments</h4>
 
@@ -641,6 +649,12 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     <h4>See also</h4>
 
     <p><a href="#ping"><code>ping</code></a></p>
+
+    <h4>Note</h4>
+
+    <p>The read method does not accept a StringIO object. If you
+    want to create an image from a string buffer, use <a href=
+    "image1.html#from_blob">from_blob</a>.</p>
 
     <h4>Magick API</h4>
 
@@ -1754,7 +1768,7 @@ img = Magick::Image.read_inline(content)
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
+    /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -4030,6 +4044,34 @@ exit
 
     <p><a href=
     "image2.html#get_iptc_dataset">get_iptc_dataset</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="each_pixel">each_pixel</h3>
+
+    <p><span class="arg">image</span>.each_pixel {|<span class=
+    "arg">pixel</span>, <span class="arg">c</span>, <span class=
+    "arg">r</span>| <span class="arg">block</span> } -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Calls <span class="arg">block</span> with 3 arguments, a
+    <span class="arg">pixel</span> from <span class=
+    "arg">image</span>, its column number <span class=
+    "arg">c</span>, and its row number <span class="arg">r</span>,
+    for all the pixels in the image. The pixels are enumerated from
+    top-to-bottom and left-to-right.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#get_pixels">get_pixels</a></p>
   </div>
 
   <div class="sig">

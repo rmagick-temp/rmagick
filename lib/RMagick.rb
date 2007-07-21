@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.58 2007/07/18 23:33:46 rmagick Exp $
+# $Id: RMagick.rb,v 1.59 2007/07/21 21:05:11 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -768,6 +768,14 @@ class Image
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image
         self
+    end
+
+    # Thanks to Russell Norris!
+    def each_pixel
+      get_pixels(0, 0, columns, rows).each_with_index do |p, n|
+        yield(p, n%columns, n/columns)
+      end
+      self
     end
 
     # Retrieve EXIF data by entry or all. If one or more entry names specified,

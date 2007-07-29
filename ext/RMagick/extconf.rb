@@ -1,7 +1,7 @@
 require 'mkmf'
 require 'date'
 
-RMAGICK_VERS = '0.0.0'
+RMAGICK_VERS = '0.0.0$'
 MIN_RUBY_VERS = "1.8.2"
 MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(',','').to_i
 MIN_IM_VERS = '6.2.6'

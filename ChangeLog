@@ -35,6 +35,8 @@ RMagick 2.0.0
     o Added Image.combine
     o Added Image#separate (available with ImageMagick 6.2.9)
     o Added Image#distort (available with ImageMagick 6.3.5)
+    o Added Image#each_pixel (thanks to Russell Norris for the suggestion and
+      code)
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
 

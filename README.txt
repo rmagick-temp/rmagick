@@ -9,10 +9,8 @@ Table Of Contents
 * [Introduction] [intro]
 * [Contact Information] [contact]
 * [Prerequisites] [prereq]
-* [Tips for installing and configuring ImageMagick and GraphicsMagick] [tips]
 * [Installing RMagick] [install]
   + [Configuration options] [options]
-  + [Running the configure and make scripts] [scripts]
 * [Things that can go wrong] [uhoh]
 * [Upgrading] [upgrade]
 * [Uninstalling] [uninstall]
@@ -25,7 +23,7 @@ Table Of Contents
 <h2 id="intro">Introduction</h2>
 
 RMagick is an interface between the Ruby programming language and the
-ImageMagick and GraphicsMagick image processing libraries.
+ImageMagick image processing library.
 
 <h2 id="contact">Contact Information</h2>
 
@@ -39,123 +37,48 @@ __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 __O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, OS X.
 
-__Ruby__ 1.6.7 or later. You can get Ruby from <http://www.ruby-lang.org>.
-RVG requires Ruby 1.8.
+__Ruby__ 1.8.2 or later. You can get Ruby from <http://www.ruby-lang.org>.
 
-Either __ImageMagick__ 6.0.0 or later, or any release of
-__GraphicsMagick__.  GraphicsMagick is a friendly fork of ImageMagick
-5.5.1.  You can get ImageMagick from <http://www.imagemagick.org>.  You
-can get GraphicsMagick from <http://www.graphicsmagick.org>.  ImageMagick
-and GraphicsMagick have slightly different capabilities.  Please consult
-their web sites if you have questions.
+__ImageMagick__ 6.2.8 or later.  You can get ImageMagick from <http://www.imagemagick.org>.
 
-<h2 id="tips">Tips for installing and configuring ImageMagick and GraphicsMagick</h2>
+<h2 id="install">Installation</h2>
 
-See <http://rmagick.rubyforge.org/install-faq.html> for the latest version
-of these tips.
+The installation procedure for RMagick 0.0.0 is different from that used
+in earlier releases. Before installing RMagick, you must install ImageMagick.
+Complete and up-to-date instructions for installing ImageMagick are available at <http://rmagick.rubyforge.org/install-faq.html>. After installing 
+ImageMagick, use the instructions in the next section to install RMagick.
 
-If you are installing RMagick by compiling the source code, I strongly
-encourage you to install the latest version of ImageMagick or
-GraphicsMagick _from source_.  If you have never installed ImageMagick or
-GraphicsMagick before, I also strongly encourage you to read the
-README.txt file as many times as is necessary for you to understand how to
-configure it.  ImageMagick and GraphicsMagick are large and complicated
-programs and can be difficult to configure.  Follow these tips to minimize
-the amount of time you'll spend and your frustration level.
+<h2 id="install">Installing RMagick 0.0.0</h2>
 
-_Do not_ simply type `./configure` and expect the defaults to be correct
-for you.  Since you are installing ImageMagick/GraphicsMagick to use with
-Ruby, consider whether you want to skip ImageMagick's/GraphicMagick's
-support for Perl and C++ by using the `--without-perl` and
-`--without-magick-plus-plus` options.  Doing so will speed up the
-installation process and save some disk space.  You will almost certainly
-want to specify the `--enable-shared` and `--disable-static` options.
+This release of RMagick uses Minero Aoki's setup.rb script for installation.
+You can get more information about setup.rb from his web site
+<http://i.loveruby.net>
 
-Determine which image formats you are interested in using and make sure
-that you have installed the libraries that ImageMagick/GraphicsMagick uses
-to process these formats.  ImageMagick and GraphicsMagick use additional
-libraries to support some image formats.  If you do not install those
-libraries you cannot read and write those image formats.  You will need to
-configure ImageMagick/GraphicsMagick to support the JPG, PNG, TIFF, and
-WMF formats in order to execute all the RMagick sample programs.  See
-ImageMagick's or GraphicMagick's README.txt file for more information.
+Download the latest version of the RMagick tarball from RubyForge. 
+Decompress the tarball into a temporary directory using the command
 
-Once you have determined the configuration options you need, run the
-configure script.  When it completes, read the summary output to see if
-configuration worked the way you expected.  Here's an example of the
-summary output from ImageMagick's configure script.  Notice that the
-result of each option is listed in the "Configured value" column.
+	tar xvzf RMagick-0.0.0-tar.gz 
 
+Change to the RMagick-0.0.0 directory. Run the command
 
-                      Option                        Value
-    -------------------------------------------------------------------------
-    Shared libraries  --enable-shared=yes           yes
-    Static libraries  --enable-static=no            no
-    Module support    --with-modules=yes            yes
-    GNU ld            --with-gnu-ld=yes             yes
-    LZW support       --enable-lzw=yes              yes
-    Quantum depth     --with-quantum-depth=8        8
+	ruby setup.rb
+	
+See the next section for configuration options. Usually you do not need to
+specify any of these options. Note that setup.rb executes all the example
+programs, so this can take some time. This process both builds the example
+images used in the documentation and validates your RMagick installation. 
 
-    Delegate Configuration:
-    BZLIB             --with-bzlib=yes              yes
-    DPS               --with-dps=yes                yes
-    FlashPIX          --with-fpx=yes                no
-    FreeType 2.0      --with-ttf=yes                yes
-    Ghostscript       None                          gs (7.07.2)
-    Ghostscript fonts --with-gs-font-dir=default    /usr/share/fonts/default/Type1/
-    Ghostscript lib   --with-gslib=no               no
-    Graphviz          --with-dot=yes                no
-    JBIG              --with-jbig=yes               no
-    JPEG v1           --with-jpeg=yes               yes
-    JPEG-2000         --with-jp2=yes                no
-    LCMS              --with-lcms=yes               yes
-    Magick++          --with-magick-plus-plus=no    no
-    PERL              --with-perl=no                no
-    PNG               --with-png=yes                yes
-    TIFF              --with-tiff=yes               yes
-    Windows fonts     --with-windows-font-dir=/mnt/windows/windows/fonts    /mnt/windows/windows/fonts/
-    WMF               --with-wmf=yes                yes
-    X11               --with-x=                     yes
-    XML               --with-xml=yes                yes
-    ZLIB              --with-zlib=yes               yes
+After this command completes, make sure you have administrator priviledges,
+then enter the command
 
-    X11 Configuration:
-      X_CFLAGS     = -I/usr/X11R6/include
-      X_PRE_LIBS   = -lSM -lICE
-      X_LIBS       = -L/usr/X11R6/lib
-      X_EXTRA_LIBS =
-
-If the results are not what you wanted, install any missing libraries,
-choose new or different options, or whatever it takes, erase the
-config.cache file, and re-run `configure`.  Repeat as often as necessary
-before moving to the `make` and `make install` steps.
-
-Detailed information about all of ImageMagick's and GraphicsMagick's
-configuration options may be found in their README.txt and INSTALL.txt
-files.
-
-#### Windows Metafile Format
-As noted in the ImageMagick and GraphicsMagick README.txt files, to
-support images in the Windows Metafile format, ImageMagick/GraphicsMagick
-requires an additional library.  Without this library some of the RMagick
-sample programs will not work.  ImageMagick and GraphicsMagick require
-libwmf 0.2.5, 0.2.7, or 0.2.2 to support the WMF format.  (Avoid libwmf
-0.2.6!)
-
-<h2 id="install">Installing RMagick</h2>
-
-Installing RMagick is much simpler than installing ImageMagick or
-GraphicsMagick.  Note that the make step runs all the example programs.
-This process both builds the example images used in the documentation and
-validates your RMagick installation.  This step can take 5-15 minutes
-depending on the speed of your computer.
+	ruby setup.rb install
 
 <h4 id="options">Configuration Options</h4>
 
-Type `./configure --help` to see a list of configuration options.  In
+Type `ruby setup.rb --help` to see a list of configuration options.  In
 addition to the regular options, there are a few RMagick-specific options:
 
-* --with-doc-dir=_directory_
+* --doc-dir=_directory_
     >  Specify the directory to install the RMagick documentation.
     >  By default this is $prefix/share/RMagick, where $prefix is the
     >  prefix specified by --prefix. For example, to install the
@@ -163,17 +86,19 @@ addition to the regular options, there are a few RMagick-specific options:
 
     >  `./configure --with-doc-dir=/home/user/RMagick`
 
-* --enable-allow-example-errors
+* --allow-example-errors
     >  Normally the documentation installation terminates if 5 examples fail.
     >  If you use this option, the installation does not check for failing
-    >  examples and will always complete. This option is useful if you're having
-    >  trouble installing RMagick and you want to see all the failing examples.
+    >  examples and will always complete. This option is useful if you're 
+    >  having trouble installing RMagick and you want to see all the failing examples.
 
-* --disable-htmldoc (or --enable-htmldoc=no)
+* --disable-htmldoc
     >  By default the install process runs all the RMagick example programs
     >  and generates HTML versions of all the examples. This option causes
     >  the install process to skip this step. No documentation is installed.
 
+<<<<<<< README.txt
+=======
 * --with-graphics-magick
     >  If you have both ImageMagick and GraphicsMagick installed, this option will
     >  force RMagick to be configured with GraphicsMagick.
@@ -206,10 +131,11 @@ directory.  Then type:
     (optionally)
     $ make clean
 
+>>>>>>> 1.30
 <h2 id="uhoh">Things that can go wrong</h2>
 
 #### Can't install RMagick. Can't find libMagick or one of the dependent libraries. Check the config.log file for more detailed information.
-The message can also refer to "libGraphicsMagick". Typically this message means that one or more of the libraries that Imagemagick/GraphicsMagick depends on hasn't been installed. Examine the config.log file in the installation directory for any error messages. These messages typically contain enough additional information for you to be able to diagnose the problem.
+Typically this message means that one or more of the libraries that ImageMagick depends on hasn't been installed. Examine the config.log file in the installation directory for any error messages. These messages typically contain enough additional information for you to be able to diagnose the problem.
 
 #### Cannot open shared object file
 When make is running the examples, if you get a message like this:
@@ -218,11 +144,11 @@ When make is running the examples, if you get a message like this:
       cannot open shared object file: No such file or directory -
       /home/you/RMagick-0.0.0/ext/RMagick/RMagick.so (LoadError)
 
-you probably do not have the directory in which the ImageMagick or GraphicsMagick
-library is installed in your load path. An easy way to fix this is to define the
-directory in the LD\_LIBRARY\_PATH environment variable. For example, suppose you
-installed the GraphicsMagick library libGraphicsMagick.so in /usr/local/lib.
-(By default this is where it is installed.) Create the LD\_LIBRARY\_PATH variable
+you probably do not have the directory in which the ImageMagick library is
+installed in your load path. An easy way to fix this is to define the
+directory in the LD\_LIBRARY\_PATH environment variable. For example, suppose
+you installed the ImageMagick library libMagick.so in /usr/local/lib. (By
+default this is where it is installed.) Create the LD\_LIBRARY\_PATH variable
 like this:
 
     export LD_LIBRARY_PATH=/usr/local/lib
@@ -243,16 +169,16 @@ the TMPDIR environment variable to your temporary directory. For example:
 
 <h2 id="upgrade">Upgrading</h2>
 
-If you upgrade to a newer release of ImageMagick or GraphicsMagick, make sure
-you're using a release of RMagick that supports that release. Usually I put out
-a new release of RMagick with every new release of ImageMagick. It's safe to
-install a newer release of RMagick over an earlier release.
+If you upgrade to a newer release of ImageMagick, make sure you're using a
+release of RMagick that supports that release. It's safe to install a newer
+release of RMagick over an earlier release.
 
 <h2 id="uninstall">Uninstalling</h2>
 
-The `uninstall` target will uninstall RMagick completely:
+The `uninstall.rb` script will uninstall RMagick completely. Make sure you
+have administrator priviledges. Then run this command:
 
-    make uninstall
+    ruby uninstall.rb
 
 <h2 id="samples">More samples</h2>
 
@@ -264,15 +190,15 @@ These programs are not installed in the RMagick documentation tree.
 Please report bugs in RMagick, its documentation, or its installation
 programs to me via the bug tracker on the [RMagick project page at
 RubyForge](http://rubyforge.org/projects/rmagick).  However, I can't help
-with Ruby installation and configuration or ImageMagick or GraphicsMagick
-installation and configuration.  Please report problems with that software
-to their respective authors or distributors.
+with Ruby installation and configuration or ImageMagick
+installation and configuration. Information about reporting problems and
+getting help for ImageMagick is available at the ImageMagick web site
+(http://www.imagemagick.org).
 
 <h2 id="credits">Credits</h2>
 
 Thanks to
 
-   * Simple Systems, for hosting the RMagick documentation online.
    * ImageMagick Studio LLC, for ImageMagick and for hosting the RMagick documentation.
    * Kaspar Schiess and Brett DiFrischia, for the MS Windows gems.
 
@@ -316,10 +242,8 @@ The HTML version was produced with [BlueCloth](http://bluecloth.rubyforge.org).
 [intro]: #intro
 [contact]: #contact
 [prereq]: #prereq
-[tips]: #tips
 [install]: #install
 [options]: #options
-[scripts]: #scripts
 [uhoh]: #uhoh
 [upgrade]: #upgrade
 [uninstall]: #uninstall

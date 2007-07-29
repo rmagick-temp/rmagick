@@ -97,41 +97,6 @@ addition to the regular options, there are a few RMagick-specific options:
     >  and generates HTML versions of all the examples. This option causes
     >  the install process to skip this step. No documentation is installed.
 
-<<<<<<< README.txt
-=======
-* --with-graphics-magick
-    >  If you have both ImageMagick and GraphicsMagick installed, this option will
-    >  force RMagick to be configured with GraphicsMagick.
-
-* --with-so-dir=_directory_
-    >  The directory for ruby extensions.
-
-* --with-ruby-path=_directory_
-    >  The path to set the !# line in Ruby scripts. The default is $prefix/bin/ruby.
-
-* --with-ruby-prog=_name_
-    >  The name of the Ruby executable. The default is `ruby`.
-
-* --with-make-prog=_name_
-    >  The name of the `make` program.
-
-* --with-rbconfig=_directory_
-    > The directory of the rbconfig.rb file to use.  The default is Ruby's
-    > rbconfig.
-
-<h4 id="scripts">Running the <code>configure</code> and <code>make</code> scripts</h4>
-
-De-compress the RMagick-0.0.0$.tar.gz archive and enter the top
-directory.  Then type:
-
-    $ ./configure <configuration options>
-    $ make
-    ($ su)
-    $ make install
-    (optionally)
-    $ make clean
-
->>>>>>> 1.30
 <h2 id="uhoh">Things that can go wrong</h2>
 
 #### Can't install RMagick. Can't find libMagick or one of the dependent libraries. Check the config.log file for more detailed information.

@@ -214,9 +214,9 @@ The message can also refer to "libGraphicsMagick". Typically this message means 
 #### Cannot open shared object file
 When make is running the examples, if you get a message like this:
 
-    /home/you/RMagick-0.0.0$/lib/RMagick.rb:11:in `require': libMagick.so.0:
+    /home/you/RMagick-0.0.0/lib/RMagick.rb:11:in `require': libMagick.so.0:
       cannot open shared object file: No such file or directory -
-      /home/you/RMagick-0.0.0$/ext/RMagick/RMagick.so (LoadError)
+      /home/you/RMagick-0.0.0/ext/RMagick/RMagick.so (LoadError)
 
 you probably do not have the directory in which the ImageMagick or GraphicsMagick
 library is installed in your load path. An easy way to fix this is to define the
@@ -233,7 +233,7 @@ systems, see the documentation for the dynamic loading facility.
 #### No such file or directory - "/tmp/rmagick6872.6"
 When make is running the examples, if you get a message like this:
 
-    hook /home/me/src/RMagick-0.0.0$/./post-setup.rb failed:
+    hook /home/me/src/RMagick-0.0.0/./post-setup.rb failed:
     No such file or directory - "/tmp/rmagick6872.6"
 
 you probably do not have a temporary directory environment variable set. Set

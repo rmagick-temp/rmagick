@@ -158,6 +158,8 @@
 
           <li><a href="#spread">spread</a></li>
 
+          <li><a href="#statistics">statistics</a></li>
+
           <li><a href="#stegano">stegano</a></li>
 
           <li><a href="#stereo">stereo</a></li>
@@ -170,14 +172,14 @@
 
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
-
-          <li><a href=
-          "#texture_floodfill">texture_floodfill</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#texture_floodfill">texture_floodfill</a></li>
+
           <li><a href="#threshold">threshold</a></li>
 
           <li><a href="#thumbnail">thumbnail</a></li>
@@ -386,7 +388,7 @@
 
     <h4>Notes</h4>
 
-    <p>ImageMagick does not automatically remove profiles when
+    <p>&times;Magick does not automatically remove profiles when
     resizing images. If you are trying to make your JPEG thumbnail
     images as small as possible, use <code>profile!</code> to
     remove any profiles from the image as well. Also see <a href=
@@ -596,7 +598,8 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
     well as operations on channels within pixels. See <a href=
     "#view">view</a>, below.</p>
 
-    <h4>Magick API</h4>EvaluateImageChannel (ImageMagick)
+    <h4>Magick API</h4>QuantumOperatorRegionImage (GraphicsMagick
+    1.1), EvaluateImageChannel (ImageMagick)
   </div>
 
   <div class="sig">
@@ -684,7 +687,7 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
 
     <h4>Magick API</h4>
 
-    <p>RadialBlurImageChannel</p>
+    <p>RadialBlurImageChannel (available in ImageMagick 6.2.4)</p>
   </div>
 
   <div class="sig">
@@ -1179,7 +1182,7 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
@@ -1631,13 +1634,13 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
     "ex/shadow_after.gif" alt="shadow example"
-    /></a> <img src="ex/images/spin.gif" alt="" style=
+     /></a> <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1849,13 +1852,13 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script" /> <!--
+    "Click to see the example script"  /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
     "ex/shear.jpg" alt="shear example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1947,7 +1950,7 @@ random_threshold_channel(geom, RedChannel)
     and is convenient for determining if an image has been modified
     or whether two images are identical.</p>
 
-    <p>ImageMagick adds the computed signature to the image's
+    <p>&times;Magick adds the computed signature to the image's
     properties.</p>
 
     <h4>Returns</h4>
@@ -2167,6 +2170,81 @@ img.properties &raquo;
   </div>
 
   <div class="sig">
+    <h3 id="statistics">statistics</h3>
+
+    <p><span class="arg">image</span>.statistics -&gt; <em>see
+    below</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Computes the minimum, maximum, mean, standard deviation, and
+    variance for each channel in the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>The statistics method returns a <code>Statistics</code>
+    class object. This class defines four <em>channel</em>
+    attributes: <code>red</code>, <code>green</code>,
+    <code>blue</code>, and <code>opacity</code>. Each channel
+    attribute is a <code>Statistics::Channel</code> class object.
+    This class defines 5 <em>statistic</em> attributes:
+    <code>min</code>, <code>max</code>, <code>mean</code>
+    <code>stddev</code>, and <code>var</code>. See the example
+    below.</p>
+
+    <h4>Example</h4>
+    <pre>
+require 'pp'
+
+img = Image.read("Flower_Hat.jpg").first
+stats = img.statistics
+
+pp stats &raquo;
+    #&lt;Magick::Statistics
+    red=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.627182352941187,
+      stddev=0.231399683489667,
+      var=0.0535458135191179&gt;,
+    green=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.571999607843132,
+      stddev=0.22246563644744,
+      var=0.0494909593999647&gt;,
+    blue=
+      #&lt;Magick::Statistics::Channel
+      max=1.0,
+      min=0.0,
+      mean=0.508869725490209,
+      stddev=0.269422111063184,
+      var=0.0725882739297426&gt;,
+    opacity=
+      #&lt;Magick::Statistics::Channel
+      max=0.0,
+      min=0.0,
+      mean=0.0,
+      stddev=0.0,
+      var=0.0&gt;&gt;
+
+p stats.red.stddev &raquo; 0.231399683489667
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#channel_extrema">channel_extrema</a>,
+    <a href="image1.html#channel_mean">channel_mean</a></p>
+
+    <h4>Magick API</h4>GetImageStatistics (available in
+    GraphicsMagick 1.1)
+  </div>
+
+  <div class="sig">
     <h3 id="stegano">stegano</h3>
 
     <p><span class="arg">image</span>.stegano(<span class=
@@ -2331,9 +2409,8 @@ img.properties &raquo;
 
     <p>self</p>
 
-    <h4>Magick API</h4>
-
-    <p>StripImage</p>
+    <h4>Magick API</h4>StripImage (available in ImageMagick and
+    GraphicsMagick 1.1)
   </div>
 
   <div class="sig">
@@ -3228,7 +3305,7 @@ end
 
     <p>The <code>view</code> method introduces a relatively high
     level of overhead to pixel manipulation compared to methods
-    that use the ImageMagick API to identify and change pixels. I
+    that use the &times;Magick API to identify and change pixels. I
     recommend that you use <code>view</code> only when the number
     of pixels identified in the view is fairly small (a few
     thousand to a few hundred thousand, depending on your patience
@@ -3279,7 +3356,7 @@ end
       expense of increased execution time. In general, <span class=
       "arg">radius</span> should be larger than <span class=
       "arg">sigma</span>, although if <span class=
-      "arg">radius</span> is 0 then ImageMagick will choose a
+      "arg">radius</span> is 0 then &times;Magick will choose a
       suitable value. <span class="arg">Sigma</span> must be
       non-zero. Choose a very small value for <span class=
       "arg">sigma</span> to produce a "hard" edge.</dd>
@@ -3430,17 +3507,8 @@ end
     present and the <span class="arg">x-offset</span> (and
     optionally the <span class="arg">y-offset</span>) is present,
     the <span class="arg">x-</span> and <span class=
-    "arg">y-offset</span> are measured from the right and/or bottom
-    edges of the target image based on the value of <span class=
-    "arg">gravity</span>. If the argument is NorthEastGravity,
-    EastGravity, or SouthEastGravity, the <span class=
-    "arg">x-offset</span> is measured from the right side of the
-    image. If the argument is SouthEastGravity, SouthGravity, or
-    SouthWestGravity, the <span class="arg">y-offset</span> is
-    measured from the bottom of the image. All other values are
-    ignored and the <span class="arg">x-</span> and <span class=
-    "arg">y-offset</span> are measured from the upper-left corner
-    of the image.</p>
+    "arg">y-offset</span> are measured relative to the <span class=
+    "arg">gravity</span> value.</p>
 
     <h4>Returns</h4>
 
@@ -3640,13 +3708,13 @@ end
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Writes the image to the specified file. ImageMagick
+    <p>Writes the image to the specified file. &times;Magick
     determines image format from the <a href=
     "imusage.html#formats">prefix or extension</a>.</p>
 
-    <p>If the argument is an open file, ImageMagick will write the
-    image in its current format. You can force a different format
-    by setting the image's <a href=
+    <p>If the argument is an open file, &times;Magick will write
+    the image in its current format. You can force a different
+    format by setting the image's <a href=
     "imageattrs.html#Image.format">format</a> attribute.</p>
 
     <h4>Arguments</h4>

@@ -636,7 +636,7 @@ img = Magick::Image.read_inline(content)
     <p>Returns the value of the image property identified by
     <span class="arg">key</span>. An image may have any number of
     properties. Each property is identified by a string (or symbol)
-    key. The property value is a string. ImageMagick predefines
+    key. The property value is a string. &times;Magick predefines
     some properties, including <code>Label</code>,
     <code>Comment</code>, <code>Signature</code>, and in some cases
     <code>EXIF</code>.</p>
@@ -664,7 +664,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Note</h4>
 
-    <p>ImageMagick calls properties "attributes." I use the word
+    <p>&times;Magick calls properties "attributes." I use the word
     "properties" to reduce the confusion with image object
     attributes such as <code>rows</code> and
     <code>columns</code>.</p>
@@ -1482,7 +1482,7 @@ img = Magick::Image.read_inline(content)
     and <span class="arg">dst_percent</span>.</p>
 
     <p>This method corresponds to the -blend option of
-    ImageMagick's <code>composite</code> command.</p>
+    &times;Magick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -1586,7 +1586,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Magick API</h4>
 
-    <p>BlurImageChannel</p>
+    <p>BlurImageChannel (available in ImageMagick 6.0.1)</p>
   </div>
 
   <div class="sig">
@@ -1680,7 +1680,7 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
+    "Click to see the example script"  /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
@@ -1885,7 +1885,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
-      arguments are specified, the default is all channels.</dd>
+      arguments are specified, the default is all channels.
+      <em>GraphicsMagick users note:</em> Specify exactly one
+      channel. The <code>AllChannels</code> value is not
+      supported.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1893,9 +1896,15 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <p>An array. The first element in the array is the minimum
     value. The second element is the maximum value.</p>
 
+    <h4>See also</h4>
+
+    <p>GraphicsMagick users see <a href=
+    "image3.html#statistics">statistics</a></p>
+
     <h4>Magick API</h4>
 
-    <p>GetImageChannelExtrema</p>
+    <p>GetImageChannelExtrema (available in ImageMagick),
+    GetImageStatistics (available in GraphicsMagick 1.1)</p>
   </div>
 
   <div class="sig">
@@ -1919,7 +1928,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <dd>Zero or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If no
-      arguments are specified, the default is all channels.</dd>
+      arguments are specified, the default is all channels.
+      <em>GraphicsMagick users note:</em> Specify exactly one
+      channel. The <code>AllChannels</code> value is not
+      supported.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1927,9 +1939,15 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <p>An array. The first element in the array is the mean value.
     The second element is the standard deviation.</p>
 
+    <h4>See also</h4>
+
+    <p>GraphicsMagick users see <a href=
+    "image3.html#statistics">statistics</a></p>
+
     <h4>Magick API</h4>
 
-    <p>GetImageChannelMean</p>
+    <p>GetImageChannelMean (available in ImageMagick),
+    GetImageStatistics (available in GraphicsMagick 1.1)</p>
   </div>
 
   <div class="sig">
@@ -2219,9 +2237,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     "ex/color_histogram.gif" alt="color_histogram example" title=
     "Click the image to see the example script" /></a></p>
 
-    <h4>Magick API</h4>
-
-    <p>GetImageHistogram</p>
+    <h4>Magick API</h4>GetColorHistogram (available in
+    GraphicsMagick 1.1), GetImageHistogram (available in
+    ImageMagick)
   </div>
 
   <div class="sig">
@@ -2264,7 +2282,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Example</h4>
 
     <p>This example converts a color image to sepia-tone using the
-    <a href="image3.htlm#quantize">quantize</a> and
+    <a href="image3.html#quantize">quantize</a> and
     <code>colorize</code> methods.</p>
 
     <p class="rollover"><a href=
@@ -2603,14 +2621,7 @@ f.color_reset!(red)
           <dt>gravity</dt>
 
           <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> value. If
-          the argument is NorthEastGravity, EastGravity, or
-          SouthEastGravity, the x-offset is measured from the right
-          side of the image. If the argument is SouthEastGravity,
-          SouthGravity, or SouthWestGravity, the y-offset is
-          measured from the bottom of the image. All other values
-          are ignored and the x- and y-offsets are measured from
-          the upper-left corner of the image.</dd>
+          "constants.html#GravityType">GravityType</a> value.</dd>
 
           <dt>x, y</dt>
 
@@ -3097,21 +3108,13 @@ f2 = f.copy
           <dt>gravity</dt>
 
           <dd>A <a href=
-          "constants.html#GravityType">GravityType</a> value. If
-          the argument is NorthEastGravity, EastGravity, or
-          SouthEastGravity, the <em>x-</em>offset is measured from
-          the right side of the image. If the argument is
-          SouthEastGravity, SouthGravity, or SouthWestGravity, the
-          <em>y-</em>offset is measured from the bottom of the
-          image. All other values are ignored and the <em>x-</em>
-          and <em>y-</em>offsets are measured from the upper-left
-          corner of the image.</dd>
+          "constants.html#GravityType">GravityType</a> value.</dd>
 
           <dt>x, y</dt>
 
-          <dd>The <em>x-</em> and <em>y-</em>offset of the
-          rectangle from the sides specified by the
-          <em>gravity</em> argument.</dd>
+          <dd><span class="arg">x-</span> and <span class=
+          "arg">y-offset</span> relative to the <span class=
+          "arg">gravity</span> value</dd>
 
           <dt>width, height</dt>
 
@@ -3526,7 +3529,8 @@ exit
 
     <h4>Magick API</h4>
 
-    <p>ExportImagePixels</p>
+    <p>DispatchImage (GraphicsMagick), or ExportImagePixels
+    (ImageMagick)</p>
 
     <h4>Note</h4>
 
@@ -3557,7 +3561,7 @@ exit
     from <span class="arg">image</span> to the output image.</p>
 
     <p>This method corresponds to the -displace option of
-    ImageMagick's <code>composite</code> command.</p>
+    &times;Magick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -3667,7 +3671,7 @@ exit
     <span class="arg">src_percentage</span>.</p>
 
     <p>This method corresponds to the -dissolve option of
-    ImageMagick's <code>composite</code> command.</p>
+    &times;Magick's <code>composite</code> command.</p>
 
     <h4>Arguments</h4>
 
@@ -3685,7 +3689,7 @@ exit
       interpreted as a percentage. Both 0.25 and "25%" mean 25%.
       This argument is required.</dd>
 
-      <dt>dst_percentage</dt>
+      <dt>dst_percentage (with ImageMagick)</dt>
 
       <dd>Either a non-negative number a string in the form "NN%".
       If <span class="arg">src_percentage</span> is a number it is
@@ -3693,6 +3697,12 @@ exit
       This argument may omitted if no other arguments follow it. In
       this case <span class="arg">image</span>'s opacity is
       unchanged.</dd>
+
+      <dt>dst_percentage (with GraphicsMagick)</dt>
+
+      <dd>With GraphicsMagick, <code>dissolve</code> ignores the
+      value and uses <code>1.0-<span class=
+      "arg">src_percentage</span></code> instead.</dd>
     </dl>
 
     <p>The <code>dissolve</code> method can be called with or

@@ -1,4 +1,8 @@
 RMagick 1.15.8
+    o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.
+      Koll
+    o Fixed bug #11890, incorrect usage description for Draw#text_undercolor in
+      HTML doc (bug report from Ezra Freedman)
     o Fixed bug #12706, specifying both a gravity and offsets to Image#composite
       positions the composite image incorrectly (bug report from Benoit Larroque)
 

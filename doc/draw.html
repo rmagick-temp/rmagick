@@ -665,7 +665,7 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
       <dt>image <em>(optional)</em></dt>
 
       <dd>The image on which the string will be rendered.
-      ImageMagick uses the attributes of the image (font name,
+      &times;Magick uses the attributes of the image (font name,
       pointsize, etc.) to compute the metrics. If this argument is
       omitted, <code>get_type_metrics</code> substitutes a dummy
       image with default attributes. The <span class=
@@ -890,6 +890,14 @@ draw.inspect &raquo;
 
     <h4>See also</h4><a href="#ellipse">ellipse</a>, <a href=
     "#path">the SVG elliptical arc commands (A and a)</a>
+
+    <h4>Note</h4>
+
+    <p>The <code>arc</code> method is broken in all releases of
+    ImageMagick prior to 6.0.0, and all releases of GraphicsMagick
+    prior to 1.1. If you see a diagonal line here instead of an
+    arc, it's broken. Either upgrade to the newest version or use
+    one of the other methods listed above.</p>
   </div>
 
   <div class="sig">
@@ -1276,9 +1284,9 @@ draw.decorate(Magick::LineThroughDecoration)
     <a href="#clip_path">clip-path</a> method, anything drawn on
     the image inside the clip-path will appear. Anything drawn
     outside the clip-path will be hidden. (See <a href=
-    "#clip_rule">clip_rule</a> for a definition of how ImageMagick
-    decides what is "inside" and what is "outside" of the
-    clip-path.)</p>
+    "#clip_rule">clip_rule</a> for a definition of how
+    &times;Magick decides what is "inside" and what is "outside" of
+    the clip-path.)</p>
 
     <h4>Arguments</h4>
 
@@ -1358,7 +1366,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <h4>Arguments</h4>
 
-    <p>See the ImageMagick documentation for the
+    <p>See the &times;Magick documentation for the
     <code>-encoding</code> option to the <code>mogrify</code>
     command</p>
 
@@ -2042,7 +2050,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><em>Note:</em> The <code>push</code> and <code>pop</code>
     methods are probably not as useful in RMagick as they are in C
-    language ImageMagick programs, since it is easy to create
+    language &times;Magick programs, since it is easy to create
     separate draw objects, each with its own set of properties and
     primitives.</p>
 
@@ -2548,7 +2556,7 @@ draw.stroke_opacity('40%')
     <p>Generally it is a good idea to surround the text string with
     quotes (""), apostrophes (''), or braces ({}). If the text
     string starts with a digit or contains an embedded blank,
-    quote, or apostrophe, you must do this. ImageMagick removes
+    quote, or apostrophe, you must do this. &times;Magick removes
     these characters before drawing the text. You can also escape a
     blank, quote, or apostrophe by preceding it with a backslash
     ("\"). To include a backslash in the text, use two consecutive
@@ -2680,7 +2688,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="text_undercolor">text_undercolor</h3>
 
-    <p><span class="arg">draw</span>.undercolor(<span class=
+    <p><span class="arg">draw</span>.text_undercolor(<span class=
     "arg">aString</span>) -&gt; <em>draw</em></p>
   </div>
 
@@ -2844,7 +2852,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <h4>Argument</h4>
 
-    <p>See the ImageMagick documentation for the
+    <p>See the &times;Magick documentation for the
     <code>-encoding</code> option to the <code>mogrify</code>
     command.</p>
 

@@ -6,9 +6,8 @@ include Magick
 img = Image.new(200,200)
 img.compression = LZWCompression
 
-bg = Image.read('plasma:fractal') {
-    self.size = '200x200'
-    }
+bg = Image.read('plasma:fractal') { self.size = '200x200' }
+bg[0].matte = false
 
 gc = Draw.new
 gc.stroke_width(2)

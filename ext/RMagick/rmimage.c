@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.231 2007/07/30 23:34:28 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.232 2007/07/31 00:04:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2472,13 +2472,13 @@ static VALUE composite(
 				case NorthEastGravity:
 				case EastGravity:
 				case SouthEastGravity:
-                	x_offset = (long)(image->columns) - (long)(comp_image->columns) - x_offset;
+                	x_offset = ((long)(image->columns) - (long)(comp_image->columns)) - x_offset;
 					break;
 				case NorthGravity:
 				case SouthGravity:
 				case CenterGravity:
 				case StaticGravity:
-            		x_offset = (long)(image->columns/2) - (long)(comp_image->columns/2);
+            		x_offset += (long)(image->columns/2) - (long)(comp_image->columns/2);
 					break;
 				default:
 					break;
@@ -2488,13 +2488,13 @@ static VALUE composite(
 				case SouthWestGravity:
 				case SouthGravity:
 				case SouthEastGravity:
-                	y_offset = (long)(image->rows) - (long)(comp_image->rows) - y_offset;
+                	y_offset = ((long)(image->rows) - (long)(comp_image->rows)) - y_offset;
 					break;
 				case EastGravity:
 				case WestGravity:
 				case CenterGravity:
 				case StaticGravity:
-                	y_offset = (long)(image->rows/2) - (long)(comp_image->rows/2);
+                	y_offset += (long)(image->rows/2) - (long)(comp_image->rows/2);
 					break;
 				case NorthEastGravity:
 				case NorthGravity:

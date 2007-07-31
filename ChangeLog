@@ -1,3 +1,7 @@
+RMagick 1.15.8
+    o Fixed bug #12706, specifying both a gravity and offsets to Image#composite
+      positions the composite image incorrectly (bug report from Benoit Larroque)
+
 RMagick 1.15.7
     o Fix bug #11033, make distclean misses some files (bug report from Lucas
       Nussbaum)

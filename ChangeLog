@@ -40,6 +40,14 @@ RMagick 2.0.0
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
 
+RMagick 1.15.8
+    o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.
+      Koll
+    o Fixed bug #11890, incorrect usage description for Draw#text_undercolor in
+      HTML doc (bug report from Ezra Freedman)
+    o Fixed bug #12706, specifying both a gravity and offsets to Image#composite
+      positions the composite image incorrectly (bug report from Benoit Larroque)
+
 RMagick 1.15.7
     o Fix bug #11033, make distclean misses some files (bug report from Lucas
       Nussbaum)

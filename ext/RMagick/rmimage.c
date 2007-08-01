@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.232 2007/07/31 00:04:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.233 2007/08/01 22:22:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -931,15 +931,34 @@ get_relative_offsets(
     {
         case NorthEastGravity:
         case EastGravity:
-            *x_offset = (long)(image->columns) - (long)(mark->columns) - *x_offset;
-            break;
-        case SouthWestGravity:
-        case SouthGravity:
-            *y_offset = (long)(image->rows) - (long)(mark->rows) - *y_offset;
-            break;
         case SouthEastGravity:
             *x_offset = (long)(image->columns) - (long)(mark->columns) - *x_offset;
+            break;
+        case NorthGravity:
+        case SouthGravity:
+        case CenterGravity:
+        case StaticGravity:
+            *x_offset += (long)(image->columns/2) - (long)(mark->columns/2);
+            break;
+        default:
+            break;
+    }
+    switch(gravity)
+    {
+        case SouthWestGravity:
+        case SouthGravity:
+        case SouthEastGravity:
             *y_offset = (long)(image->rows) - (long)(mark->rows) - *y_offset;
+            break;
+        case EastGravity:
+        case WestGravity:
+        case CenterGravity:
+        case StaticGravity:
+            *y_offset += (long)(image->rows/2) - (long)(mark->rows/2);
+            break;
+        case NorthEastGravity:
+        case NorthGravity:
+            // Don't let these run into the default case
             break;
         default:
             Data_Get_Struct(grav, MagickEnum, magick_enum);
@@ -2467,46 +2486,46 @@ static VALUE composite(
             y_offset = NUM2LONG(argv[3]);
             VALUE_TO_ENUM(argv[4], operator, CompositeOperator);
 
-			switch(gravity)
-			{
-				case NorthEastGravity:
-				case EastGravity:
-				case SouthEastGravity:
-                	x_offset = ((long)(image->columns) - (long)(comp_image->columns)) - x_offset;
-					break;
-				case NorthGravity:
-				case SouthGravity:
-				case CenterGravity:
-				case StaticGravity:
-            		x_offset += (long)(image->columns/2) - (long)(comp_image->columns/2);
-					break;
-				default:
-					break;
-			}
-			switch(gravity)
-			{
-				case SouthWestGravity:
-				case SouthGravity:
-				case SouthEastGravity:
-                	y_offset = ((long)(image->rows) - (long)(comp_image->rows)) - y_offset;
-					break;
-				case EastGravity:
-				case WestGravity:
-				case CenterGravity:
-				case StaticGravity:
-                	y_offset += (long)(image->rows/2) - (long)(comp_image->rows/2);
-					break;
-				case NorthEastGravity:
-				case NorthGravity:
-					// Don't let these run into the default case
-					break;
-				default:
-                	Data_Get_Struct(argv[1], MagickEnum, magick_enum);
-                	rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
-                	break;				
-			}
-			break;
-			
+            switch(gravity)
+            {
+                case NorthEastGravity:
+                case EastGravity:
+                case SouthEastGravity:
+                    x_offset = ((long)(image->columns) - (long)(comp_image->columns)) - x_offset;
+                    break;
+                case NorthGravity:
+                case SouthGravity:
+                case CenterGravity:
+                case StaticGravity:
+                    x_offset += (long)(image->columns/2) - (long)(comp_image->columns/2);
+                    break;
+                default:
+                    break;
+            }
+            switch(gravity)
+            {
+                case SouthWestGravity:
+                case SouthGravity:
+                case SouthEastGravity:
+                    y_offset = ((long)(image->rows) - (long)(comp_image->rows)) - y_offset;
+                    break;
+                case EastGravity:
+                case WestGravity:
+                case CenterGravity:
+                case StaticGravity:
+                    y_offset += (long)(image->rows/2) - (long)(comp_image->rows/2);
+                    break;
+                case NorthEastGravity:
+                case NorthGravity:
+                    // Don't let these run into the default case
+                    break;
+                default:
+                    Data_Get_Struct(argv[1], MagickEnum, magick_enum);
+                    rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+                    break;
+            }
+            break;
+
     }
 
     if (bang)
@@ -10037,15 +10056,34 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             {
                 case NorthEastGravity:
                 case EastGravity:
-                    nx = image->columns - columns - nx;
-                    break;
-                case SouthWestGravity:
-                case SouthGravity:
-                    ny = image->rows - rows - ny;
-                    break;
                 case SouthEastGravity:
                     nx = image->columns - columns - nx;
+                    break;
+                case NorthGravity:
+                case SouthGravity:
+                case CenterGravity:
+                case StaticGravity:
+                    nx += image->columns/2 - columns/2;
+                    break;
+                default:
+                    break;
+            }
+            switch(gravity)
+            {
+                case SouthWestGravity:
+                case SouthGravity:
+                case SouthEastGravity:
                     ny = image->rows - rows - ny;
+                    break;
+                case EastGravity:
+                case WestGravity:
+                case CenterGravity:
+                case StaticGravity:
+                    ny += image->rows/2 - rows/2;
+                    break;
+                case NorthEastGravity:
+                case NorthGravity:
+                    // Don't let these run into the default case
                     break;
                 default:
                     Data_Get_Struct(argv[0], MagickEnum, magick_enum);

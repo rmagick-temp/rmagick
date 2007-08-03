@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.233 2007/08/01 22:22:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.234 2007/08/03 17:50:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -39,7 +39,6 @@ static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation
     Static:     adaptive_method
     Purpose:    call Adaptive(Blur|Sharpen)Image
 */
-#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL) || defined(HAVE_ADAPTIVESHARPENIMAGE)
 static VALUE adaptive_method(
     int argc,
     VALUE *argv,
@@ -126,7 +125,6 @@ static VALUE adaptive_channel_method(
 
     return rm_image_new(new_image);
 }
-#endif
 
 
 /*
@@ -136,12 +134,7 @@ static VALUE adaptive_channel_method(
 VALUE
 Image_adaptive_blur(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL)
     return adaptive_method(argc, argv, self, AdaptiveBlurImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -153,12 +146,7 @@ Image_adaptive_blur(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADAPTIVEBLURIMAGECHANNEL)
     return adaptive_channel_method(argc, argv, self, AdaptiveBlurImageChannel);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -170,8 +158,6 @@ Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADAPTIVERESIZEIMAGE)
-
     Image *image, *new_image;
     unsigned long rows, columns;
     double scale, drows, dcols;
@@ -214,11 +200,6 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -230,13 +211,7 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADAPTIVESHARPENIMAGE)
     return adaptive_method(argc, argv, self, AdaptiveSharpenImage);
-#else
-
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -248,13 +223,7 @@ Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ADAPTIVESHARPENIMAGE)
     return adaptive_channel_method(argc, argv, self, AdaptiveSharpenImageChannel);
-#else
-
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -3634,6 +3603,9 @@ Image_distort(VALUE self, VALUE type, VALUE pts)
 
     return rm_image_new(new_image);
 #else
+    self = self;        // defeat "unused parameter" message
+    type = type;
+    pts = pts;
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -5398,6 +5370,9 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
+    argc = argc;    // defeat "unused parameter" messages
+    argv = argv;
+    self = self;
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -6771,6 +6746,9 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 #else
+    argc = argc;    // defeat "unused parameter" messages
+    argv = argv;
+    self = self;
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -7309,6 +7287,8 @@ Image_recolor(VALUE self, VALUE color_matrix)
     return rm_image_new(new_image);
 
 #else
+    self = self;                    // defeat "unused parameter" message
+    color_matrix = color_matrix;
     rm_not_implemented();
     return (VALUE)0;
 #endif

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.188 2007/08/03 18:16:15 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.189 2007/08/03 22:40:49 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1020,6 +1020,8 @@ extern void   rm_delete_temp_image(char *);
 extern void   rm_not_implemented(void);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
+extern const char *rm_get_property(const Image *, const char *);
+extern MagickBooleanType rm_set_property(Image *, const char *, const char *);
 extern void   rm_split(Image *);
 extern void   rm_magick_error(const char *, const char *);
 

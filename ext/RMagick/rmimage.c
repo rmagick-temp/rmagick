@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.237 2007/08/03 18:16:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.238 2007/08/03 22:40:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -27,8 +27,6 @@ static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
 static void call_trace_proc(Image *, char *);
-
-static ImageAttribute *Next_Attribute;
 
 static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation";
 
@@ -447,7 +445,7 @@ Image_aref(VALUE self, VALUE key_arg)
 {
     Image *image;
     char *key;
-    const ImageAttribute *attr;
+    const char *attr;
 
     rm_check_destroyed(self);
 
@@ -470,8 +468,8 @@ Image_aref(VALUE self, VALUE key_arg)
     }
 
     Data_Get_Struct(self, Image, image);
-    attr = GetImageAttribute(image, key);
-    return attr ? rb_str_new2(attr->value) : Qnil;
+    attr = rm_get_property(image, key);
+    return attr ? rb_str_new2(attr) : Qnil;
 }
 
 /*
@@ -495,7 +493,6 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 {
     Image *image;
     char *key, *attr;
-    const ImageAttribute *attribute;
     unsigned int okay;
 
     rm_check_destroyed(self);
@@ -523,28 +520,14 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 
     Data_Get_Struct(self, Image, image);
 
-    // If we're currently looping over the attributes via
-    // Image_properties (below) then check to see if we're
-    // about to delete the next attribute. If so, change
-    // the "next" pointer to point to the attribute following
-    // this one. (No, this isn't thread-safe!)
-
-    if (Next_Attribute)
-    {
-        attribute = GetImageAttribute(image, key);
-        if (attribute && attribute == Next_Attribute)
-        {
-            Next_Attribute = attribute->next;
-        }
-    }
 
     // Delete existing value. SetImageAttribute returns False if
     // the attribute doesn't exist - we don't care.
-    (void) SetImageAttribute(image, key, NULL);
+    (void) rm_set_property(image, key, NULL);
     // Set new value
     if (attr)
     {
-        okay = SetImageAttribute(image, key, attr);
+        okay = rm_set_property(image, key, attr);
         if (!okay)
         {
             rb_warning("SetImageAttribute failed (probably out of memory)");
@@ -817,14 +800,14 @@ VALUE
 Image_black_point_compensation(VALUE self)
 {
     Image *image;
-    const ImageAttribute *attr;
+    const char *attr;
     volatile VALUE value;
 
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
-    attr = GetImageAttribute(image, BlackPointCompensationKey);
-    if (attr && rm_strcasecmp(attr->value, "true") == 0)
+    attr = rm_get_property(image, BlackPointCompensationKey);
+    if (attr && rm_strcasecmp(attr, "true") == 0)
     {
         value = Qtrue;
     }
@@ -850,9 +833,9 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
 
-    (void) SetImageAttribute(image, BlackPointCompensationKey, NULL);
+    (void) rm_set_property(image, BlackPointCompensationKey, NULL);
     value = RTEST(arg) ? "true" : "false";
-    (void) SetImageAttribute(image, BlackPointCompensationKey, value);
+    (void) rm_set_property(image, BlackPointCompensationKey, value);
 
     return self;
 }
@@ -7887,8 +7870,11 @@ VALUE
 Image_properties(VALUE self)
 {
     Image *image;
-    const ImageAttribute *attr;
     volatile VALUE attr_hash;
+    volatile VALUE ary;
+
+#if !defined(HAVE_GETNEXTIMAGEPROPERTY)
+    const ImageAttribute *attr;
 
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
@@ -7896,7 +7882,7 @@ Image_properties(VALUE self)
     // If block, iterate over attributes
     if (rb_block_given_p())
     {
-        volatile VALUE ary = rb_ary_new2(2);
+        ary = rb_ary_new2(2);
 
         ResetImageAttributeIterator(image);
         attr = GetNextImageAttribute(image);
@@ -7923,6 +7909,47 @@ Image_properties(VALUE self)
         }
         return attr_hash;
     }
+
+#else
+    char *property;
+    const char *value;
+
+    rm_check_destroyed(self);
+    Data_Get_Struct(self, Image, image);
+
+    if (rb_block_given_p())
+    {
+        ary = rb_ary_new2(2);
+
+        ResetImagePropertyIterator(image);
+        property = GetNextImageProperty(image);
+        while (property)
+        {
+            value = GetImageProperty(image, property);
+            (void) rb_ary_store(ary, 0, rb_str_new2(property));
+            (void) rb_ary_store(ary, 1, rb_str_new2(value));
+            (void) rb_yield(ary);
+            property = GetNextImageProperty(image);
+        }
+        return self;
+    }
+
+    // otherwise return properties hash
+    else
+    {
+        attr_hash = rb_hash_new();
+        ResetImagePropertyIterator(image);
+        property = GetNextImageProperty(image);
+        while (property)
+        {
+            value = GetImageProperty(image, property);
+            (void) rb_hash_aset(attr_hash, rb_str_new2(property), rb_str_new2(value));
+            property = GetNextImageProperty(image);
+        }
+        return attr_hash;
+    }
+
+#endif
 }
 
 

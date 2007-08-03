@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.118 2007/08/03 18:16:16 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.119 2007/08/03 22:40:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2846,6 +2846,38 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 
     return self;
 }
+
+
+/*
+    Function:   rm_get_property
+    Purpose:    Backport GetImageProperty for rep-6.3.1 versions of ImageMagick
+*/
+const char *rm_get_property(const Image *img, const char *property)
+{
+#if defined(HAVE_GETIMAGEPROPERTY)
+    return GetImageProperty(img, property);
+#else
+    const ImageAttribute *attr;
+
+    attr = GetImageAttribute(img, property);
+    return attr ? (const char *)attr->value : NULL;
+#endif
+}
+
+
+/*
+    Function:   rm_set_property
+    Purpose:    Backport SetImageProperty for rep-6.3.1 versions of ImageMagick
+*/
+MagickBooleanType rm_set_property(Image *image, const char *property, const char *value)
+{
+#if defined(HAVE_SETIMAGEPROPERTY)
+    return SetImageProperty(image, property, value);
+#else
+    return SetImageAttribute(image, property, value);
+#endif
+}
+
 
 /*
  *  Extern:     get_geometry

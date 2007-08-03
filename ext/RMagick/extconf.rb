@@ -4,7 +4,7 @@ require 'date'
 RMAGICK_VERS = '0.0.0$'
 MIN_RUBY_VERS = "1.8.2"
 MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(',','').to_i
-MIN_IM_VERS = '6.2.6'
+MIN_IM_VERS = '6.3.0'
 MIN_IM_VERS_NO = MIN_IM_VERS.tr('.','').to_i
 
 SUMMARY = <<"END_SUMMARY"
@@ -109,10 +109,7 @@ end
 have_func('snprintf', headers)
 
 
-  ['AdaptiveBlurImageChannel',       # 6.2.8-5
-   'AdaptiveResizeImage',            # 6.2.9
-   'AdaptiveSharpenImage',           # 6.2.7
-   'DistortImage',                   # 6.3.5
+  ['DistortImage',                   # 6.3.5
    'InterpolatePixelColor',          # 6.2.9
    'IsImageSimilar',                 # 6.2.8
    'LinearStretchImage',             # 6.3.1

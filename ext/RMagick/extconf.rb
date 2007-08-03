@@ -110,12 +110,9 @@ have_func('snprintf', headers)
 
 
   ['DistortImage',                   # 6.3.5
-   'InterpolatePixelColor',          # 6.2.9
    'LinearStretchImage',             # 6.3.1
-   'OrderedPosterizeImageChannel',   # 6.3.0
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3
-   'SeparateImages',                 # 6.2.9
    'SetImageRegistry',               # 6.3.4-?
    ].each do |func|
     have_func(func, headers)
@@ -129,8 +126,6 @@ have_type('__int64', headers)
 check_sizeof('Image *', headers)
 
 
-have_struct_member('Image', 'transparent_color', headers)               # 6.2.9
-have_enum_value('ImageType', 'PaletteBilevelMatteType', headers)        # 6.2.9
 have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)  # 6.3.3
 have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.?
                                        'RemoveDupsLayer',               # 6.3.3-6
@@ -138,29 +133,6 @@ have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.?
                                        'CompositeLayer',                # 6.3.3-6
                                        'OptimizeImageLayer'], headers)  # 6.3.3-?
 have_enum_value('NoiseType', 'RandomNoise', headers)                    # 6.3.5-0
-
-
-
-# ColorInfo.color changed in 6.3.0
-checking_for "ColorInfo.color is a MagickPixelPacket" do
-  if try_compile(<<"SRC")
-#{COMMON_HEADERS}
-#{cpp_include(headers)}
-/*top*/
-int main()
-{
-  ColorInfo color_info;
-  MagickPixelPacket p;
-  color_info.color = p;
-  return 0;
-}
-SRC
-    $defs.push("-DHAVE_NEW_COLORINFO")
-    true
-  else
-    false
-  end
-end
 
 # Miscellaneous constants
 $defs.push("-DRUBY_VERSION_STRING=\"ruby #{RUBY_VERSION}\"")

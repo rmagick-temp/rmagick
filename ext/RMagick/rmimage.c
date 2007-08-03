@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.236 2007/08/03 18:03:27 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.237 2007/08/03 18:16:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6381,13 +6381,8 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 
     GetExceptionInfo(&exception);
 
-#if defined(HAVE_ORDEREDPOSTERIZEIMAGECHANNEL)
-    // ImageMagick >= 6.3.0
+    // ImageMagick >= 6.2.9
     (void) OrderedPosterizeImage(new_image, threshold_map, &exception);
-#else
-    // ImageMagick 6.0.0 thru 6.3.0
-    (void) RandomThresholdImageChannel(new_image, AllChannels, threshold_map, &exception);
-#endif
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -6608,24 +6603,17 @@ Image_pixel_color(
 VALUE
 Image_pixel_interpolation_method(VALUE self)
 {
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
     Image *image;
 
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return InterpolatePixelMethod_new(image->interpolate);
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
 VALUE
 Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 {
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
     Image *image;
 
     rm_check_destroyed(self);
@@ -6633,11 +6621,6 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
     Data_Get_Struct(self, Image, image);
     VALUE_TO_ENUM(method, image->interpolate, InterpolatePixelMethod);
     return self;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -7763,7 +7746,6 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 VALUE
 Image_separate(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SEPARATEIMAGES)
     Image *image, *new_images;
     ChannelType channels = 0;
     ExceptionInfo exception;
@@ -7786,14 +7768,6 @@ Image_separate(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
-#else
-    argc = argc;
-    argv = argv;
-    self = self;
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
-
 }
 
 
@@ -9175,17 +9149,11 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_transparent_color(VALUE self)
 {
-#if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
     return PixelPacket_to_Color_Name(image, &image->transparent_color);
-#else
-    self = self;        // defeat gcc message
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9196,7 +9164,6 @@ Image_transparent_color(VALUE self)
 VALUE
 Image_transparent_color_eq(VALUE self, VALUE color)
 {
-#if defined(HAVE_ST_TRANSPARENT_COLOR)
     Image *image;
 
     rm_check_destroyed(self);
@@ -9204,12 +9171,6 @@ Image_transparent_color_eq(VALUE self, VALUE color)
     Data_Get_Struct(self, Image, image);
     Color_to_PixelPacket(&image->transparent_color, color);
     return self;
-#else
-    self = self;        // defeat gcc message
-    color = color;      // defeat gcc message
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

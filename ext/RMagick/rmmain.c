@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.203 2007/08/03 17:55:51 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.204 2007/08/03 18:16:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1237,9 +1237,7 @@ Init_RMagick(void)
         ENUMERATOR(ColorSeparationType)
         ENUMERATOR(ColorSeparationMatteType)
         ENUMERATOR(OptimizeType)
-#if defined(HAVE_ENUM_PALETTEBILEVELMATTETYPE)
         ENUMERATOR(PaletteBilevelMatteType)
-#endif
     END_ENUM
 
     // InterlaceType constants
@@ -1251,7 +1249,6 @@ Init_RMagick(void)
         ENUMERATOR(PartitionInterlace)
     END_ENUM
 
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
     DEF_ENUM(InterpolatePixelMethod)
         ENUMERATOR(UndefinedInterpolatePixel)
         ENUMERATOR(AverageInterpolatePixel)
@@ -1262,7 +1259,6 @@ Init_RMagick(void)
         ENUMERATOR(MeshInterpolatePixel)
         ENUMERATOR(NearestNeighborInterpolatePixel)
     END_ENUM
-#endif
 
     DEF_ENUM(MagickLayerMethod)
         ENUMERATOR(UndefinedLayer)
@@ -1592,7 +1588,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/08/03 17:55:51 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/08/03 18:16:16 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

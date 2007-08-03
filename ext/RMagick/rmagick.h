@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.187 2007/07/18 23:38:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.188 2007/08/03 18:16:15 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -246,9 +246,7 @@ EXTERN VALUE Class_FilterTypes;
 EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
 EXTERN VALUE Class_InterpolatePixelMethod;
-#endif
 EXTERN VALUE Class_MagickLayerMethod;
 EXTERN VALUE Class_NoiseType;
 EXTERN VALUE Class_OrientationType;
@@ -974,9 +972,7 @@ extern VALUE  Segment_from_SegmentInfo(SegmentInfo *);
 extern void   AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
 extern void   ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
 extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
 extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);
-#endif
 extern VALUE  OrientationType_new(OrientationType);
 extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
 extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.117 2007/08/03 17:55:52 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.118 2007/08/03 18:16:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -16,9 +16,7 @@ static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
 static VALUE Enum_type_inspect(VALUE);
 static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
-#if defined(HAVE_NEW_COLORINFO)
 static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
-#endif
 
 
 /*
@@ -1434,9 +1432,7 @@ ImageType_name(ImageType type)
         ENUM_TO_NAME(ColorSeparationType)
         ENUM_TO_NAME(ColorSeparationMatteType)
         ENUM_TO_NAME(OptimizeType)
-#if defined(HAVE_ENUM_PALETTEBILEVELMATTETYPE)
         ENUM_TO_NAME(PaletteBilevelMatteType)
-#endif
     }
 
 }
@@ -1493,7 +1489,6 @@ InterlaceType_new(InterlaceType interlace)
     Static:     InterpolatePixelMethod_name
     Purpose:    Return the name of a InterpolatePixelMethod enum as a string
 */
-#if defined(HAVE_INTERPOLATEPIXELCOLOR)
 static const char *
 InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
 {
@@ -1524,7 +1519,6 @@ InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
     name = InterpolatePixelMethod_name(interpolate);
     return rm_enum_new(Class_InterpolatePixelMethod, ID2SYM(rb_intern(name)), INT2FIX(interpolate));
 }
-#endif
 
 
 /*
@@ -1695,11 +1689,7 @@ Color_from_ColorInfo(const ColorInfo *ci)
 
     compliance_type = ci->compliance;
     compliance = ComplianceType_new(compliance_type);
-#if defined(HAVE_NEW_COLORINFO)
     color      = Pixel_from_MagickPixelPacket((MagickPixelPacket *)(&(ci->color)));
-#else
-    color      = Pixel_from_PixelPacket((PixelPacket *)(&(ci->color)));
-#endif
 
     return rb_funcall(Class_Color, rm_ID_new, 3
                     , name, compliance, color);
@@ -1740,7 +1730,6 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     if (m != Qnil)
     {
         Data_Get_Struct(m, Pixel, pixel);
-#if defined(HAVE_NEW_COLORINFO)
         // For >= 6.3.0, ColorInfo.color is a MagickPixelPacket so we have to
         // convert the PixelPacket.
         GetMagickPixelPacket(NULL, &ci->color);
@@ -1749,9 +1738,6 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
         ci->color.blue = (MagickRealType) pixel->blue;
         ci->color.opacity = (MagickRealType) OpaqueOpacity;
         ci->color.index = (MagickRealType) 0;
-#else
-        ci->color = *pixel;
-#endif
     }
 }
 
@@ -1778,7 +1764,6 @@ Color_to_s(VALUE self)
 
     Color_to_ColorInfo(&ci, self);
 
-#if defined(HAVE_NEW_COLORINFO)
     sprintf(buff, "name=%s, compliance=%s, "
 #if (QuantumDepth == 32 || QuantumDepth == 64) && defined(HAVE_TYPE_LONG_DOUBLE)
                   "color.red=%Lg, color.green=%Lg, color.blue=%Lg, color.opacity=%Lg ",
@@ -1788,13 +1773,6 @@ Color_to_s(VALUE self)
                   ci.name,
                   ComplianceType_name(&ci.compliance),
                   ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
-#else
-    sprintf(buff, "name=%s, compliance=%s, "
-                  "color.red=%d, color.green=%d, color.blue=%d, color.opacity=%d ",
-                  ci.name,
-                  ComplianceType_name(&ci.compliance),
-                  ci.color.red, ci.color.green, ci.color.blue, ci.color.opacity);
-#endif
 
     destroy_ColorInfo(&ci);
     return rb_str_new2(buff);
@@ -1821,7 +1799,6 @@ Pixel_from_PixelPacket(PixelPacket *pp)
     Purpose:    Create a Magick::Pixel object from a MagickPixelPacket structure.
     Notes:      bypasses normal Pixel.new, Pixel#initialize methods
 */
-#if defined(HAVE_NEW_COLORINFO)
 static VALUE
 Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
 {
@@ -1835,7 +1812,6 @@ Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
 
     return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
-#endif
 
 
 /*

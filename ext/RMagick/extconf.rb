@@ -137,8 +137,7 @@ check_sizeof('Image *', headers)
 have_struct_member('Image', 'transparent_color', headers)               # 6.2.9
 have_enum_value('ImageType', 'PaletteBilevelMatteType', headers)        # 6.2.9
 have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)  # 6.3.3
-have_enum_values('MagickLayerMethod', ['CoalesceLayer',                 # 6.2.7
-                                       'OptimizeTransLayer',            # 6.3.?
+have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.?
                                        'RemoveDupsLayer',               # 6.3.3-6
                                        'RemoveZeroLayer',               # 6.3.3-6
                                        'CompositeLayer',                # 6.3.3-6

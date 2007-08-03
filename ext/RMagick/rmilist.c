@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.55 2007/07/18 23:40:02 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.56 2007/08/03 17:55:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -444,14 +444,12 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
     switch (mthd)
     {
-#if defined(HAVE_ENUM_COALESCELAYER)
         case CoalesceLayer:
             new_images = CoalesceImages(images, &exception);
             break;
         case DisposeLayer:
             new_images = DisposeImages(images, &exception);
             break;
-#endif
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         case OptimizeTransLayer:
             new_images = rm_clone_imagelist(images, MagickTrue);

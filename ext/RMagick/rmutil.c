@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.116 2007/06/30 20:53:00 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.117 2007/08/03 17:55:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1543,10 +1543,8 @@ MagickLayerMethod_name(MagickLayerMethod method)
         ENUM_TO_NAME(CompareOverlayLayer)
         ENUM_TO_NAME(OptimizeLayer)
         ENUM_TO_NAME(OptimizePlusLayer)
-#if defined(HAVE_ENUM_COALESCELAYER)
         ENUM_TO_NAME(CoalesceLayer)
         ENUM_TO_NAME(DisposeLayer)
-#endif
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         ENUM_TO_NAME(OptimizeTransLayer)
 #endif

@@ -389,19 +389,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.image_type }
         assert_instance_of(Magick::ImageType, @img.image_type)
         assert_equal(Magick::GrayscaleMatteType, @img.image_type)
-        assert_nothing_raised { @img.image_type = Magick::GrayscaleType }
-        assert_nothing_raised { @img.image_type = Magick::UndefinedType }
-        assert_nothing_raised { @img.image_type = Magick::BilevelType }
-        assert_nothing_raised { @img.image_type = Magick::GrayscaleType }
-        assert_nothing_raised { @img.image_type = Magick::GrayscaleMatteType }
-        assert_nothing_raised { @img.image_type = Magick::PaletteType }
-        assert_nothing_raised { @img.image_type = Magick::PaletteMatteType }
-        assert_nothing_raised { @img.image_type = Magick::TrueColorType }
-        assert_nothing_raised { @img.image_type = Magick::TrueColorMatteType }
-        assert_nothing_raised { @img.image_type = Magick::ColorSeparationType }
-        assert_nothing_raised { @img.image_type = Magick::ColorSeparationMatteType }
-        assert_nothing_raised { @img.image_type = Magick::OptimizeType }
-        assert_raise(TypeError) { @img.image_type = 2 }
     end
 
     def test_interlace_type
@@ -467,10 +454,10 @@ class Image_Attributes_UT < Test::Unit::TestCase
         img = @img.copy
         img.format = 'GIF'
         assert_nothing_raised { img.mime_type }
-        assert_equal('image/x-gif', img.mime_type)
+        assert_equal('image/gif', img.mime_type)
         img.format = 'JPG'
-        assert_equal('image/x-jpg', img.mime_type)
-        assert_raise(NoMethodError) { img.mime_type = 'image/x-jpg' }
+        assert_equal('image/jpeg', img.mime_type)
+        assert_raise(NoMethodError) { img.mime_type = 'image/jpeg' }
     end
 
     def test_monitor
@@ -478,18 +465,11 @@ class Image_Attributes_UT < Test::Unit::TestCase
         monitor = Proc.new { |name, q, s| puts name }
         assert_nothing_raised { @img.monitor = monitor }
         assert_nothing_raised { @img.monitor = nil }
-        # No TypeError raised - will get NoMethodError when monitor tries to call it
-        #assert_raise(TypeError) { @img.monitor = 2 }
     end
 
     def test_montage
         assert_nothing_raised { @img.montage }
         assert_nil(@img.montage)
-        v = $VERBOSE
-        $VERBOSE = nil
-        assert_nothing_raised { @img.montage = nil }
-        assert_raise(TypeError) { @img.montage = 2 }
-        $VERBOSE = v
     end
 
     def test_number_colors
@@ -600,25 +580,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.ticks_per_second = 'x' }
     end
 
-    def test_tile_info
-        v = $VERBOSE
-        $VERBOSE = nil
-        assert_nothing_raised { @img.tile_info }
-        tile_info = @img.tile_info
-        assert_equal(0, tile_info.width)
-        assert_equal(0, tile_info.height)
-        assert_equal(0, tile_info.x)
-        assert_equal(0, tile_info.y)
-        tile_info = Magick::Rectangle.new(1,2,3,4)
-        assert_nothing_raised { @img.tile_info = tile_info }
-        assert_equal(1, tile_info.width)
-        assert_equal(2, tile_info.height)
-        assert_equal(3, tile_info.x)
-        assert_equal(4, tile_info.y)
-        assert_raise(TypeError) { @img.tile_info = 2 }
-        $VERBOSE = v
-    end
-
     def test_total_colors
         assert_nothing_raised { @hat.total_colors }
         assert_equal(27980, @hat.total_colors)
@@ -699,10 +660,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.rendering_intent = Magick::SaturationIntent }
         assert_raise(TypeError) { @img.start_loop = true }
         assert_raise(TypeError) { @img.ticks_per_second = 1000 }
-        v = $VERBOSE
-        $VERBOSE = nil
-        assert_raise(TypeError) { @img.tile_info = Magick::Rectangle.new(1,2,3,4) }
-        $VERBOSE = v
         assert_raise(TypeError) { @img.units = Magick::PixelsPerInchResolution }
         assert_raise(TypeError) { @img.x_resolution = 72.0 }
         assert_raise(TypeError) { @img.y_resolution = 72.0 }

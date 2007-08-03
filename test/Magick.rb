@@ -16,7 +16,7 @@ class Magick_UT < Test::Unit::TestCase
         assert_equal(500, new)
 
         assert_nothing_raised {cur = Magick::limit_resource(:map, 3500)}
-        assert_equal(4032, cur)
+        assert_equal(2016, cur)
         assert_nothing_raised {new = Magick::limit_resource("map")}
         assert_equal(3500, new)
 

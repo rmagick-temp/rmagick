@@ -3,7 +3,7 @@ RMagick 2.0.0
       extconf.rb
     o Removed support for Ruby earlier than 1.8.2
     o Removed support for GraphicsMagick
-    o Removed support for all releases of ImageMagick earlier than 6.2.6-8.
+    o Removed support for all releases of ImageMagick earlier than 6.3.0.
     o Removed deprecated Image#random_channel_threshold. Use
       Image#random_threshold_channel instead
     o Removed deprecated Image#channel_threshold. Use
@@ -33,7 +33,7 @@ RMagick 2.0.0
     o RMagick works with Q32 version of ImageMagick
     o Added ChangeMaskCompositeOp CompositeOperator enum value
     o Added Image.combine
-    o Added Image#separate (available with ImageMagick 6.2.9)
+    o Added Image#separate
     o Added Image#distort (available with ImageMagick 6.3.5)
     o Added Image#each_pixel (thanks to Russell Norris for the suggestion and
       code)
@@ -89,8 +89,7 @@ RMagick 1.15.0
     o Added polaroid method to the Image class (available with ImageMagick 6.3.1-6)
     o Added origin attribute to the Image::Info class (supported by
       ImageMagick 6.3.1-4 and later)
-    o Added PaletteBilevelMatteType to the ImageType enum (available with
-      ImageMagick 6.2.9)
+    o Added PaletteBilevelMatteType to the ImageType enum
     o Fix bug #6260, some RVG examples produce all-black GIF images
     o Fix bug #7034, fix the matte method in the Draw class
     o Fix bug #7373, default channels should be RGB instead of RGBA

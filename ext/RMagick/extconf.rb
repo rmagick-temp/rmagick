@@ -117,7 +117,6 @@ have_func('snprintf', headers)
    'RecolorImage',                   # 6.3.1-3
    'SeparateImages',                 # 6.2.9
    'SetImageRegistry',               # 6.3.4-?
-   'UniqueImageColors'               # 6.2.8
    ].each do |func|
     have_func(func, headers)
   end

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.235 2007/08/03 18:00:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.236 2007/08/03 18:03:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9357,7 +9357,6 @@ VALUE Image_image_type(VALUE self)
 VALUE
 Image_unique_colors(VALUE self)
 {
-#if defined(HAVE_UNIQUEIMAGECOLORS)
     Image *image, *new_image;
     ExceptionInfo exception;
 
@@ -9372,10 +9371,6 @@ Image_unique_colors(VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.234 2007/08/03 17:50:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.235 2007/08/03 18:00:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -558,7 +558,6 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     Static:     crisscross
     Purpose:    Handle #transverse, #transform methods
 */
-#if defined(HAVE_TRANSPOSEIMAGE) || defined(HAVE_TRANSVERSEIMAGE)
 static VALUE
 crisscross(
     int bang,
@@ -588,7 +587,6 @@ crisscross(
     return rm_image_new(new_image);
 
 }
-#endif
 
 
 /*
@@ -599,7 +597,6 @@ crisscross(
 */
 static VALUE auto_orient(int bang, VALUE self)
 {
-#if defined(HAVE_TRANSPOSEIMAGE) || defined(HAVE_TRANSVERSEIMAGE)
     Image *image;
     volatile VALUE new_image;
     VALUE degrees[1];
@@ -649,11 +646,6 @@ static VALUE auto_orient(int bang, VALUE self)
     image->orientation = TopLeftOrientation;
 
     return new_image;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -4241,7 +4233,6 @@ Image_filter_eq(VALUE self, VALUE filter)
 VALUE
 Image_find_similar_region(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_ISIMAGESIMILAR)
     Image *image, *target;
     volatile VALUE region, targ;
     long x = 0L, y = 0L;
@@ -4282,11 +4273,6 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
     rb_ary_store(region, 1L, LONG2NUM(y));
 
     return region;
-
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -8259,13 +8245,8 @@ Image_signature(VALUE self)
 VALUE
 Image_sketch(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SKETCHIMAGE)
     rm_check_destroyed(self);
     return motion_blur(argc, argv, self, SketchImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9240,27 +9221,17 @@ Image_transparent_color_eq(VALUE self, VALUE color)
 VALUE
 Image_transpose(VALUE self)
 {
-#if defined(HAVE_TRANSPOSEIMAGE)
     rm_check_destroyed(self);
     return crisscross(False, self, TransposeImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
 VALUE
 Image_transpose_bang(VALUE self)
 {
-#if defined(HAVE_TRANSPOSEIMAGE)
     rm_check_destroyed(self);
     rm_check_frozen(self);
     return crisscross(True, self, TransposeImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 
@@ -9272,26 +9243,16 @@ Image_transpose_bang(VALUE self)
 VALUE
 Image_transverse(VALUE self)
 {
-#if defined(HAVE_TRANSVERSEIMAGE)
     rm_check_destroyed(self);
     return crisscross(False, self, TransverseImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 VALUE
 Image_transverse_bang(VALUE self)
 {
-#if defined(HAVE_TRANSVERSEIMAGE)
     rm_check_destroyed(self);
     rm_check_frozen(self);
     return crisscross(True, self, TransverseImage);
-#else
-    rm_not_implemented();
-    return (VALUE)0;
-#endif
 }
 
 

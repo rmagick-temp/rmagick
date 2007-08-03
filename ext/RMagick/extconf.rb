@@ -111,16 +111,12 @@ have_func('snprintf', headers)
 
   ['DistortImage',                   # 6.3.5
    'InterpolatePixelColor',          # 6.2.9
-   'IsImageSimilar',                 # 6.2.8
    'LinearStretchImage',             # 6.3.1
    'OrderedPosterizeImageChannel',   # 6.3.0
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3
    'SeparateImages',                 # 6.2.9
    'SetImageRegistry',               # 6.3.4-?
-   'SketchImage',                    # 6.2.8
-   'TransposeImage',                 # 6.2.8
-   'TransverseImage',                # 6.2.8
    'UniqueImageColors'               # 6.2.8
    ].each do |func|
     have_func(func, headers)

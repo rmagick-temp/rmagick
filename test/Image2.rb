@@ -543,8 +543,6 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel) }
         assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel, Magick::BlueChannel) }
         assert_raise(TypeError) { @img.gaussian_blur_channel(0.0, 3.0, Magick::RedChannel, 2) }
-        # sigma must be != 0.0
-        assert_raise(Magick::ImageMagickError) { @img.gaussian_blur_channel(1.0, 0.0) }
     end
 
     def test_get_exif_by_entry

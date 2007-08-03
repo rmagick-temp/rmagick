@@ -729,8 +729,6 @@ class Image3_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.vignette(0, 0, 0, 1) }
         # too many arguments
         assert_raise(ArgumentError) { @img.vignette(0, 0, 0, 1, 1) }
-        # sigma=0 not allowed
-        assert_raise(Magick::ImageMagickError) { @img.vignette(0, 0, 0, 0) }
     end
 
     def test_watermark

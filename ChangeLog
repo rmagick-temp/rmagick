@@ -9,6 +9,7 @@ RMagick 2.0.0
     o Removed deprecated Image#channel_threshold. Use
       Image#random_threshold_channel instead
     o Removed unecessary Image#montage=
+    o Removed unecessary and undocumented Image#image_type=
     o Removed deprecated Image::Info#tile_info, tile_info= attributes.
     o Removed deprecated Image::Info#tile, tile= attributes. Use #extract,
       #extract= instead

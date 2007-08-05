@@ -8,7 +8,10 @@ img = Magick::Image.read('images/Flower_Hat.jpg').first
 img[:Caption] = "\nLosha\n" + Date.today.to_s
 
 begin
-    picture = img.polaroid { self.gravity = Magick::CenterGravity }
+    picture = img.polaroid do
+      self.gravity = Magick::CenterGravity
+      self.border_color = "#f0f0f8"
+    end
 
     # Composite it on a white background so the result is opaque.
     background = Magick::Image.new(picture.columns, picture.rows)

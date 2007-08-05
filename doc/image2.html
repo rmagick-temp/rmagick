@@ -651,7 +651,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img onmouseover="this.style.display='none';frameless.style.display='';"
     src="ex/frame.jpg" alt="frame example" /></a> <img src=
@@ -2964,9 +2964,11 @@ old = image.pixel_color(20,40,"white")
     with the method. These arguments control the shadow color and
     how the label is rendered. By default the shadow color is
     gray75. To specify a different shadow color, use
-    <code>self.shadow_color</code>. The argument can be either a
-    <a href="imusage.html#color_names">color name</a> or a <a href=
-    "struct.html#Pixel">Pixel</a>.</p>
+    <code>self.shadow_color</code>. To specify a different border
+    color (that is, the color of the image border) use
+    <code>self.border_color</code>. Both of these methods accept
+    either a <a href="imusage.html#color_names">color name</a> or a
+    <a href="struct.html#Pixel">Pixel</a> argument.</p>
 
     <p>The following <a href="draw.html#annotate">annotate</a>
     attributes control the label rendering: <a href=

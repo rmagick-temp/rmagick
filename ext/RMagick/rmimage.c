@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.238 2007/08/03 22:40:49 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.239 2007/08/05 17:50:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1027,7 +1027,7 @@ static void get_composite_offsets(
         (void)rb_protect(check_for_long_value, argv[0], &exc);
         if (exc)
         {
-            rb_raise(rb_eArgError, "expected GravityType, got %s"
+            rb_raise(rb_eTypeError, "expected GravityType, got %s"
                    , rb_class2name(CLASS_OF(argv[0])));
         }
         *x_offset = NUM2LONG(argv[0]);

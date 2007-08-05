@@ -65,13 +65,13 @@ unless checking_for("Ruby version >= #{MIN_RUBY_VERS}") do
   version = RUBY_VERSION.tr('.','').to_i
   version >= MIN_RUBY_VERS_NO
 end
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Ruby #{MIN_RUBY_VERS} or later required."
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Ruby #{MIN_RUBY_VERS} or later required.\n"
 end
 
 
 # Check for Magick-config
 unless find_executable('Magick-config')
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}"
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}\n"
 end
 
 
@@ -80,7 +80,16 @@ unless checking_for("ImageMagick version >= #{MIN_IM_VERS}")  do
   version = `Magick-config --version`.chomp.tr('.','').to_i
   version >= MIN_IM_VERS_NO
 end
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later."
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
+end
+
+# Ensure ImageMagick is not configured for HDRI
+unless checking_for("HDRI disabled version of ImageMagick") do
+  not (`Magick-config --version`["HDRI"])
+end
+  exit_failure "\nCan't install RMagick #{RMAGICK_VERS}."+
+               "\nRMagick does not work when ImageMagick is configured for High Dynamic Range Images."+
+               "\nDon't use the --enable-hdri option when configuring ImageMagick.\n"
 end
 
 # Save flags
@@ -95,7 +104,7 @@ headers << 'sys/types.h' if have_header('sys/types.h')
 
 
 unless have_header('magick/MagickCore.h')
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find MagickCore.h."
+  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find MagickCore.h.\n"
 else
   headers << 'magick/MagickCore.h'
 end
@@ -103,7 +112,7 @@ end
 unless have_library('Magick', 'InitializeMagick', headers)
   exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
                "Can't find libMagick or one of the dependent libraries. " +
-               "Check the mkmf.log file for more detailed information."
+               "Check the mkmf.log file for more detailed information.\n"
 end
 
 have_func('snprintf', headers)

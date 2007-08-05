@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.189 2007/08/03 22:40:49 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.190 2007/08/05 21:27:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -548,6 +548,7 @@ extern VALUE PolaroidOptions_alloc(VALUE);
 extern VALUE PolaroidOptions_initialize(VALUE);
 extern VALUE rm_polaroid_new(void);
 ATTR_WRITER(PolaroidOptions, shadow_color);
+ATTR_WRITER(PolaroidOptions, border_color);
 
 
 // rmmain.c

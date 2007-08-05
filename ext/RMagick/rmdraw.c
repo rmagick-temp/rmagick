@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.52 2007/06/30 20:57:17 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.53 2007/08/05 21:27:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1355,6 +1355,7 @@ PolaroidOptions_initialize(VALUE self)
     GetExceptionInfo(&exception);
     (void) QueryColorDatabase("gray75", &draw->shadow_color, &exception);
     CHECK_EXCEPTION()
+    (void) QueryColorDatabase("#dfdfdf", &draw->info->border_color, &exception);
 
     if (rb_block_given_p())
     {
@@ -1386,6 +1387,20 @@ VALUE PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
 
     Data_Get_Struct(self, Draw, draw);
     Color_to_PixelPacket(&draw->shadow_color, shadow);
+    return self;
+}
+
+
+/*
+    Method:     PolaroidOptions#border_color=
+    Purpose:    Set the border color attribute
+*/
+VALUE PolaroidOptions_border_color_eq(VALUE self, VALUE border)
+{
+    Draw *draw;
+
+    Data_Get_Struct(self, Draw, draw);
+    Color_to_PixelPacket(&draw->info->border_color, border);
     return self;
 }
 

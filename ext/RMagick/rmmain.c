@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.204 2007/08/03 18:16:16 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.205 2007/08/05 21:27:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -889,6 +889,7 @@ Init_RMagick(void)
     rb_define_method(Class_PolaroidOptions, "initialize", PolaroidOptions_initialize, 0);
 
     DCL_ATTR_WRITER(PolaroidOptions, shadow_color)
+    DCL_ATTR_WRITER(PolaroidOptions, border_color)
     // The other attribute writer methods are implemented by Draw's functions
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, align)
     SHARE_ATTR_WRITER(PolaroidOptions, Draw, decorate)
@@ -1588,7 +1589,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/08/03 18:16:16 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/08/05 21:27:02 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

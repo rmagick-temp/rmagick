@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.239 2007/08/05 17:50:31 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.240 2007/08/05 21:27:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6686,6 +6686,7 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 
     clone = rm_clone_image(image);
     clone->background_color = draw->shadow_color;
+    clone->border_color = draw->info->border_color;
 
     GetExceptionInfo(&exception);
     new_image = PolaroidImage(clone, draw->info, angle, &exception);

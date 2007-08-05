@@ -13,6 +13,7 @@ class Import_Export_UT < Test::Unit::TestCase
     img = Magick::Image.new(@test.columns, @test.rows)
     res = img.import_pixels(0, 0, @test.columns, @test.rows, "RGB", pixels, type)
     _, diff = img.compare_channel(@test, Magick::MeanAbsoluteErrorMetric)
+    #_.display
     diff
   end
 

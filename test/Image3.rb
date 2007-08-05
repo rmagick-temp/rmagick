@@ -749,7 +749,7 @@ class Image3_UT < Test::Unit::TestCase
 
         assert_raise(ArgumentError) { @img.watermark(mark, 'x') }
         assert_raise(ArgumentError) { @img.watermark(mark, 0.50, 'x') }
-        assert_raise(ArgumentError) { @img.watermark(mark, 0.50, 0.50, 'x') }
+        assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, 'x') }
         assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 'x') }
         assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 10, 'x') }
     end

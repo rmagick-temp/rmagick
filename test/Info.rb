@@ -36,6 +36,13 @@ class Info_UT < Test::Unit::TestCase
         assert_nil(@info['tiff', 'bits-per-sample'])
     end
 
+    def test_channel
+        assert_nothing_raised { @info.channel(Magick::RedChannel) }
+        assert_nothing_raised { @info.channel(Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(TypeError) { @info.channel(1) }
+        assert_raise(TypeError) { @info.channel(Magick::RedChannel, 1) }
+    end
+
     def test_fill
         assert_nothing_raised { @info.fill }
         assert_nil(@info.fill)

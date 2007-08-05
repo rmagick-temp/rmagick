@@ -215,6 +215,77 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
+    def test_destroy
+      methods = Magick::Image.instance_methods(false).sort
+      methods -= %w{ __display__ destroy! destroyed? inspect cur_image}
+
+      assert_equal(false, @img.destroyed?)
+      @img.destroy!
+      assert_equal(true, @img.destroyed?)
+      assert_raises(Magick::DestroyedImageError) { @img.check_destroyed }
+
+      methods.each do |method|
+          arity = @img.method(method).arity
+
+          case
+              when method == "[]="
+                  assert_raises(Magick::DestroyedImageError) { @img['foo'] = 1 }
+              when method == "difference"
+                  other = Magick::Image.new(20,20)
+                  assert_raises(Magick::DestroyedImageError) { @img.difference(other) }
+              when method == "get_iptc_dataset"
+                  assert_raises(Magick::DestroyedImageError) { @img.get_iptc_dataset('x') }
+              when method == "profile!"
+                  assert_raises(Magick::DestroyedImageError) { @img.profile!('x', 'y') }
+              when /=\Z/.match(method)
+                  assert_raises(Magick::DestroyedImageError) { @img.send(method, 1) }
+              when arity == 0
+                  assert_raises(Magick::DestroyedImageError) { @img.send(method) }
+              when arity < 0
+                  args = (1..(-arity)).to_a
+                  assert_raises(Magick::DestroyedImageError) { @img.send(method, *args) }
+              when arity > 0
+                  args = (1..(arity)).to_a
+                  assert_raises(Magick::DestroyedImageError) { @img.send(method, *args) }
+              else
+                  # Don't know how to test!
+                  flunk("don't know how to test method #{method}" )
+          end
+      end
+    end
+
+    def test_destroy2
+        begin   # ensure Magick.trace_proc gets set to nil even if this test asserts
+            images = {}
+            Magick.trace_proc = Proc.new do |which, id, addr, method|
+              m = id.split(/ /)
+              name = File.basename m[0]
+              format = m[1]
+              size = m[2]
+              geometry = m[3]
+              image_class = m[4]
+
+              assert(which == :c || which == :d, "unexpected value for which: #{which}")
+              assert_equal(:destroy!, method) if which == :d
+              if which == :c
+                assert(!images.has_key?(addr), "duplicate image addresses")
+                images[addr] = name
+              else
+                assert(images.has_key?(addr), "destroying image that was not created")
+                assert_equal(name, images[addr])
+              end
+            end
+            unmapped = Magick::ImageList.new(IMAGES_DIR+"/Hot_Air_Balloons.jpg", IMAGES_DIR+"/Violin.jpg", IMAGES_DIR+"/Polynesia.jpg")
+            map = Magick::ImageList.new "netscape:"
+            mapped = unmapped.map map, false
+            unmapped.each {|i| i.destroy!}
+            map.destroy!
+            mapped.each {|i| i.destroy!}
+        ensure
+            Magick.trace_proc = nil
+        end
+    end
+
     def test_difference
         img1 = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
         img2 = Magick::Image.read(IMAGES_DIR+'/Button_1.gif').first
@@ -228,6 +299,25 @@ class Image2_UT < Test::Unit::TestCase
         end
 
         assert_raise(NoMethodError) { img1.difference(2) }
+    end
+
+    def test_displace
+      @img2 = Magick::Image.new(20,20) {self.background_color = "black"}
+      assert_nothing_raised { @img.displace(@img2, 25) }
+      res = @img.displace(@img2, 25)
+      assert_instance_of(Magick::Image, res)
+      assert_nothing_raised { @img.displace(@img2, 25, 25) }
+      assert_nothing_raised { @img.displace(@img2, 25, 25, 10) }
+      assert_nothing_raised { @img.displace(@img2, 25, 25, 10, 10) }
+      assert_nothing_raised { @img.displace(@img2, 25, 25, Magick::CenterGravity) }
+      assert_nothing_raised { @img.displace(@img2, 25, 25, Magick::CenterGravity, 10) }
+      assert_nothing_raised { @img.displace(@img2, 25, 25, Magick::CenterGravity, 10, 10) }
+      assert_raise(ArgumentError) { @img.displace }
+      assert_raise(TypeError) { @img.displace(@img2, 'x') }
+      assert_raise(TypeError) { @img.displace(@img2, 25, []) }
+      assert_raise(TypeError) { @img.displace(@img2, 25, 25, 'x') }
+      assert_raise(TypeError) { @img.displace(@img2, 25, 25, Magick::CenterGravity, 'x') }
+      assert_raise(TypeError) { @img.displace(@img2, 25, 25, Magick::CenterGravity, 10, []) }
     end
 
     def test_dissolve
@@ -245,8 +335,23 @@ class Image2_UT < Test::Unit::TestCase
 
         assert_raise(ArgumentError) { @img.dissolve(src, 'x') }
         assert_raise(ArgumentError) { @img.dissolve(src, 0.50, 'x') }
-        assert_raise(ArgumentError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 'x') }
+        assert_raise(TypeError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 'x') }
         assert_raise(TypeError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 10, 'x') }
+    end
+
+    def test_distort
+        points = [4, 30, 4, 123, 100, 123, 100, 30, 7, 40, 4, 124, 85, 122, 85, 2]
+        @img = Magick::Image.new(200, 200)
+        assert_nothing_raised { @img.distort(Magick::AffineDistortion, points) }
+        assert_nothing_raised { @img.distort(Magick::AffineProjectionDistortion, points) }
+        assert_nothing_raised { @img.distort(Magick::BilinearDistortion, points) }
+        assert_nothing_raised { @img.distort(Magick::PerspectiveDistortion, points) }
+        points = [4, 30, 4, 123, 100, 123, 100]
+        assert_nothing_raised { @img.distort(Magick::ScaleRotateTranslateDistortion, points) }
+        assert_raise(ArgumentError) { @img.distort }
+        assert_raise(ArgumentError) { @img.distort(Magick::AffineDistortion) }
+        assert_raise(ArgumentError) { @img.distort(Magick::AffineDistortion, points, 1) }
+        assert_raise(TypeError) { @img.distort(1, points) }
     end
 
     def test_distortion_channel
@@ -832,6 +937,9 @@ class Image2_UT < Test::Unit::TestCase
         assert_block { ! @img.opaque? }
     end
 
+    def test_optimize
+    end
+
     def test_ordered_dither
         assert_nothing_raised do
             res = @img.ordered_dither
@@ -871,6 +979,13 @@ class Image2_UT < Test::Unit::TestCase
         # If args are out-of-bounds return the background color
         img = Magick::Image.new(10, 10) { self.background_color = 'blue' }
         assert_equal('blue', img.pixel_color(50, 50).to_color)
+    end
+
+    def test_polaroid
+      assert_nothing_raised { @img.polaroid }
+      assert_nothing_raised { @img.polaroid(5) }
+      assert_instance_of(Magick::Image, @img.polaroid)
+      assert_raises(TypeError) { @img.polaroid('x') }
     end
 
     def test_posterize

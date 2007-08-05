@@ -248,6 +248,25 @@ class Image1_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Image,  res)
     end
 
+    def test_blend
+      @img2 = Magick::Image.new(20,20) {self.background_color = "black"}
+      assert_nothing_raised { @img.blend(@img2, 0.25) }
+      res = @img.blend(@img2, 0.25)
+      assert_instance_of(Magick::Image, res)
+      assert_nothing_raised { @img.blend(@img2, '25%') }
+      assert_nothing_raised { @img.blend(@img2, 0.25, 0.75) }
+      assert_nothing_raised { @img.blend(@img2, '25%', '75%') }
+      assert_nothing_raised { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity) }
+      assert_nothing_raised { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 10) }
+      assert_nothing_raised { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 10, 10) }
+      assert_raise(ArgumentError) { @img.blend }
+      assert_raise(ArgumentError) { @img.blend(@img2, 'x') }
+      assert_raise(TypeError) { @img.blend(@img2, 0.25, []) }
+      assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, 'x') }
+      assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 'x') }
+      assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 10, []) }
+    end
+
     def test_blur_channel
         assert_nothing_raised { @img.blur_channel }
         assert_nothing_raised { @img.blur_channel(1) }
@@ -500,6 +519,27 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(ArgumentError)  { @img.color_reset!('x') }
         @img.freeze
         assert_raise(TypeError) { @img.color_reset!('red') }
+    end
+
+    def test_combine
+      r = Magick::Image.new(20,20) { self.background_color = 'red' }
+      g = Magick::Image.new(20,20) { self.background_color = 'green' }
+      b = Magick::Image.new(20,20) { self.background_color = 'blue' }
+      a = Magick::Image.new(20,20) { self.background_color = 'transparent' }
+      assert_nothing_raised { Magick::Image.combine(r) }
+      assert_nothing_raised { Magick::Image.combine(r, g) }
+      assert_nothing_raised { Magick::Image.combine(r, g, b) }
+      assert_nothing_raised { Magick::Image.combine(r, g, b, a) }
+      assert_nothing_raised { Magick::Image.combine(nil, g) }
+      assert_nothing_raised { Magick::Image.combine(r, nil, b) }
+      assert_nothing_raised { Magick::Image.combine(r, g, nil, a) }
+      assert_nothing_raised { Magick::Image.combine(r, g, b, nil) }
+      res = Magick::Image.combine(r, g, b)
+      assert_instance_of(Magick::Image, res)
+      assert_raise(ArgumentError) { Magick::Image.combine() }
+      assert_raise(ArgumentError) { Magick::Image.combine(nil) }
+      assert_raise(ArgumentError) { Magick::Image.combine(r, g, b, a, r) }
+      assert_raise(TypeError) { Magick::Image.combine(1, g, b, a) }
     end
 
     def test_compare_channel

@@ -1177,7 +1177,7 @@ img = Magick::Image.read_inline(content)
       <a href="javascript:popup('add_noise.rb.html')"><img src=
       "ex/images/Flower_Hat.jpg" alt="add_noise example" id=
       "add_noise_example" title="Click to see the example script"
-      /></a>
+       /></a>
 
       <p>Click the NoiseType to see the effect.</p>
 
@@ -3901,6 +3901,8 @@ exit
 
       <li>AffineProjectionDistortion</li>
 
+      <li>ArcDistortion</li>
+
       <li>BilinearDistortion</li>
 
       <li>PerspectiveDistortion</li>
@@ -3909,11 +3911,8 @@ exit
     </ul>
 
     <p>The <span class="arg">points</span> argument is an array of
-    <a href="struct.html#Point">Point</a> objects. Each Point
-    object defines two values. That is, when the ImageMagick
-    documentation says that the BilinearDistortion type requires 16
-    values, specify those values using an array of 8 Point
-    objects.</p>
+    numbers. The size of the array depends on the distortion
+    type.</p>
 
     <h4>Returns</h4>
 

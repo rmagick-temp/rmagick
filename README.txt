@@ -82,14 +82,15 @@ steps 1 through 5. (Although the online instructions include GraphicsMagick,
 you should install ImageMagick.) After installing
 ImageMagick, use the instructions in the next section to install RMagick.
 
-<h2 id="install">Installing RMagick 0.0.0$</h2>
+<h2 id="install">Installing RMagick 0.0.0</h2>
 
 This release of RMagick uses Minero Aoki's setup.rb script for installation.
 See the next section for configuration options. Usually you do not need to
 specify any of these options. You can get more information about setup.rb from
 his web site <http://i.loveruby.net>
 
-Decompress the tarball into a temporary directory using the command
+I assume you've already decompressed the tarball, or you wouldn't be reading
+this. If you have not decompressed the tarball, do so with this command:
 
     tar xvzf RMagick-0.0.0$-tar.gz
 
@@ -98,12 +99,12 @@ configuration options (usually you don't need to) enter the command
 
     ruby setup.rb
 
-Note that setup.rb executes all the example
-programs, so this can take some time. This process both builds the example
-images used in the documentation and validates your RMagick installation.
+Note that setup.rb executes all the example programs, so this can take
+some time.  This process both builds the example images used in the
+documentation and validates your RMagick installation.
 
-After this command completes, make sure you have root priviledges
-(that is, login as root or use su or sudo) and enter the command
+After this command completes, make sure you have root priviledges (that
+is, login as root or use su or sudo) and enter the command
 
     ruby setup.rb install
 
@@ -118,7 +119,7 @@ addition to the regular options, there are a few RMagick-specific options:
     >  prefix specified by --prefix. For example, to install the
     >  documentation in /home/user/RMagick, specify:
 
-    >  `./configure --with-doc-dir=/home/user/RMagick`
+    >  `./configure --doc-dir=/home/user/RMagick`
 
 * --allow-example-errors
     >  Normally the documentation installation terminates if 5 examples fail.
@@ -129,7 +130,8 @@ addition to the regular options, there are a few RMagick-specific options:
 * --disable-htmldoc
     >  By default the install process runs all the RMagick example programs
     >  and generates HTML versions of all the examples. This option causes
-    >  the install process to skip this step. No documentation is installed.
+    >  the install process to skip this step. No install verification occurs
+    >  and no documentation is installed.
 
 <h2 id="uhoh">Things that can go wrong</h2>
 
@@ -150,12 +152,12 @@ When make is running the examples, if you get a message like this:
       cannot open shared object file: No such file or directory -
       /home/you/RMagick-0.0.0/ext/RMagick/RMagick.so (LoadError)
 
-you probably do not have the directory in which the ImageMagick library is
-installed in your load path. An easy way to fix this is to define the
-directory in the LD\_LIBRARY\_PATH environment variable. For example, suppose
-you installed the ImageMagick library libMagick.so in /usr/local/lib. (By
-default this is where it is installed.) Create the LD\_LIBRARY\_PATH variable
-like this:
+you probably do not have the directory in which the ImageMagick library
+is installed in your load path.  An easy way to fix this is to define
+the directory in the LD\_LIBRARY\_PATH environment variable.  For
+example, suppose you installed the ImageMagick library libMagick.so in
+/usr/local/lib.  (By default this is where it is installed.) Create the
+LD\_LIBRARY\_PATH variable like this:
 
     export LD_LIBRARY_PATH=/usr/local/lib
 

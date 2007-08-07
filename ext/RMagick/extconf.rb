@@ -140,7 +140,7 @@ check_sizeof('Image *', headers)
 
 have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)  # 6.3.3
 have_enum_value('DistortImageMethod', 'ArcDistortion', headers)         # 6.3.5-5
-have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.?
+have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.3-4
                                        'RemoveDupsLayer',               # 6.3.3-6
                                        'RemoveZeroLayer',               # 6.3.3-6
                                        'CompositeLayer',                # 6.3.3-6

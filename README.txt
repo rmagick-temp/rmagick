@@ -8,6 +8,7 @@ Table Of Contents
 
 * [Introduction] [intro]
 * [Contact Information] [contact]
+* [What's new?] [new]
 * [Prerequisites] [prereq]
 * [Installing RMagick] [install]
   + [Configuration options] [options]
@@ -32,6 +33,32 @@ __Author:__ Tim Hunter
 __Email:__ <rmagick@rubyforge.org>
 
 __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
+
+<h2 id="new">What's new?</h2>
+RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.8.
+Additionally,
+
+* The installation procedure is pure Ruby.
+* The minimum version of Ruby is 1.8.2.
+* The minimum version of ImageMagick is 6.3.0.
+* GraphicsMagick is not supported.
+* The following GraphicsMagick-only methods are no longer available:
+Image#grayscale\_pseudo\_class, Image#statistics.
+* The following deprecated methods are no longer available:
+Image#random\_channel\_threshold, Image#channel\_threshold, Image#montage=,
+Image#image\_type=, Image::Info#tile\_info, Image#tile\_info=,
+Image::Info#tile, Image::Info#tile=, Image::Info#subimage, Image::Info#subimage=,
+Image::Info#subrange, Image::Info#subrange=, Magick.set_monitor.
+* The following methods have been added:
+Image::Info#stroke=, Image::Info#stroke\_width= and Image::Info#undercolor=,
+Draw#fill_pattern= and Draw#stroke\_pattern=, Image#destroy!, Image#destroyed?,
+Image#check\_destroyed, Magick.trace\_proc, Image.combine, Image#separate,
+Image#distort, Image#each\_pixel.
+* Magick::MaxRGB is deprecated (but still available). Use Magick::QuantumRange
+instead.
+* RMagick works with the Q32 version of ImageMagick.
+
+Various other minor bug fixes and upgrades.
 
 <h2 id="prereq">Prerequisites</h2>
 
@@ -220,6 +247,7 @@ The HTML version was produced with [BlueCloth](http://bluecloth.rubyforge.org).
 
 [intro]: #intro
 [contact]: #contact
+[new]: #new
 [prereq]: #prereq
 [install]: #install
 [options]: #options

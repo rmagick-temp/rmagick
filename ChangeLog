@@ -2,7 +2,8 @@ RMagick 2.0.0
     o Replaced configure/make/make install with standard Ruby setup.rb,
       extconf.rb
     o Removed support for Ruby earlier than 1.8.2
-    o Removed support for GraphicsMagick
+    o Removed support for GraphicsMagick. As a result these methods are no
+      longer available: Image#grayscale_pseudo_class, Image#statistics.
     o Removed support for all releases of ImageMagick earlier than 6.3.0.
     o Removed deprecated Image#random_channel_threshold. Use
       Image#random_threshold_channel instead
@@ -21,7 +22,7 @@ RMagick 2.0.0
       Image::Info#set_monitor instead
     o Removed deprecated RunlengthEncodedCompression CompressionType. Use
       RLECompression instead
-    o Added Image::Info.stroke=, stroke_width= and undercolor= attributes
+    o Added Image::Info#stroke=, stroke_width= and undercolor= attributes
     o Added Draw#fill_pattern= and #stroke_pattern= annotate attributes
     o Changed Image::Info[] and Image::Info[]= to allow an omitted "format"
       argument

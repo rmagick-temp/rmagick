@@ -145,6 +145,7 @@ have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.3-
                                        'RemoveZeroLayer',               # 6.3.3-6
                                        'CompositeLayer',                # 6.3.3-6
                                        'OptimizeImageLayer'], headers)  # 6.3.3-?
+have_enum_value('MetricType', 'MeanErrorPerPixelMetric', headers)       # 6.3.4-?
 have_enum_value('NoiseType', 'RandomNoise', headers)                    # 6.3.5-0
 
 # Miscellaneous constants

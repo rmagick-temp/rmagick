@@ -39,39 +39,46 @@ __O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, OS X.
 
 __Ruby__ 1.8.2 or later. You can get Ruby from <http://www.ruby-lang.org>.
 
-__ImageMagick__ 6.2.8 or later.  You can get ImageMagick from <http://www.imagemagick.org>.
+__ImageMagick__ 6.3.0 or later.  You can get ImageMagick from
+<http://www.imagemagick.org>.
 
 <h2 id="install">Installation</h2>
 
 The installation procedure for RMagick 0.0.0 is different from that used
 in earlier releases. Before installing RMagick, you must install ImageMagick.
-Complete and up-to-date instructions for installing ImageMagick are available at <http://rmagick.rubyforge.org/install-faq.html>. After installing 
+Complete and up-to-date instructions for installing ImageMagick on Linux,
+*BSD, and other *nix-type O/S's are available
+at <http://rmagick.rubyforge.org/install-linux.html>, steps 0, 1, 2.
+Similarly, instructions
+for OS X are available at <http://rmagick.rubyforge.org/install-osx.html>,
+steps 1 through 5. (Although the online instructions include GraphicsMagick,
+you should install ImageMagick.) After installing
 ImageMagick, use the instructions in the next section to install RMagick.
 
-<h2 id="install">Installing RMagick 0.0.0</h2>
+<h2 id="install">Installing RMagick 0.0.0$</h2>
 
 This release of RMagick uses Minero Aoki's setup.rb script for installation.
-You can get more information about setup.rb from his web site
-<http://i.loveruby.net>
+See the next section for configuration options. Usually you do not need to
+specify any of these options. You can get more information about setup.rb from
+his web site <http://i.loveruby.net>
 
-Download the latest version of the RMagick tarball from RubyForge. 
 Decompress the tarball into a temporary directory using the command
 
-	tar xvzf RMagick-0.0.0-tar.gz 
+    tar xvzf RMagick-0.0.0$-tar.gz
 
-Change to the RMagick-0.0.0 directory. Run the command
+Change to the RMagick-0.0.0 directory. If you are not using any
+configuration options (usually you don't need to) enter the command
 
-	ruby setup.rb
-	
-See the next section for configuration options. Usually you do not need to
-specify any of these options. Note that setup.rb executes all the example
+    ruby setup.rb
+
+Note that setup.rb executes all the example
 programs, so this can take some time. This process both builds the example
-images used in the documentation and validates your RMagick installation. 
+images used in the documentation and validates your RMagick installation.
 
-After this command completes, make sure you have administrator priviledges,
-then enter the command
+After this command completes, make sure you have root priviledges
+(that is, login as root or use su or sudo) and enter the command
 
-	ruby setup.rb install
+    ruby setup.rb install
 
 <h4 id="options">Configuration Options</h4>
 
@@ -89,7 +96,7 @@ addition to the regular options, there are a few RMagick-specific options:
 * --allow-example-errors
     >  Normally the documentation installation terminates if 5 examples fail.
     >  If you use this option, the installation does not check for failing
-    >  examples and will always complete. This option is useful if you're 
+    >  examples and will always complete. This option is useful if you're
     >  having trouble installing RMagick and you want to see all the failing examples.
 
 * --disable-htmldoc
@@ -99,8 +106,15 @@ addition to the regular options, there are a few RMagick-specific options:
 
 <h2 id="uhoh">Things that can go wrong</h2>
 
-#### Can't install RMagick. Can't find libMagick or one of the dependent libraries. Check the config.log file for more detailed information.
-Typically this message means that one or more of the libraries that ImageMagick depends on hasn't been installed. Examine the config.log file in the installation directory for any error messages. These messages typically contain enough additional information for you to be able to diagnose the problem.
+The RMagick installation FAQ [<http://rmagick.rubyforge.org/install-faq.html>]
+has answers to the most commonly reported problems.
+
+#### Can't install RMagick. Can't find libMagick or one of the dependent libraries. Check the mkmf.log file for more detailed information.
+Typically this message means that one or more of the libraries that ImageMagick
+depends on hasn't been installed. Examine the mkmf.log file in the ext/RMagick
+subdirectory of the installation directory for any error messages. These messages
+typically contain enough additional information for you to be able to diagnose
+the problem. Also see <http://rmagick.rubyforge.org/install-faq.html#libmagick>.
 
 #### Cannot open shared object file
 When make is running the examples, if you get a message like this:

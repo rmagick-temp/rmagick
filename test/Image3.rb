@@ -541,6 +541,10 @@ class Image3_UT < Test::Unit::TestCase
         end
     end
 
+    def test_sync_profiles
+        assert_nothing_raised { assert(@img.sync_profiles) }
+    end
+
     def test_texture_fill_to_border
         texture = Magick::Image.read('granite:').first
         assert_nothing_raised do

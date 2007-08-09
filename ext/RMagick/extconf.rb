@@ -127,6 +127,7 @@ have_func('snprintf', headers)
    'RecolorImage',                   # 6.3.1-3
    'SetImageProperty',               # 6.3.1
    'SetImageRegistry',               # 6.3.4-?
+   'SyncImageProfiles',              # 6.3.2
    ].each do |func|
     have_func(func, headers)
   end

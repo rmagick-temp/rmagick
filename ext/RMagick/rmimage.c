@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.242 2007/08/09 22:54:49 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.243 2007/08/09 23:21:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8649,6 +8649,33 @@ Image_swirl(VALUE self, VALUE degrees)
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#sync_profiles()
+    Purpose:    synchronizes image properties with the image profiles
+*/
+VALUE
+Image_sync_profiles(VALUE self)
+{
+#if defined(HAVE_SYNCIMAGEPROFILES)
+    Image *image;
+    MagickBooleanType r;
+
+    rm_check_destroyed(self);
+    Data_Get_Struct(self, Image, image);
+
+    r = SyncImageProfiles(image);
+
+    return r ? Qtrue : Qfalse;
+
+#else
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#texture_flood_fill(color, texture, x, y, method)

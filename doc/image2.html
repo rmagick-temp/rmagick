@@ -121,6 +121,8 @@ td.ds {
 
           <li><a href="#grey_q">grey?</a></li>
 
+          <li><a href="#histogram_q">histogram?</a></li>
+
           <li><a href="#implode">implode</a></li>
 
           <li><a href="#import_pixels">import_pixels</a></li>
@@ -147,13 +149,13 @@ td.ds {
           <li><a href="#matte_point">matte_point</a></li>
 
           <li><a href="#matte_replace">matte_replace</a></li>
-
-          <li><a href="#matte_reset_bang">matte_reset!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#matte_reset_bang">matte_reset!</a></li>
+
           <li><a href="#median_filter">median_filter</a></li>
 
           <li><a href="#minify">minify</a></li>
@@ -1596,7 +1598,7 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="grey_q">grey?</h3>
 
-    <p><span class="arg">image</span>.qrey? -&gt; <code>true</code>
+    <p><span class="arg">image</span>.grey? -&gt; <code>true</code>
     or <code>false</code></p>
   </div>
 
@@ -1604,6 +1606,28 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
     <h4>Description</h4>
 
     <p>Synonym for <a href="#gray_q">gray?</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="histogram_q">histogram?</h3>
+
+    <p>image.histogram? -&gt; <code>true</code> or
+    <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns <code>true</code> if the image has 1024 unique
+    colors or less.</p>
+
+    <h4>Returns</h4>
+
+    <p><code>true</code> or <code>false</code></p>
+
+    <h4>Magick API</h4>
+
+    <p>IsHistogramImage</p>
   </div>
 
   <div class="sig">

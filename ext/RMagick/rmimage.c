@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.241 2007/08/09 22:47:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.242 2007/08/09 22:54:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5909,20 +5909,7 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 VALUE
 Image_monochrome_q(VALUE self)
 {
-    Image *image;
-    ExceptionInfo exception;
-    unsigned int r;
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    r = IsMonochromeImage(image, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return r ? Qtrue : Qfalse;
+    return has_attribute(self, IsMonochromeImage);
 }
 
 /*
@@ -6315,20 +6302,7 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
 VALUE
 Image_opaque_q(VALUE self)
 {
-    Image *image;
-    ExceptionInfo exception;
-    unsigned int r = 0;
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    r = IsOpaqueImage(image, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return r ? Qtrue : Qfalse;
+    return has_attribute(self, IsOpaqueImage);
 }
 
 /*
@@ -6466,20 +6440,7 @@ Image_page_eq(VALUE self, VALUE rect)
 VALUE
 Image_palette_q(VALUE self)
 {
-    Image *image;
-    ExceptionInfo exception;
-    unsigned int r = 0;
-
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
-
-    r = IsPaletteImage(image, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return r ? Qtrue : Qfalse;
+    return has_attribute(self, IsPaletteImage);
 }
 
 /*

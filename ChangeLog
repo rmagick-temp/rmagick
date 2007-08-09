@@ -1,3 +1,6 @@
+RMagick 1.15.9
+    o Fixed bug #12089 (bug report from Hans de Graaff)
+
 RMagick 1.15.8
     o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.
       Koll

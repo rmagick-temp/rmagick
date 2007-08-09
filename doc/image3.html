@@ -170,13 +170,15 @@
 
           <li><a href="#swirl">swirl</a></li>
 
-          <li><a href=
-          "#texture_fill_to_border">texture_fill_to_border</a></li>
+          <li><a href="#sync_profiles">sync_profiles</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#texture_fill_to_border">texture_fill_to_border</a></li>
+
           <li><a href=
           "#texture_floodfill">texture_floodfill</a></li>
 
@@ -1191,7 +1193,7 @@ random_threshold_channel(geom, RedChannel)
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example"  /></a>
+    "ex/rotate_f.jpg" alt="rotate example" /></a>
     <img src="ex/images/spin.gif" alt="" class="spin" style=
     "left:322px;" title=
     "Mouse over the example to see the original image" /></p>
@@ -1894,7 +1896,7 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script"  /> <!--
+    "Click to see the example script" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
@@ -2153,7 +2155,7 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
@@ -2420,6 +2422,34 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SwirlImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sync_profiles">sync_profiles</h3>
+
+    <p><span class="arg">image</span>.sync_profiles -&gt;
+    <code>true</code> or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Synchronizes image properties with the image
+    profiles.</p>
+
+    <h4>Returns</h4>
+
+    <p><code>True</code> if everything went okay,
+    <code>false</code> if there was a problem with the profile.</p>
+
+    <h4>Notes</h4>
+
+    <p class="imquote">Currently we only support updating the EXIF
+    resolution and orientation.</p>
+
+    <h4>Magick API</h4>
+
+    <p>SyncImageProfiles</p>
   </div>
 
   <div class="sig">
@@ -3558,13 +3588,13 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
+    "ex/images/Flower_Hat.jpg" alt="wave example" />
     <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

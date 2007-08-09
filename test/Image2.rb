@@ -686,6 +686,11 @@ class Image2_UT < Test::Unit::TestCase
         assert(!red.gray?)
     end
 
+    def test_histogram?
+        assert_nothing_raised { @img.histogram? }
+        assert(@img.histogram?)
+    end
+
     def test_implode
         assert_nothing_raised do
             res = @img.implode(0.5)

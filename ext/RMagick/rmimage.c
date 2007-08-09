@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.240 2007/08/05 21:27:01 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.241 2007/08/09 22:47:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4777,6 +4777,23 @@ Image_get_pixels(
 }
 
 
+static VALUE has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, ExceptionInfo *))
+{
+    Image *image;
+    ExceptionInfo exception;
+    MagickBooleanType r;
+
+    rm_check_destroyed(self);
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    r = (attr_test)(image, &exception);
+    CHECK_EXCEPTION()
+
+    return r ? Qtrue : Qfalse;
+}
+
+
 /*
     Method:     Image#gray?
     Purpose:    return true if all the pixels in the image have the same red,
@@ -4785,20 +4802,24 @@ Image_get_pixels(
 VALUE
 Image_gray_q(VALUE self)
 {
-    Image *image;
-    ExceptionInfo exception;
-    unsigned int r;
+    return has_attribute(self, IsGrayImage);
+}
 
-    rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-    GetExceptionInfo(&exception);
 
-    r = IsGrayImage(image, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return r ? Qtrue : Qfalse;
+/*
+    Method:     Image#histogram?
+    Purpose:    return true if has 1024 unique colors or less.
+*/
+VALUE
+Image_histogram_q(VALUE self)
+{
+#if defined(HAVE_ISHISTOGRAMIMAGE)
+    return has_attribute(self, IsHistogramImage);
+#else
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

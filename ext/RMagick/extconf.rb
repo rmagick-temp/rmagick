@@ -121,6 +121,7 @@ have_func('snprintf', headers)
   ['DistortImage',                   # 6.3.5
    'GetImageProperty',               # 6.3.1
    'GetNextImageProperty',           # 6.3.1
+   'IsHistogramImage',               # 6.3.5
    'LinearStretchImage',             # 6.3.1
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3

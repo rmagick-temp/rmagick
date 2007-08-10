@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.210 2007/08/10 21:16:38 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.211 2007/08/10 22:36:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -838,6 +838,7 @@ Init_RMagick(void)
     rb_define_method(Class_Info, "undefine", Info_undefine, 2);
 
     DCL_ATTR_ACCESSOR(Info, antialias)
+    DCL_ATTR_ACCESSOR(Info, attenuate)
     DCL_ATTR_ACCESSOR(Info, authenticate)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
@@ -1265,6 +1266,9 @@ Init_RMagick(void)
         ENUMERATOR(IntegerInterpolatePixel)
         ENUMERATOR(MeshInterpolatePixel)
         ENUMERATOR(NearestNeighborInterpolatePixel)
+#if defined(HAVE_SPLINEINTERPOLATEPIXEL)
+        ENUMERATOR(SplineInterpolatePixel)
+#endif
     END_ENUM
 
     DEF_ENUM(MagickLayerMethod)
@@ -1599,7 +1603,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/08/10 21:16:38 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/08/10 22:36:22 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

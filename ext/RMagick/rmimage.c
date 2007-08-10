@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.243 2007/08/09 23:21:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.244 2007/08/10 21:16:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4028,6 +4028,73 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 
     return ary;
 }
+
+
+/*
+    Method:     Image#extent(width, height, x=0, y=0)
+    Purpose:    Call ExtentImage
+*/
+VALUE
+Image_extent(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_EXTENTIMAGE)
+    Image *image, *new_image;
+    RectangleInfo geometry;
+    long height, width;
+    ExceptionInfo exception;
+
+    rm_check_destroyed(self);
+
+    if (argc < 2 || argc > 4)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (expected 2 to 4, got %d)", argc);
+    }
+
+    geometry.y = geometry.x = 0L;
+    switch (argc)
+    {
+        case 4:
+            geometry.y = NUM2LONG(argv[3]);
+        case 3:
+            geometry.x = NUM2LONG(argv[2]);
+        default:
+            geometry.height = height = NUM2LONG(argv[1]);
+            geometry.width = width = NUM2LONG(argv[0]);
+            break;
+    }
+
+    // Use the signed versions of these two values to test for < 0
+    if (height <= 0L || width <= 0L)
+    {
+        if (geometry.x == 0 && geometry.y == 0)
+        {
+            rb_raise(rb_eArgError, "invalid extent geometry %ldx%ld", width, height);
+        }
+        else
+        {
+            rb_raise(rb_eArgError, "invalid extent geometry %ldx%ld+%ld+%ld"
+                   , width, height, geometry.x, geometry.y);
+        }
+    }
+
+
+    Data_Get_Struct(self, Image, image);
+    GetExceptionInfo(&exception);
+
+    new_image = ExtentImage(image, &geometry, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    (void) DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+    return rm_image_new(new_image);
+#else
+    argc = argc;
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#export_pixels_to_str(x=0, y=0, cols=self.columns,

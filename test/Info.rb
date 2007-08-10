@@ -36,6 +36,15 @@ class Info_UT < Test::Unit::TestCase
         assert_nil(@info['tiff', 'bits-per-sample'])
     end
 
+    def test_attenuate
+        assert_nothing_raised { @info.attenuate = 10 }
+        assert_equal(10, @info.attenuate)
+        assert_nothing_raised { @info.attenuate = 5.25 }
+        assert_equal(5.25, @info.attenuate)
+        assert_nothing_raised { @info.attenuate = nil }
+        assert_equal(nil, @info.attenuate)
+    end
+
     def test_channel
         assert_nothing_raised { @info.channel(Magick::RedChannel) }
         assert_nothing_raised { @info.channel(Magick::RedChannel, Magick::BlueChannel) }
@@ -67,6 +76,15 @@ class Info_UT < Test::Unit::TestCase
         assert_nil(@info.stroke)
 
         assert_raise(ArgumentError) { @info.stroke = 'xxx' }
+    end
+
+    def test_stroke_width
+        assert_nothing_raised { @info.stroke_width = 10 }
+        assert_equal(10, @info.stroke_width)
+        assert_nothing_raised { @info.stroke_width = 5.25 }
+        assert_equal(5.25, @info.stroke_width)
+        assert_nothing_raised { @info.stroke_width = nil }
+        assert_equal(nil, @info.stroke_width)
     end
 
     def test_undercolor

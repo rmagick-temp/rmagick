@@ -213,6 +213,13 @@ td {
       </tr>
 
       <tr>
+        <td>-attenuate <em>value</em></td>
+
+        <td>Image::Info#<a href=
+        "info.html#attenuate">attenuate</a>=<em>value</em></td>
+      </tr>
+
+      <tr>
         <td>-authenticate <em>string</em></td>
 
         <td>Image::Info#<a href=
@@ -571,6 +578,12 @@ td {
       </tr>
 
       <tr>
+        <td>-displace</td>
+
+        <td>See <a href="#displace">-displace</a>, below</td>
+      </tr>
+
+      <tr>
         <td>-display</td>
 
         <td>No equivalent</td>
@@ -591,11 +604,11 @@ td {
       </tr>
 
       <tr>
-        <td>distort <em>type</em> <em>points</em></td>
+        <td>-distort <em>method</em> <em>arguments</em></td>
 
         <td>Image#<a href=
-        "image1.html#distort">distort</a>(<em>type</em>,
-        <em>points</em>)</td>
+        "image1.html#distort">distort</a>(<em>method</em>,
+        <em>arguments</em>)</td>
       </tr>
 
       <tr>
@@ -1196,7 +1209,7 @@ td {
       </tr>
 
       <tr>
-        <td>+polaroid <em>angle</em></td>
+        <td>-polaroid <em>angle</em></td>
 
         <td>Image.<a href=
         "image2.html#polaroid">polaroid</a>(<em>angle=-5.0</em>)</td>
@@ -1364,6 +1377,12 @@ td {
       </tr>
 
       <tr>
+        <td>-reverse</td>
+
+        <td>ImageList#reverse</td>
+      </tr>
+
+      <tr>
         <td>-roll +<em>x</em>+<em>y</em></td>
 
         <td>Image#<a href="image3.html#roll">roll</a>(<em>x</em>,
@@ -1413,13 +1432,20 @@ td {
       <tr>
         <td>-scenes <em>value</em>-<em>value</em></td>
 
-        <td>No equivalent</td>
+        <td>See <a href="imusage.html#frames">Selecting frames from
+        a multi-frame image file</a></td>
       </tr>
 
       <tr>
         <td>-screen</td>
 
         <td>No equivalent</td>
+      </tr>
+
+      <tr>
+        <td>-seed</td>
+
+        <td>Kernel.srand</td>
       </tr>
 
       <tr>
@@ -1536,6 +1562,12 @@ td {
         <td>Image#<a href=
         "image3.html#sketch">sketch</a>(<em>radius</em>=0.0,
         <em>sigma</em>=1.0, <em>angle</em>=0.0)</td>
+      </tr>
+
+      <tr>
+        <td>-snaps</td>
+
+        <td>No equivalent</td>
       </tr>
 
       <tr>
@@ -1793,6 +1825,12 @@ td {
       </tr>
 
       <tr>
+        <td>-update</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
         <td>-verbose</td>
 
         <td>No equivalent</td>
@@ -1830,7 +1868,7 @@ td {
       </tr>
 
       <tr>
-        <td>-visual <em>type</em></td>
+        <td>-visual</td>
 
         <td>No equivalent</td>
       </tr>
@@ -1923,7 +1961,7 @@ td {
       </tr>
 
       <tr>
-        <td>-displace
+        <td id="displace">-displace
         <em>x-amplitude</em>x<em>y-amplitude</em></td>
 
         <td>Image#<a href=

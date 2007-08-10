@@ -516,6 +516,22 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.export_pixels_to_str(0, 0, 10, 10, "I", 2) }
     end
 
+    def test_extent
+      assert_nothing_raised { @img.extent(40, 40) }
+      res = @img.extent(40, 40)
+      assert_instance_of(Magick::Image, res)
+      assert_equal(40, res.columns)
+      assert_equal(40, res.rows)
+      assert_nothing_raised { @img.extent(40, 40, 5) }
+      assert_nothing_raised { @img.extent(40, 40, 5, 5) }
+      assert_raises(ArgumentError) { @img.extent(-40, 40) }
+      assert_raises(ArgumentError) { @img.extent(40, -40) }
+      assert_raises(TypeError) { @img.extent('x', 40) }
+      assert_raises(TypeError) { @img.extent(40, 'x') }
+      assert_raises(TypeError) { @img.extent(40, 40, 'x') }
+      assert_raises(TypeError) { @img.extent(40, 40, 5, 'x') }
+    end
+
     def test_find_similar_region
         girl = Magick::Image.read(IMAGES_DIR+"/Flower_Hat.jpg").first
         region = girl.crop(10, 10, 50, 50)

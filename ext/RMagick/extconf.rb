@@ -141,15 +141,16 @@ have_type('__int64', headers)
 check_sizeof('Image *', headers)
 
 
-have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)  # 6.3.3
-have_enum_value('DistortImageMethod', 'ArcDistortion', headers)         # 6.3.5-5
-have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',            # 6.3.3-4
-                                       'RemoveDupsLayer',               # 6.3.3-6
-                                       'RemoveZeroLayer',               # 6.3.3-6
-                                       'CompositeLayer',                # 6.3.3-6
-                                       'OptimizeImageLayer'], headers)  # 6.3.3-?
-have_enum_value('MetricType', 'MeanErrorPerPixelMetric', headers)       # 6.3.4-?
-have_enum_value('NoiseType', 'RandomNoise', headers)                    # 6.3.5-0
+have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)      # 6.3.3
+have_enum_value('DistortImageMethod', 'ArcDistortion', headers)             # 6.3.5-5
+have_enum_value('InterpolatePixelMethod', 'SplineInterpolatePixel', header) # 6.3.5
+have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',                # 6.3.3-4
+                                       'RemoveDupsLayer',                   # 6.3.3-6
+                                       'RemoveZeroLayer',                   # 6.3.3-6
+                                       'CompositeLayer',                    # 6.3.3-6
+                                       'OptimizeImageLayer'], headers)      # 6.3.3-?
+have_enum_value('MetricType', 'MeanErrorPerPixelMetric', headers)           # 6.3.4-?
+have_enum_value('NoiseType', 'RandomNoise', headers)                        # 6.3.5-0
 
 # Miscellaneous constants
 $defs.push("-DRUBY_VERSION_STRING=\"ruby #{RUBY_VERSION}\"")

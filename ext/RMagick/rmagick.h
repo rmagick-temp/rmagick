@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.193 2007/08/10 21:16:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.194 2007/08/10 22:36:39 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -583,6 +583,7 @@ extern void rm_imagelist_push(VALUE, VALUE);
 
 // rminfo.c
 ATTR_ACCESSOR(Info, antialias)
+ATTR_ACCESSOR(Info, attenuate)
 ATTR_ACCESSOR(Info, authenticate)
 ATTR_ACCESSOR(Info, background_color)
 ATTR_ACCESSOR(Info, border_color)

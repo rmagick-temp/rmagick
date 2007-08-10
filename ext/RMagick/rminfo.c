@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.62 2007/06/30 23:59:38 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.63 2007/08/10 22:36:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -90,6 +90,72 @@ static VALUE set_color_option(VALUE self, const char *option, VALUE color)
 
         (void) RemoveImageOption(info, option);
         (void) SetImageOption(info, option, name);
+    }
+
+    return self;
+}
+
+
+/*
+    Static:     get_dbl_option(obj, option)
+    Purpose:    Get an Image::Info option floating-point value
+    Notes:      Convert the string value to a float
+*/
+static VALUE get_dbl_option(VALUE self, const char *option)
+{
+    Info *info;
+    const char *value;
+    double d;
+    long n;
+
+    Data_Get_Struct(self, Info, info);
+
+    value = GetImageOption(info, option);
+    if (!value)
+    {
+        return Qnil;
+    }
+
+    d = atof(value);
+    n = (long) floor(d);
+    return d == (double)n ? LONG2NUM(n) : rb_float_new(d);
+}
+
+
+/*
+    Static:     set_dbl_option(obj, option, value)
+    Purpose:    Set an Image::Info option to a floating-point value
+    Notes:      SetImageOption expects the value to be a string.
+*/
+static VALUE set_dbl_option(VALUE self, const char *option, VALUE value)
+{
+    Info *info;
+    char buff[50];
+    double d;
+    long n;
+    int len;
+
+    Data_Get_Struct(self, Info, info);
+
+    if (NIL_P(value))
+    {
+        (void) RemoveImageOption(info, option);
+    }
+    else
+    {
+        d = NUM2DBL(value);
+        n = floor(d);
+        if (d == n)
+        {
+            len = sprintf(buff, "%-10ld", n);
+        }
+        else
+        {
+            len = sprintf(buff, "%-10.2f", d);
+        }
+        memset(buff+len, '\0', sizeof(buff)-len);
+        (void) RemoveImageOption(info, option);
+        (void) SetImageOption(info, option, buff);
     }
 
     return self;
@@ -226,6 +292,20 @@ Info_aset(int argc, VALUE *argv, VALUE self)
 
 
     return self;
+}
+
+
+VALUE
+Info_attenuate(VALUE self)
+{
+    return get_dbl_option(self, "attenuate");
+}
+
+
+VALUE
+Info_attenuate_eq(VALUE self, VALUE value)
+{
+    return set_dbl_option(self, "attenuate", value);
 }
 
 
@@ -1385,13 +1465,7 @@ Info_stroke_eq(VALUE self, VALUE color)
 VALUE
 Info_stroke_width(VALUE self)
 {
-    Info *info;
-    const char *sw;
-
-    Data_Get_Struct(self, Info, info);
-
-    sw = GetImageOption(info, "strokewidth");
-    return sw ? rb_float_new(atof(sw)) : Qnil;
+    return get_dbl_option(self, "strokewidth");
 }
 
 
@@ -1403,25 +1477,7 @@ Info_stroke_width(VALUE self)
 VALUE
 Info_stroke_width_eq(VALUE self, VALUE stroke_width)
 {
-    Info *info;
-    char buff[11];
-    double sw;
-
-    Data_Get_Struct(self, Info, info);
-
-    if (NIL_P(stroke_width))
-    {
-        (void) RemoveImageOption(info, "strokewidth");
-    }
-    else
-    {
-        sw = NUM2DBL(stroke_width);
-        sprintf(buff, "%-10.2f", sw);
-        (void) RemoveImageOption(info, "strokewidth");
-        (void) SetImageOption(info, "strokewidth", buff);
-    }
-
-    return self;
+    return set_dbl_option(self, "strokewidth", stroke_width);
 }
 
 

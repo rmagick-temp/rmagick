@@ -79,6 +79,8 @@ td.ds {
           <li><a href=
           "#export_pixels_to_str">export_pixels_to_str</a></li>
 
+          <li><a href="#extent">extent</a></li>
+
           <li><a href=
           "#find_similar_region">find_similar_region</a></li>
 
@@ -105,14 +107,14 @@ td.ds {
 
           <li><a href=
           "#get_exif_by_entry">get_exif_by_entry</a></li>
-
-          <li><a href=
-          "#get_exif_by_number">get_exif_by_number</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#get_exif_by_number">get_exif_by_number</a></li>
+
           <li><a href="#get_iptc_dataset">get_iptc_dataset</a></li>
 
           <li><a href="#get_pixels">get_pixels</a></li>
@@ -421,7 +423,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
       <code>unsigned char</code>s.</dd>
     </dl>
 
-    <h4>Returns</h4>A string
+    <h4>Returns</h4>
+
+    <p>a string</p>
 
     <h4>See also</h4>
 
@@ -433,6 +437,59 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Magick API</h4>
 
     <p>ExportImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="extent">extent</h3>
+
+    <p><span class="arg">image</span>.extent(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>If <span class="arg">width</span> or <span class=
+    "arg">height</span> is greater than the target image's width or
+    height, extends the width and height of the target image to the
+    specified values. The new pixels are set to the background
+    color. If <span class="arg">width</span> or <span class=
+    "arg">height</span> is less than the target image's width or
+    height, crops the target image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>width</dt>
+
+      <dd>The width of the new image</dd>
+
+      <dt>height</dt>
+
+      <dd>The heigth of the new image</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The upper-left corner of the new image is positioned at
+      -<span class="arg">x</span>, -<span class=
+      "arg">y</span>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Notes</h4>
+
+    <p>The new image is composed over the background using the
+    composite operator specified by target image's <a href=
+    "imageattrs.html#compose">compose</a> attribute.</p>
+
+    <h4>Magick API</h4>
+
+    <p>ExtentImage</p>
   </div>
 
   <div class="sig">
@@ -1611,8 +1668,8 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="histogram_q">histogram?</h3>
 
-    <p><span class="arg">image</span>.histogram? -&gt; <code>true</code> or
-    <code>false</code></p>
+    <p><span class="arg">image</span>.histogram? -&gt;
+    <code>true</code> or <code>false</code></p>
   </div>
 
   <div class="desc">

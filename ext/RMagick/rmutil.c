@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.119 2007/08/03 22:40:50 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.120 2007/08/10 22:35:38 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1503,6 +1503,9 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
         ENUM_TO_NAME(IntegerInterpolatePixel)
         ENUM_TO_NAME(MeshInterpolatePixel)
         ENUM_TO_NAME(NearestNeighborInterpolatePixel)
+#if defined(HAVE_SPLINEINTERPOLATEPIXEL)
+        ENUM_TO_NAME(SplineInterpolatePixel)
+#endif
     }
 }
 

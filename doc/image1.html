@@ -1764,11 +1764,11 @@ img = Magick::Image.read_inline(content)
     "padding: 10px; display: none;" id="borderless" onmouseout=
     "this.style.display='none'; bordered.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="border example" title=
-    "Click to see the example script" /> <img id=
+    "Click to see the example script"  /> <img id=
     "bordered" onmouseover=
     "this.style.display='none'; borderless.style.display='';" src=
     "ex/border.jpg" alt="border example"
-    /></a><img src="ex/images/spin.gif" alt="" class=
+     /></a><img src="ex/images/spin.gif" alt="" class=
     "spin" style="left: 224px;" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3351,13 +3351,13 @@ cropped = img.crop(x, y, width, height, true)
      <img id="cropless" style="display: none" onmouseout=
     "this.style.display='none';cropped.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script" />
+    "Click to see the example script"  />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="cropped" onmouseover=
     "this.style.display='none';cropless.style.display='';" src=
-    "ex/crop_resized.jpg" alt="frame example" /></a>
+    "ex/crop_resized.jpg" alt="frame example"  /></a>
     <img src="ex/images/spin.gif" alt="" style=
     "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
@@ -3880,7 +3880,8 @@ exit
     <h3 id="distort">distort</h3>
 
     <p><span class="arg">image</span>.distort(<span class=
-    "arg">type</span>, <span class="arg">points</span>) -&gt;
+    "arg">type</span>, <span class="arg">points</span>,
+    <span class="arg">bestfit</span>=<code>false</code>) -&gt;
     <em>anImage</em></p>
   </div>
 
@@ -3913,6 +3914,13 @@ exit
     <p>The <span class="arg">points</span> argument is an array of
     numbers. The size of the array depends on the distortion
     type.</p>
+
+    <p class="imquote">If <span class="arg">bestfit</span> is
+    enabled, and the distortion allows it, the destination image is
+    adjusted to ensure the whole source image will just fit within
+    the final destination image, which will be sized and offset
+    accordingly. Also in many cases the virtual offset of the
+    source image will be taken into account in the mapping.</p>
 
     <h4>Returns</h4>
 

@@ -34,6 +34,7 @@ RMagick 2.0.0
       OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3)
     o RMagick works with Q32 version of ImageMagick
     o Added ChangeMaskCompositeOp CompositeOperator enum value
+    o Added SplineInterpolatePixel InterpolatePixelMethod
     o Added Image.combine
     o Added Image#separate
     o Added Image#distort (available with ImageMagick 6.3.5)
@@ -42,8 +43,10 @@ RMagick 2.0.0
     o Added Image#histogram?
     o Added Image#sync_profiles
     o Added Image#extent
+    o Added Image::Info#attenuate
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
+    o Updated for ImageMagick 6.3.5-6
 
 RMagick 1.15.8
     o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.

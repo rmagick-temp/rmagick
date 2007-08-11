@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.194 2007/08/10 22:36:39 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.195 2007/08/11 20:13:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -773,7 +773,7 @@ extern VALUE Image_dispatch(int, VALUE *, VALUE);
 extern VALUE Image_displace(int, VALUE *, VALUE);
 extern VALUE Image_display(VALUE);
 extern VALUE Image_dissolve(int, VALUE *, VALUE);
-extern VALUE Image_distort(VALUE, VALUE, VALUE);
+extern VALUE Image_distort(int, VALUE *, VALUE);
 extern VALUE Image_distortion_channel(int, VALUE *, VALUE);
 extern VALUE Image__dump(VALUE, VALUE);
 extern VALUE Image_dup(VALUE);

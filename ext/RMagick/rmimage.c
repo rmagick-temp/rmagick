@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.244 2007/08/10 21:16:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.245 2007/08/11 20:13:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3539,26 +3539,40 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 
 
 /*
- *  Method:     Image#distort(type, points)
+ *  Method:     Image#distort(type, points, bestfit=false)
  *  Purpose:    Call DistortImage
  *  Notes:      points is an Array of Numeric values
 */
 VALUE
-Image_distort(VALUE self, VALUE type, VALUE pts)
+Image_distort(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_DISTORTIMAGE)
     Image *image, *new_image;
+    volatile VALUE pts;
     unsigned long n, npoints;
     DistortImageMethod distortion_method;
     double *points;
+    MagickBooleanType bestfit = MagickFalse;
     ExceptionInfo exception;
 
     rm_check_destroyed(self);
-    Data_Get_Struct(self, Image, image);
-    VALUE_TO_ENUM(type, distortion_method, DistortImageMethod);
 
-    // Ensure pts is an array
-    pts = rb_Array(pts);
+    switch (argc)
+    {
+        case 3:
+            bestfit = RTEST(argv[2]);
+        case 2:
+            // Ensure pts is an array
+            pts = rb_Array(argv[1]);
+            VALUE_TO_ENUM(argv[0], distortion_method, DistortImageMethod);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (expected 2 or 3, got %d)", argc);
+            break;
+    }
+
+    Data_Get_Struct(self, Image, image);
+
     npoints = RARRAY(pts)->len;
     // Allocate points array from Ruby's memory. If an error occurs Ruby will
     // be able to clean it up.
@@ -3570,7 +3584,7 @@ Image_distort(VALUE self, VALUE type, VALUE pts)
     }
 
     GetExceptionInfo(&exception);
-    new_image = DistortImage(image, distortion_method, npoints, points, &exception);
+    new_image = DistortImage(image, distortion_method, npoints, points, bestfit, &exception);
     xfree(points);
     rm_check_exception(&exception, new_image, DestroyOnError);
     (void) DestroyExceptionInfo(&exception);
@@ -3579,8 +3593,8 @@ Image_distort(VALUE self, VALUE type, VALUE pts)
     return rm_image_new(new_image);
 #else
     self = self;        // defeat "unused parameter" message
-    type = type;
-    pts = pts;
+    argv = argv;
+    argc = argc;
     rm_not_implemented();
     return (VALUE)0;
 #endif

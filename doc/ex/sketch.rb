@@ -11,15 +11,8 @@ sketch = img.quantize(256, Magick::GRAYColorspace)
 sketch = sketch.equalize
 
 # Sketch, then dissolve 25% of the original back in
-begin
-    sketch = sketch.sketch(0, 10, 135)
-    img = img.dissolve(sketch, 0.75, 0.25)
-
-rescue NotImplementedError
-    not_impl = Magick::Image.read('images/notimplemented.gif').first
-    not_impl.resize!(img.columns, img.rows)
-    img = not_impl
-end
+sketch = sketch.sketch(0, 10, 135)
+img = img.dissolve(sketch, 0.75, 0.25)
 
 img.write('sketch.jpg')
 

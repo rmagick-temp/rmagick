@@ -901,7 +901,7 @@ ilist.display
       be quite slow depending on the complexity of the expression.
       Generally you will get better performance by accessing the
       image pixels as <a href="struct.html#Pixel">Pixel</a> objects
-      (see <a href="image2.html#get_pixel">get_pixel</a> and
+      (see <a href="image2.html#get_pixels">get_pixels</a> and
       <a href="image3.html#view">view</a>) and using Ruby code to
       perform the mathematics.</li>
 
@@ -936,7 +936,7 @@ res = imgl.fx('1/2', Magick::BlueChannel)
 
     <h4>See also</h4>
 
-    <p><a href="image2.html#get_pixel">get_pixel</a>, <a href=
+    <p><a href="image2.html#get_pixels">get_pixels</a>, <a href=
     "image3.html#view">view</a></p>
   </div>
 
@@ -1125,7 +1125,7 @@ self.frame = Magick::Geometry.new(20,20,4,4)
       <dd>If the tile has a label, the label is included in the
       frame. The default is to have no frame.</dd>
 
-      <dd>See <a href="image1.html#frame">Image#frame</a>.</dd>
+      <dd>See <a href="image2.html#frame">Image#frame</a>.</dd>
 
       <dt>geometry=</dt>
 
@@ -1718,7 +1718,7 @@ number = '0'
 
     <h4>See also</h4>
 
-    <p><a href="image3.html#read">Image.read</a></p>
+    <p><a href="image1.html#read">Image.read</a></p>
 
     <h4>Magick API</h4>
 

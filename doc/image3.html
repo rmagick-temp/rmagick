@@ -942,7 +942,7 @@ random_threshold_channel(geom, RedChannel)
     <p><span class="arg">image</span>.resize(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>,
     <em>filter</em>=<a href=
-    "constants.html#FilterType">LanczosFilter</a>,
+    "constants.html#FilterTypes">LanczosFilter</a>,
     <em>support</em>=1.0) -&gt; <em>image</em><br />
     <span class="arg">image</span>.resize(<span class=
     "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
@@ -973,7 +973,7 @@ random_threshold_channel(geom, RedChannel)
 
       <dt>filter</dt>
 
-      <dd>The <a href="constants.html#FilterType">filter</a> to use
+      <dd>The <a href="constants.html#FilterTypes">filter</a> to use
       when resizing. If you do not specify a filter argument,
       resize uses the value of the receiver's <a href=
       "imageattrs.html#Image.filter">filter attribute</a>.
@@ -1021,7 +1021,7 @@ random_threshold_channel(geom, RedChannel)
 
     <p><em>image</em>.resize!(<em>new_width</em>,
     <em>new_height</em>, <em>filter</em>=<a href=
-    "constants.html#FilterType">LanczosFilter</a>,
+    "constants.html#FilterTypes">LanczosFilter</a>,
     <em>support</em>=1.0) -&gt; <em>image</em><br />
     <span class="arg">image</span>.resize!(<span class=
     "arg">scale_factor</span>) -&gt; <em>image</em></p>
@@ -1360,7 +1360,7 @@ random_threshold_channel(geom, RedChannel)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="#Image.scale">scale</a>.</p>
+    <p>In-place form of <a href="#scale">scale</a>.</p>
 
     <h4>Returns</h4>
 
@@ -1848,7 +1848,7 @@ random_threshold_channel(geom, RedChannel)
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="#Image.shave">shave</a>.</p>
+    <p>In-place form of <a href="#shave">shave</a>.</p>
 
     <h4>Returns</h4>
 
@@ -2171,7 +2171,7 @@ img.properties &raquo;
     "image1.html#color_fill_to_border">color_fill_to_border</a>,
     <a href="image1.html#color_floodfill">color_floodfill</a>,
     <a href="image1.html#color_reset_bang">color_reset!</a>,
-    <a href="image2.html#color_reset_bang">erase!</a>, <a href=
+    <a href="image2.html#erase_bang">erase!</a>, <a href=
     "image2.html#opaque">opaque</a></p>
 
     <h4>Magick API</h4>
@@ -2251,7 +2251,7 @@ img.properties &raquo;
       from the file, you must supply this value, along with the
       width and height of the watermark, in the <a href=
       "info.html#Info.size_eq">size</a> optional parameter to the
-      <a href="#Image.read">read</a> method.</dd>
+      <a href="image1.html#read">read</a> method.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2468,7 +2468,7 @@ img.properties &raquo;
     <span class="arg">y</span> and its neighbors that are not the
     border color with copies of the <span class=
     "arg">texture</span> image. Use the <a href=
-    "imageattrs.html#Image.fuzz">fuzz</a> attribute to specify how
+    "imageattrs.html#fuzz">fuzz</a> attribute to specify how
     closely a pixel must match the border color.</p>
 
     <h4>Arguments</h4>
@@ -2537,7 +2537,7 @@ img.properties &raquo;
     color with the <span class="arg">texture</span> image. By
     default, the neighbor pixels must be exactly the same color as
     the target pixel. Use the <a href=
-    "imageattrs.html#Image.fuzz">fuzz</a> attribute to specify how
+    "imageattrs.html#fuzz">fuzz</a> attribute to specify how
     much difference is acceptable.</p>
 
     <h4>Arguments</h4>
@@ -2731,7 +2731,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
 
     <p>No required arguments, however you can specify the image
     format (such as JPEG, PNG, etc.) and depth by calling the
-    <a href="imageattrs.html#Image.format">format</a> and <a href=
+    <a href="imageattrs.html#format">format</a> and <a href=
     "imageattrs.html#Image.depth">depth</a> attributes, as well as
     other <a href="info.html">Image::Info</a> attributes as
     appropriate, in a block associated with the method.</p>
@@ -2749,7 +2749,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#Ifrom_blob">from_blob</a></p>
+    <p><a href="image1.html#from_blob">from_blob</a></p>
 
     <h4>Magick API</h4>
 
@@ -2792,7 +2792,7 @@ img.to_color(pixel)
 
     <h4>See also</h4>
 
-    <p><a href="struct.html#Pixel.to_color">Pixel#to_color</a></p>
+    <p><a href="struct.html#Pixel">Pixel#to_color</a></p>
 
     <h4>Magick API</h4>
 
@@ -2815,7 +2815,7 @@ img.to_color(pixel)
     <span class="arg">color</span> to the value specified by
     <span class="arg">opacity</span>. By default the pixel must
     match exactly, but you can specify a tolerence level by setting
-    the <a href="imageattrs.html#Image.fuzz">fuzz</a> attribute on
+    the <a href="imageattrs.html#fuzz">fuzz</a> attribute on
     the image.</p>
 
     <h4>Arguments</h4>
@@ -2858,7 +2858,7 @@ img.to_color(pixel)
     <h4>See also</h4>
 
     <p><a href="image2.html#matte_replace">matte_replace</a>,
-    <a href="draw.html#Draw.matte">Draw#matte</a></p>
+    <a href="draw.html#matte">Draw#matte</a></p>
 
     <h4>Magick API</h4>
 
@@ -3132,7 +3132,7 @@ img.to_color(pixel)
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#enhance">enhance</a>, <a href=
+    <p><a href="image2.html#enhance">enhance</a>, <a href=
     "image2.html#median_filter">median_filter</a>, <a href=
     "image3.html#reduce_noise">reduce_noise</a>, <a href=
     "#unsharp_mask_channel">unsharp_mask_channel</a></p>
@@ -3209,7 +3209,7 @@ img.to_color(pixel)
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#enhance">enhance</a>, <a href=
+    <p><a href="image2.html#enhance">enhance</a>, <a href=
     "image2.html#median_filter">median_filter</a>, <a href=
     "image3.html#reduce_noise">reduce_noise</a>, <a href=
     "#unsharp_mask">unsharp_mask</a></p>
@@ -3757,7 +3757,7 @@ end
 
     <h4>See also</h4>
 
-    <p><a href="ilist.html#ImageList.write">ImageList#write</a></p>
+    <p><a href="ilist.html#write">ImageList#write</a></p>
 
     <h4>Magick API</h4>
 

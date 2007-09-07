@@ -8,7 +8,6 @@ img.resize!(0.5)
 
 # Prepare to label each image with a number from 1 to 4
 legend = Magick::Draw.new
-legend.font_family = 'Helvetica'
 legend.stroke = 'transparent'
 legend.pointsize = 12
 legend.gravity = Magick::SouthEastGravity

@@ -10,7 +10,6 @@ canvas = Magick::ImageList.new
 canvas.new_image(300, 100, Magick::TextureFill.new(granite))
 
 text = Magick::Draw.new
-text.font_family = 'helvetica'
 text.pointsize = 52
 text.gravity = Magick::CenterGravity
 

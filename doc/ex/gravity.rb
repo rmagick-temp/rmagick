@@ -20,7 +20,6 @@ begin
 
     draw = Magick::Draw.new
     draw.pointsize = 30
-    draw.font = "Helvetica"
     draw.fill = "#600"
     draw.undercolor = "red"
 

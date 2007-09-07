@@ -8,9 +8,14 @@ gc = Magick::Draw.new
 gc.fill('black')
 gc.stroke('transparent')
 
-gc.font_family('courier')
+if RUBY_PLATFORM =~ /mswin32/
+	gc.font_family('Georgia')
+	gc.pointsize(152)
+else
+	gc.font_family('courier')
+	gc.pointsize(200)
+end
 gc.font_weight(Magick::BoldWeight)
-gc.pointsize(200)
 
 # Turn off antialiasing
 gc.text_antialias(false)

@@ -1,9 +1,10 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
+include Magick
 
 puts("Creating colors.miff. This may take a few seconds...")
 
-colors = Magick::ImageList.new
+colors = ImageList.new
 
 # Add a row of "null" colors so we'll have
 # room to add the title at the top.
@@ -13,7 +14,7 @@ puts("\tCreating color swatches...")
 
 # Create a 200x25 image for each named color.
 # Label with the name, RGB values, and compliance type.
-Magick.colors { |c|
+colors { |c|
     if c.name !~ /grey/ then    # omit SVG 'grays'
         colors.new_image(200, 25) {
             self.background_color = c.color
@@ -32,7 +33,7 @@ puts("\tCreating montage...")
 # There will be 16 images.
 montage = colors.montage {
     self.geometry = '200x25+10+5'
-    self.gravity = Magick::CenterGravity
+    self.gravity = CenterGravity
     self.tile = '4x10'
     self.background_color = 'black'
     self.border_width = 1
@@ -42,23 +43,22 @@ montage = colors.montage {
 
 # Add the title at the top, over the 'null:'
 # tiles we added at the very beginning.
-title = Magick::Draw.new
+title = Draw.new
 title.annotate(montage, 0,0,0,20, 'Named Colors') {
-    self.font_family = 'Helvetica'
     self.fill = 'white'
     self.stroke = 'transparent'
     self.pointsize = 32
-    self.font_weight = Magick::BoldWeight
-    self.gravity = Magick::NorthGravity
+    self.font_weight = BoldWeight
+    self.gravity = NorthGravity
 }
 
 puts("\tWriting ./colors.miff")
-montage.each { |f| f.compression = Magick::ZipCompression }
+montage.each { |f| f.compression = ZipCompression }
 montage.write('colors.miff')
 
 # Make a small sample of the full montage to display in the HTML file.
 sample = montage[8].crop(55, 325, 495, 110)
-sample.page = Magick::Rectangle.new(495,110)
+sample.page = Rectangle.new(495,110)
 sample.write('colors.gif')
 
 exit

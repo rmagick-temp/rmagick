@@ -46,7 +46,6 @@ circle.draw(canvas)
 labels = Magick::Draw.new
 labels.fill('black')
 labels.stroke('transparent')
-labels.font_family('helvetica')
 labels.font_style(Magick::ItalicStyle)
 labels.pointsize(14)
 labels.gravity(Magick::NorthWestGravity)

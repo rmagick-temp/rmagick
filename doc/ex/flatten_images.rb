@@ -16,7 +16,6 @@ i.new_image(200, 100) { self.background_color = 'transparent' }
 primitives = Magick::Draw.new
 primitives.annotate i, 0, 0, 2, 2, RMagick do
     self.pointsize = 32
-    self.font = "Helvetica"
     self.fill = "gray50"
     self.gravity = Magick::CenterGravity
     end
@@ -26,7 +25,6 @@ i.new_image(200, 100) { self.background_color = 'transparent' }
 primitives = Magick::Draw.new
 primitives.annotate i, 0, 0, -2, -2, RMagick do
     self.pointsize = 32
-    self.font = "Helvetica"
     self.fill = "red"
     self.stroke = "black"
     self.gravity = Magick::CenterGravity

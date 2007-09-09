@@ -135,6 +135,7 @@ have_func('snprintf', headers)
   end
 
 
+have_type('AlphaChannelType', headers)  # 6.3.5
 have_type('long double', headers)
 have_type('unsigned long long', headers)
 have_type('uint64_t', headers)

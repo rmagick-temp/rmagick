@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.246 2007/09/09 19:52:27 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.247 2007/09/09 20:45:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -400,6 +400,57 @@ Image_add_profile(VALUE self, VALUE name)
 
 
     return self;
+}
+
+
+/*                                                              
+    Method:     Image#alpha=(alpha)
+    Purpose:    Equivalent to -alpha option
+    Notes:      see mogrify.c                                                                
+*/
+VALUE
+Image_alpha_eq(VALUE self, VALUE type)
+{
+#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
+    Image *image;
+    AlphaChannelType alpha;
+
+    rm_check_destroyed(self);
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+
+    VALUE_TO_ENUM(type, alpha, AlphaChannelType);
+
+    switch (alpha)
+    {
+        case ActivateAlphaChannel:
+          image->matte = MagickTrue;
+          break;
+
+        case DeactivateAlphaChannel:
+          image->matte = MagickFalse;
+          break;
+
+        case ResetAlphaChannel:
+          if (image->matte == MagickFalse)
+          {
+              (void) SetImageOpacity(image, OpaqueOpacity);
+          }
+          break;
+
+        case SetAlphaChannel:
+          (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
+          break;
+
+        default:
+          break;
+    }
+
+    return type;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 
@@ -1714,6 +1765,11 @@ Image_clone(VALUE self)
 
     return clone;
 }
+
+/*                                                              
+    Method:     Image#clut_channel
+    Purpose:    Equivalent to -clut option.                                                                
+*/
 
 VALUE
 Image_clut_channel(int argc, VALUE *argv, VALUE self)

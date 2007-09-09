@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.213 2007/09/09 19:52:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.214 2007/09/09 20:45:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -393,6 +393,7 @@ Init_RMagick(void)
     rb_define_singleton_method(Class_Image, "read_inline", Image_read_inline, 1);
     rb_define_singleton_method(Class_Image, "from_blob", Image_from_blob, 1);
 
+    DCL_ATTR_WRITER(Image, alpha)
     DCL_ATTR_ACCESSOR(Image, background_color)
     DCL_ATTR_READER(Image, base_columns)
     DCL_ATTR_READER(Image, base_filename)
@@ -983,6 +984,17 @@ Init_RMagick(void)
         ENUMERATOR(CenterAlign)
         ENUMERATOR(RightAlign)
     END_ENUM
+
+    // AlphaChannelType constants
+#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
+    DEF_ENUM(AlphaChannelType)
+        ENUMERATOR(UndefinedAlphaChannel)
+        ENUMERATOR(ActivateAlphaChannel)
+        ENUMERATOR(DeactivateAlphaChannel) 
+        ENUMERATOR(ResetAlphaChannel) 
+        ENUMERATOR(SetAlphaChannel)         
+    END_ENUM
+#endif
 
     // AnchorType constants (for Draw#text_anchor - these are not defined by ImageMagick)
     DEF_ENUM(AnchorType)
@@ -1604,7 +1616,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/09/09 19:52:27 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/09/09 20:45:51 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

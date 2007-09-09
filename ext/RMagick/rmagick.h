@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.196 2007/09/09 19:52:26 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.197 2007/09/09 20:45:50 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -229,6 +229,7 @@ EXTERN VALUE Class_QuantumExpressionOperator;
 // Enum classes
 EXTERN VALUE Class_Enum;
 EXTERN VALUE Class_AlignType;
+EXTERN VALUE Class_AlphaChannelType;
 EXTERN VALUE Class_AnchorType;
 EXTERN VALUE Class_ChannelType;
 EXTERN VALUE Class_ClassType;
@@ -641,6 +642,7 @@ extern VALUE rm_info_new(void);
 
 
 // rmimage.c
+ATTR_WRITER(Image, alpha)
 ATTR_ACCESSOR(Image, background_color)
 ATTR_READER(Image, base_columns)
 ATTR_READER(Image, base_filename)

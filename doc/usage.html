@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: How to use RMagick</title>
   <meta http-equiv="Content-Type" content=
@@ -934,6 +934,11 @@ exit
     <h4>Enhance</h4>
 
     <dl>
+      <dt><a href="image1.html#clut_channel">clut_channel</a></dt>
+
+      <dd>Replace the channel values in the image with a lookup of
+      its replacement value in an LUT gradient image.</dd>
+
       <dt><a href="image1.html#contrast">contrast</a></dt>
 
       <dd>Enhance the intensity differences between the lighter and
@@ -1390,11 +1395,11 @@ exit
   <p>Most of the time, you'll want to specify text properties such
   as the font, its size, font styles such as italic, font weights
   such as bold, the fill and stroke color, etc. The Draw class
-  defines <a href="draw.html">attribute
-  writers</a> for this purpose. You can set the desired text
-  properties by calling the attribute writers before calling
-  <code>annotate</code>, or you can call them in an image block
-  associated with the <code>annotate</code> call.</p>
+  defines <a href="draw.html">attribute writers</a> for this
+  purpose. You can set the desired text properties by calling the
+  attribute writers before calling <code>annotate</code>, or you
+  can call them in an image block associated with the
+  <code>annotate</code> call.</p>
 
   <p>The following example shows how to use <code>annotate</code>
   to produce this image.</p>
@@ -1522,7 +1527,7 @@ exit
     use radians instead of degrees.</p>
   </div>
 
-  <p class="spacer"> </p>
+  <p class="spacer"></p>
 
   <div class="nav">
     &laquo; <a href="index.html">Prev</a> | <a href=

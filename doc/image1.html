@@ -174,6 +174,8 @@ float: left;
 
           <li><a href="#clone">clone</a></li>
 
+          <li><a href="#clut_channel">clut_channel</a></li>
+
           <li><a href=
           "#color_fill_to_border">color_fill_to_border</a></li>
 
@@ -204,13 +206,13 @@ float: left;
 
           <li><a href=
           "#contrast_stretch_channel">contrast_stretch_channel</a></li>
-
-          <li><a href="#convolve">convolve</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#convolve">convolve</a></li>
+
           <li><a href="#convolve_channel">convolve_channel</a></li>
 
           <li><a href="#copy">copy</a></li>
@@ -2166,6 +2168,69 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>See also</h4>
 
     <p><a href="#dup">dup</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="clut_channel">clut_channel</h3>
+
+    <p><span class="arg">image</span>.clut(<span class=
+    "arg">clut_image</span> [, <span class=
+    "arg">channel...</span>]) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Replace the channel values in the target image with a lookup
+    of its replacement value in an LUT gradient image.</p>
+
+    <p class="imquote">The LUT image should be either a single row
+    or column image of replacement colors. The lookup is controled
+    by the -interpolate setting, especially for an LUT which is not
+    the full length needed by the IM installed Quality (Q) level.
+    Good setings for this is the default 'bilinear' or 'bicubic'
+    interpolation setting for a smooth color gradient, or 'integer'
+    for a direct unsmoothed lookup of color values.</p>
+
+    <p class="imquote">This method is especially suited to
+    replacing a grayscale image with specific color gradient from
+    the CLUT image.</p>
+
+    <p class="imquote">Note that color replacements involving
+    transparency (alpha/matte channel) will lookup the replacement
+    alpha/matte value using the alpha/matte value of the original
+    image. As such correct alpha channel lookup for a pure
+    gray-scale original image will require a copy of that grayscale
+    to be transfered into its alpha channel before applying the
+    -clut operator.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>clut_image</dt>
+
+      <dd>The LUT gradient image. Specify which interpolation
+      method to use by setting this image's <a href=
+      "imageattrs.html#pixel_interpolation_method">pixel_interpolation_method</a>
+      attribute to a <a href=
+      "constants.html#InterpolatePixelMethod">Magick::InterpolatePixelMethod</a>
+      value.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>Limit which channels are modified by specifying one or
+      more <a href="constants.html##ChannelType">ChannelType</a>
+      values. Only these channels will be changed. If no channels
+      are specified, all channels will be changed.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p>ImageMagick's -clut option.</p>
   </div>
 
   <div class="sig">

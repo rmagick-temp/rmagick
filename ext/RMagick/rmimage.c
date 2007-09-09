@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.245 2007/08/11 20:13:20 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.246 2007/09/09 19:52:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1713,6 +1713,51 @@ Image_clone(VALUE self)
     }
 
     return clone;
+}
+
+VALUE
+Image_clut_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_CLUTIMAGECHANNEL)
+    Image *image, *clut;
+    ChannelType channels;
+    MagickBooleanType okay;
+
+    rm_check_destroyed(self);
+
+    // check_destroyed before confirming the arguments
+    if (argc >= 1) 
+    {
+        rm_check_destroyed(argv[0]);
+        channels = extract_channels(&argc, argv);
+        if (argc != 1)
+        {
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or more)", argc);
+        }
+    }
+    else
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or more)", argc);
+    }
+
+    rm_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    Data_Get_Struct(argv[0], Image, clut);
+
+    okay = ClutImageChannel(image, channels, clut);
+    rm_check_image_exception(image, RetainOnError);
+    rm_check_image_exception(clut, RetainOnError);
+    if (!okay)
+    {
+        rb_raise(rb_eRuntimeError, "ClutImageChannel failed.");
+    }
+
+    return self;
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 /*

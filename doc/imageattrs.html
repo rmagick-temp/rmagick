@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (attribute methods)</title>
   <meta http-equiv="Content-Type" content=
@@ -45,6 +45,8 @@
     <div>
       <div class="toccol">
         <ul>
+          <li><a href="#alpha">alpha</a></li>
+
           <li><a href="#background_color">background_color</a></li>
 
           <li><a href="#base_columns">base_columns</a></li>
@@ -184,6 +186,49 @@
   </div>
 
   <h2 class="methods">attribute methods</h2>
+
+  <div class="sig">
+    <h3 id="alpha">alpha</h3>
+
+    <p><span class="arg">image</span>.alpha = <span class=
+    "arg">anAlphaChannelType</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set a flag to indicate whether or not to use alpha channel
+    data. Set-only.</p>
+
+    <h4>Arguments</h4>
+
+    <p>One of the following values of the AlphaChannelType
+    enumeration:</p>
+
+    <dl>
+      <dt>ActivateAlphaChannel</dt>
+
+      <dd>Use alpha channel data. Equivalent to <code>img.matte =
+      true</code>.</dd>
+
+      <dt>DeactivateAlphaChannel</dt>
+
+      <dd>Do not use alpha channel data. Equivalent to
+      <code>img.matte = false</code>.</dd>
+
+      <dt>ResetAlphaChannel</dt>
+
+      <dd>Set the alpha channel to fully opaque</dd>
+
+      <dt>SetAlphaChannel</dt>
+
+      <dd>Sets the alpha channel to the intensity of the image</dd>
+    </dl>
+
+    <h4>See also</h4>
+
+    <p><a href="#matte">matte</a></p>
+  </div>
 
   <div class="sig">
     <h3 id="background_color">background_color</h3>
@@ -1043,6 +1088,9 @@
 
     <p>If <code>true</code>, honor the opacity values in the image
     pixels. See <a href="struct.html#Pixel">Pixel</a>.</p>
+
+    <p>This attribute is deprecated in ImageMagick 6.3.5 and later.
+    Use <a href="#alpha">alpha</a> instead.</p>
   </div>
 
   <div class="sig">

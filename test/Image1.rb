@@ -421,6 +421,17 @@ class Image1_UT < Test::Unit::TestCase
         assert_equal(res.frozen?, @img.frozen?)
     end
 
+    def test_clut_channel
+        img = Magick::Image.new(20,20) {self.colorspace = Magick::GRAYColorspace}
+        clut = Magick::Image.new(20,1) {self.background_color = 'red'}
+        res = nil
+        assert_nothing_raised {res = img.clut_channel(clut)}
+        assert_same(res, img)
+        assert_nothing_raised { img.clut_channel(clut, Magick::RedChannel) }
+        assert_nothing_raised { img.clut_channel(clut, Magick::RedChannel, Magick::BlueChannel) }
+        assert_raises(ArgumentError) { img.clut_channel(clut, 1, Magick::RedChannel) }
+    end
+
     def test_color_fill_to_border
         assert_raise(ArgumentError) { @img.color_fill_to_border(-1, 1, 'red') }
         assert_raise(ArgumentError) { @img.color_fill_to_border(1, 100, 'red') }

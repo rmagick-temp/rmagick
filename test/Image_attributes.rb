@@ -23,6 +23,13 @@ class Image_Attributes_UT < Test::Unit::TestCase
         @hat = Magick::Image.read(FLOWER_HAT).first
     end
 
+    def test_alpha
+        assert_nothing_raised { @img.alpha = Magick::ActivateAlphaChannel }
+        assert_nothing_raised { @img.alpha = Magick::DeactivateAlphaChannel }
+        assert_nothing_raised { @img.alpha = Magick::ResetAlphaChannel }
+        assert_nothing_raised { @img.alpha = Magick::SetAlphaChannel }
+    end
+
     def test_background_color
         assert_nothing_raised { @img.background_color }
         assert_equal("white", @img.background_color)

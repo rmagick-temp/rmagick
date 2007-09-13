@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.247 2007/09/09 20:45:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.248 2007/09/13 22:24:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4060,6 +4060,64 @@ Image_erase_bang(VALUE self)
     rm_check_image_exception(image, RetainOnError);
 
     return self;
+}
+
+/*
+    Method:     Image#excerpt(x, y, width, height)
+    Purpose:    lightweight crop
+    Notes:      christy says "does not respect the virtual page offset (-page) and does
+                not update the page offset and its more efficient than cropping."
+*/
+static VALUE
+excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
+{
+#if defined(HAVE_EXCERPTIMAGE)
+    Image *image, *new_image;
+    RectangleInfo rect;
+    ExceptionInfo exception;
+
+    memset(&rect,'\0', sizeof(rect));
+    rect.x = NUM2LONG(x);
+    rect.y = NUM2LONG(y);
+    rect.width = NUM2ULONG(width);
+    rect.height = NUM2ULONG(height);
+
+    Data_Get_Struct(self, Image, image);
+
+    GetExceptionInfo(&exception);
+    new_image = ExcerptImage(image, &rect, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    if (bang)
+    {
+        UPDATE_DATA_PTR(self, new_image);
+        (void) rm_image_destroy(image);
+        return self;
+    }
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+VALUE 
+Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
+{
+    rm_check_destroyed(self);
+    return excerpt(False, self, x, y, width, height);
+}
+
+VALUE 
+Image_excerpt_bang(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
+{
+    rm_check_destroyed(self);
+    rm_check_frozen(self);
+    return excerpt(True, self, x, y, width, height);
 }
 
 /*

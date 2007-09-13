@@ -120,6 +120,7 @@ have_func('snprintf', headers)
 
   ['ClutImageChannel',               # 6.3.5-8
    'DistortImage',                   # 6.3.5
+   'ExcerptImage',                   # 6.3.5-8
    'ExtentImage',                    # 6.3.1
    'GetImageProperty',               # 6.3.1
    'GetNextImageProperty',           # 6.3.1

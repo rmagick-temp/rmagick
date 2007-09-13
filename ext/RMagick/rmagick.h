@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.197 2007/09/09 20:45:50 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.198 2007/09/13 22:24:16 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -786,6 +786,8 @@ extern VALUE Image_emboss(int, VALUE *, VALUE);
 extern VALUE Image_enhance(VALUE);
 extern VALUE Image_equalize(VALUE);
 extern VALUE Image_erase_bang(VALUE);
+extern VALUE Image_excerpt(VALUE, VALUE, VALUE, VALUE, VALUE);
+extern VALUE Image_excerpt_bang(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_export_pixels(int, VALUE *, VALUE);
 extern VALUE Image_export_pixels_to_str(int, VALUE *, VALUE);
 extern VALUE Image_extent(int, VALUE *, VALUE);

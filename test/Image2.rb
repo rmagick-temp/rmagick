@@ -438,6 +438,19 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
+    def test_excerpt
+        res = nil
+        img = Magick::Image.new(200, 200)
+        assert_nothing_raised { res = @img.excerpt(20,20,50,100) }
+        assert_not_same(img, res)
+        assert_equal(50, res.columns)
+        assert_equal(100, res.rows)
+
+        assert_nothing_raised { img.excerpt!(20,20,50,100) }
+        assert_equal(50, img.columns)
+        assert_equal(100, img.rows)
+    end
+
     def test_export_pixels
         assert_nothing_raised do
             res = @img.export_pixels

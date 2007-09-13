@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (instance methods, part
   2)</title>
@@ -73,6 +73,10 @@ td.ds {
           <li><a href="#equalize">equalize</a></li>
 
           <li><a href="#erase_bang">erase!</a></li>
+
+          <li><a href="#excerpt">excerpt</a></li>
+
+          <li><a href="#excerpt_bang">excerpt!</a></li>
 
           <li><a href="#export_pixels">export_pixels</a></li>
 
@@ -294,6 +298,73 @@ td.ds {
     <h4>Magick API</h4>
 
     <p>SetImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="excerpt">excerpt</h3>
+
+    <p><span class="arg">image</span>.excerpt(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">width</span>, <span class="arg">height</span>) -&gt;
+    anImage</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>This method is very similar to <a href=
+    "image1.html#crop">crop</a>. It extracts the rectangle
+    specified by its arguments from the image and returns it as a
+    new image. However, excerpt <span class="imquote">does not
+    respect the virtual page offset and does not update the page
+    offset and is more efficient than cropping.</span></p>
+
+    <p>It is the caller's responsibility to ensure that the
+    rectangle lies entirely within the original image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The position of the upper-left corner of the excerpted
+      rectangle.</dd>
+
+      <dt>width, height</dt>
+
+      <dd>The width and height of the excerpted rectangle. The
+      resulting image will always be <span class=
+      "arg">width</span>x<span class="arg">height</span> in
+      size.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See Also</h4>
+
+    <p><a href="image1.html#crop">crop</a>, <a href=
+    "#excerpt_bang">excerpt!</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>ExcerptImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 class="excerpt_bang">excerpt!</h3>
+
+    <p><span class="arg">image</span>.excerpt!(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">width</span>, <span class="arg">height</span>) -&gt;
+    <span class="arg">image</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href="#excerpt">excerpt</a>.</p>
   </div>
 
   <div class="sig">
@@ -710,7 +781,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img onmouseover="this.style.display='none';frameless.style.display='';"
     src="ex/frame.jpg" alt="frame example" /></a> <img src=
@@ -2872,7 +2943,8 @@ img = img.opaque('white', 'red')
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#color_floodfill">color_floodfill</a></p>
+    <p><a href=
+    "image1.html#color_floodfill">color_floodfill</a></p>
 
     <h4>Magick API</h4>
 

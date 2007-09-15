@@ -93,7 +93,7 @@ end
 end
 
 # Save flags
-$CFLAGS = ENV['CFLAGS'] + ' ' + `Magick-config --cflags`.chomp
+$CFLAGS = (ENV['CFLAGS'] || "") + ' ' + `Magick-config --cflags`.chomp
 $CPPFLAGS = `Magick-config --cppflags`.chomp
 $LDFLAGS = `Magick-config --ldflags`.chomp
 $LOCAL_LIBS = `Magick-config --libs`.chomp

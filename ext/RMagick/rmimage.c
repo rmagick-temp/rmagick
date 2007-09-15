@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.248 2007/09/13 22:24:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.249 2007/09/15 23:24:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -448,6 +448,8 @@ Image_alpha_eq(VALUE self, VALUE type)
 
     return type;
 #else
+    self = self;
+    type = type;
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -1811,6 +1813,9 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
     return self;
 
 #else
+    argc = argc;
+    argv = argv;
+    self = self;
     rm_not_implemented();
     return (VALUE)0;
 #endif
@@ -4100,6 +4105,9 @@ excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
     return rm_image_new(new_image);
 
 #else
+    bang = bang; self = self;
+    x = x; y = y;
+    width = width; height = height;
     rm_not_implemented();
     return (VALUE)0;
 #endif

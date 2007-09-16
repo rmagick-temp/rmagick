@@ -1,3 +1,7 @@
+RMagick 1.15.10
+    o Update Magick::Pixel.from_HSL, #to_HSL to work with new APIs in 
+      ImageMagick 6.3.5-9.
+
 RMagick 1.15.9
     o Fixed bug #12089 (bug report from Hans de Graaff)
 

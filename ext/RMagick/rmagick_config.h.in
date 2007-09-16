@@ -37,6 +37,10 @@
 #undef HAVE_COMPOSITEIMAGECHANNEL
 /* Introduced in IM 6.2.6 */
 #undef HAVE_CONTRASTSTRETCHIMAGECHANNEL
+/* Introduced in IM 6.3.5-9 */
+#undef HAVE_CONVERTHSLTORGB
+/* Introduced in IM 6.3.5-9 */
+#undef HAVE_CONVERTRGBTOHSL
 /* Introduced in IM 6.0.1 */
 #undef HAVE_CONVOLVEIMAGECHANNEL
 /* Introduced in IM 6.0.0 */

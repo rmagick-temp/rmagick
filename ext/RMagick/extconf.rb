@@ -119,6 +119,8 @@ have_func('snprintf', headers)
 
 
   ['ClutImageChannel',               # 6.3.5-8
+   'ConvertHSLToRGB',                # 6.3.5-9
+   'ConvertRGBToHSL',                # 6.3.5-9
    'DistortImage',                   # 6.3.5
    'ExcerptImage',                   # 6.3.5-8
    'ExtentImage',                    # 6.3.1
@@ -145,7 +147,8 @@ check_sizeof('Image *', headers)
 
 
 have_enum_value('CompositeOperator', 'ChangeMaskCompositeOp', headers)      # 6.3.3
-have_enum_value('DistortImageMethod', 'ArcDistortion', headers)             # 6.3.5-5
+have_enum_values('DistortImageMethod', ['ArcDistortion',                    # 6.3.5-5
+                               'PerspectiveProjectionDistortion'], headers) # 6.3.5-9
 have_enum_value('InterpolatePixelMethod', 'SplineInterpolatePixel', headers)# 6.3.5
 have_enum_values('MagickLayerMethod', ['OptimizeTransLayer',                # 6.3.3-4
                                        'RemoveDupsLayer',                   # 6.3.3-6

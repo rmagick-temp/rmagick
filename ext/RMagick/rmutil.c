@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.120 2007/08/10 22:35:38 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.121 2007/09/17 22:51:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -551,7 +551,11 @@ Pixel_to_HSL(VALUE self)
     volatile VALUE hsl;
 
     Data_Get_Struct(self, Pixel, pixel);
+#if defined(HAVE_CONVERTRGBTOHSL)
+    ConvertRGBToHSL(pixel->red, pixel->green, pixel->blue, &hue, &saturation, &luminosity);
+#else
     TransformHSL(pixel->red, pixel->green, pixel->blue, &hue, &saturation, &luminosity);
+#endif
 
     hsl = rb_ary_new3(3, rb_float_new(hue), rb_float_new(saturation),
                       rb_float_new(luminosity));
@@ -583,8 +587,13 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
     saturation = NUM2DBL(rb_ary_entry(hsl, 1));
     luminosity = NUM2DBL(rb_ary_entry(hsl, 2));
 
+#if defined(HAVE_CONVERTHSLTORGB)
+    ConvertHSLToRGB(hue, saturation, luminosity,
+                 &rgb.red, &rgb.green, &rgb.blue);
+#else
     HSLTransform(hue, saturation, luminosity,
                  &rgb.red, &rgb.green, &rgb.blue);
+#endif
     return Pixel_from_PixelPacket(&rgb);
 }
 

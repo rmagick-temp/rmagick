@@ -118,7 +118,8 @@ end
 have_func('snprintf', headers)
 
 
-  ['ClutImageChannel',               # 6.3.5-8
+  ['AcquireQuantumMemory',           # 6.3.5-9
+   'ClutImageChannel',               # 6.3.5-8
    'ConvertHSLToRGB',                # 6.3.5-9
    'ConvertRGBToHSL',                # 6.3.5-9
    'DistortImage',                   # 6.3.5
@@ -127,9 +128,10 @@ have_func('snprintf', headers)
    'GetImageProperty',               # 6.3.1
    'GetNextImageProperty',           # 6.3.1
    'IsHistogramImage',               # 6.3.5
-   'LinearStretchImage',             # 6.3.1
+   'LinearStretchImage',             # 6.3.1   
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3
+   'ResizeQuantumMemory',            # 6.3.5-9
    'SetImageProperty',               # 6.3.1
    'SetImageRegistry',               # 6.3.4-?
    'SyncImageProfiles',              # 6.3.2

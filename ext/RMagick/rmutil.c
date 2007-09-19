@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.121 2007/09/17 22:51:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.122 2007/09/19 22:20:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -20,12 +20,42 @@ static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 
 
 /*
-    Extern:     magick_malloc, magick_free, magick_realloc
+    Extern:     magick_safe_malloc, magick_malloc, magick_free, magick_realloc
     Purpose:    ImageMagick versions of standard memory routines.
     Notes:      use when managing memory that ImageMagick may have
                 allocated or may free.
-                If malloc fails, it raises an exception
+
+                If malloc fails, it raises an exception.
+
+                magick_safe_malloc and magick_safe_realloc prevent exceptions 
+                caused by integer overflow. Added in 6.3.5-9 but backwards
+                compatible with prior releases.
 */
+void *magick_safe_malloc(const size_t count, const size_t quantum)
+{
+#if defined(HAVE_ACQUIREQUANTUMMEMORY)
+    void *ptr;
+
+    ptr = AcquireQuantumMemory(count, quantum);
+    if (!ptr)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    return ptr;
+#else    
+
+    // Provide an implementation of AcquireQuantumMemory in releases prior to 6.3.5-9.
+    size_t size = count * quantum;
+
+    if (count == 0 || quantum != (size/count))
+    {
+        rb_raise(rb_eRuntimeError, "integer overflow detected in memory size computation. "
+               "Probable image corruption.");
+    }
+    return magick_malloc(size);
+#endif
+}
+
 void *magick_malloc(const size_t size)
 {
     void *ptr;
@@ -41,6 +71,28 @@ void *magick_malloc(const size_t size)
 void magick_free(void *ptr)
 {
     (void) RelinquishMagickMemory(ptr);
+}
+
+void *magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
+{
+#if defined(HAVE_RESIZEQUANTUMMEMORY)
+    void *v;
+    v = ResizeQuantumMemory(memory, count, quantum);
+    if (!v)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    return v;
+#else
+    // Provide an implementation of ResizeQuantumMemory in releases prior to 6.3.5-9.
+    size_t size = count * quantum;
+    if (count == 0 || quantum != (size/count))
+    {
+        rb_raise(rb_eRuntimeError, "integer overflow detected in memory size computation. "
+               "Probable image corruption.");
+    }
+    return magick_realloc(memory, size);
+#endif
 }
 
 void *magick_realloc(void *ptr, const size_t size)

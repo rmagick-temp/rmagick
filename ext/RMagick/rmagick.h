@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.198 2007/09/13 22:24:16 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.199 2007/09/19 22:20:21 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1006,8 +1006,10 @@ extern VALUE  Enum_type_each(VALUE);
 
 
 extern void  *magick_malloc(const size_t);
+extern void  *magick_safe_malloc(const size_t, const size_t);
 extern void   magick_free(void *);
 extern void  *magick_realloc(void *, size_t);
+extern void  *magick_safe_realloc(void *, const size_t, const size_t);
 extern void   magick_clone_string(char **, const char *);
 extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);
 extern VALUE  rm_no_freeze(VALUE);

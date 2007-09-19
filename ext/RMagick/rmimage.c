@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.249 2007/09/15 23:24:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.250 2007/09/19 22:20:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2184,12 +2184,12 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
 
         if (!image->colormap)
         {
-            image->colormap = (PixelPacket *)magick_malloc((index+1)*sizeof(PixelPacket));
+            image->colormap = (PixelPacket *)magick_safe_malloc((index+1), sizeof(PixelPacket));
             image->colors = 0;
         }
         else
         {
-            image->colormap = magick_realloc(image->colormap, (index+1)*sizeof(PixelPacket));
+            image->colormap = (PixelPacket *)magick_safe_realloc(image->colormap, (index+1), sizeof(PixelPacket));
         }
 
         for (i = image->colors; i < index; i++)

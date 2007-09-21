@@ -131,6 +131,7 @@ have_func('snprintf', headers)
    'LinearStretchImage',             # 6.3.1   
    'PolaroidImage',                  # 6.3.1-6
    'RecolorImage',                   # 6.3.1-3
+   'ResetImagePage',                 # 6.3.3
    'ResizeQuantumMemory',            # 6.3.5-9
    'SetImageProperty',               # 6.3.1
    'SetImageRegistry',               # 6.3.4-?

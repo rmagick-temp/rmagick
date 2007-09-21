@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.250 2007/09/19 22:20:22 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.251 2007/09/21 21:44:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9543,8 +9543,12 @@ trimmer(int bang, int argc, VALUE *argv, VALUE self)
 
     if (reset_page)
     {
+#if defined(HAVE_RESETIMAGEPAGE)
+        ResetImagePage(new_image, "0x0+0+0");
+#else
         new_image->page.x = new_image->page.y = 0L;
         new_image->page.width = new_image->page.height = 0UL;
+#endif
     }
 
     if (bang)
@@ -10356,8 +10360,12 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     if (reset_page)
     {
         Data_Get_Struct(cropped, Image, image);
+#if defined(HAVE_RESETIMAGEPAGE)
+        ResetImagePage(image, "0x0+0+0");
+#else
         image->page.x = image->page.y = 0L;
         image->page.width = image->page.height = 0UL;
+#endif
     }
     return cropped;
 }

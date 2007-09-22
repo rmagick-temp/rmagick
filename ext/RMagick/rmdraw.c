@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.53 2007/08/05 21:27:01 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.54 2007/09/22 20:44:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -543,7 +543,7 @@ Draw_clone(VALUE self)
     clone = Draw_dup(self);
     if (OBJ_FROZEN(self))
     {
-        (void)rb_obj_freeze(clone);
+        OBJ_FREEZE(clone);
     }
 
     return clone;

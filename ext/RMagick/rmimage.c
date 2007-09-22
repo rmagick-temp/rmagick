@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.251 2007/09/21 21:44:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.252 2007/09/22 20:44:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1762,7 +1762,7 @@ Image_clone(VALUE self)
     clone = Image_dup(self);
     if (OBJ_FROZEN(self))
     {
-        (void) rb_obj_freeze(clone);
+        OBJ_FREEZE(clone);
     }
 
     return clone;

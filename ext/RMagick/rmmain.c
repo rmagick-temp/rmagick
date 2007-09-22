@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.216 2007/09/17 22:51:56 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.217 2007/09/22 20:44:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1613,15 +1613,15 @@ static void version_constants(void)
     mgk_version = GetMagickVersion(NULL);
 
     str = rb_str_new2(mgk_version);
-    (void) rb_obj_freeze(str);
+    OBJ_FREEZE(str);
     rb_define_const(Module_Magick, "Magick_version", str);
 
     str = rb_str_new2(Q(RMAGICK_VERSION_STRING));
-    (void) rb_obj_freeze(str);
+    OBJ_FREEZE(str);
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/09/17 22:51:56 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2007/09/22 20:44:14 $) Copyright (C) 2007 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"
@@ -1629,7 +1629,7 @@ static void version_constants(void)
         Q(RMAGICK_VERSION_STRING), mgk_version, Q(RUBY_VERSION_STRING));
 
     str = rb_str_new2(long_version);
-    (void) rb_obj_freeze(str);
+    OBJ_FREEZE(str);
     rb_define_const(Module_Magick, "Long_version", str);
 
 }

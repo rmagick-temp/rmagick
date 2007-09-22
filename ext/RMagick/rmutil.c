@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.122 2007/09/19 22:20:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.123 2007/09/22 20:44:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -951,7 +951,7 @@ Pixel_clone(VALUE self)
     clone = Pixel_dup(self);
     if (OBJ_FROZEN(self))
     {
-        (void) rb_obj_freeze(clone);
+        OBJ_FREEZE(clone);
     }
 
     return clone;

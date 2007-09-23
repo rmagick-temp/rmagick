@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.254 2007/09/23 20:42:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.255 2007/09/23 20:47:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8538,15 +8538,7 @@ Image_spaceship(VALUE self, VALUE other)
     // If the other object isn't a Image object, then they can't be equal.
     if (!rb_obj_is_kind_of(other, Class_Image))
     {
-#if RUBY_VERSION < 0x180
-        // In 1.6, raise TypeError
-        rb_raise(rb_eTypeError, "%s compared with %s",
-                                rb_class2name(CLASS_OF(self)),
-                                rb_class2name(CLASS_OF(other)));
-#else
-        // In 1.8, return nil
         return Qnil;
-#endif
     }
 
     rm_check_destroyed(other);

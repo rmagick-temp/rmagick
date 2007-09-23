@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.253 2007/09/23 20:37:25 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.254 2007/09/23 20:42:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -808,7 +808,7 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     rb_check_frozen(self);
     Data_Get_Struct(self, Image, image);
     bias = rm_percentage(pct);
-    image->bias = bias * MaxRGB;
+    image->bias = bias * QuantumRange;
 
     return self;
 }
@@ -2145,7 +2145,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     }
 
     index = NUM2ULONG(argv[0]);
-    if (index > MaxRGB)
+    if (index > QuantumRange)
     {
         rb_raise(rb_eIndexError, "index out of range");
     }
@@ -2736,7 +2736,7 @@ Image_compress_colormap_bang(VALUE self)
                 pixel data must be in scanline order, top-to-bottom.
                 The pixel data is an array of either all Fixed or all Float
                 elements. If Fixed, the elements must be in the range
-                [0..MaxRGB]. If Float, the elements must be normalized [0..1].
+                [0..QuantumRange]. If Float, the elements must be normalized [0..1].
                 The "map" argument reflects the expected ordering of the pixel
                 array. It can be any combination or order of R = red, G = green,
                 B = blue, A = alpha, C = cyan, Y = yellow, M = magenta,
@@ -3450,7 +3450,7 @@ Image_displace(int argc, VALUE *argv, VALUE self)
                 intensity (for grayscale). If the "float" parameter is specified
                 and true, the pixel data is returned as floating-point numbers
                 in the range [0..1]. By default the pixel data is returned as
-                integers in the range [0..MaxRGB].
+                integers in the range [0..QuantumRange].
     Returns:    an Array
     Raises:     ArgumentError
 */
@@ -5491,7 +5491,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
 DEF_ATTR_ACCESSOR(Image, iterations, int)
 
 /*
-    Method:     Image#level(black_point=0.0, white_point=MaxRGB, gamma=1.0)
+    Method:     Image#level(black_point=0.0, white_point=QuantumRange, gamma=1.0)
     Purpose:    adjusts the levels of an image given these points: black, mid, and white
     Notes:      all three arguments are optional
 */
@@ -5499,7 +5499,7 @@ VALUE
 Image_level2(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double black_point = 0.0, gamma = 1.0, white_point = (double)MaxRGB;
+    double black_point = 0.0, gamma = 1.0, white_point = (double)QuantumRange;
     char level[50];
 
     rm_check_destroyed(self);
@@ -5509,7 +5509,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
             break;
         case 1:
             black_point = NUM2DBL(argv[0]);
-            white_point = MaxRGB - black_point;
+            white_point = QuantumRange - black_point;
             break;
         case 2:
             black_point = NUM2DBL(argv[0]);
@@ -5537,15 +5537,15 @@ Image_level2(int argc, VALUE *argv, VALUE self)
 }
 
 /*
-    Method:     Image#level_channel(aChannelType, black=0, white=MaxRGB, gamma=1.0)
+    Method:     Image#level_channel(aChannelType, black=0, white=QuantumRange, gamma=1.0)
     Purpose:    similar to Image#level but applies to a single channel only
-    Notes:      black and white are 0-MaxRGB, gamma is 0-10.
+    Notes:      black and white are 0-QuantumRange, gamma is 0-10.
 */
 VALUE
 Image_level_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double black_point = 0.0, gamma = 1.0, white_point = (double)MaxRGB;
+    double black_point = 0.0, gamma = 1.0, white_point = (double)QuantumRange;
     ChannelType channel;
 
     rm_check_destroyed(self);
@@ -5555,7 +5555,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
             break;
         case 2:
             black_point = NUM2DBL(argv[1]);
-            white_point = MaxRGB - black_point;
+            white_point = QuantumRange - black_point;
             break;
         case 3:
             black_point = NUM2DBL(argv[1]);
@@ -6152,7 +6152,7 @@ Image_monitor_eq(VALUE self, VALUE monitor)
     Method:     Image#monochrome?
     Purpose:    return true if all the pixels in the image have the same red,
                 green, and blue intensities and the intensity is either 0 or
-                MaxRGB.
+                QuantumRange.
 */
 VALUE
 Image_monochrome_q(VALUE self)
@@ -7986,14 +7986,14 @@ Image_separate(int argc, VALUE *argv, VALUE self)
 
 
 /*
- * Method:  Image#sepiatone(threshold=MaxRGB)
+ * Method:  Image#sepiatone(threshold=QuantumRange)
  * Purpose: Call SepiaToneImage
 */
 VALUE
 Image_sepiatone(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double threshold = (double) MaxRGB;
+    double threshold = (double) QuantumRange;
     ExceptionInfo exception;
 
     rm_check_destroyed(self);
@@ -8487,7 +8487,7 @@ Image_sketch(int argc, VALUE *argv, VALUE self)
     Purpose:    applies a special effect to the image, similar to the effect
                 achieved in a photo darkroom by selectively exposing areas of
                 photo sensitive paper to light. Threshold ranges from 0 to
-                MaxRGB and is a measure of the extent of the solarization.
+                QuantumRange and is a measure of the extent of the solarization.
 */
 VALUE
 Image_solarize(int argc, VALUE *argv, VALUE self)
@@ -8500,9 +8500,9 @@ Image_solarize(int argc, VALUE *argv, VALUE self)
     {
         case 1:
             threshold = NUM2DBL(argv[0]);
-            if (threshold < 0.0 || threshold > MaxRGB)
+            if (threshold < 0.0 || threshold > QuantumRange)
             {
-                rb_raise(rb_eArgError, "threshold out of range, must be >= 0.0 and < MaxRGB");
+                rb_raise(rb_eArgError, "threshold out of range, must be >= 0.0 and < QuantumRange");
             }
         case 0:
             break;
@@ -8781,7 +8781,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     else if (image->storage_class == DirectClass && class_type == PseudoClass)
     {
         GetQuantizeInfo(&qinfo);
-        qinfo.number_colors = MaxRGB+1;
+        qinfo.number_colors = QuantumRange+1;
         (void) QuantizeImage(&qinfo, image);
     }
 
@@ -9392,7 +9392,7 @@ Image_total_colors(VALUE self)
                 Image#transparent(pixel<, opacity>)
     Purpose:    Call TransparentImage
     Notes:      Can use Magick::OpaqueOpacity or Magick::TransparentOpacity,
-                or any value >= 0 && <= MaxRGB. The default is
+                or any value >= 0 && <= QuantumRange. The default is
                 Magick::TransparentOpacity.
                 Use Image#fuzz= to define the tolerance level.
 */

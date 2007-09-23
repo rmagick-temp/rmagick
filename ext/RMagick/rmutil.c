@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.124 2007/09/23 20:37:27 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.125 2007/09/23 20:42:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -339,7 +339,7 @@ double rm_str_to_pct(VALUE str)
  *  Extern:     rm_fuzz_to_dbl(obj)
  *  Purpose:    If the argument is a number, convert it to a double.
  *              Otherwise it's supposed to be a string in the form 'NN%'.
- *              Return a percentage of MaxRGB.
+ *              Return a percentage of QuantumRange.
  *  Notes:      Called from Image#fuzz= and Info#fuzz=
 */
 double
@@ -369,7 +369,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
             {
                 rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_arg);
             }
-            fuzz = (fuzz * MaxRGB) / 100.0;
+            fuzz = (fuzz * QuantumRange) / 100.0;
         }
         else if(*end != '\0')
         {

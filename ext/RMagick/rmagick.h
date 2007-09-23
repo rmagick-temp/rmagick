@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.200 2007/09/23 20:37:24 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.201 2007/09/23 20:42:00 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -86,7 +86,7 @@
 #define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
 #define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
 #define RMAGICK_PI 3.14159265358979
-#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > (Quantum)QuantumRange ? MaxRGB : (value) + 0.5))
+#define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > (Quantum)QuantumRange ? QuantumRange : (value) + 0.5))
 
 
 

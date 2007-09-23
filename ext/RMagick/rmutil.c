@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.125 2007/09/23 20:42:01 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.126 2007/09/23 20:48:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2901,7 +2901,7 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 
 /*
     Function:   rm_get_property
-    Purpose:    Backport GetImageProperty for rep-6.3.1 versions of ImageMagick
+    Purpose:    Backport GetImageProperty for pre-6.3.1 versions of ImageMagick
 */
 const char *rm_get_property(const Image *img, const char *property)
 {
@@ -2918,7 +2918,7 @@ const char *rm_get_property(const Image *img, const char *property)
 
 /*
     Function:   rm_set_property
-    Purpose:    Backport SetImageProperty for rep-6.3.1 versions of ImageMagick
+    Purpose:    Backport SetImageProperty for pre-6.3.1 versions of ImageMagick
 */
 MagickBooleanType rm_set_property(Image *image, const char *property, const char *value)
 {

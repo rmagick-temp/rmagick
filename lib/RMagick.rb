@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.59 2007/07/21 21:05:11 rmagick Exp $
+# $Id: RMagick.rb,v 1.60 2007/09/23 21:12:49 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -615,7 +615,7 @@ module IPTC
     end
 
     module Application
-       #Record_Version                         = "2:00" abends with IM 6.2.9
+        Record_Version                         = "2:00"
         Object_Type_Reference                  = "2:03"
         Object_Name                            = "2:05"
         Title                                  = "2:05"

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.201 2007/09/23 20:42:00 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.202 2007/09/23 20:46:27 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -39,14 +39,6 @@
 
 #include "extconf.h"
 
-// Backport these definitions to Ruby 1.6.7
-#if !defined(ULONG2NUM)
-#define ULONG2NUM(v) UINT2NUM(v)
-#endif
-
-#if !defined(LONG2NUM)
-#define LONG2NUM(v) INT2NUM(v)
-#endif
 
 // For quoting preprocessor symbols
 #define Q2(q) #q

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.123 2007/09/22 20:44:15 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.124 2007/09/23 20:37:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -27,7 +27,7 @@ static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 
                 If malloc fails, it raises an exception.
 
-                magick_safe_malloc and magick_safe_realloc prevent exceptions 
+                magick_safe_malloc and magick_safe_realloc prevent exceptions
                 caused by integer overflow. Added in 6.3.5-9 but backwards
                 compatible with prior releases.
 */
@@ -42,7 +42,7 @@ void *magick_safe_malloc(const size_t count, const size_t quantum)
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     return ptr;
-#else    
+#else
 
     // Provide an implementation of AcquireQuantumMemory in releases prior to 6.3.5-9.
     size_t size = count * quantum;
@@ -153,19 +153,6 @@ rm_check_ary_len(VALUE ary, long len)
     {
         rb_raise(rb_eIndexError, "not enough elements in array - expecting %d, got %d",
                         len, RARRAY(ary)->len);
-    }
-}
-
-/*
-    Extern:     rm_check_frozen
-    Purpose:    backport rb_check_frozen for 1.6.x releases
-*/
-void
-rm_check_frozen(VALUE obj)
-{
-    if (OBJ_FROZEN(obj))
-    {
-        rb_error_frozen(rb_class2name(CLASS_OF(obj)));
     }
 }
 

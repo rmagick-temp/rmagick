@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.199 2007/09/19 22:20:21 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.200 2007/09/23 20:37:24 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -357,7 +357,7 @@ EXTERN ID rm_ID_y;                 // "y"
         if (rb_obj_is_kind_of(self, Class_Image) == Qtrue) {\
             rm_check_destroyed(self); \
         }\
-        rm_check_frozen(self);\
+        rb_check_frozen(self);\
         Data_Get_Struct(self, class, ptr);\
         ptr->attr = R_##type##_to_C_##type(val);\
         return self;\
@@ -405,7 +405,7 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
 { \
     Pixel *pixel; \
  \
-    rm_check_frozen(self); \
+    rb_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_channel_ = APP2QUANTUM(v); \
     (void) rb_funcall(self, rm_ID_changed, 0); \
@@ -423,7 +423,7 @@ Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
 { \
     Pixel *pixel; \
  \
-    rm_check_frozen(self); \
+    rb_check_frozen(self); \
     Data_Get_Struct(self, Pixel, pixel); \
     pixel->_rgb_channel_ = APP2QUANTUM(v); \
     (void) rb_funcall(self, rm_ID_changed, 0); \
@@ -1019,7 +1019,6 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
 extern void   rm_check_ary_len(VALUE, long);
-extern void   rm_check_frozen(VALUE);
 extern void   rm_check_destroyed(VALUE);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);

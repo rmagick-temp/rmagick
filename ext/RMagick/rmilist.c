@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.57 2007/09/23 20:37:25 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.58 2007/09/23 22:27:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -474,11 +474,11 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
 #endif
 #if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
-        // In 6.3.4-ish, OptimizeImageLayer replaced OptimizeLayer
+            // In 6.3.4-ish, OptimizeImageLayer replaced OptimizeLayer
         case OptimizeImageLayer:
             new_images = OptimizeImageLayers(images, &exception);
             break;
-        // and OptimizeLayer became a "General Purpose, GIF Animation Optimizer" (ref. mogrify.c)
+            // and OptimizeLayer became a "General Purpose, GIF Animation Optimizer" (ref. mogrify.c)
         case OptimizeLayer:
             new_images = CoalesceImages(images, &exception);
             rm_split(images);
@@ -541,24 +541,24 @@ rm_imagelist_new()
 VALUE
 rm_imagelist_from_images(Image *images)
 {
-     volatile VALUE new_imagelist;
-     Image *image;
+    volatile VALUE new_imagelist;
+    Image *image;
 
-     if (!images)
-     {
-         rb_bug("rm_imagelist_from_images called with NULL argument");
-     }
+    if (!images)
+    {
+        rb_bug("rm_imagelist_from_images called with NULL argument");
+    }
 
-     new_imagelist = rm_imagelist_new();
+    new_imagelist = rm_imagelist_new();
 
-     while (images)
-     {
-          image = RemoveFirstImageFromList(&images);
-          rm_imagelist_push(new_imagelist, rm_image_new(image));
-     }
+    while (images)
+    {
+        image = RemoveFirstImageFromList(&images);
+        rm_imagelist_push(new_imagelist, rm_image_new(image));
+    }
 
-     (void) rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
-     return new_imagelist;
+    (void) rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
+    return new_imagelist;
 }
 
 
@@ -603,9 +603,9 @@ rm_images_from_imagelist(VALUE imagelist)
 VALUE
 rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
 {
-     rb_check_frozen(imagelist);
-     (void) rb_iv_set(imagelist, "@scene", scene);
-     return scene;
+    rb_check_frozen(imagelist);
+    (void) rb_iv_set(imagelist, "@scene", scene);
+    return scene;
 }
 
 /*
@@ -770,7 +770,7 @@ ImageList_to_blob(VALUE self)
 static VALUE file_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
-            rb_class2name(CLASS_OF(arg)));
+             rb_class2name(CLASS_OF(arg)));
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.23 2007/06/30 20:57:17 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.24 2007/09/23 22:27:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -49,13 +49,13 @@ GradientFill_alloc(VALUE class)
 */
 VALUE
 GradientFill_initialize(
-    VALUE self,
-    VALUE x1,
-    VALUE y1,
-    VALUE x2,
-    VALUE y2,
-    VALUE start_color,
-    VALUE stop_color)
+                       VALUE self,
+                       VALUE x1,
+                       VALUE y1,
+                       VALUE x2,
+                       VALUE y2,
+                       VALUE start_color,
+                       VALUE stop_color)
 {
     rm_GradientFill *fill;
 
@@ -77,18 +77,18 @@ GradientFill_initialize(
 */
 static void
 point_fill(
-    Image *image,
-    double x0,
-    double y0,
-    PixelPacket *start_color,
-    PixelPacket *stop_color)
+          Image *image,
+          double x0,
+          double y0,
+          PixelPacket *start_color,
+          PixelPacket *stop_color)
 {
     double steps, distance;
     unsigned long x, y;
     MagickRealType red_step, green_step, blue_step;
 
     steps = sqrt((double)((image->columns-x0)*(image->columns-x0)
-                + (image->rows-y0)*(image->rows-y0)));
+                          + (image->rows-y0)*(image->rows-y0)));
 
     red_step   = ((MagickRealType)stop_color->red   - (MagickRealType)start_color->red)   / steps;
     green_step = ((MagickRealType)stop_color->green - (MagickRealType)start_color->green) / steps;
@@ -124,10 +124,10 @@ point_fill(
 */
 static void
 vertical_fill(
-    Image *image,
-    double x1,
-    PixelPacket *start_color,
-    PixelPacket *stop_color)
+             Image *image,
+             double x1,
+             PixelPacket *start_color,
+             PixelPacket *stop_color)
 {
     double steps;
     unsigned long x, y;
@@ -197,10 +197,10 @@ vertical_fill(
 */
 static void
 horizontal_fill(
-    Image *image,
-    double y1,
-    PixelPacket *start_color,
-    PixelPacket *stop_color)
+               Image *image,
+               double y1,
+               PixelPacket *start_color,
+               PixelPacket *stop_color)
 {
     double steps;
     unsigned long x, y;
@@ -267,13 +267,13 @@ horizontal_fill(
 */
 static void
 v_diagonal_fill(
-    Image *image,
-    double x1,
-    double y1,
-    double x2,
-    double y2,
-    PixelPacket *start_color,
-    PixelPacket *stop_color)
+               Image *image,
+               double x1,
+               double y1,
+               double x2,
+               double y2,
+               PixelPacket *start_color,
+               PixelPacket *stop_color)
 {
     unsigned long x, y;
     MagickRealType red_step, green_step, blue_step;
@@ -346,13 +346,13 @@ v_diagonal_fill(
 */
 static void
 h_diagonal_fill(
-    Image *image,
-    double x1,
-    double y1,
-    double x2,
-    double y2,
-    PixelPacket *start_color,
-    PixelPacket *stop_color)
+               Image *image,
+               double x1,
+               double y1,
+               double x2,
+               double y2,
+               PixelPacket *start_color,
+               PixelPacket *stop_color)
 {
     unsigned long x, y;
     double m, b, steps = 0.0;
@@ -514,10 +514,10 @@ TextureFill_alloc(VALUE class)
 {
     rm_TextureFill *fill;
     return Data_Make_Struct(class
-                        , rm_TextureFill
-                        , NULL
-                        , free_TextureFill
-                        , fill);
+                            , rm_TextureFill
+                            , NULL
+                            , free_TextureFill
+                            , fill);
 }
 
 /*

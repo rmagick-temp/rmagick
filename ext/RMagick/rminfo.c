@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.63 2007/08/10 22:36:39 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.64 2007/09/23 22:27:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -517,7 +517,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
 
     Data_Get_Struct(self, Info, info);
 
-    switch(argc)
+    switch (argc)
     {
         case 3:
             /* Allow any argument that supports to_s */
@@ -638,7 +638,7 @@ Info_density_eq(VALUE self, VALUE density_arg)
 
     Data_Get_Struct(self, Info, info);
 
-    if(NIL_P(density_arg))
+    if (NIL_P(density_arg))
     {
         magick_free(info->density);
         info->density = NULL;
@@ -705,15 +705,15 @@ static struct
     char *enum_name;
     DisposeType enumerator;
 } Dispose_Option[] = {
-    { "Background", "BackgroundDispose", BackgroundDispose },
-    { "None",       "NoneDispose",       NoneDispose },
-    { "Previous",   "PreviousDispose",   PreviousDispose },
-    { "Undefined",  "UndefinedDispose",  UndefinedDispose },
-    { "0",          "UndefinedDispose",  UndefinedDispose },
-    { "1",          "NoneDispose",       NoneDispose },
-    { "2",          "BackgroundDispose", BackgroundDispose },
-    { "3",          "PreviousDispose",   PreviousDispose },
-    };
+    { "Background", "BackgroundDispose", BackgroundDispose},
+    { "None",       "NoneDispose",       NoneDispose},
+    { "Previous",   "PreviousDispose",   PreviousDispose},
+    { "Undefined",  "UndefinedDispose",  UndefinedDispose},
+    { "0",          "UndefinedDispose",  UndefinedDispose},
+    { "1",          "NoneDispose",       NoneDispose},
+    { "2",          "BackgroundDispose", BackgroundDispose},
+    { "3",          "PreviousDispose",   PreviousDispose},
+};
 #define N_DISPOSE_OPTIONS (int)(sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
 
 VALUE
@@ -769,7 +769,7 @@ Info_dispose_eq(VALUE self, VALUE disp)
     VALUE_TO_ENUM(disp, dispose, DisposeType);
     option = "Undefined";
 
-    for(x = 0; x < N_DISPOSE_OPTIONS; x++)
+    for (x = 0; x < N_DISPOSE_OPTIONS; x++)
     {
         if (dispose == Dispose_Option[x].enumerator)
         {
@@ -991,20 +991,20 @@ static struct
     char *enum_name;
     GravityType enumerator;
 } Gravity_Option[] = {
-    { "Undefined",  "UndefinedGravity", UndefinedGravity },
-    { "None",       "UndefinedGravity", UndefinedGravity },
-    { "Center",     "CenterGravity",    CenterGravity },
+    { "Undefined",  "UndefinedGravity", UndefinedGravity},
+    { "None",       "UndefinedGravity", UndefinedGravity},
+    { "Center",     "CenterGravity",    CenterGravity},
     { "East",       "EastGravity",      EastGravity},
-    { "Forget",     "ForgetGravity",    ForgetGravity },
-    { "NorthEast",  "NorthEastGravity", NorthEastGravity },
-    { "North",      "NorthGravity",     NorthGravity },
-    { "NorthWest",  "NorthWestGravity", NorthWestGravity },
-    { "SouthEast",  "SouthEastGravity", SouthEastGravity },
-    { "South",      "SouthGravity",     SouthGravity },
-    { "SouthWest",  "SouthWestGravity", SouthWestGravity },
-    { "West",       "WestGravity",      WestGravity },
-    { "Static",     "StaticGravity",    StaticGravity }
-    };
+    { "Forget",     "ForgetGravity",    ForgetGravity},
+    { "NorthEast",  "NorthEastGravity", NorthEastGravity},
+    { "North",      "NorthGravity",     NorthGravity},
+    { "NorthWest",  "NorthWestGravity", NorthWestGravity},
+    { "SouthEast",  "SouthEastGravity", SouthEastGravity},
+    { "South",      "SouthGravity",     SouthGravity},
+    { "SouthWest",  "SouthWestGravity", SouthWestGravity},
+    { "West",       "WestGravity",      WestGravity},
+    { "Static",     "StaticGravity",    StaticGravity}
+};
 #define N_GRAVITY_OPTIONS (int)(sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
 
 VALUE Info_gravity(VALUE self)
@@ -1059,7 +1059,7 @@ Info_gravity_eq(VALUE self, VALUE grav)
     VALUE_TO_ENUM(grav, gravity, GravityType);
     option = "Undefined";
 
-    for(x = 0; x < N_GRAVITY_OPTIONS; x++)
+    for (x = 0; x < N_GRAVITY_OPTIONS; x++)
     {
         if (gravity == Gravity_Option[x].enumerator)
         {
@@ -1616,8 +1616,8 @@ Info_view_eq(VALUE self, VALUE view_arg)
 
     if (NIL_P(view_arg) || StringValuePtr(view_arg) == NULL)
     {
-       magick_free(info->view);
-       info->view = NULL;
+        magick_free(info->view);
+        info->view = NULL;
     }
     else
     {

@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.55 2007/09/23 20:37:24 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.56 2007/09/23 22:27:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -403,12 +403,12 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
 VALUE
 Draw_stroke_width_eq(VALUE self, VALUE stroke_width)
 {
-  Draw *draw;
+    Draw *draw;
 
-  rb_check_frozen(self);
-  Data_Get_Struct(self, Draw, draw);
-  draw->info->stroke_width = NUM2DBL(stroke_width);
-  return self;
+    rb_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+    draw->info->stroke_width = NUM2DBL(stroke_width);
+    return self;
 }
 
 /*
@@ -460,13 +460,13 @@ Draw_undercolor_eq(VALUE self, VALUE undercolor)
                 Draw object.
 */
 VALUE Draw_annotate(
-    VALUE self,
-    VALUE image_arg,
-    VALUE width_arg,
-    VALUE height_arg,
-    VALUE x_arg,
-    VALUE y_arg,
-    VALUE text)
+                   VALUE self,
+                   VALUE image_arg,
+                   VALUE width_arg,
+                   VALUE height_arg,
+                   VALUE x_arg,
+                   VALUE y_arg,
+                   VALUE text)
 {
     Draw *draw;
     Image *image;
@@ -496,7 +496,7 @@ VALUE Draw_annotate(
     draw->info->text = InterpretImageAttributes(NULL, image, StringValuePtr(text));
     if (!draw->info->text)
     {
-           rb_raise(rb_eArgError, "no text");
+        rb_raise(rb_eArgError, "no text");
     }
 
     // Create geometry string, copy to Draw structure, overriding
@@ -567,7 +567,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     Image *comp_img;
     struct TmpFile_Name *tmpfile;
     char name[MaxTextExtent];
-                            // Buffer for "image" primitive
+    // Buffer for "image" primitive
     char primitive[MaxTextExtent];
 
     if (argc < 5 || argc > 6)
@@ -589,7 +589,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     {
         VALUE_TO_ENUM(argv[5], cop, CompositeOperator);
 
-        switch(cop)
+        switch (cop)
         {
             case AddCompositeOp:
                 op = "Add";
@@ -742,9 +742,9 @@ Draw_dup(VALUE self)
 */
 VALUE
 Draw_get_type_metrics(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                     int argc,
+                     VALUE *argv,
+                     VALUE self)
 {
     return get_type_metrics(argc, argv, self, GetTypeMetrics);
 }
@@ -752,11 +752,11 @@ Draw_get_type_metrics(
 
 VALUE
 Draw_get_multiline_type_metrics(
-     int argc,
-     VALUE *argv,
-     VALUE self)
+                               int argc,
+                               VALUE *argv,
+                               VALUE self)
 {
-     return get_type_metrics(argc, argv, self, GetMultilineTypeMetrics);
+    return get_type_metrics(argc, argv, self, GetMultilineTypeMetrics);
 }
 
 /*
@@ -1442,84 +1442,84 @@ static VALUE get_dummy_tm_img(VALUE klass)
 */
 static VALUE
 get_type_metrics(
-     int argc,
-     VALUE *argv,
-     VALUE self,
-     get_type_metrics_func_t getter)
+                int argc,
+                VALUE *argv,
+                VALUE self,
+                get_type_metrics_func_t getter)
 {
-     static char attrs[] = "OPbcdefghiklmnopqrstuwxyz[@#%";
+    static char attrs[] = "OPbcdefghiklmnopqrstuwxyz[@#%";
  #define ATTRS_L ((int)(sizeof(attrs)-1))
-     Image *image;
-     Draw *draw;
-     volatile VALUE t;
-     TypeMetric metrics;
-     char *text = NULL;
-     long text_l;
-     long x;
-     unsigned int okay;
+    Image *image;
+    Draw *draw;
+    volatile VALUE t;
+    TypeMetric metrics;
+    char *text = NULL;
+    long text_l;
+    long x;
+    unsigned int okay;
 
-     switch (argc)
-     {
-         case 1:                   // use default image
-             text = rb_str2cstr(argv[0], &text_l);
+    switch (argc)
+    {
+        case 1:                   // use default image
+            text = rb_str2cstr(argv[0], &text_l);
 
-             for (x = 0; x < text_l; x++)
-             {
-                 // Ensure text string doesn't refer to image attributes.
-                 if (text[x] == '%' && x < text_l-1)
-                 {
-                     int y;
-                     char spec = text[x+1];
+            for (x = 0; x < text_l; x++)
+            {
+                // Ensure text string doesn't refer to image attributes.
+                if (text[x] == '%' && x < text_l-1)
+                {
+                    int y;
+                    char spec = text[x+1];
 
-                     for (y = 0; y < ATTRS_L; y++)
-                     {
-                         if (spec == attrs[y])
-                         {
-                             rb_raise(rb_eArgError,
-                                 "text string contains image attribute reference `%%%c'",
-                                 spec);
-                         }
-                     }
-                 }
-             }
+                    for (y = 0; y < ATTRS_L; y++)
+                    {
+                        if (spec == attrs[y])
+                        {
+                            rb_raise(rb_eArgError,
+                                     "text string contains image attribute reference `%%%c'",
+                                     spec);
+                        }
+                    }
+                }
+            }
 
-             Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
-             break;
-         case 2:
-             t = ImageList_cur_image(argv[0]);
-             rm_check_destroyed(t);
-             Data_Get_Struct(t, Image, image);
-             text = rb_str2cstr(argv[1], &text_l);
-             break;                  // okay
-         default:
-             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
-             break;
-     }
+            Data_Get_Struct(get_dummy_tm_img(CLASS_OF(self)), Image, image);
+            break;
+        case 2:
+            t = ImageList_cur_image(argv[0]);
+            rm_check_destroyed(t);
+            Data_Get_Struct(t, Image, image);
+            text = rb_str2cstr(argv[1], &text_l);
+            break;                  // okay
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
 
-     if (text_l == 0)
-     {
-         rb_raise(rb_eArgError, "no text to measure");
-     }
+    if (text_l == 0)
+    {
+        rb_raise(rb_eArgError, "no text to measure");
+    }
 
-     Data_Get_Struct(self, Draw, draw);
-     draw->info->text = InterpretImageAttributes(NULL, image, text);
-     if (!draw->info->text)
-     {
-         rb_raise(rb_eArgError, "no text to measure");
-     }
+    Data_Get_Struct(self, Draw, draw);
+    draw->info->text = InterpretImageAttributes(NULL, image, text);
+    if (!draw->info->text)
+    {
+        rb_raise(rb_eArgError, "no text to measure");
+    }
 
-     okay = (*getter)(image, draw->info, &metrics);
+    okay = (*getter)(image, draw->info, &metrics);
 
-     magick_free(draw->info->text);
-     draw->info->text = NULL;
+    magick_free(draw->info->text);
+    draw->info->text = NULL;
 
-     if (!okay)
-     {
-         rm_check_image_exception(image, RetainOnError);
+    if (!okay)
+    {
+        rm_check_image_exception(image, RetainOnError);
 
-         // Shouldn't get here...
-         rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "
-                  "Is the FreeType library installed?");
-     }
-     return TypeMetric_from_TypeMetric(&metrics);
+        // Shouldn't get here...
+        rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "
+                 "Is the FreeType library installed?");
+    }
+    return TypeMetric_from_TypeMetric(&metrics);
 }

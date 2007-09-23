@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.255 2007/09/23 20:47:42 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.256 2007/09/23 22:27:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -38,10 +38,10 @@ static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation
     Purpose:    call Adaptive(Blur|Sharpen)Image
 */
 static VALUE adaptive_method(
-    int argc,
-    VALUE *argv,
-    VALUE self,
-    Image *fp(const Image *, const double, const double, ExceptionInfo *))
+                            int argc,
+                            VALUE *argv,
+                            VALUE self,
+                            Image *fp(const Image *, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -83,10 +83,10 @@ static VALUE adaptive_method(
     Purpose:    call Adaptive(Blur|Sharpen)ImageChannel
 */
 static VALUE adaptive_channel_method(
-    int argc,
-    VALUE *argv,
-    VALUE self,
-    Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
+                                    int argc,
+                                    VALUE *argv,
+                                    VALUE self,
+                                    Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -247,15 +247,15 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-           offset = NUM2LONG(argv[2]);
+            offset = NUM2LONG(argv[2]);
         case 2:
-           height = NUM2ULONG(argv[1]);
+            height = NUM2ULONG(argv[1]);
         case 1:
-           width  = NUM2ULONG(argv[0]);
+            width  = NUM2ULONG(argv[0]);
         case 0:
-           break;
+            break;
         default:
-           rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 3)", argc);
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 3)", argc);
     }
 
     Data_Get_Struct(self, Image, image);
@@ -424,26 +424,26 @@ Image_alpha_eq(VALUE self, VALUE type)
     switch (alpha)
     {
         case ActivateAlphaChannel:
-          image->matte = MagickTrue;
-          break;
+            image->matte = MagickTrue;
+            break;
 
         case DeactivateAlphaChannel:
-          image->matte = MagickFalse;
-          break;
+            image->matte = MagickFalse;
+            break;
 
         case ResetAlphaChannel:
-          if (image->matte == MagickFalse)
-          {
-              (void) SetImageOpacity(image, OpaqueOpacity);
-          }
-          break;
+            if (image->matte == MagickFalse)
+            {
+                (void) SetImageOpacity(image, OpaqueOpacity);
+            }
+            break;
 
         case SetAlphaChannel:
-          (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
-          break;
+            (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
+            break;
 
         default:
-          break;
+            break;
     }
 
     return type;
@@ -451,7 +451,7 @@ Image_alpha_eq(VALUE self, VALUE type)
     self = self;
     type = type;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -596,9 +596,9 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 */
 static VALUE
 crisscross(
-    int bang,
-    VALUE self,
-    Image *fp(const Image *, ExceptionInfo *))
+          int bang,
+          VALUE self,
+          Image *fp(const Image *, ExceptionInfo *))
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -913,18 +913,18 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 */
 static void
 get_relative_offsets(
-    VALUE grav,
-    Image *image,
-    Image *mark,
-    long *x_offset,
-    long *y_offset)
+                    VALUE grav,
+                    Image *image,
+                    Image *mark,
+                    long *x_offset,
+                    long *y_offset)
 {
     MagickEnum *magick_enum;
     GravityType gravity;
 
     VALUE_TO_ENUM(grav, gravity, GravityType);
 
-    switch(gravity)
+    switch (gravity)
     {
         case NorthEastGravity:
         case EastGravity:
@@ -940,7 +940,7 @@ get_relative_offsets(
         default:
             break;
     }
-    switch(gravity)
+    switch (gravity)
     {
         case SouthWestGravity:
         case SouthGravity:
@@ -972,11 +972,11 @@ get_relative_offsets(
 */
 static void
 get_offsets_from_gravity(
-    GravityType gravity,
-    Image *image,
-    Image *mark,
-    long *x_offset,
-    long *y_offset)
+                        GravityType gravity,
+                        Image *image,
+                        Image *mark,
+                        long *x_offset,
+                        long *y_offset)
 {
 
     switch (gravity)
@@ -985,41 +985,41 @@ get_offsets_from_gravity(
         case NorthWestGravity:
             *x_offset = 0;
             *y_offset = 0;
-        break;
+            break;
         case NorthGravity:
             *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
             *y_offset = 0;
-        break;
+            break;
         case NorthEastGravity:
             *x_offset = (long)(image->columns) - (long)(mark->columns);
             *y_offset = 0;
-        break;
+            break;
         case WestGravity:
             *x_offset = 0;
             *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
-        break;
+            break;
         case StaticGravity:
         case CenterGravity:
         default:
             *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
             *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
-        break;
+            break;
         case EastGravity:
             *x_offset = (long)(image->columns) - (long)(mark->columns);
             *y_offset = ((long)(image->rows) - (long)(mark->rows)) / 2;
-        break;
+            break;
         case SouthWestGravity:
             *x_offset = 0;
             *y_offset = (long)(image->rows) - (long)(mark->rows);
-        break;
+            break;
         case SouthGravity:
             *x_offset = ((long)(image->columns) - (long)(mark->columns)) / 2;
             *y_offset = (long)(image->rows) - (long)(mark->rows);
-        break;
+            break;
         case SouthEastGravity:
             *x_offset = (long)(image->columns) - (long)(mark->columns);
             *y_offset = (long)(image->rows) - (long)(mark->rows);
-        break;
+            break;
     }
 }
 
@@ -1034,7 +1034,7 @@ static VALUE check_for_long_value(VALUE obj)
     long t;
     t = NUM2LONG(obj);
     t = t;      // placate gcc
-    return (VALUE)0;
+    return(VALUE)0;
 }
 
 
@@ -1043,12 +1043,12 @@ static VALUE check_for_long_value(VALUE obj)
     Purpose:    compute x- and y-offset of source image for a compositing method
 */
 static void get_composite_offsets(
-    int argc,
-    VALUE *argv,
-    Image *dest,
-    Image *src,
-    long *x_offset,
-    long *y_offset)
+                                 int argc,
+                                 VALUE *argv,
+                                 Image *dest,
+                                 Image *src,
+                                 long *x_offset,
+                                 long *y_offset)
 {
     GravityType gravity;
     int exc = 0;
@@ -1081,7 +1081,7 @@ static void get_composite_offsets(
         if (exc)
         {
             rb_raise(rb_eTypeError, "expected GravityType, got %s"
-                   , rb_class2name(CLASS_OF(argv[0])));
+                     , rb_class2name(CLASS_OF(argv[0])));
         }
         *x_offset = NUM2LONG(argv[0]);
         if (argc > 1)
@@ -1104,10 +1104,10 @@ static void get_composite_offsets(
 */
 static void
 blend_geometry(
-    char *geometry,
-    size_t geometry_l,
-    double src_percent,
-    double dst_percent)
+              char *geometry,
+              size_t geometry_l,
+              double src_percent,
+              double dst_percent)
 {
     size_t sz = 0;
     int fw, prec;
@@ -1164,13 +1164,13 @@ blend_geometry(
 
 static VALUE
 special_composite(
-    Image *image,
-    Image *overlay,
-    double image_pct,
-    double overlay_pct,
-    long x_off,
-    long y_off,
-    CompositeOperator op)
+                 Image *image,
+                 Image *overlay,
+                 double image_pct,
+                 double overlay_pct,
+                 long x_off,
+                 long y_off,
+                 CompositeOperator op)
 {
     Image *new_image;
     char geometry[20];
@@ -1237,7 +1237,7 @@ Image_blend(int argc, VALUE *argv, VALUE self)
     }
 
     return special_composite(image, overlay, src_percent, dst_percent
-                           , x_offset, y_offset, BlendCompositeOp);
+                             , x_offset, y_offset, BlendCompositeOp);
 
 }
 
@@ -1252,38 +1252,38 @@ DEF_ATTR_ACCESSOR(Image, blur, dbl)
 VALUE
 Image_blur_channel(int argc, VALUE *argv, VALUE self)
 {
-     Image *image, *new_image;
-     ExceptionInfo exception;
-     ChannelType channels;
-     double radius = 0.0, sigma = 1.0;
+    Image *image, *new_image;
+    ExceptionInfo exception;
+    ChannelType channels;
+    double radius = 0.0, sigma = 1.0;
 
-     rm_check_destroyed(self);
-     Data_Get_Struct(self, Image, image);
+    rm_check_destroyed(self);
+    Data_Get_Struct(self, Image, image);
 
-     channels = extract_channels(&argc, argv);
+    channels = extract_channels(&argc, argv);
 
-     // There can be 0, 1, or 2 remaining arguments.
-     switch (argc)
-     {
-         case 2:
-             sigma = NUM2DBL(argv[1]);
-         case 1:
-             radius = NUM2DBL(argv[0]);
-         case 0:
-             break;
-         default:
-             raise_ChannelType_error(argv[argc-1]);
-     }
+    // There can be 0, 1, or 2 remaining arguments.
+    switch (argc)
+    {
+        case 2:
+            sigma = NUM2DBL(argv[1]);
+        case 1:
+            radius = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            raise_ChannelType_error(argv[argc-1]);
+    }
 
-     GetExceptionInfo(&exception);
-     new_image = BlurImageChannel(image, channels, radius, sigma, &exception);
-     rm_check_exception(&exception, new_image, DestroyOnError);
+    GetExceptionInfo(&exception);
+    new_image = BlurImageChannel(image, channels, radius, sigma, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
 
-     (void) DestroyExceptionInfo(&exception);
+    (void) DestroyExceptionInfo(&exception);
 
-     rm_ensure_result(new_image);
+    rm_ensure_result(new_image);
 
-     return rm_image_new(new_image);
+    return rm_image_new(new_image);
 }
 
 
@@ -1306,11 +1306,11 @@ Image_blur_image(int argc, VALUE *argv, VALUE self)
                 height, and named color
 */
 static VALUE border(
-    int bang,
-    VALUE self,
-    VALUE width,
-    VALUE height,
-    VALUE color)
+                   int bang,
+                   VALUE self,
+                   VALUE width,
+                   VALUE height,
+                   VALUE color)
 {
     Image *image, *new_image;
     PixelPacket old_border;
@@ -1349,10 +1349,10 @@ static VALUE border(
 
 VALUE
 Image_border_bang(
-    VALUE self,
-    VALUE width,
-    VALUE height,
-    VALUE color)
+                 VALUE self,
+                 VALUE width,
+                 VALUE height,
+                 VALUE color)
 {
     rm_check_destroyed(self);
     rb_check_frozen(self);
@@ -1362,10 +1362,10 @@ Image_border_bang(
 
 VALUE
 Image_border(
-    VALUE self,
-    VALUE width,
-    VALUE height,
-    VALUE color)
+            VALUE self,
+            VALUE width,
+            VALUE height,
+            VALUE color)
 {
     rm_check_destroyed(self);
     return border(False, self, width, height, color);
@@ -1435,9 +1435,9 @@ VALUE Image_bounding_box(VALUE self)
 */
 VALUE
 Image_capture(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+             int argc,
+             VALUE *argv,
+             VALUE self)
 {
     Image *image;
     ImageInfo *image_info;
@@ -1450,20 +1450,20 @@ Image_capture(
     switch (argc)
     {
         case 5:
-           ximage_info.borders = (MagickBooleanType)RTEST(argv[4]);
+            ximage_info.borders = (MagickBooleanType)RTEST(argv[4]);
         case 4:
-           ximage_info.screen  = (MagickBooleanType)RTEST(argv[3]);
+            ximage_info.screen  = (MagickBooleanType)RTEST(argv[3]);
         case 3:
-           ximage_info.descend = (MagickBooleanType)RTEST(argv[2]);
+            ximage_info.descend = (MagickBooleanType)RTEST(argv[2]);
         case 2:
-           ximage_info.frame   = (MagickBooleanType)RTEST(argv[1]);
+            ximage_info.frame   = (MagickBooleanType)RTEST(argv[1]);
         case 1:
-           ximage_info.silent  = (MagickBooleanType)RTEST(argv[0]);
+            ximage_info.silent  = (MagickBooleanType)RTEST(argv[0]);
         case 0:
-           break;
+            break;
         default:
-           rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 5)", argc);
-           break;
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 5)", argc);
+            break;
     }
 
     // Get optional parms.
@@ -1507,7 +1507,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     flags = ParseSizeGeometry(image, geometry, &rect);
     if (flags == NoValue)
     {
-       rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
+        rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);
     }
 
     ary = rb_ary_new2(3);
@@ -1707,11 +1707,11 @@ Image_check_destroyed(VALUE self)
 */
 VALUE
 Image_chop(
-    VALUE self,
-    VALUE x,
-    VALUE y,
-    VALUE width,
-    VALUE height)
+          VALUE self,
+          VALUE x,
+          VALUE y,
+          VALUE width,
+          VALUE height)
 {
     rm_check_destroyed(self);
     return xform_image(False, self, x, y, width, height, ChopImage);
@@ -1817,7 +1817,7 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -1942,8 +1942,8 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
             if (profile)
             {
                 (void)ProfileImage(image, profile_name, profile_data->datum
-                                 , (unsigned long)profile_data->length
-                                 , (MagickBooleanType)False);
+                                   , (unsigned long)profile_data->length
+                                   , (MagickBooleanType)False);
                 if (image->exception.severity >= ErrorException)
                 {
                     break;
@@ -2011,12 +2011,12 @@ Image_color_profile_eq(VALUE self, VALUE profile)
 */
 VALUE
 Image_color_flood_fill(
-    VALUE self,
-    VALUE target_color,
-    VALUE fill_color,
-    VALUE xv,
-    VALUE yv,
-    VALUE method)
+                      VALUE self,
+                      VALUE target_color,
+                      VALUE fill_color,
+                      VALUE xv,
+                      VALUE yv,
+                      VALUE method)
 {
     Image *image, *new_image;
     PixelPacket target;
@@ -2038,14 +2038,14 @@ Image_color_flood_fill(
     if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
         rb_raise(rb_eArgError, "target out of range. %lux%lu given, image is %lux%lu"
-               , x, y, image->columns, image->rows);
+                 , x, y, image->columns, image->rows);
     }
 
     VALUE_TO_ENUM(method, fill_method, PaintMethod);
     if (!(fill_method == FloodfillMethod || fill_method == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
-                               "FillToBorderMethod (%d given)", fill_method);
+                 "FillToBorderMethod (%d given)", fill_method);
     }
 
     draw_info = CloneDrawInfo(NULL, NULL);
@@ -2072,9 +2072,9 @@ Image_color_flood_fill(
 */
 VALUE
 Image_colorize(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+              int argc,
+              VALUE *argv,
+              VALUE self)
 {
     Image *image, *new_image;
     double red, green, blue, matte;
@@ -2342,9 +2342,9 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
                 an alias.
 */
 VALUE Image_compare_channel(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                           int argc,
+                           VALUE *argv,
+                           VALUE self)
 {
     Image *image, *r_image, *difference_image;
     double distortion;
@@ -2414,8 +2414,8 @@ VALUE Image_compose(VALUE self)
     Purpose:    Set the composite operator attribute
 */
 VALUE Image_compose_eq(
-    VALUE self,
-    VALUE compose_arg)
+                      VALUE self,
+                      VALUE compose_arg)
 {
     Image *image;
 
@@ -2440,11 +2440,11 @@ VALUE Image_compose_eq(
 */
 
 static VALUE composite(
-    int bang,
-    int argc,
-    VALUE *argv,
-    VALUE self,
-    ChannelType channels)
+                      int bang,
+                      int argc,
+                      VALUE *argv,
+                      VALUE self,
+                      ChannelType channels)
 {
     Image *image, *new_image;
     Image *comp_image;
@@ -2478,53 +2478,53 @@ static VALUE composite(
             VALUE_TO_ENUM(argv[1], gravity, GravityType);
             VALUE_TO_ENUM(argv[2], operator, CompositeOperator);
 
-                                // convert gravity to x, y offsets
+            // convert gravity to x, y offsets
             switch (gravity)
             {
                 case ForgetGravity:
                 case NorthWestGravity:
                     x_offset = 0;
                     y_offset = 0;
-                break;
+                    break;
                 case NorthGravity:
                     x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
                     y_offset = 0;
-                break;
+                    break;
                 case NorthEastGravity:
                     x_offset = (long)(image->columns) - (long)(comp_image->columns);
                     y_offset = 0;
-                break;
+                    break;
                 case WestGravity:
                     x_offset = 0;
                     y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
-                break;
+                    break;
                 case StaticGravity:
                 case CenterGravity:
                 default:
                     x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
                     y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
-                break;
+                    break;
                 case EastGravity:
                     x_offset = (long)(image->columns) - (long)(comp_image->columns);
                     y_offset = ((long)(image->rows) - (long)(comp_image->rows)) / 2;
-                break;
+                    break;
                 case SouthWestGravity:
                     x_offset = 0;
                     y_offset = (long)(image->rows) - (long)(comp_image->rows);
-                break;
+                    break;
                 case SouthGravity:
                     x_offset = ((long)(image->columns) - (long)(comp_image->columns)) / 2;
                     y_offset = (long)(image->rows) - (long)(comp_image->rows);
-                break;
+                    break;
                 case SouthEastGravity:
                     x_offset = (long)(image->columns) - (long)(comp_image->columns);
                     y_offset = (long)(image->rows) - (long)(comp_image->rows);
-                break;
+                    break;
             }
             break;
 
         case 4:                 // argv[1], argv[2] is x_off, y_off,
-                                // argv[3] is composite_op
+            // argv[3] is composite_op
             x_offset = NUM2LONG(argv[1]);
             y_offset = NUM2LONG(argv[2]);
             VALUE_TO_ENUM(argv[3], operator, CompositeOperator);
@@ -2536,7 +2536,7 @@ static VALUE composite(
             y_offset = NUM2LONG(argv[3]);
             VALUE_TO_ENUM(argv[4], operator, CompositeOperator);
 
-            switch(gravity)
+            switch (gravity)
             {
                 case NorthEastGravity:
                 case EastGravity:
@@ -2552,7 +2552,7 @@ static VALUE composite(
                 default:
                     break;
             }
-            switch(gravity)
+            switch (gravity)
             {
                 case SouthWestGravity:
                 case SouthGravity:
@@ -2598,18 +2598,18 @@ static VALUE composite(
 
 
 VALUE Image_composite_bang(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                          int argc,
+                          VALUE *argv,
+                          VALUE self)
 {
     return composite(True, argc, argv, self, DefaultChannels);
 }
 
 
 VALUE Image_composite(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                     int argc,
+                     VALUE *argv,
+                     VALUE self)
 {
     return composite(False, argc, argv, self, DefaultChannels);
 }
@@ -2622,9 +2622,9 @@ VALUE Image_composite(
 */
 VALUE
 Image_composite_affine(
-    VALUE self,
-    VALUE source,
-    VALUE affine_matrix)
+                      VALUE self,
+                      VALUE source,
+                      VALUE affine_matrix)
 {
     Image *image, *composite, *new_image;
     AffineMatrix affine;
@@ -2748,7 +2748,7 @@ Image_compress_colormap_bang(VALUE self)
 
 VALUE
 Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
-                    , VALUE map_arg, VALUE pixels_arg)
+                 , VALUE map_arg, VALUE pixels_arg)
 {
     Image *image;
     ExceptionInfo exception;
@@ -2759,18 +2759,18 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     long map_l;
     union
     {
-       volatile double *f;
-       volatile Quantum *i;
-       volatile void *v;
+        volatile double *f;
+        volatile Quantum *i;
+        volatile void *v;
     } pixels;
     volatile VALUE pixel_class;
     StorageType stg_type;
 
     class = class;  // Suppress "never referenced" message from icc
 
-    // rb_Array converts objects that are not Arrays to Arrays if possible,
-    // and raises TypeError if it can't.
-    pixels_arg = rb_Array(pixels_arg);
+            // rb_Array converts objects that are not Arrays to Arrays if possible,
+            // and raises TypeError if it can't.
+            pixels_arg = rb_Array(pixels_arg);
 
     width = NUM2ULONG(width_arg);
     height = NUM2ULONG(height_arg);
@@ -2786,7 +2786,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     if (RARRAY(pixels_arg)->len != npixels)
     {
         rb_raise(rb_eArgError, "wrong number of array elements (%d for %d)"
-               , RARRAY(pixels_arg)->len, npixels);
+                 , RARRAY(pixels_arg)->len, npixels);
     }
 
     // Inspect the first element in the pixels array to determine the expected
@@ -2807,7 +2807,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     else
     {
         rb_raise(rb_eTypeError, "element 0 in pixel array is %s, must be numeric"
-               , rb_class2name(CLASS_OF(pixel0)));
+                 , rb_class2name(CLASS_OF(pixel0)));
     }
 
 
@@ -2820,7 +2820,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         if (rb_obj_is_kind_of(pixel, pixel_class) != Qtrue)
         {
             rb_raise(rb_eTypeError, "element %d in pixel array is %s, expected %s"
-                   , x, rb_class2name(CLASS_OF(pixel)),rb_class2name(CLASS_OF(pixel0)));
+                     , x, rb_class2name(CLASS_OF(pixel)),rb_class2name(CLASS_OF(pixel0)));
         }
         if (pixel_class == rb_cFloat)
         {
@@ -2899,11 +2899,11 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
                 argument is not supplied set it to #pixels - black-point.
 */
 static void get_black_white_point(
-    Image *image,
-    int argc,
-    VALUE *argv,
-    double *black_point,
-    double *white_point)
+                                 Image *image,
+                                 int argc,
+                                 VALUE *argv,
+                                 double *black_point,
+                                 double *white_point)
 {
     double pixels;
 
@@ -2992,9 +2992,9 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
 */
 VALUE
 Image_convolve(
-    VALUE self,
-    VALUE order_arg,
-    VALUE kernel_arg)
+              VALUE self,
+              VALUE order_arg,
+              VALUE kernel_arg)
 {
     Image *image, *new_image;
     volatile double *kernel;
@@ -3036,9 +3036,9 @@ Image_convolve(
 */
 VALUE
 Image_convolve_channel(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                      int argc,
+                      VALUE *argv,
+                      VALUE self)
 {
     Image *image, *new_image;
     volatile double *kernel;
@@ -3220,7 +3220,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
         x_res = NUM2DBL(x_val);
         y_val = rb_funcall(density_arg, rm_ID_height, 0);
         y_res = NUM2DBL(y_val);
-        if(x_res == 0.0)
+        if (x_res == 0.0)
         {
             rb_raise(rb_eArgError, "invalid x resolution: %f", x_res);
         }
@@ -3435,7 +3435,7 @@ Image_displace(int argc, VALUE *argv, VALUE self)
     }
 
     return special_composite(image, displacement_map, x_amplitude, y_amplitude
-                           , x_offset, y_offset, DisplaceCompositeOp);
+                             , x_offset, y_offset, DisplaceCompositeOp);
 }
 
 
@@ -3493,7 +3493,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     // Compute the size of the pixel array and allocate the memory.
     npixels = columns * rows * mapL;
     pixels.v = stg_type == QuantumPixel ? (void *) ALLOC_N(Quantum, npixels)
-                                        : (void *) ALLOC_N(double, npixels);
+               : (void *) ALLOC_N(double, npixels);
 
     // Create the Ruby array for the pixels. Return this even if DispatchImage fails.
     pixels_ary = rb_ary_new();
@@ -3528,7 +3528,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
         }
     }
 
-exit:
+    exit:
     xfree((void *)pixels.v);
     return pixels_ary;
 }
@@ -3638,7 +3638,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     }
 
     composite =  special_composite(image, overlay, src_percent, dst_percent
-                                 , x_offset, y_offset, DissolveCompositeOp);
+                                   , x_offset, y_offset, DissolveCompositeOp);
 
     return composite;
 }
@@ -3702,7 +3702,7 @@ Image_distort(int argc, VALUE *argv, VALUE self)
     argv = argv;
     argc = argc;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -3740,7 +3740,7 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
     VALUE_TO_ENUM(argv[1], metric, MetricType);
     GetExceptionInfo(&exception);
     (void) GetImageChannelDistortion(image, reconstruct, channels
-                                   , metric, &distortion, &exception);
+                                     , metric, &distortion, &exception);
     CHECK_EXCEPTION()
 
     (void) DestroyExceptionInfo(&exception);
@@ -3912,10 +3912,10 @@ Image_edge(int argc, VALUE *argv, VALUE self)
 */
 static VALUE
 effect_image(
-    VALUE self,
-    int argc,
-    VALUE *argv,
-    effector_t effector)
+            VALUE self,
+            int argc,
+            VALUE *argv,
+            effector_t effector)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -4109,7 +4109,7 @@ excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
     x = x; y = y;
     width = width; height = height;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -4171,8 +4171,8 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     }
 
     if (   x_off < 0 || (unsigned long)x_off > image->columns
-        || y_off < 0 || (unsigned long)y_off > image->rows
-        || cols == 0 || rows == 0)
+           || y_off < 0 || (unsigned long)y_off > image->rows
+           || cols == 0 || rows == 0)
     {
         rb_raise(rb_eArgError, "invalid extract geometry");
     }
@@ -4254,7 +4254,7 @@ Image_extent(int argc, VALUE *argv, VALUE self)
         else
         {
             rb_raise(rb_eArgError, "invalid extent geometry %ldx%ld+%ld+%ld"
-                   , width, height, geometry.x, geometry.y);
+                     , width, height, geometry.x, geometry.y);
         }
     }
 
@@ -4272,7 +4272,7 @@ Image_extent(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -4324,8 +4324,8 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     }
 
     if (   x_off < 0 || (unsigned long)x_off > image->columns
-        || y_off < 0 || (unsigned long)y_off > image->rows
-        || cols == 0 || rows == 0)
+           || y_off < 0 || (unsigned long)y_off > image->rows
+           || cols == 0 || rows == 0)
     {
         rb_raise(rb_eArgError, "invalid extract geometry");
     }
@@ -4738,7 +4738,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     long length;
 
     class = class;          // defeat gcc message
-    blob_arg = blob_arg;    // defeat gcc message
+            blob_arg = blob_arg;    // defeat gcc message
 
     blob = (void *) rb_str2cstr(blob_arg, &length);
 
@@ -4827,7 +4827,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
     char gamma[50];
 
     rm_check_destroyed(self);
-    switch(argc)
+    switch (argc)
     {
         case 1:
             red_gamma   = NUM2DBL(argv[0]);
@@ -4895,7 +4895,7 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
     channels = extract_channels(&argc, argv);
 
     // There can be 0, 1, or 2 remaining arguments.
-    switch(argc)
+    switch (argc)
     {
         case 2:
             sigma = NUM2DBL(argv[1]);
@@ -4929,8 +4929,8 @@ DEF_ATTR_READER(Image, geometry, str)
 
 VALUE
 Image_geometry_eq(
-    VALUE self,
-    VALUE geometry)
+                 VALUE self,
+                 VALUE geometry)
 {
     Image *image;
     volatile VALUE geom_str;
@@ -4970,11 +4970,11 @@ Image_geometry_eq(
 */
 VALUE
 Image_get_pixels(
-    VALUE self,
-    VALUE x_arg,
-    VALUE y_arg,
-    VALUE cols_arg,
-    VALUE rows_arg)
+                VALUE self,
+                VALUE x_arg,
+                VALUE y_arg,
+                VALUE cols_arg,
+                VALUE rows_arg)
 {
     Image *image;
     PixelPacket *pixels;
@@ -4994,7 +4994,7 @@ Image_get_pixels(
     if ((x+columns) > image->columns || (y+rows) > image->rows)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
-               , columns, rows, x, y);
+                 , columns, rows, x, y);
     }
 
     // Cast AcquireImagePixels to get rid of the const qualifier. We're not going
@@ -5066,7 +5066,7 @@ Image_histogram_q(VALUE self)
 #else
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -5202,7 +5202,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         if ((unsigned long)(buffer_l / type_sz) < npixels)
         {
             rb_raise(rb_eArgError, "pixel buffer too small (need %lu channel values, got %ld)"
-                   , npixels, buffer_l/type_sz);
+                     , npixels, buffer_l/type_sz);
         }
     }
     // Otherwise convert the argument to an array and convert the array elements
@@ -5220,7 +5220,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         if ((unsigned long)RARRAY(pixel_ary)->len < npixels)
         {
             rb_raise(rb_eArgError, "pixel array too small (need %lu elements, got %ld)"
-                   , npixels, RARRAY(pixel_ary)->len);
+                     , npixels, RARRAY(pixel_ary)->len);
         }
 
         if (stg_type == DoublePixel || stg_type == FloatPixel)
@@ -5314,10 +5314,10 @@ static void build_inspect_string(Image *image, char *buffer, size_t len)
 
     // Print current columnsXrows
     if (   image->page.width != 0 || image->page.height != 0
-        || image->page.x != 0     || image->page.y != 0)
+           || image->page.x != 0     || image->page.y != 0)
     {
         x += sprintf(buffer+x, "%lux%lu%+ld%+ld ", image->page.width, image->page.height
-                   , image->page.x, image->page.y);
+                     , image->page.x, image->page.y);
     }
 
     if (image->storage_class == DirectClass)
@@ -5353,13 +5353,13 @@ static void build_inspect_string(Image *image, char *buffer, size_t len)
         else
         {
             x += sprintf(buffer+x, "PseudoClass %lu=>%ldc ", image->total_colors
-                       , (long)image->colors);
+                         , (long)image->colors);
             if (image->error.mean_error_per_pixel != 0.0)
             {
-                 x += sprintf(buffer+x, "%ld/%.6f/%.6fdb "
-                            , (long) (image->error.mean_error_per_pixel+0.5)
-                            , image->error.normalized_mean_error
-                            , image->error.normalized_maximum_error);
+                x += sprintf(buffer+x, "%ld/%.6f/%.6fdb "
+                             , (long) (image->error.mean_error_per_pixel+0.5)
+                             , image->error.normalized_mean_error
+                             , image->error.normalized_maximum_error);
             }
         }
     }
@@ -5503,7 +5503,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
     char level[50];
 
     rm_check_destroyed(self);
-    switch(argc)
+    switch (argc)
     {
         case 0:             // take all the defaults
             break;
@@ -5549,7 +5549,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     ChannelType channel;
 
     rm_check_destroyed(self);
-    switch(argc)
+    switch (argc)
     {
         case 1:             // take all the defaults
             break;
@@ -5612,7 +5612,7 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -5633,7 +5633,7 @@ Image__load(VALUE class, VALUE str)
 
     class = class;  // Suppress "never referenced" message from icc
 
-    info = CloneImageInfo(NULL);
+            info = CloneImageInfo(NULL);
 
     blob = rb_str2cstr(str, &length);
 
@@ -5653,12 +5653,12 @@ Image__load(VALUE class, VALUE str)
     mi.mj = ((DumpedImage *)blob)->mj;
     mi.mi = ((DumpedImage *)blob)->mi;
     if (   mi.mj != DUMPED_IMAGE_MAJOR_VERS
-        || mi.mi > DUMPED_IMAGE_MINOR_VERS)
+           || mi.mi > DUMPED_IMAGE_MINOR_VERS)
     {
         rb_raise(rb_eTypeError, "incompatible image format (can't be read)\n"
-                                "\tformat version %d.%d required; %d.%d given"
-                              , DUMPED_IMAGE_MAJOR_VERS, DUMPED_IMAGE_MINOR_VERS
-                              , mi.mj, mi.mi);
+                 "\tformat version %d.%d required; %d.%d given"
+                 , DUMPED_IMAGE_MAJOR_VERS, DUMPED_IMAGE_MINOR_VERS
+                 , mi.mj, mi.mi);
     }
 
     mi.len = ((DumpedImage *)blob)->len;
@@ -5840,7 +5840,7 @@ Image_mask_eq(VALUE self, VALUE mask)
         {
             GetExceptionInfo(&exception);
             resized_image = ResizeImage(clip_mask, image->columns, image->rows
-                                      , UndefinedFilter, 0.0, &exception);
+                                        , UndefinedFilter, 0.0, &exception);
             rm_check_exception(&exception, resized_image, DestroyOnError);
             (void) DestroyExceptionInfo(&exception);
             rm_ensure_result(resized_image);
@@ -5851,27 +5851,27 @@ Image_mask_eq(VALUE self, VALUE mask)
         // The following section is copied from mogrify.c (6.2.8-8)
         for (y = 0; y < (long) clip_mask->rows; y++)
         {
-          q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
-          if (!q)
-          {
-              break;
-          }
-          for (x = 0; x < (long) clip_mask->columns; x++)
-          {
-            if (clip_mask->matte == MagickFalse)
+            q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
+            if (!q)
             {
-                q->opacity = PIXEL_INTENSITY(q);
+                break;
             }
-            q->red = q->opacity;
-            q->green = q->opacity;
-            q->blue = q->opacity;
-            q += 1;
-          }
-          if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
-          {
-              (void) DestroyImage(clip_mask);
-              rm_magick_error("SyncImagePixels failed", NULL);
-          }
+            for (x = 0; x < (long) clip_mask->columns; x++)
+            {
+                if (clip_mask->matte == MagickFalse)
+                {
+                    q->opacity = PIXEL_INTENSITY(q);
+                }
+                q->red = q->opacity;
+                q->green = q->opacity;
+                q->blue = q->opacity;
+                q += 1;
+            }
+            if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
+            {
+                (void) DestroyImage(clip_mask);
+                rm_magick_error("SyncImagePixels failed", NULL);
+            }
         }
 
         if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
@@ -5935,12 +5935,12 @@ Image_matte_color_eq(VALUE self, VALUE color)
 */
 VALUE
 Image_matte_flood_fill(
-    VALUE self,
-    VALUE color,
-    VALUE opacity,
-    VALUE x_obj,
-    VALUE y_obj,
-    VALUE method)
+                      VALUE self,
+                      VALUE color,
+                      VALUE opacity,
+                      VALUE x_obj,
+                      VALUE y_obj,
+                      VALUE method)
 {
     Image *image, *new_image;
     PixelPacket target;
@@ -5959,14 +5959,14 @@ Image_matte_flood_fill(
     if (!(pm == FloodfillMethod || pm == FillToBorderMethod))
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
-                               "FillToBorderMethod (%d given)", pm);
+                 "FillToBorderMethod (%d given)", pm);
     }
     x = NUM2LONG(x_obj);
     y = NUM2LONG(y_obj);
     if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
         rb_raise(rb_eArgError, "target out of range. %ldx%ld given, image is %lux%lu"
-               , x, y, image->columns, image->rows);
+                 , x, y, image->columns, image->rows);
     }
 
 
@@ -6078,8 +6078,8 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double pct_brightness = 100.0,
-           pct_saturation = 100.0,
-           pct_hue        = 100.0;
+    pct_saturation = 100.0,
+    pct_hue        = 100.0;
     char modulate[100];
 
     rm_check_destroyed(self);
@@ -6174,10 +6174,10 @@ DEF_ATTR_READER(Image, montage, str)
 */
 static VALUE
 motion_blur(
-    int argc,
-    VALUE *argv,
-    VALUE self,
-    Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
+           int argc,
+           VALUE *argv,
+           VALUE self,
+           Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -6714,9 +6714,9 @@ Image_ping(VALUE class, VALUE file_arg)
 */
 VALUE
 Image_pixel_color(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                 int argc,
+                 VALUE *argv,
+                 VALUE self)
 {
     Image *image;
     PixelPacket old_color, new_color, *pixel;
@@ -6849,13 +6849,13 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 */
 VALUE
 Image_plasma(
-    VALUE self,
-    VALUE x1,
-    VALUE y1,
-    VALUE x2,
-    VALUE y2,
-    VALUE attenuate,
-    VALUE depth)
+            VALUE self,
+            VALUE x1,
+            VALUE y1,
+            VALUE x2,
+            VALUE y2,
+            VALUE attenuate,
+            VALUE depth)
 {
     Image *image, *new_image;
     SegmentInfo segment;
@@ -6933,7 +6933,7 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -6953,7 +6953,7 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
     unsigned long levels = 4;
 
     rm_check_destroyed(self);
-    switch(argc)
+    switch (argc)
     {
         case 2:
             dither = (MagickBooleanType) RTEST(argv[1]);
@@ -7081,7 +7081,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
         Arguments 1 and 0 are required and are the rvalue and operator,
         respectively.
     */
-    switch(argc)
+    switch (argc)
     {
         case 3:
             VALUE_TO_ENUM(argv[2], channel, ChannelType);
@@ -7096,7 +7096,7 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
     }
 
     // Map QuantumExpressionOperator to MagickEvaluateOperator
-    switch(operator)
+    switch (operator)
     {
         default:
         case UndefinedQuantumOperator:
@@ -7223,9 +7223,9 @@ Image_radial_blur(VALUE self, VALUE angle)
 */
 VALUE
 Image_radial_blur_channel(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                         int argc,
+                         VALUE *argv,
+                         VALUE self)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -7263,9 +7263,9 @@ Image_radial_blur_channel(
 */
 VALUE
 Image_random_threshold_channel(
-    int argc,
-    VALUE *argv,
-    VALUE self)
+                              int argc,
+                              VALUE *argv,
+                              VALUE self)
 {
     Image *image, *new_image;
     ChannelType channels;
@@ -7371,7 +7371,7 @@ static VALUE
 file_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
-            rb_class2name(CLASS_OF(arg)));
+             rb_class2name(CLASS_OF(arg)));
 }
 
 
@@ -7394,8 +7394,8 @@ rd_image(VALUE class, VALUE file, reader_t reader)
 
     class = class;  // defeat gcc message
 
-    // Create a new Info structure for this read/ping
-    info_obj = rm_info_new();
+            // Create a new Info structure for this read/ping
+            info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
     if (TYPE(file) == T_FILE)
@@ -7473,7 +7473,7 @@ Image_recolor(VALUE self, VALUE color_matrix)
     self = self;                    // defeat "unused parameter" message
     color_matrix = color_matrix;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -7505,22 +7505,22 @@ Image_read_inline(VALUE self, VALUE content)
     // Search for a comma. If found, we'll set the start of the
     // image data just following the comma. Otherwise we'll assume
     // the image data starts with the first byte.
-    for(x = 0; x < image_data_l; x++)
+    for (x = 0; x < image_data_l; x++)
     {
-         if (image_data[x] == ',')
-         {
-              break;
-         }
+        if (image_data[x] == ',')
+        {
+            break;
+        }
     }
     if (x < image_data_l)
     {
-         image_data += x + 1;
+        image_data += x + 1;
     }
 
     blob = Base64Decode(image_data, &blob_l);
     if (blob_l == 0)
     {
-         rb_raise(rb_eArgError, "can't decode image");
+        rb_raise(rb_eArgError, "can't decode image");
     }
 
     GetExceptionInfo(&exception);
@@ -7547,22 +7547,22 @@ Image_read_inline(VALUE self, VALUE content)
 */
 static VALUE array_from_images(Image *images)
 {
-     volatile VALUE image_obj, image_ary;
-     Image *image, *next;
+    volatile VALUE image_obj, image_ary;
+    Image *image, *next;
 
-     // Orphan the image, create an Image object, add it to the array.
+    // Orphan the image, create an Image object, add it to the array.
 
-     image_ary = rb_ary_new();
-     next = NULL;
-     next = next;        // defeat "never referenced" message from icc
-     while (images)
-     {
-         image = RemoveFirstImageFromList(&images);
-         image_obj = rm_image_new(image);
-         (void) rb_ary_push(image_ary, image_obj);
-     }
+    image_ary = rb_ary_new();
+    next = NULL;
+    next = next;        // defeat "never referenced" message from icc
+    while (images)
+    {
+        image = RemoveFirstImageFromList(&images);
+        image_obj = rm_image_new(image);
+        (void) rb_ary_push(image_ary, image_obj);
+    }
 
-     return image_ary;
+    return image_ary;
 }
 
 
@@ -7935,20 +7935,20 @@ DEF_ATTR_READER(Image, scene, ulong)
 VALUE
 Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 {
-     Image *image;
-     ChannelType channel;
-     unsigned long channel_depth;
+    Image *image;
+    ChannelType channel;
+    unsigned long channel_depth;
 
-     rm_check_destroyed(self);
-     rb_check_frozen(self);
-     Data_Get_Struct(self, Image, image);
-     VALUE_TO_ENUM(channel_arg, channel, ChannelType);
-     channel_depth = NUM2ULONG(depth);
+    rm_check_destroyed(self);
+    rb_check_frozen(self);
+    Data_Get_Struct(self, Image, image);
+    VALUE_TO_ENUM(channel_arg, channel, ChannelType);
+    channel_depth = NUM2ULONG(depth);
 
-     (void) SetImageChannelDepth(image, channel, channel_depth);
-     rm_check_image_exception(image, RetainOnError);
+    (void) SetImageChannelDepth(image, channel, channel_depth);
+    rm_check_image_exception(image, RetainOnError);
 
-     return self;
+    return self;
 }
 
 
@@ -8000,7 +8000,7 @@ Image_sepiatone(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
 
-    switch(argc)
+    switch (argc)
     {
         case 1:
             threshold = NUM2DBL(argv[0]);
@@ -8251,7 +8251,7 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
     rm_check_destroyed(self);
-    switch(argc)
+    switch (argc)
     {
         case 4:
             opacity = rm_percentage(argv[3]);   // Clamp to 1.0 < x <= 100.0
@@ -8316,16 +8316,16 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
     channels = extract_channels(&argc, argv);
 
     // There must be 0, 1, or 2 remaining arguments.
-    switch(argc)
+    switch (argc)
     {
         case 2:
-             sigma = NUM2DBL(argv[1]);
-             /* Fall thru */
+            sigma = NUM2DBL(argv[1]);
+            /* Fall thru */
         case 1:
-             radius = NUM2DBL(argv[0]);
-             /* Fall thru */
+            radius = NUM2DBL(argv[0]);
+            /* Fall thru */
         case 0:
-             break;
+            break;
         default:
             raise_ChannelType_error(argv[argc-1]);
     }
@@ -8354,9 +8354,9 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 */
 VALUE
 Image_shave(
-    VALUE self,
-    VALUE width,
-    VALUE height)
+           VALUE self,
+           VALUE width,
+           VALUE height)
 {
     rm_check_destroyed(self);
     return xform_image(False, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
@@ -8365,9 +8365,9 @@ Image_shave(
 
 VALUE
 Image_shave_bang(
-    VALUE self,
-    VALUE width,
-    VALUE height)
+                VALUE self,
+                VALUE width,
+                VALUE height)
 {
     rm_check_destroyed(self);
     rb_check_frozen(self);
@@ -8383,9 +8383,9 @@ Image_shave_bang(
 */
 VALUE
 Image_shear(
-    VALUE self,
-    VALUE x_shear,
-    VALUE y_shear)
+           VALUE self,
+           VALUE x_shear,
+           VALUE y_shear)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -8423,7 +8423,7 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
 
     channels = extract_channels(&argc, argv);
 
-    switch(argc)
+    switch (argc)
     {
         case 3:
             sharpen  = (MagickBooleanType) RTEST(argv[2]);
@@ -8580,7 +8580,7 @@ Image_splice(int argc, VALUE *argv, VALUE self)
     rm_check_destroyed(self);
     Data_Get_Struct(self, Image, image);
 
-    switch(argc)
+    switch (argc)
     {
         case 4:
             // use background color
@@ -8666,9 +8666,9 @@ DEF_ATTR_ACCESSOR(Image, start_loop, bool)
 */
 VALUE
 Image_stegano(
-    VALUE self,
-    VALUE watermark_image,
-    VALUE offset)
+             VALUE self,
+             VALUE watermark_image,
+             VALUE offset)
 {
     Image *image, *new_image;
     volatile VALUE wm_image;
@@ -8705,8 +8705,8 @@ Image_stegano(
 */
 VALUE
 Image_stereo(
-    VALUE self,
-    VALUE offset_image_arg)
+            VALUE self,
+            VALUE offset_image_arg)
 {
     Image *image, *new_image;
     volatile VALUE offset_image;
@@ -8791,12 +8791,12 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
 */
 VALUE
 Image_store_pixels(
-    VALUE self,
-    VALUE x_arg,
-    VALUE y_arg,
-    VALUE cols_arg,
-    VALUE rows_arg,
-    VALUE new_pixels)
+                  VALUE self,
+                  VALUE x_arg,
+                  VALUE y_arg,
+                  VALUE cols_arg,
+                  VALUE rows_arg,
+                  VALUE new_pixels)
 {
     Image *image;
     Pixel *pixels, *pixel;
@@ -8816,7 +8816,7 @@ Image_store_pixels(
     if (x < 0 || y < 0 || x+cols > image->columns || y+rows > image->rows)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
-               , cols, rows, x, y);
+                 , cols, rows, x, y);
     }
 
     size = (long)(cols * rows);
@@ -8912,7 +8912,7 @@ Image_sync_profiles(VALUE self)
 #else
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -8930,12 +8930,12 @@ Image_sync_profiles(VALUE self)
 */
 VALUE
 Image_texture_flood_fill(
-    VALUE self,
-    VALUE color_obj,
-    VALUE texture_obj,
-    VALUE x_obj,
-    VALUE y_obj,
-    VALUE method_obj)
+                        VALUE self,
+                        VALUE color_obj,
+                        VALUE texture_obj,
+                        VALUE x_obj,
+                        VALUE y_obj,
+                        VALUE method_obj)
 {
     Image *image, *new_image;
     Image *texture_image;
@@ -8958,14 +8958,14 @@ Image_texture_flood_fill(
     if ((unsigned long)x > image->columns || (unsigned long)y > image->rows)
     {
         rb_raise(rb_eArgError, "target out of range. %ldx%ld given, image is %lux%lu"
-               , x, y, image->columns, image->rows);
+                 , x, y, image->columns, image->rows);
     }
 
     VALUE_TO_ENUM(method_obj, method, PaintMethod);
     if (method != FillToBorderMethod && method != FloodfillMethod)
     {
         rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
-                               "FillToBorderMethod (%d given)", (int)method);
+                 "FillToBorderMethod (%d given)", (int)method);
     }
 
     draw_info = CloneDrawInfo(NULL, NULL);
@@ -9024,10 +9024,10 @@ Image_threshold(VALUE self, VALUE threshold)
 */
 static
 VALUE threshold_image(
-    int argc,
-    VALUE *argv,
-    VALUE self,
-    thresholder_t thresholder)
+                     int argc,
+                     VALUE *argv,
+                     VALUE self,
+                     thresholder_t thresholder)
 {
     Image *image, *new_image;
     double red, green, blue, opacity;
@@ -9199,7 +9199,7 @@ Image_tint(int argc, VALUE *argv, VALUE self)
 
     rm_check_destroyed(self);
 
-    switch(argc)
+    switch (argc)
     {
         case 2:
             red_pct_opaque   = NUM2DBL(argv[1]);
@@ -9237,8 +9237,8 @@ Image_tint(int argc, VALUE *argv, VALUE self)
 #else
     sprintf(opacity,
 #endif
-                     "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
-                   , blue_pct_opaque*100.0, alpha_pct_opaque*100.0);
+            "%g,%g,%g,%g", red_pct_opaque*100.0, green_pct_opaque*100.0
+            , blue_pct_opaque*100.0, alpha_pct_opaque*100.0);
 
     Data_Get_Struct(argv[0], Pixel, tint);
     Data_Get_Struct(self, Image, image);
@@ -9309,11 +9309,11 @@ Image_to_blob(VALUE self)
     if (magick_info)
     {
         if (  (!rm_strcasecmp(magick_info->name, "JPEG")
-            || !rm_strcasecmp(magick_info->name, "JPG"))
-            && (image->rows == 0 || image->columns == 0))
+               || !rm_strcasecmp(magick_info->name, "JPG"))
+              && (image->rows == 0 || image->columns == 0))
         {
             rb_raise(rb_eRuntimeError, "Can't convert %lux%lu %.4s image to a blob"
-                   , image->columns, image->rows, magick_info->name);
+                     , image->columns, image->rows, magick_info->name);
         }
     }
 
@@ -9636,8 +9636,8 @@ Image_units(VALUE self)
 */
 VALUE
 Image_units_eq(
-    VALUE self,
-    VALUE restype)
+              VALUE self,
+              VALUE restype)
 {
     Image *image;
 
@@ -9657,12 +9657,12 @@ Image_units_eq(
 */
 static void
 unsharp_mask_args(
-    int argc,
-    VALUE *argv,
-    double *radius,
-    double *sigma,
-    double *amount,
-    double *threshold)
+                 int argc,
+                 VALUE *argv,
+                 double *radius,
+                 double *sigma,
+                 double *amount,
+                 double *threshold)
 {
     switch (argc)
     {
@@ -9750,7 +9750,7 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
     GetExceptionInfo(&exception);
     new_image = UnsharpMaskImageChannel(image, channels, radius, sigma, amount
-                                      , threshold, &exception);
+                                        , threshold, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -10080,11 +10080,11 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
     return rm_image_new(reflection);
 
-error:
+    error:
     (void) DestroyExceptionInfo(&exception);
     (void) DestroyImage(reflection);
     rb_raise(rb_eRuntimeError, "%s failed on row %lu", func, y);
-    return (VALUE)0;
+    return(VALUE)0;
 }
 
 
@@ -10230,7 +10230,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
             columns = NUM2ULONG(width);
             rows    = NUM2ULONG(height);
 
-            switch(gravity)
+            switch (gravity)
             {
                 case NorthEastGravity:
                 case EastGravity:
@@ -10246,7 +10246,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
                 default:
                     break;
             }
-            switch(gravity)
+            switch (gravity)
             {
                 case SouthWestGravity:
                 case SouthGravity:
@@ -10371,13 +10371,13 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
 */
 static VALUE
 xform_image(
-    int bang,
-    VALUE self,
-    VALUE x,
-    VALUE y,
-    VALUE width,
-    VALUE height,
-    xformer_t xformer)
+           int bang,
+           VALUE self,
+           VALUE x,
+           VALUE y,
+           VALUE width,
+           VALUE height,
+           xformer_t xformer)
 {
     Image *image, *new_image;
     RectangleInfo rect;
@@ -10423,8 +10423,8 @@ xform_image(
                 number of remaining arguments.
 */
 ChannelType extract_channels(
-    int *argc,
-    VALUE *argv)
+                            int *argc,
+                            VALUE *argv)
 {
     volatile VALUE arg;
     ChannelType channels, ch_arg;
@@ -10462,7 +10462,7 @@ void
 raise_ChannelType_error(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument needs to be a ChannelType (%s given)"
-            , rb_class2name(CLASS_OF(arg)));
+             , rb_class2name(CLASS_OF(arg)));
 }
 
 

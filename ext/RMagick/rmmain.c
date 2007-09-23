@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.218 2007/09/23 20:37:26 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.219 2007/09/23 22:27:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -46,7 +46,7 @@ Magick_colors(VALUE class)
 
     if (rb_block_given_p())
     {
-        for(x = 0; x < number_colors; x++)
+        for (x = 0; x < number_colors; x++)
         {
             (void) rb_yield(Color_from_ColorInfo(color_info_list[x]));
         }
@@ -56,7 +56,7 @@ Magick_colors(VALUE class)
     else
     {
         ary = rb_ary_new2((long) number_colors);
-        for(x = 0; x < number_colors; x++)
+        for (x = 0; x < number_colors; x++)
         {
             (void) rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
         }
@@ -86,7 +86,7 @@ Magick_fonts(VALUE class)
 
     if (rb_block_given_p())
     {
-        for(x = 0; x < number_types; x++)
+        for (x = 0; x < number_types; x++)
         {
             (void) rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
@@ -96,7 +96,7 @@ Magick_fonts(VALUE class)
     else
     {
         ary = rb_ary_new2((long)number_types);
-        for(x = 0; x < number_types; x++)
+        for (x = 0; x < number_types; x++)
         {
             (void) rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
@@ -153,11 +153,11 @@ Magick_init_formats(VALUE class)
     (void) DestroyExceptionInfo(&exception);
 
 
-    for(x = 0; x < number_formats; x++)
+    for (x = 0; x < number_formats; x++)
     {
         (void) rb_hash_aset(formats
-                          , rb_str_new2(magick_info[x]->name)
-                          , MagickInfo_to_format((MagickInfo *)magick_info[x]));
+                            , rb_str_new2(magick_info[x]->name)
+                            , MagickInfo_to_format((MagickInfo *)magick_info[x]));
     }
     return formats;
 }
@@ -1499,11 +1499,11 @@ Init_RMagick(void)
 
     // Magick::Chromaticity
     Class_Chromaticity = rb_struct_define(NULL
-                                            , "red_primary"
-                                            , "green_primary"
-                                            , "blue_primary"
-                                            , "white_point"
-                                            , NULL);
+                                          , "red_primary"
+                                          , "green_primary"
+                                          , "blue_primary"
+                                          , "white_point"
+                                          , NULL);
     rb_define_method(Class_Chromaticity, "to_s", ChromaticityInfo_to_s, 0);
     rb_define_const(Module_Magick, "Chromaticity", Class_Chromaticity);
 
@@ -1528,8 +1528,8 @@ Init_RMagick(void)
 
     // Magick::Font
     Class_Font = rb_struct_define(NULL, "name", "description",
-                                      "family", "style", "stretch", "weight",
-                                      "encoding", "foundry", "format", NULL);
+                                  "family", "style", "stretch", "weight",
+                                  "encoding", "foundry", "format", NULL);
     rb_define_method(Class_Font, "to_s", Font_to_s, 0);
     rb_define_const(Module_Magick, "Font", Class_Font);
 
@@ -1559,11 +1559,11 @@ static void test_Magick_version(void)
     const char *version_str;
     const char *web_site =
 #if defined(MagickHomeURL)
-        MagickHomeURL
+    MagickHomeURL
 #else
-        MagickWebSite
+    MagickWebSite
 #endif
-        ;
+    ;
     int x, n;
     ID bypass = rb_intern("RMAGICK_BYPASS_VERSION_TEST");
 
@@ -1586,12 +1586,12 @@ static void test_Magick_version(void)
         }
 
         rb_raise(rb_eRuntimeError,
-            "This version of RMagick was created to run with %s %s\n"
-            "but %.*s is installed on this system. You should either\n"
-            "   1) Configure and build RMagick for %.*s, or\n"
-            "   2) download %s %s from %s and install it.\n" ,
-            MagickPackageName, MagickLibVersionText, x, version_str, x, version_str,
-            MagickPackageName, MagickLibVersionText, web_site);
+                 "This version of RMagick was created to run with %s %s\n"
+                 "but %.*s is installed on this system. You should either\n"
+                 "   1) Configure and build RMagick for %.*s, or\n"
+                 "   2) download %s %s from %s and install it.\n" ,
+                 MagickPackageName, MagickLibVersionText, x, version_str, x, version_str,
+                 MagickPackageName, MagickLibVersionText, web_site);
     }
 
 }
@@ -1621,12 +1621,12 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/09/23 20:37:26 $) Copyright (C) 2007 by Timothy P. Hunter\n"
-        "Built with %s\n"
-        "Built for %s\n"
-        "Web page: http://rmagick.rubyforge.org\n"
-        "Email: rmagick@rubyforge.org\n",
-        Q(RMAGICK_VERSION_STRING), mgk_version, Q(RUBY_VERSION_STRING));
+            "This is %s ($Date: 2007/09/23 22:27:27 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "Built with %s\n"
+            "Built for %s\n"
+            "Web page: http://rmagick.rubyforge.org\n"
+            "Email: rmagick@rubyforge.org\n",
+            Q(RMAGICK_VERSION_STRING), mgk_version, Q(RUBY_VERSION_STRING));
 
     str = rb_str_new2(long_version);
     OBJ_FREEZE(str);

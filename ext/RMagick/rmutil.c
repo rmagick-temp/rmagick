@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.126 2007/09/23 20:48:17 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.127 2007/09/30 22:25:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -151,8 +151,8 @@ rm_check_ary_len(VALUE ary, long len)
 {
     if (RARRAY(ary)->len < len)
     {
-        rb_raise(rb_eIndexError, "not enough elements in array - expecting %d, got %d",
-                        len, RARRAY(ary)->len);
+        rb_raise(rb_eIndexError, "not enough elements in array - expecting %ld, got %ld",
+                        len, (long)RARRAY(ary)->len);
     }
 }
 
@@ -206,7 +206,7 @@ arg_is_number(VALUE arg)
 static VALUE
 rescue_not_str(VALUE arg)
 {
-    rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%' (%s given)",
+    rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%%' (%s given)",
             rb_class2name(CLASS_OF(arg)));
 }
 
@@ -367,7 +367,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
         {
             if (fuzz < 0.0)
             {
-                rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_arg);
+                rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_str);
             }
             fuzz = (fuzz * QuantumRange) / 100.0;
         }
@@ -381,7 +381,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
         fuzz = NUM2DBL(fuzz_arg);
         if (fuzz < 0.0)
         {
-            rb_raise(rb_eArgError, "fuzz may not be negative (got `%g')", fuzz_arg);
+            rb_raise(rb_eArgError, "fuzz may not be negative (got `%g')", fuzz);
         }
     }
 
@@ -2581,7 +2581,11 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 
     if (rb_cvar_defined(CLASS_OF(self), rm_ID_enumerators) != Qtrue)
     {
+#if defined(HAVE_NEW_RB_CVAR_SET)
+        rb_cvar_set(CLASS_OF(self), rm_ID_enumerators, rb_ary_new());
+#else
         rb_cvar_set(CLASS_OF(self), rm_ID_enumerators, rb_ary_new(), 0);
+#endif
     }
 
     enumerators = rb_cvar_get(CLASS_OF(self), rm_ID_enumerators);
@@ -2784,7 +2788,11 @@ rm_write_temp_image(Image *image, char *tmpnam)
     }
 
     id += 1;
+#if defined(HAVE_NEW_RB_CVAR_SET)
+    rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id));
+#else
     rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id), 0);
+#endif
 
     sprintf(tmpnam, "mpri:%d", id);
 
@@ -2842,7 +2850,7 @@ rm_not_implemented(void)
 {
 
     rb_raise(rb_eNotImpError, "the `%s' method is not supported by ImageMagick "
-            MagickLibVersionText, rb_id2name(rb_frame_last_func()));
+            MagickLibVersionText, rb_id2name(THIS_FUNC()));
 }
 
 /*
@@ -3052,7 +3060,7 @@ MagickBooleanType rm_progress_monitor(
     span = rb_uint2big((unsigned long)sp);
 #endif
 
-    method = rb_str_new2(rb_id2name(rb_frame_last_func()));
+    method = rb_str_new2(rb_id2name(THIS_FUNC()));
 
     rval = rb_funcall((VALUE)client_data, rm_ID_call, 3, method, offset, span);
 

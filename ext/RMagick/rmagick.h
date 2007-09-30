@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.202 2007/09/23 20:46:27 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.203 2007/09/30 22:25:17 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -20,7 +20,11 @@
 #include <sys/types.h>
 #endif
 #include "ruby.h"
+#if defined(HAVE_RUBY_INTERN_H)
+#include "ruby/intern.h"
+#else
 #include "intern.h"
+#endif
 #include "rubyio.h"
 
 
@@ -79,6 +83,26 @@
 #define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
 #define RMAGICK_PI 3.14159265358979
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > (Quantum)QuantumRange ? QuantumRange : (value) + 0.5))
+
+
+// Ruby 1.9.0 changed the name to rb_frame_this_func
+#if defined(HAVE_RB_FRAME_THIS_FUNC)
+#define THIS_FUNC() rb_frame_this_func()
+#else
+#define THIS_FUNC() rb_frame_last_func()
+#endif
+
+// GetReadFile doesn't exist in Ruby 1.9.0
+#if !defined(GetReadFile)
+#define GetReadFile(fptr) rb_io_stdio_file(fptr)
+#define GetWriteFile(fptr) rb_io_stdio_file(fptr)
+#endif
+
+// rb_io_t replaces OpenFile in Ruby 1.9.0
+#if defined(HAVE_RB_IO_T)
+#undef OpenFile
+#define OpenFile rb_io_t
+#endif
 
 
 

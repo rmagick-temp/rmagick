@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.256 2007/09/23 22:27:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.257 2007/09/30 22:25:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -497,7 +497,7 @@ VALUE
 Image_aref(VALUE self, VALUE key_arg)
 {
     Image *image;
-    char *key;
+    const char *key;
     const char *attr;
 
     rm_check_destroyed(self);
@@ -545,7 +545,8 @@ VALUE
 Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 {
     Image *image;
-    char *key, *attr;
+    const char *key;
+    char *attr;
     unsigned int okay;
 
     rm_check_destroyed(self);
@@ -2785,7 +2786,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     npixels = (long)(width * height * map_l);
     if (RARRAY(pixels_arg)->len != npixels)
     {
-        rb_raise(rb_eArgError, "wrong number of array elements (%d for %d)"
+        rb_raise(rb_eArgError, "wrong number of array elements (%ld for %ld)"
                  , RARRAY(pixels_arg)->len, npixels);
     }
 
@@ -2819,7 +2820,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         pixel = rb_ary_entry(pixels_arg, x);
         if (rb_obj_is_kind_of(pixel, pixel_class) != Qtrue)
         {
-            rb_raise(rb_eTypeError, "element %d in pixel array is %s, expected %s"
+            rb_raise(rb_eTypeError, "element %ld in pixel array is %s, expected %s"
                      , x, rb_class2name(CLASS_OF(pixel)),rb_class2name(CLASS_OF(pixel0)));
         }
         if (pixel_class == rb_cFloat)
@@ -2827,7 +2828,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
             pixels.f[x] = (float) NUM2DBL(pixel);
             if (pixels.f[x] < 0.0 || pixels.f[x] > 1.0)
             {
-                rb_raise(rb_eArgError, "element %d is out of range [0..1]: %f", x, pixels.f[x]);
+                rb_raise(rb_eArgError, "element %ld is out of range [0..1]: %f", x, pixels.f[x]);
             }
         }
         else
@@ -3006,6 +3007,7 @@ Image_convolve(
 
     order = NUM2UINT(order_arg);
 
+    kernel_arg = rb_Array(kernel_arg);
     rm_check_ary_len(kernel_arg, (long)(order*order));
 
     // Convert the kernel array argument to an array of doubles
@@ -10506,7 +10508,7 @@ static void call_trace_proc(Image *image, char *which)
 #endif
             buffer[n] = '\0';
             trace_args[2] = rb_str_new2(buffer);
-            trace_args[3] = ID2SYM(rb_frame_last_func());
+            trace_args[3] = ID2SYM(THIS_FUNC());
             (void) rb_funcall2(trace, rm_ID_call, 4, (VALUE *)trace_args);
         }
     }

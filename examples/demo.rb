@@ -308,7 +308,7 @@ begin
     montage_image << montage.composite(logo, 245, 0, OverCompositeOp)
 
     # Write the result to a file
-    montage_image.compression = RunlengthEncodedCompression
+    montage_image.compression = RLECompression
     montage_image.matte = false
     puts "Writing image ./rm_demo_out.miff"
     montage_image.write "rm_demo_out.miff"

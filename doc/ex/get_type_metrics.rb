@@ -3,27 +3,26 @@ require 'RMagick'
 include Magick
 
 # Add a method for drawing braces.
-module Magick
-    class Draw
+class Draw
 
-        # (w,h) - width & height of rectangle enclosing brace.
-        # Normally the brace is drawn with its opening to the
-        # left and its lower point on the origin.
-        #
-        # Set w < 0 to draw right-opening brace. Set h < 0 to
-        # position top point at origin.
-        #
-        # The placement & orientation is affected by the
-        # current user coordinate system.
-        def brace(w, h)
-            raise(ArgumentError, "width must be != 0") unless w != 0
-            raise(ArgumentError, "height must be != 0") unless h != 0
-            path("M0,0 Q#{w},0 #{w/2.0},#{-h/4.0} T#{w},#{-h/2.0}" +
-                 "Q0,#{-h/2.0} #{w/2.0},#{-(3.0*h/4.0)} T0,#{-h}")
-        end
+    # (w,h) - width & height of rectangle enclosing brace.
+    # Normally the brace is drawn with its opening to the
+    # left and its lower point on the origin.
+    #
+    # Set w < 0 to draw right-opening brace. Set h < 0 to
+    # position top point at origin.
+    #
+    # The placement & orientation is affected by the
+    # current user coordinate system.
+    def brace(w, h)
+        raise(ArgumentError, "width must be != 0") unless w != 0
+        raise(ArgumentError, "height must be != 0") unless h != 0
+        path("M0,0 Q#{w},0 #{w/2.0},#{-h/4.0} T#{w},#{-h/2.0}" +
+             "Q0,#{-h/2.0} #{w/2.0},#{-(3.0*h/4.0)} T0,#{-h}")
+    end
 
-    end     # class Draw
-end
+end     # class Draw
+
 
 
 
@@ -37,12 +36,12 @@ canvas = Image.new(410,320,HatchFill.new('white', 'lightcyan2'))
 # Draw a big lowercase 'g' on the canvas. Leave room on all sides for
 # the labels. Use 'undercolor' to set off the glyph.
 glyph = Draw.new
-glyph.annotate(canvas, 0, 0, Origin_x, Origin_y, Glyph) do |opts|
-    opts.pointsize = 124
-    opts.stroke = 'none'
-    opts.fill = 'black'
-    opts.font_family = Face
-    opts.undercolor = '#ffff00c0'
+glyph.annotate(canvas, 0, 0, Origin_x, Origin_y, Glyph) do
+    glyph.pointsize = 124
+    glyph.stroke = 'none'
+    glyph.fill = 'black'
+    glyph.font_family = Face
+    glyph.undercolor = '#ffff00c0'
 end
 
 # Call get_type_metrics. This is what this example's all about.

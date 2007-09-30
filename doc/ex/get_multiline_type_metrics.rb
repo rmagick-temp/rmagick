@@ -7,7 +7,7 @@ background = Magick::Image.new(200, 200)
 gc = Magick::Draw.new
 
 # Draw the text centered on the background
-gc.annotate(background, 0, 0, 0, 0, TEXT) do |gc|
+gc.annotate(background, 0, 0, 0, 0, TEXT) do
     gc.font_family = 'Verdana'
     gc.pointsize = 36
     gc.gravity = Magick::CenterGravity

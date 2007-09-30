@@ -207,7 +207,7 @@ if BUILD_HTMLDOC
   #
   # Don't bother if we're in the sandbox
   #
-  if File.exists? 'CVS/Entries'
+  if File.exist? 'CVS/Entries'
     puts "post-setup.rb: in CVS sandbox - stopping..."
     exit
   end

@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.10 2007/01/20 17:39:49 rmagick Exp $
+# $Id: misc.rb,v 1.11 2007/09/30 22:22:17 rmagick Exp $
 # Copyright (C) 2007 Timothy P. Hunter
 module Magick
     class RVG
@@ -295,7 +295,7 @@ module Magick
                         end
                         first_word = false
                         word.split('').each do |glyph|
-                            case @ctx.text_attrs.glyph_orientation_vertical
+                            case @ctx.text_attrs.glyph_orientation_vertical.to_i
                                 when 0, 90, 270
                                     x_shift = (dx - x_rel_coords.shift) / 2
                                 when 180

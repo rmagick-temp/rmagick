@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90.2.3.2.1 2007/09/16 21:38:42 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.3.2.2 2007/09/30 22:10:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -192,7 +192,7 @@ rm_check_ary_len(VALUE ary, long len)
 {
     if (RARRAY(ary)->len < len)
     {
-        rb_raise(rb_eIndexError, "not enough elements in array - expecting %d, got %d",
+        rb_raise(rb_eIndexError, "not enough elements in array - expecting %ld, got %ld",
                         len, RARRAY(ary)->len);
     }
 }
@@ -244,7 +244,7 @@ arg_is_number(VALUE arg)
 static VALUE
 rescue_not_str(VALUE arg)
 {
-    rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%' (%s given)",
+    rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%%' (%s given)",
             rb_class2name(CLASS_OF(arg)));
 }
 
@@ -404,7 +404,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
         {
             if (fuzz < 0.0)
             {
-                rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_arg);
+                rb_raise(rb_eArgError, "percentages may not be negative (got `%s')", fuzz_str);
             }
             fuzz = (fuzz * MaxRGB) / 100.0;
         }
@@ -418,7 +418,7 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
         fuzz = NUM2DBL(fuzz_arg);
         if (fuzz < 0.0)
         {
-            rb_raise(rb_eArgError, "fuzz may not be negative (got `%g')", fuzz_arg);
+            rb_raise(rb_eArgError, "fuzz may not be negative (got `%g')", fuzz);
         }
     }
 

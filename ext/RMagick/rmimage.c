@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5 2007/07/31 12:25:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.1 2007/09/30 22:10:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3061,7 +3061,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     npixels = (long)(width * height * map_l);
     if (RARRAY(pixels_arg)->len != npixels)
     {
-        rb_raise(rb_eArgError, "wrong number of array elements (%d for %d)"
+        rb_raise(rb_eArgError, "wrong number of array elements (%ld for %ld)"
                , RARRAY(pixels_arg)->len, npixels);
     }
 
@@ -3093,7 +3093,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         pixel = rb_ary_entry(pixels_arg, x);
         if (TYPE(pixel) != type)
         {
-            rb_raise(rb_eTypeError, "element %d in pixel array is %s, expected %s"
+            rb_raise(rb_eTypeError, "element %ld in pixel array is %s, expected %s"
                    , x, rb_class2name(CLASS_OF(pixel)),rb_class2name(CLASS_OF(pixel0)));
         }
         if (type == T_FLOAT)
@@ -3101,7 +3101,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
             pixels.f[x] = (float) NUM2DBL(pixel);
             if (pixels.f[x] < 0.0 || pixels.f[x] > 1.0)
             {
-                rb_raise(rb_eArgError, "element %d is out of range [0..1]: %f", x, pixels.f[x]);
+                rb_raise(rb_eArgError, "element %ld is out of range [0..1]: %f", x, pixels.f[x]);
             }
         }
         else
@@ -3289,6 +3289,7 @@ Image_convolve(
 
     order = NUM2UINT(order_arg);
 
+    kernel_arg = rb_Array(kernel_arg);
     rm_check_ary_len(kernel_arg, (long)(order*order));
 
     // Convert the kernel array argument to an array of doubles

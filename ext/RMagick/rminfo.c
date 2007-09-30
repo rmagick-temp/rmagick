@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.45.2.2 2007/03/04 00:05:36 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.45.2.2.2.1 2007/09/30 22:10:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -606,7 +606,7 @@ Info_depth_eq(VALUE self, VALUE depth)
 #endif
             break;
         default:
-            rb_raise(rb_eArgError, "invalid depth (%d)", d);
+            rb_raise(rb_eArgError, "invalid depth (%lu)", d);
             break;
     }
 

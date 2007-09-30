@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.60 2007/09/23 21:12:49 rmagick Exp $
+# $Id: RMagick.rb,v 1.61 2007/09/30 22:23:21 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -253,7 +253,7 @@ class Draw
     def define_clip_path(name)
         begin
             push('defs')
-            push('clip-path ', name)
+            push('clip-path', name)
             push('graphic-context')
             yield
         ensure
@@ -427,7 +427,7 @@ class Draw
             primitive "pop graphic-context"
         else
             # to_s allows a Symbol to be used instead of a String
-            primitive "pop " + what.to_s
+            primitive "pop " + what.map {|w| w.to_s}.join(' ')
         end
     end
 
@@ -441,7 +441,7 @@ class Draw
             primitive "push graphic-context"
         else
             # to_s allows a Symbol to be used instead of a String
-            primitive "push " + what.to_s
+            primitive "push " + what.map {|w| w.to_s}.join(' ')
         end
     end
 
@@ -1229,11 +1229,11 @@ protected
     end
 
     # Ensure array is always an array of Magick::Image objects
-    def is_an_image_array(obj)
-        unless obj.respond_to? :each
-            Kernel.raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{obj.class} given)"
+    def is_an_image_array(ary)
+        unless ary.respond_to? :each
+            Kernel.raise ArgumentError, "Magick::ImageList or array of Magick::Images required (#{ary.class} given)"
         end
-        obj.each { |obj| is_an_image obj }
+        ary.each { |obj| is_an_image obj }
         true
     end
 

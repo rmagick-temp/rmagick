@@ -30,6 +30,10 @@ ColorspaceTypes = [
   Magick::LogColorspace
 ]
 
+
+FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
+
+
 class Image3_UT < Test::Unit::TestCase
 
     def setup
@@ -47,8 +51,8 @@ class Image3_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.profile!('iptc', nil) }
 
         @img.freeze
-        assert_raise(TypeError) { @img.profile!('icc', 'xxx') }
-        assert_raise(TypeError) { @img.profile!('*', nil) }
+        assert_raise(FreezeError) { @img.profile!('icc', 'xxx') }
+        assert_raise(FreezeError) { @img.profile!('*', nil) }
     end
 
     def test_quantize
@@ -206,7 +210,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.resize!(0.50) }
+        assert_raise(FreezeError) { @img.resize!(0.50) }
     end
 
     def test_resize_to_fit
@@ -254,7 +258,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.rotate!(45) }
+        assert_raise(FreezeError) { @img.rotate!(45) }
     end
 
     def test_sample
@@ -275,7 +279,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.sample!(0.50) }
+        assert_raise(FreezeError) { @img.sample!(0.50) }
     end
 
     def test_scale
@@ -296,7 +300,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.scale!(0.50) }
+        assert_raise(FreezeError) { @img.scale!(0.50) }
     end
 
     def test_segment
@@ -416,7 +420,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.shave!(2,2) }
+        assert_raise(FreezeError) { @img.shave!(2,2) }
     end
 
     def test_shear
@@ -588,7 +592,7 @@ class Image3_UT < Test::Unit::TestCase
             assert_same(@img, res)
         end
         @img.freeze
-        assert_raise(TypeError) { @img.thumbnail!(0.50) }
+        assert_raise(FreezeError) { @img.thumbnail!(0.50) }
     end
 
     def test_to_blob

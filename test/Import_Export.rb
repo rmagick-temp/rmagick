@@ -48,17 +48,17 @@ class Import_Export_UT < Test::Unit::TestCase
         import(p, Magick::CharPixel)
         import(p, Magick::QuantumPixel)
 
-        spixels = pixels.collect {|p| p * 257}
+        spixels = pixels.collect {|px| px * 257}
         p = spixels.pack("S*")
         import(p, Magick::ShortPixel)
 
-        ipixels = pixels.collect {|p| p * 16843009}
+        ipixels = pixels.collect {|px| px * 16843009}
         p = ipixels.pack("I*")
         import(p, Magick::IntegerPixel)
         import(p, Magick::LongPixel)
 
       when 16
-        cpixels = pixels.collect {|p| p / 257}
+        cpixels = pixels.collect {|px| px / 257}
         p = cpixels.pack("C*")
         import(p, Magick::CharPixel)
 
@@ -66,17 +66,17 @@ class Import_Export_UT < Test::Unit::TestCase
         import(p, Magick::ShortPixel)
         import(p, Magick::QuantumPixel)
 
-        ipixels = pixels.collect {|p| p * 65537}
+        ipixels = pixels.collect {|px| px * 65537}
         p = ipixels.pack("I*")
         import(p, Magick::IntegerPixel)
         import(p, Magick::LongPixel)
 
       when 32
-        cpixels = pixels.collect {|p| p / 16843009}
+        cpixels = pixels.collect {|px| px / 16843009}
         p = cpixels.pack("C*")
         import(p, Magick::CharPixel)
 
-        spixels = pixels.collect {|p| p / 65537}
+        spixels = pixels.collect {|px| px / 65537}
         p = spixels.pack("S*")
         import(p, Magick::ShortPixel)
 
@@ -86,15 +86,15 @@ class Import_Export_UT < Test::Unit::TestCase
         import(p, Magick::QuantumPixel)
 
       when 64
-        cpixels = pixels.collect {|p| p / 72340172838076673}
+        cpixels = pixels.collect {|px| px / 72340172838076673}
         p = cpixels.pack("C*")
         import(p, Magick::CharPixel)
 
-        spixels = pixels.collect {|p| p / 281479271743489}
+        spixels = pixels.collect {|px| px / 281479271743489}
         p = spixels.pack("S*")
         import(p, Magick::ShortPixel)
 
-        ipixels = pixels.collect {|p| p / 4294967297 }
+        ipixels = pixels.collect {|px| px / 4294967297 }
         p = ipixels.pack("I*")
         import(p, Magick::IntegerPixel)
         import(p, Magick::LongPixel)

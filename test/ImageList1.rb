@@ -801,6 +801,6 @@ end
 
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
-FILES = Dir[IMAGES_DIR+'/Button_*.gif']
+FILES = Dir[IMAGES_DIR+'/Button_*.gif'].sort
 Test::Unit::UI::Console::TestRunner.run(ImageList1_UT)
 end

@@ -10,6 +10,8 @@ require 'test/unit/ui/console/testrunner'
 #   improve test_directory
 #   improve test_montage
 
+FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
+
 class Image_Attributes_UT < Test::Unit::TestCase
 
     def setup
@@ -633,43 +635,43 @@ class Image_Attributes_UT < Test::Unit::TestCase
 
     def test_frozen
         @img.freeze
-        assert_raise(TypeError) { @img.background_color = 'xxx' }
-        assert_raise(TypeError) { @img.blur = 50 }
-        assert_raise(TypeError) { @img.border_color = 'xxx' }
+        assert_raise(FreezeError) { @img.background_color = 'xxx' }
+        assert_raise(FreezeError) { @img.blur = 50 }
+        assert_raise(FreezeError) { @img.border_color = 'xxx' }
         rp = Magick::Point.new(1,1)
         gp = Magick::Point.new(1,1)
         bp = Magick::Point.new(1,1)
         wp = Magick::Point.new(1,1)
-        assert_raise(TypeError) { @img.chromaticity = Magick::Chromaticity.new(rp, gp, bp, wp) }
-        assert_raise(TypeError) { @img.class_type = Magick::DirectClass }
-        assert_raise(TypeError) { @img.color_profile = 'xxx' }
-        assert_raise(TypeError) { @img.colorspace = Magick::RGBColorspace }
-        assert_raise(TypeError) { @img.compose = Magick::OverCompositeOp }
-        assert_raise(TypeError) { @img.compression = Magick::RLECompression }
-        assert_raise(TypeError) { @img.delay = 2 }
-        assert_raise(TypeError) { @img.density = '72.0x72.0' }
-        assert_raise(TypeError) { @img.dispose = Magick::NoneDispose }
-        assert_raise(TypeError) { @img.endian = Magick::MSBEndian }
-        assert_raise(TypeError) { @img.extract_info = Magick::Rectangle.new(1,2,3,4) }
-        assert_raise(TypeError) { @img.filter = Magick::PointFilter }
-        assert_raise(TypeError) { @img.format = 'GIF' }
-        assert_raise(TypeError) { @img.fuzz = 50.0 }
-        assert_raise(TypeError) { @img.gamma = 2.0 }
-        assert_raise(TypeError) { @img.geometry = '100x100' }
-        assert_raise(TypeError) { @img.interlace = Magick::NoInterlace }
-        assert_raise(TypeError) { @img.iptc_profile = 'xxx' }
-        assert_raise(TypeError) { @img.mask = @img }
-        assert_raise(TypeError) { @img.matte = true }
-        assert_raise(TypeError) { @img.monitor = Proc.new { |name, q, s| puts name } }
-        assert_raise(TypeError) { @img.offset = 100 }
-        assert_raise(TypeError) { @img.opacity = 100 }
-        assert_raise(TypeError) { @img.page = Magick::Rectangle.new(1,2,3,4) }
-        assert_raise(TypeError) { @img.rendering_intent = Magick::SaturationIntent }
-        assert_raise(TypeError) { @img.start_loop = true }
-        assert_raise(TypeError) { @img.ticks_per_second = 1000 }
-        assert_raise(TypeError) { @img.units = Magick::PixelsPerInchResolution }
-        assert_raise(TypeError) { @img.x_resolution = 72.0 }
-        assert_raise(TypeError) { @img.y_resolution = 72.0 }
+        assert_raise(FreezeError) { @img.chromaticity = Magick::Chromaticity.new(rp, gp, bp, wp) }
+        assert_raise(FreezeError) { @img.class_type = Magick::DirectClass }
+        assert_raise(FreezeError) { @img.color_profile = 'xxx' }
+        assert_raise(FreezeError) { @img.colorspace = Magick::RGBColorspace }
+        assert_raise(FreezeError) { @img.compose = Magick::OverCompositeOp }
+        assert_raise(FreezeError) { @img.compression = Magick::RLECompression }
+        assert_raise(FreezeError) { @img.delay = 2 }
+        assert_raise(FreezeError) { @img.density = '72.0x72.0' }
+        assert_raise(FreezeError) { @img.dispose = Magick::NoneDispose }
+        assert_raise(FreezeError) { @img.endian = Magick::MSBEndian }
+        assert_raise(FreezeError) { @img.extract_info = Magick::Rectangle.new(1,2,3,4) }
+        assert_raise(FreezeError) { @img.filter = Magick::PointFilter }
+        assert_raise(FreezeError) { @img.format = 'GIF' }
+        assert_raise(FreezeError) { @img.fuzz = 50.0 }
+        assert_raise(FreezeError) { @img.gamma = 2.0 }
+        assert_raise(FreezeError) { @img.geometry = '100x100' }
+        assert_raise(FreezeError) { @img.interlace = Magick::NoInterlace }
+        assert_raise(FreezeError) { @img.iptc_profile = 'xxx' }
+        assert_raise(FreezeError) { @img.mask = @img }
+        assert_raise(FreezeError) { @img.matte = true }
+        assert_raise(FreezeError) { @img.monitor = Proc.new { |name, q, s| puts name } }
+        assert_raise(FreezeError) { @img.offset = 100 }
+        assert_raise(FreezeError) { @img.opacity = 100 }
+        assert_raise(FreezeError) { @img.page = Magick::Rectangle.new(1,2,3,4) }
+        assert_raise(FreezeError) { @img.rendering_intent = Magick::SaturationIntent }
+        assert_raise(FreezeError) { @img.start_loop = true }
+        assert_raise(FreezeError) { @img.ticks_per_second = 1000 }
+        assert_raise(FreezeError) { @img.units = Magick::PixelsPerInchResolution }
+        assert_raise(FreezeError) { @img.x_resolution = 72.0 }
+        assert_raise(FreezeError) { @img.y_resolution = 72.0 }
     end
 
 end     # class Image_Attributes_UT

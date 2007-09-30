@@ -6,6 +6,7 @@ require 'test/unit/ui/console/testrunner'
 
 # TODO: improve exif tests - need a benchmark image with EXIF data
 
+FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
 class Image2_UT < Test::Unit::TestCase
 
@@ -21,7 +22,7 @@ class Image2_UT < Test::Unit::TestCase
             assert_same(img1, res)
         end
         img1.freeze
-        assert_raise(TypeError) { img1.composite!(img2, Magick::NorthWestGravity, Magick::OverCompositeOp) }
+        assert_raise(FreezeError) { img1.composite!(img2, Magick::NorthWestGravity, Magick::OverCompositeOp) }
     end
 
     def test_composite_affine
@@ -217,7 +218,11 @@ class Image2_UT < Test::Unit::TestCase
 
     def test_destroy
       methods = Magick::Image.instance_methods(false).sort
-      methods -= %w{ __display__ destroy! destroyed? inspect cur_image}
+      if RUBY_VERSION == '1.9.0'
+          methods -= [:__display__, :destroy!, :destroyed?, :inspect, :cur_image]
+      else
+          methods -= %w{ __display__ destroy! destroyed? inspect cur_image}
+      end
 
       assert_equal(false, @img.destroyed?)
       @img.destroy!
@@ -226,6 +231,7 @@ class Image2_UT < Test::Unit::TestCase
 
       methods.each do |method|
           arity = @img.method(method).arity
+          method = method.to_s
 
           case
               when method == "[]="

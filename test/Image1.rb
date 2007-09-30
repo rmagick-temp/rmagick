@@ -5,6 +5,8 @@ require 'base64'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
+FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
+
 class Image1_UT < Test::Unit::TestCase
 
     def setup
@@ -36,7 +38,7 @@ class Image1_UT < Test::Unit::TestCase
             assert_equal(known[name], value)
         end
 
-        assert_raise(TypeError) do
+        assert_raise(FreezeError) do
             @img.freeze
             @img['d'] = 'string4'
         end
@@ -307,7 +309,7 @@ class Image1_UT < Test::Unit::TestCase
         res = @img.border(2,2, 'red')
         assert_instance_of(Magick::Image,  res)
         @img.freeze
-        assert_raise(TypeError) { @img.border!(2,2, 'red') }
+        assert_raise(FreezeError) { @img.border!(2,2, 'red') }
     end
 
     def test_change_geometry
@@ -506,7 +508,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_nothing_raised { pc_img.colormap(0, pixel) }
         assert_raise(TypeError) { pc_img.colormap(0, [2]) }
         pc_img.freeze
-        assert_raise(TypeError) { pc_img.colormap(0, 'red') }
+        assert_raise(FreezeError) { pc_img.colormap(0, 'red') }
     end
 
     def test_color_point
@@ -529,7 +531,7 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.color_reset!([2]) }
         assert_raise(ArgumentError)  { @img.color_reset!('x') }
         @img.freeze
-        assert_raise(TypeError) { @img.color_reset!('red') }
+        assert_raise(FreezeError) { @img.color_reset!('red') }
     end
 
     def test_combine

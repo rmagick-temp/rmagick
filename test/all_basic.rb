@@ -20,7 +20,7 @@ end
 $:.push('.')
 
 IMAGES_DIR = '../doc/ex/images'
-FILES = Dir[IMAGES_DIR+'/Button_*.gif']
+FILES = Dir[IMAGES_DIR+'/Button_*.gif'].sort
 FLOWER_HAT = IMAGES_DIR+'/Flower_Hat.jpg'
 
 require 'Image1.rb'

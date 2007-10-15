@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.58 2007/09/23 22:27:26 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.59 2007/10/15 23:05:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -203,7 +203,13 @@ ImageList_flatten_images(VALUE self)
 
     images = rm_images_from_imagelist(self);
     GetExceptionInfo(&exception);
+
+#if defined(HAVE_ENUM_FLATTENLAYER)
+    new_image = MergeImageLayers(images, FlattenLayer, &exception);
+#else
     new_image = FlattenImages(images, &exception);
+#endif
+
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
     (void) DestroyExceptionInfo(&exception);
@@ -413,7 +419,13 @@ ImageList_mosaic(VALUE self)
 
     GetExceptionInfo(&exception);
     images = rm_images_from_imagelist(self);
+
+#if defined(HAVE_ENUM_MOSAICLAYER)
+    new_image = MergeImageLayers(images, MosaicLayer, &exception);
+#else
     new_image = MosaicImages(images, &exception);
+#endif
+
     rm_split(images);
     rm_check_exception(&exception, new_image, DestroyOnError);
     (void) DestroyExceptionInfo(&exception);

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image::Info - Optional method
   arguments</title>
@@ -132,13 +132,13 @@
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#orientation">orientation</a></li>
+
+        <li><a href="#origin">origin</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#origin">origin</a></li>
-
         <li><a href="#page">page</a></li>
 
         <li><a href="#pointsize">pointsize</a></li>
@@ -154,6 +154,8 @@
         <li><a href="#stroke">stroke</a></li>
 
         <li><a href="#stroke_width">stroke_width</a></li>
+
+        <li><a href="#tile_offset">tile_offset</a></li>
 
         <li><a href="#texture">texture</a></li>
 
@@ -338,8 +340,8 @@ self["tiff", "bits-per-sample"] &raquo; 2
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Define a format-specific option. See <a href="#aset">[]=</a>,
-    above.</p>
+    <p>Define a format-specific option. See <a href=
+    "#aset">[]=</a>, above.</p>
 
     <h4>Arguments</h4>
 
@@ -507,7 +509,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the image pixel interpretation.</p>
+    <p>Specifies the image pixel interpretation.</p>
 
     <h4>Arguments</h4>A <a href=
     "constants.html#ColorspaceType">ColorspaceType</a> constant.
@@ -545,7 +547,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the type of compression used when writing the image.
+    <p>Specifies the type of compression used when writing the image.
     Only some image formats support compression. For those that do,
     only some compression types are supported. If you specify an
     compression type that is not supported, the default compression
@@ -717,7 +719,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the vertical and horizontal resolution in pixels.
+    <p>Specifies the vertical and horizontal resolution in pixels.
     The default density is "72.0x72.0". This attribute can be used
     when writing JBIG, PCL, PS, PS2, and PS3 format images.</p>
 
@@ -761,7 +763,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the image depth.</p>
+    <p>Specifies the image depth.</p>
 
     <h4>Arguments</h4>
 
@@ -824,7 +826,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify a portion of an image to be extracted when the image
+    <p>Specifies a portion of an image to be extracted when the image
     is constituted. This attribute can be used to identify a subset
     of an image that is otherwise too large to keep in memory.</p>
 
@@ -1089,7 +1091,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the orientation of the image pixels.</p>
+    <p>Specifies the orientation of the image pixels.</p>
 
     <h4>Argument</h4>
 
@@ -1231,8 +1233,8 @@ self.undefine("tiff", "bits-per-sample")
 
     <h4>Arguments</h4>
 
-    <p>A <a href="imusage.html#geometry">geometry string</a>
-    or a <a href="struct.html#Geometry">Geometry</a> object.</p>
+    <p>A <a href="imusage.html#geometry">geometry string</a> or a
+    <a href="struct.html#Geometry">Geometry</a> object.</p>
   </div>
 
   <div class="sig">
@@ -1292,6 +1294,28 @@ self.undefine("tiff", "bits-per-sample")
   </div>
 
   <div class="sig">
+    <h3 id="tile_offset">tile_offset</h3>
+
+    <p><span class="arg">self</span>.tile_offset= <span class=
+    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Specifies the offset for tile images, relative
+    to the background image it will be tiled on.</p>
+
+    <p>This attribute is useful with the "tile:" and "pattern:"
+    image formats.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A <a href="imusage.html#geometry">geometry string</a> or a
+    <a href="struct.html#Geometry">Geometry</a> object.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="undercolor">undercolor</h3>
 
     <p><span class="arg">self.</span>undercolor= <span class=
@@ -1320,7 +1344,7 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specify the units of image resolution.</p>
+    <p>Specifies the units of image resolution.</p>
 
     <h4>Arguments</h4>
 

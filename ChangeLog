@@ -23,6 +23,7 @@ RMagick 2.0.0
     o Removed deprecated RunlengthEncodedCompression CompressionType. Use
       RLECompression instead
     o Added Image::Info#stroke=, stroke_width= and undercolor= attributes
+    o Added Image::Info#tile_offset= attribute
     o Added Draw#fill_pattern= and #stroke_pattern= annotate attributes
     o Changed Image::Info[] and Image::Info[]= to allow an omitted "format"
       argument
@@ -48,7 +49,8 @@ RMagick 2.0.0
     o Added Image#alpha=
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
-    o Updated for ImageMagick 6.3.5-8
+    o Updated for ImageMagick 6.3.6-2
+    o Made changes as necessary to work with current Ruby 1.9.0
 
 RMagick 1.15.8
     o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.

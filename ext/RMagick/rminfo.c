@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.65 2007/09/30 22:25:17 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.66 2007/10/20 22:37:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1516,6 +1516,55 @@ Info_texture_eq(VALUE self, VALUE texture)
     magick_clone_string(&info->texture, name);
 
     return self;
+}
+
+
+/*
+    Method:     Image::Info#tile_offset= geometry
+    Purpose:    info.tile_offset = [+/-]x[+/-]y
+*/
+VALUE
+Info_tile_offset_eq(VALUE self, VALUE offset)
+{
+    Info *info;
+    volatile VALUE offset_str;
+    char *tile_offset;
+
+    offset_str = rb_funcall(offset, rm_ID_to_s, 0);
+    tile_offset = StringValuePtr(offset_str);
+    if (!IsGeometry(tile_offset))
+    {
+        rb_raise(rb_eArgError, "invalid tile offset geometry: %s", tile_offset);
+    }
+
+    Data_Get_Struct(self, Info, info);
+
+    (void) DeleteImageOption(info, "tile-offset");
+    (void) SetImageOption(info, "tile-offset", tile_offset);
+    return self;
+}
+
+
+/*
+    Method:     Image::Info#tile_offset
+    Purpose:    returns tile_offset attribute values
+*/
+VALUE
+Info_tile_offset(VALUE self)
+{
+    Info *info;
+    const char *tile_offset;
+
+    Data_Get_Struct(self, Info, info);
+
+    tile_offset = GetImageOption(info, "tile-offset");
+
+    if (!tile_offset)
+    {
+        return Qnil;
+    }
+
+    return rb_str_new2(tile_offset);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.203 2007/09/30 22:25:17 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.204 2007/10/20 22:37:06 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -637,10 +637,11 @@ ATTR_ACCESSOR(Info, quality)
 ATTR_ACCESSOR(Info, sampling_factor)
 ATTR_ACCESSOR(Info, scene)
 ATTR_ACCESSOR(Info, server_name)
+ATTR_ACCESSOR(Info, size)
 ATTR_ACCESSOR(Info, stroke)
 ATTR_ACCESSOR(Info, stroke_width)
 ATTR_WRITER(Info, texture)
-ATTR_ACCESSOR(Info, size)
+ATTR_ACCESSOR(Info, tile_offset)
 ATTR_ACCESSOR(Info, undercolor)
 ATTR_ACCESSOR(Info, units)
 ATTR_ACCESSOR(Info, view)

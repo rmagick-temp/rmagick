@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.219 2007/09/23 22:27:27 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.220 2007/10/20 22:37:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -862,6 +862,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, fuzz)
     DCL_ATTR_ACCESSOR(Info, gravity)
     DCL_ATTR_ACCESSOR(Info, group)
+    DCL_ATTR_ACCESSOR(Info, image_type)
     DCL_ATTR_ACCESSOR(Info, interlace)
     DCL_ATTR_ACCESSOR(Info, label)
     DCL_ATTR_ACCESSOR(Info, matte_color)
@@ -880,7 +881,7 @@ Init_RMagick(void)
     DCL_ATTR_ACCESSOR(Info, stroke)
     DCL_ATTR_ACCESSOR(Info, stroke_width)
     DCL_ATTR_WRITER(Info, texture)
-    DCL_ATTR_ACCESSOR(Info, image_type)
+    DCL_ATTR_ACCESSOR(Info, tile_offset)
     DCL_ATTR_ACCESSOR(Info, undercolor)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
@@ -1621,7 +1622,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/09/23 22:27:27 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/10/20 22:37:06 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

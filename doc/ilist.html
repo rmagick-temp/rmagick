@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: class ImageList</title>
   <meta http-equiv="Content-Type" content=
@@ -536,17 +536,15 @@ imagelist.animate { self.server_name = "other:0.0" }
      <img style="display:none" id="notaveraged" onmouseout=
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
-    "ex/average_before.gif" alt="average example"
-    /><!--
+    "ex/average_before.gif" alt="average example" /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
-    src="ex/average_after.gif" alt="average example"
-    /></a> <img src="ex/images/spin.gif" alt="" class=
-    "spin" style="left:131px; display:" id="averagedspin" title=
-    "Mouse over the example to see the 3 original images"
-    /></p>
+    src="ex/average_after.gif" alt="average example" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" style=
+    "left:131px; display:" id="averagedspin" title=
+    "Mouse over the example to see the 3 original images" /></p>
 
     <h4>Magick API</h4>
 
@@ -615,7 +613,10 @@ imagelist.animate { self.server_name = "other:0.0" }
     "ex/images/spin.gif" alt="" class="spin" style="left:159px"
     title="Mouse over the example to see the animation" /></p>
 
-    <h4>See also</h4><a href="#flatten_images">flatten_images</a>
+    <h4>See also</h4>
+
+    <p><a href="#flatten_images">flatten_images</a>, <a href=
+    "#optimize_layers">optimize_layers</a></p>
 
     <h4>Magick API</h4>
 
@@ -799,11 +800,12 @@ imagelist2 = imagelist1.copy
 
     <h4>See also</h4>
 
-    <p><a href="#coalesce">coalesce</a></p>
+    <p><a href="#coalesce">coalesce</a>, <a href=
+    "#optimize_layers">optimize_layers</a></p>
 
     <h4>Magick API</h4>
 
-    <p>FlattenImageList</p>
+    <p>MergeImageLaters with the FlattenLayer method.</p>
   </div>
 
   <div class="sig">
@@ -1315,11 +1317,12 @@ img[2]['Label'] = "Mom's Birthday"
 
     <h4>See also</h4><a href="#coalesce">coalesce</a>, <a href=
     "#flatten_images">flatten_images</a>, <a href=
-    "#montage">montage</a>
+    "#montage">montage</a>, <a href=
+    "#optimize_images">optimize_images</a>
 
     <h4>Magick API</h4>
 
-    <p>MosaicImages</p>
+    <p>MergeImageLayers with the MosaicLayer method.</p>
   </div>
 
   <div class="sig">
@@ -1396,6 +1399,15 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     <p>One of the following MagickLayerMethod enum values:</p>
 
     <dl>
+      <dt>CoalesceLayer</dt>
+
+      <dd class="imquote">Equivalent to [<a href=
+      "#coalesce">coalesce</a>]. Apply the GIF disposal methods set
+      in the current image sequence to form a fully defined
+      animation sequence without, as it should be displayed.
+      Effectively converting a GIF animation into a 'film strip'
+      like animation.</dd>
+
       <dt>CompareAnyLayer</dt>
 
       <dd class="imquote">Crop the second and later frames to the
@@ -1422,13 +1434,44 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
       -compose alpha composition method 'change-mask', to reduce
       the image to just the pixels that need to be overlaid.</dd>
 
-      <dt>OptimizeLayer</dt>
+      <dt>DisposeLayer</dt>
 
-      <dd class="imquote">Optimize a coalesced animation into GIF
-      animation using a number of general techniques. This is
-      currently a short cut to apply both the [OptimizeImageLayer]
-      and [OptimizeTransLayer] methods but will expand to include
-      other methods.</dd>
+      <dd class="imquote">This is like [CoalesceLayer] but shows
+      the look of the animation after the GIF disposal method has
+      been applied, before the next sub-frame image is overlaid.
+      That is the 'dispose' image that results from the application
+      of the GIF disposal method. This allows you to check what is
+      going wrong with a particular animation you may be
+      developing.</dd>
+
+      <dt>FlattenLayer</dt>
+
+      <dd><span class="imquote">Create a canvas the size of the
+      first images virtual canvas using the current background
+      color, and compose each image in turn onto that canvas.
+      Images falling outside that canvas will be clipped. Final
+      image will have a zero virtual canvas offset. This is usally
+      used as one of the final 'image layering' operations
+      overlaying all the prepared image layers into a final image.
+      For a single image this method can also be used to fillout a
+      virtual canvas with real pixels, or to underlay a opaque
+      color to remove transparency from an image.</span> This
+      method corresponds to <a href=
+      "#flatten_images">flatten_images</a>, above.</dd>
+
+      <dt>MosaicLayer</dt>
+
+      <dd><span class="imquote">As FlattenLayer method but
+      expanding the initial canvas size of the first image so as to
+      hold all the image layers. However as a virtual canvas is
+      'locked' to the origin, by definition, image layers with a
+      negative offsets will still be clipped by the top and left
+      edges. This method is commonly used to layout individual
+      image using various offset but without knowning the final
+      canvas size. The resulting image will, like FlattenLayer not
+      have any virtual offset, so can be saved to any image file
+      format.</span> This method corresponds to <a href=
+      "#mosaic">mosaic</a>, above.</dd>
 
       <dt>OptimizeImageLayer</dt>
 
@@ -1440,6 +1483,14 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
       optimization will be found. But then no reasonably fast GIF
       optimization algorithm can do this. However this does seem to
       do better than most other GIF frame optimizers seen.</dd>
+
+      <dt>OptimizeLayer</dt>
+
+      <dd class="imquote">Optimize a coalesced animation into GIF
+      animation using a number of general techniques. This is
+      currently a short cut to apply both the [OptimizeImageLayer]
+      and [OptimizeTransLayer] methods but will expand to include
+      other methods.</dd>
 
       <dt>OptimizePlusLayer</dt>
 
@@ -1456,25 +1507,6 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
       in the optimization of later frames, though this is unlikely.
       In other words there no guarantee that it is better than the
       normal 'optimize-frame' technique.</dd>
-
-      <dt>CoalesceLayer</dt>
-
-      <dd class="imquote">Equivalent to [<a href=
-      "#coalesce">coalesce</a>]. Apply the GIF disposal methods set
-      in the current image sequence to form a fully defined
-      animation sequence without, as it should be displayed.
-      Effectively converting a GIF animation into a 'film strip'
-      like animation.</dd>
-
-      <dt>DisposeLayer</dt>
-
-      <dd class="imquote">This is like [CoalesceLayer] but shows
-      the look of the animation after the GIF disposal method has
-      been applied, before the next sub-frame image is overlaid.
-      That is the 'dispose' image that results from the application
-      of the GIF disposal method. This allows you to check what is
-      going wrong with a particular animation you may be
-      developing.</dd>
 
       <dt>OptimizeTransLayer</dt>
 

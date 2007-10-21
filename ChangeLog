@@ -32,7 +32,8 @@ RMagick 2.0.0
       Magick.trace_proc attribute
     o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
     o Added OptimizeTransLayer, RemoveDupsLayer, RemoveZeroLayer,
-      OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3)
+      OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3),
+      MosaicLayer, FlattenLayer (available with ImageMagick 6.3.6)
     o RMagick works with Q32 version of ImageMagick
     o Added ChangeMaskCompositeOp CompositeOperator enum value
     o Added SplineInterpolatePixel InterpolatePixelMethod
@@ -51,6 +52,13 @@ RMagick 2.0.0
       option" (bug report from Nobody)
     o Updated for ImageMagick 6.3.6-2
     o Made changes as necessary to work with current Ruby 1.9.0
+
+RMagick 1.15.10
+    o Update Magick::Pixel.from_HSL, #to_HSL to work with new APIs in
+      ImageMagick 6.3.5-9.
+
+RMagick 1.15.9
+    o Fixed bug #12089 (bug report from Hans de Graaff)
 
 RMagick 1.15.8
     o Fixed bug #12671, incorrect link in HTML doc (bug report from Thomas R.

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.220 2007/10/20 22:37:06 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.221 2007/10/21 18:14:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1314,6 +1314,12 @@ Init_RMagick(void)
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUMERATOR(CompositeLayer)
 #endif
+#if defined(HAVE_ENUM_MOSAICLAYER)
+        ENUMERATOR(MosaicLayer)
+#endif
+#if defined(HAVE_ENUM_FLATTENLAYER)
+        ENUMERATOR(FlattenLayer)
+#endif
     END_ENUM
 
     DEF_ENUM(MetricType)
@@ -1622,7 +1628,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/10/20 22:37:06 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/10/21 18:14:33 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

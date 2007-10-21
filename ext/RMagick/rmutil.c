@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.127 2007/09/30 22:25:18 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.128 2007/10/21 18:14:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1604,6 +1604,12 @@ MagickLayerMethod_name(MagickLayerMethod method)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUM_TO_NAME(CompositeLayer)
+#endif
+#if defined(HAVE_ENUM_MOSAICLAYER)
+        ENUM_TO_NAME(MosaicLayer)
+#endif
+#if defined(HAVE_ENUM_FLATTENLAYER)
+        ENUM_TO_NAME(FlattenLayer)
 #endif
 
     }

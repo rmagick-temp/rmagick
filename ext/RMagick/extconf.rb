@@ -148,6 +148,7 @@ have_func("snprintf", headers)
    "GetNextImageProperty",           # 6.3.1
    "IsHistogramImage",               # 6.3.5
    "LinearStretchImage",             # 6.3.1
+   "MagickCoreGenesis",              # 6.3.4
    "PolaroidImage",                  # 6.3.1-6
    "RecolorImage",                   # 6.3.1-3
    "ResetImagePage",                 # 6.3.3

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.221 2007/10/21 18:14:33 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.222 2007/10/24 22:21:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -324,7 +324,12 @@ Init_RMagick(void)
 {
     volatile VALUE observable;
 
+#if defined(HAVE_MagickCoreGenesis)
+    MagickCoreGenesis("RMagick", MagickFalse);
+#else
     InitializeMagick("RMagick");
+#endif
+
     test_Magick_version();
 
     Module_Magick = rb_define_module("Magick");
@@ -1628,7 +1633,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/10/21 18:14:33 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/10/24 22:21:03 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

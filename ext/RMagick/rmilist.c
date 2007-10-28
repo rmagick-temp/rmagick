@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.59 2007/10/15 23:05:52 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.60 2007/10/28 23:43:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -280,8 +280,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
             dither = RTEST(argv[1]);
         case 1:
             t = ImageList_cur_image(argv[0]);
-            rm_check_destroyed(t);
-            Data_Get_Struct(t, Image, map);
+            map = rm_check_destroyed(t);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
@@ -599,8 +598,7 @@ rm_images_from_imagelist(VALUE imagelist)
         Image *image;
 
         t = rb_ary_entry(images, x);
-        rm_check_destroyed(t);
-        Data_Get_Struct(t, Image, image);
+        image = rm_check_destroyed(t);
         AppendImageToList(&head, image);
     }
 

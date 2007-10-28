@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.57 2007/09/30 22:25:17 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.58 2007/10/28 23:43:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -135,8 +135,7 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
     if (!NIL_P(pattern))
     {
         pattern = ImageList_cur_image(pattern);
-        rm_check_destroyed(pattern);
-        Data_Get_Struct(pattern, Image, image);
+        image = rm_check_destroyed(pattern);
         // Do not trace creation
         draw->info->fill_pattern = rm_clone_image(image);
     }
@@ -387,8 +386,7 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
     {
         // DestroyDrawInfo destroys the clone
         pattern = ImageList_cur_image(pattern);
-        rm_check_destroyed(pattern);
-        Data_Get_Struct(pattern, Image, image);
+        image = rm_check_destroyed(pattern);
         // Do not trace creation
         draw->info->stroke_pattern = rm_clone_image(image);
     }
@@ -481,9 +479,7 @@ VALUE Draw_annotate(
     keep = draw->info->affine;
 
     image_arg = ImageList_cur_image(image_arg);
-    rm_check_destroyed(image_arg);
-    rb_check_frozen(image_arg);
-    Data_Get_Struct(image_arg, Image, image);
+    image = rm_check_frozen_image(image_arg);
 
     // If we have an optional parm block, run it in self's context,
     // allowing the app a chance to modify the object's attributes
@@ -577,7 +573,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
 
     // Retrieve the image to composite
     image = ImageList_cur_image(argv[4]);
-    rm_check_destroyed(image);
+    (void) rm_check_destroyed(image);
 
     x = NUM2DBL(argv[0]);
     y = NUM2DBL(argv[1]);
@@ -687,9 +683,7 @@ Draw_draw(VALUE self, VALUE image_arg)
     Image *image;
 
     image_arg = ImageList_cur_image(image_arg);
-    rm_check_destroyed(image_arg);
-    rb_check_frozen(image_arg);
-    Data_Get_Struct(image_arg, Image, image);
+    image = rm_check_frozen_image(image_arg);
 
     Data_Get_Struct(self, Draw, draw);
     if (draw->primitives == 0)
@@ -1269,8 +1263,7 @@ Montage_texture_eq(VALUE self, VALUE texture)
     }
 
     texture = ImageList_cur_image(texture);
-    rm_check_destroyed(texture);
-    Data_Get_Struct(texture, Image, texture_image);
+    texture_image = rm_check_destroyed(texture);
 
     // Write a temp copy of the image & save its name.
     rm_write_temp_image(texture_image, tmpnam);
@@ -1491,8 +1484,7 @@ get_type_metrics(
             break;
         case 2:
             t = ImageList_cur_image(argv[0]);
-            rm_check_destroyed(t);
-            Data_Get_Struct(t, Image, image);
+            image = rm_check_destroyed(t);
             text = rb_str2cstr(argv[1], &text_l);
             break;                  // okay
         default:

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.128 2007/10/21 18:14:33 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.129 2007/10/28 23:43:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -161,15 +161,31 @@ rm_check_ary_len(VALUE ary, long len)
     Extern:     rm_check_destroyed
     Purpose:    raise an error if the image has been destroyed
 */
-void
+Image *
 rm_check_destroyed(VALUE obj)
 {
     Image *image;
+
     Data_Get_Struct(obj, Image, image);
     if (!image)
     {
         rb_raise(Class_DestroyedImageError, "destroyed image");
     }
+
+    return image;
+}
+
+
+/*
+    Extern:     rm_check_frozen_image
+    Purpose:    raise an error if the image has been destroyed or is frozen
+*/
+Image *
+rm_check_frozen_image(VALUE obj)
+{
+    Image *image = rm_check_destroyed(obj);
+    rb_check_frozen(obj);
+    return image;
 }
 
 

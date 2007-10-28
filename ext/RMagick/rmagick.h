@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.204 2007/10/20 22:37:06 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.205 2007/10/28 23:43:24 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -351,7 +351,7 @@ EXTERN ID rm_ID_y;                 // "y"
     {\
         class *ptr;\
         if (rb_obj_is_kind_of(self, Class_Image) == Qtrue) {\
-            rm_check_destroyed(self); \
+            (void) rm_check_destroyed(self); \
         }\
         Data_Get_Struct(self, class, ptr);\
         return C_##type##_to_R_##type(ptr->attr);\
@@ -362,7 +362,7 @@ EXTERN ID rm_ID_y;                 // "y"
     VALUE class##_##attr(VALUE self)\
     {\
         class *ptr;\
-        rm_check_destroyed(self); \
+        (void) rm_check_destroyed(self); \
         Data_Get_Struct(self, class, ptr);\
         return C_##type##_to_R_##type(ptr->field);\
     }
@@ -371,7 +371,7 @@ EXTERN ID rm_ID_y;                 // "y"
     {\
         class *ptr;\
         if (rb_obj_is_kind_of(self, Class_Image) == Qtrue) {\
-            rm_check_destroyed(self); \
+            (void) rm_check_destroyed(self); \
         }\
         rb_check_frozen(self);\
         Data_Get_Struct(self, class, ptr);\
@@ -1036,7 +1036,8 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
 extern void   rm_check_ary_len(VALUE, long);
-extern void   rm_check_destroyed(VALUE);
+extern Image *rm_check_destroyed(VALUE);
+extern Image *rm_check_frozen_image(VALUE);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
 extern Quantum rm_app2quantum(VALUE);

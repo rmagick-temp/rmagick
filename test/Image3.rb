@@ -309,7 +309,18 @@ class Image3_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
 
-        ColorspaceTypes.each do |cs|
+        # Don't test colorspaces that require PsuedoColor images
+        (ColorspaceTypes - [Magick::OHTAColorspace,
+                            Magick::LABColorspace,
+                            Magick::XYZColorspace,
+                            Magick::YCbCrColorspace,
+                            Magick::YCCColorspace,
+                            Magick::YIQColorspace,
+                            Magick::YPbPrColorspace,
+                            Magick::YUVColorspace,
+                            Magick::Rec601YCbCrColorspace,
+                            Magick::Rec709YCbCrColorspace,
+                            Magick::LogColorspace]).each do |cs|
             assert_nothing_raised { @img.segment(cs) }
         end
 

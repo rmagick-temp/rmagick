@@ -346,18 +346,15 @@ class Image2_UT < Test::Unit::TestCase
     end
 
     def test_distort
-        points = [4, 30, 4, 123, 100, 123, 100, 30, 7, 40, 4, 124, 85, 122, 85, 2]
         @img = Magick::Image.new(200, 200)
-        assert_nothing_raised { @img.distort(Magick::AffineDistortion, points) }
-        assert_nothing_raised { @img.distort(Magick::AffineProjectionDistortion, points) }
-        assert_nothing_raised { @img.distort(Magick::BilinearDistortion, points) }
-        assert_nothing_raised { @img.distort(Magick::PerspectiveDistortion, points) }
-        points = [4, 30, 4, 123, 100, 123, 100]
-        assert_nothing_raised { @img.distort(Magick::ScaleRotateTranslateDistortion, points) }
+        assert_nothing_raised { @img.distort(Magick::AffineDistortion, [2,60, 2,60,     32,60, 32,60,    2,30, 17,35]) }
+        assert_nothing_raised { @img.distort(Magick::AffineProjectionDistortion, [1,0,0,1,0,0]) }
+        assert_nothing_raised { @img.distort(Magick::BilinearDistortion, [7,40, 4,30,   4,124, 4,123,   85,122, 100,123,   85,2, 100,30]) }
+        assert_nothing_raised { @img.distort(Magick::PerspectiveDistortion, [7,40, 4,30,   4,124, 4,123,   85,122, 100,123,   85,2, 100,30]) }
+        assert_nothing_raised { @img.distort(Magick::ScaleRotateTranslateDistortion, [28,24,  0.4,0.8  -110,  37.5,60]) }
         assert_raise(ArgumentError) { @img.distort }
         assert_raise(ArgumentError) { @img.distort(Magick::AffineDistortion) }
-        assert_raise(ArgumentError) { @img.distort(Magick::AffineDistortion, points, 1) }
-        assert_raise(TypeError) { @img.distort(1, points) }
+        assert_raise(TypeError) { @img.distort(1, [1]) }
     end
 
     def test_distortion_channel

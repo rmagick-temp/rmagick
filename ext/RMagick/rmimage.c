@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.258 2007/10/28 23:43:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.259 2007/11/07 23:07:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3875,6 +3875,36 @@ Image_equalize(VALUE self)
     (void) EqualizeImage(new_image);
     rm_check_image_exception(new_image, DestroyOnError);
 
+    (void) DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+}
+
+/*
+    Method:     Image#equalize_channel
+    Purpose:    call EqualizeImageChannel
+*/
+VALUE
+Image_equalize_channel(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *new_image;
+    ExceptionInfo exception;
+    ChannelType channels;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+    if (argc > 0)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    new_image = rm_clone_image(image);
+
+    GetExceptionInfo(&exception);
+
+    (void) EqualizeImageChannel(new_image, channels);
+
+    rm_check_image_exception(new_image, DestroyOnError);
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);

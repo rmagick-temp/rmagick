@@ -434,6 +434,17 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
+    def test_equalize_channel
+        assert_nothing_raised do
+            res = @img.equalize_channel
+            assert_instance_of(Magick::Image, res)
+        end
+        assert_nothing_raised { @img.equalize_channel }
+        assert_nothing_raised { @img.equalize_channel(Magick::RedChannel) }
+        assert_nothing_raised { @img.equalize_channel(Magick::RedChannel, Magick::BlueChannel) }
+        assert_raise(TypeError) { @img.equalize_channel(Magick::RedChannel, 2) }
+    end
+
     def test_erase!
         assert_nothing_raised do
             res = @img.erase!

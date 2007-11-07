@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.129 2007/10/28 23:43:25 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.130 2007/11/07 23:22:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1426,6 +1426,18 @@ FilterTypes_name(FilterTypes type)
         ENUM_TO_NAME(LanczosFilter)
         ENUM_TO_NAME(BesselFilter)
         ENUM_TO_NAME(SincFilter)
+#if defined(HAVE_ENUM_KAISERFILTER)
+        ENUM_TO_NAME(KaiserFilter)
+#endif
+#if defined(HAVE_ENUM_WELSHFILTER)
+        ENUM_TO_NAME(WelshFilter)
+#endif
+#if defined(HAVE_ENUM_PARZENFILTER)
+        ENUM_TO_NAME(ParzenFilter)
+#endif
+#if defined(HAVE_ENUM_LAGRANGIANFILTER)
+        ENUM_TO_NAME(LagrangianFilter)
+#endif
     }
 }
 

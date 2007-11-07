@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.223 2007/11/07 23:07:18 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.224 2007/11/07 23:22:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1239,6 +1239,19 @@ Init_RMagick(void)
         ENUMERATOR(LanczosFilter)
         ENUMERATOR(BesselFilter)
         ENUMERATOR(SincFilter)
+#if defined(HAVE_ENUM_KAISERFILTER)
+        ENUMERATOR(KaiserFilter)
+#endif
+#if defined(HAVE_ENUM_WELSHFILTER)
+        ENUMERATOR(WelshFilter)
+#endif
+#if defined(HAVE_ENUM_PARZENFILTER)
+        ENUMERATOR(ParzenFilter)
+#endif
+#if defined(HAVE_ENUM_LAGRANGIANFILTER)
+        ENUMERATOR(LagrangianFilter)
+#endif
+
     END_ENUM
 
     // GravityType constants
@@ -1634,7 +1647,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/11/07 23:07:18 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/11/07 23:22:22 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

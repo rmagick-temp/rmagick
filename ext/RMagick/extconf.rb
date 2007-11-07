@@ -173,6 +173,10 @@ check_sizeof("Image *", headers)
 have_enum_value("CompositeOperator", "ChangeMaskCompositeOp", headers)      # 6.3.3
 have_enum_values("DistortImageMethod", ["ArcDistortion",                    # 6.3.5-5
                                "PerspectiveProjectionDistortion"], headers) # 6.3.5-9
+have_enum_values("FilterTypes", ["KaiserFilter",                            # 6.3.6-?
+                                 "WelshFilter",                             # 6.3.6-4
+                                 "ParzenFilter",                            # 6.3.6-4
+                                 "LagrangianFilter"], headers)              # 6.3.6-4
 have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers)# 6.3.5
 have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                # 6.3.3-4
                                        "RemoveDupsLayer",                   # 6.3.3-6

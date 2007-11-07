@@ -72,6 +72,8 @@ td.ds {
 
           <li><a href="#equalize">equalize</a></li>
 
+          <li><a href="#equalize_channel">equalize_channel</a></li>
+
           <li><a href="#erase_bang">erase!</a></li>
 
           <li><a href="#excerpt">excerpt</a></li>
@@ -108,14 +110,14 @@ td.ds {
 
           <li><a href=
           "#gaussian_blur_channel">gaussian_blur_channel</a></li>
-
-          <li><a href=
-          "#get_exif_by_entry">get_exif_by_entry</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#get_exif_by_entry">get_exif_by_entry</a></li>
+
           <li><a href=
           "#get_exif_by_number">get_exif_by_number</a></li>
 
@@ -274,6 +276,49 @@ td.ds {
     <h4>Magick API</h4>
 
     <p>EqualizeImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#equalize_channel">equalize_channel</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="equalize_channel">equalize_chanel</h3>
+
+    <p><span class="arg">image</span>.equalize_channel(<span class=
+    "arg">[channel...]</span>) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Applies a histogram equalization to
+    the image.</span> Only the specified channels are
+    equalized.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, all the channels are normalized.
+      Specifying no channel arguments has the same effect as the
+      equalize method, above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>EqualizeImageChannel</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#equalize">equalize</a></p>
   </div>
 
   <div class="sig">

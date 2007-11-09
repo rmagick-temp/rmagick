@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.260 2007/11/09 00:19:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.261 2007/11/09 23:18:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3894,6 +3894,7 @@ Image_equalize(VALUE self)
 VALUE
 Image_equalize_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_EQUALIZEIMAGECHANNEL)
     Image *image, *new_image;
     ExceptionInfo exception;
     ChannelType channels;
@@ -3915,6 +3916,13 @@ Image_equalize_channel(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
+#else
+    argc = argc;
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return (VALUE) 0;
+#endif
 }
 
 /*

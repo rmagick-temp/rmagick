@@ -154,6 +154,7 @@ have_func("snprintf", headers)
    "RecolorImage",                   # 6.3.1-3
    "ResetImagePage",                 # 6.3.3
    "ResizeQuantumMemory",            # 6.3.5-9
+   "SetImageAlphaChannel",           # 6.3.6-9
    "SetImageProperty",               # 6.3.1
    "SetImageRegistry",               # 6.3.4-?
    "SyncImageProfiles",              # 6.3.2

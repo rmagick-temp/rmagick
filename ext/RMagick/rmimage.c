@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.259 2007/11/07 23:07:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.260 2007/11/09 00:19:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -408,6 +408,12 @@ Image_alpha_eq(VALUE self, VALUE type)
 
     VALUE_TO_ENUM(type, alpha, AlphaChannelType);
 
+#if defined(HAVE_SETIMAGEALPHACHANNEL)
+    // Added in 6.3.6-9
+    (void) SetImageAlphaChannel(image, alpha);
+
+#else
+
     switch (alpha)
     {
         case ActivateAlphaChannel:
@@ -432,6 +438,7 @@ Image_alpha_eq(VALUE self, VALUE type)
         default:
             break;
     }
+#endif
 
     return type;
 #else

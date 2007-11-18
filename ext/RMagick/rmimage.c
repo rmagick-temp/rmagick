@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.261 2007/11/09 23:18:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.262 2007/11/18 23:44:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2357,12 +2357,12 @@ static VALUE composite(
 {
     Image *image, *new_image;
     Image *comp_image;
-    CompositeOperator operator;
+    CompositeOperator operator = UndefinedCompositeOp;
     GravityType gravity;
     MagickEnum *magick_enum;
     volatile VALUE comp;
-    signed long x_offset;
-    signed long y_offset;
+    signed long x_offset = 0;
+    signed long y_offset = 0;
 
     image = rm_check_destroyed(self);
 

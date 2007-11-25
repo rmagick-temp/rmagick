@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.262 2007/11/18 23:44:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.263 2007/11/25 21:32:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9285,8 +9285,41 @@ Image_units_eq(
               VALUE self,
               VALUE restype)
 {
+    ResolutionType units;
     Image *image = rm_check_frozen_image(self);
-    VALUE_TO_ENUM(restype, image->units, ResolutionType);
+
+    VALUE_TO_ENUM(restype, units, ResolutionType);
+
+    if (image->units != units)
+    {
+        switch (image->units)
+        {
+            case PixelsPerInchResolution:
+                if (units == PixelsPerCentimeterResolution)
+                {
+                    image->x_resolution /= 2.54;
+                    image->y_resolution /= 2.54;
+                }
+                break;
+
+            case PixelsPerCentimeterResolution:
+                if (units == PixelsPerInchResolution)
+                {
+                  image->x_resolution *= 2.54;
+                  image->y_resolution *= 2.54;
+                }
+                break;
+
+            default:
+                // UndefinedResolution
+                image->x_resolution = 0.0;
+                image->y_resolution = 0.0;
+                break;
+        }
+
+        image->units = units;
+    }
+
     return self;
 }
 

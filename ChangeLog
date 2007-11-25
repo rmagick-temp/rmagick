@@ -48,10 +48,19 @@ RMagick 2.0.0
     o Added Image::Info#attenuate
     o Added Image#clut_channel
     o Added Image#alpha=
+    o Added Image#equalize_channel
+    o Added new FilterTypes values KaiserFilter, WelshFilter, ParzenFilter,
+      LagrangianFilter
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
     o Updated for ImageMagick 6.3.6-2
     o Made changes as necessary to work with current Ruby 1.9.0
+
+RMagick 1.15.11
+    o Fix bug #15887, the x_ and y_resolution attributes don't respect the units
+      attribute (bug report from Ben Greenburg)
+    o Fix bug #15889, memory leak in Draw#composite method (bug report from Till
+      Vollmer)
 
 RMagick 1.15.10
     o Update Magick::Pixel.from_HSL, #to_HSL to work with new APIs in

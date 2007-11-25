@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90.2.3.2.2 2007/09/30 22:10:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.3.2.3 2007/11/25 19:45:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2980,6 +2980,10 @@ rm_write_temp_image(Image *image, char *tmpnam)
 
     long registry_id;
 
+    rb_warn("`%s' can cause memory leaks when RMagick was built with " Q(MAGICKNAME) " " MagickLibVersionText
+            ".\nUpgrade to ImageMagick 6.3.4 or later to prevent this behavior."
+          , rb_id2name(rb_frame_last_func()));
+
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
     rm_check_image_exception(image, RetainOnError);
     if (registry_id < 0)
@@ -3000,6 +3004,14 @@ rm_write_temp_image(Image *image, char *tmpnam)
 void
 rm_delete_temp_image(char *tmpnam)
 {
+#if defined(HAVE_SETIMAGEREGISTRY)
+    MagickBooleanType okay = DeleteImageRegistry(tmpnam+5);
+
+    if (!okay)
+    {
+        rb_warn("DeleteImageRegistry failed for `%s'", tmpnam);
+    }
+#else
     long registry_id = -1;
 
     sscanf(tmpnam, "mpri:%ld", &registry_id);
@@ -3007,6 +3019,8 @@ rm_delete_temp_image(char *tmpnam)
     {
         (void) DeleteMagickRegistry(registry_id);
     }
+#endif
+
 }
 
 /*

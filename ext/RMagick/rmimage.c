@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.1 2007/09/30 22:10:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.2 2007/11/25 19:44:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10177,12 +10177,46 @@ Image_units_eq(
     VALUE restype)
 {
     Image *image;
+    ResolutionType units;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
+
     VALUE_TO_ENUM(restype, image->units, ResolutionType);
+
+    if (image->units != units)
+    {
+        switch (image->units)
+        {
+            case PixelsPerInchResolution:
+                if (units == PixelsPerCentimeterResolution)
+                {
+                    image->x_resolution /= 2.54;
+                    image->y_resolution /= 2.54;
+                }
+                break;
+
+            case PixelsPerCentimeterResolution:
+                if (units == PixelsPerInchResolution)
+                {
+                  image->x_resolution *= 2.54;
+                  image->y_resolution *= 2.54;
+                }
+                break;
+
+            default:
+                // UndefinedResolution
+                image->x_resolution = 0.0;
+                image->y_resolution = 0.0;
+                break;
+        }
+
+        image->units = units;
+    }
+
     return self;
 }
+
 
 /*
     Method:     Image#unsharp_mask(radius=0.0, sigma=1.0, amount=1.0, threshold=0.05)

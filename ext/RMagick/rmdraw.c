@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.43.2.2 2007/04/13 00:13:56 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.43.2.2.2.1 2007/11/25 19:42:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -855,6 +855,7 @@ destroy_Draw(void *drawptr)
     if (draw->info)
     {
         (void) DestroyDrawInfo(draw->info);
+        draw->info = NULL;
     }
 
     // Erase any temporary image files.
@@ -1186,10 +1187,12 @@ destroy_Montage(void *obj)
     if (montage->info && montage->info->texture != NULL)
     {
         rm_delete_temp_image(montage->info->texture);
+        montage->info->texture = NULL;
     }
     if (montage->info)
     {
         (void) DestroyMontageInfo(montage->info);
+        montage->info = NULL;
     }
     xfree(montage);
 }

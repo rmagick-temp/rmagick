@@ -1,5 +1,11 @@
+RMagick 1.15.11
+    o Fix bug #15887, the x_ and y_resolution attributes don't respect the units
+      attribute (bug report from Ben Greenburg)
+    o Fix bug #15889, memory leak in Draw#composite method (bug report from Till
+      Vollmer)
+
 RMagick 1.15.10
-    o Update Magick::Pixel.from_HSL, #to_HSL to work with new APIs in 
+    o Update Magick::Pixel.from_HSL, #to_HSL to work with new APIs in
       ImageMagick 6.3.5-9.
 
 RMagick 1.15.9

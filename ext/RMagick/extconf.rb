@@ -177,7 +177,9 @@ have_enum_values("DistortImageMethod", ["ArcDistortion",                    # 6.
 have_enum_values("FilterTypes", ["KaiserFilter",                            # 6.3.6-?
                                  "WelshFilter",                             # 6.3.6-4
                                  "ParzenFilter",                            # 6.3.6-4
-                                 "LagrangianFilter"], headers)              # 6.3.6-4
+                                 "LagrangeFilter",                          # 6.3.7-2
+                                 "BohmanFilter",                            # 6.3.7-2
+                                 "BartlettFilter"], headers)                # 6.3.7-2
 have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers)# 6.3.5
 have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                # 6.3.3-4
                                        "RemoveDupsLayer",                   # 6.3.3-6

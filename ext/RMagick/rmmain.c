@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.224 2007/11/07 23:22:22 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.225 2007/12/02 21:19:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1248,8 +1248,14 @@ Init_RMagick(void)
 #if defined(HAVE_ENUM_PARZENFILTER)
         ENUMERATOR(ParzenFilter)
 #endif
-#if defined(HAVE_ENUM_LAGRANGIANFILTER)
-        ENUMERATOR(LagrangianFilter)
+#if defined(HAVE_ENUM_LAGRANGEFILTER)
+        ENUMERATOR(LagrangeFilter)
+#endif
+#if defined(HAVE_ENUM_BOHMANFILTER)
+        ENUMERATOR(BohmanFilter)
+#endif
+#if defined(HAVE_ENUM_BARTLETTFILTER)
+        ENUMERATOR(BartlettFilter)
 #endif
 
     END_ENUM
@@ -1647,7 +1653,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/11/07 23:22:22 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/12/02 21:19:23 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

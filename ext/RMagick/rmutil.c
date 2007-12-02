@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.131 2007/11/25 21:32:41 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.132 2007/12/02 21:19:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1435,8 +1435,14 @@ FilterTypes_name(FilterTypes type)
 #if defined(HAVE_ENUM_PARZENFILTER)
         ENUM_TO_NAME(ParzenFilter)
 #endif
-#if defined(HAVE_ENUM_LAGRANGIANFILTER)
-        ENUM_TO_NAME(LagrangianFilter)
+#if defined(HAVE_ENUM_LAGRANGEFILTER)
+        ENUM_TO_NAME(LagrangeFilter)
+#endif
+#if defined(HAVE_ENUM_BOHMANFILTER)
+        ENUM_TO_NAME(BohmanFilter)
+#endif
+#if defined(HAVE_ENUM_BARTLETTFILTER)
+        ENUM_TO_NAME(BartlettFilter)
 #endif
     }
 }

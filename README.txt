@@ -35,7 +35,7 @@ __Email:__ <rmagick@rubyforge.org>
 __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 <h2 id="new">What's new?</h2>
-RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.8.
+RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.11.
 Additionally,
 
 * The installation procedure is pure Ruby.
@@ -76,10 +76,9 @@ in earlier releases. Before installing RMagick, you must install ImageMagick.
 Complete and up-to-date instructions for installing ImageMagick on Linux,
 *BSD, and other *nix-type O/S's are available
 at <http://rmagick.rubyforge.org/install-linux.html>, steps 0, 1, 2.
-Similarly, instructions
-for OS X are available at <http://rmagick.rubyforge.org/install-osx.html>,
-steps 1 through 5. (Although the online instructions include GraphicsMagick,
-you should install ImageMagick.) After installing
+Similarly, instructions for installing ImageMagick using MacPorts
+on OS X are available at <http://rmagick.rubyforge.org/install-osx.html>,
+steps 1 and 2. After installing
 ImageMagick, use the instructions in the next section to install RMagick.
 
 <h2 id="install">Installing RMagick 0.0.0</h2>
@@ -93,6 +92,10 @@ I assume you've already decompressed the tarball, or you wouldn't be reading
 this. If you have not decompressed the tarball, do so with this command:
 
     tar xvzf RMagick-0.0.0$-tar.gz
+
+or
+
+    tar xvjf RMagick-0.0.0$-tar.bz2
 
 Change to the RMagick-0.0.0 directory. If you are not using any
 configuration options (usually you don't need to) enter the command
@@ -117,9 +120,9 @@ addition to the regular options, there are a few RMagick-specific options:
     >  Specify the directory to install the RMagick documentation.
     >  By default this is $prefix/share/RMagick, where $prefix is the
     >  prefix specified by --prefix. For example, to install the
-    >  documentation in /home/user/RMagick, specify:
+    >  documentation in /Users/me/RMagick, specify:
 
-    >  `./configure --doc-dir=/home/user/RMagick`
+    >  `./configure --doc-dir=/Users/me/RMagick`
 
 * --allow-example-errors
     >  Normally the documentation installation terminates if 5 examples fail.
@@ -208,7 +211,6 @@ getting help for ImageMagick is available at the ImageMagick web site
 Thanks to
 
    * ImageMagick Studio LLC, for ImageMagick and for hosting the RMagick documentation.
-   * Kaspar Schiess and Brett DiFrischia, for the MS Windows gems.
 
 <h2 id="license">License</h2>
 

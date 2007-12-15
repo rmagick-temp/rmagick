@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.2 2007/11/25 19:44:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.3 2007/12/15 23:31:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -551,7 +551,7 @@ Image_aref(VALUE self, VALUE key_arg)
 {
     Image *image;
     char *key;
-    const ImageAttribute *attr;
+    const char *attr;
 
     switch (TYPE(key_arg))
     {
@@ -572,8 +572,18 @@ Image_aref(VALUE self, VALUE key_arg)
     }
 
     Data_Get_Struct(self, Image, image);
-    attr = GetImageAttribute(image, key);
-    return attr ? rb_str_new2(attr->value) : Qnil;
+
+    if (rm_strcasecmp(key, "EXIF:*") == 0)
+    {
+        return rm_exif_by_entry(image);
+    }
+    else if (rm_strcasecmp(key, "EXIF:!") == 0)
+    {
+        return rm_exif_by_number(image);
+    }
+
+    attr = rm_get_property(image, key);
+    return attr ? rb_str_new2(attr) : Qnil;
 }
 
 /*
@@ -597,7 +607,6 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 {
     Image *image;
     char *key, *attr;
-    const ImageAttribute *attribute;
     unsigned int okay;
 
     rm_check_frozen(self);
@@ -630,22 +639,24 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     // the "next" pointer to point to the attribute following
     // this one. (No, this isn't thread-safe!)
 
+#if !defined(HAVE_GETIMAGEPROPERTY) && !defined(HAVE_GETNEXTIMAGEATTRIBUTE)
     if (Next_Attribute)
     {
-        attribute = GetImageAttribute(image, key);
+        const ImageAttribute *attribute = GetImageAttribute(image, key);
         if (attribute && attribute == Next_Attribute)
         {
             Next_Attribute = attribute->next;
         }
     }
+#endif
 
     // Delete existing value. SetImageAttribute returns False if
     // the attribute doesn't exist - we don't care.
-    (void) SetImageAttribute(image, key, NULL);
+    (void) rm_set_property(image, key, NULL);
     // Set new value
     if (attr)
     {
-        okay = SetImageAttribute(image, key, attr);
+        okay = rm_set_property(image, key, attr);
         if (!okay)
         {
             rb_warning("SetImageAttribute failed (probably out of memory)");

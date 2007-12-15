@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152.2.4 2007/06/09 16:44:30 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.4.2.1 2007/12/15 23:32:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1124,6 +1124,7 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
+extern int    rm_strncasecmp(const char *, const char *, size_t);
 extern void   rm_check_ary_len(VALUE, long);
 extern void   rm_check_frozen(VALUE);
 extern int    rm_check_num2dbl(VALUE);
@@ -1136,6 +1137,8 @@ extern void   rm_delete_temp_image(char *);
 extern void   rm_not_implemented(void);
 extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
+extern const char *rm_get_property(const Image *, const char *);
+extern unsigned int rm_set_property(Image *, const char *, const char *);
 extern void   rm_split(Image *);
 extern void   rm_magick_error(const char *, const char *);
 
@@ -1152,6 +1155,8 @@ extern Image *rm_clone_image(Image *);
 #if defined(HAVE_SETIMAGEPROGRESSMONITOR)
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
 #endif
+extern VALUE  rm_exif_by_entry(Image *);
+extern VALUE  rm_exif_by_number(Image *);
 
 #endif
 

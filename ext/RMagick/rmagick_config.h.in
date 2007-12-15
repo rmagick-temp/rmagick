@@ -109,6 +109,8 @@
 #undef HAVE_GETNEXTIMAGEATTRIBUTE
 /* Introduced in IM 6.0.0 */
 #undef HAVE_GETNEXTIMAGEPROFILE
+/* Introduced in IM 6.3.2 */
+#undef HAVE_GETIMAGEPROPERTY
 /* Introduced in IM 6.0.1 */
 #undef HAVE_GETTYPEINFOLIST
 /* API changed in IM 6.1.3 */
@@ -223,6 +225,8 @@
 #undef HAVE_SETIMAGEREGISTRY
 /* Introduced in IM 6.1.0 */
 #undef HAVE_SETIMAGEPROGRESSMONITOR
+/* Introduced in IM 6.3.2 */
+#undef HAVE_SETIMAGEPROPERTY
 /* Introduced in IM 6.2.6 */
 #undef HAVE_SETIMAGESTORAGECLASS
 /* Introduced in IM 6.1.7 */

@@ -121,7 +121,7 @@ fi
 
 AC_CHECK_FUNCS([GetImageChannelDepth GetImageChannelDistortion])
 AC_CHECK_FUNCS([GetImageChannelExtrema GetImageChannelMean GetImageClipMask])
-AC_CHECK_FUNCS([GetImageHistogram GetImageProfile])
+AC_CHECK_FUNCS([GetImageHistogram GetImageProfile GetImageProperty])
 
 # We need to be able to query this later in the configure script, so set a shell variable here
 # as well as defining a symbol.
@@ -166,7 +166,7 @@ AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChanne
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
 AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])
-AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageRegistry SetImageStorageClass])
+AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageProperty SetImageRegistry SetImageStorageClass])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
 AC_CHECK_FUNCS([SigmoidalContrastImageChannel SketchImage SpliceImage StripImage])
 AC_CHECK_FUNCS([ThresholdImageChannel TintImage TransposeImage TransverseImage UniqueImageColors])

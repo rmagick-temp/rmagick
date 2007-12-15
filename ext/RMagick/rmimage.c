@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.263 2007/11/25 21:32:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.264 2007/12/15 23:35:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -511,6 +511,16 @@ Image_aref(VALUE self, VALUE key_arg)
                 return Qnil;
             }
             break;
+    }
+
+
+    if (rm_strcasecmp(key, "EXIF:*") == 0)
+    {
+        return rm_exif_by_entry(image);
+    }
+    else if (rm_strcasecmp(key, "EXIF:!") == 0)
+    {
+        return rm_exif_by_number(image);
     }
 
     attr = rm_get_property(image, key);
@@ -3367,7 +3377,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     pixels.v = stg_type == QuantumPixel ? (void *) ALLOC_N(Quantum, npixels)
                : (void *) ALLOC_N(double, npixels);
 
-    // Create the Ruby array for the pixels. Return this even if DispatchImage fails.
+    // Create the Ruby array for the pixels. Return this even if ExportImagePixels fails.
     pixels_ary = rb_ary_new();
 
     Data_Get_Struct(self, Image, image);

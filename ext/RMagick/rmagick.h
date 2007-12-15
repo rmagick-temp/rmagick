@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.206 2007/11/07 23:07:17 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.207 2007/12/15 23:35:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1036,6 +1036,7 @@ extern char  *rm_string_value_ptr(volatile VALUE *);
 #endif
 extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
+extern int    rm_strncasecmp(const char *, const char *, size_t);
 extern void   rm_check_ary_len(VALUE, long);
 extern Image *rm_check_destroyed(VALUE);
 extern Image *rm_check_frozen_image(VALUE);
@@ -1067,6 +1068,8 @@ extern void   rm_ensure_result(Image *);
 extern Image *rm_clone_image(Image *);
 extern Image *rm_clone_imagelist(Image *, int);
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
+extern VALUE  rm_exif_by_entry(Image *);
+extern VALUE  rm_exif_by_number(Image *);
 
 #endif
 

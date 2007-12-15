@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.132 2007/12/02 21:19:23 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.133 2007/12/15 23:36:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -133,6 +133,33 @@ rm_strcasecmp(const char *s1, const char *s2)
         if (toupper(*s1) != toupper(*s2))
         {
             break;
+        }
+        s1 += 1;
+        s2 += 1;
+    }
+    return (int)(*s1 - *s2);
+}
+
+
+
+
+/*
+ *  Extern:     rm_strncasecmp(s1, s2, n)
+ *  Purpose:    compare s1 and s2 ignoring case
+ *  Returns:    same as strcmp(3)
+*/
+int
+rm_strncasecmp(const char *s1, const char *s2, size_t n)
+{
+    if (n == 0)
+    {
+        return 0;
+    }
+    while (toupper(*s1) == toupper(*s2))
+    {
+        if (--n == 0 || *s1 == '\0')
+        {
+            return 0;
         }
         s1 += 1;
         s2 += 1;
@@ -2992,7 +3019,187 @@ MagickBooleanType rm_set_property(Image *image, const char *property, const char
 
 
 /*
- *  Extern:     get_geometry
+    Function:   rm_exif_by_entry
+    Purpose:    replicate old (< 6.3.2) EXIF:* functionality using GetImageProperty
+                by returning the exif entries as a single string, separated by \n's.
+                Do this so that RMagick.rb works no matter which version of
+                ImageMagick is in use.
+    Notes:      see magick/identify.c
+*/
+VALUE
+rm_exif_by_entry(Image *image)
+{
+#if defined(HAVE_GETIMAGEPROPERTY)
+    const char *property, *value;
+    char *str;
+    size_t len = 0, property_l, value_l;
+    volatile VALUE v;
+
+    (void) GetImageProperty(image, "exif:*");
+    ResetImagePropertyIterator(image);
+    property = GetNextImageProperty(image);
+
+    // Measure the exif properties and values
+    while (property)
+    {
+        // ignore properties that don't start with "exif:"
+        property_l = strlen(property);
+        if (property_l > 5 && rm_strncasecmp(property, "exif:", 5) == 0)
+        {
+            if (len > 0)
+            {
+                len += 1;   // there will be a \n between property=value entries
+            }
+            len += property_l - 5;
+            value = GetImageProperty(image,property);
+            if (value)
+            {
+                // add 1 for the = between property and value
+                len += 1 + strlen(value);
+            }
+        }
+        property = GetNextImageProperty(image);
+    }
+
+    if (len == 0)
+    {
+        return Qnil;
+    }
+    str = xmalloc(len);
+    len = 0;
+
+    // Copy the exif properties and values into the string.
+    ResetImagePropertyIterator(image);
+    property = GetNextImageProperty(image);
+
+    while (property)
+    {
+        property_l = strlen(property);
+        if (property_l > 5 && rm_strncasecmp(property, "exif:", 5) == 0)
+        {
+            if (len > 0)
+            {
+                str[len++] = '\n';
+            }
+            memcpy(str+len, property+5, property_l-5);
+            len += property_l - 5;
+            value = GetImageProperty(image,property);
+            if (value)
+            {
+                value_l = strlen(value);
+                str[len++] = '=';
+                memcpy(str+len, value, value_l);
+                len += value_l;
+            }
+        }
+        property = GetNextImageProperty(image);
+    }
+
+    v = rb_str_new(str, len);
+    xfree(str);
+    return v;
+
+#else
+
+    const char *attr = rm_get_property(image, "EXIF:*");
+    return attr ? rb_str_new2(attr) : Qnil;
+
+#endif
+}
+
+
+/*
+    Function:   rm_exif_by_number
+    Purpose:    replicate old (< 6.3.2) EXIF:! functionality using GetImageProperty
+                by returning the exif entries as a single string, separated by \n's.
+                Do this so that RMagick.rb works no matter which version of
+                ImageMagick is in use.
+    Notes:      see magick/identify.c
+*/
+VALUE
+rm_exif_by_number(Image *image)
+{
+#if defined(HAVE_GETIMAGEPROPERTY)
+    const char *property, *value;
+    char *str;
+    size_t len = 0, property_l, value_l;
+    volatile VALUE v;
+
+    (void) GetImageProperty(image, "exif:!");
+    ResetImagePropertyIterator(image);
+    property = GetNextImageProperty(image);
+
+    // Measure the exif properties and values
+    while (property)
+    {
+        // ignore properties that don't start with "#"
+        property_l = strlen(property);
+        if (property_l > 1 && property[0] == '#')
+        {
+            if (len > 0)
+            {
+                len += 1;   // there will be a \n between property=value entries
+            }
+            len += property_l;
+            value = GetImageProperty(image,property);
+            if (value)
+            {
+                // add 1 for the = between property and value
+                len += 1 + strlen(value);
+            }
+        }
+        property = GetNextImageProperty(image);
+    }
+
+    if (len == 0)
+    {
+        return Qnil;
+    }
+    str = xmalloc(len);
+    len = 0;
+
+    // Copy the exif properties and values into the string.
+    ResetImagePropertyIterator(image);
+    property = GetNextImageProperty(image);
+
+    while (property)
+    {
+        property_l = strlen(property);
+        if (property_l > 1 && property[0] == '#')
+        {
+            if (len > 0)
+            {
+                str[len++] = '\n';
+            }
+            memcpy(str+len, property, property_l);
+            len += property_l;
+            value = GetImageProperty(image,property);
+            if (value)
+            {
+                value_l = strlen(value);
+                str[len++] = '=';
+                memcpy(str+len, value, value_l);
+                len += value_l;
+            }
+        }
+        property = GetNextImageProperty(image);
+    }
+
+    v = rb_str_new(str, len);
+    xfree(str);
+    return v;
+
+#else
+
+    const char *attr = rm_get_property(image, "EXIF:!");
+    return attr ? rb_str_new2(attr) : Qnil;
+
+#endif
+}
+
+
+/*
+ *  Extern:     rm_get_geometry
  *  Purpose:    Get the values from a Geometry object and return
  *              them in C variables.
 */

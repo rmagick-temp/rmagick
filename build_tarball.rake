@@ -1,6 +1,10 @@
 
 # Build the tar.gz, tar.bz2, and .gem files for an RMagick Release
 
+# To use: cd to $HOME
+# run:    rake -f path/to/build_tarball.rake clean
+#         rake -f path/to/build_tarball.rake release=tag beta=whatever
+#
 # Specify the release as release=RMagick_x-y-z or nothing if release=HEAD
 # Specify a beta Release as beta=beta1
 
@@ -14,8 +18,8 @@ include FileUtils
 CVSSERVER = ":ext:rmagick@rubyforge.org/var/cvs/rmagick"
 
 
-# CVS_Tag is the CVS tag for this release. Dist_Directory is the CVS_Tag,
-# modified for use as a directory name and the public release name.
+# CVS_Tag is the CVS tag for this release. Dist_Directory is CVS_Tag,
+# modified for use as a directory name.
 if ENV.include?("release")
   CVS_Tag = ENV["release"]
   Dist_Directory = CVS_Tag.tr('_-','-.')
@@ -40,7 +44,8 @@ MANIFEST = "ext/RMagick/MANIFEST"
 
 
 
-# Returns an array of lines from the file
+# Change the version number placeholders in a file.
+# Returns an array of lines from the file.
 def reversion(name)
   now = Time.new
   now = now.strftime("%m/%d/%y")
@@ -57,6 +62,7 @@ end
 
 
 
+# Rewrite a file containing embedded version number placeholders.
 def reversion_file(name)
   lines = reversion(name)
   tmp_name = name + "_tmp"
@@ -174,9 +180,9 @@ end
 
 
 
-GEM = Dist_Directory.downcase + ".gem"
-
 task :collateral => ["README.html", :gemspec, :extconf, :doc]
+
+GEM = Dist_Directory.downcase + ".gem"
 
 task :default => [:export, :collateral, :fix_files, :manifest] do
   sh "tar cvfz #{Release}.tar.gz #{Dist_Directory}"

@@ -1,3 +1,8 @@
+RMagick 1.15.12
+    o Fix bug #16221, starting with ImageMagick 6.3.2, get_exif_by_entry/number
+      returns empty array/hash when no arguments are specified, even though the
+      image has EXIF data (bug report from Paul Clegg)
+
 RMagick 1.15.11
     o Fix bug #15887, the x_ and y_resolution attributes don't respect the units
       attribute (bug report from Ben Greenburg)

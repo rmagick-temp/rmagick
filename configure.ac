@@ -14,8 +14,18 @@ AC_PROG_CC
 AC_PROG_CC_STDC
 AC_PATH_PROG(RUBY, ruby,)
 if test -z "$RUBY"; then
-    AC_MSG_ERROR([Can't install RMagick. Ruby must be installed first.])
+    AC_MSG_ERROR([Can't install $PACKAGE_NAME. Ruby must be installed first.])
 fi
+
+
+AC_MSG_CHECKING([Ruby version])
+RUBYVERS=`${RUBY} --version | cut -d" " -f2`
+AC_MSG_RESULT($RUBYVERS)
+RUBYVERS=`echo ${RUBYVERS} | tr -d .`
+if test $RUBYVERS -ge 190; then
+    AC_MSG_ERROR([$PACKAGE_STRING doesn't work with this version of Ruby. Use $PACKAGE_NAME 2.0.0 or later.])
+fi
+
 
 # See if user prefers GraphicsMagick over ImageMagick
 AC_ARG_WITH(graphics-magick,
@@ -26,7 +36,7 @@ AC_ARG_WITH(graphics-magick,
 if test "$with_graphics_magick" != 'no' ; then
     AC_CHECK_PROGS(MAGICKCONFIG, GraphicsMagick-config)
     if test -z "$MAGICKCONFIG"; then
-        AC_MSG_ERROR([Can't install RMagick. Can't find GraphicsMagick-config program.])
+        AC_MSG_ERROR([Can't install $PACKAGE_NAME. Can't find GraphicsMagick-config program.])
     fi
     MAGICKNAME=GraphicsMagick
     MAGICKLIB=GraphicsMagick
@@ -36,20 +46,22 @@ if test "$with_graphics_magick" != 'no' ; then
 else
     AC_CHECK_PROGS(MAGICKCONFIG, [Magick-config GraphicsMagick-config])
     if test -z "$MAGICKCONFIG"; then
-        AC_MSG_ERROR([Can't install RMagick. Can't find Magick-config or GraphicsMagick-config program.])
+        AC_MSG_ERROR([Can't install $PACKAGE_NAME. Can't find Magick-config or GraphicsMagick-config program.])
     else
         case "$MAGICKCONFIG" in
             Magick-config )
                 MAGICKNAME=ImageMagick
                 MAGICKLIB=Magick
-                MAGICKVERS=`${MAGICKCONFIG} --version | cut -d" " -f1 | tr -d .`
+                AC_MSG_CHECKING([ImageMagick version])
+                MAGICKVERS=`${MAGICKCONFIG} --version | cut -d" " -f1`
+                AC_MSG_RESULT($MAGICKVERS)
+                MAGICKVERS=`echo ${MAGICKVERS} | tr -d .`
                 if test $MAGICKVERS -lt 600; then
-                   MAGICKVERS=`${MAGICKCONFIG} --version`
-                   AC_MSG_ERROR([Can't install RMagick. You must have ImageMagick 6.0.0 or later installed. Your version of ImageMagick is ${MAGICKVERS}])
+                   AC_MSG_ERROR([Can't install $PACKAGE_NAME. You must have ImageMagick 6.0.0 or later installed.])
                 fi
                 HDRI=`${MAGICKCONFIG} --version | cut -d" " -f3`
                 if test "$HDRI" = HDRI; then
-                   AC_MSG_ERROR([Can't install RMagick. RMagick does not work with ImageMagick's HDRI.])
+                   AC_MSG_ERROR([Can't install $PACKAGE_NAME. $PACKAGE_NAME does not work with ImageMagick's HDRI.])
                 fi
                 ;;
             GraphicsMagick-config )
@@ -71,7 +83,7 @@ AC_SUBST(CPPFLAGS, ${CPPFLAGS})
 AC_SUBST(LOCAL_LIBS, `${MAGICKCONFIG} --libs`)
 
 AC_CHECK_LIB($MAGICKLIB, InitializeMagick, [],
-    [AC_MSG_ERROR([Can't install RMagick. Can't find lib${MAGICKLIB} or one of the dependent libraries.
+    [AC_MSG_ERROR([Can't install $PACKAGE_NAME. Can't find lib${MAGICKLIB} or one of the dependent libraries.
                   Check the config.log file for more detailed information.])],
     [`${MAGICKCONFIG} --libs`])
 
@@ -750,9 +762,10 @@ AC_SUBST(RUBY_CONFIG_OPTS)
 AC_CONFIG_FILES(Makefile ext/RMagick/extconf.rb metaconfig)
 AC_OUTPUT
 
-echo ""
-echo ""
-echo "This installation of $PACKAGE_STRING is configured for"
-echo "$RUBY_VERSION_STRING and $MAGICKNAME `$MAGICKCONFIG --version`."
+
+MAGICKVERS=`${MAGICKCONFIG} --version | cut -d" " -f1`
+AC_MSG_NOTICE([
+
+This installation of $PACKAGE_STRING is configured for $RUBY_VERSION_STRING and $MAGICKNAME $MAGICKVERS.])
 
 

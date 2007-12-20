@@ -22,6 +22,7 @@ RMagick 2.0.0
       Image::Info#set_monitor instead
     o Removed deprecated RunlengthEncodedCompression CompressionType. Use
       RLECompression instead
+    o Deprecated Image#matte, matte= with ImageMagick 6.3.5 and later
     o Added Image::Info#stroke=, stroke_width= and undercolor= attributes
     o Added Image::Info#tile_offset= attribute
     o Added Draw#fill_pattern= and #stroke_pattern= annotate attributes

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.265 2007/12/20 21:25:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.266 2007/12/20 22:34:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5725,7 +5725,9 @@ Image_matte(VALUE self)
 {
     Image *image;
 
+#if defined(HAVE_TYPE_ALPHACHANNELTYPE) || defined(HAVE_SETIMAGEALPHACHANNEL)
     rb_warning("Magick::Image#matte is deprecated and may not be available in future releases of RMagick.");
+#endif
     image = rm_check_destroyed(self);
     return image->matte ? Qtrue : Qfalse;
 }
@@ -5739,6 +5741,7 @@ Image_matte(VALUE self)
 VALUE
 Image_matte_eq(VALUE self, VALUE matte)
 {
+#if defined(HAVE_TYPE_ALPHACHANNELTYPE) || defined(HAVE_SETIMAGEALPHACHANNEL)
     VALUE alpha_channel_type;
 
     rb_warning("Magick::Image#matte= is deprecated. Use Magick::Image#alpha= instead.");
@@ -5752,6 +5755,11 @@ Image_matte_eq(VALUE self, VALUE matte)
     }
 
     return Image_alpha_eq(self, alpha_channel_type);
+#else
+    Image *image = rm_check_frozen_image(self);
+    image->matte = RTEST(matte) ? MagickTrue : MagickFalse;
+    return matte;
+#endif
 }
 
 

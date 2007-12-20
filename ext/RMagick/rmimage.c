@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.264 2007/12/15 23:35:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.265 2007/12/20 21:25:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5715,7 +5715,45 @@ Image_mask_eq(VALUE self, VALUE mask)
 }
 
 
-DEF_ATTR_ACCESSOR(Image, matte, bool)
+/*
+    Method:     Image#matte
+    Purpose:    Get matte attribute
+    Notes:      Deprecated as of ImageMagick 6.3.6
+*/
+VALUE
+Image_matte(VALUE self)
+{
+    Image *image;
+
+    rb_warning("Magick::Image#matte is deprecated and may not be available in future releases of RMagick.");
+    image = rm_check_destroyed(self);
+    return image->matte ? Qtrue : Qfalse;
+}
+
+
+/*
+    Method:     Image#matte=
+    Purpose:    Set matte attribute
+    Notes:      Deprecated as of ImageMagick 6.3.6. Calls Image_matte_eq.
+*/
+VALUE
+Image_matte_eq(VALUE self, VALUE matte)
+{
+    VALUE alpha_channel_type;
+
+    rb_warning("Magick::Image#matte= is deprecated. Use Magick::Image#alpha= instead.");
+    if (RTEST(matte))
+    {
+        alpha_channel_type = rb_const_get(Module_Magick, rb_intern("ActivateAlphaChannel"));
+    }
+    else
+    {
+        alpha_channel_type = rb_const_get(Module_Magick, rb_intern("DeactivateAlphaChannel"));
+    }
+
+    return Image_alpha_eq(self, alpha_channel_type);
+}
+
 
 /*
     Method:     Image#matte_color

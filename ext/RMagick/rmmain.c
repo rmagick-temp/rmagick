@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.225 2007/12/02 21:19:23 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.226 2007/12/21 23:24:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -313,14 +313,14 @@ Magick_set_log_format(VALUE class, VALUE format)
 
 
 /*
-  External:     Init_RMagick
+  External:     Init_RMagick2
   Purpose:      define the classes and constants
   Arguments:    void
   Returns:      void
 */
 
 void
-Init_RMagick(void)
+Init_RMagick2(void)
 {
     volatile VALUE observable;
 
@@ -1653,7 +1653,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/12/02 21:19:23 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/12/21 23:24:16 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

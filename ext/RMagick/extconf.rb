@@ -220,7 +220,7 @@ create_header()
 # Force re-compilation if the generated Makefile changed.
 $config_h = "Makefile rmagick.h"
 
-create_makefile("RMagick")
+create_makefile("RMagick2")
 
 Logging::message SUMMARY
 message SUMMARY

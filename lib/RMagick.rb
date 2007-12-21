@@ -1,14 +1,14 @@
-# $Id: RMagick.rb,v 1.61 2007/09/30 22:23:21 rmagick Exp $
+# $Id: RMagick.rb,v 1.62 2007/12/21 23:24:20 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
 #   Author:     Tim Hunter
 #   Purpose:    Extend Ruby to interface with ImageMagick.
-#   Notes:      RMagick.so defines the classes. The code below adds methods
+#   Notes:      RMagick2.so defines the classes. The code below adds methods
 #               to the classes.
 #==============================================================================
 
-require 'RMagick.so'
+require 'RMagick2.so'
 
 module Magick
     @@formats = nil

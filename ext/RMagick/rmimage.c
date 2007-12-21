@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.267 2007/12/21 15:53:07 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.268 2007/12/21 22:06:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -356,6 +356,10 @@ Image_add_profile(VALUE self, VALUE name)
     profile_filename = rb_str2cstr(name, &profile_filename_l);
 
     info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
     info->client_data= (void *)GetImageProfile(image,"8bim");
 
     strncpy(info->filename, profile_filename, min((size_t)profile_filename_l, sizeof(info->filename)));
@@ -411,6 +415,7 @@ Image_alpha_eq(VALUE self, VALUE type)
 #if defined(HAVE_SETIMAGEALPHACHANNEL)
     // Added in 6.3.6-9
     (void) SetImageAlphaChannel(image, alpha);
+    rm_check_image_exception(image, RetainOnError);
 
 #else
 
@@ -428,11 +433,13 @@ Image_alpha_eq(VALUE self, VALUE type)
             if (image->matte == MagickFalse)
             {
                 (void) SetImageOpacity(image, OpaqueOpacity);
+                rm_check_image_exception(image, RetainOnError);
             }
             break;
 
         case SetAlphaChannel:
             (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
+            rm_check_image_exception(image, RetainOnError);
             break;
 
         default:
@@ -1488,7 +1495,9 @@ VALUE
 Image_changed_q(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return IsTaintImage(image) ? Qtrue : Qfalse;
+    VALUE okay = IsTaintImage(image) ? Qtrue : Qfalse;
+    rm_check_image_exception(image, RetainOnError);
+    return okay;
 }
 
 
@@ -2739,7 +2748,6 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         }
     }
 
-    // Release the pixel buffer before any exception can be raised.
     GetExceptionInfo(&exception);
 
     // This is based on ConstituteImage in IM 5.5.7
@@ -2748,16 +2756,19 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue.");
     }
+
     SetImageExtent(image, width, height);
+    rm_check_image_exception(image, DestroyOnError);
+
     (void) SetImageBackgroundColor(image);
+    rm_check_image_exception(image, DestroyOnError);
 
     (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
+    xfree((void *)pixels.v);
     rm_check_image_exception(image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
     DestroyConstitute();
-
-    xfree((void *)pixels.v);
 
     return rm_image_new(image);
 }
@@ -5290,6 +5301,7 @@ Image_iptc_profile(VALUE self)
 
     image = rm_check_destroyed(self);
     profile = GetImageProfile(image, "iptc");
+    rm_check_image_exception(image, RetainOnError);
     if (!profile)
     {
         return Qnil;
@@ -6540,7 +6552,7 @@ Image_pixel_color(
     ExceptionInfo exception;
     long x, y;
     unsigned int set = False;
-    unsigned int okay;
+    MagickBooleanType okay;
 
     memset(&old_color, 0, sizeof(old_color));
 
@@ -6597,13 +6609,16 @@ Image_pixel_color(
     // Convert to DirectClass
     if (image->storage_class == PseudoClass)
     {
-        (void) SyncImage(image);
-        magick_free(image->colormap);
-        image->colormap = NULL;
-        image->storage_class = DirectClass;
+        okay = SetImageStorageClass(image, DirectClass);
+        rm_check_image_exception(image, RetainOnError);
+        if (!okay)
+        {
+            rb_raise(Class_ImageMagickError, "SetImageStorageClass failed. Can't set pixel color.");
+        }
     }
 
     pixel = GetImagePixels(image, x, y, 1, 1);
+    rm_check_image_exception(image, RetainOnError);
     if (pixel)
     {
         old_color = *pixel;
@@ -6614,6 +6629,7 @@ Image_pixel_color(
     }
     *pixel = new_color;
     okay = SyncImagePixels(image);
+    rm_check_image_exception(image, RetainOnError);
     if (!okay)
     {
         rb_raise(Class_ImageMagickError, "image pixels could not be synced");
@@ -6644,49 +6660,6 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
     VALUE_TO_ENUM(method, image->interpolate, InterpolatePixelMethod);
     return self;
 }
-
-
-#if 0
-/*
-    Method:     Image.plasma(x1, y1, x2, y2, attenuate, depth)
-                x1, y1, x2, y2 - the region to apply plasma fractals values
-                attenuate - the plasma attenuation factor
-                depth - the plasma recursion depth
-    Purpose:    initializes an image with plasma fractal values. The image must
-                be initialized with a base color before this method is called.
-    Returns:    A new Image
-*/
-VALUE
-Image_plasma(
-            VALUE self,
-            VALUE x1,
-            VALUE y1,
-            VALUE x2,
-            VALUE y2,
-            VALUE attenuate,
-            VALUE depth)
-{
-    Image *image, *new_image;
-    SegmentInfo segment;
-    unsigned int okay;
-
-    Data_Get_Struct(self, Image, image);
-
-    new_image = rm_clone_image(image);
-
-    segment.x1 = NUM2DBL(x1);
-    segment.y1 = NUM2DBL(y1);
-    segment.x2 = NUM2DBL(x2);
-    segment.y2 = NUM2DBL(y2);
-    srand((unsigned int) time(NULL));
-    okay = PlasmaImage(new_image, &segment, NUM2INT(attenuate), NUM2INT(depth));
-    if (!okay)
-    {
-        rb_warning("RMagick: invalid region - plasma failed.");
-    }
-    return rm_image_new(new_image);
-}
-#endif
 
 
 /*
@@ -7344,13 +7317,11 @@ Image_read_inline(VALUE self, VALUE content)
 static VALUE array_from_images(Image *images)
 {
     volatile VALUE image_obj, image_ary;
-    Image *image, *next;
+    Image *image;
 
     // Orphan the image, create an Image object, add it to the array.
 
     image_ary = rb_ary_new();
-    next = NULL;
-    next = next;        // defeat "never referenced" message from icc
     while (images)
     {
         image = RemoveFirstImageFromList(&images);
@@ -7857,6 +7828,7 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
     image = rm_check_frozen_image(self);
     opacity = APP2QUANTUM(opacity_arg);
     (void) SetImageOpacity(image, opacity);
+    rm_check_image_exception(image, RetainOnError);
     return self;
 }
 
@@ -7896,6 +7868,7 @@ Image_properties(VALUE self)
             (void) rb_yield(ary);
             attr = GetNextImageAttribute(image);
         }
+        rm_check_image_exception(image, RetainOnError);
         return self;
     }
 
@@ -7910,6 +7883,7 @@ Image_properties(VALUE self)
             (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
             attr = GetNextImageAttribute(image);
         }
+        rm_check_image_exception(image, RetainOnError);
         return attr_hash;
     }
 
@@ -7933,6 +7907,7 @@ Image_properties(VALUE self)
             (void) rb_yield(ary);
             property = GetNextImageProperty(image);
         }
+        rm_check_image_exception(image, RetainOnError);
         return self;
     }
 
@@ -7948,6 +7923,7 @@ Image_properties(VALUE self)
             (void) rb_hash_aset(attr_hash, rb_str_new2(property), rb_str_new2(value));
             property = GetNextImageProperty(image);
         }
+        rm_check_image_exception(image, RetainOnError);
         return attr_hash;
     }
 
@@ -8219,6 +8195,7 @@ Image_signature(VALUE self)
 
     (void) SignatureImage(image);
     signature = GetImageAttribute(image, "signature");
+    rm_check_image_exception(image, RetainOnError);
     if (!signature)
     {
         return Qnil;
@@ -9556,6 +9533,7 @@ Image_virtual_pixel_method(VALUE self)
 
     image = rm_check_destroyed(self);
     vpm = GetImageVirtualPixelMethod(image);
+    rm_check_image_exception(image, RetainOnError);
     return VirtualPixelMethod_new(vpm);
 }
 
@@ -9573,6 +9551,7 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
     image = rm_check_frozen_image(self);
     VALUE_TO_ENUM(method, vpm, VirtualPixelMethod);
     (void) SetImageVirtualPixelMethod(image, vpm);
+    rm_check_image_exception(image, RetainOnError);
     return self;
 }
 
@@ -9703,6 +9682,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     double rate = 1.0;
     double opacity, step;
     char *func;
+    MagickBooleanType okay;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
@@ -9778,6 +9758,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
         rm_check_exception(&exception, reflection, RetainOnError);
 
         q = SetImagePixels(reflection, 0, y, image->columns, 1);
+        rm_check_image_exception(reflection, DestroyOnError);
         if (!q)
         {
             func = "SetImagePixels";
@@ -9791,7 +9772,9 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
             q[x].opacity = max(q[x].opacity, (Quantum)opacity);
         }
 
-        if (SyncImagePixels(reflection) == MagickFalse)
+        okay = SyncImagePixels(reflection);
+        rm_check_image_exception(reflection, DestroyOnError);
+        if (!okay)
         {
             func = "SyncImagePixels";
             goto error;

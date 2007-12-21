@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.266 2007/12/20 22:34:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.267 2007/12/21 15:53:07 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5725,9 +5725,6 @@ Image_matte(VALUE self)
 {
     Image *image;
 
-#if defined(HAVE_TYPE_ALPHACHANNELTYPE) || defined(HAVE_SETIMAGEALPHACHANNEL)
-    rb_warning("Magick::Image#matte is deprecated and may not be available in future releases of RMagick.");
-#endif
     image = rm_check_destroyed(self);
     return image->matte ? Qtrue : Qfalse;
 }
@@ -5744,7 +5741,6 @@ Image_matte_eq(VALUE self, VALUE matte)
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE) || defined(HAVE_SETIMAGEALPHACHANNEL)
     VALUE alpha_channel_type;
 
-    rb_warning("Magick::Image#matte= is deprecated. Use Magick::Image#alpha= instead.");
     if (RTEST(matte))
     {
         alpha_channel_type = rb_const_get(Module_Magick, rb_intern("ActivateAlphaChannel"));
@@ -8567,11 +8563,18 @@ Image_store_pixels(
     size = (long)(cols * rows);
     rm_check_ary_len(new_pixels, size);
 
-    (void) SetImageType(image, TrueColorType);
+    okay = SetImageStorageClass(image, DirectClass);
+    rm_check_image_exception(image, RetainOnError);
+    if (!okay)
+    {
+        rb_raise(Class_ImageMagickError, "SetImageStorageClass failed. Can't store pixels.");
+    }
 
     // Get a pointer to the pixels. Replace the values with the PixelPackets
     // from the pixels argument.
     pixels = GetImagePixels(image, x, y, cols, rows);
+    rm_check_image_exception(image, RetainOnError);
+
     if (pixels)
     {
         for (n = 0; n < size; n++)
@@ -8582,9 +8585,10 @@ Image_store_pixels(
         }
 
         okay = SyncImagePixels(image);
+        rm_check_image_exception(image, RetainOnError);
         if (!okay)
         {
-            rb_raise(Class_ImageMagickError, "image pixels could not be synced");
+            rb_raise(Class_ImageMagickError, "SyncImagePixels failed. Can't store pixels.");
         }
     }
 
@@ -8601,6 +8605,7 @@ Image_strip_bang(VALUE self)
 {
     Image *image = rm_check_frozen_image(self);
     (void) StripImage(image);
+    rm_check_image_exception(image, RetainOnError);
     return self;
 }
 
@@ -8640,8 +8645,9 @@ Image_sync_profiles(VALUE self)
 {
 #if defined(HAVE_SYNCIMAGEPROFILES)
     Image *image = rm_check_destroyed(self);
-    return SyncImageProfiles(image) ? Qtrue : Qfalse;
-
+    volatile VALUE okay =  SyncImageProfiles(image) ? Qtrue : Qfalse;
+    rm_check_image_exception(image, RetainOnError);
+    return okay;
 #else
     self = self;
     rm_not_implemented();

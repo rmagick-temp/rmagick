@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.3 2007/12/15 23:31:52 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.4 2007/12/21 15:17:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9281,6 +9281,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
 #if defined(HAVE_SETIMAGESTORAGECLASS)
     (void) SetImageStorageClass(image, class_type);
 #else
+    (void) SyncImage(image);
     image->storage_class = class_type;
 #endif
     return self;
@@ -9326,11 +9327,27 @@ Image_store_pixels(
     size = (long)(cols * rows);
     rm_check_ary_len(new_pixels, size);
 
-    (void) SetImageType(image, TrueColorType);
+#if defined(HAVE_SETIMAGESTORAGECLASS)
+    okay = SetImageStorageClass(image,DirectClass);
+    rm_check_image_exception(image, RetainOnError);
+    if (!okay)
+    {
+        rb_raise(Class_ImageMagickError, "Can't store pixels. Can't change image storage class.");
+    }
+#else
+    if (image->storage_class == PseudoClass)
+    {
+        SyncImage(image);
+        rm_check_image_exception(image, RetainOnError);
+        image->storage_class = DirectClass;
+    }
+#endif
 
     // Get a pointer to the pixels. Replace the values with the PixelPackets
     // from the pixels argument.
     pixels = GetImagePixels(image, x, y, cols, rows);
+    rm_check_image_exception(image, RetainOnError);
+
     if (pixels)
     {
         for (n = 0; n < size; n++)
@@ -9341,9 +9358,10 @@ Image_store_pixels(
         }
 
         okay = SyncImagePixels(image);
+        rm_check_image_exception(image, RetainOnError);
         if (!okay)
         {
-            rb_raise(Class_ImageMagickError, "image pixels could not be synced");
+            rb_raise(Class_ImageMagickError, "Can't store pixels. Can't sync image pixels.");
         }
     }
 

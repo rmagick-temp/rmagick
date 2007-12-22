@@ -6,8 +6,7 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (instance methods, part
-  2)</title>
+  <title>RMagick 0.0.0: class Image (instance methods e-o)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -57,7 +56,7 @@ td.ds {
   </div>
 
   <h1>class Image <span class="superclass">&lt; Object</span>
-  (class and instance methods, part 2)<br />
+  (instance methods e-o)<br />
   <span class="mixin">mixes in Comparable</span></h1>
 
   <div id="toc">
@@ -68,6 +67,17 @@ td.ds {
     <div>
       <div class="toccol">
         <ul>
+          <li><a href=
+          "#each_iptc_dataset">each_iptc_dataset</a></li>
+
+          <li><a href="#each_pixel">each_pixel</a></li>
+
+          <li><a href="#each_profile">each_profile</a></li>
+
+          <li><a href="#edge">edge</a></li>
+
+          <li><a href="#emboss">emboss</a></li>
+
           <li><a href="#enhance">enhance</a></li>
 
           <li><a href="#equalize">equalize</a></li>
@@ -99,7 +109,11 @@ td.ds {
           <li><a href="#flop_bang">flop!</a></li>
 
           <li><a href="#frame">frame</a></li>
+        </ul>
+      </div>
 
+      <div class="toccol">
+        <ul>
           <li><a href="#freeze">freeze</a></li>
 
           <li><a href="#gamma_channel">gamma_channel</a></li>
@@ -110,11 +124,7 @@ td.ds {
 
           <li><a href=
           "#gaussian_blur_channel">gaussian_blur_channel</a></li>
-        </ul>
-      </div>
 
-      <div class="toccol">
-        <ul>
           <li><a href=
           "#get_exif_by_entry">get_exif_by_entry</a></li>
 
@@ -146,7 +156,11 @@ td.ds {
           <li><a href="#magnify">magnify</a></li>
 
           <li><a href="#magnify_bang">magnify!</a></li>
+        </ul>
+      </div>
 
+      <div class="toccol">
+        <ul>
           <li><a href="#map">map</a></li>
 
           <li><a href=
@@ -157,11 +171,7 @@ td.ds {
           <li><a href="#matte_point">matte_point</a></li>
 
           <li><a href="#matte_replace">matte_replace</a></li>
-        </ul>
-      </div>
 
-      <div class="toccol">
-        <ul>
           <li><a href="#matte_reset_bang">matte_reset!</a></li>
 
           <li><a href="#median_filter">median_filter</a></li>
@@ -192,20 +202,181 @@ td.ds {
           <li><a href="#opaque_q">opaque?</a></li>
 
           <li><a href="#ordered_dither">ordered_dither</a></li>
-
-          <li><a href="#palette_q">palette?</a></li>
-
-          <li><a href="#pixel_color">pixel_color</a></li>
-
-          <li><a href="#polaroid">polaroid</a></li>
-
-          <li><a href="#posterize">posterize</a></li>
         </ul>
       </div>
     </div>
   </div>
 
   <h2 class="methods">instance methods</h2>
+
+  <div class="sig">
+    <h3 id="each_iptc_dataset">each_iptc_dataset</h3>
+
+    <p>image.each_iptc_dataset { |<span class="arg">dataset</span>,
+    <span class="arg">data_field</span>| <span class=
+    "arg">block</span>} -&gt; <code>nil</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Iterates over the IPTC DataSet constants in Magick::IPTC. If
+    the image's IPTC profile has the DataSet and the data field has
+    non-0 length, yields to the block. The IPTC DataSet constants
+    are listed <a href="image2.html#get_iptc_dataset">here</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The block arguments are:</p>
+
+    <dl>
+      <dt>dataset</dt>
+
+      <dd>The DataSet name</dd>
+
+      <dt>data_field</dt>
+
+      <dd>The data field</dd>
+    </dl>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image2.html#get_iptc_dataset">get_iptc_dataset</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="each_pixel">each_pixel</h3>
+
+    <p><span class="arg">image</span>.each_pixel {|<span class=
+    "arg">pixel</span>, <span class="arg">c</span>, <span class=
+    "arg">r</span>| <span class="arg">block</span> } -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Calls <span class="arg">block</span> with 3 arguments, a
+    <span class="arg">pixel</span> from <span class=
+    "arg">image</span>, its column number <span class=
+    "arg">c</span>, and its row number <span class="arg">r</span>,
+    for all the pixels in the image. The pixels are enumerated from
+    top-to-bottom and left-to-right.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#get_pixels">get_pixels</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="each_profile">each_profile</h3>
+
+    <p><span class="arg">image</span>.each_profile {|<span class=
+    "arg">name</span>, <span class="arg">value</span>| <span class=
+    "arg">block</span>} -&gt; <em>???</em> (see Returns)</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Calls <span class="arg">block</span> once
+    for each profile in the image, passing the profile name and
+    value as parameters.
+
+    <h4>Returns</h4>
+
+    <p>the last value returned by the block</p>
+
+    <h4>See also</h4>
+
+    <p>The <a href=
+    "imageattrs.html#color_profile">color_profile</a> and <a href=
+    "imageattrs.html#iptc_profile">iptc_profile</a> attributes
+    return the ICC and IPTC profiles, respectively.</p>
+
+    <h4>Magick API</h4>
+
+    <p>GetNextImageProfile</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="edge">edge</h3>
+
+    <p><span class="arg">image</span>.edge(<span class=
+    "arg">radius</span>=0.0) -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Finds edges in the image.
+
+    <h4>Arguments</h4>The radius of the convolution filter. If the
+    radius is 0, <code>edge</code> selects a suitable default.
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('edge.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/edge.jpg'" src="ex/edge.jpg" alt="edge example"
+    title="Click the image to see the example script" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>EdgeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="emboss">emboss</h3>
+
+    <p><span class="arg">image</span>.emboss(<span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>Adds a 3-dimensional effect.
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius</dt>
+
+      <dd>The radius of the Gaussian operator.</dd>
+
+      <dt>sigma</dt>
+
+      <dd>The sigma (standard deviation) of the Gaussian operator.
+      This value cannot be 0.0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('emboss.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/emboss.jpg'" src="ex/emboss.jpg" alt=
+    "emboss example" title=
+    "Click the image to see the example script" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Magick API</h4>
+
+    <p>EmbossImage</p>
+  </div>
 
   <div class="sig">
     <h3 id="enhance">enhance</h3>
@@ -3067,213 +3238,12 @@ convert -list Thresholds
 
     <h4>See also</h4>
 
-    <p><a href="#posterize">posterize</a>, <a href=
+    <p><a href="image3.html#posterize">posterize</a>, <a href=
     "image3.html#quantize">quantize</a></p>
 
     <h4>Magick API</h4>
 
     <p>OrderedPosterizeImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="palette_q">palette?</h3>
-
-    <p><span class="arg">image</span>.palette? -&gt; true or
-    false</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p class="imquote">Returns true if the image is <a href=
-    "constants.html#ClassType">PseudoClass</a> and has 256 unique
-    colors or less.</p>
-
-    <h4>Returns</h4>
-
-    <p>true or false</p>
-
-    <h4>Magick API</h4>
-
-    <p>IsPaletteImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="pixel_color">pixel_color</h3>
-
-    <p><span class="arg">image</span>.pixel_color(<span class=
-    "arg">x</span>, <span class="arg">y</span>[, <span class=
-    "arg">new_color</span>]) -&gt; <em>aPixel</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Returns the color of the pixel at <span class=
-    "arg">x</span>, <span class="arg">y</span>. Optionally, changes
-    the color of the pixel to a new color.</p>
-
-    <p>If new_color is specified, pixel_color changes the image
-    type to DirectClass if necessary.</p>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>x, y</dt>
-
-      <dd>The x- and y-coordinates of the pixel.</dd>
-
-      <dt>new_color</dt>
-
-      <dd>If specified, the pixel is set to this color. May be
-      either a <a href="imusage.html#color_names">color name</a> or
-      a <a href="struct.html#Pixel">Pixel</a>.</dd>
-    </dl>
-
-    <h4>Returns</h4>A <a href="struct.html#Pixel">Pixel</a> having
-    the RGB values of the specified pixel.
-
-    <h4>Example</h4>
-    <pre>
-old = image.pixel_color(20,40,"white")
-</pre>
-
-    <h4>Magick API</h4>
-
-    <p>AcquireImagePixels</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="polaroid">polaroid</h3>
-
-    <p>image.polaroid(angle=-5.0) [ <span class="arg">{ optional
-    arguments }</span> ] -&gt; anImage</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Produce an image that looks like a Polaroid&reg; instant
-    picture. If the image has a "Caption" <a href=
-    "image1.html#aset">property</a>, the value is used as a
-    caption.</p>
-
-    <p>Optional arguments may be specified in a block associated
-    with the method. These arguments control the shadow color and
-    how the label is rendered. By default the shadow color is
-    gray75. To specify a different shadow color, use
-    <code>self.shadow_color</code>. To specify a different border
-    color (that is, the color of the image border) use
-    <code>self.border_color</code>. Both of these methods accept
-    either a <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">Pixel</a> argument.</p>
-
-    <p>The following <a href="draw.html#annotate">annotate</a>
-    attributes control the label rendering: <a href=
-    "draw.html#align_eq">align</a>, <a href=
-    "draw.html#decorate_eq">decorate</a>, <a href=
-    "draw.html#density_eq">density</a>, <a href=
-    "draw.html#encoding_eq">encoding</a>, <a href=
-    "draw.html#fill_eq">fill</a>, <a href=
-    "draw.html#font_eq">font</a>, <a href=
-    "draw.html#font_family_eq">font_family</a>, <a href=
-    "draw.html#font_stretch_eq">font_stretch</a>, <a href=
-    "draw.html#font_style_eq">font_style</a>, <a href=
-    "draw.html#font_weight_eq">font_weight</a>, <a href=
-    "draw.html#gravity_eq">gravity</a>, <a href=
-    "draw.html#pointsize_eq">pointsize</a>, <a href=
-    "draw.html#stroke_eq">stroke</a>, <a href=
-    "draw.html#stroke_width_eq">stroke_width</a>, <a href=
-    "draw.html#text_antialias_eq">text_antialias</a>, <a href=
-    "draw.html#undercolor_eq">undercolor</a>.</p>
-    <pre>
-img.polaroid do
-   self.shadow_color = "gray40"
-   self.pointsize = 12
-end
-</pre>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>angle</dt>
-
-      <dd>The resulting image is rotated by this amount, measured
-      in degrees. The default is -5.0.</dd>
-    </dl>
-
-    <h4>Example</h4>
-
-    <p><a href="javascript:popup('polaroid.rb.html')"><img src=
-    "ex/polaroid.jpg" alt="polaroid example" /></a></p>
-
-    <h4>Magick API</h4>
-
-    <p>PolaroidImage</p>
-
-    <h4>See also</h4>
-
-    <p><a href=
-    "http://rmagick.rubyforge.org/Polaroid/polaroid.html">The
-    Polaroid Effect</a></p>
-
-    <h4>Notes</h4>
-
-    <p>"Polaroid" and the other names of products of Polaroid
-    Corporation are trademarks of Polaroid Corporation.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="posterize">posterize</h3>
-
-    <p><span class="arg">image</span>.posterize(<span class=
-    "arg">levels</span>=4, <span class="arg">dither</span>=false)
-    -&gt; <em>anImage</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p class="imquote">Reduces the image to a limited number of
-    colors for a "poster" effect.</p>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>levels</dt>
-
-      <dd><span class="imquote">Number of color levels allowed in
-      each channel. Very low values (2, 3, or 4) have the most
-      visible effect.</span> The default is 4.</dd>
-
-      <dt>dither</dt>
-
-      <dd>If true, dither the image. The default is false.</dd>
-    </dl>
-
-    <h4>Returns</h4>
-
-    <p>A new image</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('posterize.rb.html')"><img src=
-    "ex/posterize.jpg" alt="posterize example" onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/posterize.jpg'" title=
-    "Click to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" title=
-    "Mouse over the example to see the original image" /></p>
-
-    <h4>See also</h4>
-
-    <p><a href="#ordered_dither">ordered_dither</a>, <a href=
-    "image3.html#quantize">quantize</a></p>
-
-    <h4>Magick API</h4>
-
-    <p>PosterizeImage</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

@@ -6,8 +6,8 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (class and instance methods,
-  part 1)</title>
+  <title>RMagick 0.0.0: class Image (class methods and instance
+  methods a-d)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -57,7 +57,7 @@ float: left;
   </div>
 
   <h1>class Image <span class="superclass">&lt; Object</span>
-  (class and instance methods, part 1)<br />
+  (class methods and instance methods a-d)<br />
   <span class="mixin">mixes in Comparable</span></h1>
 
   <div id="toc">
@@ -149,13 +149,13 @@ float: left;
           <li><a href="#border">border</a></li>
 
           <li><a href="#border_bang">border!</a></li>
-
-          <li><a href="#change_geometry">change_geometry</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#change_geometry">change_geometry</a></li>
+
           <li><a href="#changed_q">changed?</a></li>
 
           <li><a href="#channel">channel</a></li>
@@ -201,16 +201,16 @@ float: left;
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
-
-          <li><a href="#contrast">contrast</a></li>
-
-          <li><a href=
-          "#contrast_stretch_channel">contrast_stretch_channel</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#contrast">contrast</a></li>
+
+          <li><a href=
+          "#contrast_stretch_channel">contrast_stretch_channel</a></li>
+
           <li><a href="#convolve">convolve</a></li>
 
           <li><a href="#convolve_channel">convolve_channel</a></li>
@@ -251,17 +251,6 @@ float: left;
           "#distortion_channel">distortion_channel</a></li>
 
           <li><a href="#dup">dup</a></li>
-
-          <li><a href=
-          "#each_iptc_dataset">each_iptc_dataset</a></li>
-
-          <li><a href="#each_pixel">each_pixel</a></li>
-
-          <li><a href="#each_profile">each_profile</a></li>
-
-          <li><a href="#edge">edge</a></li>
-
-          <li><a href="#emboss">emboss</a></li>
         </ul>
       </div>
     </div>
@@ -1256,7 +1245,7 @@ img = Magick::Image.read_inline(content)
     method can also be used to add a profile. The type of profile
     must be specified and the profile data must be in the form of a
     string. Also see <a href="#delete_profile">delete_profile</a>
-    and <a href="image1.html#each_profile">each_profile</a>.</p>
+    and <a href="image2.html#each_profile">each_profile</a>.</p>
 
     <h4>Magick API</h4>
 
@@ -2507,7 +2496,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     "arg">x</span>,<span class="arg">y</span> to the fill color.
     This method creates a new image object. If you want to set a
     single pixel in the image without creating a new image, use
-    <a href="image2.html#pixel_color">pixel_color</a> or the
+    <a href="image3.html#pixel_color">pixel_color</a> or the
     <a href="draw.html#point">Draw#point</a> method.
 
     <h4>Arguments</h4>
@@ -2534,7 +2523,7 @@ f.color_point(50,50, 'red')
 
     <h4>See also</h4>
 
-    <p><a href="image2.html#pixel_color">pixel_color</a>, <a href=
+    <p><a href="image3.html#pixel_color">pixel_color</a>, <a href=
     "draw.html#point">Draw#point</a></p>
 
     <h4>Magick API</h4>
@@ -3044,7 +3033,7 @@ f.colors &raquo; 108
     <h4>See also</h4>
 
     <p><a href="#convolve_channel">convolve_channel</a>. The
-    <a href="#edge">edge</a>, <a href=
+    <a href="image2.html#edge">edge</a>, <a href=
     "image2.html#emboss">emboss</a>, <a href=
     "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
     "image2.html#motion_blur">motion_blur</a> and <a href=
@@ -4070,175 +4059,6 @@ exit
     <h4>See also</h4>
 
     <p><a href="#clone">clone</a></p>
-  </div>
-
-  <div class="sig">
-    <h3 id="each_iptc_dataset">each_iptc_dataset</h3>
-
-    <p>image.each_iptc_dataset { |<span class="arg">dataset</span>,
-    <span class="arg">data_field</span>| <span class=
-    "arg">block</span>} -&gt; <code>nil</code></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Iterates over the IPTC DataSet constants in Magick::IPTC. If
-    the image's IPTC profile has the DataSet and the data field has
-    non-0 length, yields to the block. The IPTC DataSet constants
-    are listed <a href="image2.html#get_iptc_dataset">here</a>.</p>
-
-    <h4>Arguments</h4>
-
-    <p>The block arguments are:</p>
-
-    <dl>
-      <dt>dataset</dt>
-
-      <dd>The DataSet name</dd>
-
-      <dt>data_field</dt>
-
-      <dd>The data field</dd>
-    </dl>
-
-    <h4>See also</h4>
-
-    <p><a href=
-    "image2.html#get_iptc_dataset">get_iptc_dataset</a></p>
-  </div>
-
-  <div class="sig">
-    <h3 id="each_pixel">each_pixel</h3>
-
-    <p><span class="arg">image</span>.each_pixel {|<span class=
-    "arg">pixel</span>, <span class="arg">c</span>, <span class=
-    "arg">r</span>| <span class="arg">block</span> } -&gt;
-    <em>image</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Calls <span class="arg">block</span> with 3 arguments, a
-    <span class="arg">pixel</span> from <span class=
-    "arg">image</span>, its column number <span class=
-    "arg">c</span>, and its row number <span class="arg">r</span>,
-    for all the pixels in the image. The pixels are enumerated from
-    top-to-bottom and left-to-right.</p>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
-
-    <h4>See also</h4>
-
-    <p><a href="image2.html#get_pixels">get_pixels</a></p>
-  </div>
-
-  <div class="sig">
-    <h3 id="each_profile">each_profile</h3>
-
-    <p><span class="arg">image</span>.each_profile {|<span class=
-    "arg">name</span>, <span class="arg">value</span>| <span class=
-    "arg">block</span>} -&gt; <em>???</em> (see Returns)</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>Calls <span class="arg">block</span> once
-    for each profile in the image, passing the profile name and
-    value as parameters.
-
-    <h4>Returns</h4>
-
-    <p>the last value returned by the block</p>
-
-    <h4>See also</h4>
-
-    <p>The <a href=
-    "imageattrs.html#color_profile">color_profile</a> and <a href=
-    "imageattrs.html#iptc_profile">iptc_profile</a> attributes
-    return the ICC and IPTC profiles, respectively.</p>
-
-    <h4>Magick API</h4>
-
-    <p>GetNextImageProfile</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="edge">edge</h3>
-
-    <p><span class="arg">image</span>.edge(<span class=
-    "arg">radius</span>=0.0) -&gt; <em>anImage</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>Finds edges in the image.
-
-    <h4>Arguments</h4>The radius of the convolution filter. If the
-    radius is 0, <code>edge</code> selects a suitable default.
-
-    <h4>Returns</h4>
-
-    <p>A new image</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('edge.rb.html')"><img onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/edge.jpg'" src="ex/edge.jpg" alt="edge example"
-    title="Click the image to see the example script" /></a>
-    <img src="ex/images/spin.gif" alt="" class="spin" title=
-    "Mouse over the example to see the original image" /></p>
-
-    <h4>Magick API</h4>
-
-    <p>EdgeImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="emboss">emboss</h3>
-
-    <p><span class="arg">image</span>.emboss(<span class=
-    "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>Adds a 3-dimensional effect.
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>radius</dt>
-
-      <dd>The radius of the Gaussian operator.</dd>
-
-      <dt>sigma</dt>
-
-      <dd>The sigma (standard deviation) of the Gaussian operator.
-      This value cannot be 0.0.</dd>
-    </dl>
-
-    <h4>Returns</h4>
-
-    <p>A new image</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('emboss.rb.html')"><img onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/emboss.jpg'" src="ex/emboss.jpg" alt=
-    "emboss example" title=
-    "Click the image to see the example script" /></a><img src=
-    "ex/images/spin.gif" alt="" class="spin" title=
-    "Mouse over the example to see the original image" /></p>
-
-    <h4>Magick API</h4>
-
-    <p>EmbossImage</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

@@ -4,10 +4,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (instance methods, part
-  3)</title>
+  <title>RMagick 0.0.0: class Image (instance methods p-w)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -61,7 +60,7 @@
   </div>
 
   <h1>class Image <span class="superclass">&lt; Object</span>
-  (class and instance methods, part 3)<br />
+  (instance methods p-w)<br />
   <span class="mixin">mixes in Comparable</span></h1>
 
   <div id="toc">
@@ -72,6 +71,14 @@
     <div>
       <div class="toccol">
         <ul>
+          <li><a href="#palette_q">palette?</a></li>
+
+          <li><a href="#pixel_color">pixel_color</a></li>
+
+          <li><a href="#polaroid">polaroid</a></li>
+
+          <li><a href="#posterize">posterize</a></li>
+
           <li><a href="#preview">preview</a></li>
 
           <li><a href="#profile_bang">profile!</a></li>
@@ -115,15 +122,15 @@
           <li><a href="#sample">sample</a></li>
 
           <li><a href="#sample_bang">sample!</a></li>
-
-          <li><a href="#scale">scale</a></li>
-
-          <li><a href="#scale_bang">scale!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#scale">scale</a></li>
+
+          <li><a href="#scale_bang">scale!</a></li>
+
           <li><a href="#segment">segment</a></li>
 
           <li><a href="#separate">separate</a></li>
@@ -232,6 +239,207 @@
   </div>
 
   <h2 class="methods">instance methods</h2>
+
+  <div class="sig">
+    <h3 id="palette_q">palette?</h3>
+
+    <p><span class="arg">image</span>.palette? -&gt; true or
+    false</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Returns true if the image is <a href=
+    "constants.html#ClassType">PseudoClass</a> and has 256 unique
+    colors or less.</p>
+
+    <h4>Returns</h4>
+
+    <p>true or false</p>
+
+    <h4>Magick API</h4>
+
+    <p>IsPaletteImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="pixel_color">pixel_color</h3>
+
+    <p><span class="arg">image</span>.pixel_color(<span class=
+    "arg">x</span>, <span class="arg">y</span>[, <span class=
+    "arg">new_color</span>]) -&gt; <em>aPixel</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns the color of the pixel at <span class=
+    "arg">x</span>, <span class="arg">y</span>. Optionally, changes
+    the color of the pixel to a new color.</p>
+
+    <p>If new_color is specified, pixel_color changes the image
+    type to DirectClass if necessary.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>x, y</dt>
+
+      <dd>The x- and y-coordinates of the pixel.</dd>
+
+      <dt>new_color</dt>
+
+      <dd>If specified, the pixel is set to this color. May be
+      either a <a href="imusage.html#color_names">color name</a> or
+      a <a href="struct.html#Pixel">Pixel</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>A <a href="struct.html#Pixel">Pixel</a> having
+    the RGB values of the specified pixel.
+
+    <h4>Example</h4>
+    <pre>
+old = image.pixel_color(20,40,"white")
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>AcquireImagePixels</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="polaroid">polaroid</h3>
+
+    <p>image.polaroid(angle=-5.0) [ <span class="arg">{ optional
+    arguments }</span> ] -&gt; anImage</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Produce an image that looks like a Polaroid&reg; instant
+    picture. If the image has a "Caption" <a href=
+    "image1.html#aset">property</a>, the value is used as a
+    caption.</p>
+
+    <p>Optional arguments may be specified in a block associated
+    with the method. These arguments control the shadow color and
+    how the label is rendered. By default the shadow color is
+    gray75. To specify a different shadow color, use
+    <code>self.shadow_color</code>. To specify a different border
+    color (that is, the color of the image border) use
+    <code>self.border_color</code>. Both of these methods accept
+    either a <a href="imusage.html#color_names">color name</a> or a
+    <a href="struct.html#Pixel">Pixel</a> argument.</p>
+
+    <p>The following <a href="draw.html#annotate">annotate</a>
+    attributes control the label rendering: <a href=
+    "draw.html#align_eq">align</a>, <a href=
+    "draw.html#decorate_eq">decorate</a>, <a href=
+    "draw.html#density_eq">density</a>, <a href=
+    "draw.html#encoding_eq">encoding</a>, <a href=
+    "draw.html#fill_eq">fill</a>, <a href=
+    "draw.html#font_eq">font</a>, <a href=
+    "draw.html#font_family_eq">font_family</a>, <a href=
+    "draw.html#font_stretch_eq">font_stretch</a>, <a href=
+    "draw.html#font_style_eq">font_style</a>, <a href=
+    "draw.html#font_weight_eq">font_weight</a>, <a href=
+    "draw.html#gravity_eq">gravity</a>, <a href=
+    "draw.html#pointsize_eq">pointsize</a>, <a href=
+    "draw.html#stroke_eq">stroke</a>, <a href=
+    "draw.html#stroke_width_eq">stroke_width</a>, <a href=
+    "draw.html#text_antialias_eq">text_antialias</a>, <a href=
+    "draw.html#undercolor_eq">undercolor</a>.</p>
+    <pre>
+img.polaroid do
+   self.shadow_color = "gray40"
+   self.pointsize = 12
+end
+</pre>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>angle</dt>
+
+      <dd>The resulting image is rotated by this amount, measured
+      in degrees. The default is -5.0.</dd>
+    </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('polaroid.rb.html')"><img src=
+    "ex/polaroid.jpg" alt="polaroid example" /></a></p>
+
+    <h4>Magick API</h4>
+
+    <p>PolaroidImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "http://rmagick.rubyforge.org/Polaroid/polaroid.html">The
+    Polaroid Effect</a></p>
+
+    <h4>Notes</h4>
+
+    <p>"Polaroid" and the other names of products of Polaroid
+    Corporation are trademarks of Polaroid Corporation.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="posterize">posterize</h3>
+
+    <p><span class="arg">image</span>.posterize(<span class=
+    "arg">levels</span>=4, <span class="arg">dither</span>=false)
+    -&gt; <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Reduces the image to a limited number of
+    colors for a "poster" effect.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>levels</dt>
+
+      <dd><span class="imquote">Number of color levels allowed in
+      each channel. Very low values (2, 3, or 4) have the most
+      visible effect.</span> The default is 4.</dd>
+
+      <dt>dither</dt>
+
+      <dd>If true, dither the image. The default is false.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('posterize.rb.html')"><img src=
+    "ex/posterize.jpg" alt="posterize example" onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/posterize.jpg'" title=
+    "Click to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#ordered_dither">ordered_dither</a>,
+    <a href="image3.html#quantize">quantize</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>PosterizeImage</p>
+  </div>
 
   <div class="sig">
     <h3 id="preview">preview</h3>
@@ -509,7 +717,7 @@
     <h4>See also</h4>
 
     <p><a href="image2.html#ordered_dither">ordered_dither</a>,
-    <a href="image2.html#posterize">posterize</a>, <a href=
+    <a href="image3.html#posterize">posterize</a>, <a href=
     "ilist.html#quantize">ImageList#quantize</a></p>
 
     <h4>Magick API</h4>
@@ -973,8 +1181,8 @@ random_threshold_channel(geom, RedChannel)
 
       <dt>filter</dt>
 
-      <dd>The <a href="constants.html#FilterTypes">filter</a> to use
-      when resizing. If you do not specify a filter argument,
+      <dd>The <a href="constants.html#FilterTypes">filter</a> to
+      use when resizing. If you do not specify a filter argument,
       resize uses the value of the receiver's <a href=
       "imageattrs.html#Image.filter">filter attribute</a>.
       <span class="imquote">Most of the filters are FIR (finite
@@ -1188,15 +1396,14 @@ random_threshold_channel(geom, RedChannel)
     id="notrotated" onmouseout=
     "this.style.display='none'; rotated.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="rotate example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                                       This img tag displays the rotated image.
                                                                       --><img class="hide"
     id="rotated" onmouseover=
     "this.style.display='none'; notrotated.style.display='';" src=
-    "ex/rotate_f.jpg" alt="rotate example"  /></a>
-    <img src="ex/images/spin.gif" alt="" class="spin" style=
-    "left:322px;" title=
-    "Mouse over the example to see the original image" /></p>
+    "ex/rotate_f.jpg" alt="rotate example" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" style="left:322px;"
+    title="Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
 
@@ -1678,14 +1885,13 @@ random_threshold_channel(geom, RedChannel)
     onmouseout=
     "this.style.display='none';shadowed.style.display='';" src=
     "ex/shadow_before.gif" alt="shadow example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                           This img tag displays the shadowed image when the mouse is not over
                                                           --><img class="hide"
     id="shadowed" onmouseover=
     "this.style.display='none';shadowless.style.display='';" src=
-    "ex/shadow_after.gif" alt="shadow example"
-     /></a> <img src="ex/images/spin.gif" alt="" style=
-    "margin-bottom: 120px" title=
+    "ex/shadow_after.gif" alt="shadow example" /></a> <img src=
+    "ex/images/spin.gif" alt="" style="margin-bottom: 120px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>Magick API</h4>
@@ -1896,14 +2102,14 @@ random_threshold_channel(geom, RedChannel)
     id="noshear" onmouseout=
     "this.style.display='none'; sheared.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="shear example" title=
-    "Click to see the example script"  /> <!--
+    "Click to see the example script" /> <!--
                                                                        This img tag displays the sheared image when the mouse is not over
                                                                        -->
      <img id="sheared" onmouseover=
     "this.style.display='none'; noshear.style.display='';" src=
-    "ex/shear.jpg" alt="shear example"
-     /></a><img src="ex/images/spin.gif" alt="" class=
-    "spin" style="left: 253px; top: 34px" title=
+    "ex/shear.jpg" alt="shear example" /></a><img src=
+    "ex/images/spin.gif" alt="" class="spin" style=
+    "left: 253px; top: 34px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -2155,14 +2361,13 @@ img.properties &raquo;
     id="nosplice" onmouseout=
     "this.style.display='none';spliced.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="splice example" title=
-    "Click to see the example script"  /><!--
+    "Click to see the example script" /><!--
                                                                                                                 This img tag displays the spliced image when the mouse is not over
                                                                                                                 --><img class="hide"
     id="spliced" onmouseover=
     "this.style.display='none';nosplice.style.display='';" src=
-    "ex/splice.jpg" alt="splice example"  /></a>
-    <img src="ex/images/spin.gif" alt="" style=
-    "margin-bottom: 280px" title=
+    "ex/splice.jpg" alt="splice example" /></a> <img src=
+    "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -2537,8 +2742,8 @@ img.properties &raquo;
     color with the <span class="arg">texture</span> image. By
     default, the neighbor pixels must be exactly the same color as
     the target pixel. Use the <a href=
-    "imageattrs.html#fuzz">fuzz</a> attribute to specify how
-    much difference is acceptable.</p>
+    "imageattrs.html#fuzz">fuzz</a> attribute to specify how much
+    difference is acceptable.</p>
 
     <h4>Arguments</h4>
 
@@ -2815,8 +3020,8 @@ img.to_color(pixel)
     <span class="arg">color</span> to the value specified by
     <span class="arg">opacity</span>. By default the pixel must
     match exactly, but you can specify a tolerence level by setting
-    the <a href="imageattrs.html#fuzz">fuzz</a> attribute on
-    the image.</p>
+    the <a href="imageattrs.html#fuzz">fuzz</a> attribute on the
+    image.</p>
 
     <h4>Arguments</h4>
 
@@ -3310,7 +3515,7 @@ end
 
     <h4>See also</h4>
 
-    <p><a href="image2.html#pixel_color">pixel_color</a>, <a href=
+    <p><a href="image3.html#pixel_color">pixel_color</a>, <a href=
     "image2.html#get_pixels">get_pixels</a>, <a href=
     "#store_pixels">store_pixels</a></p>
 
@@ -3588,13 +3793,12 @@ end
     "padding-top:25px; padding-bottom:25px; display:none" id=
     "nowave" title="Click to see the example script" onmouseout=
     "this.style.display='none'; waved.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="wave example"  />
-    <!--
+    "ex/images/Flower_Hat.jpg" alt="wave example" /> <!--
                                                               This img tag displays the framed image when the mouse is not over
                                                               --><img class="hide"
     id="waved" onmouseover=
     "this.style.display='none'; nowave.style.display='';" src=
-    "ex/wave.jpg" alt="wave example"  /></a> <img src=
+    "ex/wave.jpg" alt="wave example" /></a> <img src=
     "ex/images/spin.gif" alt="" class="spin" title=
     "Mouse over the example to see the original image" /></p>
 

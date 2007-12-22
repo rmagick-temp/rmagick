@@ -212,9 +212,10 @@ imagelist.delay = 20 # delay 1/5 of a second between images.
     <p>Sets the number of times an animated image should loop.</p>
 
     <p>The <a href="#animate">animate</a> method and the
-    ImageMagick animate command does not respect this number. Both
-    will repeat the animation until you stop them. Mozilla (and
-    presumably Netscape) do respect the value..</p>
+    ImageMagick animate/GraphicsMagick gm utilities do not respect
+    this number. Both will repeat the animation until you stop
+    them. Mozilla (and presumably Netscape) do respect the
+    value..</p>
 
     <h4>Arguments</h4>
 
@@ -463,7 +464,7 @@ imagelist.animate { self.server_name = "other:0.0" }
 
     <h4>See also</h4>
 
-    <p><a href="#ImageList.display">display</a></p>
+    <p><a href="#display">display</a></p>
 
     <h4>Note</h4>
 
@@ -501,7 +502,7 @@ imagelist.animate { self.server_name = "other:0.0" }
 
     <h4>Example</h4>
 
-    <p>See the <a href="#ImageList.map">map</a> example.</p>
+    <p>See the <a href="#map">map</a> example.</p>
 
     <h4>Magick API</h4>
 
@@ -535,16 +536,16 @@ imagelist.animate { self.server_name = "other:0.0" }
     "this.style.display='none'; averaged.style.display=''; averagedspin.style.display='';"
     title="Click to see the example script" src=
     "ex/average_before.gif" alt="average example"
-    /><!--
+     /><!--
                                   This img tag displays the averaged image when the mouse is not over
                                   --><img style="display:" id=
 "averaged" onmouseover=
 "this.style.display='none'; notaveraged.style.display=''; averagedspin.style.display='none';"
     src="ex/average_after.gif" alt="average example"
-    /></a> <img src="ex/images/spin.gif" alt="" class=
+     /></a> <img src="ex/images/spin.gif" alt="" class=
     "spin" style="left:131px; display:" id="averagedspin" title=
     "Mouse over the example to see the 3 original images"
-    /></p>
+     /></p>
 
     <h4>Magick API</h4>
 
@@ -899,7 +900,7 @@ ilist.display
       be quite slow depending on the complexity of the expression.
       Generally you will get better performance by accessing the
       image pixels as <a href="struct.html#Pixel">Pixel</a> objects
-      (see <a href="image2.html#get_pixel">get_pixel</a> and
+      (see <a href="image2.html#get_pixels">get_pixels</a> and
       <a href="image3.html#view">view</a>) and using Ruby code to
       perform the mathematics.</li>
 
@@ -934,7 +935,7 @@ res = imgl.fx('1/2', Magick::BlueChannel)
 
     <h4>See also</h4>
 
-    <p><a href="image2.html#get_pixel">get_pixel</a>, <a href=
+    <p><a href="image2.html#get_pixels">get_pixels</a>, <a href=
     "image3.html#view">view</a></p>
   </div>
 
@@ -1123,7 +1124,7 @@ self.frame = Magick::Geometry.new(20,20,4,4)
       <dd>If the tile has a label, the label is included in the
       frame. The default is to have no frame.</dd>
 
-      <dd>See <a href="image1.html#frame">Image#frame</a>.</dd>
+      <dd>See <a href="image2.html#frame">Image#frame</a>.</dd>
 
       <dt>geometry=</dt>
 
@@ -1181,8 +1182,8 @@ geometry is "120x120+4+3&gt;".
       <dd>
         A image to be tiled on the background of the composite
         image. If present, this attribute overrides the background
-        color. For example, to use ImageMagick's built-in "granite"
-        texture as the background, use:
+        color. For example, to use &times;Magick's built-in
+        "granite" texture as the background, use:
         <pre>
 self.texture = Magick::Image.read("granite:").first
 </pre>
@@ -1661,7 +1662,7 @@ number = '0'
 
     <h4>See also</h4>
 
-    <p><a href="image3.html#read">Image.read</a></p>
+    <p><a href="image1.html#read">Image.read</a></p>
 
     <h4>Magick API</h4>
 
@@ -1669,7 +1670,7 @@ number = '0'
 
     <h4>Notes</h4>
 
-    <p>You can create images using ImageMagick's built-in formats
+    <p>You can create images using &times;Magick's built-in formats
     with the <code>read</code> method. See <a href=
     "imusage.html#builtin_formats">Built-in image formats</a>.</p>
   </div>
@@ -1774,7 +1775,7 @@ p i.length &raquo; 3 # contains 3 images
 i.write "test.png" &raquo; test.png.0
                    &raquo; test.png.1
                    &raquo; test.png.2
-# ImageMagick's MIFF format does support multi-frame
+# &times;Magick's MIFF format does support multi-frame
 # files, so all 3 images are written to one file.
 i.write "animated.miff" &raquo; animated.miff
 </pre>

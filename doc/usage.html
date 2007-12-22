@@ -231,8 +231,8 @@
 
   <p>The statement on line 7 writes the image to a file. Notice
   that the filename extension is <code>gif</code>. When writing
-  images, ImageMagick uses the filename extension to determine what
-  image format to write. In this example, the
+  images, &times;Magick uses the filename extension to determine
+  what image format to write. In this example, the
   <code>Small-Cheetah.gif</code> file will be in the GIF format.
   Notice how easy it is to covert an image from one format to
   another? (For more details, see <a href=
@@ -377,8 +377,8 @@ exit
   <p>The methods can be classified into the following broad groups.
   ImageList method descriptions look like <span class=
   "ilist">this</span>. Some of the listed methods are not available
-  in some releases of ImageMagick. See the method documentation for
-  details.</p>
+  in some releases of &times;Magick. See the method documentation
+  for details.</p>
 
   <div id="index">
     <h4>Utility methods</h4>
@@ -554,6 +554,10 @@ exit
 
       <dd>Compute the 64-byte message signature for the image</dd>
 
+      <dt><a href="image3.html#statistics">statistics</a></dt>
+
+      <dd>Compute image statistics</dd>
+
       <dt><a href="image3.html#store_pixels">store_pixels</a></dt>
 
       <dd>Replace a region of pixels in the image</dd>
@@ -580,6 +584,11 @@ exit
 
       <dd>Remove duplicate or unused entries in the image's
       colormap</dd>
+
+      <dt><a href=
+      "image2.html#grayscale_pseudo_class">grayscale_pseudo_class</a></dt>
+
+      <dd>Convert the image to a grayscale PseudoClass image.</dd>
 
       <dt><a href="image2.html#map">map</a></dt>
 
@@ -678,7 +687,7 @@ exit
 
       <dd>Get or set a color in the image's colormap</dd>
 
-      <dt><a href="image1.htlm#color_point">color_point</a></dt>
+      <dt><a href="image1.html#color_point">color_point</a></dt>
 
       <dd>Change the color of a single pixel in the image</dd>
 
@@ -692,7 +701,7 @@ exit
 
       <dd>Displace the image's colormap</dd>
 
-      <dt><a href="image1.html#erase_bang">erase!</a></dt>
+      <dt><a href="image2.html#erase_bang">erase!</a></dt>
 
       <dd>Set the entire image to a single color</dd>
 
@@ -1007,7 +1016,7 @@ exit
       "image1.html#blur_channel">blur_channel</a>, <a href=
       "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
       "image2.html#gaussian_blur_channel">gaussian_blur_channel</a>,
-      <a href="image3.html#motion_blur">motion_blur</a>, <a href=
+      <a href="image2.html#motion_blur">motion_blur</a>, <a href=
       "image3.html#radial_blur">radial_blur</a>, <a href=
       "image3.html#radial_blur_channel">radial_blur_channel</a></dt>
 
@@ -1196,7 +1205,7 @@ exit
 
   <p>Image and ImageList objects can be serialized using Ruby's
   <code>Marshal</code> module. Marshaling is supported via
-  ImageMagick's Binary Large OBject functions
+  &times;Magick's Binary Large OBject functions
   <code>ImageToBlob</code> (for dumping) and
   <code>BlobToImage</code> (for loading).</p>
 
@@ -1222,7 +1231,7 @@ exit
 
   <h3 id="drawing">Drawing</h3>
 
-  <p>ImageMagick supports a set of 2D drawing commands that are
+  <p>&times;Magick supports a set of 2D drawing commands that are
   very similar to the commands and elements defined by the W3C's
   <a href="http://www.w3.org/TR/SVG/index.html#minitoc">Scalable
   Vector Graphics (SVG) 1.1 Specification</a>. In RMagick, each
@@ -1344,7 +1353,7 @@ exit
   <p>Most of the time, you'll want to specify text properties such
   as the font, its size, font styles such as italic, font weights
   such as bold, the fill and stroke color, etc. The Draw class
-  defines <a href="draw.html#attribute_writers">attribute
+  defines <a href="draw.html#attributes">attribute
   writers</a> for this purpose. You can set the desired text
   properties by calling the attribute writers before calling
   <code>annotate</code>, or you can call them in an image block
@@ -1399,7 +1408,7 @@ exit
   <p>First, the statements in lines 8-10 create the background. See
   <a href="struct.html#fill"><code>Fill classes</code></a> for
   information about the <code>TextureFill</code> class. The
-  "granite:" image format is one of ImageMagick's built-in image
+  "granite:" image format is one of &times;Magick's built-in image
   formats. See <a href="imusage.html#builtin_formats">"Built-in
   image formats"</a> for more information. The statement on line 12
   creates the Draw object that does the annotation. The next 3
@@ -1427,19 +1436,20 @@ exit
 
   <h2 id="more">Where to go from here</h2>
 
-  <p>The next section, <a href="imusage.html">"ImageMagick
-  Conventions,"</a> describes some conventions that you need to
-  know, such as how ImageMagick determines the graphic format of an
-  image file, etc. The ImageMagick (www.imagemagick.org) web site
-  (from which much of the information in these pages has been
-  taken) offers a lot of detail about ImageMagick. While this web
-  sites doesn't describe RMagick, you can often use the
-  documentation to learn more about a RMagick method by reading
-  about the Magick API the method calls. (In the Reference section
-  of this document, most of the method descriptions include the
-  name of the Magick API that the method calls.) Check out the
-  example programs. Almost every one of the methods is demonstrated
-  in one of the examples.</p>
+  <p>The next section, <a href=
+  "imusage.html">"ImageMagick/GraphicsMagick Conventions,"</a>
+  describes some conventions that you need to know, such as how
+  &times;Magick determines the graphic format of an image file,
+  etc. The ImageMagick (www.imagemagick.org) and GraphicsMagick
+  (www.graphicsmagick.org) web sites (from which much of the
+  information in these pages has been taken) offers a lot of detail
+  about &times;Magick. While these web sites don't describe
+  RMagick, you can often use the documentation to learn more about
+  a RMagick method by reading about the Magick API the method
+  calls. (In the Reference section of this document, most of the
+  method descriptions include the name of the Magick API that the
+  method calls.) Check out the example programs. Almost every one
+  of the methods is demonstrated in one of the examples.</p>
 
   <p>Good luck!</p>
 

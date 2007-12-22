@@ -599,9 +599,7 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     required. If the image format cannot be deduced from the image
     data, you can use the <a href="info.html#format">format</a>
     attribute. If you want to extract a subset of an image
-    sequence, you can use the <a href="info.html#scene">scene</a>
-    and <a href="info.html#number_scenes">number_scenes</a>
-    attributes.</p>
+    sequence, read <a href="imusage.html#frames">this</a> section.</p>
 
     <h4>Returns</h4>
 
@@ -897,7 +895,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>See also</h4>
 
-    <p><a href="#resize">resize</a></p>
+    <p><a href="image3.html#resize">resize</a></p>
 
     <h4>Magick API</h4>
 
@@ -1172,7 +1170,7 @@ img = Magick::Image.read_inline(content)
     method can also be used to add a profile. The type of profile
     must be specified and the profile data must be in the form of a
     string. Also see <a href="#delete_profile">delete_profile</a>
-    and <a href="image1.html#each_profile">each_profile</a>.</p>
+    and <a href="#each_profile">each_profile</a>.</p>
 
     <h4>Magick API</h4>
 
@@ -2360,7 +2358,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     "arg">x</span>,<span class="arg">y</span> to the fill color.
     This method creates a new image object. If you want to set a
     single pixel in the image without creating a new image, use
-    <a href="image3.html#pixel_color">pixel_color</a> or the
+    <a href="image2.html#pixel_color">pixel_color</a> or the
     <a href="draw.html#point">Draw#point</a> method.
 
     <h4>Arguments</h4>
@@ -2387,7 +2385,7 @@ f.color_point(50,50, 'red')
 
     <h4>See also</h4>
 
-    <p><a href="image3.html#pixel_color">pixel_color</a>, <a href=
+    <p><a href="image2.html#pixel_color">pixel_color</a>, <a href=
     "draw.html#point">Draw#point</a></p>
 
     <h4>Magick API</h4>
@@ -3271,7 +3269,7 @@ cropped = img.crop(x, y, width, height, true)
   </div>
 
   <div class="sig">
-    <h3 id="crop_resize_bang">crop_resized!</h3>
+    <h3 id="crop_resized_bang">crop_resized!</h3>
 
     <p><span class="arg">image</span>.crop_resized!(<span class=
     "arg">width</span>, <span class="arg">height</span>,

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: Miscellaneous classes</title>
   <meta http-equiv="Content-Type" content=
@@ -766,7 +766,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     </div>
 
     <div class="sig">
-      <h4>to_color</h4>
+      <h4 id="Pixel_to_color">to_color</h4>
 
       <p><span class="arg">pixel</span>.to_color(<span class=
       "arg">compliance</span>=AllCompliance, <span class=
@@ -1081,7 +1081,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="intro">
       <h3>Introduction</h3>
 
-      <p>The <a href="image.html#new">Image#new</a> and <a href=
+      <p>The <a href="image1.html#new">Image#new</a> and <a href=
       "ilist.html#new_image">ImageList#new_image</a> methods accept
       a <code>Fill</code> object as an optional third argument. A
       <code>Fill</code> object is an instance of a <em>Fill
@@ -1252,6 +1252,18 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <p>When an &times;Magick function returns an error condition,
       RMagick raises an <code>ImageMagickError</code>
       exception.</p>
+
+      <h4>Attributes</h4>
+
+      <dl>
+        <dt>magick_location</dt>
+
+        <dd>With GraphicsMagick 1.1, this attribute contains a
+        string that indicates the source file (module), function
+        and line number in which GraphicsMagick raised the error.
+        The string is in the form <tt>&lt;function&gt; at
+        &lt;module&gt;:&lt;line&gt;</tt>. (Get-only.)</dd>
+      </dl>
     </div>
   </div>
 

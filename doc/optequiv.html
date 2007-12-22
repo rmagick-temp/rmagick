@@ -102,24 +102,24 @@ td {
   <div class="intro">
     <h3>Introduction</h3>
 
-    <p>If you're familar with the ImageMagick command-line tools
+    <p>If you're familar with the &times;Magick command-line tools
     <code>convert</code>, <code>mogrify</code>,
     <code>composite</code>, and <code>montage</code> you can use
     the tables on this page to determine which RMagick methods
     correspond to the options used by these tools.</p>
 
     <p>The options listed below are for ImageMagick 6.3.1. Earlier
-    releases of ImageMagick may not support all these options.
-    Later releases of ImageMagick may have options that are not
-    listed.</p>
+    releases of ImageMagick and the GraphicsMagick <code>gm</code>
+    command may not support all these options. Later releases of
+    ImageMagick may have options that are not listed.</p>
 
-    <p>ImageMagick's <code>convert</code> and <code>mogrify</code>
-    share many options with each other, as well as with the other
-    utilities. This table includes all the options for both
-    <code>convert</code> and <code>mogrify</code>. When another
-    utility has an option with the same name and purpose, and same
-    RMagick equivalent, the option is omitted from the table for
-    that utility.</p>
+    <p>&times;Magick's <code>convert</code> and
+    <code>mogrify</code> share many options with each other, as
+    well as with the other utilities. This table includes all the
+    options for both <code>convert</code> and <code>mogrify</code>.
+    When another utility has an option with the same name and
+    purpose, and same RMagick equivalent, the option is omitted
+    from the table for that utility.</p>
   </div>
 
   <table class="striped" summary=
@@ -593,7 +593,7 @@ td {
         +dither</td>
 
         <td>This option corresponds to the <em>dither</em> option
-        to Image#<a href="image1.html#quantize">quantize</a> and
+        to Image#<a href="image3.html#quantize">quantize</a> and
         ImageList#<a href="ilist.html#quantize">quantize</a>.</td>
       </tr>
 
@@ -677,9 +677,9 @@ td {
         <td>-family <em>name</em></td>
 
         <td>Draw#<a href=
-        "draw.html#family">family</a>(<em>name</em>) (for
+        "draw.html#font_family">family</a>(<em>name</em>) (for
         drawing)<br />
-        Draw#<a href="draw.html#family_eq">family=</a><em>name</em>
+        Draw#<a href="draw.html#font_family_eq">family=</a><em>name</em>
         (for annotation)</td>
       </tr>
 
@@ -697,13 +697,13 @@ td {
 
         <td>This option corresponds to the <a href=
         "constants.html#FilterTypes">filter</a> option to
-        Image#<a href="image3htm#resize">resize</a>.</td>
+        Image#<a href="image3.html#resize">resize</a>.</td>
       </tr>
 
       <tr>
         <td>-flatten</td>
 
-        <td>ImageList#<a href="ilist.html#flatten">flatten</a></td>
+        <td>ImageList#<a href="ilist.html#flatten_images">flatten_images</a></td>
       </tr>
 
       <tr>
@@ -853,7 +853,7 @@ td {
       <tr>
         <td>-immutable</td>
 
-        <td>Image#<a href="image1.html#freeze">freeze</a></td>
+        <td>Image#<a href="image2.html#freeze">freeze</a></td>
       </tr>
 
       <tr>

@@ -6,8 +6,7 @@
   <meta name="generator" content=
   "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
 
-  <title>RMagick 0.0.0: class Image (instance methods, part
-  2)</title>
+  <title>RMagick 0.0.0: class Image (instance methods, part 2)</title>
   <meta http-equiv="Content-Type" content=
   "text/html; charset=us-ascii" />
   <meta name="GENERATOR" content="Quanta Plus" />
@@ -119,6 +118,9 @@ td.ds {
 
           <li><a href="#gray_q">gray?</a></li>
 
+          <li><a href=
+          "#grayscale_pseudo_class">grayscale_pseudo_class</a></li>
+
           <li><a href="#grey_q">grey?</a></li>
 
           <li><a href="#implode">implode</a></li>
@@ -147,13 +149,13 @@ td.ds {
           <li><a href="#matte_point">matte_point</a></li>
 
           <li><a href="#matte_replace">matte_replace</a></li>
-
-          <li><a href="#matte_reset_bang">matte_reset!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#matte_reset_bang">matte_reset!</a></li>
+
           <li><a href="#median_filter">median_filter</a></li>
 
           <li><a href="#minify">minify</a></li>
@@ -226,8 +228,8 @@ td.ds {
 
     <h4>See also</h4>
 
-    <p><a href="image2.html#median_filter">median_filter</a>,
-    <a href="image2.html#reduce_noise">reduce_noise</a>, <a href=
+    <p><a href="#median_filter">median_filter</a>,
+    <a href="image3.html#reduce_noise">reduce_noise</a>, <a href=
     "image3.html#unsharp_mask">unsharp_mask</a></p>
 
     <h4>Magick API</h4>
@@ -528,7 +530,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="image1.html#flip">flip</a>.</p>
+    <p>In-place form of <a href="#flip">flip</a>.</p>
 
     <h4>Returns</h4>
 
@@ -584,7 +586,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="image1.html#flop">flop</a>.</p>
+    <p>In-place form of <a href="#flop">flop</a>.</p>
 
     <h4>Returns</h4>
 
@@ -651,7 +653,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
+    "Click to see the example script"  /><!--
                                                           This img tag displays the framed image when the mouse is not over
                                                           --><img onmouseover="this.style.display='none';frameless.style.display='';"
     src="ex/frame.jpg" alt="frame example" /></a> <img src=
@@ -874,7 +876,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p><a href="image1.html#blur_channel">blur_channel</a></p>
 
-    <h4>Magick API</h4><p>GaussianBlurImageChannel</p>
+    <h4>Magick API</h4>GaussianBlurImageChannel (available in
+    ImageMagick 6.0.0)
   </div>
 
   <div class="sig">
@@ -1592,6 +1595,41 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   </div>
 
   <div class="sig">
+    <h3 id="grayscale_pseudo_class">grayscale_pseudo_class</h3>
+
+    <p><span class=
+    "arg">image</span>.grayscale_pseudo_class(<span class=
+    "arg">optimize</span>=<code>true</code>) -&gt;
+    <em>anImage</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Converts an image to a PseudoClass
+    grayscale representation with an optionally compressed and
+    sorted colormap..</span> This method is only available in
+    GraphicsMagick 1.1 and later.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>optimize</dt>
+
+      <dd>If true, compress and sort the colormap by increasing
+      intensity.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>GrayscalePseudoClass</p>
+  </div>
+
+  <div class="sig">
     <h3 id="grey_q">grey?</h3>
 
     <p><span class="arg">image</span>.qrey? -&gt; <code>true</code>
@@ -1756,7 +1794,7 @@ img.import_pixels(0, 0, hat.columns, hat.rows, "RGB", char_buffer, Magick::CharP
     <h4>See also</h4>
 
     <p><a href="image1.html#constitute">constitute</a>, <a href=
-    "image2.html#export_pixels">export_pixels</a>, <a href=
+    "#export_pixels">export_pixels</a>, <a href=
     "image3.html#store_pixels">store_pixels</a></p>
 
     <h4>Magick API</h4>
@@ -2242,7 +2280,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
 
     <h4>See also</h4>
 
-    <p><a href="draw.html#Draw.matte">Draw#matte</a></p>
+    <p><a href="draw.html#matte">Draw#matte</a></p>
   </div>
 
   <div class="sig">
@@ -2311,7 +2349,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
 
     <h4>See also</h4>
 
-    <p><a href="imageattrs.html#opacity_eq">opacity=</a></p>
+    <p><a href="imageattrs.html#opacity">opacity=</a></p>
 
     <h4>Magick API</h4>SetImageOpacity
   </div>
@@ -2403,7 +2441,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="desc">
     <h4>Description</h4>
 
-    <p>In-place form of <a href="#Image.minify">minify</a>.</p>
+    <p>In-place form of <a href="#minify">minify</a>.</p>
 
     <h4>Returns</h4>
 
@@ -2784,7 +2822,7 @@ img = img.opaque('white', 'red')
 
     <h4>See also</h4>
 
-    <p><a href="#color_floodfill">color_floodfill</a></p>
+    <p><a href="image1.html#color_floodfill">color_floodfill</a></p>
 
     <h4>Magick API</h4>
 
@@ -2836,11 +2874,12 @@ img = img.opaque('white', 'red')
 convert -list Thresholds
 </pre>
 
-    <p>Older releases of ImageMagick do not accept threshold map
-    strings and will not respond to that command. In these cases
-    <span class="arg">threshold_map</span> should be one of the
-    numbers 2, 3, or 4. These numbers correspond to the threshold
-    maps "o2x2", "o3x3", and "o4x4", respectively.</p>
+    <p>GraphicsMagick and older releases of ImageMagick do not
+    accept threshold map strings and will not respond to that
+    command. In these cases <span class="arg">threshold_map</span>
+    should be one of the numbers 2, 3, or 4. These numbers
+    correspond to the threshold maps "o2x2", "o3x3", and "o4x4",
+    respectively.</p>
 
     <h4>Returns</h4>
 

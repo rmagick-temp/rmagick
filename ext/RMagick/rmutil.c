@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.134 2007/12/23 21:21:51 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.135 2007/12/23 23:44:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3289,23 +3289,25 @@ Image *rm_clone_image(Image *image)
  *  Extern:     rm_clone_imagelist
  *  Purpose:    clone a list of images, handle errors
  */
-Image *rm_clone_imagelist(Image *images, int trace)
+Image *rm_clone_imagelist(Image *images)
 {
-    Image *new_images = NULL, *img, *clone;
+    Image *new_imagelist = NULL, *image, *clone;
+    ExceptionInfo exception;
 
-    img = GetFirstImageInList(images);
-    while (img)
+    GetExceptionInfo(&exception);
+
+    image = GetFirstImageInList(images);
+    while (image)
     {
-        clone = rm_clone_image(img);
-        if (trace)
-        {
-            (void) rm_trace_creation(img);
-        }
-        AppendImageToList(&new_images, clone);
-        img = GetNextImageInList(img);
+        clone = CloneImage(image, 0, 0, MagickTrue, &exception);
+        rm_check_exception(&exception, new_imagelist, DestroyOnError);
+        AppendImageToList(&new_imagelist, clone);
+        (void) rm_trace_creation(clone);
+        image = GetNextImageInList(image);
     }
 
-    return new_images;
+    (void) DestroyExceptionInfo(&exception);
+    return new_imagelist;
 }
 
 

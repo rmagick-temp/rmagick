@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.61 2007/12/23 21:22:29 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.62 2007/12/23 23:44:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -168,7 +168,7 @@ ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
 
     // Convert ImageLists to image sequences.
     dest = rm_images_from_imagelist(self);
-    new_images = rm_clone_imagelist(dest, MagickTrue);
+    new_images = rm_clone_imagelist(dest);
     rm_split(dest);
 
     source = rm_images_from_imagelist(source_images);
@@ -525,19 +525,19 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         case OptimizeTransLayer:
-            new_images = rm_clone_imagelist(images, MagickTrue);
+            new_images = rm_clone_imagelist(images);
             OptimizeImageTransparency(new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEDUPSLAYER)
         case RemoveDupsLayer:
-            new_images = rm_clone_imagelist(images, MagickTrue);
+            new_images = rm_clone_imagelist(images);
             RemoveDuplicateLayers(&new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEZEROLAYER)
         case RemoveZeroLayer:
-            new_images = rm_clone_imagelist(images, MagickTrue);
+            new_images = rm_clone_imagelist(images);
             RemoveZeroDelayLayers(&new_images, &exception);
             break;
 #endif

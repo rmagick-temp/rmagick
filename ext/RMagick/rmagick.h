@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.207 2007/12/15 23:35:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.208 2007/12/23 21:22:28 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -577,6 +577,7 @@ extern VALUE ImageList_animate(int, VALUE *, VALUE);
 extern VALUE ImageList_append(VALUE, VALUE);
 extern VALUE ImageList_average(VALUE);
 extern VALUE ImageList_coalesce(VALUE);
+extern VALUE ImageList_composite_layers(int, VALUE *, VALUE);
 extern VALUE ImageList_deconstruct(VALUE);
 extern VALUE ImageList_display(VALUE);
 extern VALUE ImageList_flatten_images(VALUE);
@@ -691,6 +692,7 @@ ATTR_ACCESSOR(Image, format)
 ATTR_ACCESSOR(Image, fuzz)
 ATTR_ACCESSOR(Image, gamma)
 ATTR_ACCESSOR(Image, geometry)
+ATTR_ACCESSOR(Image, gravity)
 ATTR_READER(Image, image_type)
 ATTR_ACCESSOR(Image, interlace)
 ATTR_ACCESSOR(Image, iptc_profile)
@@ -952,6 +954,7 @@ extern VALUE  CompressionType_new(CompressionType);
 extern VALUE  DisposeType_new(DisposeType);
 extern VALUE  EndianType_new(EndianType);
 extern VALUE  FilterTypes_new(FilterTypes);
+extern VALUE  GravityType_new(GravityType);
 extern VALUE  Font_to_s(VALUE);
 extern VALUE  ImageList_cur_image(VALUE);
 extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);

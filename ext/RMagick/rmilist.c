@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.60 2007/10/28 23:43:24 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.61 2007/12/23 21:22:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -136,6 +136,68 @@ ImageList_coalesce(VALUE self)
     rm_ensure_result(new_images);
 
     return rm_imagelist_from_images(new_images);
+}
+
+
+/*
+    Method:     ImageList#composite_layers
+    Purpose:    Equivalent to convert's -layers composite option
+    Notes:      see mogrify.c
+*/
+VALUE
+ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_COMPOSITELAYERS)
+    volatile VALUE source_images;
+    Image *dest, *source, *new_images;
+    RectangleInfo geometry;
+    CompositeOperator operator = OverCompositeOp;
+    ExceptionInfo exception;
+
+    switch (argc)
+    {
+        case 2:
+            VALUE_TO_ENUM(argv[1], operator, CompositeOperator);
+        case 1:
+            source_images = argv[0];
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (expected 1 or 2, got %d)", argc);
+            break;
+    }
+
+    // Convert ImageLists to image sequences.
+    dest = rm_images_from_imagelist(self);
+    new_images = rm_clone_imagelist(dest, MagickTrue);
+    rm_split(dest);
+
+    source = rm_images_from_imagelist(source_images);
+
+    SetGeometry(new_images,&geometry);
+    (void) ParseAbsoluteGeometry(new_images->geometry, &geometry);
+
+    geometry.width  = source->page.width != 0 ? source->page.width : source->columns;
+    geometry.height = source->page.height != 0 ? source->page.height : source->rows;
+    GravityAdjustGeometry(new_images->page.width  != 0 ? new_images->page.width  : new_images->columns
+                        , new_images->page.height != 0 ? new_images->page.height : new_images->rows
+                        , new_images->gravity, &geometry);
+
+    GetExceptionInfo(&exception);
+    CompositeLayers(new_images, operator, source, geometry.x, geometry.y, &exception);
+    rm_split(source);
+    rm_check_exception(&exception, new_images, DestroyOnError);
+    (void) DestroyExceptionInfo(&exception);
+
+    return rm_imagelist_from_images(new_images);
+
+#else
+
+    self = self;
+    source_images = source_images;
+    rm_not_implemented();
+    return (VALUE)0;
+
+#endif
 }
 
 

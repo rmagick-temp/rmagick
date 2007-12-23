@@ -2,6 +2,7 @@
 require 'RMagick'
 
 class Magick::ImageList
+  # Create a shadow image for each image in the list
   def shadow(x_offset = 4, y_offset = 4, sigma = 4.0, opacity = 1.0)
     return collect { |frame| frame.shadow(x_offset, y_offset, sigma, opacity) }
   end
@@ -24,17 +25,17 @@ gc.stroke_width = 1
   gc.rotation = 15
 end
 
-# Create a background by making 23 copies of a gradient
-bg = Magick::Image.new(99, 99, Magick::GradientFill.new(50, 50, 50, 50, "white", "tan"))
+# Create a gradient background
+bg = Magick::ImageList.new
+bg.new_image(99, 99, Magick::GradientFill.new(50, 50, 50, 50, "white", "tan"))
 bg.border!(1, 1, "black")
-grad = Magick::ImageList.new
-23.times { grad << bg.copy }
 
 # Create the animated shadows of the rotating "Ruby" animation
 shadows = ruby.shadow(2, 5, 3)
 
-# Composite the shadow animation over the background
-result = grad.composite_layers(shadows)
+# Composite the shadow animation over the background. Since there is only one
+# background image, it will replicated for each frame in the shadow animation.
+result = bg.composite_layers(shadows)
 
 # Composite the "Ruby" animation over the previous composite
 result = result.composite_layers(ruby)

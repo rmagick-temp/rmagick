@@ -139,6 +139,7 @@ have_func("snprintf", headers)
 
   ["AcquireQuantumMemory",           # 6.3.5-9
    "ClutImageChannel",               # 6.3.5-8
+   "CompositeLayers",                # 6.3.3-?
    "ConvertHSLToRGB",                # 6.3.5-9
    "ConvertRGBToHSL",                # 6.3.5-9
    "DistortImage",                   # 6.3.5

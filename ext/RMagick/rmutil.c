@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.135 2007/12/23 23:44:56 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.136 2007/12/23 23:47:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3302,7 +3302,6 @@ Image *rm_clone_imagelist(Image *images)
         clone = CloneImage(image, 0, 0, MagickTrue, &exception);
         rm_check_exception(&exception, new_imagelist, DestroyOnError);
         AppendImageToList(&new_imagelist, clone);
-        (void) rm_trace_creation(clone);
         image = GetNextImageInList(image);
     }
 

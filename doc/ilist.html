@@ -72,6 +72,8 @@
 
         <li><a href="#coalesce">coalesce</a></li>
 
+        <li><a href="#composite_layers">composite_layers</a></li>
+
         <li><a href="#copy">copy</a></li>
 
         <li><a href="#cur_image">cur_image</a></li>
@@ -97,13 +99,13 @@
         <li><a href="#map">map</a></li>
 
         <li><a href="#montage">montage</a></li>
+
+        <li><a href="#morph">morph</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#morph">morph</a></li>
-
         <li><a href="#mosaic">mosaic</a></li>
 
         <li><a href="#new_image">new_image</a></li>
@@ -610,7 +612,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     "this.src='ex/coalesce.gif'" src="ex/coalesce.gif" alt=
     "coalesce example" title=
     "Click the image to see the example script" /></a><img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left:159px"
+    "ex/images/spin.gif" alt="" class="spin" style="left:165px"
     title="Mouse over the example to see the animation" /></p>
 
     <h4>See also</h4>
@@ -621,6 +623,72 @@ imagelist.animate { self.server_name = "other:0.0" }
     <h4>Magick API</h4>
 
     <p>CoalesceImages</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="composite_layers">composite_layers</h3>
+
+    <p><span class=
+    "arg">destination_list</span>.composite_layers(<span class=
+    "arg">source_list</span>, <span class=
+    "arg">operator</span>=<code>OverCompositeOp</code>) -&gt;
+    <em>anImageList</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>An image from <span class="arg">source_list</span> is
+    composited over an image from <span class=
+    "arg">destination_list</span> until one list is finished. Use
+    the <a href="imageattrs.html#geometry">geometry</a> and
+    <a href="imageattrs.html#gravity">gravity</a> attributes of the
+    first image in <span class="arg">destination_list</span> to
+    position the source images over the destination images.
+    <span class="imquote">Unlike a normal composite operation, the
+    canvas offset is also included to the composite positioning. If
+    one of the image lists only contains one image, that image is
+    applied to all the images in the other image list, regardless
+    of which list it is. In this case it is the image meta-data of
+    the list which preserved.</span></p>
+
+    <h4>Arguments</h4>
+
+    <p>The optional <span class="arg">operator</span> argument
+    specifies a <a href=
+    "constants.html#CompositeOperator">CompositeOperator</a> to use
+    for the compositing operations.</p>
+
+    <h4>Returns</h4>
+
+    <p>An imagelist</p>
+
+    <h4>Example</h4>
+
+    <p>This example is an animated GIF. Mouse over the image to
+    start the animation.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('composite_layers.rb.html')"><img onmouseover="this.src='ex/composite_layers.gif'"
+    onmouseout="this.src='ex/composite_layers1.gif'" src=
+    "ex/composite_layers1.gif" alt="composite_layers example"
+    title="Click the image to see the example script" /></a><img src="ex/images/spin.gif"
+    alt="" class="spin" style="left:105px" title=
+    "Mouse over the example to see the animation" /></p>
+
+    <h4>Notes</h4>
+
+    <p>This method is equivalent to the <code>-layers
+    Composite</code> option of ImageMagick's <code>convert</code>
+    command. See the <a href=
+    "http://www.imagemagick.org/Usage/anim_mods/#composite">Layers
+    Composition</a> section in <a href=
+    "http://www.imagemagick.org/Usage/">Examples of ImageMagick
+    Usage</a> for more information.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#optimize_layers">optimize_layers</a></p>
   </div>
 
   <div class="sig">
@@ -646,8 +714,10 @@ imagelist.animate { self.server_name = "other:0.0" }
 imagelist2 = imagelist1.copy
 </pre>
 
-    <h4>See also</h4><a href="image1.html#copy">Image#copy</a>,
-    <a href="#clone">clone</a>, <a href="#dup">dup</a>
+    <h4>See also</h4>
+
+    <p><a href="image1.html#copy">Image#copy</a>, <a href=
+    "#clone">clone</a>, <a href="#dup">dup</a></p>
   </div>
 
   <div class="sig">
@@ -1545,6 +1615,8 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
     <p>A new imagelist</p>
 
     <h4>See also</h4>
+
+    <p><a href="#composite_layers">composite_layers</a></p>
 
     <p><a href="#deconstruct">deconstruct</a> is an alias for
     <code>optimize_layers</code> with the

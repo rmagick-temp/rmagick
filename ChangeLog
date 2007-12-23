@@ -43,18 +43,27 @@ RMagick 2.0.0
     o Added Image#distort (available with ImageMagick 6.3.5)
     o Added Image#each_pixel (thanks to Russell Norris for the suggestion and
       code)
-    o Added Image#histogram?
-    o Added Image#sync_profiles
-    o Added Image#extent, Image#excerpt, Image#excerpt!
+    o Added Image#histogram? (available with ImageMagick 6.3.5)
+    o Added Image#sync_profiles  (available with ImageMagick 6.3.2)
+    o Added Image#extent (available with ImageMagick 6.3.1)
+    o Added Image#excerpt, Image#excerpt! (available with ImageMagick 6.3.5)
     o Added Image::Info#attenuate
-    o Added Image#clut_channel
-    o Added Image#alpha=
-    o Added Image#equalize_channel
+    o Added Image#clut_channel (available with ImageMagick 6.3.5)
+    o Feature Request #16264, added ImageList#composite_layers (available with
+      ImageMagick 6.3.3, request from Steve Martocci)
+    o Added Image#alpha= (available with ImageMagick 6.3.5)
+    o Added Image#gravity=
+    o Added Image#equalize_channel (available with ImageMagick 6.3.6)
     o Added new FilterTypes values KaiserFilter, WelshFilter, ParzenFilter,
-      LagrangeFilter, BohmanFilter, BartlettFilter
+      LagrangeFilter, BohmanFilter, BartlettFilter (available with ImageMagick
+      6.3.6)
     o Fix bug #10339, Image#trim does not support "reset page information
       option" (bug report from Nobody)
-    o Updated for ImageMagick 6.3.6-2
+    o Renamed RMagick.so to RMagick2.so to prevent confusion between RMagick.rb
+      and RMagick.so
+    o Feature Request #16276, re-organize doc to not split Image method pages
+      in the middle of an initial letter (request from Roy Leban)
+    o Updated for ImageMagick 6.3.7-5
     o Made changes as necessary to work with current Ruby 1.9.0
 
 RMagick 1.15.12

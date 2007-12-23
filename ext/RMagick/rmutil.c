@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.133 2007/12/15 23:36:00 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.134 2007/12/23 21:21:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1350,9 +1350,7 @@ CompositeOperator_name(CompositeOperator op)
 VALUE
 CompositeOperator_new(CompositeOperator op)
 {
-    const char *name;
-
-    name = CompositeOperator_name(op);
+    const char *name = CompositeOperator_name(op);
     return rm_enum_new(Class_CompositeOperator, ID2SYM(rb_intern(name)), INT2FIX(op));
 }
 
@@ -1388,9 +1386,7 @@ CompressionType_name(CompressionType ct)
 VALUE
 CompressionType_new(CompressionType ct)
 {
-    const char *name;
-
-    name = CompressionType_name(ct);
+    const char *name = CompressionType_name(ct);
     return rm_enum_new(Class_CompressionType, ID2SYM(rb_intern(name)), INT2FIX(ct));
 }
 
@@ -1420,9 +1416,7 @@ DisposeType_name(DisposeType type)
 VALUE
 DisposeType_new(DisposeType type)
 {
-    const char *name;
-
-    name = DisposeType_name(type);
+    const char *name = DisposeType_name(type);
     return rm_enum_new(Class_DisposeType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
@@ -1482,9 +1476,7 @@ FilterTypes_name(FilterTypes type)
 VALUE
 FilterTypes_new(FilterTypes type)
 {
-    const char *name;
-
-    name = FilterTypes_name(type);
+    const char *name = FilterTypes_name(type);
     return rm_enum_new(Class_FilterTypes, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
@@ -1513,10 +1505,51 @@ EndianType_name(EndianType type)
 VALUE
 EndianType_new(EndianType type)
 {
-    const char *name;
-
-    name = EndianType_name(type);
+    const char *name = EndianType_name(type);
     return rm_enum_new(Class_EndianType, ID2SYM(rb_intern(name)), INT2FIX(type));
+}
+
+
+/*
+    Static:     GravityType_name
+    Purpose:    Return the name of a GravityType enum as a string
+*/
+static const char *
+GravityType_name(GravityType type)
+{
+    // Defeat "duplicate case value" error.
+    if (type == UndefinedGravity)
+    {
+        return "UndefinedGravity";
+    }
+
+    switch(type)
+    {
+        default:
+        ENUM_TO_NAME(ForgetGravity)
+        ENUM_TO_NAME(NorthWestGravity)
+        ENUM_TO_NAME(NorthGravity)
+        ENUM_TO_NAME(NorthEastGravity)
+        ENUM_TO_NAME(WestGravity)
+        ENUM_TO_NAME(CenterGravity)
+        ENUM_TO_NAME(EastGravity)
+        ENUM_TO_NAME(SouthWestGravity)
+        ENUM_TO_NAME(SouthGravity)
+        ENUM_TO_NAME(SouthEastGravity)
+        ENUM_TO_NAME(StaticGravity)
+    }
+}
+
+
+/*
+    External:  GravityType.new
+    Purpose: Construct an GravityType enum object for the specified value
+*/
+VALUE
+GravityType_new(GravityType type)
+{
+    const char *name = GravityType_name(type);
+    return rm_enum_new(Class_GravityType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
 
@@ -1554,9 +1587,7 @@ ImageType_name(ImageType type)
 VALUE
 ImageType_new(ImageType type)
 {
-    const char *name;
-
-    name = ImageType_name(type);
+    const char *name = ImageType_name(type);
     return rm_enum_new(Class_ImageType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
@@ -1587,9 +1618,7 @@ InterlaceType_name(InterlaceType interlace)
 VALUE
 InterlaceType_new(InterlaceType interlace)
 {
-    const char *name;
-
-    name = InterlaceType_name(interlace);
+    const char *name = InterlaceType_name(interlace);
     return rm_enum_new(Class_InterlaceType, ID2SYM(rb_intern(name)), INT2FIX(interlace));
 }
 
@@ -1626,9 +1655,7 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
 VALUE
 InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
 {
-    const char *name;
-
-    name = InterpolatePixelMethod_name(interpolate);
+    const char *name = InterpolatePixelMethod_name(interpolate);
     return rm_enum_new(Class_InterpolatePixelMethod, ID2SYM(rb_intern(name)), INT2FIX(interpolate));
 }
 
@@ -1679,9 +1706,7 @@ MagickLayerMethod_name(MagickLayerMethod method)
 VALUE
 MagickLayerMethod_new(MagickLayerMethod method)
 {
-    const char *name;
-
-    name = MagickLayerMethod_name(method);
+    const char *name = MagickLayerMethod_name(method);
     return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
 }
 
@@ -1714,9 +1739,7 @@ RenderingIntent_name(RenderingIntent intent)
 VALUE
 RenderingIntent_new(RenderingIntent intent)
 {
-    const char *name;
-
-    name = RenderingIntent_name(intent);
+    const char *name = RenderingIntent_name(intent);
     return rm_enum_new(Class_RenderingIntent, ID2SYM(rb_intern(name)), INT2FIX(intent));
 }
 
@@ -1746,9 +1769,7 @@ ResolutionType_name(ResolutionType type)
 VALUE
 ResolutionType_new(ResolutionType type)
 {
-    const char *name;
-
-    name = ResolutionType_name(type);
+    const char *name = ResolutionType_name(type);
     return rm_enum_new(Class_ResolutionType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
@@ -1784,9 +1805,7 @@ OrientationType_name(OrientationType type)
 VALUE
 OrientationType_new(OrientationType type)
 {
-    const char *name;
-
-    name = OrientationType_name(type);
+    const char *name = OrientationType_name(type);
     return rm_enum_new(Class_OrientationType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
 
@@ -2211,9 +2230,7 @@ Segment_to_SegmentInfo(SegmentInfo *segment, VALUE s)
 static VALUE
 StretchType_new(StretchType stretch)
 {
-    const char *name;
-
-    name = StretchType_name(stretch);
+    const char *name = StretchType_name(stretch);
     return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2FIX(stretch));
 }
 
@@ -2225,9 +2242,7 @@ StretchType_new(StretchType stretch)
 static VALUE
 StyleType_new(StyleType style)
 {
-    const char *name;
-
-    name = StyleType_name(style);
+    const char *name = StyleType_name(style);
     return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
 
@@ -2490,9 +2505,7 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
 VALUE
 VirtualPixelMethod_new(VirtualPixelMethod style)
 {
-    const char *name;
-
-    name = VirtualPixelMethod_name(style);
+    const char *name = VirtualPixelMethod_name(style);
     return rm_enum_new(Class_VirtualPixelMethod, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
 

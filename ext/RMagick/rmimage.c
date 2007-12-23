@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.268 2007/12/21 22:06:22 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.269 2007/12/23 21:21:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9257,6 +9257,25 @@ Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_frozen_image(self);
     return trimmer(True, argc, argv, self);
+}
+
+
+/*
+    Method:     Image#gravity, gravity=
+    Purpose:    Get/set the image gravity attribute
+*/
+VALUE Image_gravity(VALUE self)
+{
+    Image *image = rm_check_destroyed(self);
+    return GravityType_new(image->gravity);
+}
+
+
+VALUE Image_gravity_eq(VALUE self, VALUE gravity)
+{
+    Image *image = rm_check_frozen_image(self);
+    VALUE_TO_ENUM(gravity, image->gravity, GravityType);
+    return gravity;
 }
 
 

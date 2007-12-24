@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.62 2007/12/23 23:44:56 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.63 2007/12/24 19:08:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -701,6 +701,32 @@ rm_imagelist_push(VALUE imagelist, VALUE image)
     rb_check_frozen(imagelist);
     (void) rb_funcall(imagelist, rm_ID_push, 1, image);
 }
+
+
+/*
+ *  Extern:     rm_clone_imagelist
+ *  Purpose:    clone a list of images, handle errors
+ */
+Image *rm_clone_imagelist(Image *images)
+{
+    Image *new_imagelist = NULL, *image, *clone;
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+
+    image = GetFirstImageInList(images);
+    while (image)
+    {
+        clone = CloneImage(image, 0, 0, MagickTrue, &exception);
+        rm_check_exception(&exception, new_imagelist, DestroyOnError);
+        AppendImageToList(&new_imagelist, clone);
+        image = GetNextImageInList(image);
+    }
+
+    (void) DestroyExceptionInfo(&exception);
+    return new_imagelist;
+}
+
 
 /*
     Method:     ImageList#quantize(<number_colors<, colorspace<, dither<, tree_depth<, measure_error>>>>>)

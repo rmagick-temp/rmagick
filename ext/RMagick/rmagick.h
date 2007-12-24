@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.209 2007/12/23 23:44:56 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.210 2007/12/24 21:08:40 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -591,12 +591,7 @@ extern VALUE ImageList_quantize(int, VALUE*, VALUE);
 extern VALUE ImageList_to_blob(VALUE);
 extern VALUE ImageList_write(VALUE, VALUE);
 
-extern VALUE rm_imagelist_new(void);
 extern VALUE rm_imagelist_from_images(Image *);
-extern Image *rm_images_from_imagelist(VALUE);
-extern VALUE rm_imagelist_scene_eq(VALUE, VALUE);
-extern long rm_imagelist_length(VALUE);
-extern void rm_imagelist_push(VALUE, VALUE);
 
 
 // rminfo.c
@@ -1069,7 +1064,6 @@ extern void   rm_check_image_exception(Image *, ErrorRetention);
 extern void   rm_check_exception(ExceptionInfo *, Image *, ErrorRetention);
 extern void   rm_ensure_result(Image *);
 extern Image *rm_clone_image(Image *);
-extern Image *rm_clone_imagelist(Image *);
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
 extern VALUE  rm_exif_by_entry(Image *);
 extern VALUE  rm_exif_by_number(Image *);

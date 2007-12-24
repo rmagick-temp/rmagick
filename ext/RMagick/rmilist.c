@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.63 2007/12/24 19:08:08 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.64 2007/12/24 21:08:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -7,6 +7,13 @@
 \============================================================================*/
 
 #include "rmagick.h"
+
+static Image *clone_imagelist(Image *);
+static Image *images_from_imagelist(VALUE);
+static long imagelist_length(VALUE);
+static VALUE imagelist_scene_eq(VALUE, VALUE);
+static void imagelist_push(VALUE, VALUE);
+static VALUE ImageList_new(void);
 
 
 /*
@@ -29,7 +36,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     }
 
     // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     if (argc == 1)
     {
@@ -68,7 +75,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     // If stack == true, stack rectangular images top-to-bottom,
     // otherwise left-to-right.
@@ -97,7 +104,7 @@ ImageList_average(VALUE self)
     ExceptionInfo exception;
 
     // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     new_image = AverageImages(images, &exception);
@@ -125,7 +132,7 @@ ImageList_coalesce(VALUE self)
     ExceptionInfo exception;
 
     // Convert the image array to an image sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     new_images = CoalesceImages(images, &exception);
@@ -167,11 +174,11 @@ ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
     }
 
     // Convert ImageLists to image sequences.
-    dest = rm_images_from_imagelist(self);
-    new_images = rm_clone_imagelist(dest);
+    dest = images_from_imagelist(self);
+    new_images = clone_imagelist(dest);
     rm_split(dest);
 
-    source = rm_images_from_imagelist(source_images);
+    source = images_from_imagelist(source_images);
 
     SetGeometry(new_images,&geometry);
     (void) ParseAbsoluteGeometry(new_images->geometry, &geometry);
@@ -214,7 +221,7 @@ ImageList_deconstruct(VALUE self)
     Image *new_images, *images;
     ExceptionInfo exception;
 
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_images = DeconstructImages(images, &exception);
     rm_split(images);
@@ -242,7 +249,7 @@ ImageList_display(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     (void) DisplayImages(info, images);
     rm_split(images);
@@ -263,7 +270,7 @@ ImageList_flatten_images(VALUE self)
     Image *images, *new_image;
     ExceptionInfo exception;
 
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     GetExceptionInfo(&exception);
 
 #if defined(HAVE_ENUM_FLATTENLAYER)
@@ -308,7 +315,7 @@ ImageList_fx(int argc, VALUE *argv, VALUE self)
 
     expression = StringValuePtr(argv[0]);
 
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     GetExceptionInfo(&exception);
     new_image = FxImageChannel(images, channels, expression, &exception);
     rm_split(images);
@@ -350,7 +357,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     }
 
 
-    if (rm_imagelist_length(self) == 0L)
+    if (imagelist_length(self) == 0L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
@@ -358,7 +365,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     // Convert image array to image sequence, clone image sequence.
     GetExceptionInfo(&exception);
 
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
@@ -373,7 +380,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     // Set @scene in new ImageList object to same value as in self.
     new_imagelist = rm_imagelist_from_images(new_images);
     scene = rb_iv_get(self, "@scene");
-    (void) rm_imagelist_scene_eq(new_imagelist, scene);
+    (void) imagelist_scene_eq(new_imagelist, scene);
 
     return new_imagelist;
 }
@@ -403,7 +410,7 @@ ImageList_montage(VALUE self)
 
     Data_Get_Struct(montage_obj, Montage, montage);
 
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     // If app specified a non-default composition operator, use it for all images.
     if (montage->compose != UndefinedCompositeOp)
@@ -443,7 +450,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     ExceptionInfo exception;
     long number_images;
 
-    if (rm_imagelist_length(self) < 1L)
+    if (imagelist_length(self) < 1L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
@@ -456,7 +463,7 @@ ImageList_morph(VALUE self, VALUE nimages)
     }
 
     GetExceptionInfo(&exception);
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     new_images = MorphImages(images, (unsigned long)number_images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
@@ -479,7 +486,7 @@ ImageList_mosaic(VALUE self)
     ExceptionInfo exception;
 
     GetExceptionInfo(&exception);
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
 #if defined(HAVE_ENUM_MOSAICLAYER)
     new_image = MergeImageLayers(images, MosaicLayer, &exception);
@@ -513,7 +520,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
     GetExceptionInfo(&exception);
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     switch (mthd)
     {
@@ -525,19 +532,19 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
 #if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         case OptimizeTransLayer:
-            new_images = rm_clone_imagelist(images);
+            new_images = clone_imagelist(images);
             OptimizeImageTransparency(new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEDUPSLAYER)
         case RemoveDupsLayer:
-            new_images = rm_clone_imagelist(images);
+            new_images = clone_imagelist(images);
             RemoveDuplicateLayers(&new_images, &exception);
             break;
 #endif
 #if defined(HAVE_ENUM_REMOVEZEROLAYER)
         case RemoveZeroLayer:
-            new_images = rm_clone_imagelist(images);
+            new_images = clone_imagelist(images);
             RemoveZeroDelayLayers(&new_images, &exception);
             break;
 #endif
@@ -594,16 +601,15 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 
 
 /*
-    External:   rm_imagelist_new
+    Static:     ImageList_new
     Purpose:    create a new ImageList object with no images
     Notes:      this simply calls ImageList.new() in RMagick.rb
 */
-VALUE
-rm_imagelist_new()
+static VALUE
+ImageList_new()
 {
     return rb_funcall(Class_ImageList, rm_ID_new, 0);
 }
-
 
 
 /*
@@ -622,12 +628,12 @@ rm_imagelist_from_images(Image *images)
         rb_bug("rm_imagelist_from_images called with NULL argument");
     }
 
-    new_imagelist = rm_imagelist_new();
+    new_imagelist = ImageList_new();
 
     while (images)
     {
         image = RemoveFirstImageFromList(&images);
-        rm_imagelist_push(new_imagelist, rm_image_new(image));
+        imagelist_push(new_imagelist, rm_image_new(image));
     }
 
     (void) rb_iv_set(new_imagelist, "@scene", INT2FIX(0));
@@ -636,19 +642,19 @@ rm_imagelist_from_images(Image *images)
 
 
 /*
-    Extern:     rm_images_from_imagelist
+    Extern:     images_from_imagelist
     Purpose:    Convert an array of Image *s to an ImageMagick scene
                 sequence (i.e. a doubly-linked list of Images)
     Returns:    a pointer to the head of the scene sequence list
 */
-Image *
-rm_images_from_imagelist(VALUE imagelist)
+static Image *
+images_from_imagelist(VALUE imagelist)
 {
     long x, len;
     Image *head = NULL;
     volatile VALUE images, t;
 
-    len = rm_imagelist_length(imagelist);
+    len = imagelist_length(imagelist);
     if (len == 0)
     {
         rb_raise(rb_eArgError, "no images in this image list");
@@ -669,11 +675,11 @@ rm_images_from_imagelist(VALUE imagelist)
 
 
 /*
- *   Extern:   rm_imagelist_scene_eq(imagelist, scene)
+ *   Static:   imagelist_scene_eq(imagelist, scene)
  *   Purpose:  @scene attribute writer
 */
-VALUE
-rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
+static VALUE
+imagelist_scene_eq(VALUE imagelist, VALUE scene)
 {
     rb_check_frozen(imagelist);
     (void) rb_iv_set(imagelist, "@scene", scene);
@@ -681,22 +687,22 @@ rm_imagelist_scene_eq(VALUE imagelist, VALUE scene)
 }
 
 /*
-    External:   rm_imagelist_length
-    Purpose:    return the # of images in an imagelist
+    Static:    imagelist_length
+    Purpose:   return the # of images in an imagelist
 */
-long
-rm_imagelist_length(VALUE imagelist)
+static long
+imagelist_length(VALUE imagelist)
 {
     volatile VALUE images = rb_iv_get(imagelist, "@images");
     return RARRAY(images)->len;
 }
 
 /*
-    External:   rm_imagelist_push
+    Static:     imagelist_push
     Purpose:    push an image onto the end of the imagelist
 */
-void
-rm_imagelist_push(VALUE imagelist, VALUE image)
+static void
+imagelist_push(VALUE imagelist, VALUE image)
 {
     rb_check_frozen(imagelist);
     (void) rb_funcall(imagelist, rm_ID_push, 1, image);
@@ -704,10 +710,11 @@ rm_imagelist_push(VALUE imagelist, VALUE image)
 
 
 /*
- *  Extern:     rm_clone_imagelist
+ *  Static:     clone_imagelist
  *  Purpose:    clone a list of images, handle errors
  */
-Image *rm_clone_imagelist(Image *images)
+static Image *
+clone_imagelist(Image *images)
 {
     Image *new_imagelist = NULL, *image, *clone;
     ExceptionInfo exception;
@@ -765,14 +772,14 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    if (rm_imagelist_length(self) == 0L)
+    if (imagelist_length(self) == 0L)
     {
         rb_raise(rb_eArgError, "no images in this image list");
     }
 
     // Convert image array to image sequence, clone image sequence.
     GetExceptionInfo(&exception);
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
     new_images = CloneImageList(images, &exception);
     rm_split(images);
     rm_check_exception(&exception, new_images, DestroyOnError);
@@ -786,10 +793,10 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
 
     // Create new ImageList object, convert mapped image sequence to images,
     // append to images array.
-    new_imagelist = rm_imagelist_new();
+    new_imagelist = ImageList_new();
     while ((new_image = ShiftImageList(&new_images)))
     {
-        rm_imagelist_push(new_imagelist, rm_image_new(new_image));
+        imagelist_push(new_imagelist, rm_image_new(new_image));
     }
 
     // Set @scene in new ImageList object to same value as in self.
@@ -820,7 +827,7 @@ ImageList_to_blob(VALUE self)
     Data_Get_Struct(info_obj, Info, info);
 
     // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     GetExceptionInfo(&exception);
     (void) SetImageInfo(info, MagickTrue, &exception);
@@ -918,7 +925,7 @@ ImageList_write(VALUE self, VALUE file)
     }
 
     // Convert the images array to an images sequence.
-    images = rm_images_from_imagelist(self);
+    images = images_from_imagelist(self);
 
     // Copy the filename into each images. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c
@@ -940,7 +947,7 @@ ImageList_write(VALUE self, VALUE file)
     (void) DestroyExceptionInfo(&exception);
 
     // Tell WriteImage if we want a multi-images file.
-    if (rm_imagelist_length(self) > 1L && m->adjoin)
+    if (imagelist_length(self) > 1L && m->adjoin)
     {
         info->adjoin = MagickTrue;
     }

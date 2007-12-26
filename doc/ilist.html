@@ -1466,7 +1466,7 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
 
     <h4>Arguments</h4>
 
-    <p>One of the following MagickLayerMethod enum values:</p>
+    <p>One of the following ImageLayerMethod enum values:</p>
 
     <dl>
       <dt>CoalesceLayer</dt>
@@ -1609,6 +1609,20 @@ imagelist.new_image(100, 100) { self.background_color = "red" }
       actually displayed to users. These frames are usally added
       for improved frame optimization in GIF animations.</dd>
     </dl>
+
+    <p>Some of these values are not supported by older versions of
+    ImageMagick. To see what values are available, enter the
+    following code in irb:</p>
+    <pre>
+Magick::ImageLayerMethod.values {|v| puts v}
+</pre>
+
+    <p>In releases of ImageMagick before 6.3.6, this type was
+    called MagickLayerMethod, so you may need to use this
+    instead:</p>
+    <pre>
+Magick::MagickLayerMethod.values {|v| puts v}
+</pre>
 
     <h4>Returns</h4>
 

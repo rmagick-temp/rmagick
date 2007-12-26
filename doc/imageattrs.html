@@ -1633,7 +1633,39 @@ blur_image is 100% complete.
 
       <dd>The area surrounding the image is transparent
       blackness.</dd>
+
+      <dt>BlackVirtualPixelMethod</dt>
+
+      <dd class="imquote">The area surrounding the image is
+      black.</dd>
+
+      <dt>GrayVirtualPixelMethod</dt>
+
+      <dd class="imquote">The area surrounding the image is
+      gray.</dd>
+
+      <dt>WhiteVirtualPixelMethod</dt>
+
+      <dd class="imquote">The area surrounding the image is
+      white.</dd>
+
+      <dt>RandomVirtualPixelMethod</dt>
+
+      <dd class="imquote">Choose a random pixel from the
+      image.</dd>
+
+      <dt>DitherVirtualPixelMethod</dt>
+
+      <dd class="imquote">use a dithered pattern to choose a pixel
+      in a 32x32 neighborhood.</dd>
     </dl>
+
+    <p>Some of these values are not supported by older versions of
+    ImageMagick. To see what values are available, enter the
+    following code in irb:</p>
+    <pre>
+Magick::VirtualPixelMethod.values {|v| puts v}
+</pre>
 
     <h4>Returns</h4>
 

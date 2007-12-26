@@ -155,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 1.15.0 ($Date: 2007/12/02 21:19:16 $)
+    <code>This is RMagick 1.15.0 ($Date: 2007/12/26 21:44:14 $)
     Copyright (C) 2007 by Timothy P. Hunter<br />
     Built with ImageMagick 6.2.5 03/05/06 Q8
     http://www.imagemagick.org<br />
@@ -760,6 +760,11 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dd class="imquote">Replace any destination pixel that is the
     simular to the source images pixel (as defined by the current
     fuzz factor), with transparency.</dd>
+
+    <dt>LinearLightCompositeOp</dt>
+
+    <dd class="imquote">Increase contrast slightly with an impact
+    on the foreground's tonal values.</dd>
   </dl>
 
   <h3 class="const" id="CompressionType">CompressionType</h3>
@@ -1092,6 +1097,15 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dd class="imquote">Similar to plane interlacing except that
     the different planes are saved to individual files (e.g.
     image.R, image.G, and image.B)</dd>
+
+    <dt>GIFInterlace</dt>
+
+    <dt>JPEGInterlace</dt>
+
+    <dt>PNGInterlace</dt>
+
+    <dd>See the ImageMagick documentation for the -interlace
+    option.</dd>
   </dl>
 
   <h3 class="const" id="InterpolatePixelMethod">

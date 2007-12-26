@@ -33,13 +33,23 @@ RMagick 2.0.0
       Magick.trace_proc attribute
     o Added Magick::QuantumRange. Magick::MaxRGB is deprecated.
     o Added OptimizeTransLayer, RemoveDupsLayer, RemoveZeroLayer,
-      OptimizeImageLayer MagickLayerMethods (available with ImageMagick 6.3.3),
+      OptimizeImageLayer ImageLayerMethods enum values (available with
+      ImageMagick 6.3.3),
       MosaicLayer, FlattenLayer (available with ImageMagick 6.3.6)
     o RMagick works with Q32 version of ImageMagick
-    o Added ChangeMaskCompositeOp CompositeOperator enum value
-    o Added SplineInterpolatePixel InterpolatePixelMethod
+    o Added ChangeMaskCompositeOp, DivideCompositeOp, LinearLightCompositeOp
+      CompositeOperator enum values
+    o Added SplineInterpolatePixel InterpolatePixelMethod enum value
+    o Added DitherVirtualPixelMethod, RandomVirtualPixelMethod,
+      BlackVirtualPixelMethod, GrayVirtualPixelMethod, WhiteVirtualPixelMethod
+      (available with ImageMagick 6.3.5), and MaskVirtualPixelMethod (available
+      with ImageMagick 6.3.3) VirtualPixelMethod enum values
+    o Added GIFInterlace, JPEGInterlace, PNGInterlace Interlace type enum
+      values (available with ImageMagick 6.3.4)
+    o Added SentinelFilter FilterTypes enum value (available in ImageMagick
+      6.3.6)
     o Added Image.combine
-    o Added Image#separate
+    o Added Image#separate (available with ImageMagick 6.3.2)
     o Added Image#distort (available with ImageMagick 6.3.5)
     o Added Image#each_pixel (thanks to Russell Norris for the suggestion and
       code)

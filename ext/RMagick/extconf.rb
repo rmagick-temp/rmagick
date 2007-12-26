@@ -165,6 +165,7 @@ have_func("snprintf", headers)
 
 
 have_type("AlphaChannelType", headers)  # 6.3.5
+have_type("ImageLayerMethod", headers)  # 6.3.6 replaces MagickLayerMethod
 have_type("long double", headers)
 have_type("unsigned long long", headers)
 have_type("uint64_t", headers)
@@ -172,25 +173,36 @@ have_type("__int64", headers)
 check_sizeof("Image *", headers)
 
 
-have_enum_value("CompositeOperator", "ChangeMaskCompositeOp", headers)      # 6.3.3
-have_enum_values("DistortImageMethod", ["ArcDistortion",                    # 6.3.5-5
-                               "PerspectiveProjectionDistortion"], headers) # 6.3.5-9
-have_enum_values("FilterTypes", ["KaiserFilter",                            # 6.3.6-?
-                                 "WelshFilter",                             # 6.3.6-4
-                                 "ParzenFilter",                            # 6.3.6-4
-                                 "LagrangeFilter",                          # 6.3.7-2
-                                 "BohmanFilter",                            # 6.3.7-2
-                                 "BartlettFilter"], headers)                # 6.3.7-2
-have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers)# 6.3.5
-have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                # 6.3.3-4
-                                       "RemoveDupsLayer",                   # 6.3.3-6
-                                       "RemoveZeroLayer",                   # 6.3.3-6
-                                       "CompositeLayer",                    # 6.3.3-6
-                                       "FlattenLayer",                      # 6.3.6-2
-                                       "MosaicLayer",                       # 6.3.6-2
-                                       "OptimizeImageLayer"], headers)      # 6.3.3-?
-have_enum_value("MetricType", "MeanErrorPerPixelMetric", headers)           # 6.3.4-?
-have_enum_value("NoiseType", "RandomNoise", headers)                        # 6.3.5-0
+have_enum_values("CompositeOperator", ["ChangeMaskCompositeOp",              # 6.3.3
+                                       "LinearLightCompositeOp",             # 6.3.5
+                                       "DivideCompositeOp"], headers)        # 6.3.5
+have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
+                               "PerspectiveProjectionDistortion"], headers)  # 6.3.5-9
+have_enum_values("FilterTypes", ["KaiserFilter",                             # 6.3.6
+                                 "SentinelFilter",                           # 6.3.6
+                                 "WelshFilter",                              # 6.3.6-4
+                                 "ParzenFilter",                             # 6.3.6-4
+                                 "LagrangeFilter",                           # 6.3.7-2
+                                 "BohmanFilter",                             # 6.3.7-2
+                                 "BartlettFilter"], headers)                 # 6.3.7-2
+have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers) # 6.3.5
+have_enum_values("InterlaceType", ["GIFInterlace",                           # 6.3.4
+                                  "JPEGInterlace",                           # 6.3.4
+                                  "PNGInterlace"], headers)                  # 6.3.4
+have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                 # 6.3.3-4
+                                       "RemoveDupsLayer",                    # 6.3.3-6
+                                       "RemoveZeroLayer",                    # 6.3.3-6
+                                       "CompositeLayer",                     # 6.3.3-6
+                                       "FlattenLayer",                       # 6.3.6-2
+                                       "MergeLayer",                         # 6.3.6
+                                       "MosaicLayer",                        # 6.3.6-2
+                                       "OptimizeImageLayer"], headers)       # 6.3.3-?
+have_enum_value("MetricType", "MeanErrorPerPixelMetric", headers)            # 6.3.4-?
+have_enum_value("NoiseType", "RandomNoise", headers)                         # 6.3.5-0
+have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6.3.3
+                                        "BlackVirtualPixelMethod",           # 6.3.5
+                                        "GrayVirtualPixelMethod",            # 6.3.5
+                                        "WhiteVirtualPixelMethod"], headers) # 6.3.5
 
 
 # Now test Ruby 1.9.0 features. intern.h depends on stdarg.h.

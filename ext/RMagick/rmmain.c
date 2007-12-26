@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.227 2007/12/23 21:22:29 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.228 2007/12/26 21:43:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1133,6 +1133,9 @@ Init_RMagick2(void)
         ENUMERATOR(CopyRedCompositeOp)
         ENUMERATOR(CopyYellowCompositeOp)
         ENUMERATOR(DarkenCompositeOp)
+#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
+        ENUMERATOR(DivideCompositeOp)
+#endif
         ENUMERATOR(DstAtopCompositeOp)
         ENUMERATOR(DstCompositeOp)
         ENUMERATOR(DstInCompositeOp)
@@ -1146,6 +1149,9 @@ Init_RMagick2(void)
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
+#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
+        ENUMERATOR(LinearLightCompositeOp)
+#endif
         ENUMERATOR(LuminizeCompositeOp)
         ENUMERATOR(MinusCompositeOp)
         ENUMERATOR(ModulateCompositeOp)
@@ -1259,7 +1265,9 @@ Init_RMagick2(void)
 #if defined(HAVE_ENUM_BARTLETTFILTER)
         ENUMERATOR(BartlettFilter)
 #endif
-
+#if defined(HAVE_ENUM_SENTINELFILTER)
+        ENUMERATOR(SentinelFilter)
+#endif
     END_ENUM
 
     // GravityType constants
@@ -1301,6 +1309,15 @@ Init_RMagick2(void)
         ENUMERATOR(LineInterlace)
         ENUMERATOR(PlaneInterlace)
         ENUMERATOR(PartitionInterlace)
+#if defined(HAVE_ENUM_GIFINTERLACE)
+        ENUMERATOR(GIFInterlace)
+#endif
+#if defined(HAVE_ENUM_JPEGINTERLACE)
+        ENUMERATOR(JPEGInterlace)
+#endif
+#if defined(HAVE_ENUM_PNGINTERLACE)
+        ENUMERATOR(PNGInterlace)
+#endif
     END_ENUM
 
     DEF_ENUM(InterpolatePixelMethod)
@@ -1317,7 +1334,11 @@ Init_RMagick2(void)
 #endif
     END_ENUM
 
+#if defined(HAVE_TYPE_IMAGELAYERMETHOD)
+    DEF_ENUM(ImageLayerMethod)
+#else
     DEF_ENUM(MagickLayerMethod)
+#endif
         ENUMERATOR(UndefinedLayer)
         ENUMERATOR(CompareAnyLayer)
         ENUMERATOR(CompareClearLayer)
@@ -1340,6 +1361,9 @@ Init_RMagick2(void)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUMERATOR(CompositeLayer)
+#endif
+#if defined(HAVE_ENUM_MERGELAYER)
+        ENUMERATOR(MergeLayer)
 #endif
 #if defined(HAVE_ENUM_MOSAICLAYER)
         ENUMERATOR(MosaicLayer)
@@ -1502,8 +1526,23 @@ Init_RMagick2(void)
         ENUMERATOR(EdgeVirtualPixelMethod)
         ENUMERATOR(MirrorVirtualPixelMethod)
         ENUMERATOR(TileVirtualPixelMethod)
-        ENUMERATOR(BackgroundVirtualPixelMethod)
         ENUMERATOR(TransparentVirtualPixelMethod)
+        ENUMERATOR(BackgroundVirtualPixelMethod)
+        ENUMERATOR(DitherVirtualPixelMethod)
+        ENUMERATOR(RandomVirtualPixelMethod)
+        ENUMERATOR(ConstantVirtualPixelMethod)
+#if defined(HAVE_ENUM_MASKVIRTUALPIXELMETHOD)
+        ENUMERATOR(MaskVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_BLACKVIRTUALPIXELMETHOD)
+        ENUMERATOR(BlackVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_GRAYVIRTUALPIXELMETHOD)
+        ENUMERATOR(GrayVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_WHITEVIRTUALPIXELMETHOD)
+        ENUMERATOR(WhiteVirtualPixelMethod)
+#endif
     END_ENUM
 
     // WeightType constants
@@ -1655,7 +1694,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/12/23 21:22:29 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/12/26 21:43:52 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

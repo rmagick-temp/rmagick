@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.137 2007/12/24 19:08:08 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.138 2007/12/26 21:43:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1283,7 +1283,6 @@ CompositeOperator_name(CompositeOperator op)
 {
     switch (op)
     {
-        default:
         ENUM_TO_NAME(UndefinedCompositeOp)
         ENUM_TO_NAME(NoCompositeOp)
         ENUM_TO_NAME(AddCompositeOp)
@@ -1310,6 +1309,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)
         ENUM_TO_NAME(DarkenCompositeOp)
+#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
+        ENUM_TO_NAME(DivideCompositeOp)
+#endif
         ENUM_TO_NAME(DstAtopCompositeOp)
         ENUM_TO_NAME(DstCompositeOp)
         ENUM_TO_NAME(DstInCompositeOp)
@@ -1321,6 +1323,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(HueCompositeOp)
         ENUM_TO_NAME(InCompositeOp)
         ENUM_TO_NAME(LightenCompositeOp)
+#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
+        ENUM_TO_NAME(LinearLightCompositeOp)
+#endif
         ENUM_TO_NAME(LuminizeCompositeOp)
         ENUM_TO_NAME(MinusCompositeOp)
         ENUM_TO_NAME(ModulateCompositeOp)
@@ -1341,6 +1346,8 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(ThresholdCompositeOp)
         ENUM_TO_NAME(XorCompositeOp)
     }
+
+    return "UndefinedCompositeOp";
 }
 
 /*
@@ -1364,18 +1371,20 @@ CompressionType_name(CompressionType ct)
 {
     switch (ct)
     {
-        default:
         ENUM_TO_NAME(UndefinedCompression)
         ENUM_TO_NAME(NoCompression)
         ENUM_TO_NAME(BZipCompression)
         ENUM_TO_NAME(FaxCompression)
         ENUM_TO_NAME(Group4Compression)
         ENUM_TO_NAME(JPEGCompression)
+        ENUM_TO_NAME(JPEG2000Compression)
         ENUM_TO_NAME(LosslessJPEGCompression)
         ENUM_TO_NAME(LZWCompression)
         ENUM_TO_NAME(RLECompression)
         ENUM_TO_NAME(ZipCompression)
     }
+
+    return "UndefinedCompression";
 }
 
 
@@ -1400,12 +1409,13 @@ DisposeType_name(DisposeType type)
 {
     switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedDispose)
         ENUM_TO_NAME(BackgroundDispose)
         ENUM_TO_NAME(NoneDispose)
         ENUM_TO_NAME(PreviousDispose)
     }
+
+    return "UndefinedDispose";
 }
 
 
@@ -1430,7 +1440,6 @@ FilterTypes_name(FilterTypes type)
 {
     switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedFilter)
         ENUM_TO_NAME(PointFilter)
         ENUM_TO_NAME(BoxFilter)
@@ -1465,7 +1474,12 @@ FilterTypes_name(FilterTypes type)
 #if defined(HAVE_ENUM_BARTLETTFILTER)
         ENUM_TO_NAME(BartlettFilter)
 #endif
+#if defined(HAVE_ENUM_SENTINELFILTER)
+        ENUM_TO_NAME(SentinelFilter)
+#endif
     }
+
+    return "UndefinedFilter";
 }
 
 
@@ -1491,11 +1505,11 @@ EndianType_name(EndianType type)
 {
     switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedEndian)
         ENUM_TO_NAME(LSBEndian)
         ENUM_TO_NAME(MSBEndian)
     }
+    return "UndefinedEndian";
 }
 
 /*
@@ -1517,15 +1531,8 @@ EndianType_new(EndianType type)
 static const char *
 GravityType_name(GravityType type)
 {
-    // Defeat "duplicate case value" error.
-    if (type == UndefinedGravity)
-    {
-        return "UndefinedGravity";
-    }
-
     switch(type)
     {
-        default:
         ENUM_TO_NAME(ForgetGravity)
         ENUM_TO_NAME(NorthWestGravity)
         ENUM_TO_NAME(NorthGravity)
@@ -1538,6 +1545,9 @@ GravityType_name(GravityType type)
         ENUM_TO_NAME(SouthEastGravity)
         ENUM_TO_NAME(StaticGravity)
     }
+
+    // Defeat "duplicate case value" error.
+    return "UndefinedGravity";
 }
 
 
@@ -1560,9 +1570,9 @@ GravityType_new(GravityType type)
 */
 static char *
 ImageType_name(ImageType type)
-{    switch(type)
+{
+    switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedType)
         ENUM_TO_NAME(BilevelType)
         ENUM_TO_NAME(GrayscaleType)
@@ -1577,6 +1587,7 @@ ImageType_name(ImageType type)
         ENUM_TO_NAME(PaletteBilevelMatteType)
     }
 
+    return "UndefinedType";
 }
 
 
@@ -1601,13 +1612,23 @@ InterlaceType_name(InterlaceType interlace)
 {
     switch(interlace)
     {
-        default:
         ENUM_TO_NAME(UndefinedInterlace)
+#if defined(HAVE_ENUM_GIFINTERLACE)
+        ENUM_TO_NAME(GIFInterlace)
+#endif
+#if defined(HAVE_ENUM_JPEGINTERLACE)
+        ENUM_TO_NAME(JPEGInterlace)
+#endif
+#if defined(HAVE_ENUM_PNGINTERLACE)
+        ENUM_TO_NAME(PNGInterlace)
+#endif
         ENUM_TO_NAME(NoInterlace)
         ENUM_TO_NAME(LineInterlace)
         ENUM_TO_NAME(PlaneInterlace)
         ENUM_TO_NAME(PartitionInterlace)
     }
+
+    return "UndefinedInterlace";
 }
 
 
@@ -1632,7 +1653,6 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
 {
     switch(interpolate)
     {
-        default:
         ENUM_TO_NAME(UndefinedInterpolatePixel)
         ENUM_TO_NAME(AverageInterpolatePixel)
         ENUM_TO_NAME(BicubicInterpolatePixel)
@@ -1641,10 +1661,12 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
         ENUM_TO_NAME(IntegerInterpolatePixel)
         ENUM_TO_NAME(MeshInterpolatePixel)
         ENUM_TO_NAME(NearestNeighborInterpolatePixel)
-#if defined(HAVE_SPLINEINTERPOLATEPIXEL)
+#if defined(HAVE_ENUM_SPLINEINTERPOLATEPIXEL)
         ENUM_TO_NAME(SplineInterpolatePixel)
 #endif
     }
+
+    return "UndefinedInterpolatePixel";
 }
 
 
@@ -1665,11 +1687,10 @@ InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
     Purpose:    Construct an MagickLayerMethod enum object for the specified value.
 */
 static const char *
-MagickLayerMethod_name(MagickLayerMethod method)
+LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
 {
     switch(method)
     {
-        default:
         ENUM_TO_NAME(UndefinedLayer)
         ENUM_TO_NAME(CompareAnyLayer)
         ENUM_TO_NAME(CompareClearLayer)
@@ -1693,6 +1714,9 @@ MagickLayerMethod_name(MagickLayerMethod method)
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUM_TO_NAME(CompositeLayer)
 #endif
+#if defined(HAVE_ENUM_MERGELAYER)
+        ENUM_TO_NAME(MergeLayer)
+#endif
 #if defined(HAVE_ENUM_MOSAICLAYER)
         ENUM_TO_NAME(MosaicLayer)
 #endif
@@ -1701,13 +1725,15 @@ MagickLayerMethod_name(MagickLayerMethod method)
 #endif
 
     }
+
+    return "UndefinedLayer";
 }
 
 VALUE
-MagickLayerMethod_new(MagickLayerMethod method)
+LAYERMETHODTYPE_NEW(LAYERMETHODTYPE method)
 {
-    const char *name = MagickLayerMethod_name(method);
-    return rm_enum_new(Class_MagickLayerMethod, ID2SYM(rb_intern(name)), INT2FIX(method));
+    const char *name = LAYERMETHODTYPE_NAME(method);
+    return rm_enum_new(CLASS_LAYERMETHODTYPE, ID2SYM(rb_intern(name)), INT2FIX(method));
 }
 
 
@@ -1720,7 +1746,6 @@ RenderingIntent_name(RenderingIntent intent)
 {
     switch(intent)
     {
-        default:
         ENUM_TO_NAME(UndefinedIntent)
         ENUM_TO_NAME(SaturationIntent)
         ENUM_TO_NAME(PerceptualIntent)
@@ -1728,6 +1753,7 @@ RenderingIntent_name(RenderingIntent intent)
         ENUM_TO_NAME(RelativeIntent)
     }
 
+    return "UndefinedIntent";
 }
 
 
@@ -1753,12 +1779,12 @@ ResolutionType_name(ResolutionType type)
 {
     switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedResolution)
         ENUM_TO_NAME(PixelsPerInchResolution)
         ENUM_TO_NAME(PixelsPerCentimeterResolution)
     }
 
+    return "UndefinedResolution";
 }
 
 
@@ -1784,7 +1810,6 @@ OrientationType_name(OrientationType type)
 {
     switch(type)
     {
-        default:
         ENUM_TO_NAME(UndefinedOrientation)
         ENUM_TO_NAME(TopLeftOrientation)
         ENUM_TO_NAME(TopRightOrientation)
@@ -1795,6 +1820,8 @@ OrientationType_name(OrientationType type)
         ENUM_TO_NAME(RightBottomOrientation)
         ENUM_TO_NAME(LeftBottomOrientation)
     }
+
+    return "UndefinedOrientation";
 }
 
 
@@ -2487,14 +2514,30 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
 {
     switch (method)
     {
-        default:
         ENUM_TO_NAME(UndefinedVirtualPixelMethod)
         ENUM_TO_NAME(EdgeVirtualPixelMethod)
         ENUM_TO_NAME(MirrorVirtualPixelMethod)
         ENUM_TO_NAME(TileVirtualPixelMethod)
         ENUM_TO_NAME(TransparentVirtualPixelMethod)
         ENUM_TO_NAME(BackgroundVirtualPixelMethod)
+        ENUM_TO_NAME(DitherVirtualPixelMethod)
+        ENUM_TO_NAME(RandomVirtualPixelMethod)
+        ENUM_TO_NAME(ConstantVirtualPixelMethod)
+#if defined(HAVE_ENUM_MASKVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(MaskVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_BLACKVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(BlackVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_GRAYVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(GrayVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_WHITEVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(WhiteVirtualPixelMethod)
+#endif
     }
+
+    return "UndefinedVirtualPixelMethod";
 }
 
 
@@ -2779,6 +2822,7 @@ StorageType_name(StorageType type)
 {
     switch (type)
     {
+        ENUM_TO_NAME(UndefinedPixel)
         ENUM_TO_NAME(CharPixel)
         ENUM_TO_NAME(DoublePixel)
         ENUM_TO_NAME(FloatPixel)
@@ -2786,9 +2830,9 @@ StorageType_name(StorageType type)
         ENUM_TO_NAME(LongPixel)
         ENUM_TO_NAME(QuantumPixel)
         ENUM_TO_NAME(ShortPixel)
-        default:
-        ENUM_TO_NAME(UndefinedPixel)
     }
+
+    return "UndefinedPixel";
 }
 
 /*
@@ -2800,6 +2844,7 @@ StretchType_name(StretchType stretch)
 {
     switch (stretch)
     {
+        ENUM_TO_NAME(UndefinedStretch)
         ENUM_TO_NAME(NormalStretch)
         ENUM_TO_NAME(UltraCondensedStretch)
         ENUM_TO_NAME(ExtraCondensedStretch)
@@ -2810,9 +2855,9 @@ StretchType_name(StretchType stretch)
         ENUM_TO_NAME(ExtraExpandedStretch)
         ENUM_TO_NAME(UltraExpandedStretch)
         ENUM_TO_NAME(AnyStretch)
-        default:
-        ENUM_TO_NAME(UndefinedStretch)
     }
+
+    return "UndefinedStretch";
 }
 
 
@@ -2825,13 +2870,14 @@ StyleType_name(StyleType style)
 {
     switch (style)
     {
+        ENUM_TO_NAME(UndefinedStyle)
         ENUM_TO_NAME(NormalStyle)
         ENUM_TO_NAME(ItalicStyle)
         ENUM_TO_NAME(ObliqueStyle)
         ENUM_TO_NAME(AnyStyle)
-        default:
-        ENUM_TO_NAME(UndefinedStyle)
     }
+
+    return "UndefinedStyle";
 }
 
 
@@ -2889,8 +2935,8 @@ rm_write_temp_image(Image *image, char *tmpnam)
 
     long registry_id;
 
-    rb_warn("`%s' can cause memory leaks when RMagick was built with ImageMagick "  MagickLibVersionText
-            ".\nUpgrade to ImageMagick 6.3.4 or later to prevent this behavior."
+    rb_warn("`%s' can cause memory leaks with ImageMagick "  MagickLibVersionText
+            ".\nUpgrade to ImageMagick 6.3.4-10 or later to prevent this behavior."
           , rb_id2name(THIS_FUNC()));
 
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);

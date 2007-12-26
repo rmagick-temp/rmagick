@@ -35,11 +35,19 @@ shadows = ruby.shadow(2, 5, 3)
 
 # Composite the shadow animation over the background. Since there is only one
 # background image, it will replicated for each frame in the shadow animation.
-result = bg.composite_layers(shadows)
+begin
+  result = bg.composite_layers(shadows)
 
-# Composite the "Ruby" animation over the previous composite
-result = result.composite_layers(ruby)
-result.delay = 10
-result.write("composite_layers.gif")
-result[0].write("composite_layers1.gif")
+  # Composite the "Ruby" animation over the previous composite
+  result = result.composite_layers(ruby)
+  result.delay = 10
+  result.write("composite_layers.gif")
+  result[0].write("composite_layers1.gif")
+
+rescue NotImplementedError
+    result = Magick::Image.read('images/notimplemented.gif').first
+    result.resize!(100, 100)
+    result.write("composite_layers.gif")
+    result.write("composite_layers1.gif")
+end
 exit

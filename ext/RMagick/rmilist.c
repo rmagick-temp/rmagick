@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.64 2007/12/24 21:08:40 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.65 2007/12/26 21:41:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -200,7 +200,8 @@ ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
 #else
 
     self = self;
-    source_images = source_images;
+    argc = argc;
+    argv = argv;
     rm_not_implemented();
     return (VALUE)0;
 
@@ -513,13 +514,17 @@ VALUE
 ImageList_optimize_layers(VALUE self, VALUE method)
 {
     Image *images, *new_images, *new_images2;
-    MagickLayerMethod mthd;
+    LAYERMETHODTYPE mthd;
     ExceptionInfo exception;
 
     new_images2 = NULL;     // defeat "unused variable" message
 
     GetExceptionInfo(&exception);
+#if defined(HAVE_TYPE_IMAGELAYERMETHOD)
+    VALUE_TO_ENUM(method, mthd, ImageLayerMethod);
+#else
     VALUE_TO_ENUM(method, mthd, MagickLayerMethod);
+#endif
     images = images_from_imagelist(self);
 
     switch (mthd)

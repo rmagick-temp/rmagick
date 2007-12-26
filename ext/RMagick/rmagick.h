@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.210 2007/12/24 21:08:40 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.211 2007/12/26 21:41:48 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -104,6 +104,18 @@
 #define OpenFile rb_io_t
 #endif
 
+// ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6
+#if defined(HAVE_TYPE_IMAGELAYERMETHOD)
+#define LAYERMETHODTYPE ImageLayerMethod
+#define CLASS_LAYERMETHODTYPE Class_ImageLayerMethod
+#define LAYERMETHODTYPE_NAME ImageLayerMethod_name
+#define LAYERMETHODTYPE_NEW  ImageLayerMethod_new
+#else
+#define LAYERMETHODTYPE MagickLayerMethod
+#define CLASS_LAYERMETHODTYPE Class_MagickLayerMethod
+#define LAYERMETHODTYPE_NAME MagickLayerMethod_name
+#define LAYERMETHODTYPE_NEW  MagickLayerMethod_new
+#endif
 
 
 typedef ImageInfo Info; // Make type name match class name
@@ -264,7 +276,7 @@ EXTERN VALUE Class_GravityType;
 EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
 EXTERN VALUE Class_InterpolatePixelMethod;
-EXTERN VALUE Class_MagickLayerMethod;
+EXTERN VALUE CLASS_LAYERMETHODTYPE;
 EXTERN VALUE Class_NoiseType;
 EXTERN VALUE Class_OrientationType;
 EXTERN VALUE Class_PaintMethod;

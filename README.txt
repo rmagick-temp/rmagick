@@ -35,7 +35,7 @@ __Email:__ <rmagick@rubyforge.org>
 __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 <h2 id="new">What's new?</h2>
-RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.11.
+RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.12.
 Additionally,
 
 * The installation procedure is pure Ruby.

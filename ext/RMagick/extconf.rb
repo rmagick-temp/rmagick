@@ -3,7 +3,7 @@ require "date"
 
 RMAGICK_VERS = "0.0.0$"
 MIN_RUBY_VERS = "1.8.2"
-MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(",","").to_i
+MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(".","").to_i
 MIN_IM_VERS = "6.3.0"
 MIN_IM_VERS_NO = MIN_IM_VERS.tr(".","").to_i
 
@@ -229,6 +229,9 @@ $defs.push("-DRUBY_VERSION_STRING=\"ruby #{RUBY_VERSION}\"")
 $defs.push("-DRMAGICK_VERSION_STRING=\"RMagick #{RMAGICK_VERS}\"")
 
 create_header()
+# Prior to 1.8.5 mkmf duplicated the symbols on the command line and in the
+# extconf.h header. Suppress that behavior by removing the symbol array.
+$defs = []
 
 # Force re-compilation if the generated Makefile changed.
 $config_h = "Makefile rmagick.h"

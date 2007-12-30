@@ -1,7 +1,7 @@
 require "mkmf"
 require "date"
 
-RMAGICK_VERS = "0.0.0$"
+RMAGICK_VERS = "2.0.0"
 MIN_RUBY_VERS = "1.8.2"
 MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(".","").to_i
 MIN_IM_VERS = "6.3.0"
@@ -13,7 +13,7 @@ SUMMARY = <<"END_SUMMARY"
 #{"=" * 70}
 #{DateTime.now.strftime("%a %d%b%y %T")}
 This installation of RMagick #{RMAGICK_VERS} is configured
-for Ruby #{RUBY_VERSION} (#{RUBY_PLATFORM}) and ImageMagick #{`Magick-config --version`.chomp}.
+for Ruby #{RUBY_VERSION} (#{RUBY_PLATFORM}) and ImageMagick 6.3.7.
 #{"=" * 70}
 
 
@@ -88,37 +88,54 @@ end
 end
 
 
-# Check for Magick-config
-unless find_executable("Magick-config")
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}\n"
+
+# Magick-config is not available on Windows
+if RUBY_PLATFORM !~ /mswin/ 
+	# Check for Magick-config
+	unless find_executable("Magick-config")
+	  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}\n"
+	end
+
+	# Ensure minimum ImageMagick version
+	unless checking_for("ImageMagick version >= #{MIN_IM_VERS}")  do
+	  version = `Magick-config --version`.chomp.tr(".","").to_i
+	  version >= MIN_IM_VERS_NO
+	end
+	  exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
+	end
+
+	# Ensure ImageMagick is not configured for HDRI
+	unless checking_for("HDRI disabled version of ImageMagick") do
+	  not (`Magick-config --version`["HDRI"])
+	end
+	  exit_failure "\nCan't install RMagick #{RMAGICK_VERS}."+
+				   "\nRMagick does not work when ImageMagick is configured for High Dynamic Range Images."+
+				   "\nDon't use the --enable-hdri option when configuring ImageMagick.\n"
+	end
+
+	# Save flags
+	$CFLAGS = ENV["CFLAGS"].to_s + " " + `Magick-config --cflags`.chomp
+	$CPPFLAGS = `Magick-config --cppflags`.chomp
+	$LDFLAGS = `Magick-config --ldflags`.chomp
+	$LOCAL_LIBS = `Magick-config --libs`.chomp
+	
+else	# mswin
+
+    `convert -version` =~ /Version: ImageMagick (\d\.\d\.\d+) /
+    abort "Unable to get ImageMagick version" unless $1
+    $CFLAGS = "-W3"
+	$CPPFLAGS = %Q{-I"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Include" -I"C:\\Program Files\\ImageMagick-#{$1}-Q8\\include"}
+	# The /link option is required by the Makefile but causes warnings in the mkmf.log file. 
+	$LDFLAGS = %Q{/link /LIBPATH:"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Lib" /LIBPATH:"C:\\Program Files\\ImageMagick-#{$1}-Q8\\lib" /LIBPATH:"C:\\ruby\\lib"}
+	$LOCAL_LIBS = 'CORE_RL_magick_.lib X11.lib'
+	
 end
 
 
-# Ensure minimum ImageMagick version
-unless checking_for("ImageMagick version >= #{MIN_IM_VERS}")  do
-  version = `Magick-config --version`.chomp.tr(".","").to_i
-  version >= MIN_IM_VERS_NO
-end
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
-end
-
-# Ensure ImageMagick is not configured for HDRI
-unless checking_for("HDRI disabled version of ImageMagick") do
-  not (`Magick-config --version`["HDRI"])
-end
-  exit_failure "\nCan't install RMagick #{RMAGICK_VERS}."+
-               "\nRMagick does not work when ImageMagick is configured for High Dynamic Range Images."+
-               "\nDon't use the --enable-hdri option when configuring ImageMagick.\n"
-end
-
-# Save flags
-$CFLAGS = ENV["CFLAGS"].to_s + " " + `Magick-config --cflags`.chomp
-$CPPFLAGS = `Magick-config --cppflags`.chomp
-$LDFLAGS = `Magick-config --ldflags`.chomp
-$LOCAL_LIBS = `Magick-config --libs`.chomp
 
 #headers = %w{assert.h ctype.h errno.h float.h limits.h math.h stdarg.h stddef.h stdint.h stdio.h stdlib.h string.h time.h}
-headers = %w{assert.h ctype.h stdint.h stdio.h stdlib.h math.h time.h}
+headers = %w{assert.h ctype.h stdio.h stdlib.h math.h time.h}
+headers << "stdint.h" if have_header("stdint.h")	# defines uint64_t
 headers << "sys/types.h" if have_header("sys/types.h")
 
 
@@ -128,11 +145,16 @@ else
   headers << "magick/MagickCore.h"
 end
 
-unless have_library("Magick", "InitializeMagick", headers)
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
-               "Can't find libMagick or one of the dependent libraries. " +
-               "Check the mkmf.log file for more detailed information.\n"
+
+if RUBY_PLATFORM !~ /mswin/ 
+
+	unless have_library("Magick", "InitializeMagick", headers)
+	  exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
+				   "Can't find libMagick or one of the dependent libraries. " +
+				   "Check the mkmf.log file for more detailed information.\n"
+	end
 end
+
 
 have_func("snprintf", headers)
 

@@ -29,7 +29,7 @@ end
 Origin_x = 110
 Origin_y = 230
 Glyph = 'g'
-Face = ARGV[0] ? ARGV[0] : "Times"
+Face = RUBY_PLATFORM =~ /nswin/ ? "Verdana" : "Times"
 
 canvas = Magick::Image.new(410, 320, Magick::HatchFill.new('white', 'lightcyan2'))
 
@@ -89,7 +89,7 @@ gc.draw(canvas)
 # Draw the braces and labels. Position the braces by transforming the
 # user coordinate system with translate and rotate methods.
 gc = Magick::Draw.new
-gc.font_family('Times')
+gc.font_family('Face')
 gc.pointsize(13)
 gc.fill('none')
 gc.stroke('black')

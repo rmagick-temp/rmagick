@@ -1,0 +1,7 @@
+# define additional install.rb config options
+# add --allow-example-errors - default is false (only allow 5 examples to fail)
+add_bool_config('allow-example-errors', false, 'Allow installation to proceed even if a lot of examples fail')
+# add --disable-htmldoc - default is false, if true don't build doc and examples
+add_bool_config('disable-htmldoc', false, "don't build HTML doc and examples")
+# add --doc-dir - default is $prefix/share/RMagick
+add_path_config('doc-dir', "$prefix/share/RMagick", 'where to install RMagick documentation')

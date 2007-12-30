@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.228 2007/12/26 21:43:52 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.229 2007/12/30 23:13:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -50,7 +50,7 @@ Magick_colors(VALUE class)
         {
             (void) rb_yield(Color_from_ColorInfo(color_info_list[x]));
         }
-        magick_free(color_info_list);
+        magick_free((void *)color_info_list);
         return class;
     }
     else
@@ -61,7 +61,7 @@ Magick_colors(VALUE class)
             (void) rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
         }
 
-        magick_free(color_info_list);
+        magick_free((void *)color_info_list);
         return ary;
     }
 }
@@ -90,7 +90,7 @@ Magick_fonts(VALUE class)
         {
             (void) rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
-        magick_free(type_info);
+        magick_free((void *)type_info);
         return class;
     }
     else
@@ -100,7 +100,7 @@ Magick_fonts(VALUE class)
         {
             (void) rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
         }
-        magick_free(type_info);
+        magick_free((void *)type_info);
         return ary;
     }
 
@@ -1694,7 +1694,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2007/12/26 21:43:52 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2007/12/30 23:13:06 $) Copyright (C) 2007 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

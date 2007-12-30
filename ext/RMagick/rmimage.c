@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.269 2007/12/23 21:21:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.270 2007/12/30 23:13:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -14,7 +14,7 @@ typedef Image *(flipper_t)(const Image *, ExceptionInfo *);
 typedef Image *(magnifier_t)(const Image *, ExceptionInfo *);
 typedef Image *(reader_t)(const Info *, ExceptionInfo *);
 typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned long, ExceptionInfo *);
-typedef unsigned int (thresholder_t)(Image *, const char *);
+typedef MagickBooleanType (thresholder_t)(Image *, const char *);
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE cropper(int, int, VALUE *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.211 2007/12/26 21:41:48 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.212 2007/12/30 22:46:22 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -9,10 +9,15 @@
 #ifndef _RMAGICK_H_
 #define _RMAGICK_H_
 
+// Suppress warnings about deprecated functions on Windows
+#define _CRT_SECURE_NO_DEPRECATE 1
+
 #include <assert.h>
 #include <stdio.h>
 #include <ctype.h>
+#if defined(HAVE_STDINT_H)
 #include <stdint.h>
+#endif
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
@@ -319,9 +324,12 @@ EXTERN ID rm_ID_width;             // "width"
 EXTERN ID rm_ID_x;                 // "x"
 EXTERN ID rm_ID_y;                 // "y"
 
-
+#if !defined(min)
 #define min(a,b) ((a)<(b)?(a):(b))
+#endif
+#if !defined(max)
 #define max(a,b) ((a)>(b)?(a):(b))
+#endif
 
 /*
    Handle warnings & errors
@@ -1036,7 +1044,7 @@ extern VALUE  Enum_type_each(VALUE);
 extern void  *magick_malloc(const size_t);
 extern void  *magick_safe_malloc(const size_t, const size_t);
 extern void   magick_free(void *);
-extern void  *magick_realloc(void *, size_t);
+extern void  *magick_realloc(void *, const size_t);
 extern void  *magick_safe_realloc(void *, const size_t, const size_t);
 extern void   magick_clone_string(char **, const char *);
 extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);

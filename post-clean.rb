@@ -2,11 +2,11 @@
 # doc/*.rb.html
 # doc/ex/* (!rb)
 # Bug #246: Don't use chdir!
-require 'ftools'
+require 'fileutils'
 
 targets = Dir['doc/*.rb.html']
-File.safe_unlink(*targets) unless targets.empty?
+FileUtils.safe_unlink(targets) unless targets.empty?
 
 targets = Dir['doc/ex/*']
 targets.delete_if { |entry| File.directory?(entry) || %r{\.rb\z}.match(entry) }
-File.safe_unlink(*targets) unless targets.empty?
+FileUtils.safe_unlink(targets) unless targets.empty?

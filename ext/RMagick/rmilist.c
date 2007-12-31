@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.65 2007/12/26 21:41:24 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.66 2007/12/31 21:40:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -900,7 +900,7 @@ ImageList_write(VALUE self, VALUE file)
     const MagickInfo *m;
     volatile VALUE info_obj;
     char *filename;
-    long filenameL;
+    long filename_l;
     unsigned long scene;
     ExceptionInfo exception;
 
@@ -922,10 +922,10 @@ ImageList_write(VALUE self, VALUE file)
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
         // Copy the filename to the Info and to the Image.
-        filename = rb_str2cstr(file, &filenameL);
-        filenameL = min(filenameL, MaxTextExtent-1);
-        memcpy(info->filename, filename, (size_t)filenameL);
-        info->filename[filenameL] = '\0';
+        filename = rm_str2cstr(file, &filename_l);
+        filename_l = min(filename_l, MaxTextExtent-1);
+        memcpy(info->filename, filename, (size_t)filename_l);
+        info->filename[filename_l] = '\0';
         SetImageInfoFile(info, NULL);
     }
 

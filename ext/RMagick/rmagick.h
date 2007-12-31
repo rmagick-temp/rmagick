@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.212 2007/12/30 22:46:22 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.213 2007/12/31 21:40:02 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -107,6 +107,14 @@
 #if defined(HAVE_RB_IO_T)
 #undef OpenFile
 #define OpenFile rb_io_t
+#endif
+
+// These macros are needed in 1.9.0 but aren't defined prior to 1.8.6.
+#if !defined(RSTRING_LEN)
+#define RSTRING_LEN(s) (RSTRING(s)->len)
+#endif
+#if !defined(RSTRING_PTR)
+#define RSTRING_PTR(s) (RSTRING(s)->ptr)
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6
@@ -1057,7 +1065,8 @@ extern int    rm_strcasecmp(const char *, const char *);
 extern int    rm_strncasecmp(const char *, const char *, size_t);
 extern void   rm_check_ary_len(VALUE, long);
 extern Image *rm_check_destroyed(VALUE);
-extern Image *rm_check_frozen_image(VALUE);
+extern Image *rm_check_frozen(VALUE);
+extern char  *rm_str2cstr(VALUE, long *);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
 extern Quantum rm_app2quantum(VALUE);

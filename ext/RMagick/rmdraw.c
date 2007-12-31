@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.59 2007/11/25 21:32:41 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.60 2007/12/31 21:40:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -479,7 +479,7 @@ VALUE Draw_annotate(
     keep = draw->info->affine;
 
     image_arg = ImageList_cur_image(image_arg);
-    image = rm_check_frozen_image(image_arg);
+    image = rm_check_frozen(image_arg);
 
     // If we have an optional parm block, run it in self's context,
     // allowing the app a chance to modify the object's attributes
@@ -683,7 +683,7 @@ Draw_draw(VALUE self, VALUE image_arg)
     Image *image;
 
     image_arg = ImageList_cur_image(image_arg);
-    image = rm_check_frozen_image(image_arg);
+    image = rm_check_frozen(image_arg);
 
     Data_Get_Struct(self, Draw, draw);
     if (draw->primitives == 0)
@@ -1461,7 +1461,7 @@ get_type_metrics(
     switch (argc)
     {
         case 1:                   // use default image
-            text = rb_str2cstr(argv[0], &text_l);
+            text = rm_str2cstr(argv[0], &text_l);
 
             for (x = 0; x < text_l; x++)
             {
@@ -1488,7 +1488,7 @@ get_type_metrics(
         case 2:
             t = ImageList_cur_image(argv[0]);
             image = rm_check_destroyed(t);
-            text = rb_str2cstr(argv[1], &text_l);
+            text = rm_str2cstr(argv[1], &text_l);
             break;                  // okay
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);

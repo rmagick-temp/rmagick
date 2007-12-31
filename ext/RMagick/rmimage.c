@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.270 2007/12/30 23:13:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.271 2007/12/31 21:40:02 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -350,10 +350,10 @@ Image_add_profile(VALUE self, VALUE name)
     long profile_filename_l = 0;
     const StringInfo *profile;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     // ProfileImage issues a warning if something goes wrong.
-    profile_filename = rb_str2cstr(name, &profile_filename_l);
+    profile_filename = rm_str2cstr(name, &profile_filename_l);
 
     info = CloneImageInfo(NULL);
     if (!info)
@@ -408,7 +408,7 @@ Image_alpha_eq(VALUE self, VALUE type)
     Image *image;
     AlphaChannelType alpha;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     VALUE_TO_ENUM(type, alpha, AlphaChannelType);
 
@@ -558,7 +558,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     char *attr;
     unsigned int okay;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     attr = attr_arg == Qnil ? NULL : StringValuePtr(attr_arg);
 
@@ -705,7 +705,7 @@ Image_auto_orient(VALUE self)
 VALUE
 Image_auto_orient_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return auto_orient(True, self);
 }
 
@@ -729,7 +729,7 @@ Image_background_color(VALUE self)
 VALUE
 Image_background_color_eq(VALUE self, VALUE color)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Color_to_PixelPacket(&image->background_color, color);
     return self;
 }
@@ -791,7 +791,7 @@ VALUE Image_bias_eq(VALUE self, VALUE pct)
     Image *image;
     double bias;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
     bias = rm_percentage(pct);
     image->bias = bias * QuantumRange;
 
@@ -865,7 +865,7 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
     Image *image;
     char *value;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
     (void) rm_set_property(image, BlackPointCompensationKey, NULL);
     value = RTEST(arg) ? "true" : "false";
     (void) rm_set_property(image, BlackPointCompensationKey, value);
@@ -1331,7 +1331,7 @@ Image_border_bang(
                  VALUE height,
                  VALUE color)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return border(True, self, width, height, color);
 }
 
@@ -1366,7 +1366,7 @@ Image_border_color(VALUE self)
 VALUE
 Image_border_color_eq(VALUE self, VALUE color)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Color_to_PixelPacket(&image->border_color, color);
     return self;
 }
@@ -1700,7 +1700,7 @@ Image_chromaticity(VALUE self)
 VALUE
 Image_chromaticity_eq(VALUE self, VALUE chroma)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     ChromaticityInfo_to_ChromaticityInfo(&image->chromaticity, chroma);
     return self;
 }
@@ -1737,7 +1737,7 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
     ChannelType channels;
     MagickBooleanType okay;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     // check_destroyed before confirming the arguments
     if (argc >= 1)
@@ -1861,9 +1861,9 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
     long profile_length;
     const StringInfo *profile_data;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
-    profile_blob = rb_str2cstr(profile, &profile_length);
+    profile_blob = rm_str2cstr(profile, &profile_length);
 
     GetExceptionInfo(&exception);
     m = GetMagickInfo(name, &exception);
@@ -2183,7 +2183,7 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
     Image *image;
     ColorspaceType new_cs;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
     (void) SetImageColorspace(image, new_cs);
 
@@ -2349,7 +2349,7 @@ VALUE Image_compose_eq(
                       VALUE self,
                       VALUE compose_arg)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
     return self;
 }
@@ -2622,7 +2622,7 @@ Image_compression(VALUE self)
 VALUE
 Image_compression_eq(VALUE self, VALUE compression)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(compression, image->compression, CompressionType);
     return self;
 }
@@ -2635,7 +2635,7 @@ Image_compression_eq(VALUE self, VALUE compression)
 VALUE
 Image_compress_colormap_bang(VALUE self)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     (void) CompressImageColormap(image);
     rm_check_image_exception(image, RetainOnError);
 
@@ -2692,7 +2692,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
         rb_raise(rb_eArgError, "width and height must be non-zero");
     }
 
-    map = rb_str2cstr(map_arg, &map_l);
+    map = rm_str2cstr(map_arg, &map_l);
 
     npixels = (long)(width * height * map_l);
     if (RARRAY(pixels_arg)->len != npixels)
@@ -3044,7 +3044,7 @@ Image_crop(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_crop_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return cropper(True, argc, argv, self);
 }
 
@@ -3109,7 +3109,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
     int count;
     double x_res, y_res;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     // Get the Class ID for the Geometry class.
     if (!Class_Geometry)
@@ -3189,7 +3189,7 @@ DEF_ATTR_ACCESSOR(Image, delay, ulong)
 VALUE
 Image_delete_profile(VALUE self, VALUE name)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     (void) ProfileImage(image, StringValuePtr(name), NULL, 0, MagickTrue);
     rm_check_image_exception(image, RetainOnError);
 
@@ -3377,7 +3377,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     y       = NUM2LONG(argv[1]);
     columns = NUM2ULONG(argv[2]);
     rows    = NUM2ULONG(argv[3]);
-    map     = rb_str2cstr(argv[4], &mapL);
+    map     = rm_str2cstr(argv[4], &mapL);
     if (argc == 6)
     {
         stg_type = RTEST(argv[5]) ? DoublePixel : QuantumPixel;
@@ -3470,7 +3470,7 @@ Image_dispose(VALUE self)
 VALUE
 Image_dispose_eq(VALUE self, VALUE dispose)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(dispose, image->dispose, DisposeType);
     return self;
 }
@@ -3858,7 +3858,7 @@ Image_endian(VALUE self)
 VALUE
 Image_endian_eq(VALUE self, VALUE type)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(type, image->endian, EndianType);
     return self;
 }
@@ -3955,7 +3955,7 @@ Image_equalize_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_erase_bang(VALUE self)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
 
     (void) SetImageBackgroundColor(image);
     rm_check_image_exception(image, RetainOnError);
@@ -4019,7 +4019,7 @@ Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 VALUE
 Image_excerpt_bang(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return excerpt(True, self, x, y, width, height);
 }
 
@@ -4292,7 +4292,7 @@ Image_extract_info(VALUE self)
 VALUE
 Image_extract_info_eq(VALUE self, VALUE rect)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->extract_info, rect);
     return self;
 }
@@ -4326,7 +4326,7 @@ Image_filter(VALUE self)
 VALUE
 Image_filter_eq(VALUE self, VALUE filter)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(filter, image->filter, FilterTypes);
     return self;
 }
@@ -4426,7 +4426,7 @@ Image_flip(VALUE self)
 VALUE
 Image_flip_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return flipflop(True, self, FlipImage);
 }
 
@@ -4448,7 +4448,7 @@ Image_flop(VALUE self)
 VALUE
 Image_flop_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return flipflop(True, self, FlopImage);
 }
 
@@ -4492,7 +4492,7 @@ Image_format_eq(VALUE self, VALUE magick)
     char *mgk;
     ExceptionInfo exception;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     GetExceptionInfo(&exception);
 
@@ -4609,7 +4609,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     class = class;          // defeat gcc message
             blob_arg = blob_arg;    // defeat gcc message
 
-    blob = (void *) rb_str2cstr(blob_arg, &length);
+    blob = (void *) rm_str2cstr(blob_arg, &length);
 
     // Get a new Info object - run the parm block if supplied
     info_obj = rm_info_new();
@@ -4635,7 +4635,7 @@ DEF_ATTR_READER(Image, fuzz, dbl)
 */
 VALUE Image_fuzz_eq(VALUE self, VALUE fuzz)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     image->fuzz = rm_fuzz_to_dbl(fuzz);
     return self;
 }
@@ -4797,7 +4797,7 @@ Image_geometry_eq(
     volatile VALUE geom_str;
     char *geom;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     if (geometry == Qnil)
     {
@@ -4986,7 +4986,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile void *buffer;
     unsigned int okay;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     switch (argc)
     {
@@ -5017,7 +5017,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     // binary pixel data.
     if (rb_respond_to(pixel_arg, rb_intern("to_str")))
     {
-        buffer = (void *)rb_str2cstr(pixel_arg, &buffer_l);
+        buffer = (void *)rm_str2cstr(pixel_arg, &buffer_l);
         switch (stg_type)
         {
             case CharPixel:
@@ -5282,7 +5282,7 @@ Image_interlace(VALUE self)
 VALUE
 Image_interlace_eq(VALUE self, VALUE interlace)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(interlace, image->interlace, InterlaceType);
     return self;
 }
@@ -5474,7 +5474,7 @@ Image__load(VALUE class, VALUE str)
 
             info = CloneImageInfo(NULL);
 
-    blob = rb_str2cstr(str, &length);
+    blob = rm_str2cstr(str, &length);
 
     // Must be as least as big as the 1st 4 fields in DumpedImage
     if (length <= (long)(sizeof(DumpedImage)-MaxTextExtent))
@@ -5573,7 +5573,7 @@ Image_magnify(VALUE self)
 VALUE
 Image_magnify_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return magnify(True, self, MagnifyImage);
 }
 
@@ -5657,7 +5657,7 @@ Image_mask_eq(VALUE self, VALUE mask)
     PixelPacket *q;
     ExceptionInfo exception;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     if (mask != Qnil)
     {
@@ -5764,7 +5764,7 @@ Image_matte_eq(VALUE self, VALUE matte)
 
     return Image_alpha_eq(self, alpha_channel_type);
 #else
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     image->matte = RTEST(matte) ? MagickTrue : MagickFalse;
     return matte;
 #endif
@@ -5789,7 +5789,7 @@ Image_matte_color(VALUE self)
 VALUE
 Image_matte_color_eq(VALUE self, VALUE color)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Color_to_PixelPacket(&image->matte_color, color);
     return self;
 }
@@ -5924,7 +5924,7 @@ Image_minify(VALUE self)
 VALUE
 Image_minify_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return magnify(True, self, MinifyImage);
 }
 
@@ -5984,7 +5984,7 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_monitor_eq(VALUE self, VALUE monitor)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
 
     if (NIL_P(monitor))
     {
@@ -6479,7 +6479,7 @@ Image_orientation(VALUE self)
 VALUE
 Image_orientation_eq(VALUE self, VALUE orientation)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(orientation, image->orientation, OrientationType);
     return self;
 }
@@ -6504,7 +6504,7 @@ Image_page(VALUE self)
 VALUE
 Image_page_eq(VALUE self, VALUE rect)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Rectangle_to_RectangleInfo(&image->page, rect);
     return self;
 }
@@ -6656,7 +6656,7 @@ Image_pixel_interpolation_method(VALUE self)
 VALUE
 Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(method, image->interpolate, InterpolatePixelMethod);
     return self;
 }
@@ -7183,7 +7183,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
         // Convert arg to string. If an exception occurs raise an error condition.
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
-        filename = rb_str2cstr(file, &filename_l);
+        filename = rm_str2cstr(file, &filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';
@@ -7269,7 +7269,7 @@ Image_read_inline(VALUE self, VALUE content)
 
     self = self;    // defeat gcc message
 
-    image_data = rb_str2cstr(content, &image_data_l);
+    image_data = rm_str2cstr(content, &image_data_l);
 
     // Search for a comma. If found, we'll set the start of the
     // image data just following the comma. Otherwise we'll assume
@@ -7373,7 +7373,7 @@ Image_rendering_intent(VALUE self)
 VALUE
 Image_rendering_intent_eq(VALUE self, VALUE ri)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
     return self;
 }
@@ -7467,7 +7467,7 @@ Image_resize(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_resize_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return resize(True, argc, argv, self);
 }
 
@@ -7518,7 +7518,7 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 2:
-            arrow = rb_str2cstr(argv[1], &arrow_l);
+            arrow = rm_str2cstr(argv[1], &arrow_l);
             if (arrow_l != 1 || (*arrow != '<' && *arrow != '>'))
             {
                 rb_raise(rb_eArgError, "second argument must be '<' or '>', '%s' given", arrow);
@@ -7567,7 +7567,7 @@ Image_rotate(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_rotate_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return rotate(True, argc, argv, self);
 }
 
@@ -7590,7 +7590,7 @@ Image_sample(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return scale(True, argc, argv, self, SampleImage);
 }
 
@@ -7611,7 +7611,7 @@ Image_scale(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return scale(True, argc, argv, self, ScaleImage);
 }
 
@@ -7693,7 +7693,7 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
     ChannelType channel;
     unsigned long channel_depth;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     VALUE_TO_ENUM(channel_arg, channel, ChannelType);
     channel_depth = NUM2ULONG(depth);
@@ -7825,7 +7825,7 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
     Image *image;
     Quantum opacity;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
     opacity = APP2QUANTUM(opacity_arg);
     (void) SetImageOpacity(image, opacity);
     rm_check_image_exception(image, RetainOnError);
@@ -8108,7 +8108,7 @@ Image_shave_bang(
                 VALUE width,
                 VALUE height)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
 }
 
@@ -8479,7 +8479,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     ClassType class_type;
     QuantizeInfo qinfo;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
 
     VALUE_TO_ENUM(new_class_type, class_type, ClassType);
 
@@ -8580,7 +8580,7 @@ Image_store_pixels(
 VALUE
 Image_strip_bang(VALUE self)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     (void) StripImage(image);
     rm_check_image_exception(image, RetainOnError);
     return self;
@@ -8860,7 +8860,7 @@ Image_thumbnail(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return thumbnail(True, argc, argv, self);
 }
 
@@ -8880,7 +8880,7 @@ Image_ticks_per_second(VALUE self)
 VALUE
 Image_ticks_per_second_eq(VALUE self, VALUE tps)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     image->ticks_per_second = NUM2ULONG(tps);
     return self;
 }
@@ -9138,7 +9138,7 @@ Image_transparent_color(VALUE self)
 VALUE
 Image_transparent_color_eq(VALUE self, VALUE color)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     Color_to_PixelPacket(&image->transparent_color, color);
     return self;
 }
@@ -9160,7 +9160,7 @@ Image_transpose(VALUE self)
 VALUE
 Image_transpose_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return crisscross(True, self, TransposeImage);
 }
 
@@ -9180,7 +9180,7 @@ Image_transverse(VALUE self)
 VALUE
 Image_transverse_bang(VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return crisscross(True, self, TransverseImage);
 }
 
@@ -9255,7 +9255,7 @@ Image_trim(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
-    (void) rm_check_frozen_image(self);
+    (void) rm_check_frozen(self);
     return trimmer(True, argc, argv, self);
 }
 
@@ -9273,7 +9273,7 @@ VALUE Image_gravity(VALUE self)
 
 VALUE Image_gravity_eq(VALUE self, VALUE gravity)
 {
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(gravity, image->gravity, GravityType);
     return gravity;
 }
@@ -9344,7 +9344,7 @@ Image_units_eq(
               VALUE restype)
 {
     ResolutionType units;
-    Image *image = rm_check_frozen_image(self);
+    Image *image = rm_check_frozen(self);
 
     VALUE_TO_ENUM(restype, units, ResolutionType);
 
@@ -9567,7 +9567,7 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
     Image *image;
     VirtualPixelMethod vpm;
 
-    image = rm_check_frozen_image(self);
+    image = rm_check_frozen(self);
     VALUE_TO_ENUM(method, vpm, VirtualPixelMethod);
     (void) SetImageVirtualPixelMethod(image, vpm);
     rm_check_image_exception(image, RetainOnError);
@@ -9863,7 +9863,7 @@ Image_write(VALUE self, VALUE file)
         // Convert arg to string. If an exception occurs raise an error condition.
         file = rb_rescue(rb_String, file, file_arg_rescue, file);
 
-        filename = rb_str2cstr(file, &filename_l);
+        filename = rm_str2cstr(file, &filename_l);
         filename_l = min(filename_l, MaxTextExtent-1);
         memcpy(info->filename, filename, (size_t)filename_l);
         info->filename[filename_l] = '\0';

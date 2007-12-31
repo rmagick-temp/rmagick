@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.138 2007/12/26 21:43:52 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.139 2007/12/31 21:40:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -204,11 +204,11 @@ rm_check_destroyed(VALUE obj)
 
 
 /*
-    Extern:     rm_check_frozen_image
+    Extern:     rm_check_frozen
     Purpose:    raise an error if the image has been destroyed or is frozen
 */
 Image *
-rm_check_frozen_image(VALUE obj)
+rm_check_frozen(VALUE obj)
 {
     Image *image = rm_check_destroyed(obj);
     rb_check_frozen(obj);
@@ -224,6 +224,22 @@ VALUE
 rm_no_freeze(VALUE obj)
 {
     rb_raise(rb_eTypeError, "can't freeze %s", rb_class2name(CLASS_OF(obj)));
+}
+
+
+/*
+    Extern:     rm_str2cstr(str, &len);
+    Purpose:    Supply our own version of the "obsolete" rm_str2cstr.
+*/
+char *
+rm_str2cstr(VALUE str, long *len)
+{
+    StringValue(str);
+    if (len)
+    {
+        *len = RSTRING_LEN(str);
+    }
+    return RSTRING_PTR(str);
 }
 
 

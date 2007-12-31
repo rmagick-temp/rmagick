@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.67 2007/10/28 23:43:24 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.68 2007/12/31 21:40:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -187,8 +187,8 @@ Info_aref(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 2:
-            format_p = rb_str2cstr(argv[0], &format_l);
-            key_p = rb_str2cstr(argv[1], &key_l);
+            format_p = rm_str2cstr(argv[0], &format_l);
+            key_p = rm_str2cstr(argv[1], &key_l);
             if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent-1)
             {
                 rb_raise(rb_eArgError, "can't reference %.60s:%.1024s - too long", format_p, key_p);
@@ -246,8 +246,8 @@ Info_aset(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            format_p = rb_str2cstr(argv[0], &format_l);
-            key_p = rb_str2cstr(argv[1], &key_l);
+            format_p = rm_str2cstr(argv[0], &format_l);
+            key_p = rm_str2cstr(argv[1], &key_l);
 
             if (format_l > MAX_FORMAT_LEN || format_l+key_l > MaxTextExtent-1)
             {
@@ -331,13 +331,13 @@ Info_authenticate_eq(VALUE self, VALUE passwd)
 {
     Info *info;
     char *passwd_p = NULL;
-    long passwd_len = 0;
+    long passwd_l = 0;
 
     Data_Get_Struct(self, Info, info);
 
     if (!NIL_P(passwd))
     {
-        passwd_p = rb_str2cstr(passwd, &passwd_len);
+        passwd_p = rm_str2cstr(passwd, &passwd_l);
     }
 
     if (info->authenticate)
@@ -345,7 +345,7 @@ Info_authenticate_eq(VALUE self, VALUE passwd)
         magick_free(info->authenticate);
         info->authenticate = NULL;
     }
-    if (passwd_len > 0)
+    if (passwd_l > 0)
     {
         magick_clone_string(&info->authenticate, passwd_p);
     }
@@ -524,8 +524,8 @@ Info_define(int argc, VALUE *argv, VALUE self)
             fmt_arg = rb_funcall(argv[2], rm_ID_to_s, 0);
             value = StringValuePtr(fmt_arg);
         case 2:
-            key = rb_str2cstr(argv[1], &key_l);
-            format = rb_str2cstr(argv[0], &format_l);
+            key = rm_str2cstr(argv[1], &key_l);
+            format = rm_str2cstr(argv[0], &format_l);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
@@ -1355,7 +1355,7 @@ Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
 
     if (!NIL_P(sampling_factor))
     {
-        sampling_factor_p = rb_str2cstr(sampling_factor, &sampling_factor_len);
+        sampling_factor_p = rm_str2cstr(sampling_factor, &sampling_factor_len);
     }
 
     if (info->sampling_factor)
@@ -1580,8 +1580,8 @@ Info_undefine(VALUE self, VALUE format, VALUE key)
     long format_l, key_l;
     char fkey[MaxTextExtent];
 
-    format_p = rb_str2cstr(format, &format_l);
-    key_p = rb_str2cstr(key, &key_l);
+    format_p = rm_str2cstr(format, &format_l);
+    key_p = rm_str2cstr(key, &key_l);
 
     if (format_l > MAX_FORMAT_LEN || format_l + key_l > MaxTextExtent)
     {

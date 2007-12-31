@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.213 2007/12/31 21:40:02 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.214 2007/12/31 23:37:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -39,6 +39,7 @@
 #undef PACKAGE_STRING
 #undef PACKAGE_BUGREPORT
 #undef PACKAGE_TARNAME
+#undef WORDS_BIGENDIAN
 
 #include "magick/MagickCore.h"
 

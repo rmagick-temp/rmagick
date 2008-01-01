@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.139 2007/12/31 21:40:03 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.140 2008/01/01 21:33:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -176,10 +176,10 @@ rm_strncasecmp(const char *s1, const char *s2, size_t n)
 void
 rm_check_ary_len(VALUE ary, long len)
 {
-    if (RARRAY(ary)->len < len)
+    if (RARRAY_LEN(ary) < len)
     {
         rb_raise(rb_eIndexError, "not enough elements in array - expecting %ld, got %ld",
-                        len, (long)RARRAY(ary)->len);
+                        len, (long)RARRAY_LEN(ary));
     }
 }
 
@@ -676,7 +676,7 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
     memset(&rgb, 0, sizeof(rgb));
 
     hsl = rb_Array(hsl);    // Ensure array
-    if (RARRAY(hsl)->len < 3)
+    if (RARRAY_LEN(hsl) < 3)
     {
         rb_raise(rb_eArgError, "array argument must have at least 3 elements");
     }
@@ -2765,7 +2765,7 @@ static VALUE Enum_type_values(VALUE class)
 
     if (rb_block_given_p())
     {
-        for (x = 0; x < RARRAY(enumerators)->len; x++)
+        for (x = 0; x < RARRAY_LEN(enumerators); x++)
         {
             (void) rb_yield(rb_ary_entry(enumerators, x));
         }
@@ -2773,8 +2773,8 @@ static VALUE Enum_type_values(VALUE class)
     }
     else
     {
-        copy = rb_ary_new2(RARRAY(enumerators)->len);
-        for (x = 0; x < RARRAY(enumerators)->len; x++)
+        copy = rb_ary_new2(RARRAY_LEN(enumerators));
+        for (x = 0; x < RARRAY_LEN(enumerators); x++)
         {
             (void) rb_ary_push(copy, rb_ary_entry(enumerators, x));
         }

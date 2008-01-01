@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.66 2007/12/31 21:40:02 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.67 2008/01/01 21:33:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -699,7 +699,7 @@ static long
 imagelist_length(VALUE imagelist)
 {
     volatile VALUE images = rb_iv_get(imagelist, "@images");
-    return RARRAY(images)->len;
+    return RARRAY_LEN(images);
 }
 
 /*

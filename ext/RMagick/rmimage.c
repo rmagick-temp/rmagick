@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.271 2007/12/31 21:40:02 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.272 2008/01/01 21:33:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2007 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2695,10 +2695,10 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     map = rm_str2cstr(map_arg, &map_l);
 
     npixels = (long)(width * height * map_l);
-    if (RARRAY(pixels_arg)->len != npixels)
+    if (RARRAY_LEN(pixels_arg) != npixels)
     {
         rb_raise(rb_eArgError, "wrong number of array elements (%ld for %ld)"
-                 , RARRAY(pixels_arg)->len, npixels);
+                 , RARRAY_LEN(pixels_arg), npixels);
     }
 
     // Inspect the first element in the pixels array to determine the expected
@@ -3561,7 +3561,7 @@ Image_distort(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    npoints = RARRAY(pts)->len;
+    npoints = RARRAY_LEN(pts);
     // Allocate points array from Ruby's memory. If an error occurs Ruby will
     // be able to clean it up.
     points = ALLOC_N(double, npoints);
@@ -5068,14 +5068,14 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
         // and raises TypeError if it can't. It usually is possible.
         pixel_ary = rb_Array(pixel_arg);
 
-        if (RARRAY(pixel_ary)->len % map_l != 0)
+        if (RARRAY_LEN(pixel_ary) % map_l != 0)
         {
             rb_raise(rb_eArgError, "pixel array must contain an exact multiple of the map length");
         }
-        if ((unsigned long)RARRAY(pixel_ary)->len < npixels)
+        if ((unsigned long)RARRAY_LEN(pixel_ary) < npixels)
         {
             rb_raise(rb_eArgError, "pixel array too small (need %lu elements, got %ld)"
-                     , npixels, RARRAY(pixel_ary)->len);
+                     , npixels, RARRAY_LEN(pixel_ary));
         }
 
         if (stg_type == DoublePixel || stg_type == FloatPixel)
@@ -7219,7 +7219,7 @@ Image_recolor(VALUE self, VALUE color_matrix)
     GetExceptionInfo(&exception);
 
     // Allocate color matrix from Ruby's memory
-    len = RARRAY(color_matrix)->len;
+    len = RARRAY_LEN(color_matrix);
     matrix = ALLOC_N(double, len);
 
     for (x = 0; x < len; x++)

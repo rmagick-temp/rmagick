@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.214 2007/12/31 23:37:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.215 2008/01/01 21:33:21 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -116,6 +116,14 @@
 #endif
 #if !defined(RSTRING_PTR)
 #define RSTRING_PTR(s) (RSTRING(s)->ptr)
+#endif
+
+// Backport these two macros to 1.8
+#if !defined(RARRAY_LEN)
+#define RARRAY_LEN(a) RARRAY(a)->len
+#endif
+#if !defined(RARRAY_PTR)
+#define RARRAY_PTR(a) RARRAY(a)->ptr
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6

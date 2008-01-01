@@ -1,6 +1,6 @@
 # uninstall RMagick - called from Makefile uninstall target
 
-require 'ftools'
+require 'fileutils'
 
 class Dir
   def Dir.safe_unlink(dir)
@@ -23,7 +23,7 @@ def rmdir(dir, no_check=false)
     targets = Dir[dir+'/*']
     targets += Dir[dir+'/.*'].delete_if { |f| FileTest.directory?(f) }
     if not targets.empty?
-        File.safe_unlink(*targets)
+        FileUtils.safe_unlink(targets)
     end
     Dir.safe_unlink(dir)
   end
@@ -56,13 +56,13 @@ version = ::Config::CONFIG['ruby_version']
 arch    = ::Config::CONFIG['arch']
 
 prefix    ||= ::Config::CONFIG['prefix']
-site_ruby ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version)
-so_dir    ||= File.join(prefix, 'lib', 'ruby', 'site_ruby', version, arch)
+site_ruby ||= ::Config::CONFIG['sitelibdir']
+so_dir    ||= ::Config::CONFIG['sitearchdir']
 doc_dir   ||= File.join(prefix, 'share', 'RMagick')
 dlext       = ::Config::CONFIG['DLEXT']
 
-File.safe_unlink File.join(site_ruby, 'RMagick.rb'), true
-File.safe_unlink File.join(so_dir, 'RMagick.' + dlext), true
+FileUtils.safe_unlink File.join(site_ruby, 'RMagick.rb'), true
+FileUtils.safe_unlink File.join(so_dir, 'RMagick.' + dlext), true
 
 rmdir File.join(site_ruby, 'rvg'), true
 rmdir File.join(doc_dir, 'ex', 'images')

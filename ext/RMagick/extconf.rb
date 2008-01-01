@@ -227,11 +227,7 @@ have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6
                                         "WhiteVirtualPixelMethod"], headers) # 6.3.5
 
 
-# Now test Ruby 1.9.0 features. intern.h depends on stdarg.h.
-if have_header("stdarg.h")
-    $CPPFLAGS << " -DHAVE_STDARG_PROTOTYPES=1"
-end
-
+# Now test Ruby 1.9.0 features.
 headers = ["ruby.h", "rubyio.h"]
 have_func("rb_frame_this_func", headers)
 have_new_rb_cvar_set(headers)

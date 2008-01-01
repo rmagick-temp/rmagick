@@ -108,7 +108,7 @@ td {
     the tables on this page to determine which RMagick methods
     correspond to the options used by these tools.</p>
 
-    <p>The options listed below are for ImageMagick 6.3.5. Earlier
+    <p>The options listed below are for ImageMagick 6.3.7. Earlier
     releases of ImageMagick may not support all these options.
     Later releases of ImageMagick may have options that are not
     listed.</p>
@@ -260,6 +260,12 @@ td {
       </tr>
 
       <tr>
+        <td>-bench</td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
         <td>-bias <em>value[%]</em></td>
 
         <td>Image#<a href=
@@ -327,6 +333,12 @@ td {
         <td>-cache <em>threshold</em></td>
 
         <td>See <a href="#limit">-limit</a>, below</td>
+      </tr>
+
+      <tr>
+        <td>-caption <em>string</em></td>
+
+        <td>No equivalent</td>
       </tr>
 
       <tr>
@@ -1652,6 +1664,16 @@ td {
       </tr>
 
       <tr>
+        <td>-storage-type <em>type</em></td>
+
+        <td>This option corresponds to the <em><a href=
+        "constants.html#StorageType">type</a></em> argument to
+        Image#<a href="image2.html#import_pixels">import_pixels</a>
+        and Image#<a href=
+        "image2.html#export_pixels_to_str">export_pixels_to_str</a></td>
+      </tr>
+
+      <tr>
         <td>-stretch <em>type</em></td>
 
         <td>Draw#<a href=
@@ -1662,16 +1684,6 @@ td {
         "draw.html#font_stretch_eq">font_stretch=</a><em><a href=
         "constants.html#StretchType">type</a></em> (for
         annotation)</td>
-      </tr>
-
-      <tr>
-        <td>-storage-type <em>type</em></td>
-
-        <td>This option corresponds to the <em><a href=
-        "constants.html#StorageType">type</a></em> argument to
-        Image#<a href="image2.html#import_pixels">import_pixels</a>
-        and Image#<a href=
-        "image2.html#export_pixels_to_str">export_pixels_to_str</a></td>
       </tr>
 
       <tr>

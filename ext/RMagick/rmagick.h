@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.215 2008/01/01 21:33:21 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.216 2008/01/01 21:41:06 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -25,11 +25,6 @@
 #include <sys/types.h>
 #endif
 #include "ruby.h"
-#if defined(HAVE_RUBY_INTERN_H)
-#include "ruby/intern.h"
-#else
-#include "intern.h"
-#endif
 #include "rubyio.h"
 
 

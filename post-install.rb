@@ -1,6 +1,6 @@
 # install RMagick documentation
 
-require 'ftools'
+require 'fileutils'
 require 'find'
 
 if defined?(Installer) && self.class == Installer
@@ -33,13 +33,12 @@ if BUILD_HTMLDOC
         next if FileTest.directory? file
         target = file.sub(/^doc\//,docdir())
         unless FileTest.exists? File.dirname(target)
-            File.makedirs(File.dirname(target), true)
+            FileUtils.mkdir_p(File.dirname(target), :verbose => true)
             # Mark this directory as one we created so
             # that uninstall.rb knows it's okay to delete
-            f = File.new("#{File.dirname(target)}/.rmagick", "w")
-            f.close
+            FileUtils.touch("#{File.dirname(target)}/.rmagick")
         end
-        File.install(file, target, 0644)
+        FileUtils.install(file, target, :mode => 0644)
     end
 
 else

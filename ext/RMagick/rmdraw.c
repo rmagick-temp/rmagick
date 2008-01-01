@@ -1,6 +1,6 @@
-/* $Id: rmdraw.c,v 1.60 2007/12/31 21:40:02 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.61 2008/01/01 23:18:31 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2007 by Timothy P. Hunter
+|                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
 | Author:   Tim Hunter
 | Purpose:  Contains Draw class methods.

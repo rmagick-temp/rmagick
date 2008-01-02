@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.274 2008/01/02 18:07:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.275 2008/01/02 18:43:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6371,17 +6371,17 @@ VALUE
 Image_opaque(VALUE self, VALUE target, VALUE fill)
 {
     Image *image, *new_image;
-    PixelPacket target_pp;
-    PixelPacket fill_pp;
+    MagickPixelPacket target_pp;
+    MagickPixelPacket fill_pp;
 
     image = rm_check_destroyed(self);
     new_image = rm_clone_image(image);
 
     // Allow color name or Pixel
-    Color_to_PixelPacket(&target_pp, target);
-    Color_to_PixelPacket(&fill_pp, fill);
+    Color_to_MagickPixelPacket(image, &target_pp, target);
+    Color_to_MagickPixelPacket(image, &fill_pp, fill);
 
-    (void) OpaqueImage(new_image, target_pp, fill_pp);
+    (void) PaintOpaqueImage(new_image, &target_pp, &fill_pp);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -9093,7 +9093,7 @@ VALUE
 Image_transparent(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    PixelPacket color;
+    MagickPixelPacket color;
     Quantum opacity = TransparentOpacity;
 
     image = rm_check_destroyed(self);
@@ -9103,7 +9103,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
         case 2:
             opacity = APP2QUANTUM(argv[1]);
         case 1:
-            Color_to_PixelPacket(&color, argv[0]);
+            Color_to_MagickPixelPacket(image, &color, argv[0]);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
@@ -9112,7 +9112,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    (void) TransparentImage(new_image, color, opacity);
+    (void) PaintTransparentImage(new_image, &color, opacity);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);

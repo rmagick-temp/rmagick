@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.141 2008/01/01 23:18:32 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.142 2008/01/02 18:46:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2029,6 +2029,45 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
         Color_Name_to_PixelPacket(pp, color);
     }
 }
+
+
+/*
+    Extern:     Color_to_MagickPixelPacket
+    Purpose:    Convert either a String color name or
+                a Magick::Pixel to a MagickPixelPacket
+    Notes:      The channel values in a MagickPixelPacket are doubles.
+*/
+void
+Color_to_MagickPixelPacket(Image *image, MagickPixelPacket *mpp, VALUE color)
+{
+    Pixel *pixel;
+    PixelPacket pp;
+
+    memset(&pp, '\0', sizeof(pp));
+    // image can be NULL
+    GetMagickPixelPacket(image, mpp);
+
+    // Allow color name or Pixel
+    if (CLASS_OF(color) == Class_Pixel)
+    {
+        Data_Get_Struct(color, Pixel, pixel);
+        mpp->red = pixel->red;
+        mpp->green = pixel->green;
+        mpp->blue = pixel->blue;
+        mpp->opacity = pixel->opacity;
+    }
+    else
+    {
+        // require 'to_str' here instead of just 'to_s'.
+        color = rb_rescue(rb_str_to_str, color, color_arg_rescue, color);
+        Color_Name_to_PixelPacket(&pp, color);
+        mpp->red = pp.red;
+        mpp->green = pp.green;
+        mpp->blue = pp.blue;
+        mpp->opacity = pp.opacity;
+    }
+}
+
 
 /*
     Extern:     PrimaryInfo_from_PrimaryInfo(pp)

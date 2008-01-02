@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.217 2008/01/02 15:52:19 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.218 2008/01/02 18:46:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -973,6 +973,7 @@ extern VALUE  TextureFill_fill(VALUE, VALUE);
 extern VALUE  ChromaticityInfo_to_s(VALUE);
 extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
 extern void   Color_to_PixelPacket(PixelPacket *, VALUE);
+extern void   Color_to_MagickPixelPacket(Image *, MagickPixelPacket *, VALUE);
 extern VALUE  Color_to_s(VALUE);
 extern VALUE  Color_from_ColorInfo(const ColorInfo *);
 extern VALUE  ClassType_new(ClassType);

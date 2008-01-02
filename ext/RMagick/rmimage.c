@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.273 2008/01/01 23:18:31 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.274 2008/01/02 18:07:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8189,18 +8189,18 @@ VALUE
 Image_signature(VALUE self)
 {
     Image *image;
-    const ImageAttribute *signature;
+    const char *signature;
 
     image = rm_check_destroyed(self);
 
     (void) SignatureImage(image);
-    signature = GetImageAttribute(image, "signature");
+    signature = rm_get_property(image, "signature");
     rm_check_image_exception(image, RetainOnError);
     if (!signature)
     {
         return Qnil;
     }
-    return rb_str_new(signature->value, 64);
+    return rb_str_new(signature, 64);
 }
 
 
@@ -8263,7 +8263,7 @@ VALUE
 Image_spaceship(VALUE self, VALUE other)
 {
     Image *imageA, *imageB;
-    const ImageAttribute *sigA, *sigB;
+    const char *sigA, *sigB;
     int res;
 
     imageA = rm_check_destroyed(self);
@@ -8278,14 +8278,14 @@ Image_spaceship(VALUE self, VALUE other)
 
     (void) SignatureImage(imageA);
     (void) SignatureImage(imageB);
-    sigA = GetImageAttribute(imageA, "signature");
-    sigB = GetImageAttribute(imageB, "signature");
+    sigA = rm_get_property(imageA, "signature");
+    sigB = rm_get_property(imageB, "signature");
     if (!sigA || !sigB)
     {
         rb_raise(Class_ImageMagickError, "can't get image signature");
     }
 
-    res = memcmp(sigA->value, sigB->value, 64);
+    res = memcmp(sigA, sigB, 64);
     res = res > 0 ? 1 : (res < 0 ? -1 :  0);    // reduce to 1, -1, 0
 
     return INT2FIX(res);

@@ -61,8 +61,8 @@ so_dir    ||= ::Config::CONFIG['sitearchdir']
 doc_dir   ||= File.join(prefix, 'share', 'RMagick')
 dlext       = ::Config::CONFIG['DLEXT']
 
-FileUtils.safe_unlink File.join(site_ruby, 'RMagick.rb'), true
-FileUtils.safe_unlink File.join(so_dir, 'RMagick.' + dlext), true
+FileUtils.safe_unlink File.join(site_ruby, 'RMagick.rb'), :verbose => true
+FileUtils.safe_unlink File.join(so_dir, 'RMagick.' + dlext), :verbose =>  true
 
 rmdir File.join(site_ruby, 'rvg'), true
 rmdir File.join(doc_dir, 'ex', 'images')

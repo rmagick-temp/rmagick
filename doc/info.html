@@ -85,6 +85,8 @@
 
         <li><a href="#border_color">border_color</a></li>
 
+        <li><a href="#caption">caption</a></li>
+
         <li><a href="#colorspace">colorspace</a></li>
 
         <li><a href="#comment">comment</a></li>
@@ -100,13 +102,13 @@
         <li><a href="#dispose">dispose</a></li>
 
         <li><a href="#dither">dither</a></li>
-
-        <li><a href="#extract">extract</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#extract">extract</a></li>
+
         <li><a href="#filename">filename</a></li>
 
         <li><a href="#fill">fill</a></li>
@@ -132,13 +134,13 @@
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#orientation">orientation</a></li>
-
-        <li><a href="#origin">origin</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#origin">origin</a></li>
+
         <li><a href="#page">page</a></li>
 
         <li><a href="#pointsize">pointsize</a></li>
@@ -478,7 +480,7 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">Pixel</a>.</p>
   </div>
 
   <div class="sig">
@@ -496,7 +498,34 @@ self.undefine("tiff", "bits-per-sample")
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">Pixel</a>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="caption">caption</h3>
+
+    <p><span class="arg">self.</span>caption= <span class=
+    "arg">aString</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>When used with <a href="image1.html#read">Image.read</a>,
+    assigns a caption to an image. The caption is an image
+    property:</p>
+    <pre>
+img = Magick::Image.read("xc:white") do 
+  self.caption = "a new caption"
+  self.size = "20x20"
+end
+p img.first.properties &raquo; {"caption"=&gt;"a new caption"}
+p img.first['caption'] &raquo; "a new caption"
+</pre>
+
+    <h4>Arguments</h4>
+
+    <p>A string.</p>
   </div>
 
   <div class="sig">
@@ -547,11 +576,11 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specifies the type of compression used when writing the image.
-    Only some image formats support compression. For those that do,
-    only some compression types are supported. If you specify an
-    compression type that is not supported, the default compression
-    type (usually NoCompression) is used instead.</p>
+    <p>Specifies the type of compression used when writing the
+    image. Only some image formats support compression. For those
+    that do, only some compression types are supported. If you
+    specify an compression type that is not supported, the default
+    compression type (usually NoCompression) is used instead.</p>
 
     <p>Some compression types support varying levels of
     compression. See the <a href=
@@ -825,9 +854,10 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Specifies a portion of an image to be extracted when the image
-    is constituted. This attribute can be used to identify a subset
-    of an image that is otherwise too large to keep in memory.</p>
+    <p>Specifies a portion of an image to be extracted when the
+    image is constituted. This attribute can be used to identify a
+    subset of an image that is otherwise too large to keep in
+    memory.</p>
 
     <h4>Arguments</h4>
 
@@ -1302,8 +1332,8 @@ self.undefine("tiff", "bits-per-sample")
   <div class="desc">
     <h4>Description</h4>
 
-    <p class="imquote">Specifies the offset for tile images, relative
-    to the background image it will be tiled on.</p>
+    <p class="imquote">Specifies the offset for tile images,
+    relative to the background image it will be tiled on.</p>
 
     <p>This attribute is useful with the "tile:" and "pattern:"
     image formats.</p>

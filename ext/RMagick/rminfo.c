@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.69 2008/01/01 23:18:32 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.70 2008/01/02 15:52:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -412,6 +412,25 @@ Info_border_color_eq(VALUE self, VALUE bc_arg)
     return self;
 }
 
+
+
+/*
+    Method:     Info#caption=<aString>
+    Purpose:    emulate the -caption option
+*/
+VALUE
+Info_caption(VALUE self)
+{
+    return get_option(self, "caption");
+}
+
+
+
+VALUE
+Info_caption_eq(VALUE self, VALUE caption)
+{
+    return set_option(self, "caption", caption);
+}
 
 
 /*

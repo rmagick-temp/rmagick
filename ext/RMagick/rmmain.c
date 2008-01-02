@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.230 2008/01/01 23:18:32 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.231 2008/01/02 15:52:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -854,6 +854,7 @@ Init_RMagick2(void)
     DCL_ATTR_ACCESSOR(Info, authenticate)
     DCL_ATTR_ACCESSOR(Info, background_color)
     DCL_ATTR_ACCESSOR(Info, border_color)
+    DCL_ATTR_ACCESSOR(Info, caption)
     DCL_ATTR_ACCESSOR(Info, colorspace)
     DCL_ATTR_ACCESSOR(Info, comment)
     DCL_ATTR_ACCESSOR(Info, compression)
@@ -1694,7 +1695,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/01/01 23:18:32 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/01/02 15:52:19 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

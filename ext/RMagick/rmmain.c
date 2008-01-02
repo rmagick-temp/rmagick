@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.232 2008/01/02 18:54:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.233 2008/01/02 23:06:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1631,13 +1631,6 @@ static void test_Magick_version(void)
 {
     unsigned long version_number;
     const char *version_str;
-    const char *web_site =
-#if defined(MagickHomeURL)
-    MagickHomeURL
-#else
-    MagickWebSite
-#endif
-    ;
     int x, n;
     ID bypass = rb_intern("RMAGICK_BYPASS_VERSION_TEST");
 
@@ -1660,12 +1653,8 @@ static void test_Magick_version(void)
         }
 
         rb_raise(rb_eRuntimeError,
-                 "This version of RMagick was created to run with %s %s\n"
-                 "but %.*s is installed on this system. You should either\n"
-                 "   1) Configure and build RMagick for %.*s, or\n"
-                 "   2) download %s %s from %s and install it.\n" ,
-                 MagickPackageName, MagickLibVersionText, x, version_str, x, version_str,
-                 MagickPackageName, MagickLibVersionText, web_site);
+                 "This version of RMagick was created to run with %s %s but %.*s is in use.\n" ,
+                 MagickPackageName, MagickLibVersionText, x, version_str);
     }
 
 }
@@ -1695,7 +1684,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/01/02 18:54:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/01/02 23:06:29 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

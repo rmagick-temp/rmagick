@@ -1,3 +1,8 @@
+RMagick 2.0.1
+    o Added Image::Info#caption= attribute
+    o Fix bug #16776, last 2 arguments to border.rectangle are swapped (bug
+      report by Alain Feler)
+
 RMagick 2.0.0
     o Replaced configure/make/make install with standard Ruby setup.rb,
       extconf.rb

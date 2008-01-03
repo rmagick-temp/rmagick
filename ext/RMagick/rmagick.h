@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.218 2008/01/02 18:46:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.219 2008/01/03 15:32:24 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -42,7 +42,7 @@
 #undef PACKAGE_STRING
 
 
-#include "extconf.h"
+#include RUBY_EXTCONF_H
 
 
 // For quoting preprocessor symbols

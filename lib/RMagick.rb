@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.62 2007/12/21 23:24:20 rmagick Exp $
+# $Id: RMagick.rb,v 1.63 2008/01/03 23:57:36 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -750,21 +750,6 @@ class Image
         self
     end
 
-    # Force an image to exact dimensions without changing the aspect ratio.
-    # Resize and crop if necessary. (Thanks to Jerett Taylor!)
-    def crop_resized(ncols, nrows, gravity=CenterGravity)
-        copy.crop_resized!(ncols, nrows, gravity)
-    end
-
-    def crop_resized!(ncols, nrows, gravity=CenterGravity)
-        if ncols != columns || nrows != rows
-            scale = [ncols/columns.to_f, nrows/rows.to_f].max
-            resize!(scale*columns+0.5, scale*rows+0.5)
-        end
-        crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
-        self
-    end
-
     # Used by ImageList methods - see ImageList#cur_image
     def cur_image
         self
@@ -926,6 +911,25 @@ class Image
         self.y_resolution = y_res
         resize(width, height)
     end
+
+    # Force an image to exact dimensions without changing the aspect ratio.
+    # Resize and crop if necessary. (Thanks to Jerett Taylor!)
+    def resize_to_fill(ncols, nrows, gravity=CenterGravity)
+        copy.crop_resized!(ncols, nrows, gravity)
+    end
+
+    def resize_to_fill!(ncols, nrows, gravity=CenterGravity)
+        if ncols != columns || nrows != rows
+            scale = [ncols/columns.to_f, nrows/rows.to_f].max
+            resize!(scale*columns+0.5, scale*rows+0.5)
+        end
+        crop!(gravity, ncols, nrows, true) if ncols != columns || nrows != rows
+        self
+    end
+
+    # Preserve aliases used < RMagick 2.0.1
+    alias_method :crop_resized, :resize_to_fill
+    alias_method :crop_resized!, :resize_to_fill!
 
     # Convenience method to resize retaining the aspect ratio.
     # (Thanks to Robert Manni!)

@@ -437,10 +437,10 @@ img = Magick::Image.capture {
 
     <p>An image constructed from the pixel data.</p>
 
-    <h4>Example</h4><a href=
-    "javascript:popup('Zconstitute.rb.html')"><img src=
-    "ex/constitute.jpg" title="Click to see the example script"
-    alt="constitute example" /></a>
+    <h4>Example</h4>
+    <pre>
+image = Magick::Image.constitute(width, height, "RGB", pixels)
+</pre>
 
     <h4>See also</h4>
 
@@ -3692,25 +3692,7 @@ cropped = img.crop(x, y, width, height, true)
 
     <h4>Example</h4>
     <pre>
-#! /usr/local/bin/ruby -w
-require 'RMagick'
-
-f = Magick::Image.read("images/Flower_Hat.jpg").first
-
-pixels = f.dispatch(0,0,f.columns,f.rows,"RGB")
-
-# Write the pixels to a file, to be included
-# in the constitute.rb example.
-File.open('pixels-array', 'w') { |txt|
- txt.puts("Width = #{f.columns}")
- txt.puts("Height = #{f.rows}")
- txt.print('Pixels = [')
- pixels = pixels.join(',')
- pixels.gsub!(/(\d+,){1,25}/) { "#{$&amp;}\n" }
- txt.print(pixels)
- txt.puts(']')
-}
-exit
+pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
 </pre>
 
     <h4>See also</h4>

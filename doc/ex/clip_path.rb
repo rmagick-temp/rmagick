@@ -41,13 +41,14 @@ pr.pop
 canvas = Magick::Image.new(cols, rows)
 
 star = Magick::Draw.new
-star.stroke('black')
-star.fill('black')
+star.stroke('gray50')
+star.fill('gray50')
+points.map! {|p| p + 8}
 star.polygon(*points)
 star.draw(canvas)
-canvas = canvas.blur_image(0, 20)
+canvas = canvas.blur_image(0, 3)
 
-# Draw the star over the background
+# Draw the star shadow over the background
 pr.draw(canvas)
 
 # Crop away all the solid white border pixels.

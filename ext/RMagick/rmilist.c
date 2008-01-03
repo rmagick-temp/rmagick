@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.68 2008/01/01 23:18:31 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.69 2008/01/03 15:32:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -340,7 +340,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
 {
     Image *images, *new_images = NULL;
     Image *map;
-    unsigned int dither = False;
+    unsigned int dither = MagickFalse;
     volatile VALUE scene, new_imagelist, t;
     ExceptionInfo exception;
 

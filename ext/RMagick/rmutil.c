@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.143 2008/01/02 18:54:39 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.144 2008/01/03 15:32:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -586,7 +586,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     char name[MaxTextExtent];
     ExceptionInfo exception;
     ComplianceType compliance = AllCompliance;
-    unsigned int matte = False;
+    unsigned int matte = MagickFalse;
     unsigned int depth = QuantumDepth;
 
     switch (argc)

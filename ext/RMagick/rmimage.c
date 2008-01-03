@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.275 2008/01/02 18:43:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.276 2008/01/03 15:32:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1894,7 +1894,7 @@ static VALUE set_profile(VALUE self, const char *name, VALUE profile)
             {
                 (void)ProfileImage(image, profile_name, profile_data->datum
                                    , (unsigned long)profile_data->length
-                                   , (MagickBooleanType)False);
+                                   , (MagickBooleanType)MagickFalse);
                 if (image->exception.severity >= ErrorException)
                 {
                     break;
@@ -5589,7 +5589,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     Image *map;
     volatile VALUE map_obj, map_arg;
-    unsigned int dither = False;
+    unsigned int dither = MagickFalse;
 
     image = rm_check_destroyed(self);
     switch (argc)
@@ -5697,14 +5697,14 @@ Image_mask_eq(VALUE self, VALUE mask)
                 q->blue = q->opacity;
                 q += 1;
             }
-            if (SyncImagePixels(clip_mask) == (MagickBooleanType)False)
+            if (SyncImagePixels(clip_mask) == (MagickBooleanType)MagickFalse)
             {
                 (void) DestroyImage(clip_mask);
                 rm_magick_error("SyncImagePixels failed", NULL);
             }
         }
 
-        if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)False)
+        if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)MagickFalse)
         {
             (void) DestroyImage(clip_mask);
             rm_magick_error("SetImageStorageClass failed", NULL);
@@ -6100,7 +6100,7 @@ VALUE
 Image_negate(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    unsigned int grayscale = False;
+    unsigned int grayscale = MagickFalse;
 
     image = rm_check_destroyed(self);
     if (argc == 1)
@@ -6131,7 +6131,7 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     ChannelType channels;
-    unsigned int grayscale = False;
+    unsigned int grayscale = MagickFalse;
 
     image = rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
@@ -7092,7 +7092,7 @@ Image_raise(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     RectangleInfo rect;
-    int raised = True;      // default
+    int raised = MagickTrue;      // default
 
     memset(&rect, 0, sizeof(rect));
     rect.width = 6;         // default
@@ -7784,7 +7784,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     int colorspace              = RGBColorspace;    // These are the Magick++ defaults
-    unsigned int verbose        = False;
+    unsigned int verbose        = MagickFalse;
     double cluster_threshold    = 1.0;
     double smoothing_threshold  = 1.5;
 
@@ -7944,7 +7944,7 @@ Image_shade(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double azimuth = 30.0, elevation = 30.0;
-    unsigned int shading=False;
+    unsigned int shading=MagickFalse;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);

@@ -109,6 +109,11 @@
 
           <li><a href="#resize_bang">resize!</a></li>
 
+          <li><a href="#resize_to_fill">resize_to_fill</a></li>
+
+          <li><a href=
+          "#resize_to_fill_bang">resize_to_fill!</a></li>
+
           <li><a href="#resize_to_fit">resize_to_fit</a></li>
 
           <li><a href="#resize_to_fit_bang">resize_to_fit!</a></li>
@@ -118,15 +123,15 @@
           <li><a href="#rotate">rotate</a></li>
 
           <li><a href="#rotate_bang">rotate!</a></li>
-
-          <li><a href="#sample">sample</a></li>
-
-          <li><a href="#sample_bang">sample!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#sample">sample</a></li>
+
+          <li><a href="#sample_bang">sample!</a></li>
+
           <li><a href="#scale">scale</a></li>
 
           <li><a href="#scale_bang">scale!</a></li>
@@ -174,15 +179,15 @@
           <li><a href="#store_pixels">store_pixels</a></li>
 
           <li><a href="#strip_bang">strip!</a></li>
-
-          <li><a href="#swirl">swirl</a></li>
-
-          <li><a href="#sync_profiles">sync_profiles</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#swirl">swirl</a></li>
+
+          <li><a href="#sync_profiles">sync_profiles</a></li>
+
           <li><a href=
           "#texture_fill_to_border">texture_fill_to_border</a></li>
 
@@ -1246,6 +1251,103 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="resize_to_fill">resize_to_fill</h3>
+
+    <p><span class="arg">image</span>.resize_to_fill(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class=
+    "arg">gravity</span>=<code>Magick::CenterGravity</code>) -&gt;
+    <span class="arg">anImage</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>A convenience method. Resize the image to fit within the
+    specified dimensions while retaining the aspect ratio of the
+    original image. If necessary, crop the image in the larger
+    dimension.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>width</dt>
+
+      <dd>The width of the resulting image in pixels</dd>
+
+      <dt>height</dt>
+
+      <dd>The height of the resulting image in pixels</dd>
+
+      <dt>gravity</dt>
+
+      <dd>Use this argument to specify which portion of the image
+      to retain when cropping. The value can be any <a href=
+      "constants.html#GravityType">GravityType</a> value. The
+      effect is the same as the <span class="arg">gravity</span>
+      argument to the <a href="#crop"><code>crop</code></a> method.
+      The default is <code>CenterGravity</code>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p>In this example, some rows have been cropped from the top
+    and bottom to produce a square thumbnail from a rectangular
+    image without distorting the image.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('resize_to_fill.rb.html')">
+    <!-- This img tag displays the original image when the mouse is over -->
+     <img id="cropless" style="display: none" onmouseout=
+    "this.style.display='none';cropped.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
+    "Click to see the example script" /> 
+    <!--  This img tag displays the framed image when the mouse is not over-->
+     <img style=
+    "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
+    id="cropped" onmouseover=
+    "this.style.display='none';cropless.style.display='';" src=
+    "ex/resize_to_fill.jpg" alt="frame example" /></a> <img src=
+    "ex/images/spin.gif" alt="" style="margin-bottom: 230px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#crop">crop</a>, <a href=
+    "#resize">resize</a>, <a href=
+    "#resize_to_fit">resize_to_fit</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="resize_to_fill_bang">resize_to_fill!</h3>
+
+    <p><span class="arg">image</span>.resize_to_fill!(<span class=
+    "arg">width</span>, <span class="arg">height</span>,
+    <span class=
+    "arg">gravity</span>=<code>Magick::CenterGravity</code>) -&gt;
+    <span class="arg">image</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>The in-place form of <a href=
+    "#resize_to_fill">resize_to_fill</a>.
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#crop_bang">crop!</a>, <a href=
+    "#resize_bang">resize!</a>, <a href=
+    "#resize_to_fit_bang">resize_to_fit!</a></p>
+  </div>
+
+  <div class="sig">
     <h3 id="resize_to_fit">resize_to_fit</h3>
 
     <p><em>image</em>.resize_to_fit(<em>new_width</em>,
@@ -1256,8 +1358,9 @@ random_threshold_channel(geom, RedChannel)
     <h4>Description</h4>
 
     <p>A convenience method. Resize the image to fit within the
-    specified dimensions while retaining the original aspect
-    ratio.</p>
+    specified dimensions while retaining the original aspect ratio.
+    The image may be shorter or narrower than specified in the
+    smaller dimension.</p>
 
     <h4>Arguments</h4>
 
@@ -1274,9 +1377,32 @@ random_threshold_channel(geom, RedChannel)
 
     <p>A new image</p>
 
-    <h4>See also</h4><a href=
-    "image1.html#change_geometry">change_geometry</a>, <a href=
-    "#resize">resize</a>
+    <h4>Example</h4>
+
+    <p>Compare the result of this example to the result of the
+    <a href="#resize_to_fill">resize_to_fill</a> example above.</p>
+
+    <p class="rollover"><a href=
+    "javascript:popup('resize_to_fit.rb.html')">
+    <!-- This img tag displays the original image when the mouse is over -->
+     <img id="cropless" style="display: none" onmouseout=
+    "this.style.display='none';cropped.style.display='';" src=
+    "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
+    "Click to see the example script" /> 
+    <!--  This img tag displays the framed image when the mouse is not over-->
+     <img style=
+    "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
+    id="cropped" onmouseover=
+    "this.style.display='none';cropless.style.display='';" src=
+    "ex/resize_to_fit.jpg" alt="frame example" /></a> <img src=
+    "ex/images/spin.gif" alt="" style="margin-bottom: 230px" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#change_geometry">change_geometry</a>,
+    <a href="#resize">resize</a>, <a href=
+    "#resize_to_fill">resize_to_fill</a></p>
   </div>
 
   <div class="sig">
@@ -1295,6 +1421,12 @@ random_threshold_channel(geom, RedChannel)
     <h4>Returns</h4>
 
     <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#change_geometry_bang">change_geometry!</a>,
+    <a href="#resize_bang">resize!</a>, <a href=
+    "#resize_to_fill_bang">resize_to_fill!</a></p>
   </div>
 
   <div class="sig">

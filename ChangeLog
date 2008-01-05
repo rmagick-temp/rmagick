@@ -1,7 +1,9 @@
-RMagick 2.0.1
+RMagick 2.1.0
     o Added Image::Info#caption= attribute
-    o Fix bug #16776, last 2 arguments to border.rectangle are swapped (bug
-      report by Alain Feler)
+    o Rename Image#crop_resized, #crop_resized! to #resize_to_fill,
+      #resize_to_fill!. Add aliases for the old names.
+    o Fix bug #16776, in the axes.rb example the last 2 arguments to
+      border.rectangle are swapped (bug report by Alain Feler)
 
 RMagick 2.0.0
     o Replaced configure/make/make install with standard Ruby setup.rb,

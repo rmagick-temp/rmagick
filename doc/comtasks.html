@@ -1,10 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: Common Tasks</title>
   <meta http-equiv="Content-Type" content=
@@ -153,6 +153,18 @@ thumb.write "thumb.gif"
   <code>resize</code> if the thumbnail is less than 10% of the size
   of the original image.</p>
 
+  <h3>flickr-style thumbnails</h3>
+
+  <p><a href="www.flickr.com">flickr</a> thumbnails are 75 pixels
+  wide and 75 pixels tall. If the original image isn't square, the
+  thumbnail is cropped in its larger dimension so that the image
+  isn't distorted. You can get make this kind of thumbnail with the
+  <a href="image3.html#resize_to_fill">resize_to_fill</a>
+  method.</p>
+  <pre class="example">
+thumb = img.resize_to_fill(75, 75)
+</pre>
+
   <h2 id="resizing">Resizing to a maximum (or minimum) size</h2>
 
   <p>Say you need to make all your thumbnails no bigger than 64x64
@@ -176,6 +188,13 @@ thumb.write "thumb.gif"
   in the previous section and make the resized image the return
   value from the block. The <code>change_geometry</code> method
   then returns that value to its caller.</p>
+
+  <h3>Simple thumbnails</h3>If you just want to make sure your
+  thumbnail is no bigger than a certain width and height, use the
+  <a href="image3.html#resize_to_fit">resize_to_fit</a> method.
+  <pre class="example">
+thumb = img.resize_to_fit(75, 75)
+</pre>
 
   <h2><a id="blob" name="blob">Writing to or reading from a string
   instead of a file</a></h2>
@@ -255,7 +274,7 @@ img.write("myimage.jpg") { self.quality = 50 }
   </div>
   <hr />
 
-  <p class="spacer"> </p>
+  <p class="spacer"></p>
 
   <div class="nav">
     &laquo; <a href="optequiv.html">Prev</a> | <a href=

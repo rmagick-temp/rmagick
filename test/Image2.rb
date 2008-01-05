@@ -155,52 +155,6 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
-    def test_crop_resized_0
-        changed = @img.crop_resized(@img.columns,@img.rows)
-        assert_equal(@img.columns, changed.columns)
-        assert_equal(@img.rows, changed.rows)
-        assert_not_same(changed, @img)
-    end
-
-    def test_crop_resized_1
-        @img = Magick::Image.new(200, 250)
-        @img.crop_resized!(100,100)
-        assert_equal(100, @img.columns)
-        assert_equal(100, @img.rows)
-    end
-
-    def test_crop_resized_2
-        @img = Magick::Image.new(200, 250)
-        changed = @img.crop_resized(300,100)
-        assert_equal(300, changed.columns)
-        assert_equal(100, changed.rows)
-    end
-
-    def test_crop_resized_3
-        @img = Magick::Image.new(200, 250)
-        changed = @img.crop_resized(100,300)
-        assert_equal(100, changed.columns)
-        assert_equal(300, changed.rows)
-    end
-
-    def test_crop_resized_4
-        @img = Magick::Image.new(200, 250)
-        changed = @img.crop_resized(300,350)
-        assert_equal(300, changed.columns)
-        assert_equal(350, changed.rows)
-    end
-
-    def test_crop_resized_5
-        changed = @img.crop_resized(20,400)
-        assert_equal(20, changed.columns)
-        assert_equal(400, changed.rows)
-    end
-    def test_crop_resized_6
-        changed = @img.crop_resized(3000,400)
-        assert_equal(3000, changed.columns)
-        assert_equal(400, changed.rows)
-    end
-
     def test_cycle_colormap
         assert_nothing_raised do
             res = @img.cycle_colormap(5)

@@ -213,14 +213,93 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(FreezeError) { @img.resize!(0.50) }
     end
 
+    def test_resize_to_fill_0
+        changed = @img.resize_to_fill(@img.columns,@img.rows)
+        assert_equal(@img.columns, changed.columns)
+        assert_equal(@img.rows, changed.rows)
+        assert_not_same(changed, @img)
+    end
+
+    def test_resize_to_fill_1
+        @img = Magick::Image.new(200, 250)
+        @img.resize_to_fill!(100,100)
+        assert_equal(100, @img.columns)
+        assert_equal(100, @img.rows)
+    end
+
+    def test_resize_to_fill_2
+        @img = Magick::Image.new(200, 250)
+        changed = @img.resize_to_fill(300,100)
+        assert_equal(300, changed.columns)
+        assert_equal(100, changed.rows)
+    end
+
+    def test_resize_to_fill_3
+        @img = Magick::Image.new(200, 250)
+        changed = @img.resize_to_fill(100,300)
+        assert_equal(100, changed.columns)
+        assert_equal(300, changed.rows)
+    end
+
+    def test_resize_to_fill_4
+        @img = Magick::Image.new(200, 250)
+        changed = @img.resize_to_fill(300,350)
+        assert_equal(300, changed.columns)
+        assert_equal(350, changed.rows)
+    end
+
+    def test_resize_to_fill_5
+        changed = @img.resize_to_fill(20,400)
+        assert_equal(20, changed.columns)
+        assert_equal(400, changed.rows)
+    end
+    def test_resize_to_fill_6
+        changed = @img.resize_to_fill(3000,400)
+        assert_equal(3000, changed.columns)
+        assert_equal(400, changed.rows)
+    end
+
+    # Make sure the old name is still around
+    def test_resize_to_fill_7
+      assert_block {@img.respond_to? :crop_resized}
+      assert_block {@img.respond_to? :crop_resized!}
+    end
+
+    # 2nd argument defaults to the same value as the 1st argument
+    def test_resize_to_fill_8
+        changed = @img.resize_to_fill(100)
+        assert_equal(100, changed.columns)
+        assert_equal(100, changed.rows)
+    end
+
     def test_resize_to_fit
         img = Magick::Image.new(200, 250)
         res = nil
         assert_nothing_raised { res = img.resize_to_fit(50, 50) }
         assert_not_nil(res)
         assert_instance_of(Magick::Image, res)
+        assert_not_same(img, res)
         assert_equal(40, res.columns)
         assert_equal(50, res.rows)
+    end
+
+    def test_resize_to_fit2
+      img = Magick::Image.new(200, 300)
+      changed = img.resize_to_fit(100)
+      assert_instance_of(Magick::Image, changed)
+      assert_not_same(img, changed)
+      assert_equal(67, changed.columns)
+      assert_equal(100, changed.rows)
+    end
+
+    def test_resize_to_fit3
+      img = Magick::Image.new(200, 300)
+      keep = img
+      img.resize_to_fit!(100)
+      assert_instance_of(Magick::Image, img)
+      assert_same(img, keep)
+      assert_equal(67, img.columns)
+      assert_equal(100, img.rows)
     end
 
     def test_roll

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.63 2008/01/03 23:57:36 rmagick Exp $
+# $Id: RMagick.rb,v 1.64 2008/01/05 22:21:52 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -914,11 +914,12 @@ class Image
 
     # Force an image to exact dimensions without changing the aspect ratio.
     # Resize and crop if necessary. (Thanks to Jerett Taylor!)
-    def resize_to_fill(ncols, nrows, gravity=CenterGravity)
+    def resize_to_fill(ncols, nrows=nil, gravity=CenterGravity)
         copy.crop_resized!(ncols, nrows, gravity)
     end
 
-    def resize_to_fill!(ncols, nrows, gravity=CenterGravity)
+    def resize_to_fill!(ncols, nrows=nil, gravity=CenterGravity)
+        nrows ||= ncols
         if ncols != columns || nrows != rows
             scale = [ncols/columns.to_f, nrows/rows.to_f].max
             resize!(scale*columns+0.5, scale*rows+0.5)
@@ -933,13 +934,15 @@ class Image
 
     # Convenience method to resize retaining the aspect ratio.
     # (Thanks to Robert Manni!)
-    def resize_to_fit(cols, rows)
+    def resize_to_fit(cols, rows=nil)
+        rows ||= cols
         change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
             resize(ncols, nrows)
         end
     end
 
-    def resize_to_fit!(cols, rows)
+    def resize_to_fit!(cols, rows=nil)
+        rows ||= cols
         change_geometry(Geometry.new(cols, rows)) do |ncols, nrows|
             resize!(ncols, nrows)
         end

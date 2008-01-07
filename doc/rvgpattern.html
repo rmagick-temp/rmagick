@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: RVG Reference: RVG::Pattern Class</title>
   <meta http-equiv="Content-Type" content=
@@ -35,9 +35,10 @@
     "rvgclip.html">Next</a>&nbsp;&raquo;
   </div>
 
-  <h1>class RVG::Pattern <span class="superclass">&lt; Object</span></h1>
+  <h1>class RVG::Pattern <span class="superclass">&lt;
+  Object</span></h1>
 
-    <div id="toc">
+  <div id="toc">
     <h2>Table of Contents</h2>
 
     <h3>class methods</h3>
@@ -47,11 +48,14 @@
     </ul>
 
     <h3>instance methods</h3>
-        <div>
+
+    <div>
       <div class="toccol">
         <ul>
           <li><a href="#g">g</a></li>
+
           <li><a href="#image">image</a></li>
+
           <li><a href=
           "#preserve_aspect_ratio">preserve_aspect_ratio</a></li>
         </ul>
@@ -59,7 +63,6 @@
 
       <div class="toccol">
         <ul>
-
           <li><a href="#rvg">rvg</a></li>
 
           <li><a href="#RVG_text">text</a></li>
@@ -77,61 +80,75 @@
 
     <h3>shared methods</h3>
 
-    <p>    <p>In addition to the methods listed above, this class
-     also implements the <a href=
-    "rvgstyle.html">styles</a> method, the <a href=
-    "rvgshape.html">shape methods</a> and the <a href=
-    "rvgxform.html">transform methods</a>.</p></p>
+    <p>In addition to the methods listed above, this class also
+    implements the <a href="rvgstyle.html">styles</a> method, the
+    <a href="rvgshape.html">shape methods</a> and the <a href=
+    "rvgxform.html">transform methods</a>.</p>
   </div>
 
   <h2 class="methods">class methods</h2>
+
   <div class="sig">
     <h3 id="new">new</h3>
 
-    <p>RVG::Pattern.new(<span class="arg">width</span>=0, <span class="arg">height</span>=0, <span class="arg">x</span>=0, <span class="arg">y</span>=0) [ <span class="arg">{ |pattern| drawing
-    method calls }</span> ] -&gt; aPattern</p>
+    <p>RVG::Pattern.new(<span class="arg">width</span>=0,
+    <span class="arg">height</span>=0, <span class=
+    "arg">x</span>=0, <span class="arg">y</span>=0) [ <span class=
+    "arg">{ |pattern| drawing method calls }</span> ] -&gt;
+    <em>pattern</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Creates a pattern that can be used with the <code>:fill</code> and <code>:stroke</code> styles.</p>
-    <p>Define the pattern in the associated block. The pattern can be composed of <a href="rvgshape.html">shapes</a>,
-    <a href="rvgtext.html#new">text</a>, <a href="rvgimage.html#new">raster images</a>, <a href="rvggroup.html#new">groups</a>, and <a href="rvg.html#RVG_new">RVG objects</a>.
-    You can use the <a href="rvguse.html#new">use</a> method to include graphic objects in the pattern.</p>
+    <p>Creates a pattern that can be used with the
+    <code>:fill</code> and <code>:stroke</code> styles.</p>
+
+    <p>Define the pattern in the associated block. The pattern can
+    be composed of <a href="rvgshape.html">shapes</a>, <a href=
+    "rvgtext.html#new">text</a>, <a href="rvgimage.html#new">raster
+    images</a>, <a href="rvggroup.html#new">groups</a>, and
+    <a href="rvg.html#RVG_new">RVG objects</a>. You can use the
+    <a href="rvguse.html#new">use</a> method to include graphic
+    objects in the pattern.</p>
 
     <h4>Arguments</h4>
+
     <dl>
-    <dt>width, height</dt>
-    <dd>These arguments define the pattern viewport.</dd>
-    <dt>x, y</dt>
-    <dd>Specify the starting offset of the pattern. The pattern will be repeated at <span class="arg">x</span><code>+m*width</code> and <span class="arg">y</span><code>+n*height</code> offsets.</dd>
+      <dt>width, height</dt>
+
+      <dd>These arguments define the pattern viewport.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>Specify the starting offset of the pattern. The pattern
+      will be repeated at <span class=
+      "arg">x</span><code>+m*width</code> and <span class=
+      "arg">y</span><code>+n*height</code> offsets.</dd>
     </dl>
 
     <h4>Example</h4>
-    <p><a href=
-    "javascript:popup('rvg_pattern.rb.html')"><img src="ex/rvg_pattern.gif"
-    title="Click to see the example script" alt=
-    "pattern example" /></a></p>
 
+    <p><a href="javascript:popup('rvg_pattern.rb.html')"><img src=
+    "ex/rvg_pattern.gif" title="Click to see the example script"
+    alt="pattern example" /></a></p>
   </div>
 
   <h2 class="methods">instance methods</h2>
+
   <div class="sig">
     <h3 id='g'>g</h3>
 
     <p><span class="arg">pattern.</span>g [{|<span class=
-    "arg">grp</span>| ...}] -&gt; <span class=
-    "arg">aGroup</span></p>
+    "arg">grp</span>| ...}] -&gt; <em>group</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Calls <a href="rvggroup.html#new">RVG::Group.new</a> to
-    construct a group and adds it to the pattern.
-    Yields to a block if one is present, passing the new group as
-    an argument.</p>
+    construct a group and adds it to the pattern. Yields to a block
+    if one is present, passing the new group as an argument.</p>
 
     <h4>Returns</h4>
 
@@ -146,7 +163,7 @@
     "arg">raster_image</span>, <span class="arg">width</span>=nil,
     <span class="arg">height</span>=nil, <span class=
     "arg">x</span>=0, <span class="arg">y</span>=0) -&gt;
-    <span class="arg">anImage</span></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -159,7 +176,6 @@
 
     <p>Returns the new image, so <code>RVG::Image</code> methods
     can be chained to this method.</p>
-
   </div>
 
   <div class="sig">
@@ -169,19 +185,18 @@
     "arg">pattern</span>.preserve_aspect_ratio(<span class=
     "arg">align</span>, <span class=
     "arg">meet_or_slice</span>='meet') [{|<span class=
-    "arg">self</span>| ...}] -&gt; <span class=
-    "arg">self</span></p>
+    "arg">self</span>| ...}] -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>If you use the <a href="#viewbox">viewbox</a> method and
-    the user coordinate system does not scale uniformly to the
-    default coordinate system,
-    use the <code>preserve_aspect_ratio</code> method to specify
-    whether or not the content is stretched to fit. If not, you can
-    specify how to fit the content into the space.</p>
+    <p>If you use the <a href="#viewbox">viewbox</a> method and the
+    user coordinate system does not scale uniformly to the default
+    coordinate system, use the <code>preserve_aspect_ratio</code>
+    method to specify whether or not the content is stretched to
+    fit. If not, you can specify how to fit the content into the
+    space.</p>
 
     <p><code>Preserve_aspect_ratio</code> yields to a block if one
     is present, passing <span class="arg">self</span> as an
@@ -270,12 +285,14 @@
 
     <h4>Example</h4>
 
-    <p>See the RVG class <a href="rvg.html#RVG_preserve_aspect_ratio">example</a>.</p>
+    <p>See the RVG class <a href=
+    "rvg.html#RVG_preserve_aspect_ratio">example</a>.</p>
 
     <h4>Returns</h4>
 
-    <p><span class="arg">Self</span>, so other <code>RVG::Pattern</code>
-    methods can be chained to this method.</p>
+    <p><span class="arg">Self</span>, so other
+    <code>RVG::Pattern</code> methods can be chained to this
+    method.</p>
 
     <h4>See Also</h4>
 
@@ -288,16 +305,16 @@
     <p><span class="arg">pattern</span>.rvg(<span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">x</span>=0, <span class="arg">y</span>=0)
-    [{|<span class="arg">new_rvg</span>| ...}] -&gt; <span class=
-    "arg">aPattern</span></p>
+    [{|<span class="arg">new_rvg</span>| ...}] -&gt;
+    <em>pattern</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>This method constructs a new RVG object and adds it to the
-    pattern. Each nested RVG object can use the
-    <a href="rvg.html#RVG_viewbox">viewbox</a> method to define its own
+    pattern. Each nested RVG object can use the <a href=
+    "rvg.html#RVG_viewbox">viewbox</a> method to define its own
     coordinate system. The <code>rvg</code> method yields to a
     block, passing the nested RVG object as an argument. Within the
     block, any drawing objects added to the nested RVG object are
@@ -321,8 +338,8 @@
     <h4>Example</h4>
 
     <p>See the example for <a href=
-    "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a>
-    in <code>class RVG</code>.</p>
+    "#RVG_preserve_aspect_ratio">preserve_aspect_ratio</a> in
+    <code>class RVG</code>.</p>
 
     <h4>Returns</h4>
 
@@ -335,16 +352,17 @@
 
     <p><span class="arg">pattern.</span>text(<span class=
     "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
-    "arg">text</span>=nil) [{|<span class="arg">aText</span>| ...}]
-    -&gt; <span class="arg">aText</span></p>
+    "arg">text</span>=nil) [{|<span class="arg">text</span>| ...}]
+    -&gt; <em>text</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Calls <a href="rvgtext.html#new">RVG::Text.new</a> to
-    construct a text object and adds it to the pattern. Yields to a block if one is present, passing the new
-    text object as an argument.</p>
+    construct a text object and adds it to the pattern. Yields to a
+    block if one is present, passing the new text object as an
+    argument.</p>
 
     <h4>Returns</h4>
 
@@ -359,24 +377,23 @@
     <p><span class="arg">pattern</span>.use(<span class=
     "arg">obj</span>, <span class="arg">x</span>=0, <span class=
     "arg">y</span>=0, <span class="arg">width</span>=nil,
-    <span class="arg">height</span>=nil) -&gt; <span class=
-    "arg">aUse</span></p>
+    <span class="arg">height</span>=nil) -&gt; <em>use</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Calls <a href="rvguse.html#new">RVG::Use.new</a> to
-    constructs a <code>use</code> object and adds it to the pattern.</p>
+    constructs a <code>use</code> object and adds it to the
+    pattern.</p>
 
-    <p>When the referenced argument is an RVG object,
-    <span class="arg">width</span> and <span class=
-    "arg">height</span> can be used to specify the width and height
-    of the viewport. If present and non-nil, these arguments
-    override any width and height specified when the RVG object was
-    created. You must specify the viewport size either when
-    creating the RVG object or when referencing it with
-    <code>use</code>.</p>
+    <p>When the referenced argument is an RVG object, <span class=
+    "arg">width</span> and <span class="arg">height</span> can be
+    used to specify the width and height of the viewport. If
+    present and non-nil, these arguments override any width and
+    height specified when the RVG object was created. You must
+    specify the viewport size either when creating the RVG object
+    or when referencing it with <code>use</code>.</p>
 
     <h4>Examples</h4>
 
@@ -392,20 +409,22 @@
   <div class="sig">
     <h3 id="viewbox">viewbox</h3>
 
-    <p><span class="arg">pattern</span>.viewbox(<span class="arg">min_x</span>, <span class=
-    "arg">min_y</span>, <span class="arg">width</span>,
-    <span class="arg">height</span>) [{|<span class=
-    "arg">self</span>| ...}] -&gt; <span class="arg">rvg</span></p>
+    <p><span class="arg">pattern</span>.viewbox(<span class=
+    "arg">min_x</span>, <span class="arg">min_y</span>,
+    <span class="arg">width</span>, <span class=
+    "arg">height</span>) [{|<span class="arg">self</span>| ...}]
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>The area of the pattern is called the <em>viewport</em>.
-    By default the origin of the coordinate system for an pattern is (0,0). The user coordinates are pixels and the width
-    and height are established by the <span class=
-    "arg">width</span> and <span class="arg">height</span>
-    arguments to <code>RVG::Pattern.new</code>.</p>
+    <p>The area of the pattern is called the <em>viewport</em>. By
+    default the origin of the coordinate system for an pattern is
+    (0,0). The user coordinates are pixels and the width and height
+    are established by the <span class="arg">width</span> and
+    <span class="arg">height</span> arguments to
+    <code>RVG::Pattern.new</code>.</p>
 
     <p>Use the <code>viewbox</code> method to superimpose a user
     coordinate system on the viewport. The <code>viewbox</code>
@@ -430,12 +449,14 @@
 
     <h4>Example</h4>
 
-    <p>See the <a href="rvg.html#RVG_viewbox">example</a> for the <code>RVG </code>class.</p>
+    <p>See the <a href="rvg.html#RVG_viewbox">example</a> for the
+    <code>RVG</code> class.</p>
 
     <h4>Returns</h4>
 
-    <p><span class="arg">Self</span>, so other <code>RVG::Pattern</code>
-    methods may be chained to <code>viewbox</code>.</p>
+    <p><span class="arg">Self</span>, so other
+    <code>RVG::Pattern</code> methods may be chained to
+    <code>viewbox</code>.</p>
 
     <h4>See Also</h4>
 
@@ -443,14 +464,12 @@
     "#preserve_aspect_ratio">preserve_aspect_ratio</a></p>
   </div>
 
-
-
-    <p class="spacer">&nbsp;</p>
+  <p class="spacer">&nbsp;</p>
 
   <div class="nav">
     &laquo;&nbsp;<a href="rvgimage.html">Prev</a> | <a href=
     "index.html">Contents</a> | <a href=
     "rvgclip.html">Next</a>&nbsp;&raquo;
   </div>
- </body>
+</body>
 </html>

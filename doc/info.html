@@ -438,7 +438,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="attenuate">attenuate</h3>
 
     <p><span class="arg">self</span>.attenuate= <span class=
-    "arg">aNumeric</span></p>
+    "arg">number</span></p>
   </div>
 
   <div class="desc">
@@ -452,7 +452,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="authenticate">authenticate</h3>
 
     <p><span class="arg">self.</span>authenticate= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -469,7 +469,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="background_color">background_color</h3>
 
     <p><span class="arg">self.</span>background_color= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -487,7 +487,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="border_color">border_color</h3>
 
     <p><span class="arg">self.</span>border_color= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -505,7 +505,7 @@ self.undefine("tiff", "bits-per-sample")
     <h3 id="caption">caption</h3>
 
     <p><span class="arg">self.</span>caption= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -515,7 +515,7 @@ self.undefine("tiff", "bits-per-sample")
     assigns a caption to an image. The caption is an image
     property:</p>
     <pre>
-img = Magick::Image.read("xc:white") do 
+img = Magick::Image.read("xc:white") do
   self.caption = "a new caption"
   self.size = "20x20"
 end
@@ -532,7 +532,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="colorspace">colorspace</h3>
 
     <p><span class="arg">self.</span>colorspace= <span class=
-    "arg">aColorspaceType</span></p>
+    "arg">colorspace</span></p>
   </div>
 
   <div class="desc">
@@ -548,7 +548,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="comment">comment</h3>
 
     <p><span class="arg">self.</span>comment= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -570,7 +570,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="compression">compression</h3>
 
     <p><span class="arg">self.</span>compression= <span class=
-    "arg">aCompressionType</span></p>
+    "arg">type</span></p>
   </div>
 
   <div class="desc">
@@ -741,7 +741,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="density">density</h3>
 
     <p><span class="arg">self.</span>density= <span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+    "arg">string</span> or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -768,7 +768,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="delay">delay</h3>
 
     <p><span class="arg">self.</span>delay= <span class=
-    "arg">anInteger</span></p>
+    "arg">integer</span></p>
   </div>
 
   <div class="desc">
@@ -785,7 +785,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="depth">depth</h3>
 
     <p><span class="arg">self.</span>depth= <span class=
-    "arg">aNumber</span></p>
+    "arg">integer</span></p>
   </div>
 
   <div class="desc">
@@ -808,7 +808,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="dispose">dispose</h3>
 
     <p><span class="arg">self.</span>dispose= <span class=
-    "arg">aDisposeType</span></p>
+    "arg">type</span></p>
   </div>
 
   <div class="desc">
@@ -848,7 +848,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="extract">extract</h3>
 
     <p><span class="arg"><em>self.</em></span>extract= <span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+    "arg">string</span> or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -870,7 +870,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="filename">filename</h3>
 
     <p><span class="arg">self.</span>filename= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -883,7 +883,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="fill">fill</h3>
 
     <p><span class="arg">self.</span>fill= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -895,14 +895,14 @@ p img.first['caption'] &raquo; "a new caption"
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">pixel</a>.</p>
   </div>
 
   <div class="sig">
     <h3 id="font">font</h3>
 
     <p><span class="arg">self.</span>font= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -915,7 +915,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="format">format</h3>
 
     <p><span class="arg">self.</span>format= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -934,7 +934,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="fuzz">fuzz</h3>
 
     <p><span class="arg">self.</span>fuzz= <span class=
-    "arg">aNumeric</span> or <span class="arg">aString</span></p>
+    "arg">number</span> or <span class="arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -960,7 +960,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="gravity">gravity</h3>
 
     <p><span class="arg">self.</span>gravity= <span class=
-    "arg">aGravityType</span></p>
+    "arg">gravity</span></p>
   </div>
 
   <div class="desc">
@@ -988,7 +988,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="image_type">image_type</h3>
 
     <p><span class="arg">self.</span>image_type= <span class=
-    "arg">anImageType</span></p>
+    "arg">image_type</span></p>
   </div>
 
   <div class="desc">
@@ -1008,7 +1008,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="interlace">interlace</h3>
 
     <p><span class="arg">self.</span>interlace= <span class=
-    "arg">anInterlaceType</span></p>
+    "arg">type</span></p>
   </div>
 
   <div class="desc">
@@ -1034,7 +1034,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="label">label</h3>
 
     <p><span class="arg">self.</span>label= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -1053,7 +1053,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="matte_color">matte_color</h3>
 
     <p><span class="arg">self.</span>matte_color= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -1065,14 +1065,14 @@ p img.first['caption'] &raquo; "a new caption"
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">pixel</a>.</p>
   </div>
 
   <div class="sig">
     <h3 id="monitor">monitor</h3>
 
     <p><span class="arg">self.</span>monitor= <span class=
-    "arg">aProc</span></p>
+    "arg">proc</span></p>
   </div>
 
   <div class="desc">
@@ -1114,7 +1114,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="orientation">orientation</h3>
 
     <p><span class="arg">self</span>.orientation=<span class=
-    "arg">anOrientationType</span></p>
+    "arg">type</span></p>
   </div>
 
   <div class="desc">
@@ -1132,7 +1132,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="origin">origin</h3>
 
     <p><span class="arg">self</span>.origin=<span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+    "arg">string</span> or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -1152,7 +1152,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="page">page</h3>
 
     <p><span class="arg">self.</span>page= <span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+    "arg">string</span> or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -1171,7 +1171,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="pointsize">pointsize</h3>
 
     <p><span class="arg">self.</span>pointsize= <span class=
-    "arg">aNumeric</span></p>
+    "arg">number</span></p>
   </div>
 
   <div class="desc">
@@ -1185,7 +1185,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="quality">quality</h3>
 
     <p><span class="arg">self.</span>quality= <span class=
-    "arg">anInteger</span></p>
+    "arg">integer</span></p>
   </div>
 
   <div class="desc">
@@ -1202,7 +1202,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="sampling_factor">sampling_factor</h3>
 
     <p><span class="arg">self.</span>sampling_factor= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -1228,7 +1228,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="server_name">server_name</h3>
 
     <p><span class="arg">self.</span>server_name= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -1240,9 +1240,8 @@ p img.first['caption'] &raquo; "a new caption"
   <div class="sig">
     <h3 id="size">size</h3>
 
-    <p><span class="arg"><em>self.</em>size=
-    <em>aString</em></span> or <span class=
-    "arg">aGeometry</span></p>
+    <p><span class="arg"><em>self.</em>size= <em>string</em></span>
+    or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -1270,7 +1269,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="stroke">stroke</h3>
 
     <p><span class="arg">self.</span>stroke= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -1282,14 +1281,14 @@ p img.first['caption'] &raquo; "a new caption"
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">pixel</a>.</p>
   </div>
 
   <div class="sig">
     <h3 id="stroke_width">stroke_width</h3>
 
     <p><span class="arg">self.</span>stroke_width=
-    <em>aNumeric</em></p>
+    <em>number</em></p>
   </div>
 
   <div class="desc">
@@ -1326,7 +1325,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="tile_offset">tile_offset</h3>
 
     <p><span class="arg">self</span>.tile_offset= <span class=
-    "arg">aString</span> or <span class="arg">aGeometry</span></p>
+    "arg">string</span> or <span class="arg">geometry</span></p>
   </div>
 
   <div class="desc">
@@ -1348,7 +1347,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="undercolor">undercolor</h3>
 
     <p><span class="arg">self.</span>undercolor= <span class=
-    "arg">aString</span> or <span class="arg">aPixel</span></p>
+    "arg">string</span> or <span class="arg">pixel</span></p>
   </div>
 
   <div class="desc">
@@ -1360,14 +1359,14 @@ p img.first['caption'] &raquo; "a new caption"
     <h4>Arguments</h4>
 
     <p>A <a href="imusage.html#color_names">color name</a> or a
-    <a href="struct.html#Pixel">aPixel</a>.</p>
+    <a href="struct.html#Pixel">pixel</a>.</p>
   </div>
 
   <div class="sig">
     <h3 id="units">units</h3>
 
     <p><span class="arg">self.</span>units= <span class=
-    "arg">aResolutionType</span></p>
+    "arg">unit</span></p>
   </div>
 
   <div class="desc">
@@ -1385,7 +1384,7 @@ p img.first['caption'] &raquo; "a new caption"
     <h3 id="view">view</h3>
 
     <p><span class="arg">self.</span>view= <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">

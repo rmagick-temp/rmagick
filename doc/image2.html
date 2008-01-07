@@ -212,9 +212,10 @@ td.ds {
   <div class="sig">
     <h3 id="each_iptc_dataset">each_iptc_dataset</h3>
 
-    <p>image.each_iptc_dataset { |<span class="arg">dataset</span>,
-    <span class="arg">data_field</span>| <span class=
-    "arg">block</span>} -&gt; <code>nil</code></p>
+    <p><span class="arg">img</span>.each_iptc_dataset {
+    |<span class="arg">dataset</span>, <span class=
+    "arg">data_field</span>| <span class="arg">block</span>} -&gt;
+    <code>nil</code></p>
   </div>
 
   <div class="desc">
@@ -248,10 +249,10 @@ td.ds {
   <div class="sig">
     <h3 id="each_pixel">each_pixel</h3>
 
-    <p><span class="arg">image</span>.each_pixel {|<span class=
+    <p><span class="arg">img</span>.each_pixel {|<span class=
     "arg">pixel</span>, <span class="arg">c</span>, <span class=
     "arg">r</span>| <span class="arg">block</span> } -&gt;
-    <em>image</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -259,9 +260,9 @@ td.ds {
 
     <p>Calls <span class="arg">block</span> with 3 arguments, a
     <span class="arg">pixel</span> from <span class=
-    "arg">image</span>, its column number <span class=
-    "arg">c</span>, and its row number <span class="arg">r</span>,
-    for all the pixels in the image. The pixels are enumerated from
+    "arg">img</span>, its column number <span class="arg">c</span>,
+    and its row number <span class="arg">r</span>, for all the
+    pixels in the image. The pixels are enumerated from
     top-to-bottom and left-to-right.</p>
 
     <h4>Returns</h4>
@@ -276,7 +277,7 @@ td.ds {
   <div class="sig">
     <h3 id="each_profile">each_profile</h3>
 
-    <p><span class="arg">image</span>.each_profile {|<span class=
+    <p><span class="arg">img</span>.each_profile {|<span class=
     "arg">name</span>, <span class="arg">value</span>| <span class=
     "arg">block</span>} -&gt; <em>???</em> (see Returns)</p>
   </div>
@@ -305,8 +306,8 @@ td.ds {
   <div class="sig">
     <h3 id="edge">edge</h3>
 
-    <p><span class="arg">image</span>.edge(<span class=
-    "arg">radius</span>=0.0) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.edge(<span class=
+    "arg">radius</span>=0.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -337,9 +338,9 @@ td.ds {
   <div class="sig">
     <h3 id="emboss">emboss</h3>
 
-    <p><span class="arg">image</span>.emboss(<span class=
+    <p><span class="arg">img</span>.emboss(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -381,8 +382,8 @@ td.ds {
   <div class="sig">
     <h3 id="enhance">enhance</h3>
 
-    <p><span class="arg">image</span>.enhance -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.enhance -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -419,8 +420,8 @@ td.ds {
   <div class="sig">
     <h3 id="equalize">equalize</h3>
 
-    <p><span class="arg">image</span>.equalize -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.equalize -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -456,8 +457,8 @@ td.ds {
   <div class="sig">
     <h3 id="equalize_channel">equalize_chanel</h3>
 
-    <p><span class="arg">image</span>.equalize_channel(<span class=
-    "arg">[channel...]</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.equalize_channel(<span class=
+    "arg">[channel...]</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -495,8 +496,7 @@ td.ds {
   <div class="sig">
     <h3 id="erase_bang">erase!</h3>
 
-    <p><span class="arg">image</span>.erase! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.erase! -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -519,10 +519,10 @@ td.ds {
   <div class="sig">
     <h3 id="excerpt">excerpt</h3>
 
-    <p><span class="arg">image</span>.excerpt(<span class=
+    <p><span class="arg">img</span>.excerpt(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    anImage</p>
+    image</p>
   </div>
 
   <div class="desc">
@@ -571,10 +571,10 @@ td.ds {
   <div class="sig">
     <h3 id="excerpt_bang">excerpt!</h3>
 
-    <p><span class="arg">image</span>.excerpt!(<span class=
+    <p><span class="arg">img</span>.excerpt!(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <span class="arg">image</span></p>
+    <span class="arg">img</span></p>
   </div>
 
   <div class="desc">
@@ -586,12 +586,12 @@ td.ds {
   <div class="sig">
     <h3 id="export_pixels">export_pixels</h3>
 
-    <p><span class="arg">image</span>.export_pixels(<span class=
+    <p><span class="arg">img</span>.export_pixels(<span class=
     "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
-    "arg">columns</span>=<span class="arg">image</span>.columns,
+    "arg">columns</span>=<span class="arg">img</span>.columns,
     <span class="arg">rows</span>=<span class=
-    "arg">image</span>.rows, <span class="arg">map</span>="RGB")
-    -&gt; <em>anArray</em></p>
+    "arg">img</span>.rows, <span class="arg">map</span>="RGB")
+    -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -653,13 +653,13 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h3 id="export_pixels_to_str">export_pixels_to_str</h3>
 
     <p><span class=
-    "arg">image</span>.export_pixels_to_str(<span class=
+    "arg">img</span>.export_pixels_to_str(<span class=
     "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
-    "arg">columns</span>=<span class="arg">image</span>.columns,
+    "arg">columns</span>=<span class="arg">img</span>.columns,
     <span class="arg">rows</span>=<span class=
-    "arg">image</span>.rows, <span class="arg">map</span>="RGB",
-    <span class="arg">type</span>=<code>Magick::CharPixel</code>)
-    -&gt; <em>aString</em></p>
+    "arg">img</span>.rows, <span class="arg">map</span>="RGB",
+    <span class="arg">type</span>=<code>CharPixel</code>) -&gt;
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -729,10 +729,10 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="extent">extent</h3>
 
-    <p><span class="arg">image</span>.extent(<span class=
+    <p><span class="arg">img</span>.extent(<span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">x</span>=0, <span class="arg">y</span>=0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -783,9 +783,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h3 id="find_similar_region">find_similar_region</h3>
 
     <p><span class=
-    "arg">image</span>.find_similar_region(<span class=
-    "arg">target</span>, <span class="arg">x</span>=0, <span class=
-    "arg">y</span>=0) -&gt; <em>[rx, ry]</em></p>
+    "arg">img</span>.find_similar_region(<span class="arg">target</span>,
+    <span class="arg">x</span>=0, <span class="arg">y</span>=0)
+    -&gt; <em>[rx, ry]</em></p>
   </div>
 
   <div class="desc">
@@ -828,8 +828,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="flip">flip</h3>
 
-    <p><span class="arg">image</span>.flip -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.flip -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -867,8 +866,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="flip_bang">flip!</h3>
 
-    <p><span class="arg">image</span>.flip! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.flip! -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -884,8 +882,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="flop">flop</h3>
 
-    <p><span class="arg">image</span>.flop -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.flop -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -923,8 +920,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="flop_bang">flop!</h3>
 
-    <p><span class="arg">image</span>.flop! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.flop! -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -940,14 +936,14 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="frame">frame</h3>
 
-    <p><span class="arg">image</span>.frame(<span class=
+    <p><span class="arg">img</span>.frame(<span class=
     "arg">width</span>=25, <span class="arg">height</span>=25,
     <span class="arg">x</span>=25, <span class="arg">y</span>=25,
     <span class="arg">inner_bevel</span>=6, <span class=
     "arg">outer_bevel</span>=6, <span class=
     "arg">color</span>=<code><a href=
     "imageattrs.html#matte_color">matte_color</a></code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1016,8 +1012,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="freeze">freeze</h3>
 
-    <p><span class="arg">image</span>.freeze -&gt;
-    <em>self</em></p>
+    <p><span class="arg">img</span>.freeze -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1033,9 +1028,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="gamma_channel">gamma_channel</h3>
 
-    <p><span class="arg">image</span>.gamma_channel(<span class=
+    <p><span class="arg">img</span>.gamma_channel(<span class=
     "arg">gamma</span>, [<span class="arg">channel</span>...]) =
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1080,10 +1075,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="gamma_correct">gamma_correct</h3>
 
-    <p><span class="arg">image</span>.gamma_correct(<span class=
+    <p><span class="arg">img</span>.gamma_correct(<span class=
     "arg">red_gamma</span>[,<span class="arg">green_gamma</span>[,
-    <span class="arg">blue_gamma</span>]]) -&gt;
-    <em>anImage</em></p>
+    <span class="arg">blue_gamma</span>]]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1116,9 +1110,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="gaussian_blur">gaussian_blur</h3>
 
-    <p><span class="arg">image</span>.gaussian_blur(<span class=
+    <p><span class="arg">img</span>.gaussian_blur(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1176,10 +1170,9 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h3 id="gaussian_blur_channel">gaussian_blur_channel</h3>
 
     <p><span class=
-    "arg">image</span>.gaussian_blur_channel(<span class=
+    "arg">img</span>.gaussian_blur_channel(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0[,
-    <span class="arg">channel</span>...]) -&gt;
-    <em>anImage</em></p>
+    <span class="arg">channel</span>...]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1228,9 +1221,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
   <div class="sig">
     <h3 id="get_exif_by_entry">get_exif_by_entry</h3>
 
-    <p><span class=
-    "arg">image</span>.get_exif_by_entry(<span class="arg">[name]*</span>)
-    -&gt; <em>anArray</em></p>
+    <p><span class="arg">img</span>.get_exif_by_entry(<span class=
+    "arg">[name]*</span>) -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -1271,9 +1263,8 @@ image.get_exif_by_entry() &raquo;
   <div class="sig">
     <h3 id="get_exif_by_number">get_exif_by_number</h3>
 
-    <p><span class=
-    "arg">image</span>.get_exif_by_number(<span class=
-    "arg">[tag]*</span>) -&gt; <em>aHash</em></p>
+    <p><span class="arg">img</span>.get_exif_by_number(<span class=
+    "arg">[tag]*</span>) -&gt; <em>hash</em></p>
   </div>
 
   <div class="desc">
@@ -1310,8 +1301,8 @@ image.get_exif_by_number() &raquo;
   <div class="sig">
     <h3 id="get_iptc_dataset">get_iptc_dataset</h3>
 
-    <p><span class="arg">image</span>.get_iptc_dataset(<span class=
-    "arg">ds</span>) -&gt; <em>aString</em></p>
+    <p><span class="arg">img</span>.get_iptc_dataset(<span class=
+    "arg">ds</span>) -&gt; <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -1850,10 +1841,10 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="get_pixels">get_pixels</h3>
 
-    <p><span class="arg">image</span>.get_pixels(<span class=
+    <p><span class="arg">img</span>.get_pixels(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">columns</span>, <span class="arg">rows</span>) -&gt;
-    <em>anArray</em></p>
+    <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -1916,7 +1907,7 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="gray_q">gray?</h3>
 
-    <p><span class="arg">image</span>.gray? -&gt; <code>true</code>
+    <p><span class="arg">img</span>.gray? -&gt; <code>true</code>
     or <code>false</code></p>
   </div>
 
@@ -1942,7 +1933,7 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="grey_q">grey?</h3>
 
-    <p><span class="arg">image</span>.grey? -&gt; <code>true</code>
+    <p><span class="arg">img</span>.grey? -&gt; <code>true</code>
     or <code>false</code></p>
   </div>
 
@@ -1955,7 +1946,7 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="histogram_q">histogram?</h3>
 
-    <p><span class="arg">image</span>.histogram? -&gt;
+    <p><span class="arg">img</span>.histogram? -&gt;
     <code>true</code> or <code>false</code></p>
   </div>
 
@@ -1977,8 +1968,8 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="implode">implode</h3>
 
-    <p><span class="arg">image</span>.implode(<span class=
-    "arg">amount</span>=0.50) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.implode(<span class=
+    "arg">amount</span>=0.50) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2019,11 +2010,11 @@ img.get_iptc_dataset(Magick::IPTC::Application::Keywords)
   <div class="sig">
     <h3 id="import_pixels">import_pixels</h3>
 
-    <p><span class="arg">image</span>.import_pixels(<span class=
+    <p><span class="arg">img</span>.import_pixels(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">columns</span>, <span class="arg">rows</span>,
     <span class="arg">map</span>, <span class="arg">pixels</span>,
-    <span class="arg">type</span>=Magick::CharPixel) -&gt;
+    <span class="arg">type</span>=CharPixel) -&gt;
     <em>image</em></p>
   </div>
 
@@ -2117,11 +2108,11 @@ img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
     example assumes that &times;Magick is configured with
     QuantumDepth=8.</p>
     <pre>
-hat = Magick::Image.read("Flower_Hat.jpg").first
+hat = Image.read("Flower_Hat.jpg").first
 pixels = hat.export_pixels(0, 0, hat.columns, hat.rows, "RGB")
 char_buffer = pixels.pack("C*")
-img = Magick::Image.new(hat.columns, hat.rows)
-img.import_pixels(0, 0, hat.columns, hat.rows, "RGB", char_buffer, Magick::CharPixel)
+img = Image.new(hat.columns, hat.rows)
+img.import_pixels(0, 0, hat.columns, hat.rows, "RGB", char_buffer, CharPixel)
 </pre>
 
     <h4>See also</h4>
@@ -2142,8 +2133,8 @@ img.import_pixels(0, 0, hat.columns, hat.rows, "RGB", char_buffer, Magick::CharP
   <div class="sig">
     <h3 id="inspect">inspect</h3>
 
-    <p><span class="arg">image</span>.inspect -&gt;
-    <em>aString</em></p>
+    <p><span class="arg">img</span>.inspect -&gt;
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2209,11 +2200,11 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
   <div class="sig">
     <h3 id="level">level</h3>
 
-    <p><span class="arg">image</span>.level(<span class=
+    <p><span class="arg">img</span>.level(<span class=
     "arg">black_point</span>=<code>0.0</code>, <span class=
     "arg">white_point</span>=<code>QuantumRange</code>,
     <span class="arg">gamma</span>=<code>1.0</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2272,7 +2263,7 @@ f.inspect &raquo; "images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9kb"
     <p>Prior to version 1.11.0 RMagick defined the signature for
     <code>level</code> incorrectly:</p>
     <pre>
-img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
+img.level(white_point, gamma, black_point) -&gt; image # wrong!
 </pre>
 
     <p>That is, the <code>gamma</code> and <code>white_point</code>
@@ -2302,11 +2293,11 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="level_channel">level_channel</h3>
 
-    <p><span class="arg">image</span>.level_channel(<span class=
+    <p><span class="arg">img</span>.level_channel(<span class=
     "arg">channel</span>, <span class="arg">black_point</span>=0,
     <span class="arg">white_point</span>=QuantumRange -
     black_point, <span class="arg">gamma</span>=1.0) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2356,9 +2347,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="linear_stretch">linear_stretch</h3>
 
-    <p><span class="arg">image</span>.linear_stretch(<span class=
+    <p><span class="arg">img</span>.linear_stretch(<span class=
     "arg">black_point</span>[, <span class=
-    "arg">white_point</span>]) -&gt; <em>anImage</em></p>
+    "arg">white_point</span>]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2396,8 +2387,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="magnify">magnify</h3>
 
-    <p><span class="arg">image</span>.magnify -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.magnify -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2424,8 +2415,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="magnify_bang">magnify!</h3>
 
-    <p><span class="arg">image</span>.magnify! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.magnify! -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2439,9 +2430,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="map">map</h3>
 
-    <p><span class="arg">image</span>.map(<span class=
+    <p><span class="arg">img</span>.map(<span class=
     "arg">img</span>, <span class="arg">dither</span>=false) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2493,9 +2484,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
     <h3 id="matte_fill_to_border">matte_fill_to_border</h3>
 
     <p><span class=
-    "arg">image</span>.matte_fill_to_border(<span class=
+    "arg">img</span>.matte_fill_to_border(<span class=
     "arg">x</span>, <span class="arg">y</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2544,9 +2535,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="matte_floodfill">matte_floodfill</h3>
 
-    <p><span class="arg">image</span>.matte_floodfill(<span class=
+    <p><span class="arg">img</span>.matte_floodfill(<span class=
     "arg">x</span>, <span class="arg">y</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2594,9 +2585,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="matte_point">matte_point</h3>
 
-    <p><span class="arg">image</span>.matte_point(<span class=
+    <p><span class="arg">img</span>.matte_point(<span class=
     "arg">x</span>, <span class="arg">y</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2623,9 +2614,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="matte_replace">matte_replace</h3>
 
-    <p><span class="arg">image</span>.matte_replace(<span class=
+    <p><span class="arg">img</span>.matte_replace(<span class=
     "arg">x</span>, <span class="arg">y</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2671,8 +2662,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="matte_reset_bang">matte_reset!</h3>
 
-    <p><span class="arg">image</span>.matte_reset! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.matte_reset! -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2694,8 +2685,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="median_filter">median_filter</h3>
 
-    <p><span class="arg">image</span>.median_filter(<span class=
-    "arg">radius</span>=1.0) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.median_filter(<span class=
+    "arg">radius</span>=1.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2740,8 +2731,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="minify">minify</h3>
 
-    <p><span class="arg">image</span>.minify -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.minify -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2771,8 +2761,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="minify_bang">minify!</h3>
 
-    <p><span class="arg">image</span>.minify! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.minify! -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2788,10 +2777,10 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="modulate">modulate</h3>
 
-    <p><span class="arg">image</span>.modulate(<span class=
+    <p><span class="arg">img</span>.modulate(<span class=
     "arg">brightness</span>=1.0, <span class=
     "arg">saturation</span>=1.0, <span class="arg">hue</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2831,7 +2820,7 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="monochrome_q">monochrome?</h3>
 
-    <p><span class="arg">image</span>.monochrome? -&gt; true or
+    <p><span class="arg">img</span>.monochrome? -&gt; true or
     false</p>
   </div>
 
@@ -2854,9 +2843,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="motion_blur">motion_blur</h3>
 
-    <p><span class="arg">image</span>.motion_blur(<span class=
+    <p><span class="arg">img</span>.motion_blur(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0,
-    <span class="arg">angle</span>=0.0) -&gt; <em>anImage</em></p>
+    <span class="arg">angle</span>=0.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2914,8 +2903,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="negate">negate</h3>
 
-    <p><span class="arg">image</span>.negate(<span class=
-    "arg">grayscale</span>=false) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.negate(<span class=
+    "arg">grayscale</span>=false) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2953,9 +2942,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="negate_channel">negate_channel</h3>
 
-    <p><span class="arg">image</span>.negate_channel(<span class=
+    <p><span class="arg">img</span>.negate_channel(<span class=
     "arg">grayscale</span>=false, [<span class=
-    "arg">channel</span>...]) = <em>anImage</em></p>
+    "arg">channel</span>...]) = <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3009,8 +2998,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="normalize">normalize</h3>
 
-    <p><span class="arg">image</span>.normalize -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.normalize -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3047,9 +3036,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="normalize_channel">normalize_channel</h3>
 
-    <p><span class=
-    "arg">image</span>.normalize_channel([<span class=
-    "arg">channel</span>...]) = <em>anImage</em></p>
+    <p><span class="arg">img</span>.normalize_channel([<span class=
+    "arg">channel</span>...]) = <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3088,8 +3076,8 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="oil_paint">oil_paint</h3>
 
-    <p><span class="arg">image</span>.oil_paint(<span class=
-    "arg">radius</span>=3.0) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.oil_paint(<span class=
+    "arg">radius</span>=3.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3122,9 +3110,9 @@ img.level(white_point, gamma, black_point) -&gt; anImage # wrong!
   <div class="sig">
     <h3 id="opaque">opaque</h3>
 
-    <p><span class="arg">image</span>.opaque(<span class=
+    <p><span class="arg">img</span>.opaque(<span class=
     "arg">target</span>, <span class="arg">fill</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3170,8 +3158,7 @@ img = img.opaque('white', 'red')
   <div class="sig">
     <h3 id="opaque_q">opaque?</h3>
 
-    <p><span class="arg">image</span>.opaque? -&gt; true or
-    false</p>
+    <p><span class="arg">img</span>.opaque? -&gt; true or false</p>
   </div>
 
   <div class="desc">
@@ -3193,8 +3180,8 @@ img = img.opaque('white', 'red')
   <div class="sig">
     <h3 id="ordered_dither">ordered_dither</h3>
 
-    <p><span class="arg">image</span>.ordered_dither(<span class=
-    "arg">threshold_map</span>='2x2') -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.ordered_dither(<span class=
+    "arg">threshold_map</span>='2x2') -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">

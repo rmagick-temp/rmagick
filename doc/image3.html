@@ -248,7 +248,7 @@
   <div class="sig">
     <h3 id="palette_q">palette?</h3>
 
-    <p><span class="arg">image</span>.palette? -&gt; true or
+    <p><span class="arg">img</span>.palette? -&gt; true or
     false</p>
   </div>
 
@@ -271,9 +271,9 @@
   <div class="sig">
     <h3 id="pixel_color">pixel_color</h3>
 
-    <p><span class="arg">image</span>.pixel_color(<span class=
+    <p><span class="arg">img</span>.pixel_color(<span class=
     "arg">x</span>, <span class="arg">y</span>[, <span class=
-    "arg">new_color</span>]) -&gt; <em>aPixel</em></p>
+    "arg">new_color</span>]) -&gt; <em>pixel</em></p>
   </div>
 
   <div class="desc">
@@ -316,8 +316,9 @@ old = image.pixel_color(20,40,"white")
   <div class="sig">
     <h3 id="polaroid">polaroid</h3>
 
-    <p>image.polaroid(angle=-5.0) [ <span class="arg">{ optional
-    arguments }</span> ] -&gt; anImage</p>
+    <p><span class="arg">img</span>.polaroid(angle=-5.0) [
+    <span class="arg">{ optional arguments }</span> ] -&gt;
+    image</p>
   </div>
 
   <div class="desc">
@@ -396,9 +397,9 @@ end
   <div class="sig">
     <h3 id="posterize">posterize</h3>
 
-    <p><span class="arg">image</span>.posterize(<span class=
+    <p><span class="arg">img</span>.posterize(<span class=
     "arg">levels</span>=4, <span class="arg">dither</span>=false)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -449,8 +450,8 @@ end
   <div class="sig">
     <h3 id="preview">preview</h3>
 
-    <p><span class="arg">image</span>.preview(<span class=
-    "arg">aPreviewType</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.preview(<span class=
+    "arg">aPreviewType</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -556,9 +557,9 @@ end
   <div class="sig">
     <h3 id="profile_bang">profile!</h3>
 
-    <p><span class="arg">image</span>.profile!(<span class=
+    <p><span class="arg">img</span>.profile!(<span class=
     "arg">name</span>, <span class="arg">profile</span>) -&gt;
-    <em>image</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -613,8 +614,8 @@ end
   <div class="sig">
     <h3 id="properties">properties</h3>
 
-    <p><span class="arg">image</span>.properties <span class=
-    "arg">[ {|name,value| block} ]</span> -&gt; <em>aHash</em></p>
+    <p><span class="arg">img</span>.properties <span class="arg">[
+    {|name,value| block} ]</span> -&gt; <em>hash</em></p>
   </div>
 
   <div class="desc">
@@ -646,13 +647,13 @@ end
   <div class="sig">
     <h3 id="quantize">quantize</h3>
 
-    <p><span class="arg">image</span>.quantize(<span class=
+    <p><span class="arg">img</span>.quantize(<span class=
     "arg">number_colors</span>=256, <span class=
-    "arg">colorspace</span>=Magick::RGBColorspace, <span class=
+    "arg">colorspace</span>=RGBColorspace, <span class=
     "arg">dither</span>=<code>true</code>, <span class=
     "arg">tree_depth</span>=0, <span class=
     "arg">measure_error</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -733,10 +734,10 @@ end
   <div class="sig">
     <h3 id="quantum_operator">quantum_operator</h3>
 
-    <p><span class="arg">image</span>.quantum_operator(<span class=
+    <p><span class="arg">img</span>.quantum_operator(<span class=
     "arg">operator</span>, <span class="arg">rvalue</span>,
     <span class="arg">channel</span>=AllChannels) -&gt;
-    <em>anImage</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -823,8 +824,8 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
   <div class="sig">
     <h3 id="radial_blur">radial_blur</h3>
 
-    <p><span class="arg">image</span>.radial_blur(<span class=
-    "arg">aFloat</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.radial_blur(<span class=
+    "arg">float</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -871,9 +872,9 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
     <h3 id="radial_blur_channel">radial_blur_channel</h3>
 
     <p><span class=
-    "arg">image</span>.radial_blur_channel(<span class=
-    "arg">aFloat</span> [, <span class="arg">channel</span>...])
-    -&gt; <em>anImage</em></p>
+    "arg">img</span>.radial_blur_channel(<span class="arg">float</span>
+    [, <span class="arg">channel</span>...]) -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -911,10 +912,10 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
   <div class="sig">
     <h3 id="raise">raise</h3>
 
-    <p><span class="arg">image</span>.raise(<span class=
+    <p><span class="arg">img</span>.raise(<span class=
     "arg">width</span>=6, <span class="arg">height</span>=6,
     <span class="arg">raised</span>=<code>true</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -965,9 +966,9 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
   <div class="sig">
     <h3 id="random_threshold_channel">random_threshold_channel</h3>
 
-    <p><span class="arg">image</span>.random_threshold_channel(
+    <p><span class="arg">img</span>.random_threshold_channel(
     <span class="arg">thresholds</span>, [<span class=
-    "arg">channel</span>...] ) -&gt; <em>anImage</em></p>
+    "arg">channel</span>...] ) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1035,8 +1036,8 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="recolor">recolor</h3>
 
-    <p><span class="arg">image</span>.recolor(<span class=
-    "arg">color_matrix</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.recolor(<span class=
+    "arg">color_matrix</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1061,8 +1062,8 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="reduce_noise">reduce_noise</h3>
 
-    <p><span class="arg">image</span>.reduce_noise(<span class=
-    "arg">radius</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.reduce_noise(<span class=
+    "arg">radius</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1109,9 +1110,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resample">resample</h3>
 
-    <p><span class="arg">image</span>.resample(<span class=
+    <p><span class="arg">img</span>.resample(<span class=
     "arg">horizontal_res</span>=72.0[, <span class=
-    "arg">vertical_res</span>]) -&gt; <em>anImage</em></p>
+    "arg">vertical_res</span>]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1152,13 +1153,13 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize">resize</h3>
 
-    <p><span class="arg">image</span>.resize(<span class=
+    <p><span class="arg">img</span>.resize(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>,
     <em>filter</em>=<a href=
     "constants.html#FilterTypes">LanczosFilter</a>,
     <em>support</em>=1.0) -&gt; <em>image</em><br />
-    <span class="arg">image</span>.resize(<span class=
-    "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
+    <span class="arg">img</span>.resize(<span class=
+    "arg">scale_factor</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1232,12 +1233,12 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize_bang">resize!</h3>
 
-    <p><em>image</em>.resize!(<em>new_width</em>,
+    <p><span class="arg">img</span>.resize!(<em>new_width</em>,
     <em>new_height</em>, <em>filter</em>=<a href=
     "constants.html#FilterTypes">LanczosFilter</a>,
-    <em>support</em>=1.0) -&gt; <em>image</em><br />
-    <span class="arg">image</span>.resize!(<span class=
-    "arg">scale_factor</span>) -&gt; <em>image</em></p>
+    <em>support</em>=1.0) -&gt; <em>self</em><br />
+    <span class="arg">img</span>.resize!(<span class=
+    "arg">scale_factor</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1253,11 +1254,10 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize_to_fill">resize_to_fill</h3>
 
-    <p><span class="arg">image</span>.resize_to_fill(<span class=
+    <p><span class="arg">img</span>.resize_to_fill(<span class=
     "arg">width</span> [, <span class="arg">height</span> [,
-    <span class=
-    "arg">gravity</span>=<code>Magick::CenterGravity</code>]])
-    -&gt; <span class="arg">anImage</span></p>
+    <span class="arg">gravity</span>=<code>CenterGravity</code>]])
+    -&gt; <span class="arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -1330,11 +1330,10 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize_to_fill_bang">resize_to_fill!</h3>
 
-    <p><span class="arg">image</span>.resize_to_fill!(<span class=
+    <p><span class="arg">img</span>.resize_to_fill!(<span class=
     "arg">width</span> [, <span class="arg">height</span> [,
-    <span class=
-    "arg">gravity</span>=<code>Magick::CenterGravity</code>]])
-    -&gt; <span class="arg">image</span></p>
+    <span class="arg">gravity</span>=<code>CenterGravity</code>]])
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1359,8 +1358,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize_to_fit">resize_to_fit</h3>
 
-    <p><em>image</em>.resize_to_fit(<em>new_width</em> [,
-    <em>new_height</em>]) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.resize_to_fit(<span class=
+    "arg">new_width</span> [, <span class="arg">new_height</span>])
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1421,8 +1421,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="resize_to_fit_bang">resize_to_fit!</h3>
 
-    <p><em>image</em>.resize_to_fit!(<em>new_width</em>,
-    <em>new_height</em>) -&gt; <em>image</em></p>
+    <p><span class="arg">img</span>.resize_to_fit!(<span class=
+    "arg">new_width</span> [, <span class="arg">new_height</span>])
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1445,9 +1446,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="roll">roll</h3>
 
-    <p><span class="arg">image</span>.roll(<span class=
+    <p><span class="arg">img</span>.roll(<span class=
     "arg">x_offset</span>, <span class="arg">y_offset</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1493,9 +1494,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="rotate">rotate</h3>
 
-    <p><span class="arg">image</span>.rotate(<span class=
+    <p><span class="arg">img</span>.rotate(<span class=
     "arg">amount</span> [, <span class="arg">qualifier</span>])
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1563,9 +1564,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="rotate_bang">rotate!</h3>
 
-    <p><span class="arg">image</span>.rotate!(<span class=
+    <p><span class="arg">img</span>.rotate!(<span class=
     "arg">amount</span> [, <span class="arg">qualifier</span>])
-    -&gt; <em>image</em></p>
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1583,11 +1584,11 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="sample">sample</h3>
 
-    <p><span class="arg">image</span>.sample(<span class=
+    <p><span class="arg">img</span>.sample(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <span class="arg">anImage</span><br />
-    <span class="arg">image</span>.sample(<span class=
-    "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
+    -&gt; <span class="arg">image</span><br />
+    <span class="arg">img</span>.sample(<span class=
+    "arg">scale_factor</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1633,11 +1634,11 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="sample_bang">sample!</h3>
 
-    <p><span class="arg">image</span>.sample!(<span class=
+    <p><span class="arg">img</span>.sample!(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>image</em><br />
-    <span class="arg">image</span>.sample!(<span class=
-    "arg">scale_factor</span>) -&gt; <em>image</em></p>
+    -&gt; <em>self</em><br />
+    <span class="arg">img</span>.sample!(<span class=
+    "arg">scale_factor</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1653,11 +1654,11 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="scale">scale</h3>
 
-    <p><span class="arg">image</span>.scale(<span class=
+    <p><span class="arg">img</span>.scale(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.scale(<span class=
-    "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.scale(<span class=
+    "arg">scale_factor</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1702,11 +1703,11 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="scale_bang">scale!</h3>
 
-    <p><span class="arg">image</span>.scale!(<span class=
+    <p><span class="arg">img</span>.scale!(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>image</em><br />
-    <span class="arg">image</span>.scale!(<span class=
-    "arg">scale_factor</span>) -&gt; <em>image</em></p>
+    -&gt; <em>self</em><br />
+    <span class="arg">img</span>.scale!(<span class=
+    "arg">scale_factor</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1722,12 +1723,12 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="segment">segment</h3>
 
-    <p>image.segment(<span class=
+    <p><span class="arg">img</span>.segment(<span class=
     "arg">colorspace</span>=RGBColorspace, <span class=
     "arg">cluster_threshold</span>=1.0, <span class=
     "arg">smoothing_threshold</span>=1.5, <span class=
     "arg">verbose</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1774,7 +1775,7 @@ random_threshold_channel(geom, RedChannel)
 
     <h4>Example</h4>
 
-    <p><code>segment(Magick::YUVColorspace, 0.4, 0.4)</code></p>
+    <p><code>segment(YUVColorspace, 0.4, 0.4)</code></p>
 
     <p class="rollover"><a href=
     "javascript:popup('segment.rb.html')"><img src="ex/segment.jpg"
@@ -1792,9 +1793,8 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="separate">separate</h3>
 
-    <p><span class="arg">Image</span>.separate(<span class=
-    "arg">channel</span>...) -&gt; <span class=
-    "arg">anImageList</span></p>
+    <p>Image.separate(<span class="arg">channel</span>...) -&gt;
+    <span class="arg">imagelist</span></p>
   </div>
 
   <div class="desc">
@@ -1830,9 +1830,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="sepiatone">sepiatone</h3>
 
-    <p><span class="arg">image</span>.sepiatone(<span class=
+    <p><span class="arg">img</span>.sepiatone(<span class=
     "arg">threshold</span>=QuantumRange) -&gt; <span class=
-    "arg">anImage</span></p>
+    "arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -1855,7 +1855,7 @@ random_threshold_channel(geom, RedChannel)
 
     <h4>Returns</h4>
 
-    <p>self</p>
+    <p>A new image.</p>
 
     <h4>Example</h4>
 
@@ -1881,9 +1881,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="set_channel_depth">set_channel_depth</h3>
 
-    <p><span class=
-    "arg">image.</span>set_channel_depth(<span class="arg">channel</span>,
-    <span class="arg">depth</span>) -&gt; <em>self</em></p>
+    <p><span class="arg">img.</span>set_channel_depth(<span class=
+    "arg">channel</span>, <span class="arg">depth</span>) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1921,10 +1921,10 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="shade">shade</h3>
 
-    <p><span class="arg">image</span>.shade(<span class=
+    <p><span class="arg">img</span>.shade(<span class=
     "arg">shading</span>=<code>false</code>, <span class=
     "arg">azimuth</span>=30, <span class="arg">elevation</span>=30)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1978,10 +1978,10 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="shadow">shadow</h3>
 
-    <p><span class="arg">image</span>.shadow(<span class=
+    <p><span class="arg">img</span>.shadow(<span class=
     "arg">x_offset=4</span>, <span class="arg">y_offset=4</span>,
     <span class="arg">sigma=4.0</span>, <span class=
-    "arg">opacity=1.0</span>) -&gt; <em>anImage</em></p>
+    "arg">opacity=1.0</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2053,9 +2053,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="sharpen">sharpen</h3>
 
-    <p><span class="arg">image</span>.sharpen(<span class=
+    <p><span class="arg">img</span>.sharpen(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2091,10 +2091,10 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="sharpen_channel">sharpen_channel</h3>
 
-    <p><span class="arg">image</span>.sharpen_channel( <span class=
+    <p><span class="arg">img</span>.sharpen_channel( <span class=
     "arg">radius</span>, <span class="arg">sigma</span>
     [,<span class="arg">channel</span>...] ) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2139,9 +2139,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="shave">shave</h3>
 
-    <p><span class="arg">image</span>.shave(<span class=
+    <p><span class="arg">img</span>.shave(<span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2191,9 +2191,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="shave_bang">shave!</h3>
 
-    <p><span class="arg">image</span>.shave!(<span class=
+    <p><span class="arg">img</span>.shave!(<span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <em>image</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2209,9 +2209,9 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="shear">shear</h3>
 
-    <p><span class="arg">image</span>.shear(<span class=
+    <p><span class="arg">img</span>.shear(<span class=
     "arg">x_shear</span>, <span class="arg">y_shear</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2273,11 +2273,11 @@ random_threshold_channel(geom, RedChannel)
 
     <p><br />
     <span class=
-    "arg">image</span>.sigmoidal_contrast_channel(<span class=
+    "arg">img</span>.sigmoidal_contrast_channel(<span class=
     "arg">contrast</span>=3.0, <span class=
     "arg">midpoint</span>=50.0, <span class=
     "arg">sharpen</span>=false[,<span class=
-    "arg">channel</span>...]) -&gt; <em>anImage</em></p>
+    "arg">channel</span>...]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2331,8 +2331,8 @@ random_threshold_channel(geom, RedChannel)
   <div class="sig">
     <h3 id="signature">signature</h3>
 
-    <p><span class="arg">image</span>.signature -&gt;
-    <em>aString</em></p>
+    <p><span class="arg">img</span>.signature -&gt;
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2377,9 +2377,9 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="sketch">sketch</h3>
 
-    <p><span class="arg">image</span>.sketch(<span class=
+    <p><span class="arg">img</span>.sketch(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0,
-    <span class="arg">angle</span>=0.0) -&gt; <em>anImage</em></p>
+    <span class="arg">angle</span>=0.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2422,8 +2422,8 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="solarize">solarize</h3>
 
-    <p><span class="arg">image</span>.solarize(<span class=
-    "arg">threshold</span>=50) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.solarize(<span class=
+    "arg">threshold</span>=50) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2463,10 +2463,10 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="splice">splice</h3>
 
-    <p><span class="arg">image</span>.splice(<span class=
+    <p><span class="arg">img</span>.splice(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>[,
-    <span class="arg">color</span>]) -&gt; <em>anImage</em></p>
+    <span class="arg">color</span>]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2532,8 +2532,8 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="spread">spread</h3>
 
-    <p><span class="arg">image</span>.spread(<span class=
-    "arg">radius</span>=3) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.spread(<span class=
+    "arg">radius</span>=3) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2565,9 +2565,9 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="stegano">stegano</h3>
 
-    <p><span class="arg">image</span>.stegano(<span class=
+    <p><span class="arg">img</span>.stegano(<span class=
     "arg">watermark</span>, <span class="arg">offset</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2626,8 +2626,8 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="stereo">stereo</h3>
 
-    <p><span class="arg">image</span>.stereo(<span class=
-    "arg">offset_image</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.stereo(<span class=
+    "arg">offset_image</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2655,7 +2655,7 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="store_pixels">store_pixels</h3>
 
-    <p><span class="arg">image</span>.store_pixels(<span class=
+    <p><span class="arg">img</span>.store_pixels(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">columns</span>, <span class="arg">rows</span>,
     <span class="arg">pixels</span>) -&gt; <em>image</em></p>
@@ -2713,8 +2713,7 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="strip_bang">strip!</h3>
 
-    <p><span class="arg">image</span>.strip! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.strip! -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2735,8 +2734,8 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="swirl">swirl</h3>
 
-    <p><span class="arg">image</span>.swirl(<span class=
-    "arg">degrees</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.swirl(<span class=
+    "arg">degrees</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2777,7 +2776,7 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="sync_profiles">sync_profiles</h3>
 
-    <p><span class="arg">image</span>.sync_profiles -&gt;
+    <p><span class="arg">img</span>.sync_profiles -&gt;
     <code>true</code> or <code>false</code></p>
   </div>
 
@@ -2806,9 +2805,9 @@ img.properties &raquo;
     <h3 id="texture_fill_to_border">texture_fill_to_border</h3>
 
     <p><span class=
-    "arg">image</span>.texture_fill_to_border(<span class=
+    "arg">img</span>.texture_fill_to_border(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">texture</span>) -&gt; <em>anImage</em></p>
+    "arg">texture</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2873,10 +2872,9 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="texture_floodfill">texture_floodfill</h3>
 
-    <p><span class=
-    "arg">image</span>.texture_floodfill(<span class="arg">x</span>,
-    <span class="arg">y</span>, <span class="arg">texture</span>)
-    -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.texture_floodfill(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">texture</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2940,8 +2938,8 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="threshold">threshold</h3>
 
-    <p><span class="arg">image</span>.threshold(<span class=
-    "arg">threshold</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.threshold(<span class=
+    "arg">threshold</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2962,7 +2960,7 @@ img.properties &raquo;
 
     <h4>Example</h4>
 
-    <p><code>threshold(Magick::MaxRGB*0.55)</code></p>
+    <p><code>threshold(MaxRGB*0.55)</code></p>
 
     <p class="rollover"><a href=
     "javascript:popup('threshold.rb.html')"><img src=
@@ -2990,11 +2988,11 @@ img.properties &raquo;
   <div class="sig">
     <h3 id="thumbnail">thumbnail</h3>
 
-    <p><span class="arg">image</span>.thumbnail(<span class=
+    <p><span class="arg">img</span>.thumbnail(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.thumbnail(<span class=
-    "arg">scale_factor</span>) -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.thumbnail(<span class=
+    "arg">scale_factor</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3027,7 +3025,7 @@ img.properties &raquo;
 
     <h4>Example</h4>
     <pre>
-img = Magick::Image.read("images/Cheetah.jpg").first
+img = Image.read("images/Cheetah.jpg").first
 thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
 </pre>
 
@@ -3045,11 +3043,11 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
   <div class="sig">
     <h3 id="thumbnail_bang">thumbnail!</h3>
 
-    <p><span class="arg">image</span>.thumbnail!(<span class=
+    <p><span class="arg">img</span>.thumbnail!(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>image</em><br />
-    <span class="arg">image</span>.thumbnail!(<span class=
-    "arg">scale_factor</span>) -&gt; <em>image</em></p>
+    -&gt; <em>self</em><br />
+    <span class="arg">img</span>.thumbnail!(<span class=
+    "arg">scale_factor</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -3065,8 +3063,8 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
   <div class="sig">
     <h3 id="to_blob">to_blob</h3>
 
-    <p><span class="arg">image</span>.to_blob <span class="arg">[ {
-    optional arguments } ]</span>-&gt; <em>aString</em></p>
+    <p><span class="arg">img</span>.to_blob <span class="arg">[ {
+    optional arguments } ]</span>-&gt; <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -3109,8 +3107,8 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
   <div class="sig">
     <h3 id="to_color">to_color</h3>
 
-    <p><span class="arg">image</span>.to_color(<span class=
-    "arg">aPixel</span>) -&gt; <em>aString</em></p>
+    <p><span class="arg">img</span>.to_color(<span class=
+    "arg">pixel</span>) -&gt; <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -3135,7 +3133,7 @@ thumbnail = img.thumbnail(img.columns*0.09, img.rows*0.09)
 img = Image.read('ex/images/Flower_Hat.jpg').first
 &raquo; ex/images/Flower_Hat.jpg JPEG 200x250 DirectClass 8-bit 9761b
 pixel = img.pixel_color(img.columns/2, img.rows/2)
-&raquo; #&lt;struct Magick::Pixel red=216, green=147, blue=106, opacity=0&gt;
+&raquo; #&lt;struct Pixel red=216, green=147, blue=106, opacity=0&gt;
 img.to_color(pixel)
 &raquo; "#D8936A"
 </pre>
@@ -3152,10 +3150,10 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="transparent">transparent</h3>
 
-    <p><span class="arg">image</span>.transparent(<span class=
+    <p><span class="arg">img</span>.transparent(<span class=
     "arg">color</span>, <span class=
-    "arg">opacity</span>=Magick::TransparentOpacity) -&gt;
-    <em>anImage</em></p>
+    "arg">opacity</span>=TransparentOpacity) -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3218,8 +3216,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="transpose">transpose</h3>
 
-    <p><span class="arg">image</span>.transpose -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.transpose -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3260,7 +3258,7 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="transpose_bang">transpose!</h3>
 
-    <p><span class="arg">image</span>.transpose! -&gt;
+    <p><span class="arg">img</span>.transpose! -&gt;
     <em>self</em></p>
   </div>
 
@@ -3277,8 +3275,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="transverse">transverse</h3>
 
-    <p><span class="arg">image</span>.transverse -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.transverse -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3319,7 +3317,7 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="transverse_bang">transverse!</h3>
 
-    <p><span class="arg">image</span>.transverse! -&gt;
+    <p><span class="arg">img</span>.transverse! -&gt;
     <em>self</em></p>
   </div>
 
@@ -3336,8 +3334,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="trim">trim</h3>
 
-    <p><span class="arg">image</span>.trim(<span class=
-    "arg">reset</span>=false) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.trim(<span class=
+    "arg">reset</span>=false) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3385,7 +3383,7 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="trim_bang">trim!</h3>
 
-    <p><span class="arg">image</span>.trim!(<span class=
+    <p><span class="arg">img</span>.trim!(<span class=
     "arg">reset</span>=false) -&gt; <em>self</em></p>
   </div>
 
@@ -3400,8 +3398,8 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="unique_colors">unique_colors</h3>
 
-    <p><span class="arg">image</span>.unique_colors -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.unique_colors -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3423,10 +3421,10 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="unsharp_mask">unsharp_mask</h3>
 
-    <p><span class="arg">image</span>.unsharp_mask(<span class=
+    <p><span class="arg">img</span>.unsharp_mask(<span class=
     "arg">radius=0.0</span>, <span class="arg">sigma=1.0</span>,
     <span class="arg">amount=1.0</span>, <span class=
-    "arg">threshold=0.05</span>) -&gt; <em>anImage</em></p>
+    "arg">threshold=0.05</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3496,11 +3494,11 @@ img.to_color(pixel)
     <h3 id="unsharp_mask_channel">unsharp_mask_channel</h3>
 
     <p><span class=
-    "arg">image</span>.unsharp_mask_channel(<span class=
+    "arg">img</span>.unsharp_mask_channel(<span class=
     "arg">radius=0.0</span>, <span class="arg">sigma=1.0</span>,
     <span class="arg">amount=1.0</span>, <span class=
     "arg">threshold=0.05</span> [,<span class=
-    "arg">channel</span>...]) -&gt; <em>anImage</em></p>
+    "arg">channel</span>...]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3572,11 +3570,11 @@ img.to_color(pixel)
   <div class="sig">
     <h3 id="view">view</h3>
 
-    <p><span class="arg">image</span>.view(<span class=
+    <p><span class="arg">img</span>.view(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
     <em>aView</em><br />
-    <span class="arg">image</span>.view(<span class="arg">x</span>,
+    <span class="arg">img</span>.view(<span class="arg">x</span>,
     <span class="arg">y</span>, <span class="arg">width</span>,
     <span class="arg">height</span>) {&nbsp;|view|
     <em>block</em>&nbsp;} -&gt; <em>nil</em></p>
@@ -3606,7 +3604,7 @@ img.to_color(pixel)
       <dt>width, height</dt>
 
       <dd>The width and height of the view. The view may not extend
-      past the boundaries of <span class="arg">image</span>.</dd>
+      past the boundaries of <span class="arg">img</span>.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -3679,10 +3677,10 @@ end
   <div class="sig">
     <h3 id="vignette">vignette</h3>
 
-    <p>image.vignette(<span class="arg">x</span>, <span class=
-    "arg">y</span>, <span class="arg">radius</span>=0.0,
-    <span class="arg">sigma</span>=10.0) -&gt; <span class=
-    "arg">anImage</span></p>
+    <p><span class="arg">img</span>.vignette(<span class=
+    "arg">x</span>, <span class="arg">y</span>, <span class=
+    "arg">radius</span>=0.0, <span class="arg">sigma</span>=10.0)
+    -&gt; <span class="arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -3701,7 +3699,7 @@ end
       "arg">x</span> make the vignette narrower. This argument
       should be positive and less than image.columns / 2. This
       argument is optional. If omitted, the default value is 0.10 *
-      <span class="arg">image</span>.columns.</dd>
+      <span class="arg">img</span>.columns.</dd>
 
       <dt>y</dt>
 
@@ -3710,7 +3708,7 @@ end
       the vignette shorter. This argument should be positive and
       less than image.rows / 2. This argument is optional. If
       omitted, the default value is 0.10 * <span class=
-      "arg">image</span>.rows.</dd>
+      "arg">img</span>.rows.</dd>
 
       <dt>radius, sigma</dt>
 
@@ -3755,16 +3753,16 @@ end
   <div class="sig">
     <h3 id="watermark">watermark</h3>
 
-    <p><span class="arg">image</span>.watermark(<span class=
+    <p><span class="arg">img</span>.watermark(<span class=
     "arg">mark</span>, <span class="arg">lightness</span>=1.0,
     <span class="arg">saturation</span>=1.0, <span class=
     "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.watermark(<span class=
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.watermark(<span class=
     "arg">mark</span>, <span class="arg">lightness</span>=1.0,
     <span class="arg">saturation</span>=1.0, <span class=
     "arg">gravity</span>, <span class="arg">x_offset</span>=0,
-    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
+    <span class="arg">y_offset</span>=0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3912,9 +3910,9 @@ end
   <div class="sig">
     <h3 id="wave">wave</h3>
 
-    <p><span class="arg">image</span>.wave(<span class=
+    <p><span class="arg">img</span>.wave(<span class=
     "arg">amplitude</span>=25.0, <span class=
-    "arg">wavelength</span>=150.0) -&gt; <em>anImage</em></p>
+    "arg">wavelength</span>=150.0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3960,9 +3958,9 @@ end
   <div class="sig">
     <h3 id="wet_floor">wet_floor</h3>
 
-    <p><span class="arg">image</span>.wet_floor(<span class=
+    <p><span class="arg">img</span>.wet_floor(<span class=
     "arg">intial=0.5</span>, <span class="arg">rate=1.0</span>)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -4026,11 +4024,11 @@ end
   <div class="sig">
     <h3 id="white_threshold">white_threshold</h3>
 
-    <p><span class="arg">image</span>.white_threshold(<span class=
+    <p><span class="arg">img</span>.white_threshold(<span class=
     "arg">red_channel</span> [, <span class=
     "arg">green_channel</span>[, <span class=
     "arg">blue_channel</span>[, <span class=
-    "arg">opacity_channel</span>]]]) -&gt; <em>anImage</em></p>
+    "arg">opacity_channel</span>]]]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -4068,12 +4066,12 @@ end
   <div class="sig">
     <h3 id="write">write</h3>
 
-    <p><span class="arg">image</span>.write(<span class=
+    <p><span class="arg">img</span>.write(<span class=
     "arg">filename</span>) <span class="arg">[ { optional arguments
-    } ]</span> -&gt; <span class="arg">image</span><br />
-    <span class="arg">image</span>.write(<span class=
+    } ]</span> -&gt; <em>self</em><br />
+    <span class="arg">img</span>.write(<span class=
     "arg">file</span>) <span class="arg">[ { optional arguments }
-    ]</span> -&gt; <em>image</em></p>
+    ]</span> -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st March 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: RVG Reference: RVG::Group Class</title>
   <meta http-equiv="Content-Type" content=
@@ -87,7 +87,7 @@
 
     <p><span class="arg">RVG::Group</span>.new [ <span class=
     "arg">{ |<span class="arg">self</span>| drawing method calls
-    }</span> ] -&gt; <span class="arg">aGroup</span></p>
+    }</span> ] -&gt; <em>group</em></p>
   </div>
 
   <div class="desc">
@@ -97,8 +97,9 @@
     and styles defined on the group. Groups can be nested
     arbitrarily deep. <code>RVG::Group.new</code> is commonly
     invoked within another group or RVG object by calling the
-    <code>g</code> method (<a href="rvg.html#RVG_g">RVG#g</a>, <a href="#g">RVG::Group#g</a>) , which nests the group within the target
-    object.</p>
+    <code>g</code> method (<a href="rvg.html#RVG_g">RVG#g</a>,
+    <a href="#g">RVG::Group#g</a>) , which nests the group within
+    the target object.</p>
 
     <p><code>RVG::Group.new</code> yields to a block if one is
     present, passing <code>self</code> as an argument.</p>
@@ -128,10 +129,10 @@
   <div class="sig">
     <h3 id="desc">desc, desc=</h3>
 
-    <p><span class="arg">group</span>.desc -&gt; <span class=
-    "arg">aString</span><br />
+    <p><span class="arg">group</span>.desc -&gt;
+    <em>string</em><br />
     <span class="arg">group</span>.desc = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -142,10 +143,10 @@
   <div class="sig">
     <h3 id="metadata">metadata, metadata=</h3>
 
-    <p><span class="arg">group</span>.metadata -&gt; <span class=
-    "arg">aString</span><br />
+    <p><span class="arg">group</span>.metadata -&gt;
+    <em>string</em><br />
     <span class="arg">group</span>.metadata = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -157,9 +158,9 @@
     <h3 id="RVG_title">title, title=</h3>
 
     <p><span class="arg">group</span>.title -&gt; <span class=
-    "arg">aString</span><br />
+    "arg">string</span><br />
     <span class="arg">group</span>.title = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -173,8 +174,7 @@
     <h3 id='g'>g</h3>
 
     <p><span class="arg">group.</span>g [{|<span class=
-    "arg">grp</span>| ...}] -&gt; <span class=
-    "arg">aGroup</span></p>
+    "arg">grp</span>| ...}] -&gt; <em>group</em></p>
   </div>
 
   <div class="desc">
@@ -197,7 +197,7 @@
     "arg">raster_image</span>, <span class="arg">width</span>=nil,
     <span class="arg">height</span>=nil, <span class=
     "arg">x</span>=0, <span class="arg">y</span>=0) -&gt;
-    <span class="arg">anImage</span></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -218,8 +218,8 @@
     <p><span class="arg">group</span>.rvg(<span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">x</span>=0, <span class="arg">y</span>=0)
-    [{|<span class="arg">new_rvg</span>| ...}] -&gt; <span class=
-    "arg">anRVG</span></p>
+    [{|<span class="arg">new_rvg</span>| ...}] -&gt;
+    <em>rvg</em></p>
   </div>
 
   <div class="desc">
@@ -240,8 +240,8 @@
 
     <p><span class="arg">group.</span>text(<span class=
     "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
-    "arg">text</span>=nil) [{|<span class="arg">aText</span>| ...}]
-    -&gt; <span class="arg">aText</span></p>
+    "arg">text</span>=nil) [{|<span class="arg">text</span>| ...}]
+    -&gt; <em>text</em></p>
   </div>
 
   <div class="desc">
@@ -265,8 +265,7 @@
     <p><span class="arg">group</span>.use(<span class=
     "arg">obj</span>, <span class="arg">x</span>=0, <span class=
     "arg">y</span>=0, <span class="arg">width</span>=nil,
-    <span class="arg">height</span>=nil) -&gt; <span class=
-    "arg">aUse</span></p>
+    <span class="arg">height</span>=nil) -&gt; <em>use</em></p>
   </div>
 
   <div class="desc">
@@ -285,6 +284,7 @@
     or when referencing it with <code>use</code>.</p>
 
     <h4>Example</h4>
+
     <p>See <a href="rvguse.html#new">RVG::Use.new</a></p>
 
     <h4>Returns</h4>

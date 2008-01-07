@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: RVG Reference: RVG Class</title>
   <meta http-equiv="Content-Type" content=
@@ -148,7 +148,7 @@
 
     <p>RVG.new(<span class="arg">width</span>=nil, <span class=
     "arg">height</span>=nil) [ <span class="arg">{ |canvas| drawing
-    method calls }</span> ] -&gt; anRVG</p>
+    method calls }</span> ] -&gt; <em>rvg</em></p>
   </div>
 
   <div class="desc">
@@ -265,7 +265,7 @@ canvas.background_fill_opacity = 0.50
     <h3 id='RVG_background_image'>background_image=</h3>
 
     <p><span class="arg">canvas</span>.background_image =
-    <span class="arg">anImage</span></p>
+    <span class="arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -280,7 +280,7 @@ canvas.background_fill_opacity = 0.50
 canvas.background_image = Magick::Image.read('myBackground.gif').first
 </pre>
 
-    <h4>Returns</h4><span class="arg">anImage</span>
+    <h4>Returns</h4><span class="arg">image</span>
 
     <h4>See also</h4>
 
@@ -292,7 +292,7 @@ canvas.background_image = Magick::Image.read('myBackground.gif').first
     <h3 id='RVG_background_pattern'>background_pattern=</h3>
 
     <p><span class="arg">canvas</span>.background_pattern =
-    <span class="arg">aFill</span></p>
+    <span class="arg">fill</span></p>
   </div>
 
   <div class="desc">
@@ -359,7 +359,7 @@ canvas.background_position = :scaled
   <div class="sig">
     <h3 id='RVG_canvas'>canvas</h3>
 
-    <p><span class="arg">rvg</span>.canvas -&gt; anImage</p>
+    <p><span class="arg">rvg</span>.canvas -&gt; image</p>
   </div>
 
   <div class="desc">
@@ -378,9 +378,9 @@ canvas.background_position = :scaled
     <h3 id="RVG_desc">desc, desc=</h3>
 
     <p><span class="arg">rvg</span>.desc -&gt; <span class=
-    "arg">aString</span><br />
+    "arg">string</span><br />
     <span class="arg">rvg</span>.desc = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -411,9 +411,9 @@ canvas.background_position = :scaled
     <h3 id="RVG_metadata">metadata, metadata=</h3>
 
     <p><span class="arg">rvg</span>.metadata -&gt; <span class=
-    "arg">aString</span><br />
+    "arg">string</span><br />
     <span class="arg">rvg</span>.metadata = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -427,9 +427,9 @@ canvas.background_position = :scaled
     <h3 id="RVG_title">title, title=</h3>
 
     <p><span class="arg">rvg</span>.title -&gt; <span class=
-    "arg">aString</span><br />
+    "arg">string</span><br />
     <span class="arg">rvg</span>.title = <span class=
-    "arg">aString</span></p>
+    "arg">string</span></p>
   </div>
 
   <div class="desc">
@@ -499,7 +499,7 @@ canvas.background_position = :scaled
   <div class="sig">
     <h3 id='RVG_draw'>draw</h3>
 
-    <p><span class="arg">rvg</span>.draw -&gt; anImage</p>
+    <p><span class="arg">rvg</span>.draw -&gt; image</p>
   </div>
 
   <div class="desc">
@@ -541,7 +541,7 @@ canvas.background_position = :scaled
 
     <p><span class="arg">rvg.</span>g [{|<span class=
     "arg">grp</span>| ...}] -&gt; <span class=
-    "arg">aGroup</span></p>
+    "arg">group</span></p>
   </div>
 
   <div class="desc">
@@ -565,7 +565,7 @@ canvas.background_position = :scaled
     "arg">raster_image</span>, <span class="arg">width</span>=nil,
     <span class="arg">height</span>=nil, <span class=
     "arg">x</span>=0, <span class="arg">y</span>=0) -&gt;
-    <span class="arg">anImage</span></p>
+    <span class="arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -716,8 +716,8 @@ canvas.background_position = :scaled
     <p><span class="arg">rvg</span>.rvg(<span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">x</span>=0, <span class="arg">y</span>=0)
-    [{|<span class="arg">new_rvg</span>| ...}] -&gt; <span class=
-    "arg">anRVG</span></p>
+    [{|<span class="arg">new_rvg</span>| ...}] -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -763,7 +763,7 @@ canvas.background_position = :scaled
     <p><span class="arg">rvg.</span>text(<span class=
     "arg">x</span>=0, <span class="arg">y</span>=0, <span class=
     "arg">text</span>=nil) [{|<span class="arg">aText</span>| ...}]
-    -&gt; <span class="arg">aText</span></p>
+    -&gt; <em>text</em></p>
   </div>
 
   <div class="desc">
@@ -787,8 +787,7 @@ canvas.background_position = :scaled
     <p><span class="arg">rvg</span>.use(<span class=
     "arg">obj</span>, <span class="arg">x</span>=0, <span class=
     "arg">y</span>=0, <span class="arg">width</span>=nil,
-    <span class="arg">height</span>=nil) -&gt; <span class=
-    "arg">aUse</span></p>
+    <span class="arg">height</span>=nil) -&gt; <em>use</em></p>
   </div>
 
   <div class="desc">
@@ -825,7 +824,7 @@ canvas.background_position = :scaled
     "arg">min_x</span>, <span class="arg">min_y</span>,
     <span class="arg">width</span>, <span class=
     "arg">height</span>) [{|<span class="arg">self</span>| ...}]
-    -&gt; <span class="arg">rvg</span></p>
+    -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">

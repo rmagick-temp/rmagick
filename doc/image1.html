@@ -266,7 +266,7 @@ float: left;
     "arg">screen=</span><code>false</code>, <span class=
     "arg">borders=</span><code>false</code>) [ <span class=
     "arg">{&nbsp;optional arguments&nbsp;}</span> ] -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -335,7 +335,7 @@ float: left;
 
     <h4>Example</h4>
     <pre>
-img = Magick::Image.capture {
+img = Image.capture {
  self.filename = "root"
  }
 </pre>
@@ -344,10 +344,10 @@ img = Magick::Image.capture {
   <div class="sig">
     <h3 id="combine">combine</h3>
 
-    <p>Image.combine(<span class="arg">red_ch</span>=nil[,
-    <span class="arg">green_ch</span>=nil[, <span class=
-    "arg">blue_ch</span>=nil[<span class="arg">,
-    opacity_ch</span>=nil]]]) -&gt;<em>anImage</em></p>
+    <p>Image.combine(<span class="arg">red_ch</span>=nil,
+    <span class="arg">green_ch</span>=nil, <span class=
+    "arg">blue_ch</span>=nil<span class="arg">,
+    opacity_ch</span>=nil) -&gt;<em>image</em></p>
   </div>
 
   <div class="desc">
@@ -392,7 +392,7 @@ img = Magick::Image.capture {
 
     <p>Image.constitute(<span class="arg">width</span>,
     <span class="arg">height</span>, <span class="arg">map</span>,
-    <span class="arg">pixels</span>) -&gt; <em>anImage</em></p>
+    <span class="arg">pixels</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -437,7 +437,7 @@ img = Magick::Image.capture {
 
     <h4>Example</h4>
     <pre>
-image = Magick::Image.constitute(width, height, "RGB", pixels)
+image = Image.constitute(width, height, "RGB", pixels)
 </pre>
 
     <h4>See also</h4>
@@ -455,9 +455,9 @@ image = Magick::Image.constitute(width, height, "RGB", pixels)
   <div class="sig">
     <h3 id="from_blob">from_blob</h3>
 
-    <p>Image.from_blob(<span class="arg">aString</span>) [
+    <p>Image.from_blob(<span class="arg">string</span>) [
     <span class="arg">{ optional arguments }</span> ] -&gt;
-    <em>anArray</em></p>
+    <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -499,7 +499,7 @@ image = Magick::Image.constitute(width, height, "RGB", pixels)
     <p>Image.new(<span class="arg">columns</span>, <span class=
     "arg">rows</span> [, <span class="arg">fill</span>]) [
     <span class="arg">{ optional arguments }</span> ] -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -533,7 +533,7 @@ image = Magick::Image.constitute(width, height, "RGB", pixels)
 
     <h4>Example</h4>
     <pre>
-img = Magick::Image.new(256, 64) {
+img = Image.new(256, 64) {
  self.background_color = 'red'
  }
 </pre>
@@ -553,9 +553,9 @@ img = Magick::Image.new(256, 64) {
 
     <p>Image.ping(<span class="arg">filename</span>) [ <span class=
     "arg">{ optional arguments }</span> ] -&gt;
-    <em>anArray</em><br />
+    <em>array</em><br />
     Image.ping(<span class="arg">file</span>) [ <span class="arg">{
-    optional arguments }</span> ] -&gt; <em>anArray</em></p>
+    optional arguments }</span> ] -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -578,7 +578,7 @@ img = Magick::Image.new(256, 64) {
 
     <h4>Example</h4>
     <pre>
-cheetah = Magick::Image.ping("Cheetah.jpg") &raquo;
+cheetah = Image.ping("Cheetah.jpg") &raquo;
  [Cheetah.jpg JPEG 1024x768 DirectClass 8-bit 101684b]
 p cheetah[0].rows &raquo; 768
 p cheetah[0].columns &raquo; 1024
@@ -598,9 +598,9 @@ p cheetah[0].columns &raquo; 1024
 
     <p>Image.read(<span class="arg">filename</span>) [ <span class=
     "arg">{ optional arguments }</span> ] -&gt;
-    <em>anArray</em><br />
+    <em>array</em><br />
     Image.read(<span class="arg">file</span>) [ <span class="arg">{
-    optional arguments }</span> ] -&gt; <em>anArray</em></p>
+    optional arguments }</span> ] -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -629,7 +629,7 @@ p cheetah[0].columns &raquo; 1024
 
     <h4>Example</h4>
     <pre>
-animated = Magick::Image.read("animated.gif") &raquo;
+animated = Image.read("animated.gif") &raquo;
 [animated.gif GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b
 animated.gif[1] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b,
 animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
@@ -655,7 +655,7 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
 
     <p>Image.read_inline(<span class="arg">content</span>) [
     <span class="arg">{ optional arguments }</span> ] -&gt;
-    <em>anArray</em></p>
+    <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -682,7 +682,7 @@ animated.gif[2] GIF 127x120+0+0 PseudoClass 256c 8-bit 54395b]
     <h4>Example</h4>
     <pre>
 content = "R0lGODlhnAEuAferAAAAAAcIBggJBgw..."
-img = Magick::Image.read_inline(content)
+img = Image.read_inline(content)
 </pre>
 
     <h4>See also</h4>
@@ -695,8 +695,8 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="aref">[&nbsp;]</h3>
 
-    <p>image[<span class="arg">key</span>] -&gt;
-    <em>aString</em></p>
+    <p><span class="arg">img</span>[<span class="arg">key</span>]
+    -&gt; <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -742,8 +742,8 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="aset">[&nbsp;]=</h3>
 
-    <p>image[<span class="arg">key</span>] = <span class=
-    "arg">aString</span> -&gt; <em>image</em></p>
+    <p><span class="arg">img</span>[<span class="arg">key</span>] =
+    <span class="arg">string</span> -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -774,19 +774,19 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="spaceship">&lt;=&gt;</h3>
 
-    <p><span class="arg">image</span> &lt;=&gt; <span class=
-    "arg">anOtherImage</span> -&gt; -1, 0, 1</p>
+    <p><span class="arg">img</span> &lt;=&gt; <span class=
+    "arg">other_image</span> -&gt; -1, 0, 1</p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Compares two images and returns -1, 0, or 1 if <span class=
-    "arg">image</span> is less than, equal to, or greater than
-    <span class="arg">anOtherImage</span> as determined by
-    comparing the signatures of the images. If one of the arguments
-    is not an image, this method raises a TypeError exception (in
-    Ruby 1.6) or returns <code>nil</code> (in Ruby 1.8)</p>
+    "arg">img</span> is less than, equal to, or greater than
+    <span class="arg">other_image</span> as determined by comparing
+    the signatures of the images. If one of the arguments is not an
+    image, this method raises a TypeError exception (in Ruby 1.6)
+    or returns <code>nil</code> (in Ruby 1.8)</p>
 
     <p>In addition to &lt;=&gt;, <code>Image</code> mixes in the
     <code>Comparable</code> module, which defines the &lt;, &lt;=,
@@ -799,8 +799,8 @@ img = Magick::Image.read_inline(content)
     <h4>Returns</h4>
 
     <p>The value of <span class=
-    "arg">image</span>.<code>signature</code> &lt;=&gt;
-    <span class="arg">anOtherImage</span>.<code>signature</code>.</p>
+    "arg">img</span>.<code>signature</code> &lt;=&gt; <span class=
+    "arg">other_mage</span>.<code>signature</code>.</p>
 
     <h4>See also</h4>
 
@@ -816,9 +816,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_blur">adaptive_blur</h3>
 
-    <p><span class="arg">image</span>.adaptive_blur(<span class=
+    <p><span class="arg">img</span>.adaptive_blur(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -870,10 +870,10 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_blur_channel">adaptive_blur_channel</h3>
 
-    <p><span class="arg">image</span>.adaptive_blur(<span class=
+    <p><span class="arg">img</span>.adaptive_blur(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0
     [,<span class="arg">channel</span>...]) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -921,12 +921,12 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_resize">adaptive_resize</h3>
 
-    <p><span class="arg">image</span>.adaptive_resize(<span class=
+    <p><span class="arg">img</span>.adaptive_resize(<span class=
     "arg">new_width</span>, <span class="arg">new_height</span>)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.adaptive_resize(<span class=
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.adaptive_resize(<span class=
     "arg">scale_factor</span>) -&gt; <span class=
-    "arg">anImage</span></p>
+    "arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -975,9 +975,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_sharpen">adaptive_sharpen</h3>
 
-    <p><span class="arg">image</span>.adaptive_sharpen(<span class=
+    <p><span class="arg">img</span>.adaptive_sharpen(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1029,10 +1029,10 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_sharpen_channel">adaptive_sharpen_channel</h3>
 
-    <p><span class="arg">image</span>.adaptive_sharpen(<span class=
+    <p><span class="arg">img</span>.adaptive_sharpen(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0
     [,<span class="arg">channel</span>...]) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1080,10 +1080,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="adaptive_threshold">adaptive_threshold</h3>
 
-    <p><span class=
-    "arg">image</span>.adaptive_threshold(<span class=
+    <p><span class="arg">img</span>.adaptive_threshold(<span class=
     "arg">width</span>=3, <span class="arg">height</span>=3,
-    <span class="arg">offset</span>=0) -&gt; <em>anImage</em></p>
+    <span class="arg">offset</span>=0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1138,8 +1137,8 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="add_noise">add_noise</h3>
 
-    <p><span class="arg">image</span>.add_noise(<span class=
-    "arg">noise_type</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.add_noise(<span class=
+    "arg">noise_type</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1209,7 +1208,7 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="add_profile">add_profile</h3>
 
-    <p><span class="arg">image</span>.add_profile(<span class=
+    <p><span class="arg">img</span>.add_profile(<span class=
     "arg">filename</span>) -&gt; <span class="arg">self</span></p>
   </div>
 
@@ -1253,10 +1252,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="add_noise_channel">add_noise_channel</h3>
 
-    <p><span class=
-    "arg">image</span>.add_noise_channel(<span class="arg">noise_type</span>
-    [,<span class="arg">channel</span>...]) -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.add_noise_channel(<span class=
+    "arg">noise_type</span> [,<span class="arg">channel</span>...])
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1298,8 +1296,8 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="affine_transform">affine_transform</h3>
 
-    <p><span class="arg">image</span>.affine_transform(<span class=
-    "arg">anAffineMatrix</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.affine_transform(<span class=
+    "arg">matrix</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1349,10 +1347,10 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="annotate">annotate</h3>
 
-    <p><span class="arg">image.</span>annotate(<span class=
+    <p><span class="arg">img.</span>annotate(<span class=
     "arg">draw, width, height, x, y, text</span>) <span class=
     "arg">[&nbsp;{ additional parameters }&nbsp;]</span> -&gt;
-    <em>image</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1373,8 +1371,8 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="auto_orient">auto_orient</h3>
 
-    <p><span class="arg">image</span>.auto_orient -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.auto_orient -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1404,7 +1402,7 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="auto_orient_bang">auto_orient!</h3>
 
-    <p><span class="arg">image</span>.auto_orient! -&gt;
+    <p><span class="arg">img</span>.auto_orient! -&gt;
     <em>self</em></p>
   </div>
 
@@ -1431,9 +1429,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="bilevel_channel">bilevel_channel</h3>
 
-    <p><span class="arg">image</span>.bilevel_channel(<span class=
+    <p><span class="arg">img</span>.bilevel_channel(<span class=
     "arg">threshold</span> [,<span class="arg">channel...</span>])
-    = <em>aNewImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1491,11 +1489,11 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="black_threshold">black_threshold</h3>
 
-    <p><span class="arg">image</span>.black_threshold(<span class=
+    <p><span class="arg">img</span>.black_threshold(<span class=
     "arg">red_channel</span> [, <span class=
     "arg">green_channel</span> [, <span class=
     "arg">blue_channel</span> [, <span class=
-    "arg">opacity_channel</span>]]]) -&gt; <em>anImage</em></p>
+    "arg">opacity_channel</span>]]]) -&gt; <em>image</em></p>
   </div><!-- this example is larger than normal -->
 
   <div class="desc">
@@ -1533,16 +1531,16 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="blend">blend</h3>
 
-    <p><span class="arg">image</span>.blend(<span class=
+    <p><span class="arg">img</span>.blend(<span class=
     "arg">overlay</span>, <span class="arg">src_percentage</span>,
     <span class="arg">dst_percentage</span>, <span class=
     "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.blend(<span class=
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.blend(<span class=
     "arg">overlay</span>, <span class="arg">src_percentage</span>,
     <span class="arg">dst_percentage</span>, <span class=
     "arg">gravity</span>, <span class="arg">x_offset</span>=0,
-    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
+    <span class="arg">y_offset</span>=0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1610,10 +1608,10 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="blur_channel">blur_channel</h3>
 
-    <p><span class="arg">image</span>.blur_channel(<span class=
+    <p><span class="arg">img</span>.blur_channel(<span class=
     "arg">radius=0.0</span>, <span class=
     "arg">sigma=1.0</span><span class="arg">[, channel...]]</span>)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1663,9 +1661,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="blur_image">blur_image</h3>
 
-    <p><span class="arg">image</span>.blur_image(<span class=
+    <p><span class="arg">img</span>.blur_image(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1712,9 +1710,9 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="border">border</h3>
 
-    <p><span class="arg">image</span>.border(<span class=
+    <p><span class="arg">img</span>.border(<span class=
     "arg">width</span>, <span class="arg">height</span>,
-    <span class="arg">color</span>) -&gt; <em>anImage</em></p>
+    <span class="arg">color</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1771,7 +1769,7 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="border_bang">border!</h3>
 
-    <p><span class="arg">image</span>.border!(<span class=
+    <p><span class="arg">img</span>.border!(<span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">color</span>) -&gt; <em>self</em></p>
   </div>
@@ -1789,11 +1787,11 @@ img = Magick::Image.read_inline(content)
   <div class="sig">
     <h3 id="change_geometry">change_geometry</h3>
 
-    <p><span class="arg">image</span>.change_geometry(<span class=
-    "arg">aString</span>) {|cols,rows,image| <span class=
+    <p><span class="arg">img</span>.change_geometry(<span class=
+    "arg">string</span>) {|cols,rows,image| <span class=
     "arg">block</span>} -&gt; <em>??? (see Returns)</em><br />
-    <span class="arg">image.change_geometry</span>(<span class=
-    "arg">aGeometry</span>) {|cols,rows,image| <span class=
+    <span class="arg">img.change_geometry</span>(<span class=
+    "arg">geometry</span>) {|cols,rows,image| <span class=
     "arg">block</span>} -&gt; <em>??? (see Returns)</em></p>
   </div>
 
@@ -1823,7 +1821,7 @@ img = Magick::Image.read_inline(content)
 
     <h4>Example</h4>
     <pre>
-mona = Magick::Image.read('MonaLisa.jpg').first
+mona = Image.read('MonaLisa.jpg').first
 mona.change_geometry!('320x240') { |cols, rows, img|
  img.resize!(cols, rows)
  }
@@ -1842,7 +1840,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="changed_q">changed?</h3>
 
-    <p><span class="arg">image</span>.changed? -&gt;
+    <p><span class="arg">img</span>.changed? -&gt;
     <code>true</code> or <code>false</code></p>
   </div>
 
@@ -1858,8 +1856,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="channel">channel</h3>
 
-    <p><span class="arg">image</span>.channel(<span class=
-    "arg">aChannelType</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.channel(<span class=
+    "arg">channel</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1900,8 +1898,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="channel_depth">channel_depth</h3>
 
-    <p><span class="arg">image</span>.channel_depth([<span class=
-    "arg">channel</span>...]) -&gt; <em>aNumeric</em></p>
+    <p><span class="arg">img</span>.channel_depth([<span class=
+    "arg">channel</span>...]) -&gt; <em>number</em></p>
   </div>
 
   <div class="desc">
@@ -1937,9 +1935,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="channel_extrema">channel_extrema</h3>
 
-    <p><span class="arg">image</span>.channel_extrema([<span class=
-    "arg">channel</span>...]) -&gt; <em>[aNumeric,
-    aNumeric]</em></p>
+    <p><span class="arg">img</span>.channel_extrema([<span class=
+    "arg">channel</span>...]) -&gt; <em>[number, number]</em></p>
   </div>
 
   <div class="desc">
@@ -1971,9 +1968,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="channel_mean">channel_mean</h3>
 
-    <p><span class="arg">image</span>.channel_mean([<span class=
-    "arg">channel</span>...]) -&gt; <em>[aNumeric,
-    aNumeric]</em></p>
+    <p><span class="arg">img</span>.channel_mean([<span class=
+    "arg">channel</span>...]) -&gt; <em>[number, number]</em></p>
   </div>
 
   <div class="desc">
@@ -2005,9 +2001,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="charcoal">charcoal</h3>
 
-    <p><span class="arg">image</span>.charcoal(<span class=
+    <p><span class="arg">img</span>.charcoal(<span class=
     "arg">radius</span>=0.0, <span class="arg">sigma</span>=1.0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2055,15 +2051,15 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="check_destroyed">check_destroyed</h3>
 
-    <p><span class="arg">image</span>.check_destroyed -&gt;
+    <p><span class="arg">img</span>.check_destroyed -&gt;
     <code>nil</code></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Raises Magick::DestroyedImageError if the image has been
-    destroyed. Returns nil otherwise.</p>
+    <p>Raises DestroyedImageError if the image has been destroyed.
+    Returns nil otherwise.</p>
 
     <h4>See also</h4>
 
@@ -2074,10 +2070,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="chop">chop</h3>
 
-    <p><span class="arg">image</span>.chop(<span class=
+    <p><span class="arg">img</span>.chop(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2138,8 +2134,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="clone">clone</h3>
 
-    <p><span class="arg">image</span>.clone -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.clone -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2160,7 +2155,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="clut_channel">clut_channel</h3>
 
-    <p><span class="arg">image</span>.clut(<span class=
+    <p><span class="arg">img</span>.clut(<span class=
     "arg">clut_image</span> [, <span class=
     "arg">channel...</span>]) -&gt; <em>self</em></p>
   </div>
@@ -2200,7 +2195,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       method to use by setting this image's <a href=
       "imageattrs.html#pixel_interpolation_method">pixel_interpolation_method</a>
       attribute to a <a href=
-      "constants.html#InterpolatePixelMethod">Magick::InterpolatePixelMethod</a>
+      "constants.html#InterpolatePixelMethod">InterpolatePixelMethod</a>
       value.</dd>
 
       <dt>channel...</dt>
@@ -2224,9 +2219,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h3 id="color_fill_to_border">color_fill_to_border</h3>
 
     <p><span class=
-    "arg">image</span>.color_fill_to_border(<span class=
+    "arg">img</span>.color_fill_to_border(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">fill_color</span>) -&gt; <em>anImage</em></p>
+    "arg">fill_color</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2282,9 +2277,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="color_floodfill">color_floodfill</h3>
 
-    <p><span class="arg">image</span>.color_floodfill(<span class=
+    <p><span class="arg">img</span>.color_floodfill(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">fill_color</span>) -&gt; <em>anImage</em></p>
+    "arg">fill_color</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2340,8 +2335,8 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="color_histogram">color_histogram</h3>
 
-    <p><span class="arg">image</span>.color_histogram() -&gt;
-    <em>aHash</em></p>
+    <p><span class="arg">img</span>.color_histogram() -&gt;
+    <em>hash</em></p>
   </div>
 
   <div class="desc">
@@ -2379,11 +2374,11 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="colorize">colorize</h3>
 
-    <p><span class="arg">image</span>.colorize(<span class=
+    <p><span class="arg">img</span>.colorize(<span class=
     "arg">red_pct</span>, <span class="arg">green_pct</span>,
     <span class="arg">blue_pct</span>, [<span class=
     "arg">matte_pct</span>, ] <span class="arg">fill</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2440,9 +2435,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="colormap">colormap</h3>
 
-    <p><span class="arg">image</span>.colormap(<span class=
+    <p><span class="arg">img</span>.colormap(<span class=
     "arg">index</span>[, <span class="arg">new_color</span>]) -&gt;
-    <em>aString</em></p>
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2484,9 +2479,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
   <div class="sig">
     <h3 id="color_point">color_point</h3>
 
-    <p><span class="arg">image</span>.color_point(<span class=
+    <p><span class="arg">img</span>.color_point(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">fill</span>) -&gt; <em>anImage</em></p>
+    "arg">fill</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2532,8 +2527,8 @@ f.color_point(50,50, 'red')
   <div class="sig">
     <h3 id="color_reset_bang">color_reset!</h3>
 
-    <p><span class="arg">image</span>.color_reset!(<span class=
-    "arg">fill</span>) -&gt; <em>image</em></p>
+    <p><span class="arg">img</span>.color_reset!(<span class=
+    "arg">fill</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2562,10 +2557,10 @@ f.color_reset!(red)
   <div class="sig">
     <h3 id="compare_channel">compare_channel</h3>
 
-    <p><span class="arg">image</span>.compare_channel(<span class=
+    <p><span class="arg">img</span>.compare_channel(<span class=
     "arg">img</span>, <span class="arg">metric</span> [,
-    <span class="arg">channel...</span>]) -&gt; [<em>anImage</em>,
-    <em>aFloat</em>]</p>
+    <span class="arg">channel...</span>]) -&gt; [<em>image</em>,
+    <em>float</em>]</p>
   </div>
 
   <div class="desc">
@@ -2621,24 +2616,23 @@ f.color_reset!(red)
   <div class="sig">
     <h3 id="composite">composite</h3>
 
-    <p><span class="arg">image</span>.composite(<span class=
-    "arg">img</span>, <span class="arg">x</span>, <span class=
+    <p><span class="arg">dest</span>.composite(<span class=
+    "arg">src</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">composite_op</span>) -&gt;
-    <em>anImage</em><br />
-    <span class="arg">image</span>.composite(<span class=
-    "arg">img</span>, <span class="arg">gravity</span>,
+    <em>image</em><br />
+    <span class="arg">dest</span>.composite(<span class=
+    "arg">src</span>, <span class="arg">gravity</span>,
     <span class="arg">composite_op</span>) -&gt;
-    <em>anImage</em><br />
-    <span class="arg">image</span>.composite(<span class=
-    "arg">img</span>, <span class="arg">gravity</span>,
+    <em>image</em><br />
+    <span class="arg">dest</span>.composite(<span class=
+    "arg">src</span>, <span class="arg">gravity</span>,
     <span class="arg">x</span>, <span class="arg">y</span>,
-    <span class="arg">composite_op</span>) -&gt;
-    <em>anImage</em></p>
+    <span class="arg">composite_op</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Composites <span class="arg">img</span>
-    onto <span class="arg">image</span> using the specified
+    <h4>Description</h4>Composites <span class="arg">src</span>
+    onto <span class="arg">dest</span> using the specified
     composite operator.
 
     <h4>Arguments</h4>
@@ -2651,7 +2645,7 @@ f.color_reset!(red)
 
       <dd>
         <dl>
-          <dt>img</dt>
+          <dt>src</dt>
 
           <dd>Either an imagelist or an image. If an imagelist,
           uses the current image.</dd>
@@ -2674,7 +2668,7 @@ f.color_reset!(red)
 
       <dd>
         <dl>
-          <dt>img</dt>
+          <dt>src</dt>
 
           <dd>Either an imagelist or an image. If an imagelist,
           uses the current image.</dd>
@@ -2747,7 +2741,7 @@ f.color_reset!(red)
 
       <dd>
         <dl>
-          <dt>img</dt>
+          <dt>src</dt>
 
           <dd>Either an imagelist or an image. If an imagelist,
           uses the current image.</dd>
@@ -2798,16 +2792,16 @@ f.color_reset!(red)
   <div class="sig">
     <h3 id="composite_bang">composite!</h3>
 
-    <p><span class="arg">image</span>.composite!(<span class=
-    "arg">img</span>, <span class="arg">x</span>, <span class=
+    <p><span class="arg">dest</span>.composite!(<span class=
+    "arg">src</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">composite_op</span>) -&gt;
     <em>self</em><br />
-    <span class="arg">image</span>.composite!(<span class=
-    "arg">img</span>, <span class="arg">gravity</span>,
+    <span class="arg">dest</span>.composite!(<span class=
+    "arg">src</span>, <span class="arg">gravity</span>,
     <span class="arg">composite_op</span>) -&gt;
     <em>self</em><br />
-    <span class="arg">image</span>.composite!(<span class=
-    "arg">img</span>, <span class="arg">gravity</span>,
+    <span class="arg">dest</span>.composite!(<span class=
+    "arg">src</span>, <span class="arg">gravity</span>,
     <span class="arg">x</span>, <span class="arg">y</span>,
     <span class="arg">composite_op</span>) -&gt; <em>self</em></p>
   </div>
@@ -2825,14 +2819,14 @@ f.color_reset!(red)
   <div class="sig">
     <h3 id="composite_affine">composite_affine</h3>
 
-    <p><span class="arg">image</span>.composite_affine(<span class=
-    "arg">img</span>, <span class="arg">affine</span>) -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">dest</span>.composite_affine(<span class=
+    "arg">src</span>, <span class="arg">affine</span>) -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
-    <h4>Description</h4>Composite <span class="arg">img</span> over
-    the receiver image as dictated by the <span class=
+    <h4>Description</h4>Composite <span class="arg">src</span> over
+    <span class="arg">dest</span> as dictated by the <span class=
     "arg">affine</span> argument.
 
     <h4>Arguments</h4>
@@ -2864,8 +2858,8 @@ f.color_reset!(red)
   <div class="sig">
     <h3 id="compress_colormap">compress_colormap</h3>
 
-    <p><span class="arg">image</span>.compress_colormap! -&gt;
-    <em>image</em></p>
+    <p><span class="arg">img</span>.compress_colormap! -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2881,7 +2875,7 @@ f.color_reset!(red)
 
     <h4>Example</h4>
     <pre>
-f = Magick::Image.read('cbezier1.gif').first &raquo;
+f = Image.read('cbezier1.gif').first &raquo;
  cbezier1.gif GIF 500x350+0+0 PseudoClass 128c 8-bit 177503b
 f.colors &raquo; 128
 f.compress_colormap! &raquo;
@@ -2897,9 +2891,9 @@ f.colors &raquo; 108
   <div class="sig">
     <h3 id="contrast">contrast</h3>
 
-    <p><span class="arg">image</span>.contrast(<span class=
+    <p><span class="arg">img</span>.contrast(<span class=
     "arg">sharpen</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2941,11 +2935,11 @@ f.colors &raquo; 108
     <h3 id="contrast_stretch_channel">contrast_stretch_channel</h3>
 
     <p><span class=
-    "arg">image</span>.contrast_stretch_channel(<span class=
+    "arg">img</span>.contrast_stretch_channel(<span class=
     "arg">black_point</span> [, <span class=
     "arg">white_point</span>] [, <span class=
     "arg">channel</span>...]) -&gt; <span class=
-    "arg">anImage</span></p>
+    "arg">image</span></p>
   </div>
 
   <div class="desc">
@@ -3000,9 +2994,9 @@ f.colors &raquo; 108
   <div class="sig">
     <h3 id="convolve">convolve</h3>
 
-    <p><span class="arg">image</span>.convolve(<span class=
+    <p><span class="arg">img</span>.convolve(<span class=
     "arg">order</span>, <span class="arg">kernel</span>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3054,10 +3048,9 @@ f.colors &raquo; 108
   <div class="sig">
     <h3 id="convolve_channel">convolve_channel</h3>
 
-    <p><span class="arg">image</span>.convolve_channel(<span class=
+    <p><span class="arg">img</span>.convolve_channel(<span class=
     "arg">order</span>, <span class="arg">kernel</span> [,
-    <span class="arg">channel</span>...]) -&gt;
-    <em>anImage</em></p>
+    <span class="arg">channel</span>...]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3102,8 +3095,8 @@ f.colors &raquo; 108
   <div class="sig">
     <h3 id="copy">copy</h3>
 
-    <p><span class="arg">image</span>.copy -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.copy -&gt;
+    <em>other_image</em></p>
   </div>
 
   <div class="desc">
@@ -3128,17 +3121,17 @@ f2 = f.copy
   <div class="sig">
     <h3 id="crop">crop</h3>
 
-    <p><span class="arg">image</span>.crop(<span class=
+    <p><span class="arg">img</span>.crop(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <em>anImage</em><br />
-    <span class="arg">image</span>.crop(<span class=
+    <em>image</em><br />
+    <span class="arg">img</span>.crop(<span class=
     "arg">gravity</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">width</span>, <span class=
-    "arg">height</span>) -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.crop(<span class=
+    "arg">height</span>) -&gt; <em>image</em><br />
+    <span class="arg">img</span>.crop(<span class=
     "arg">gravity</span>, <span class="arg">width</span>,
-    <span class="arg">height</span>) -&gt; <em>anImage</em></p>
+    <span class="arg">height</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3314,17 +3307,17 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="crop_bang">crop!</h3>
 
-    <p><span class="arg">image</span>.crop!(<span class=
+    <p><span class="arg">img</span>.crop!(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>) -&gt;
-    <em>image</em><br />
-    <span class="arg">image</span>.crop!(<span class=
+    <em>self</em><br />
+    <span class="arg">img</span>.crop!(<span class=
     "arg">gravity</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">width</span>, <span class=
-    "arg">height</span>) -&gt; <em>image</em><br />
-    <span class="arg">image</span>.crop!(<span class=
+    "arg">height</span>) -&gt; <em>self</em><br />
+    <span class="arg">img</span>.crop!(<span class=
     "arg">gravity</span>, <span class="arg">width</span>,
-    <span class="arg">height</span>) -&gt; <em>image</em></p>
+    <span class="arg">height</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -3339,9 +3332,9 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="crop_resized">crop_resized</h3>
 
-    <p><span class="arg">image</span>.crop_resized(<span class=
+    <p><span class="arg">img</span>.crop_resized(<span class=
     "arg">width</span>, <span class="arg">height</span>,
-    gravity=Magick::CenterGravity) -&gt; <em>anImage</em></p>
+    gravity=CenterGravity) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3354,8 +3347,8 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="cycle_colormap">cycle_colormap</h3>
 
-    <p><span class="arg">image</span>.cycle_colormap(<span class=
-    "arg">amount</span>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">img</span>.cycle_colormap(<span class=
+    "arg">amount</span>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3399,7 +3392,7 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="delete_profile">delete_profile</h3>
 
-    <p><span class="arg">image</span>.delete_profile(<span class=
+    <p><span class="arg">img</span>.delete_profile(<span class=
     "arg">profile_name</span>) -&gt; <span class=
     "arg">self</span></p>
   </div>
@@ -3433,8 +3426,8 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="despeckle">despeckle</h3>
 
-    <p><span class="arg">image</span>.despeckle -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.despeckle -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3455,7 +3448,7 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="destroy_bang">destroy!</h3>
 
-    <p><span class="arg">image</span>.destroy! -&gt;
+    <p><span class="arg">img</span>.destroy! -&gt;
     <em>self</em></p>
   </div>
 
@@ -3466,7 +3459,7 @@ cropped = img.crop(x, y, width, height, true)
     system. After an image has been destroyed, all Image methods
     (except <a href="image1.html#destroyed_q">destroyed?</a> and
     <a href="image2.html#inspect">inspect</a>) called on the image
-    will raise a Magick::DestroyedImageError.</p>
+    will raise a DestroyedImageError.</p>
 
     <p>It is not possible to recover a destroyed image.</p>
 
@@ -3483,7 +3476,7 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="destroyed_q">destroyed?</h3>
 
-    <p><span class="arg">image</span>.destroyed? -&gt;
+    <p><span class="arg">img</span>.destroyed? -&gt;
     <code>true</code> or <code>false</code></p>
   </div>
 
@@ -3502,8 +3495,8 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="difference">difference</h3>
 
-    <p><span class="arg">image</span>.difference(<span class=
-    "arg">other</span>) -&gt; <em>anArray</em></p>
+    <p><span class="arg">img</span>.difference(<span class=
+    "arg">other</span>) -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -3559,12 +3552,11 @@ cropped = img.crop(x, y, width, height, true)
   <div class="sig">
     <h3 id="dispatch">dispatch</h3>
 
-    <p><span class="arg">image</span>.dispatch(<span class=
+    <p><span class="arg">img</span>.dispatch(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">columns</span>, <span class="arg">rows</span>,
     <span class="arg">map</span>, <span class=
-    "arg">float</span>=<code>false</code>) -&gt;
-    <em>anArray</em></p>
+    "arg">float</span>=<code>false</code>) -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -3632,24 +3624,24 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="displace">displace</h3>
 
-    <p><span class="arg">image</span>.displace(<span class=
+    <p><span class="arg">img</span>.displace(<span class=
     "arg">displacement_map</span>, <span class=
     "arg">x_amplitude</span>, <span class="arg">y_amplitude</span>,
     <span class="arg">x_offset</span>=0, <span class=
-    "arg">y_offset</span>=0) -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.displace(<span class=
+    "arg">y_offset</span>=0) -&gt; <em>image</em><br />
+    <span class="arg">img</span>.displace(<span class=
     "arg">displacement_map</span>, <span class=
     "arg">x_amplitude</span>, <span class="arg">y_amplitude</span>,
     <span class="arg">gravity</span>, <span class=
     "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
-    -&gt; <em>anImage</em></p>
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Uses <span class="arg">displacement_map</span> to move color
-    from <span class="arg">image</span> to the output image.</p>
+    from <span class="arg">img</span> to the output image.</p>
 
     <p>This method corresponds to the -displace option of
     ImageMagick's <code>composite</code> command.</p>
@@ -3703,8 +3695,8 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="display">display</h3>
 
-    <p><span class="arg">image</span>.display [ <span class="arg">{
-    optional arguments }</span> ] -&gt; <em>image</em></p>
+    <p><span class="arg">img</span>.display [ <span class="arg">{
+    optional arguments }</span> ] -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -3740,23 +3732,23 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="dissolve">dissolve</h3>
 
-    <p><span class="arg">image</span>.dissolve(<span class=
+    <p><span class="arg">img</span>.dissolve(<span class=
     "arg">overlay</span>, <span class="arg">src_percentage</span>,
     <span class="arg">dst_percentage</span>, <span class=
     "arg">x_offset</span>=0, <span class="arg">y_offset</span>=0)
-    -&gt; <em>anImage</em><br />
-    <span class="arg">image</span>.dissolve(<span class=
+    -&gt; <em>image</em><br />
+    <span class="arg">img</span>.dissolve(<span class=
     "arg">overlay</span>, <span class="arg">src_percentage</span>,
     <span class="arg">dst_percentage</span>, <span class=
     "arg">gravity</span>, <span class="arg">x_offset</span>=0,
-    <span class="arg">y_offset</span>=0) -&gt; <em>anImage</em></p>
+    <span class="arg">y_offset</span>=0) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Composites the <span class="arg">overlay</span> image into
-    the target image. The opacity of <span class="arg">image</span>
+    the target image. The opacity of <span class="arg">img</span>
     is multiplied by <span class="arg">dst_percentage</span> and
     opacity of <span class="arg">overlay</span> is multiplied by
     <span class="arg">src_percentage</span>.</p>
@@ -3786,7 +3778,7 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
       If <span class="arg">src_percentage</span> is a number it is
       interpreted as a percentage. Both 0.25 and "25%" mean 25%.
       This argument may omitted if no other arguments follow it. In
-      this case <span class="arg">image</span>'s opacity is
+      this case <span class="arg">img</span>'s opacity is
       unchanged.</dd>
     </dl>
 
@@ -3830,10 +3822,10 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="distort">distort</h3>
 
-    <p><span class="arg">image</span>.distort(<span class=
+    <p><span class="arg">img</span>.distort(<span class=
     "arg">type</span>, <span class="arg">points</span>,
     <span class="arg">bestfit</span>=<code>false</code>) -&gt;
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3889,11 +3881,10 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="distortion_channel">distortion_channel</h3>
 
-    <p><span class=
-    "arg">image</span>.distortion_channel(<span class=
+    <p><span class="arg">img</span>.distortion_channel(<span class=
     "arg">reconstructed_image</span>, <span class=
     "arg">metric</span>[, <span class="arg">channel</span>...])
-    -&gt; <em>aFloat</em></p>
+    -&gt; <em>float</em></p>
   </div>
 
   <div class="desc">
@@ -3943,8 +3934,8 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
   <div class="sig">
     <h3 id="dup">dup</h3>
 
-    <p><span class="arg">image</span>.dup -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">img</span>.dup -&gt;
+    <em>other_image</em></p>
   </div>
 
   <div class="desc">

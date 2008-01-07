@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -247,8 +247,8 @@
   <div class="sig">
     <h3 id="new">new</h3>
 
-    <p>Magick::Draw.new <span class="arg">[&nbsp;{ optional
-    parameters }&nbsp;]</span> -&gt; <em>draw</em></p>
+    <p>Draw.new <span class="arg">[&nbsp;{ optional parameters
+    }&nbsp;]</span> -&gt; <em>draw</em></p>
   </div>
 
   <div class="desc">
@@ -280,7 +280,7 @@ gc = Draw.new
     "arg">height</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">text</span>) <span class=
     "arg">[&nbsp;{ additional parameters }&nbsp;]</span> -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -531,7 +531,8 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
   <div class="sig">
     <h3 id="clone">clone</h3>
 
-    <p><span class="arg">draw</span>.clone -&gt; <em>aDraw</em></p>
+    <p><span class="arg">draw</span>.clone -&gt;
+    <em>other_draw</em></p>
   </div>
 
   <div class="desc">
@@ -549,7 +550,7 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
     <h3 id="draw">draw</h3>
 
     <p><span class="arg">draw</span>.draw(<span class=
-    "arg">img</span>) -&gt; <em>draw</em></p>
+    "arg">img</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -581,7 +582,8 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
   <div class="sig">
     <h3 id="dup">dup</h3>
 
-    <p><span class="arg">draw</span>.dup -&gt; <em>aDraw</em></p>
+    <p><span class="arg">draw</span>.dup -&gt;
+    <em>other_draw</em></p>
   </div>
 
   <div class="desc">
@@ -605,16 +607,16 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
 
     <p><span class=
     "arg">draw</span>.get_multiline_type_metrics([<span class=
-    "arg">anImage</span>,] <span class="arg">aString</span>) -&gt;
-    <em>aTypeMetric</em></p>
+    "arg">image</span>,] <span class="arg">string</span>) -&gt;
+    <em>type_metrics</em></p>
   </div>
 
   <div class="sig">
     <h3 id="get_type_metrics">get_type_metrics</h3>
 
     <p><span class="arg">draw</span>.get_type_metrics([<span class=
-    "arg">anImage</span>,] <span class="arg">aString</span>) -&gt;
-    <em>aTypeMetric</em></p>
+    "arg">image</span>,] <span class="arg">string</span>) -&gt;
+    <em>type_metrics</em></p>
   </div>
 
   <div class="desc">
@@ -680,22 +682,21 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
       <dt>string</dt>
 
       <dd>The string to be rendered. If <span class=
-      "arg">image</span> is specified, the string may contain
-      special characters that refer to the image attributes. See
-      <a href="#spec_chars_table">this</a> table.</dd>
+      "arg">img</span> is specified, the string may contain special
+      characters that refer to the image attributes. See <a href=
+      "#spec_chars_table">this</a> table.</dd>
     </dl>
 
     <h4>Returns</h4>
 
-    <p>A Magick::TypeMetric struct. This structure has the
-    following attributes. (The descriptions are taken from the
-    <a href=
+    <p>A TypeMetric struct. This structure has the following
+    attributes. (The descriptions are taken from the <a href=
     "http://www.imagemagick.org/Magick++/TypeMetric.html">Magick++</a>
     documentation and source code.)</p>
 
     <table summary="type metric attributes" class="simple_table">
       <caption>
-        Magick::TypeMetric attributes
+        TypeMetric attributes
       </caption>
 
       <tr>
@@ -767,13 +768,13 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
     <h3 id="inspect">inspect</h3>
 
     <p><span class="arg">draw</span>.inspect -&gt;
-    <em>draw</em></p>
+    <em>string</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Displays the list of primitives that have been added to the
+    <p>Returns the list of primitives that have been added to the
     <code>draw</code> object. This is very handy for debugging.</p>
 
     <h4>Example</h4>
@@ -795,7 +796,7 @@ draw.inspect &raquo;
     <h3 id="affine">affine</h3>
 
     <p><span class="arg">draw</span>.affine(<span class="arg">sx,
-    rx, ry, sy, tx, ty</span>) -&gt; <em>draw</em></p>
+    rx, ry, sy, tx, ty</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -851,7 +852,7 @@ draw.inspect &raquo;
 
     <p><span class="arg">draw</span>.arc(<span class="arg">start_x,
     start_y, end_x, end_y, start_degrees, end_degrees</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -903,7 +904,7 @@ draw.inspect &raquo;
     "arg">cx1</span>, <span class="arg">cy1</span>, <span class=
     "arg">cx2</span>, <span class="arg">cy2</span>, <span class=
     "arg">x2</span>, <span class="arg">y2</span>...) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -989,7 +990,7 @@ draw.inspect &raquo;
 
     <p><span class="arg">draw</span>.circle(<span class=
     "arg">origin_x, origin_y, perim_x, perim_y</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <p>self</p>
@@ -1028,7 +1029,7 @@ draw.inspect &raquo;
     <h3 id="clip_path">clip_path</h3>
 
     <p><span class="arg">draw</span>.clip_path(<span class=
-    "arg">pathname</span>) -&gt; <em>draw</em></p>
+    "arg">pathname</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1081,7 +1082,7 @@ gc.draw
 
     <p><span class=
     "arg">draw</span>.clip_rule(<code>"evenodd"</code> or
-    <code>"nonzero"</code>) -&gt; <em>draw</em></p>
+    <code>"nonzero"</code>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1109,7 +1110,7 @@ gc.draw
     <p><span class=
     "arg">draw</span>.clip_units(<code>"userSpace"</code>
     <span class="arg">or</span> <code>"userSpaceOnUse"</code> or
-    <code>"objectSpace"</code>) -&gt; <em>draw</em></p>
+    <code>"objectSpace"</code>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1136,7 +1137,7 @@ gc.draw
 
     <p><span class="arg">draw</span>.color(<span class=
     "arg">x</span>, <span class="arg">y</span>, <span class=
-    "arg">aPaintMethod</span>) -&gt; <em>draw</em></p>
+    "arg">paint_method</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1160,7 +1161,7 @@ gc.draw
     <h4>Example</h4>
     <pre>
   draw.border_color = 'black'
-  draw.color(x, y, Magick::FillToBorderMethod)
+  draw.color(x, y, FillToBorderMethod)
 </pre>
 
     <h4>See Also</h4>
@@ -1175,8 +1176,8 @@ gc.draw
     "arg">x</span>, <span class="arg">y</span>, <span class=
     "arg">width</span>, <span class="arg">height</span>,
     <span class="arg">composite_image</span>, <span class=
-    "arg">op</span>=<code>Magick::OverCompositeOp</code>) -&gt;
-    <em>draw</em></p>
+    "arg">op</span>=<code>OverCompositeOp</code>) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1236,7 +1237,7 @@ gc.draw
     <h3 id="decorate">decorate</h3>
 
     <p><span class="arg">draw</span>.decorate(<span class=
-    "arg">aDecorationType</span>) -&gt; <em>draw</em></p>
+    "arg">decoration</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1255,7 +1256,7 @@ gc.draw
 
     <h4>Example</h4>
     <pre>
-draw.decorate(Magick::LineThroughDecoration)
+draw.decorate(LineThroughDecoration)
 </pre>
   </div>
 
@@ -1263,8 +1264,8 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="define_clip_path">define_clip_path</h3>
 
     <p><span class="arg">draw</span>.define_clip_path(<span class=
-    "arg">aString</span>) { <span class="arg">block</span> } -&gt;
-    <em>draw</em></p>
+    "arg">string</span>) { <span class="arg">block</span> } -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1302,7 +1303,7 @@ draw.decorate(Magick::LineThroughDecoration)
     "arg">origin_y</span>, <span class="arg">width</span>,
     <span class="arg">height</span>, <span class=
     "arg">arc_start</span>, <span class="arg">arc_end</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1351,7 +1352,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="encoding">encoding</h3>
 
     <p><span class="arg">draw</span>.encoding(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1374,7 +1375,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="fill">fill</h3>
 
     <p><span class="arg">draw</span>.fill(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1406,8 +1407,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="fill_opacity">fill_opacity</h3>
 
     <p><span class="arg">draw</span>.fill_opacity(<span class=
-    "arg">aFloat</span> or <em>aString</em>) -&gt;
-    <em>draw</em></p>
+    "arg">float</span> or <em>string</em>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1438,7 +1438,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class=
     "arg">draw</span>.fill_rule(<code>"evenodd"</code> or
-    <code>"nonzero"</code>) -&gt; <em>draw</em></p>
+    <code>"nonzero"</code>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1463,9 +1463,8 @@ draw.decorate(Magick::LineThroughDecoration)
   <div class="sig">
     <h3 id="font">font</h3>
 
-    <p><span class=
-    "arg"><em>draw</em>.font(<em>aString</em>)</span> -&gt;
-    <em>draw</em></p>
+    <p><span class="arg">draw</span>.font(<span class=
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1496,7 +1495,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="font_family">font_family</h3>
 
     <p><span class="arg">draw</span>.font_family(<span class=
-    "arg">aString</span>) -&gt; draw</p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1521,7 +1520,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="font_stretch">font_stretch</h3>
 
     <p><span class="arg">draw</span>.font_stretch(<span class=
-    "arg">aStretchType</span>) -&gt; <em>draw</em></p>
+    "arg">stretch</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1543,7 +1542,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="font_style">font_style</h3>
 
     <p><span class="arg">draw</span>.font_style(<span class=
-    "arg">aStyleType</span>) -&gt; <em>draw</em></p>
+    "arg">style</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1565,7 +1564,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="font_weight">font_weight</h3>
 
     <p><span class="arg">draw</span>.font_weight(<span class=
-    "arg">aWeightType</span>) -&gt; <em>draw</em></p>
+    "arg">weight</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1589,14 +1588,14 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="gravity">gravity</h3>
 
     <p><span class="arg">draw</span>.gravity(<span class=
-    "arg">aGravityType</span>) -&gt; <em>draw</em></p>
+    "arg">gravity</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Specify how the text is positioned. The default is
-    <code>Magick::NorthWestGravity</code>.</p>
+    <code>NorthWestGravity</code>.</p>
 
     <h4>Arguments</h4>
 
@@ -1624,7 +1623,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <p><span class="arg">draw</span>.line(<span class=
     "arg">here_x</span>, <span class="arg">here_y</span>,
     <span class="arg">there_x</span>, <span class=
-    "arg">there_y</span>) -&gt; <em>draw</em></p>
+    "arg">there_y</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1664,7 +1663,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.matte(<span class=
     "arg">x</span>,<span class="arg">y</span>, <span class=
-    "arg">aPaintMethod</span>) -&gt; <em>draw</em></p>
+    "arg">paint_method</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1681,7 +1680,7 @@ draw.decorate(Magick::LineThroughDecoration)
       <dd>Point in image to use, along with the PaintMethod
       constant, to set transparent pixels in the image.</dd>
 
-      <dt>aPaintMethod</dt>
+      <dt>paint_method</dt>
 
       <dd>
         One of the following <a href=
@@ -1735,7 +1734,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="opacity">opacity</h3>
 
     <p><span class="arg">draw</span>.opacity(<span class=
-    "arg">opacity</span>) -&gt; <em>draw</em></p>
+    "arg">opacity</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1772,7 +1771,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="path">path</h3>
 
     <p><span class="arg">draw</span>.path(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1835,7 +1834,7 @@ draw.decorate(Magick::LineThroughDecoration)
     "arg">name</span>, <span class="arg">x</span>, <span class=
     "arg">y</span>, <span class="arg">width</span>, <span class=
     "arg">height</span>) { pattern primitives } -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1893,7 +1892,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.point(<span class=
     "arg">x</span>, <span class="arg">y</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1919,7 +1918,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="pointsize">pointsize</h3>
 
     <p><span class="arg">draw</span>.pointsize(<span class=
-    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+    "arg">integer</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1946,7 +1945,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <p><span class="arg">draw</span>.polygon(<span class=
     "arg">x1</span>, <span class="arg">y1</span>,...,<span class=
     "arg">xN</span>, <span class="arg">yN</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1982,7 +1981,8 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.polyline(<span class=
     "arg">x1</span>, <span class="arg">y1</span>,...,<span class=
-    "arg">xN</span>, <span class="arg">yN</span>) -&gt; draw</p>
+    "arg">xN</span>, <span class="arg">yN</span>) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2014,7 +2014,7 @@ draw.decorate(Magick::LineThroughDecoration)
   <div class="sig">
     <h3 id="pop">pop</h3>
 
-    <p><span class="arg">draw</span>.pop -&gt; <em>draw</em></p>
+    <p><span class="arg">draw</span>.pop -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2033,7 +2033,7 @@ draw.decorate(Magick::LineThroughDecoration)
   <div class="sig">
     <h3 id="push">push</h3>
 
-    <p><span class="arg">draw</span>.push -&gt; <em>draw</em></p>
+    <p><span class="arg">draw</span>.push -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2061,7 +2061,8 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.rectangle(<span class=
     "arg">x1</span>, <span class="arg">y1</span>, <span class=
-    "arg">x2</span>, <span class="arg">y2</span>) -&gt; draw</p>
+    "arg">x2</span>, <span class="arg">y2</span>) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2097,7 +2098,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="rotate">rotate</h3>
 
     <p><span class="arg">draw</span>.rotate(<span class=
-    "arg">degrees</span>) -&gt; <em>draw</em></p>
+    "arg">degrees</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2133,7 +2134,7 @@ draw.decorate(Magick::LineThroughDecoration)
     "arg">x1</span>, <span class="arg">y1</span>, <span class=
     "arg">x2</span>, <span class="arg">y2</span>, <span class=
     "arg">cw</span>, <span class="arg">ch</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2175,7 +2176,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.scale(<span class=
     "arg">sx</span>, <span class="arg">sy</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2203,7 +2204,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="skewx">skewx</h3>
 
     <p><span class="arg">draw</span>.skewx(<span class=
-    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+    "arg">float</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2235,7 +2236,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="skewy">skewy</h3>
 
     <p><span class="arg">draw</span>.skewy(<span class=
-    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+    "arg">float</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2267,7 +2268,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke">stroke</h3>
 
     <p><span class="arg">draw</span>.stroke(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2293,7 +2294,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class=
     "arg">draw</span>.stroke_antialias(<code>true</code> or
-    <code>false</code>) -&gt; <em>draw</em></p>
+    <code>false</code>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2308,7 +2309,7 @@ draw.decorate(Magick::LineThroughDecoration)
 
     <p><span class="arg">draw</span>.stroke_dasharray(<span class=
     "arg">x1</span>,...,<span class="arg">xn</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2350,7 +2351,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke_dashoffset">stroke_dashoffset</h3>
 
     <p><span class="arg">draw</span>.stroke_dashoffset(<span class=
-    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+    "arg">integer</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2375,7 +2376,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke_linecap">stroke_linecap</h3>
 
     <p><span class="arg">draw</span>.stroke_linecap(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2408,7 +2409,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke_linejoin">stroke_linejoin</h3>
 
     <p><span class="arg">draw</span>.stroke_linejoin(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2444,7 +2445,7 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke_miterlimit">stroke_miterlimit</h3>
 
     <p><span class="arg">draw</span>.stroke_miterlimit(<span class=
-    "arg">aFloat</span>) -&gt; <em>draw</em></p>
+    "arg">float</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2470,8 +2471,8 @@ draw.decorate(Magick::LineThroughDecoration)
     <h3 id="stroke_opacity">stroke_opacity</h3>
 
     <p><span class="arg">draw</span>.stroke_opacity(<span class=
-    "arg">aFloat</span> or <span class="arg">aString</span>) -&gt;
-    <em>draw</em></p>
+    "arg">float</span> or <span class="arg">string</span>) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2503,7 +2504,7 @@ draw.stroke_opacity('40%')
     <h3 id="stroke_width">stroke_width</h3>
 
     <p><span class="arg">draw</span>.stroke_width(<span class=
-    "arg">anInteger</span>) -&gt; <em>draw</em></p>
+    "arg">integer</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2527,7 +2528,7 @@ draw.stroke_opacity('40%')
 
     <p><span class="arg">draw</span>.text(<span class=
     "arg">x</span>,<span class="arg">y</span>, <span class=
-    "arg">text</span>) -&gt; <em>draw</em></p>
+    "arg">text</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2599,7 +2600,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="text_align">text_align</h3>
 
     <p><span class="arg">draw</span>.text_align(<span class=
-    "arg">anAlignType</span>) -&gt; <em>draw</em></p>
+    "arg">alignment</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2627,7 +2628,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="text_anchor">text_anchor</h3>
 
     <p><span class="arg">draw</span>.text_anchor(<span class=
-    "arg">anAnchorType</span>) -&gt; <em>draw</em></p>
+    "arg">anchor</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2651,7 +2652,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p><span class=
     "arg">draw</span>.text_antialias(<code>true</code> or
-    <code>false</code>) -&gt; <em>draw</em></p>
+    <code>false</code>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2684,7 +2685,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="text_undercolor">text_undercolor</h3>
 
     <p><span class="arg">draw</span>.text_undercolor(<span class=
-    "arg">aString</span>) -&gt; <em>draw</em></p>
+    "arg">string</span>) -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2703,7 +2704,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <h4>Example</h4>
 
-    <p><a href="javascript:popup('text_undercolor.rb.html')"><img src=
+    <p><a href=
+    "javascript:popup('text_undercolor.rb.html')"><img src=
     "ex/text_undercolor.gif" alt="text_undercolor example" title=
     "Click to see the example script" /></a></p>
   </div>
@@ -2713,7 +2715,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p><span class="arg">draw</span>.translate(<span class=
     "arg">tx</span>, <span class="arg">ty</span>) -&gt;
-    <em>draw</em></p>
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -2751,8 +2753,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="affine_eq">affine=</h3>
 
-    <p><span class="arg">draw.</span>.affine =
-    <em>anAffineMatrix</em></p>
+    <p><span class="arg">draw</span>.affine = <em>matrix</em></p>
   </div>
 
   <div class="desc">
@@ -2769,8 +2770,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="align_eq">align=</h3>
 
-    <p><span class="arg">draw.</span>.align =
-    <em>anAlignType</em></p>
+    <p><span class="arg">draw</span>.align = <em>alignment</em></p>
   </div>
 
   <div class="desc">
@@ -2789,7 +2789,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="decorate_eq">decorate=</h3>
 
     <p><span class="arg">draw</span>.decorate =
-    <em>aDecorationType</em></p>
+    <em>decoration</em></p>
   </div>
 
   <div class="desc">
@@ -2807,7 +2807,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="density_eq">density=</h3>
 
-    <p><span class="arg">draw</span>.density = <em>aString</em></p>
+    <p><span class="arg">draw</span>.density = <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2820,8 +2820,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="encoding_eq">encoding=</h3>
 
-    <p><span class="arg">draw</span>.encoding =
-    <em>aString</em></p>
+    <p><span class="arg">draw</span>.encoding = <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2839,8 +2838,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="fill_eq">fill=</h3>
 
-    <p><span class="arg">draw</span>.fill = <em>aString</em> or
-    <em>aPixel</em></p>
+    <p><span class="arg">draw</span>.fill = <em>string</em> or
+    <em>pixel</em></p>
   </div>
 
   <div class="desc">
@@ -2856,7 +2855,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="fill_pattern_eq">fill_pattern=</h3>
 
     <p><span class="arg">draw</span>.fill_pattern =
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -2877,7 +2876,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="font_eq">font=</h3>
 
-    <p><span class="arg">draw</span>.font = <em>aString</em></p>
+    <p><span class="arg">draw</span>.font = <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2891,7 +2890,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="font_family_eq">font_family=</h3>
 
     <p><span class="arg">draw</span>.font_family =
-    <em>aString</em></p>
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -2905,7 +2904,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="font_stretch_eq">font_stretch=</h3>
 
     <p><span class="arg">draw</span>.font_stretch =
-    <em>aStretchType</em></p>
+    <em>stretch</em></p>
   </div>
 
   <div class="desc">
@@ -2921,7 +2920,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="font_style_eq">font_style=</h3>
 
     <p><span class="arg">draw</span>.font_style =
-    <em>aStyleType</em></p>
+    <em>style</em></p>
   </div>
 
   <div class="desc">
@@ -2939,7 +2938,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="font_weight_eq">font_weight=</h3>
 
     <p><span class="arg">draw</span>.font_weight =
-    <em>aWeightType</em></p>
+    <em>weight</em></p>
   </div>
 
   <div class="desc">
@@ -2957,8 +2956,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="gravity_eq">gravity=</h3>
 
-    <p><span class="arg">draw</span>.gravity =
-    <em>aGravityType</em></p>
+    <p><span class="arg">draw</span>.gravity = <em>gravity</em></p>
   </div>
 
   <div class="desc">
@@ -2977,7 +2975,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="pointsize_eq">pointsize=</h3>
 
     <p><span class="arg">draw</span>.pointsize =
-    <em>anNumeric</em></p>
+    <em>integer</em></p>
   </div>
 
   <div class="desc">
@@ -2989,8 +2987,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="rotation_eq">rotation=</h3>
 
-    <p><span class="arg">draw</span>.rotation =
-    <em>aNumeric</em></p>
+    <p><span class="arg">draw</span>.rotation = <em>number</em></p>
   </div>
 
   <div class="desc">
@@ -3006,8 +3003,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="stroke_eq">stroke=</h3>
 
-    <p><span class="arg">draw</span>.stroke = <em>aString</em> or
-    <em>aPixel</em></p>
+    <p><span class="arg">draw</span>.stroke = <em>string</em> or
+    <em>pixel</em></p>
   </div>
 
   <div class="desc">
@@ -3024,7 +3021,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
     <h3 id="stroke_pattern_eq">stroke_pattern=</h3>
 
     <p><span class="arg">draw</span>.stroke_pattern =
-    <em>anImage</em></p>
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3042,8 +3039,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="stroke_width_eq">stroke_width=</h3>
 
-    <p><span class="arg">draw</span>.stroke =
-    <em>anInteger</em></p>
+    <p><span class="arg">draw</span>.stroke = <em>integer</em></p>
   </div>
 
   <div class="desc">
@@ -3069,7 +3065,7 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="tile_eq">tile=</h3>
 
-    <p><span class="arg">draw</span>.tile = <em>anImage</em></p>
+    <p><span class="arg">draw</span>.tile = <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -3085,8 +3081,8 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   <div class="sig">
     <h3 id="undercolor_eq">undercolor=</h3>
 
-    <p><span class="arg">draw</span>.undercolor = <em>aString</em>
-    or <em>aPixel</em></p>
+    <p><span class="arg">draw</span>.undercolor = <em>string</em>
+    or <em>pixel</em></p>
   </div>
 
   <div class="desc">

@@ -170,7 +170,7 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
   <div class="sig">
     <h3 id="delay_eq">delay=</h3>
 
-    <p><span class="arg">imagelist.</span>delay=<em>n</em></p>
+    <p><span class="arg">ilist.</span>delay=<em>n</em></p>
   </div>
 
   <div class="desc">
@@ -180,7 +180,7 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
     "#ticks_per_second_eq">ticks_per_second</a> sets the length of
     time between each image in an animation. The
     <code>delay=</code> attribute assigns the same delay to all the
-    images in the imagelist. Use <a href=
+    images in the ilist. Use <a href=
     "imageattrs.html#delay">Image#delay=</a> to set different delay
     values on individual images.</p>
 
@@ -195,7 +195,7 @@ i = Magick::ImageList.new("Button_A.gif", "Cheetah.jpg")
 
     <h4>Example</h4>
     <pre>
-imagelist.delay = 20 # delay 1/5 of a second between images.
+ilist.delay = 20 # delay 1/5 of a second between images.
 </pre>
 
     <h4>See also</h4>
@@ -206,7 +206,7 @@ imagelist.delay = 20 # delay 1/5 of a second between images.
   <div class="sig">
     <h3 id="iterations_eq">iterations=</h3>
 
-    <p><span class="arg">imagelist.</span>iterations=<em>n</em></p>
+    <p><span class="arg">ilist.</span>iterations=<em>n</em></p>
   </div>
 
   <div class="desc">
@@ -229,15 +229,15 @@ imagelist.delay = 20 # delay 1/5 of a second between images.
 
     <h4>Example</h4>
     <pre>
-imagelist.iterations = 10
+ilist.iterations = 10
 </pre>
   </div>
 
   <div class="sig">
     <h3 id="length">length</h3>
 
-    <p><span class="arg">imagelist.</span>length -&gt;
-    <em>anInteger</em></p>
+    <p><span class="arg">ilist.</span>length -&gt;
+    <em>integer</em></p>
   </div>
 
   <div class="desc">
@@ -255,10 +255,9 @@ i.length &raquo; 2
   <div class="sig">
     <h3 id="scene">scene, scene=</h3>
 
-    <p><span class="arg">imagelist</span>.scene -&gt;
-    <em>anInteger</em><br />
-    <span class="arg">imagelist</span>.scene =
-    <em>anInteger</em></p>
+    <p><span class="arg">ilist</span>.scene -&gt;
+    <em>integer</em><br />
+    <span class="arg">ilist</span>.scene = <em>integer</em></p>
   </div>
 
   <div class="desc">
@@ -270,16 +269,16 @@ i.length &raquo; 2
 
     <h4>Example</h4>
     <pre>
-imagelist.scene = 10
-imagelist.scene &raquo; 10
+ilist.scene = 10
+ilist.scene &raquo; 10
 </pre>
   </div>
 
   <div class="sig">
     <h3 id="ticks_per_second_eq">ticks_per_second=</h3>
 
-    <p><span class="arg">imagelist</span>.ticks_per_second =
-    <em>anInteger</em></p>
+    <p><span class="arg">ilist</span>.ticks_per_second =
+    <em>integer</em></p>
   </div>
 
   <div class="desc">
@@ -291,7 +290,7 @@ imagelist.scene &raquo; 10
 
     <h4>Example</h4>
     <pre>
-imagelist.ticks_per_second = 1000
+ilist.ticks_per_second = 1000
 </pre>
   </div>
 
@@ -404,8 +403,8 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
   <div class="sig">
     <h3 id="spaceship">&lt;=&gt;</h3>
 
-    <p><span class="arg">imagelist</span> &lt;=&gt; <span class=
-    "arg">anOtherImageList</span> -&gt; -1, 0, 1</p>
+    <p><span class="arg">ilist</span> &lt;=&gt; <span class=
+    "arg">other_imagelist</span> -&gt; -1, 0, 1</p>
   </div>
 
   <div class="desc">
@@ -442,7 +441,7 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
   <div class="sig">
     <h3 id="animate">animate</h3>
 
-    <p><span class="arg">imagelist.</span>animate(<span class=
+    <p><span class="arg">ilist.</span>animate(<span class=
     "arg">[delay]</span>) <span class="arg">[&nbsp;{ optional
     arguments }&nbsp;]</span> -&gt; <em>self</em></p>
   </div>
@@ -461,8 +460,8 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
 
     <h4>Example</h4>
     <pre>
-imagelist.animate
-imagelist.animate { self.server_name = "other:0.0" }
+ilist.animate
+ilist.animate { self.server_name = "other:0.0" }
 </pre>
 
     <h4>See also</h4>
@@ -482,8 +481,8 @@ imagelist.animate { self.server_name = "other:0.0" }
   <div class="sig">
     <h3 id="append">append</h3>
 
-    <p><span class="arg">imagelist.</span>append(<code>true</code>
-    or <code>false</code>) -&gt; <em>anImage</em></p>
+    <p><span class="arg">ilist.</span>append(<code>true</code> or
+    <code>false</code>) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -515,8 +514,8 @@ imagelist.animate { self.server_name = "other:0.0" }
   <div class="sig">
     <h3 id="average">average</h3>
 
-    <p><span class="arg">imagelist.</span>average -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">ilist.</span>average -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -556,8 +555,8 @@ imagelist.animate { self.server_name = "other:0.0" }
   <div class="sig">
     <h3 id="clone">clone</h3>
 
-    <p><span class="arg">imagelist</span>.clone -&gt;
-    <em>anImageList</em></p>
+    <p><span class="arg">ilist</span>.clone -&gt;
+    <em>other_imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -578,8 +577,8 @@ imagelist.animate { self.server_name = "other:0.0" }
   <div class="sig">
     <h3 id="coalesce">coalesce</h3>
 
-    <p><span class="arg">imagelist.</span>coalesce -&gt;
-    <em>anImageList</em></p>
+    <p><span class="arg">ilist.</span>coalesce -&gt;
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -632,7 +631,7 @@ imagelist.animate { self.server_name = "other:0.0" }
     "arg">destination_list</span>.composite_layers(<span class=
     "arg">source_list</span>, <span class=
     "arg">operator</span>=<code>OverCompositeOp</code>) -&gt;
-    <em>anImageList</em></p>
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -694,8 +693,8 @@ imagelist.animate { self.server_name = "other:0.0" }
   <div class="sig">
     <h3 id="copy">copy</h3>
 
-    <p><span class="arg">imagelist.</span>copy -&gt;
-    <em>anImageList</em></p>
+    <p><span class="arg">ilist.</span>copy -&gt;
+    <em>other_imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -723,8 +722,8 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="cur_image">cur_image</h3>
 
-    <p><span class="arg">imagelist.</span>cur_image -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">ilist.</span>cur_image -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -749,8 +748,8 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="deconstruct">deconstruct</h3>
 
-    <p><span class="arg">imagelist.</span>deconstruct -&gt;
-    <em>anImageList</em></p>
+    <p><span class="arg">ilist.</span>deconstruct -&gt;
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -785,8 +784,8 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="dup">dup</h3>
 
-    <p><span class="arg">imagelist</span>.dup -&gt;
-    <em>anImageList</em></p>
+    <p><span class="arg">ilist</span>.dup -&gt;
+    <em>other_imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -804,7 +803,7 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="display">display</h3>
 
-    <p><span class="arg">imagelist.</span>display <span class=
+    <p><span class="arg">ilist.</span>display <span class=
     "arg">[&nbsp;{ optional arguments }&nbsp;]</span> -&gt;
     <em>self</em></p>
   </div>
@@ -840,8 +839,8 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="flatten_images">flatten_images</h3>
 
-    <p><span class="arg">imagelist.</span>flatten_images -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">ilist.</span>flatten_images -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -881,10 +880,9 @@ imagelist2 = imagelist1.copy
   <div class="sig">
     <h3 id="from_blob">from_blob</h3>
 
-    <p><span class=
-    "arg">imagelist.</span>from_blob(blob<span class="arg">[,
-    blob...]</span>) <span class="arg">[&nbsp;{ optional arguments
-    }&nbsp;]</span> -&gt; <em>self</em></p>
+    <p><span class="arg">ilist.</span>from_blob(blob<span class=
+    "arg">[, blob...]</span>) <span class="arg">[&nbsp;{ optional
+    arguments }&nbsp;]</span> -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -938,7 +936,9 @@ ilist.display
   <div class="sig">
     <h3 id="fx">fx</h3>
 
-    <p>imagelist.fx(expression [, channel...]) -&gt; anImage</p>
+    <p><span class="arg">ilist</span> .fx(<span class=
+    "arg">expression</span> [, <span class=
+    "arg">channel</span>...]) -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1015,8 +1015,8 @@ res = imgl.fx('1/2', Magick::BlueChannel)
   <div class="sig">
     <h3 id="inspect">inspect</h3>
 
-    <p><span class="arg">imagelist.</span>inspect -&gt;
-    <em>aString</em></p>
+    <p><span class="arg">ilist.</span>inspect -&gt;
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -1049,9 +1049,9 @@ scene=1
   <div class="sig">
     <h3 id="map">map</h3>
 
-    <p><span class="arg">imagelist</span>.map(<span class=
+    <p><span class="arg">ilist</span>.map(<span class=
     "arg">reference</span>, <span class="arg">dither</span>) -&gt;
-    <em>anImageList</em></p>
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -1105,9 +1105,9 @@ scene=1
   <div class="sig">
     <h3 id="montage">montage</h3>
 
-    <p><span class="arg">imagelist.</span>montage <span class=
+    <p><span class="arg">ilist.</span>montage <span class=
     "arg">[&nbsp;{ optional arguments }&nbsp;]</span> -&gt;
-    <em>anImageList</em></p>
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -1318,8 +1318,8 @@ img[2]['Label'] = "Mom's Birthday"
   <div class="sig">
     <h3 id="morph">morph</h3>
 
-    <p><span class="arg">imagelist.</span>morph(<span class=
-    "arg">n</span>) -&gt; <em>anImageList</em></p>
+    <p><span class="arg">ilist.</span>morph(<span class=
+    "arg">n</span>) -&gt; <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -1364,8 +1364,8 @@ img[2]['Label'] = "Mom's Birthday"
   <div class="sig">
     <h3 id="mosaic">mosaic</h3>
 
-    <p><span class="arg">imagelist.</span>mosaic -&gt;
-    <em>anImage</em></p>
+    <p><span class="arg">ilist.</span>mosaic -&gt;
+    <em>image</em></p>
   </div>
 
   <div class="desc">
@@ -1398,7 +1398,7 @@ img[2]['Label'] = "Mom's Birthday"
   <div class="sig">
     <h3 id="new_image">new_image</h3>
 
-    <p><span class="arg">imagelist.</span>new_image(<span class=
+    <p><span class="arg">ilist.</span>new_image(<span class=
     "arg">columns</span>, <span class="arg">rows[, fill]</span>)
     <span class="arg">[&nbsp;{ optional arguments }&nbsp;]</span>
     -&gt; <em>self</em></p>
@@ -1434,17 +1434,16 @@ img[2]['Label'] = "Mom's Birthday"
 
     <p>Create a square red image.</p>
     <pre>
-imagelist = Magick::ImageList.new
-imagelist.new_image(100, 100) { self.background_color = "red" }
+ilist = Magick::ImageList.new
+ilist.new_image(100, 100) { self.background_color = "red" }
 </pre>
   </div>
 
   <div class="sig">
     <h3 id="optimize_layers">optimize_layers</h3>
 
-    <p><span class=
-    "arg">imagelist</span>.optimize_layers(<span class=
-    "arg">layer_method</span>) -&gt; <em>anImageList</em></p>
+    <p><span class="arg">ilist</span>.optimize_layers(<span class=
+    "arg">layer_method</span>) -&gt; <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -1648,10 +1647,10 @@ Magick::MagickLayerMethod.values {|v| puts v}
   <div class="sig">
     <h3 id="ping">ping</h3>
 
-    <p><span class="arg">imagelist.</span>ping(<span class=
+    <p><span class="arg">ilist.</span>ping(<span class=
     "arg">filename</span>[, <span class="arg">filename</span>...])
     -&gt; <em>self</em><br />
-    <span class="arg">imagelist.</span>ping(<span class=
+    <span class="arg">ilist.</span>ping(<span class=
     "arg">file</span>[, <span class="arg">file</span>...]) -&gt;
     <em>self</em></p>
   </div>
@@ -1675,8 +1674,8 @@ Magick::MagickLayerMethod.values {|v| puts v}
 
     <h4>Example</h4>
     <pre>
-imagelist = Magick::ImageList.new
-imagelist.ping "Button_A.gif"
+ilist = Magick::ImageList.new
+ilist.ping "Button_A.gif"
 puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
       The image has 127 columns and 120 rows.
 </pre>
@@ -1691,11 +1690,10 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
   <div class="sig">
     <h3 id="quantize">quantize</h3>
 
-    <p><span class="arg">imagelist.</span>quantize(nc=256,
+    <p><span class="arg">ilist.</span>quantize(nc=256,
     colorspace=<code>Magick::RGBColorspace</code>,
     dither=<code>true</code>, tree_depth=0,
-    measure_error=<code>false</code>) -&gt;
-    <em>anImageList</em></p>
+    measure_error=<code>false</code>) -&gt; <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -1791,13 +1789,13 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
   <div class="sig">
     <h3 id="read">read</h3>
 
-    <p><span class="arg">imagelist.</span>read(<span class=
+    <p><span class="arg">ilist.</span>read(<span class=
     "arg">filename[, filename...]</span>) <span class=
     "arg">[&nbsp;{ optional arguments }&nbsp;]</span> -&gt;
     <em>self</em><br />
-    <span class="arg">imagelist.</span>read(<span class=
-    "arg">file[, file...]</span>) <span class="arg">[&nbsp;{
-    optional arguments }&nbsp;]</span> -&gt; <em>self</em></p>
+    <span class="arg">ilist.</span>read(<span class="arg">file[,
+    file...]</span>) <span class="arg">[&nbsp;{ optional arguments
+    }&nbsp;]</span> -&gt; <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1852,9 +1850,9 @@ number = '0'
   <div class="sig">
     <h3 id="to_blob">to_blob</h3>
 
-    <p><span class="arg">imagelist.</span>to_blob <span class=
+    <p><span class="arg">ilist.</span>to_blob <span class=
     "arg">[&nbsp;{ optional arguments }&nbsp;]</span> -&gt;
-    <em>aString</em></p>
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -1893,8 +1891,7 @@ s = i.to_blob &raquo; a string representing the image.
   <div class="sig">
     <h3 id="to_a">to_a</h3>
 
-    <p><span class="arg">imagelist</span>.to_a -&gt;
-    <em>anArray</em></p>
+    <p><span class="arg">ilist</span>.to_a -&gt; <em>array</em></p>
   </div>
 
   <div class="desc">
@@ -1910,10 +1907,10 @@ s = i.to_blob &raquo; a string representing the image.
   <div class="sig">
     <h3 id="write">write</h3>
 
-    <p><span class="arg">imagelist.</span>write(<span class=
+    <p><span class="arg">ilist.</span>write(<span class=
     "arg">filename</span>) <span class="arg">[&nbsp;{ optional
     arguments }&nbsp;]</span> -&gt; <em>self</em><br />
-    <span class="arg">imagelist.</span>write(<span class=
+    <span class="arg">ilist.</span>write(<span class=
     "arg">file</span>) <span class="arg">[&nbsp;{ optional
     arguments }&nbsp;]</span> -&gt; <em>self</em></p>
   </div>

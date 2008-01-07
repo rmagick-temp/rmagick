@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1st December 2004), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
 
   <title>RMagick 0.0.0: Miscellaneous classes</title>
   <meta http-equiv="Content-Type" content=
@@ -90,7 +90,9 @@
 
     <ul>
       <li><a href="#MagickError">ImageMagickError</a></li>
-      <li><a href="#DestroyedImageError">DestroyedImageError</a></li>
+
+      <li><a href=
+      "#DestroyedImageError">DestroyedImageError</a></li>
     </ul>
   </div>
 
@@ -121,7 +123,7 @@
       <p>Image::View.new(<span class="arg">img</span>, <span class=
       "arg">x</span>, <span class="arg">y</span>, <span class=
       "arg">width</span>, <span class="arg">height</span>) -&gt;
-      aView</p>
+      <em>view</em></p>
     </div>
 
     <div class="desc">
@@ -162,7 +164,7 @@
 
       <p><span class="arg">view</span>[<span class=
       "arg">i</span>][<span class="arg">j</span>] -&gt;
-      <em>aPixel</em> or <em>anArray</em></p>
+      <em>pixel</em> or <em>array</em></p>
     </div>
 
     <div class="desc">
@@ -234,16 +236,16 @@
       [][].opacity</h4>
 
       <p>[<span class="arg">i</span>][<span class=
-      "arg">j</span>].red -&gt; <em>anInteger</em> or
-      <em>anArray</em><br />
+      "arg">j</span>].red -&gt; <em>integer</em> or
+      <em>array</em><br />
       [<span class="arg">i</span>][<span class=
-      "arg">j</span>].green -&gt; <em>anInteger</em> or
-      <em>anArray</em><br />
+      "arg">j</span>].green -&gt; <em>integer</em> or
+      <em>array</em><br />
       [<span class="arg">i</span>][<span class="arg">j</span>].blue
-      -&gt; <em>anInteger</em> or <em>anArray</em><br />
+      -&gt; <em>integer</em> or <em>array</em><br />
       [<span class="arg">i</span>][<span class=
-      "arg">j</span>].opacity -&gt; <em>anInteger</em> or
-      <em>anArray</em></p>
+      "arg">j</span>].opacity -&gt; <em>integer</em> or
+      <em>array</em></p>
     </div>
 
     <div class="desc">
@@ -273,8 +275,8 @@
       <h4>[][]=</h4>
 
       <p><span class="arg">view</span>[<span class=
-      "arg">i</span>][<span class="arg">j</span>] = <em>rvalue</em>
-      -&gt; <code>nil</code></p>
+      "arg">i</span>][<span class="arg">j</span>] =
+      <em>rvalue</em></p>
     </div>
 
     <div class="desc">
@@ -305,22 +307,19 @@
       [][].opacity=</h4>
 
       <p>[<span class="arg">i</span>][<span class=
-      "arg">j</span>].red = <em>anInteger</em> -&gt;
-      <code>nil</code><br />
+      "arg">j</span>].red = <em>integer</em><br />
       [<span class="arg">i</span>][<span class=
-      "arg">j</span>].green = <em>anInteger</em> -&gt;
-      <code>nil</code><br />
+      "arg">j</span>].green = <em>integer</em><br />
       [<span class="arg">i</span>][<span class="arg">j</span>].blue
-      = <em>anInteger</em> -&gt; <code>nil</code><br />
+      = <em>integer</em><br />
       [<span class="arg">i</span>][<span class=
-      "arg">j</span>].opacity = <em>anInteger</em> -&gt;
-      <code>nil</code></p>
+      "arg">j</span>].opacity = <em>integer</em></p>
     </div>
 
     <div class="desc">
       <h5>Description</h5>
 
-      <p>Assigns <em>anInteger</em> to the red, green, blue, or
+      <p>Assigns <em>integer</em> to the red, green, blue, or
       opacity channel of the pixel or pixels identified by the
       indexes.</p>
 
@@ -391,10 +390,10 @@
       width<br />
       height</h4>
 
-      <p>x -&gt; anInteger<br />
-      y -&gt; anInteger<br />
-      width -&gt; anInteger<br />
-      height -&gt; anInteger</p>
+      <p>x -&gt; integer<br />
+      y -&gt; integer<br />
+      width -&gt; integer<br />
+      height -&gt; integer</p>
     </div>
 
     <div class="desc">
@@ -425,11 +424,11 @@
     <div class="sig">
       <h4>new</h4>
 
-      <p>Geometry.<span class="arg">new</span>(<span class=
-      "arg">width</span>=nil, <span class="arg">height</span>=nil,
-      <span class="arg">x</span>=nil, <span class=
-      "arg">y</span>=nil, <span class="arg">flag</span>=nil) -&gt;
-      <em>aGeometry</em></p>
+      <p>Geometry.new(<span class="arg">width</span>=nil,
+      <span class="arg">height</span>=nil, <span class=
+      "arg">x</span>=nil, <span class="arg">y</span>=nil,
+      <span class="arg">flag</span>=nil) -&gt;
+      <em>geometry</em></p>
     </div>
 
     <div class="desc">
@@ -548,7 +547,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <h4>from_s</h4>
 
     <p>Geometry.<span class="arg">from_s</span>(<span class=
-    "arg">string</span>) -&gt; <em>aGeometry</em></p>
+    "arg">string</span>) -&gt; <em>geometry</em></p>
   </div>
 
   <div class="desc">
@@ -561,8 +560,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
   <div class="sig">
     <h4>to_s</h4>
 
-    <p><span class="arg">geometry.</span>to_s() -&gt;
-    <em>aString</em></p>
+    <p><span class="arg">geom.</span>to_s() -&gt;
+    <em>string</em></p>
   </div>
 
   <div class="desc">
@@ -604,10 +603,9 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="sig">
       <h4>new</h4>
 
-      <p>Pixel.<span class="arg">new</span>(<span class=
-      "arg">red</span>, <span class="arg">green</span>,
-      <span class="arg">blue</span>, <span class=
-      "arg">opacity</span>) -&gt; <em>aPixel</em></p>
+      <p>Pixel.new(<span class="arg">red</span>, <span class=
+      "arg">green</span>, <span class="arg">blue</span>,
+      <span class="arg">opacity</span>) -&gt; <em>pixel</em></p>
     </div>
 
     <div class="desc">
@@ -646,8 +644,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="sig">
       <h4>from_color</h4>
 
-      <p>Pixel.<span class="arg">from_color</span>(<span class=
-      "arg">color_name</span>) -&gt; <em>aPixel</em></p>
+      <p>Pixel.from_color(<span class="arg">color_name</span>)
+      -&gt; <em>pixel</em></p>
     </div>
 
     <div class="desc">
@@ -661,9 +659,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="sig">
       <h4>from_HSL</h4>
 
-      <p>Pixel.<span class="arg">from_HSL</span>(<span class=
-      "arg">[hue, saturation, luminosity]</span>) -&gt;
-      <em>aPixel</em></p>
+      <p>Pixel.from_HSL(<span class="arg">[hue, saturation,
+      luminosity]</span>) -&gt; <em>pixel</em></p>
     </div>
 
     <div class="desc">
@@ -713,7 +710,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h4 id="fcmp">fcmp</h4>
 
       <p><span class="arg">pixel</span>.fcmp(<span class=
-      "arg">aPixel</span>, <span class="arg">fuzz</span>=0.0,
+      "arg">pixel</span>, <span class="arg">fuzz</span>=0.0,
       <span class="arg">colorspace</span>=RGBColorspace) -&gt;
       <code>true</code> <em>or</em> <code>false</code></p>
     </div>
@@ -756,7 +753,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h4>intensity</h4>
 
       <p><span class="arg">pixel</span>.intensity() -&gt;
-      anInteger</p>
+      integer</p>
     </div>
 
     <div class="desc">
@@ -773,7 +770,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       "arg">compliance</span>=AllCompliance, <span class=
       "arg">matte</span>=<code>false</code>, <span class=
       "arg">depth</span>=<code>QuantumDepth</code>) -&gt;
-      <em>aString</em></p>
+      <em>string</em></p>
     </div>
 
     <div class="desc">
@@ -804,8 +801,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
         <dt>depth</dt>
 
         <dd>An image depth. The default is the quantum depth used
-        when ImageMagick was compiled. The values 16 and 32 can
-        be used only when ImageMagick was compiled with the
+        when ImageMagick was compiled. The values 16 and 32 can be
+        used only when ImageMagick was compiled with the
         appropriate QuantumDepth.</dd>
       </dl>
 
@@ -821,7 +818,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h4>to_HSL</h4>
 
       <p><span class="arg">pixel</span>.to_HSL -&gt;
-      <em>anArray</em></p>
+      <em>array</em></p>
     </div>
 
     <div class="desc">
@@ -861,11 +858,10 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="sig">
       <h4>new</h4>
 
-      <p>AffineMatrix.<span class="arg">new</span>(<span class=
-      "arg">sx</span>, <span class="arg">rx</span>, <span class=
-      "arg">ry</span>, <span class="arg">sy</span>, <span class=
-      "arg">tx</span>, <span class="arg">ty</span>) -&gt;
-      <em>anAffineMatrix</em></p>
+      <p>AffineMatrix.new(<span class="arg">sx</span>, <span class=
+      "arg">rx</span>, <span class="arg">ry</span>, <span class=
+      "arg">sy</span>, <span class="arg">tx</span>, <span class=
+      "arg">ty</span>) -&gt; <em>matrix</em></p>
     </div>
 
     <div class="desc">
@@ -905,11 +901,10 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="sig">
       <h4>new</h4>
 
-      <p>Chromaticity.<span class="arg">new</span>(<span class=
-      "arg">red_primary</span>, <span class=
-      "arg">green_primary</span>, <span class=
+      <p>Chromaticity.new(<span class="arg">red_primary</span>,
+      <span class="arg">green_primary</span>, <span class=
       "arg">blue_primary</span>, <span class=
-      "arg">white_point</span>) -&gt; <em>aChromaticity</em></p>
+      "arg">white_point</span>) -&gt; <em>chromaticity</em></p>
     </div>
 
     <div class="desc">
@@ -955,7 +950,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h4>new</h4>
 
       <p>Point.new(<span class="arg">x</span>, <span class=
-      "arg">y</span>) -&gt; <em>aPoint</em></p>
+      "arg">y</span>) -&gt; <em>point</em></p>
     </div>
 
     <div class="desc">
@@ -987,7 +982,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
       <p>Primary.new(<span class="arg">x</span>, <span class=
       "arg">y</span>, <span class="arg">z</span>) -&gt;
-      <em>aPrimary</em></p>
+      <em>primary</em></p>
     </div>
 
     <div class="desc">
@@ -1020,7 +1015,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
       <p>Rectangle.new(<span class="arg">width</span>, <span class=
       "arg">height</span>, <span class="arg">x</span>, <span class=
-      "arg">y</span>) -&gt; <em>aRectangle</em></p>
+      "arg">y</span>) -&gt; <em>rectangle</em></p>
     </div>
 
     <div class="desc">
@@ -1060,7 +1055,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
       <p>Segment.new(<span class="arg">x1</span>, <span class=
       "arg">y1</span>, <span class="arg">x2</span>, <span class=
-      "arg">y2</span>) -&gt; <em>aSegment</em></p>
+      "arg">y2</span>) -&gt; <em>segment</em></p>
     </div>
 
     <div class="desc">
@@ -1078,167 +1073,166 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
   <div class="subhd">
     <h2 id="fill">Fill classes</h2>
+  </div>
 
-    <div class="intro">
-      <h3>Introduction</h3>
+  <div class="intro">
+    <h3>Introduction</h3>
 
-      <p>The <a href="image1.html#new">Image#new</a> and <a href=
-      "ilist.html#new_image">ImageList#new_image</a> methods accept
-      a <code>Fill</code> object as an optional third argument. A
-      <code>Fill</code> object is an instance of a <em>Fill
-      class</em>. Fill classes are designed to support custom
-      background fills. Each <code>Fill</code> class defines only
-      two methods, <code>initialize</code> and <code>fill</code>.
-      The <code>initialize</code> method is called from the
-      application to create an instance of the fill class. It
-      accepts any arguments and does whatever is necessary to
-      create the fill. The <code>fill</code> method is called from
-      the initialize method of the new image object, after the
-      image is completely initialized. The <code>fill</code> method
-      gets the image as its only argument and sends whatever
-      methods are necessary to the image to fill the image's
-      background.</p>
+    <p>The <a href="image1.html#new">Image#new</a> and <a href=
+    "ilist.html#new_image">ImageList#new_image</a> methods accept a
+    <code>Fill</code> object as an optional third argument. A
+    <code>Fill</code> object is an instance of a <em>Fill
+    class</em>. Fill classes are designed to support custom
+    background fills. Each <code>Fill</code> class defines only two
+    methods, <code>initialize</code> and <code>fill</code>. The
+    <code>initialize</code> method is called from the application
+    to create an instance of the fill class. It accepts any
+    arguments and does whatever is necessary to create the fill.
+    The <code>fill</code> method is called from the initialize
+    method of the new image object, after the image is completely
+    initialized. The <code>fill</code> method gets the image as its
+    only argument and sends whatever methods are necessary to the
+    image to fill the image's background.</p>
 
-      <p>RMagick supplies three Fill classes,
-      <code><strong>HatchFill</strong></code>,
-      <code><strong>GradientFill</strong></code>, and
-      <code><strong>TextureFill</strong></code>. These classes are
-      explained below. The <code>HatchFill</code> class is intended
-      as an example of how to write a <code>Fill</code> class and
-      is written in pure Ruby. You can read it in RMagick.rb.</p>
-    </div>
+    <p>RMagick supplies three Fill classes,
+    <code><strong>HatchFill</strong></code>,
+    <code><strong>GradientFill</strong></code>, and
+    <code><strong>TextureFill</strong></code>. These classes are
+    explained below. The <code>HatchFill</code> class is intended
+    as an example of how to write a <code>Fill</code> class and is
+    written in pure Ruby. You can read it in RMagick.rb.</p>
+  </div>
 
-    <h3 id="GradientFill">class GradientFill <span class=
-    "superclass">&lt; Object</span></h3>
+  <h3 id="GradientFill">class GradientFill <span class=
+  "superclass">&lt; Object</span></h3>
 
-    <div class="sig">
-      <h4>new</h4>
+  <div class="sig">
+    <h4>new</h4>
 
-      <p><span class="arg">GradientFill.new(<em>x1</em>,
-      <em>y1</em>, <em>x2</em>, <em>y2</em>, <em>start_color</em>,
-      <em>end_color</em>) -&gt;</span> <em>aGradientFill</em></p>
-    </div>
+    <p>GradientFill.new(<span class="arg">x1</span>, <span class=
+    "arg">y1</span>, <span class="arg">x2</span>, <span class=
+    "arg">y2</span>, <span class="arg">start_color</span>,
+    <span class="arg">end_color</span>) -&gt;
+    <em>gradient_fill</em></p>
+  </div>
 
-    <div class="desc">
-      <h5>Description</h5>
+  <div class="desc">
+    <h5>Description</h5>
 
-      <p>Creates a gradient fill. The <span class="arg">x1</span>,
-      <span class="arg">y1</span>, and <span class="arg">x2</span>,
-      <span class="arg">y2</span> arguments describe either a line
-      or a point. If <span class="arg">x1</span> != <span class=
-      "arg">x2</span> or <span class="arg">y1</span> !=
-      <span class="arg">y2</span>, then the arguments describe the
-      starting line for the gradient. The gradient will start with
-      <span class="arg">start_color</span> at the starting line and
-      gradually transform to <span class="arg">end_color</span> as
-      the distance increases from the starting line.</p>
+    <p>Creates a gradient fill. The <span class="arg">x1</span>,
+    <span class="arg">y1</span>, and <span class="arg">x2</span>,
+    <span class="arg">y2</span> arguments describe either a line or
+    a point. If <span class="arg">x1</span> != <span class=
+    "arg">x2</span> or <span class="arg">y1</span> != <span class=
+    "arg">y2</span>, then the arguments describe the starting line
+    for the gradient. The gradient will start with <span class=
+    "arg">start_color</span> at the starting line and gradually
+    transform to <span class="arg">end_color</span> as the distance
+    increases from the starting line.</p>
 
-      <p>If <span class="arg">x1</span> == <span class=
-      "arg">x2</span> and <span class="arg">y1</span> ==
-      <span class="arg">y2</span>, the gradient radiates from the
-      specified point, gradually transforming from <span class=
-      "arg">start_color</span> to <span class=
-      "arg">end_color</span>.</p>
+    <p>If <span class="arg">x1</span> == <span class=
+    "arg">x2</span> and <span class="arg">y1</span> == <span class=
+    "arg">y2</span>, the gradient radiates from the specified
+    point, gradually transforming from <span class=
+    "arg">start_color</span> to <span class=
+    "arg">end_color</span>.</p>
 
-      <p>The line or point does not have to lie within the image
-      bounds.</p>
+    <p>The line or point does not have to lie within the image
+    bounds.</p>
 
-      <h5>Arguments</h5>
+    <h5>Arguments</h5>
 
-      <dl>
-        <dt>x1, y1</dt>
+    <dl>
+      <dt>x1, y1</dt>
 
-        <dd>One of the starting line end-points.</dd>
+      <dd>One of the starting line end-points.</dd>
 
-        <dt>x2, y2</dt>
+      <dt>x2, y2</dt>
 
-        <dd>The other end-point on the starting line.</dd>
+      <dd>The other end-point on the starting line.</dd>
 
-        <dt>start_color</dt>
+      <dt>start_color</dt>
 
-        <dd>The color at the starting line.</dd>
+      <dd>The color at the starting line.</dd>
 
-        <dt>end_color</dt>
+      <dt>end_color</dt>
 
-        <dd>The color to which the gradient transforms.</dd>
-      </dl>
+      <dd>The color to which the gradient transforms.</dd>
+    </dl>
 
-      <h5>Example</h5>
+    <h5>Example</h5>
 
-      <p><a href=
-      "javascript:popup('gradientfill.rb.html')"><img src=
-      "ex/gradientfill.gif" alt="GradientFill example" title=
-      "Click to see the example script" /></a></p>
-    </div>
+    <p><a href="javascript:popup('gradientfill.rb.html')"><img src=
+    "ex/gradientfill.gif" alt="GradientFill example" title=
+    "Click to see the example script" /></a></p>
+  </div>
 
-    <h3 id="HatchFill">class HatchFill <span class=
-    "superclass">&lt; Object</span></h3>
+  <h3 id="HatchFill">class HatchFill <span class="superclass">&lt;
+  Object</span></h3>
 
-    <div class="sig">
-      <h4>new</h4>
+  <div class="sig">
+    <h4>new</h4>
 
-      <p>HatchFill.new(<span class="arg">background_color</span>,
-      <span class="arg">hatch_color</span>='white', <span class=
-      "arg">dist</span>=10) -&gt; <em>aHatchFill</em></p>
-    </div>
+    <p>HatchFill.new(<span class="arg">background_color</span>,
+    <span class="arg">hatch_color</span>='white', <span class=
+    "arg">dist</span>=10) -&gt; <em>hatch_fill</em></p>
+  </div>
 
-    <div class="desc">
-      <h4>Description</h4>
+  <div class="desc">
+    <h4>Description</h4>
 
-      <p>Creates a cross-hatched fill.</p>
+    <p>Creates a cross-hatched fill.</p>
 
-      <h4>Arguments</h4>
+    <h4>Arguments</h4>
 
-      <dl>
-        <dt>background_color</dt>
+    <dl>
+      <dt>background_color</dt>
 
-        <dd>The image background color.</dd>
+      <dd>The image background color.</dd>
 
-        <dt>hatch_color</dt>
+      <dt>hatch_color</dt>
 
-        <dd>The color of the cross-hatch lines.</dd>
+      <dd>The color of the cross-hatch lines.</dd>
 
-        <dt>dist</dt>
+      <dt>dist</dt>
 
-        <dd>The distance between cross-hatch lines, in pixels.</dd>
-      </dl>
+      <dd>The distance between cross-hatch lines, in pixels.</dd>
+    </dl>
 
-      <h4>Example</h4>
+    <h4>Example</h4>
 
-      <p><a href="javascript:popup('hatchfill.rb.html')"><img src=
-      "ex/hatchfill.gif" alt="HatchFill example" title=
-      "Click to see the example script" /></a></p>
-    </div>
+    <p><a href="javascript:popup('hatchfill.rb.html')"><img src=
+    "ex/hatchfill.gif" alt="HatchFill example" title=
+    "Click to see the example script" /></a></p>
+  </div>
 
-    <h3 id="TextureFill">class TextureFill <span class=
-    "superclass">&lt; Object</span></h3>
+  <h3 id="TextureFill">class TextureFill <span class=
+  "superclass">&lt; Object</span></h3>
 
-    <div class="sig">
-      <h4>new</h4>
+  <div class="sig">
+    <h4>new</h4>
 
-      <p>TextureFill.new(<span class="arg">texture_image</span>)
-      -&gt; <em>aTextureFill</em></p>
-    </div>
+    <p>TextureFill.new(<span class="arg">texture_image</span>)
+    -&gt; <em>texture_fill</em></p>
+  </div>
 
-    <div class="desc">
-      <h5>Description</h5>
+  <div class="desc">
+    <h5>Description</h5>
 
-      <p>Creates a texture fill by tiling the <span class=
-      "arg">texture_image</span> to fill the image.</p>
+    <p>Creates a texture fill by tiling the <span class=
+    "arg">texture_image</span> to fill the image.</p>
 
-      <h5>Arguments</h5>
+    <h5>Arguments</h5>
 
-      <p>The texture to be used as the background. May be an image
-      or imagelist. If <span class="arg">texture_image</span> is an
-      imagelist, uses the current image.</p>
+    <p>The texture to be used as the background. May be an image or
+    imagelist. If <span class="arg">texture_image</span> is an
+    imagelist, uses the current image.</p>
 
-      <h5>Example</h5>
+    <h5>Example</h5>
 
-      <p><a href=
-      "javascript:popup('texturefill.rb.html')"><img src="ex/texturefill.gif"
-      alt="TextureFill example" title=
-      "Click to see the example script" /></a></p>
-    </div>
+    <p><a href="javascript:popup('texturefill.rb.html')"><img src=
+    "ex/texturefill.gif" alt="TextureFill example" title=
+    "Click to see the example script" /></a></p>
   </div>
 
   <div class="subhd">
@@ -1246,22 +1240,26 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
 
     <h3 id="MagickError">class ImageMagickError <span class=
     "superclass">&lt; StandardError</span></h3>
+  </div>
 
-    <div class="desc">
-      <h4>Description</h4>
-
-      <p>When an ImageMagick function returns an error condition,
-      RMagick raises this
-      exception.</p>
-    </div>
-
-    <h3 id="DestroyedImageError">class DestroyedImageError
-    <span class="superclass">&lt; StandardError</span></h3>
-    <div class="desc">
+  <div class="desc">
     <h4>Description</h4>
-    <p>When any Image method (except <a href="image1.html#destroyed_q">destroyed?</a> and <a href="image2.html#inspect">inspect</a>) is
-called after an image has been <a href="image1.html#destroy_bang">destroyed</a>, RMagick raises this
-exception.</p>
+
+    <p>When an ImageMagick function returns an error condition,
+    RMagick raises this exception.</p>
+  </div>
+
+  <h3 id="DestroyedImageError">class DestroyedImageError
+  <span class="superclass">&lt; StandardError</span></h3>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>When any Image method (except <a href=
+    "image1.html#destroyed_q">destroyed?</a> and <a href=
+    "image2.html#inspect">inspect</a>) is called after an image has
+    been <a href="image1.html#destroy_bang">destroyed</a>, RMagick
+    raises this exception.</p>
   </div>
 
   <p class="spacer">&nbsp;</p>

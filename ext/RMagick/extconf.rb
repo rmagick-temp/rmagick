@@ -192,6 +192,8 @@ have_type("long double", headers)
 have_type("unsigned long long", headers)
 have_type("uint64_t", headers)
 have_type("__int64", headers)
+have_type("uintmax_t", headers)
+check_sizeof("unsigned long", headers)
 check_sizeof("Image *", headers)
 
 

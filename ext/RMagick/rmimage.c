@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.276 2008/01/03 15:32:00 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.277 2008/01/08 23:47:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10221,10 +10221,14 @@ static void call_trace_proc(Image *image, char *which)
             n = sprintf(buffer, "%016llx", (unsigned long long)image);
 #elif HAVE_TYPE_UINT64_T
             n = sprintf(buffer, "%016llx", (uint64_t)image);
+#elif HAVE_TYPE_UINTMAX_T
+            n = sprintf(buffer, "%016llx", (uintmax_t)image);
 #elif HAVE_TYPE___INT64
             n = sprintf(buffer, "%016llx", (__int64)image);
+#elif SIZEOF_UNSIGNED_LONG == 8
+            n = sprintf(buffer, "%016lx", (unsigned long)image);
 #else
-#error Can't find a 64-bit type.
+#error "No 64-bit type detected."
 #endif
 #else
             n = sprintf(buffer, "%08lx", (unsigned long)image);

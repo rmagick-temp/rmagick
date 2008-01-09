@@ -4,6 +4,8 @@ RMagick 2.1.0
       #resize_to_fill!. Add aliases for the old names.
     o Fix bug #16776, in the axes.rb example the last 2 arguments to
       border.rectangle are swapped (bug report by Alain Feler)
+    o Fix bug #16931, apostrophe in #error directive causes error in some
+      versions of GCC (bug report by Justin Dossey)
 
 RMagick 2.0.0
     o Replaced configure/make/make install with standard Ruby setup.rb,

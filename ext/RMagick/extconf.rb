@@ -173,6 +173,7 @@ have_func("snprintf", headers)
    "IsHistogramImage",               # 6.3.5
    "LinearStretchImage",             # 6.3.1
    "MagickCoreGenesis",              # 6.3.4
+   "OpaquePaintImageChannel",        # 6.3.7-10
    "PolaroidImage",                  # 6.3.1-6
    "RecolorImage",                   # 6.3.1-3
    "ResetImagePage",                 # 6.3.3
@@ -181,6 +182,7 @@ have_func("snprintf", headers)
    "SetImageProperty",               # 6.3.1
    "SetImageRegistry",               # 6.3.4-?
    "SyncImageProfiles",              # 6.3.2
+   "TransparentPaintImage",          # 6.3.7-10
    ].each do |func|
     have_func(func, headers)
   end

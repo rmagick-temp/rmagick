@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.220 2008/01/05 19:24:22 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.221 2008/01/17 23:48:19 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -42,7 +42,7 @@
 #undef PACKAGE_STRING
 
 
-#include RUBY_EXTCONF_H
+#include "extconf.h"
 
 
 // For quoting preprocessor symbols
@@ -877,8 +877,10 @@ extern VALUE Image_normalize(VALUE);
 extern VALUE Image_normalize_channel(int, VALUE *, VALUE);
 extern VALUE Image_oil_paint(int, VALUE *, VALUE);
 extern VALUE Image_opaque(VALUE, VALUE, VALUE);
+extern VALUE Image_opaque_channel(int, VALUE *, VALUE);
 extern VALUE Image_opaque_q(VALUE);
 extern VALUE Image_ordered_dither(int, VALUE *, VALUE);
+extern VALUE Image_paint_transparent(int, VALUE *, VALUE);
 extern VALUE Image_palette_q(VALUE);
 extern VALUE Image_ping(VALUE, VALUE);
 extern VALUE Image_pixel_color(int, VALUE *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.277 2008/01/08 23:47:33 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.278 2008/01/17 23:48:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6373,6 +6373,7 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
     Image *image, *new_image;
     MagickPixelPacket target_pp;
     MagickPixelPacket fill_pp;
+    MagickBooleanType okay;
 
     image = rm_check_destroyed(self);
     new_image = rm_clone_image(image);
@@ -6381,11 +6382,98 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
     Color_to_MagickPixelPacket(image, &target_pp, target);
     Color_to_MagickPixelPacket(image, &fill_pp, fill);
 
-    (void) PaintOpaqueImage(new_image, &target_pp, &fill_pp);
+#if defined(HAVE_OPAQUEPAINTIMAGECHANNEL)
+    okay = OpaquePaintImageChannel(new_image, DefaultChannels, &target_pp, &fill_pp, MagickFalse);
+#else
+    okay =  PaintOpaqueImageChannel(new_image, DefaultChannels, &target_pp, &fill_pp);
+#endif
     rm_check_image_exception(new_image, DestroyOnError);
+
+    if (!okay)
+    {
+        // Force exception
+        DestroyImage(new_image);
+        rm_ensure_result(NULL);
+    }
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#opaque_channel
+    Purpose:    Improved Image#opaque available in 6.3.7-10
+    Notes:      opaque_channel(target, fill, invert=false, fuzz=img.fuzz [, channel...])
+*/
+VALUE
+Image_opaque_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_OPAQUEPAINTIMAGECHANNEL)
+    Image *image, *new_image;
+    MagickPixelPacket target_pp, fill_pp;
+    ChannelType channels;
+    double keep, fuzz;
+    MagickBooleanType okay, invert = MagickFalse;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+    if (argc > 4)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    // Default fuzz value is image's fuzz attribute.
+    fuzz = image->fuzz;
+
+    switch (argc)
+    {
+        case 4:
+            fuzz = NUM2DBL(argv[3]);
+            if (fuzz < 0.0)
+            {
+                rb_raise(rb_eArgError, "fuzz must be >= 0.0", fuzz);
+            }
+        case 3:
+            invert = RTEST(argv[2]);
+        case 2:
+            // Allow color name or Pixel
+            Color_to_MagickPixelPacket(image, &fill_pp, argv[1]);
+            Color_to_MagickPixelPacket(image, &target_pp, argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (got %d, expected 2 or more)", argc);
+            break;
+    }
+
+    new_image = rm_clone_image(image);
+    keep = new_image->fuzz;
+    new_image->fuzz = fuzz;
+
+    okay = OpaquePaintImageChannel(new_image, channels, &target_pp, &fill_pp, invert);
+
+    // Restore saved fuzz value
+    new_image->fuzz = keep;
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    if (!okay)
+    {
+        // Force exception
+        DestroyImage(new_image);
+        rm_ensure_result(NULL);
+    }
+
+    return rm_image_new(new_image);
+
+#else
+    argc = argc;    // defeat "unused parameter" messages
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 
 /*
     Method:     Image#opaque?
@@ -6508,6 +6596,71 @@ Image_page_eq(VALUE self, VALUE rect)
     Rectangle_to_RectangleInfo(&image->page, rect);
     return self;
 }
+
+
+/*
+    Method:     Image#paint_transparent(target, opacity=TransparentOpacity, invert=false, fuzz=img.fuzz)
+    Purpose:    Improved version of Image#transparent available in 6.3.7-10
+*/
+VALUE
+Image_paint_transparent(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_TRANSPARENTPAINTIMAGE)
+    Image *image, *new_image;
+    MagickPixelPacket color;
+    Quantum opacity = TransparentOpacity;
+    double keep, fuzz;
+    MagickBooleanType okay, invert = MagickFalse;
+
+    image = rm_check_destroyed(self);
+
+    // Default fuzz value is image's fuzz attribute.
+    fuzz = image->fuzz;
+
+    switch (argc)
+    {
+        case 4:
+            fuzz = NUM2DBL(argv[3]);
+        case 3:
+            invert = RTEST(argv[2]);
+        case 2:
+            opacity = APP2QUANTUM(argv[1]);
+        case 1:
+            Color_to_MagickPixelPacket(image, &color, argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
+            break;
+    }
+
+    new_image = rm_clone_image(image);
+
+    // Use fuzz value from caller
+    keep = new_image->fuzz;
+    new_image->fuzz = fuzz;
+
+    okay = TransparentPaintImage(new_image, &color, opacity, invert);
+    new_image->fuzz = keep;
+
+    // Is it possible for TransparentPaintImage to silently fail?
+    rm_check_image_exception(new_image, DestroyOnError);
+    if (!okay)
+    {
+        // Force exception
+        DestroyImage(new_image);
+        rm_ensure_result(NULL);
+    }
+
+    return rm_image_new(new_image);
+#else
+    argc = argc;    // defeat "unused parameter" messages
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
 
 /*
     Method:     Image#palette?
@@ -9095,6 +9248,7 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     Image *image, *new_image;
     MagickPixelPacket color;
     Quantum opacity = TransparentOpacity;
+    MagickBooleanType okay;
 
     image = rm_check_destroyed(self);
 
@@ -9112,8 +9266,18 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    (void) PaintTransparentImage(new_image, &color, opacity);
+#if defined(HAVE_TRANSPARENTPAINTIMAGE)
+    okay = TransparentPaintImage(new_image, &color, opacity, MagickFalse);
+#else
+    okay = PaintTransparentImage(new_image, &color, opacity);
+#endif
     rm_check_image_exception(new_image, DestroyOnError);
+    if (!okay)
+    {
+        // Force exception
+        DestroyImage(new_image);
+        rm_ensure_result(NULL);
+    }
 
     return rm_image_new(new_image);
 }
@@ -10186,7 +10350,7 @@ ChannelType extract_channels(
 void
 raise_ChannelType_error(VALUE arg)
 {
-    rb_raise(rb_eTypeError, "argument needs to be a ChannelType (%s given)"
+    rb_raise(rb_eTypeError, "argument must be a ChannelType value (%s given)"
              , rb_class2name(CLASS_OF(arg)));
 }
 

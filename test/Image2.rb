@@ -931,6 +931,26 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.opaque(2, blue) }
     end
 
+    def test_opaque_channel
+      res = nil
+      assert_nothing_raised { res = @img.opaque_channel('white', 'red') }
+      assert_not_nil(res)
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(res, @img)
+      assert_nothing_raised { @img.opaque_channel('red', 'blue', true) }
+      assert_nothing_raised { @img.opaque_channel('red', 'blue', true, 50) }
+      assert_nothing_raised { @img.opaque_channel('red', 'blue', true, 50, Magick::RedChannel) }
+      assert_nothing_raised { @img.opaque_channel('red', 'blue', true, 50, Magick::RedChannel, Magick::GreenChannel) }
+      assert_nothing_raised do
+        @img.opaque_channel('red', 'blue', true, 50, Magick::RedChannel, Magick::GreenChannel, Magick::BlueChannel)
+      end
+
+      assert_raise(TypeError) { @img.opaque_channel('red', 'blue', true, 50, 50) }
+      assert_raise(TypeError) { @img.opaque_channel('red', 'blue', true, []) }
+      assert_raise(ArgumentError) { @img.opaque_channel('red') }
+      assert_raise(TypeError) { @img.opaque_channel('red', []) }
+    end
+
     def test_opaque?
         assert_nothing_raised do
             assert_block { @img.opaque? }
@@ -953,6 +973,25 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.ordered_dither(4) }
         assert_raise(ArgumentError) { @img.ordered_dither(5) }
         assert_raise(ArgumentError) { @img.ordered_dither(2, 1) }
+    end
+
+    def test_paint_transparent
+      res = nil
+      assert_nothing_raised { res = @img.paint_transparent("red") }
+      assert_not_nil(res)
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(res, @img)
+      assert_nothing_raised { @img.paint_transparent("red", Magick::TransparentOpacity) }
+      assert_nothing_raised { @img.paint_transparent("red", Magick::TransparentOpacity, true) }
+      assert_nothing_raised { @img.paint_transparent("red", Magick::TransparentOpacity, true, 50) }
+
+      # Too many arguments
+      assert_raise(ArgumentError) { @img.paint_transparent("red", Magick::TransparentOpacity, true, 50, 50) }
+      # Not enough
+      assert_raise(ArgumentError) { @img.paint_transparent() }
+      assert_raise(TypeError) { @img.paint_transparent("red", Magick::TransparentOpacity, true, []) }
+      assert_raise(TypeError) { @img.paint_transparent("red", "blue") }
+      assert_raise(TypeError) { @img.paint_transparent(50) }
     end
 
     def test_palette?

@@ -199,6 +199,8 @@ td.ds {
 
           <li><a href="#opaque">opaque</a></li>
 
+          <li><a href="#opaque_channel">opaque_channel</a></li>
+
           <li><a href="#opaque_q">opaque?</a></li>
 
           <li><a href="#ordered_dither">ordered_dither</a></li>
@@ -989,14 +991,15 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p class="rollover"><a href=
     "javascript:popup('frame.rb.html')">
-    <!-- This img tag displays the original image when the mouse is over -->
+    <!-- This img tag displays the original image when moused over -->
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /><!--
-                                                          This img tag displays the framed image when the mouse is not over
-                                                          --><img onmouseover="this.style.display='none';frameless.style.display='';"
-    src="ex/frame.jpg" alt="frame example" /></a> <img src=
+    "Click to see the example script" /> 
+    <!-- This img tag displays the framed image when the mouse is not over -->
+     <img onmouseover=
+    "this.style.display='none';frameless.style.display='';" src=
+    "ex/frame.jpg" alt="frame example" /></a> <img src=
     "ex/images/spin.gif" alt="" style="margin-bottom: 280px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -3147,12 +3150,75 @@ img = img.opaque('white', 'red')
 
     <h4>See also</h4>
 
-    <p><a href=
-    "image1.html#color_floodfill">color_floodfill</a></p>
+    <p><a href="image1.html#color_floodfill">color_floodfill</a>,
+    <a href="#opaque_channel">opaque_channel</a></p>
 
     <h4>Magick API</h4>
 
-    <p>OpaqueImage</p>
+    <p>OpaquePaintImageChannel</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="opaque_channel">opaque_channel</h3>
+
+    <p><span class="arg">img</span>.opaque_channel(<span class=
+    "arg">target</span>, <span class="arg">fill</span>,
+    <span class="arg">invert</span>=false, <span class=
+    "arg">fuzz</span>=<span class="arg">img</span>.fuzz [,
+    <span class="arg">channel</span>...]) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Changes all pixels having the target color to the fill
+    color. If <span class="arg">invert</span> is true, changes all
+    the pixels that are <em>not</em> the target color to the fill
+    color.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>target</dt>
+
+      <dd>The color to be replaced. May be a color name or a
+      <a href="struct.html#Pixel">Pixel</a></dd>
+
+      <dt>fill</dt>
+
+      <dd>The replacement color. May be a color name or a <a href=
+      "struct.html#Pixel">Pixel</a></dd>
+
+      <dt>invert</dt>
+
+      <dd>If true, the target pixels are all the pixels that are
+      not the target color. The default is the value of the target
+      image's <code>fuzz</code> attribute</dd>
+
+      <dt>fuzz</dt>
+
+      <dd>Colors within this distance are considered equal to the
+      target color.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, the default is <a href=
+      "constants.html#ChannelType">DefaultChannels</a>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#opaque">opaque</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>OpaquePaintImageChannel</p>
   </div>
 
   <div class="sig">

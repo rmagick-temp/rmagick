@@ -73,6 +73,9 @@
         <ul>
           <li><a href="#palette_q">palette?</a></li>
 
+          <li><a href=
+          "#paint_transparent">paint_transparent</a></li>
+
           <li><a href="#pixel_color">pixel_color</a></li>
 
           <li><a href="#polaroid">polaroid</a></li>
@@ -179,13 +182,13 @@
           <li><a href="#store_pixels">store_pixels</a></li>
 
           <li><a href="#strip_bang">strip!</a></li>
+
+          <li><a href="#swirl">swirl</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#swirl">swirl</a></li>
-
           <li><a href="#sync_profiles">sync_profiles</a></li>
 
           <li><a href=
@@ -266,6 +269,67 @@
     <h4>Magick API</h4>
 
     <p>IsPaletteImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="paint_transparent">paint_transparent</h3>
+
+    <p><span class="arg">img</span>.paint_transparent(<span class=
+    "arg">color</span>, <span class=
+    "arg">opacity</span>=TransparentOpacity, <span class=
+    "arg">invert</span>=false, <span class=
+    "arg">fuzz</span>=<span class="arg">img</span>.fuzz) -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Changes the opacity value of all the pixels that match
+    <span class="arg">color</span> to the value specified by
+    <span class="arg">opacity</span>. If <span class=
+    "arg">invert</span> is true, changes the pixels that don't
+    match <span class="arg">color</span>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>color</dt>
+
+      <dd>Either a <a href="imusage.html#color_names">color
+      name</a> or a <a href="struct.html#Pixel">pixel</a>.</dd>
+
+      <dt>opacity</dt>
+
+      <dd>The new opacity value, either an <a href=
+      "constants.html#Opacity">opacity</a> value or a number
+      between 0 and QuantumRange. The default is
+      TransparentOpacity.</dd>
+
+      <dt>invert</dt>
+
+      <dd>If true, changes all the pixels that are <em>not</em> the
+      target color.</dd>
+
+      <dt>fuzz</dt>
+
+      <dd>By default the pixel must match exactly, but you can
+      specify a tolerence level by passing a positive value.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#matte_replace">matte_replace</a>,
+    <a href="draw.html#matte">Draw#matte</a>, <a href=
+    "#transparent">transparent</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>TransparentPaintImage</p>
   </div>
 
   <div class="sig">
@@ -1303,17 +1367,18 @@ random_threshold_channel(geom, RedChannel)
 
     <p class="rollover"><a href=
     "javascript:popup('resize_to_fill.rb.html')">
-    <!-- This img tag displays the original image when the mouse is over -->
-     <img id="cropless" style="display: none" onmouseout=
-    "this.style.display='none';cropped.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="crop_resize example" title=
-    "Click to see the example script" /> 
-    <!--  This img tag displays the framed image when the mouse is not over-->
-     <img style=
+    <!--  This img tag displays the after image when the mouse is not over-->
+     <img src="ex/resize_to_fill.jpg" style=
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
-    id="cropped" onmouseover=
-    "this.style.display='none';cropless.style.display='';" src=
-    "ex/resize_to_fill.jpg" alt="frame example" /></a> <img src=
+    id="after_resize_to_fill" onmouseover=
+    "this.style.display='none'; before_resize_to_fill.style.display='';"
+    alt="resize_to_fill example" /> 
+    <!-- This img tag displays the before image when moused over -->
+     <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
+    "before_resize_to_fill" onmouseout=
+    "this.style.display='none'; after_resize_to_fill.style.display='';"
+    alt="resize_to_fill example" title=
+    "Click to see the example script" /></a> <img src=
     "ex/images/spin.gif" alt="" style="margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
 
@@ -1401,15 +1466,16 @@ random_threshold_channel(geom, RedChannel)
     <!-- This img tag displays the original image when the mouse is over -->
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
-    "ex/images/Flower_Hat.jpg" alt="resize_to_fill example" title=
+    "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
     "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
     id="rtf" onmouseover=
     "this.style.display='none';rtfless.style.display='';" src=
-    "ex/resize_to_fit.jpg" alt="frame example" /></a> <img src=
-    "ex/images/spin.gif" alt="" style="margin-bottom: 230px" title=
+    "ex/resize_to_fit.jpg" alt="resize_to_fit example" /></a>
+    <img src="ex/images/spin.gif" alt="" style=
+    "margin-bottom: 230px" title=
     "Mouse over the example to see the original image" /></p>
 
     <h4>See also</h4>
@@ -3205,11 +3271,12 @@ img.to_color(pixel)
     <h4>See also</h4>
 
     <p><a href="image2.html#matte_replace">matte_replace</a>,
-    <a href="draw.html#matte">Draw#matte</a></p>
+    <a href="draw.html#matte">Draw#matte</a>, <a href=
+    "#paint_transparent">paint_transparent</a></p>
 
     <h4>Magick API</h4>
 
-    <p>TransparentImage</p>
+    <p>TransparentPaintImage</p>
   </div>
 
   <div class="sig">

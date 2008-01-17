@@ -1,3 +1,9 @@
+RMagick 2.2.0
+    o Added Image#opaque_channel, Image#paint_transparent (available with
+      ImageMagick 6.3.7-10)
+    o Fixed bug #17148, compiler error message on Solaris (bug report by Trever
+      Wennblom)
+
 RMagick 2.1.0
     o Added Image::Info#caption= attribute
     o Rename Image#crop_resized, #crop_resized! to #resize_to_fill,

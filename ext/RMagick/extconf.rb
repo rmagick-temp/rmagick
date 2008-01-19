@@ -199,13 +199,13 @@ check_sizeof("unsigned long", headers)
 check_sizeof("Image *", headers)
 
 
+have_enum_value("ColorspaceType", "CMYColorspace", headers)                  # 6.3.5
 have_enum_values("CompositeOperator", ["ChangeMaskCompositeOp",              # 6.3.3
                                        "LinearLightCompositeOp",             # 6.3.5
                                        "DivideCompositeOp"], headers)        # 6.3.5
 have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
                                "PerspectiveProjectionDistortion"], headers)  # 6.3.5-9
 have_enum_values("FilterTypes", ["KaiserFilter",                             # 6.3.6
-                                 "SentinelFilter",                           # 6.3.6
                                  "WelshFilter",                              # 6.3.6-4
                                  "ParzenFilter",                             # 6.3.6-4
                                  "LagrangeFilter",                           # 6.3.7-2

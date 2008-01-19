@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.234 2008/01/17 23:48:19 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.235 2008/01/19 16:22:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1093,6 +1093,9 @@ Init_RMagick2(void)
         ENUMERATOR(Rec709LumaColorspace)
         ENUMERATOR(Rec709YCbCrColorspace)
         ENUMERATOR(LogColorspace)
+#if defined(HAVE_ENUM_CMYCOLORSPACE)
+        ENUMERATOR(CMYColorspace)
+#endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -1267,9 +1270,6 @@ Init_RMagick2(void)
 #endif
 #if defined(HAVE_ENUM_BARTLETTFILTER)
         ENUMERATOR(BartlettFilter)
-#endif
-#if defined(HAVE_ENUM_SENTINELFILTER)
-        ENUMERATOR(SentinelFilter)
 #endif
     END_ENUM
 
@@ -1686,7 +1686,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/01/17 23:48:19 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/01/19 16:22:25 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.144 2008/01/03 15:32:00 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.145 2008/01/19 16:22:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1268,6 +1268,11 @@ ColorspaceType_new(ColorspaceType cs)
         case LogColorspace:
             name = "LogColorspace";
             break;
+#if defined(HAVE_ENUM_CMYCOLORSPACE)
+        case CMYColorspace:
+            name = "CMYColorspace";
+            break;
+#endif
     }
 
     return rm_enum_new(Class_ColorspaceType, ID2SYM(rb_intern(name)), INT2FIX(cs));
@@ -1489,9 +1494,6 @@ FilterTypes_name(FilterTypes type)
 #endif
 #if defined(HAVE_ENUM_BARTLETTFILTER)
         ENUM_TO_NAME(BartlettFilter)
-#endif
-#if defined(HAVE_ENUM_SENTINELFILTER)
-        ENUM_TO_NAME(SentinelFilter)
 #endif
     }
 

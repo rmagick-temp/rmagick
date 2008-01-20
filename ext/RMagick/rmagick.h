@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.221 2008/01/17 23:48:19 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.222 2008/01/20 21:02:22 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -107,18 +107,18 @@
 
 // These macros are needed in 1.9.0 but aren't defined prior to 1.8.6.
 #if !defined(RSTRING_LEN)
-#define RSTRING_LEN(s) (RSTRING(s)->len)
+#define RSTRING_LEN(s) (RSTRING((s))->len)
 #endif
 #if !defined(RSTRING_PTR)
-#define RSTRING_PTR(s) (RSTRING(s)->ptr)
+#define RSTRING_PTR(s) (RSTRING((s))->ptr)
 #endif
 
 // Backport these two macros to 1.8
 #if !defined(RARRAY_LEN)
-#define RARRAY_LEN(a) RARRAY(a)->len
+#define RARRAY_LEN(a) RARRAY((a))->len
 #endif
 #if !defined(RARRAY_PTR)
-#define RARRAY_PTR(a) RARRAY(a)->ptr
+#define RARRAY_PTR(a) RARRAY((a))->ptr
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6

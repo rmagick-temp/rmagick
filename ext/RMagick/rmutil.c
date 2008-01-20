@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.145 2008/01/19 16:22:25 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.146 2008/01/20 17:29:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1494,6 +1494,11 @@ FilterTypes_name(FilterTypes type)
 #endif
 #if defined(HAVE_ENUM_BARTLETTFILTER)
         ENUM_TO_NAME(BartlettFilter)
+#endif
+#if defined(HAVE_ENUM_SENTINELFILTER)
+        // not a real filter name - defeat gcc warning message
+        case SentinelFilter:
+            break;
 #endif
     }
 

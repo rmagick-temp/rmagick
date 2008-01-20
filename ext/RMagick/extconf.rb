@@ -7,19 +7,6 @@ MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(".","").to_i
 MIN_IM_VERS = "6.3.0"
 MIN_IM_VERS_NO = MIN_IM_VERS.tr(".","").to_i
 
-SUMMARY = <<"END_SUMMARY"
-
-
-#{"=" * 70}
-#{DateTime.now.strftime("%a %d%b%y %T")}
-This installation of RMagick #{RMAGICK_VERS} is configured
-for Ruby #{RUBY_VERSION} (#{RUBY_PLATFORM}) and ImageMagick 6.3.7.
-#{"=" * 70}
-
-
-END_SUMMARY
-
-
 
 
 # Test for a specific value in an enum type
@@ -104,6 +91,8 @@ if RUBY_PLATFORM !~ /mswin/
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
   end
 
+  $magick_version = `Magick-config --version`.chomp
+
   # Ensure ImageMagick is not configured for HDRI
   unless checking_for("HDRI disabled version of ImageMagick") do
     not (`Magick-config --version`["HDRI"])
@@ -121,12 +110,13 @@ if RUBY_PLATFORM !~ /mswin/
 
 else  # mswin
 
-    `convert -version` =~ /Version: ImageMagick (\d\.\d\.\d+) /
-    abort "Unable to get ImageMagick version" unless $1
-    $CFLAGS = "-W3"
-  $CPPFLAGS = %Q{-I"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Include" -I"C:\\Program Files\\ImageMagick-#{$1}-Q8\\include"}
+  `convert -version` =~ /Version: ImageMagick (\d\.\d\.\d+) /
+  abort "Unable to get ImageMagick version" unless $1
+  $magick_version = $1
+  $CFLAGS = "-W3"
+  $CPPFLAGS = %Q{-I"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Include" -I"C:\\Program Files\\ImageMagick-#{$magick_version}-Q8\\include"}
   # The /link option is required by the Makefile but causes warnings in the mkmf.log file.
-  $LDFLAGS = %Q{/link /LIBPATH:"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Lib" /LIBPATH:"C:\\Program Files\\ImageMagick-#{$1}-Q8\\lib" /LIBPATH:"C:\\ruby\\lib"}
+  $LDFLAGS = %Q{/link /LIBPATH:"C:\\Program Files\\Microsoft Platform SDK for Windows Server 2003 R2\\Lib" /LIBPATH:"C:\\Program Files\\ImageMagick-#{$magick_version}-Q8\\lib" /LIBPATH:"C:\\ruby\\lib"}
   $LOCAL_LIBS = 'CORE_RL_magick_.lib X11.lib'
 
 end
@@ -210,7 +200,8 @@ have_enum_values("FilterTypes", ["KaiserFilter",                             # 6
                                  "ParzenFilter",                             # 6.3.6-4
                                  "LagrangeFilter",                           # 6.3.7-2
                                  "BohmanFilter",                             # 6.3.7-2
-                                 "BartlettFilter"], headers)                 # 6.3.7-2
+                                 "BartlettFilter",                           # 6.3.7-2
+                                 "SentinelFilter"], headers)                 # 6.3.7-2
 have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers) # 6.3.5
 have_enum_values("InterlaceType", ["GIFInterlace",                           # 6.3.4
                                   "JPEGInterlace",                           # 6.3.4
@@ -251,6 +242,19 @@ $defs = []
 $config_h = "Makefile rmagick.h"
 
 create_makefile("RMagick2")
+
+
+SUMMARY = <<"END_SUMMARY"
+
+
+#{"=" * 70}
+#{DateTime.now.strftime("%a %d%b%y %T")}
+This installation of RMagick #{RMAGICK_VERS} is configured for
+Ruby #{RUBY_VERSION} (#{RUBY_PLATFORM}) and ImageMagick #{$magick_version}
+#{"=" * 70}
+
+
+END_SUMMARY
 
 Logging::message SUMMARY
 message SUMMARY

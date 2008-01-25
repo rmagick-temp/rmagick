@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.64 2008/01/05 22:21:52 rmagick Exp $
+# $Id: RMagick.rb,v 1.65 2008/01/25 00:43:01 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2007 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -775,6 +775,7 @@ class Image
                 exif_data.split("\n").each { |exif| ary.push(exif.split('=')) }
             end
         else
+            get_exif_by_entry()     # ensure properties is populated with exif data
             entry.each do |name|
                 rval = self["EXIF:#{name}"]
                 ary.push([name, rval])
@@ -796,8 +797,9 @@ class Image
                 end
             end
         else
+            get_exif_by_number()    # ensure properties is populated with exif data
             tag.each do |num|
-                rval = self["EXIF:#{'#%04X' % num}"]
+                rval = self['#%04X' % num.to_i]
                 hash[num] = rval == 'unknown' ? nil : rval
             end
         end

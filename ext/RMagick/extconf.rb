@@ -162,6 +162,7 @@ have_func("snprintf", headers)
    "GetNextImageProperty",           # 6.3.1
    "IsHistogramImage",               # 6.3.5
    "LinearStretchImage",             # 6.3.1
+   "LiquidRescaleImage",             # 6.3.8-2
    "MagickCoreGenesis",              # 6.3.4
    "OpaquePaintImageChannel",        # 6.3.7-10
    "PolaroidImage",                  # 6.3.1-6

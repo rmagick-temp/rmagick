@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.278 2008/01/17 23:48:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.279 2008/01/28 22:31:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5444,6 +5444,54 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
 
     (void) LinearStretchImage(new_image, black_point, white_point);
     rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
+#else
+    argc = argc;    // defeat "unused parameter" messages
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return(VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     Image#liquid_rescale(columns, rows, delta_x=0.0, rigidity=0.0)
+    Purpose:    Call the LiquidRescaleImage API
+*/
+VALUE
+Image_liquid_rescale(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_LIQUIDRESCALEIMAGE)
+    Image *image, *new_image;
+    unsigned long cols, rows;
+    double delta_x = 0.0;
+    double rigidity = 0.0;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+
+    switch (argc)
+    {
+        case 4:
+            rigidity = NUM2DBL(argv[3]);
+        case 3:
+            delta_x = NUM2DBL(argv[2]);
+        case 2:
+            rows = NUM2ULONG(argv[1]);
+            cols = NUM2ULONG(argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 4)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = LiquidRescaleImage(image, cols, rows, delta_x, rigidity, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
 #else

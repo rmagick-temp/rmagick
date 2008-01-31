@@ -153,6 +153,8 @@ td.ds {
 
           <li><a href="#linear_stretch">linear_stretch</a></li>
 
+          <li><a href="#liquid_rescale">liquid_rescale</a></li>
+
           <li><a href="#magnify">magnify</a></li>
 
           <li><a href="#magnify_bang">magnify!</a></li>
@@ -2385,6 +2387,57 @@ img.level(white_point, gamma, black_point) -&gt; image # wrong!
     <h4>Magick API</h4>
 
     <p>LinearStretchImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="liquid_rescale">liquid_rescale</h3>
+
+    <p><span class="arg">img</span>.liquid_rescale(<span class=
+    "arg">new_width</span>, <span class="arg">new_height</span>,
+    <span class="arg">delta_x</span>=0.0, <span class=
+    "arg">rigidity</span>=0.0) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Rescale image with seam
+    carving.</span> To use this method, you must have installed and
+    configured ImageMagick to use the <a href=
+    "http://liblqr.wikidot.com/">Liquid Rescale Library</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>new_width, new_height</dt>
+
+      <dd>
+        <p>The desired width and height. Should not exceed 200% of
+        the original dimension.</p>
+      </dd>
+
+      <dt>delta_x</dt>
+
+      <dd>
+        <p class="imquote">Maximum seam transversal step (0 means
+        straight seams).</p>
+      </dd>
+
+      <dt>rigidity</dt>
+
+      <dd>
+        <p class="imquote">Introduce a bias for non-straight seams
+        (typically 0).</p>
+      </dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>LiquidRescaleImage</p>
   </div>
 
   <div class="sig">

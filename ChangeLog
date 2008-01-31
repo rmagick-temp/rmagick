@@ -1,11 +1,12 @@
 RMagick 2.2.0
     o Added Image#opaque_channel, Image#paint_transparent (available with
       ImageMagick 6.3.7-10)
+    o Added Image#liquid_rescale (available with ImageMagick 6.3.8-2)
     o Added CMYColorspace ColorspaceType value
     o Fixed bug #17148, compiler error message on Solaris (bug report by Trever
       Wennblom)
     o Fixed bug #17470, get_exif_by_number, get_exif_by_entry may fail when
-      called with at least one argument
+      called with one or more arguments
 
 RMagick 2.1.0
     o Added Image::Info#caption= attribute

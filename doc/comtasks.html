@@ -108,7 +108,7 @@ ARGV.each { |file|
   <h2 id="convert">Converting an image to another format</h2>
 
   <p>Converting an image to another format is as simple as writing
-  the image to a file. &times;Magick uses the output filename
+  the image to a file. ImageMagick uses the output filename
   suffix (".jpg" for JPEG, ".gif" for GIF, for example) or prefix
   ("ps:" for PostScript, for example) to determine the format of
   the output image.</p>
@@ -175,7 +175,7 @@ thumb = img.resize_to_fill(75, 75)
   method can help.</p>
 
   <p>The <code>change_geometry</code> method accepts an
-  &times;Magick <a href="imusage.html#geometry">geometry string</a>
+  ImageMagick <a href="imusage.html#geometry">geometry string</a>
   argument and a block. The geometry string specifies how to change
   the image's size: one or two numbers to specify the new size and
   optional flags to describe any constraints. The
@@ -252,7 +252,7 @@ thumb = img.resize_to_fit(75, 75)
   compress an image using ZipCompression, more compression usually
   takes longer.</p>
 
-  <p>For more information, see the &times;Magick documentation for
+  <p>For more information, see the ImageMagick documentation for
   the <code>-quality</code> option to the utility commands.</p>
   <pre class="example">
 img.write("myimage.jpg") { self.quality = 50 }

@@ -997,7 +997,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" /> 
+    "Click to see the example script" />
     <!-- This img tag displays the framed image when the mouse is not over -->
      <img onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
@@ -1245,7 +1245,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Returns</h4>
 
     <p>The elements in the returned array are 2-element arrays in
-    the form [name, value]. If &times;Magick does not know the name
+    the form [name, value]. If ImageMagick does not know the name
     for an entry it uses "unknown." There may be more than one
     entry for "unknown" in the returned array. If there is no entry
     with the specified name the value is set to
@@ -2110,7 +2110,7 @@ img.import_pixels(0, r, img.columns, 1, "RGB", scanline);
     the <code>pixels</code> array into a string by calling
     <code>pack</code>, but it does demonstrate the use of a string
     <span class="arg">pixels</span> argument. Note that this
-    example assumes that &times;Magick is configured with
+    example assumes that ImageMagick is configured with
     QuantumDepth=8.</p>
     <pre>
 hat = Image.read("Flower_Hat.jpg").first

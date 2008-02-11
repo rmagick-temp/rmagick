@@ -155,6 +155,7 @@ have_func("snprintf", headers)
    "ConvertHSLToRGB",                # 6.3.5-9
    "ConvertRGBToHSL",                # 6.3.5-9
    "DistortImage",                   # 6.3.5
+   "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9
    "ExcerptImage",                   # 6.3.5-8
    "ExtentImage",                    # 6.3.1

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.236 2008/01/28 22:31:50 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.237 2008/02/11 00:03:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -519,6 +519,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "crop", Image_crop, -1);
     rb_define_method(Class_Image, "crop!", Image_crop_bang, -1);
     rb_define_method(Class_Image, "cycle_colormap", Image_cycle_colormap, 1);
+    rb_define_method(Class_Image, "decipher", Image_decipher, 1);
     rb_define_method(Class_Image, "delete_profile", Image_delete_profile, 1);
     rb_define_method(Class_Image, "despeckle", Image_despeckle, 0);
     rb_define_method(Class_Image, "destroy!", Image_destroy_bang, 0);
@@ -535,6 +536,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "each_profile", Image_each_profile, 0);
     rb_define_method(Class_Image, "edge", Image_edge, -1);
     rb_define_method(Class_Image, "emboss", Image_emboss, -1);
+    rb_define_method(Class_Image, "encipher", Image_encipher, 1);
     rb_define_method(Class_Image, "enhance", Image_enhance, 0);
     rb_define_method(Class_Image, "equalize", Image_equalize, 0);
     rb_define_method(Class_Image, "equalize_channel", Image_equalize_channel, -1);
@@ -1687,7 +1689,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/01/28 22:31:50 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/02/11 00:03:47 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

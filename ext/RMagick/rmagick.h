@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.223 2008/01/28 22:31:50 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.224 2008/02/11 00:03:47 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -814,6 +814,7 @@ extern VALUE Image_copy(VALUE);
 extern VALUE Image_crop(int, VALUE *, VALUE);
 extern VALUE Image_crop_bang(int, VALUE *, VALUE);
 extern VALUE Image_cycle_colormap(VALUE, VALUE);
+extern VALUE Image_decipher(VALUE, VALUE);
 extern VALUE Image_delete_profile(VALUE, VALUE);
 extern VALUE Image_despeckle(VALUE);
 extern VALUE Image_destroy_bang(VALUE);
@@ -830,6 +831,7 @@ extern VALUE Image_dup(VALUE);
 extern VALUE Image_each_profile(VALUE);
 extern VALUE Image_edge(int, VALUE *, VALUE);
 extern VALUE Image_emboss(int, VALUE *, VALUE);
+extern VALUE Image_encipher(VALUE, VALUE);
 extern VALUE Image_enhance(VALUE);
 extern VALUE Image_equalize(VALUE);
 extern VALUE Image_equalize_channel(int, VALUE *, VALUE);

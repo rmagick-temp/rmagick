@@ -1,3 +1,6 @@
+RMagick 2.3.0
+    o Added Image#encipher, Image#decipher (available with ImageMagick 6.3.8-6)
+
 RMagick 2.2.0
     o Added Image#opaque_channel, Image#paint_transparent (available with
       ImageMagick 6.3.7-10)

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.146 2008/01/20 17:29:42 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.147 2008/02/11 00:03:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -229,7 +229,7 @@ rm_no_freeze(VALUE obj)
 
 /*
     Extern:     rm_str2cstr(str, &len);
-    Purpose:    Supply our own version of the "obsolete" rm_str2cstr.
+    Purpose:    Supply our own version of the "obsolete" rb_str2cstr.
 */
 char *
 rm_str2cstr(VALUE str, long *len)

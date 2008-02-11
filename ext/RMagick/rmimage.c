@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.279 2008/01/28 22:31:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.280 2008/02/11 00:03:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3178,6 +3178,45 @@ Image_depth(VALUE self)
 }
 
 
+/*
+    Method:     Image#decipher(passphrase)
+    Purpose:    call DecipherImage
+*/
+VALUE
+Image_decipher(VALUE self, VALUE passphrase)
+{
+#if defined(HAVE_ENCIPHERIMAGE)
+    Image *image, *new_image;
+    char *pf;
+    ExceptionInfo exception;
+    MagickBooleanType okay;
+
+    image = rm_check_destroyed(self);
+    pf = StringValuePtr(passphrase);      // ensure passphrase is a string
+    GetExceptionInfo(&exception);
+
+    new_image = rm_clone_image(image);
+
+    okay = DecipherImage(new_image, pf, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    if (!okay)
+    {
+        new_image = DestroyImage(new_image);
+        rb_raise(rb_eRuntimeError, "DecipherImage failed for unknown reason.");
+    }
+
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+#else
+    self = self;
+    passphrase = passphrase;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
 DEF_ATTR_ACCESSOR(Image, delay, ulong)
 
 
@@ -3835,6 +3874,45 @@ VALUE
 Image_emboss(int argc, VALUE *argv, VALUE self)
 {
     return effect_image(self, argc, argv, EmbossImage);
+}
+
+
+/*
+    Method:     Image#encipher(passphrase)
+    Purpose:    call EncipherImage
+*/
+VALUE
+Image_encipher(VALUE self, VALUE passphrase)
+{
+#if defined(HAVE_ENCIPHERIMAGE)
+    Image *image, *new_image;
+    char *pf;
+    ExceptionInfo exception;
+    MagickBooleanType okay;
+
+    image = rm_check_destroyed(self);
+    pf = StringValuePtr(passphrase);      // ensure passphrase is a string
+    GetExceptionInfo(&exception);
+
+    new_image = rm_clone_image(image);
+
+    okay = EncipherImage(new_image, pf, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    if (!okay)
+    {
+        new_image = DestroyImage(new_image);
+        rb_raise(rb_eRuntimeError, "EncipherImage failed for unknown reason.");
+    }
+
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+#else
+    self = self;
+    passphrase = passphrase;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

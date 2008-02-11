@@ -78,6 +78,8 @@ td.ds {
 
           <li><a href="#emboss">emboss</a></li>
 
+          <li><a href="#encipher">encipher</a></li>
+
           <li><a href="#enhance">enhance</a></li>
 
           <li><a href="#equalize">equalize</a></li>
@@ -381,6 +383,40 @@ td.ds {
     <h4>Magick API</h4>
 
     <p>EmbossImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="encipher">encipher</h3>
+
+    <p><span class="arg">img</span>.encipher(<span class=
+    "arg">passphrase</span>) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Encipher an image.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The passphrase.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+enciphered_img = img.encipher("magic word")
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>EncipherImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#decipher">decipher</a></p>
   </div>
 
   <div class="sig">
@@ -997,7 +1033,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!-- This img tag displays the framed image when the mouse is not over -->
      <img onmouseover=
     "this.style.display='none';frameless.style.display='';" src=

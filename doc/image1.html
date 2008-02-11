@@ -196,13 +196,13 @@ float: left;
           <li><a href="#composite">composite</a></li>
 
           <li><a href="#composite_bang">composite!</a></li>
+
+          <li><a href="#composite_affine">composite_affine</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#composite_affine">composite_affine</a></li>
-
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
 
@@ -224,6 +224,8 @@ float: left;
           <li><a href="#crop_resized">crop_resized</a></li>
 
           <li><a href="#cycle_colormap">cycle_colormap</a></li>
+
+          <li><a href="#decipher">decipher</a></li>
 
           <li><a href="#delete_profile">delete_profile</a></li>
 
@@ -3387,6 +3389,40 @@ cropped = img.crop(x, y, width, height, true)
     <h4>Magick API</h4>
 
     <p>CycleColormapImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="decipher">decipher</h3>
+
+    <p><span class="arg">img</span>.decipher(<span class=
+    "arg">passphrase</span>) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Decipher an enciphered image.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The passphrase used to encipher the image.</p>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+deciphered_img = img.decipher("magic word")
+</pre>
+
+    <h4>Magick API</h4>
+
+    <p>DecipherImage</p>
+
+    <h4>See also</h4>
+
+    <p><a href="image2.html#encipher">encipher</a></p>
   </div>
 
   <div class="sig">

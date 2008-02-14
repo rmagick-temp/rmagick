@@ -14,7 +14,7 @@ canvas.new_image(250, 250, Magick::HatchFill.new('white', 'gray90'))
 border = Magick::Draw.new
 border.stroke('thistle')
 border.fill_opacity(0)
-border.rectangle(0,0, canvas.rows-1, canvas.columns-1)
+border.rectangle(0,0, canvas.columns-1, canvas.rows-1)
 border.draw(canvas)
 
 # Draw gold axes with arrow-heads.

@@ -48,9 +48,6 @@
 
       <li><a href="#limit_resource">limit_resource</a></li>
 
-      <li><a href=
-      "#set_cache_threshold">set_cache_threshold</a></li>
-
       <li><a href="#set_log_event_mask">set_log_event_mask</a></li>
 
       <li><a href="#set_log_format">set_log_format</a></li>
@@ -252,11 +249,11 @@
   <div class="desc">
     <h4>Description</h4>
 
-    <p>Describes the image formats supported by ImageMagick. If
-    the optional block is present, calls the block once for each
-    image format. The first argument, <em>f</em>, is the format
-    name. The second argument, <em>v</em>, is the properties string
-    described below.</p>
+    <p>Describes the image formats supported by ImageMagick. If the
+    optional block is present, calls the block once for each image
+    format. The first argument, <em>f</em>, is the format name. The
+    second argument, <em>v</em>, is the properties string described
+    below.</p>
 
     <h4>Returns</h4>A hash of image formats and their properties.
     Each key in the returned hash is the name of a supported image
@@ -323,9 +320,9 @@ p Magick.formats &raquo;
     <h4>Note</h4>
 
     <p>ImageMagick depends on external programs for some formats.
-    Depending on how ImageMagick was installed on your system,
-    some formats may not be available. If you have questions, ask
-    your system administrator.</p>
+    Depending on how ImageMagick was installed on your system, some
+    formats may not be available. If you have questions, ask your
+    system administrator.</p>
   </div>
 
   <div class="sig">
@@ -341,9 +338,9 @@ p Magick.formats &raquo;
 
     <p>Sets a limit to the amount of a resource, or gets the
     current limit for the resource. <span class="imquote">When the
-    limit is reached, ImageMagick will fail in some fashion or
-    take compensating actions if possible.</span> The default
-    limits vary according to the platform. See the ImageMagick
+    limit is reached, ImageMagick will fail in some fashion or take
+    compensating actions if possible.</span> The default limits
+    vary according to the platform. See the ImageMagick
     documentation for the <em>-limit</em> option for more
     information.</p>
 
@@ -354,20 +351,23 @@ p Magick.formats &raquo;
     <dl>
       <dt>resource_type</dt>
 
-      <dd>One of the symbols <code>:disk</code>,
-      <code>:file</code>, <code>:map</code>, or
+      <dd>One of the symbols <code>:area</code>,
+      <code>:disk</code>, <code>:file</code>, <code>:map</code>, or
       <code>:memory</code>. You may use a string instead of a
       symbol.</dd>
 
       <dt>limit</dt>
 
       <dd>If present, the limit for the resource. This argument is
-      always an integer number. If the resource_type is
-      <code>:file</code>, the limit is the number of open files. If
-      <code>:memory</code> or <code>:map</code>, the limit is
-      measured megabytes. If <code>:disk</code>, the limit is
-      measured in gigabytes. If this argument is omitted the limit
-      is not changed.</dd>
+      always an integer number. If the <span class=
+      "arg">resource_type</span> is <code>:file</code>, the limit
+      is the number of open files. If <code>:memory</code> or
+      <code>:map</code>, the limit is measured megabytes. If
+      <code>:disk</code>, the limit is measured in gigabytes. If
+      the <span class="arg">resource_type</span> is
+      <code>:area</code> the limit is the maximum width * heigth of
+      an image in pixels that can reside in pixel cache memory. If
+      this argument is omitted the limit is not changed.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -377,47 +377,7 @@ p Magick.formats &raquo;
 
     <h4>Notes</h4>
 
-    <p>This method supercedes <a href=
-    "#set_cache_threshold">set_cache_threshold</a>.</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="set_cache_threshold">set_cache_threshold</h3>
-
-    <p>Magick.set_cache_threshold(<span class="arg">n</span>)</p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Sets the amount of free memory allocated for the pixel
-    cache. <span class="imquote">Once this threshold is exceeded,
-    all subsequent pixels cache operations are to/from
-    disk.</span></p>
-
-    <h4>Arguments</h4>
-
-    <p>An integer number of megabytes.</p>
-
-    <h4>Example</h4>
-    <pre>
-# set the cache threshold to 10Mb
-Magick.set_cache_threshold(10)
-</pre>
-
-    <h4>Notes</h4>
-
-    <p>This method is obsolete. Use <a href=
-    "#limit_resource">limit_resource</a> instead. The code:</p>
-    <pre>
-Magick.limit_resource(:memory, n)
-Magick.imit_resource(:map, 2*n)
-</pre>
-
-    <p>is equivalent to</p>
-    <pre>
-Magick.set_cache_threshold(n)
-</pre>
+    <p>This method supercedes <code>set_cache_threshold</code>.</p>
   </div>
 
   <div class="sig">

@@ -1,5 +1,10 @@
 RMagick 2.3.0
     o Added Image#encipher, Image#decipher (available with ImageMagick 6.3.8-6)
+    o Support :area resource type in Magick.limit_resource
+
+RMagick 2.2.2
+    o Fix bug #18016, add test for InitializeMagick in libMagickCore to
+      extconf.rb
 
 RMagick 2.2.0
     o Added Image#opaque_channel, Image#paint_transparent (available with

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.237 2008/02/11 00:03:47 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.238 2008/02/15 00:40:53 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -167,7 +167,6 @@ Magick_init_formats(VALUE class)
   Method:   Magick.limit_resource(resource[, limit])
   Purpose:  Get/set resource limits. If a limit is specified the old limit
             is set to the new value. Either way the current/new limit is returned.
-  Notes:    Don't support "AreaLimit" because GraphicsMagick doesn't support it.
 */
 static VALUE
 Magick_limit_resource(int argc, VALUE *argv, VALUE class)
@@ -187,7 +186,11 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 
         case T_SYMBOL:
             id = (ID)SYM2ID(resource);
-            if (id == rb_intern("memory"))
+            if (id == rb_intern("area"))
+            {
+                res = AreaResource;
+            }
+            else if (id == rb_intern("memory"))
             {
                 res = MemoryResource;
             }
@@ -214,6 +217,10 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
             if (*str == '\0')
             {
                 return class;
+            }
+            else if (rm_strcasecmp("area", str) == 0)
+            {
+                res = AreaResource;
             }
             else if (rm_strcasecmp("memory", str) == 0)
             {
@@ -1689,7 +1696,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/02/11 00:03:47 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/02/15 00:40:53 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

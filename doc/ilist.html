@@ -374,7 +374,7 @@ ilist.ticks_per_second = 1000
     undefined results. Most of the time RMagick will raise an
     ArgumentError exception. For example, if you call
     <code>collect!</code> on an imagelist you should make sure that
-    the members of theimagelist remain images. If you need to
+    the members of the imagelist remain images. If you need to
     replace images in an imagelist with non-image objects, convert
     the imagelist to an array with the <code>to_a</code> method,
     then modify the array.</p>
@@ -563,7 +563,7 @@ ilist.animate { self.server_name = "other:0.0" }
     <h4>Description</h4>
 
     <p>Same as <a href="#dup">dup</a>, but the frozen state of the
-    original is propogated to the copy.</p>
+    original is propagated to the copy.</p>
 
     <h4>Returns</h4>
 
@@ -760,7 +760,7 @@ imagelist2 = imagelist1.copy
     successor. The resulting imagelist usually produces a much
     smaller file.</p>
 
-    <p>The <code>desconstruct</code> method starts by copying the
+    <p>The <code>deconstruct</code> method starts by copying the
     first image in the list to the output imagelist. Then, for each
     pair of images, <code>deconstruct</code> computes the smallest
     rectangle that encompasses all the changes between the first
@@ -1519,7 +1519,7 @@ ilist.new_image(100, 100) { self.background_color = "red" }
       first images virtual canvas using the current background
       color, and compose each image in turn onto that canvas.
       Images falling outside that canvas will be clipped. Final
-      image will have a zero virtual canvas offset. This is usally
+      image will have a zero virtual canvas offset. This is usually
       used as one of the final 'image layering' operations
       overlaying all the prepared image layers into a final image.
       For a single image this method can also be used to fillout a
@@ -1536,7 +1536,7 @@ ilist.new_image(100, 100) { self.background_color = "red" }
       'locked' to the origin, by definition, image layers with a
       negative offsets will still be clipped by the top and left
       edges. This method is commonly used to layout individual
-      image using various offset but without knowning the final
+      image using various offset but without knowing the final
       canvas size. The resulting image will, like FlattenLayer not
       have any virtual offset, so can be saved to any image file
       format.</span> This method corresponds to <a href=
@@ -1592,7 +1592,7 @@ ilist.new_image(100, 100) { self.background_color = "red" }
 
       <dd class="imquote">Remove (and merge time delays) of
       duplicate consecutive images, so as to simplify layer
-      overlays of coalesced animations. Usally this is a result of
+      overlays of coalesced animations. Usually this is a result of
       using a constant time delay across the whole animation, or
       after a larger animation was split into smaller
       sub-animations. The duplicate frames could also have been
@@ -1605,7 +1605,7 @@ ilist.new_image(100, 100) { self.background_color = "red" }
       proper timed animation, a warning is then issued). In a GIF
       animation, such images are usually frames which provide
       partial intermediary updates between the frames that are
-      actually displayed to users. These frames are usally added
+      actually displayed to users. These frames are usually added
       for improved frame optimization in GIF animations.</dd>
     </dl>
 

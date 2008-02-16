@@ -802,7 +802,7 @@ img = Image.read_inline(content)
 
     <p>The value of <span class=
     "arg">img</span>.<code>signature</code> &lt;=&gt; <span class=
-    "arg">other_mage</span>.<code>signature</code>.</p>
+    "arg">other_image</span>.<code>signature</code>.</p>
 
     <h4>See also</h4>
 
@@ -826,7 +826,7 @@ img = Image.read_inline(content)
   <div class="desc">
     <h4>Description</h4>
 
-    <p><span class="imquote">Adaptively blurs the image by bluring
+    <p><span class="imquote">Adaptively blurs the image by blurring
     more intensely near image edges and less intensely far from
     edges.</span> The adaptive_blur method blurs <span class=
     "imquote">the image with a Gaussian operator of the
@@ -2143,7 +2143,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Description</h4>
 
     <p>Same as <a href="#dup">dup</a> except the frozen state of
-    the original is propogated to the new copy.</p>
+    the original is propagated to the new copy.</p>
 
     <h4>Returns</h4>
 
@@ -2169,10 +2169,10 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     of its replacement value in an LUT gradient image.</p>
 
     <p class="imquote">The LUT image should be either a single row
-    or column image of replacement colors. The lookup is controled
+    or column image of replacement colors. The lookup is controlled
     by the -interpolate setting, especially for an LUT which is not
     the full length needed by the IM installed Quality (Q) level.
-    Good setings for this is the default 'bilinear' or 'bicubic'
+    Good settings for this is the default 'bilinear' or 'bicubic'
     interpolation setting for a smooth color gradient, or 'integer'
     for a direct unsmoothed lookup of color values.</p>
 
@@ -2185,7 +2185,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     alpha/matte value using the alpha/matte value of the original
     image. As such correct alpha channel lookup for a pure
     gray-scale original image will require a copy of that grayscale
-    to be transfered into its alpha channel before applying the
+    to be transferred into its alpha channel before applying the
     -clut operator.</p>
 
     <h4>Arguments</h4>
@@ -2396,7 +2396,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>red_pct, green_pct, blue_pct, matte_pct</dt>
 
       <dd>The percentage of the fill color red, green, blue and
-      matte (tranparency) components to blend with the image pixel.
+      matte (transparency) components to blend with the image pixel.
       For example, <code>.25</code> is 25%. The matte_pct argument
       is optional.</dd>
 
@@ -3103,7 +3103,7 @@ f.colors &raquo; 108
 
   <div class="desc">
     <h4>Description</h4>Returns a copy of the image. The tainted
-    state of the original is propogated to the copy.
+    state of the original is propagated to the copy.
 
     <h4>Example</h4>
     <pre>
@@ -3542,7 +3542,7 @@ deciphered_img = img.decipher("magic word")
     about their difference.</p>
 
     <p class="imquote">A small normalized mean square
-    error...suggests the images are very similiar in spatial layout
+    error...suggests the images are very similar in spatial layout
     and color.</p>
 
     <h4>Returns</h4>

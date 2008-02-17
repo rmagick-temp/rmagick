@@ -1,3 +1,7 @@
+RMagick 1.15.13
+     o Fix bug #18016, check for InitializeMagick in libMagickCore (bug report
+       by Dan Gilbert)
+
 RMagick 1.15.12
     o Fix bug #16221, starting with ImageMagick 6.3.2, get_exif_by_entry/number
       returns empty array/hash when no arguments are specified, even though the

@@ -753,7 +753,7 @@ img = Magick::Image.read_inline(content)
   <div class="desc">
     <h4>Description</h4>
 
-    <p><span class="imquote">Adaptively blurs the image by bluring
+    <p><span class="imquote">Adaptively blurs the image by blurring
     more intensely near image edges and less intensely far from
     edges.</span> The adaptive_blur method blurs <span class=
     "imquote">the image with a Gaussian operator of the
@@ -2073,7 +2073,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Description</h4>
 
     <p>Same as <a href="#dup">dup</a> except the frozen state of
-    the original is propogated to the new copy.</p>
+    the original is propagated to the new copy.</p>
 
     <h4>Returns</h4>
 
@@ -2263,7 +2263,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>red_pct, green_pct, blue_pct, matte_pct</dt>
 
       <dd>The percentage of the fill color red, green, blue and
-      matte (tranparency) components to blend with the image pixel.
+      matte (transparency) components to blend with the image pixel.
       For example, <code>.25</code> is 25%. The matte_pct argument
       is optional.</dd>
 
@@ -2972,7 +2972,7 @@ f.colors &raquo; 108
 
   <div class="desc">
     <h4>Description</h4>Returns a copy of the image. The tainted
-    state of the original is propogated to the copy.
+    state of the original is propagated to the copy.
 
     <h4>Example</h4>
     <pre>
@@ -3402,7 +3402,7 @@ cropped = img.crop(x, y, width, height, true)
     about their difference.</p>
 
     <p class="imquote">A small normalized mean square
-    error...suggests the images are very similiar in spatial layout
+    error...suggests the images are very similar in spatial layout
     and color.</p>
 
     <h4>Returns</h4>

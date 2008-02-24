@@ -1,6 +1,6 @@
 #--
-# $Id: embellishable.rb,v 1.7 2007/01/20 17:39:49 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: embellishable.rb,v 1.8 2008/02/24 18:26:36 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 #++
 
 module Magick

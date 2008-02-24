@@ -1,5 +1,5 @@
-# $Id: misc.rb,v 1.11 2007/09/30 22:22:17 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: misc.rb,v 1.12 2008/02/24 18:26:36 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 module Magick
     class RVG
 

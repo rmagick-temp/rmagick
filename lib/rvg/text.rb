@@ -1,6 +1,6 @@
 #--
-# $Id: text.rb,v 1.5 2007/01/20 17:39:50 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: text.rb,v 1.6 2008/02/24 18:26:37 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 #++
 # Text-related classes
 

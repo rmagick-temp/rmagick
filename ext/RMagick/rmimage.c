@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.280 2008/02/11 00:03:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.281 2008/02/24 18:27:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6557,7 +6557,7 @@ Image_opaque_channel(int argc, VALUE *argv, VALUE self)
             fuzz = NUM2DBL(argv[3]);
             if (fuzz < 0.0)
             {
-                rb_raise(rb_eArgError, "fuzz must be >= 0.0", fuzz);
+                rb_raise(rb_eArgError, "fuzz must be >= 0.0 (%g given)", fuzz);
             }
         case 3:
             invert = RTEST(argv[2]);

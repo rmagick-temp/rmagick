@@ -1,6 +1,6 @@
 #--
-# $Id: stylable.rb,v 1.4 2007/01/20 17:49:57 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: stylable.rb,v 1.4.4.1 2008/02/24 23:21:51 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 #++
 
 module Magick

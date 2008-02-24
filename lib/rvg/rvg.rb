@@ -1,7 +1,7 @@
 #--############################################################################
-# $Id: rvg.rb,v 1.8 2007/01/20 17:39:50 rmagick Exp $
+# $Id: rvg.rb,v 1.8.4.1 2008/02/24 23:21:50 rmagick Exp $
 #
-#                    Copyright (C) 2007 by Timothy P. Hunter
+#                    Copyright (C) 2008 by Timothy P. Hunter
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the

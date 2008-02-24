@@ -1,6 +1,6 @@
-/* $Id: rmmain.c,v 1.159.2.2 2007/06/09 16:45:25 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.159.2.2.2.1 2008/02/24 23:26:38 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2007 by Timothy P. Hunter
+|                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
 | Author:   Tim Hunter
 | Purpose:  Contains all module, class, method declarations.
@@ -1937,7 +1937,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2007/06/09 16:45:25 $) Copyright (C) 2007 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2008/02/24 23:26:38 $) Copyright (C) 2008 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

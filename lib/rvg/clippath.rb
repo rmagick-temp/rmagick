@@ -1,6 +1,6 @@
 #--
-# $Id: clippath.rb,v 1.3 2007/01/20 17:39:48 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: clippath.rb,v 1.3.4.1 2008/02/24 23:21:48 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 #++
 module Magick
     class RVG

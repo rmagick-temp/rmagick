@@ -1,6 +1,6 @@
 #--
-# $Id: paint.rb,v 1.4 2007/01/20 17:39:49 rmagick Exp $
-# Copyright (C) 2007 Timothy P. Hunter
+# $Id: paint.rb,v 1.4.4.1 2008/02/24 23:22:14 rmagick Exp $
+# Copyright (C) 2008 Timothy P. Hunter
 #++
 # Defines paint server classes.
 # Eventually this will include gradients.
@@ -17,6 +17,11 @@ module Magick
             include Stretchable
             include Duplicatable
             include Stylable
+
+            # Return upper-left corner, width, height of viewport in user coordinates.
+            # Usually these are the values specified when the Pattern object is
+            # created, but they can be changed by a call to the viewbox method.
+            attr_reader :x, :y, :width, :height
 
             # Create a pattern that can be used with the :fill or :stroke styles.
             # The +width+ and +height+ arguments define the viewport.

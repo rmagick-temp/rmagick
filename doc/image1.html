@@ -132,6 +132,8 @@ float: left;
 
           <li><a href="#alpha">alpha</a></li>
 
+          <li><a href="#alpha_q">alpha?</a></li>
+
           <li><a href="#annotate">annotate</a></li>
 
           <li><a href="#auto_orient">auto_orient</a></li>
@@ -147,13 +149,13 @@ float: left;
           <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
-
-          <li><a href="#border">border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#border">border</a></li>
+
           <li><a href="#border_bang">border!</a></li>
 
           <li><a href="#change_geometry">change_geometry</a></li>
@@ -198,13 +200,13 @@ float: left;
           <li><a href="#composite">composite</a></li>
 
           <li><a href="#composite_bang">composite!</a></li>
-
-          <li><a href="#composite_affine">composite_affine</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#composite_affine">composite_affine</a></li>
+
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
 
@@ -1351,22 +1353,20 @@ img = Image.read_inline(content)
   <div class="sig">
     <h3 id="alpha">alpha</h3>
 
-    <p><span class="arg">img</span>.alpha([<span class=
-    "arg">type</span>])</p>
+    <p><span class="arg">img</span>.alpha(<span class=
+    "arg">type</span>) -&gt; <em>type</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Set a flag to indicate whether or not to use alpha channel
-    data. If no argument is present, returns <code>true</code> or
-    <code>false</code>, depending on whether or not the alpha
-    channel is active.</p>
+    data.</p>
 
     <h4>Arguments</h4>
 
-    <p>The argument may be omitted. If present, one of the
-    following values of the AlphaChannelType enumeration:</p>
+    <p>One of the following values of the AlphaChannelType
+    enumeration:</p>
 
     <dl>
       <dt>ActivateAlphaChannel</dt>
@@ -1389,13 +1389,41 @@ img = Image.read_inline(content)
 
     <h4>Returns</h4>
 
-    <p>If the argument was omitted, returns <code>true</code> if
-    the alpha channel is active, <code>false</code> otherwise. If
-    an argument was supplied, returns the argument.</p>
+    <p>The argument.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#alpha_q">alpha?</a></p>
 
     <h4>Notes</h4>
 
     <p>Available in ImageMagick 6.3.5 and later.</p>
+
+    <h4>Magick API</h4>
+
+    <p>SetImageAlphaChannel</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="alpha_q">alpha?</h3>
+
+    <p><span class="arg">img</span>.alpha? -&gt; <code>true</code>
+    or <code>false</code></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Returns <code>true</code> if the alpha channel will be used,
+    <code>false</code> otherwise.</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#alpha">alpha</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>GetImageAlphaChannel</p>
   </div>
 
   <div class="sig">

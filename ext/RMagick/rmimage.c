@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.281 2008/02/24 18:27:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.282 2008/03/06 00:10:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -396,57 +396,109 @@ Image_add_profile(VALUE self, VALUE name)
 }
 
 
+
+/*
+    Method:         Image#alpha(type)
+    Purpose:        If an AlphaChannelType argument is provided, sets a flag
+                    indicating whether or not to use the alpha channel and
+                    returns the flag. If there is no argument, returns true or
+                    false depending on whether the alpha channel is active.
+    Notes:          Replaces matte, matte=, alpha=
+*/
+VALUE
+Image_alpha(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
+    Image *image;
+    AlphaChannelType alpha;
+    MagickBooleanType matte;
+    volatile VALUE ret;
+
+    image = rm_check_destroyed(self);
+    if (argc > 0)
+    {
+        rb_check_frozen(self);
+    }
+
+    switch (argc)
+    {
+        case 1:
+            VALUE_TO_ENUM(argv[0], alpha, AlphaChannelType);
+#if defined(HAVE_SETIMAGEALPHACHANNEL)
+            // Added in 6.3.6-9
+            (void) SetImageAlphaChannel(image, alpha);
+            rm_check_image_exception(image, RetainOnError);
+#else
+            switch (alpha)
+            {
+                case ActivateAlphaChannel:
+                    image->matte = MagickTrue;
+                    break;
+
+                case DeactivateAlphaChannel:
+                    image->matte = MagickFalse;
+                    break;
+
+                case ResetAlphaChannel:
+                    if (image->matte == MagickFalse)
+                    {
+                        (void) SetImageOpacity(image, OpaqueOpacity);
+                        rm_check_image_exception(image, RetainOnError);
+                    }
+                    break;
+
+                case SetAlphaChannel:
+                    (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
+                    rm_check_image_exception(image, RetainOnError);
+                    break;
+
+                default:
+                    rb_raise(rb_eArgError, "unknown AlphaChannelType value");
+                    break;
+            }
+
+#endif
+            ret = argv[0];
+            break;
+        case 0:
+#if defined(HAVE_GETIMAGEALPHACHANNEL)
+            matte = GetImageAlphaChannel(image);
+            ret = matte ? Qtrue : Qfalse;
+#else
+            ret = image->matte ? Qtrue : Qfalse;
+#endif
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+            break;
+    }
+
+    return ret;
+
+#else   // HAVE_ALPHACHANNELTYPE
+    argc = argc;
+    argv = argv;
+    self = self;
+    rm_not_implemented();
+    return(VALUE)0;
+#endif
+}
+
+
 /*
     Method:     Image#alpha=(alpha)
     Purpose:    Equivalent to -alpha option
+    Returns:    alpha
     Notes:      see mogrify.c
+    Notes:      Deprecated. See Image_alpha.
 */
 VALUE
 Image_alpha_eq(VALUE self, VALUE type)
 {
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE)
-    Image *image;
-    AlphaChannelType alpha;
-
-    image = rm_check_frozen(self);
-
-    VALUE_TO_ENUM(type, alpha, AlphaChannelType);
-
-#if defined(HAVE_SETIMAGEALPHACHANNEL)
-    // Added in 6.3.6-9
-    (void) SetImageAlphaChannel(image, alpha);
-    rm_check_image_exception(image, RetainOnError);
-
-#else
-
-    switch (alpha)
-    {
-        case ActivateAlphaChannel:
-            image->matte = MagickTrue;
-            break;
-
-        case DeactivateAlphaChannel:
-            image->matte = MagickFalse;
-            break;
-
-        case ResetAlphaChannel:
-            if (image->matte == MagickFalse)
-            {
-                (void) SetImageOpacity(image, OpaqueOpacity);
-                rm_check_image_exception(image, RetainOnError);
-            }
-            break;
-
-        case SetAlphaChannel:
-            (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
-            rm_check_image_exception(image, RetainOnError);
-            break;
-
-        default:
-            break;
-    }
-#endif
-
+    VALUE v[1];
+    v[0] = type;
+    Image_alpha(1, v, self);
     return type;
 #else
     self = self;
@@ -5856,7 +5908,7 @@ Image_mask_eq(VALUE self, VALUE mask)
 /*
     Method:     Image#matte
     Purpose:    Get matte attribute
-    Notes:      Deprecated as of ImageMagick 6.3.6
+    Notes:      Deprecated as of ImageMagick 6.3.6. See Image#alpha
 */
 VALUE
 Image_matte(VALUE self)
@@ -5871,7 +5923,7 @@ Image_matte(VALUE self)
 /*
     Method:     Image#matte=
     Purpose:    Set matte attribute
-    Notes:      Deprecated as of ImageMagick 6.3.6. Calls Image_matte_eq.
+    Notes:      Deprecated as of ImageMagick 6.3.6. See Image#alpha
 */
 VALUE
 Image_matte_eq(VALUE self, VALUE matte)

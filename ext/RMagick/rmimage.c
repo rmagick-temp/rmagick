@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.282 2008/03/06 00:10:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.283 2008/03/06 23:27:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -399,81 +399,54 @@ Image_add_profile(VALUE self, VALUE name)
 
 /*
     Method:         Image#alpha(type)
-    Purpose:        If an AlphaChannelType argument is provided, sets a flag
-                    indicating whether or not to use the alpha channel and
-                    returns the flag. If there is no argument, returns true or
-                    false depending on whether the alpha channel is active.
-    Notes:          Replaces matte, matte=, alpha=
+    Purpose:        Calls SetImageAlphaChannel
+    Notes:          Replaces matte=, alpha=
 */
 VALUE
-Image_alpha(int argc, VALUE *argv, VALUE self)
+Image_alpha(VALUE self, VALUE type)
 {
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE)
     Image *image;
     AlphaChannelType alpha;
-    MagickBooleanType matte;
-    volatile VALUE ret;
 
-    image = rm_check_destroyed(self);
-    if (argc > 0)
-    {
-        rb_check_frozen(self);
-    }
+    image = rm_check_frozen(self);
+    VALUE_TO_ENUM(type, alpha, AlphaChannelType);
 
-    switch (argc)
-    {
-        case 1:
-            VALUE_TO_ENUM(argv[0], alpha, AlphaChannelType);
 #if defined(HAVE_SETIMAGEALPHACHANNEL)
-            // Added in 6.3.6-9
-            (void) SetImageAlphaChannel(image, alpha);
-            rm_check_image_exception(image, RetainOnError);
+    // Added in 6.3.6-9
+    (void) SetImageAlphaChannel(image, alpha);
+    rm_check_image_exception(image, RetainOnError);
 #else
-            switch (alpha)
+    switch (alpha)
+    {
+        case ActivateAlphaChannel:
+            image->matte = MagickTrue;
+            break;
+
+        case DeactivateAlphaChannel:
+            image->matte = MagickFalse;
+            break;
+
+        case ResetAlphaChannel:
+            if (image->matte == MagickFalse)
             {
-                case ActivateAlphaChannel:
-                    image->matte = MagickTrue;
-                    break;
-
-                case DeactivateAlphaChannel:
-                    image->matte = MagickFalse;
-                    break;
-
-                case ResetAlphaChannel:
-                    if (image->matte == MagickFalse)
-                    {
-                        (void) SetImageOpacity(image, OpaqueOpacity);
-                        rm_check_image_exception(image, RetainOnError);
-                    }
-                    break;
-
-                case SetAlphaChannel:
-                    (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
-                    rm_check_image_exception(image, RetainOnError);
-                    break;
-
-                default:
-                    rb_raise(rb_eArgError, "unknown AlphaChannelType value");
-                    break;
+                (void) SetImageOpacity(image, OpaqueOpacity);
+                rm_check_image_exception(image, RetainOnError);
             }
+            break;
 
-#endif
-            ret = argv[0];
+        case SetAlphaChannel:
+            (void) CompositeImage(image, CopyOpacityCompositeOp, image, 0, 0);
+            rm_check_image_exception(image, RetainOnError);
             break;
-        case 0:
-#if defined(HAVE_GETIMAGEALPHACHANNEL)
-            matte = GetImageAlphaChannel(image);
-            ret = matte ? Qtrue : Qfalse;
-#else
-            ret = image->matte ? Qtrue : Qfalse;
-#endif
-            break;
+
         default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+            rb_raise(rb_eArgError, "unknown AlphaChannelType value");
             break;
     }
+#endif
 
-    return ret;
+    return type;
 
 #else   // HAVE_ALPHACHANNELTYPE
     argc = argc;
@@ -481,6 +454,24 @@ Image_alpha(int argc, VALUE *argv, VALUE self)
     self = self;
     rm_not_implemented();
     return(VALUE)0;
+#endif
+}
+
+
+
+/*
+    Method:     Image#alpha?
+    Returns:    true if the image's alpha channel is activated
+    Notes:      Replaces Image#matte
+*/
+VALUE
+Image_alpha_q(VALUE self)
+{
+    Image *image = rm_check_destroyed(self);
+#if defined(HAVE_GETIMAGEALPHACHANNEL)
+    return GetImageAlphaChannel(image) ? Qtrue : Qfalse;
+#else
+    return image->matte ? Qtrue : Qfalse;
 #endif
 }
 
@@ -496,9 +487,7 @@ VALUE
 Image_alpha_eq(VALUE self, VALUE type)
 {
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE)
-    VALUE v[1];
-    v[0] = type;
-    Image_alpha(1, v, self);
+    Image_alpha(self, type);
     return type;
 #else
     self = self;

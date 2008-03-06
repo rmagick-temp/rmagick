@@ -130,6 +130,8 @@ float: left;
 
           <li><a href="#affine_transform">affine_transform</a></li>
 
+          <li><a href="#alpha">alpha</a></li>
+
           <li><a href="#annotate">annotate</a></li>
 
           <li><a href="#auto_orient">auto_orient</a></li>
@@ -1347,6 +1349,56 @@ img = Image.read_inline(content)
   </div>
 
   <div class="sig">
+    <h3 id="alpha">alpha</h3>
+
+    <p><span class="arg">img</span>.alpha([<span class=
+    "arg">type</span>])</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set a flag to indicate whether or not to use alpha channel
+    data. If no argument is present, returns <code>true</code> or
+    <code>false</code>, depending on whether or not the alpha
+    channel is active.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The argument may be omitted. If present, one of the
+    following values of the AlphaChannelType enumeration:</p>
+
+    <dl>
+      <dt>ActivateAlphaChannel</dt>
+
+      <dd>Use alpha channel data.</dd>
+
+      <dt>DeactivateAlphaChannel</dt>
+
+      <dd>Do not use alpha channel data.</dd>
+
+      <dt>ResetAlphaChannel</dt>
+
+      <dd>Set the alpha channel to fully opaque.</dd>
+
+      <dt>SetAlphaChannel</dt>
+
+      <dd>Sets the alpha channel to the intensity of the
+      image.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>If the argument was omitted, returns <code>true</code> if
+    the alpha channel is active, <code>false</code> otherwise. If
+    an argument was supplied, returns the argument.</p>
+
+    <h4>Notes</h4>
+
+    <p>Available in ImageMagick 6.3.5 and later.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="annotate">annotate</h3>
 
     <p><span class="arg">img.</span>annotate(<span class=
@@ -2396,9 +2448,9 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>red_pct, green_pct, blue_pct, matte_pct</dt>
 
       <dd>The percentage of the fill color red, green, blue and
-      matte (transparency) components to blend with the image pixel.
-      For example, <code>.25</code> is 25%. The matte_pct argument
-      is optional.</dd>
+      matte (transparency) components to blend with the image
+      pixel. For example, <code>.25</code> is 25%. The matte_pct
+      argument is optional.</dd>
 
       <dt>fill</dt>
 

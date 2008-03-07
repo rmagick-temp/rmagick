@@ -196,6 +196,9 @@ have_enum_value("ColorspaceType", "CMYColorspace", headers)                  # 6
 have_enum_values("CompositeOperator", ["ChangeMaskCompositeOp",              # 6.3.3
                                        "LinearLightCompositeOp",             # 6.3.5
                                        "DivideCompositeOp"], headers)        # 6.3.5
+have_enum_values("CompressionType", ["DXT1Compression",                      # 6.3.9-3
+                                     "DXT3Compression",                      # 6.3.9-3
+                                     "DXT5Compression"], headers)            # 6.3.9-3
 have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
                                "PerspectiveProjectionDistortion"], headers)  # 6.3.5-9
 have_enum_values("FilterTypes", ["KaiserFilter",                             # 6.3.6

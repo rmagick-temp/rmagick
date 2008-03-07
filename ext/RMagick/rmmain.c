@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.241 2008/03/07 01:40:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.242 2008/03/07 23:17:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1198,6 +1198,15 @@ Init_RMagick2(void)
         ENUMERATOR(UndefinedCompression)
         ENUMERATOR(NoCompression)
         ENUMERATOR(BZipCompression)
+#if defined(HAVE_ENUM_DXT1COMPRESSION)
+        ENUMERATOR(DXT1Compression)
+#endif
+#if defined(HAVE_ENUM_DXT3COMPRESSION)
+        ENUMERATOR(DXT3Compression)
+#endif
+#if defined(HAVE_ENUM_DXT5COMPRESSION)
+        ENUMERATOR(DXT5Compression)
+#endif
         ENUMERATOR(FaxCompression)
         ENUMERATOR(Group4Compression)
         ENUMERATOR(JPEGCompression)
@@ -1699,7 +1708,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/07 01:40:36 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/03/07 23:17:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

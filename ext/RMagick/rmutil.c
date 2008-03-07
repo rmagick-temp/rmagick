@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.147 2008/02/11 00:03:47 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.148 2008/03/07 23:17:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1395,6 +1395,15 @@ CompressionType_name(CompressionType ct)
         ENUM_TO_NAME(UndefinedCompression)
         ENUM_TO_NAME(NoCompression)
         ENUM_TO_NAME(BZipCompression)
+#if defined(HAVE_ENUM_DXT1COMPRESSION)
+        ENUM_TO_NAME(DXT1Compression)
+#endif
+#if defined(HAVE_ENUM_DXT3COMPRESSION)
+        ENUM_TO_NAME(DXT3Compression)
+#endif
+#if defined(HAVE_ENUM_DXT5COMPRESSION)
+        ENUM_TO_NAME(DXT5Compression)
+#endif
         ENUM_TO_NAME(FaxCompression)
         ENUM_TO_NAME(Group4Compression)
         ENUM_TO_NAME(JPEGCompression)

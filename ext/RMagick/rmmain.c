@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.240 2008/03/06 23:27:19 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.241 2008/03/07 01:40:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -441,7 +441,7 @@ Init_RMagick2(void)
     DCL_ATTR_ACCESSOR(Image, interlace)
     DCL_ATTR_ACCESSOR(Image, iptc_profile)
     DCL_ATTR_ACCESSOR(Image, iterations)        // do not document! Only used by Image#iterations=
-    DCL_ATTR_ACCESSOR(Image, mask)
+    DCL_ATTR_WRITER(Image, mask)
     DCL_ATTR_ACCESSOR(Image, matte)
     DCL_ATTR_ACCESSOR(Image, matte_color)
     DCL_ATTR_READER(Image, mean_error_per_pixel)
@@ -580,6 +580,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "magnify", Image_magnify, 0);
     rb_define_method(Class_Image, "magnify!", Image_magnify_bang, 0);
     rb_define_method(Class_Image, "map", Image_map, -1);
+    rb_define_method(Class_Image, "mask", Image_mask, -1);
     rb_define_method(Class_Image, "matte_flood_fill", Image_matte_flood_fill, 5);
     rb_define_method(Class_Image, "median_filter", Image_median_filter, -1);
     rb_define_method(Class_Image, "minify", Image_minify, 0);
@@ -1698,7 +1699,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/06 23:27:19 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/03/07 01:40:36 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.283 2008/03/06 23:27:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.284 2008/03/07 01:40:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5783,18 +5783,17 @@ Image_map(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#mask
+    Static:     get_image_mask
     Purpose:    Return the image's clip mask, or nil if it doesn't have a clip
                 mask.
     Notes:      Distinguish from Image#clip_mask
 */
-VALUE
-Image_mask(VALUE self)
+static VALUE
+get_image_mask(Image *image)
 {
-    Image *image, *mask;
+    Image *mask;
     ExceptionInfo exception;
 
-    image = rm_check_destroyed(self);
     GetExceptionInfo(&exception);
 
     // The returned clip mask is a clone, ours to keep.
@@ -5809,22 +5808,49 @@ Image_mask(VALUE self)
 
 /*
     Method:     Image#mask=(mask-image)
+    Notes:      Deprecated in favor of Image#mask(mask-image). See below.
+*/
+VALUE
+Image_mask_eq(VALUE self, VALUE mask)
+{
+    VALUE v[1];
+    v[0] = mask;
+    return Image_mask(1, v, self);
+}
+
+
+/*
+    Method:     Image#mask([mask-image])
     Purpose:    associates a clip mask with the image
+    Returns:    Copy of the current clip-mask
+    Notes:      Omit the argument to get a copy of the current clip mask.
     Notes:      pass "nil" for the mask-image to remove the current clip mask.
                 If the clip mask is not the same size as the target image,
                 resizes the clip mask to match the target.
     Notes:      Distinguish from Image#clip_mask=
 */
 VALUE
-Image_mask_eq(VALUE self, VALUE mask)
+Image_mask(int argc, VALUE *argv, VALUE self)
 {
+    volatile VALUE mask;
     Image *image, *mask_image, *resized_image;
     Image *clip_mask;
     long x, y;
     PixelPacket *q;
     ExceptionInfo exception;
 
-    image = rm_check_frozen(self);
+    image = rm_check_destroyed(self);
+    if (argv == 0)
+    {
+        return get_image_mask(image);
+    }
+    if (argc != 1)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (expected 0 or 1, got %d)", argc);
+    }
+
+    rb_check_frozen(self);
+    mask = argv[0];
 
     if (mask != Qnil)
     {
@@ -5890,7 +5916,8 @@ Image_mask_eq(VALUE self, VALUE mask)
         (void) SetImageClipMask(image, NULL);
     }
 
-    return self;
+    // Always return a copy of the mask!
+    return get_image_mask(image);
 }
 
 

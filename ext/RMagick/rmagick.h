@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.226 2008/03/06 23:27:18 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.227 2008/03/07 01:40:36 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -725,7 +725,7 @@ ATTR_READER(Image, image_type)
 ATTR_ACCESSOR(Image, interlace)
 ATTR_ACCESSOR(Image, iptc_profile)
 ATTR_ACCESSOR(Image, iterations)
-ATTR_ACCESSOR(Image, mask)
+ATTR_WRITER(Image, mask)
 ATTR_ACCESSOR(Image, matte)
 ATTR_ACCESSOR(Image, matte_color)
 ATTR_READER(Image, mean_error_per_pixel)
@@ -869,6 +869,7 @@ extern VALUE Image__load(VALUE, VALUE);
 extern VALUE Image_magnify(VALUE);
 extern VALUE Image_magnify_bang(VALUE);
 extern VALUE Image_map(int, VALUE *, VALUE);
+extern VALUE Image_mask(int, VALUE *, VALUE);
 extern VALUE Image_matte_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_median_filter(int, VALUE *, VALUE);
 extern VALUE Image_minify(VALUE);

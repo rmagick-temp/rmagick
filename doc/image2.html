@@ -165,6 +165,8 @@ td.ds {
 
       <div class="toccol">
         <ul>
+          <li><a href="#mask">mask</a></li>
+
           <li><a href="#map">map</a></li>
 
           <li><a href=
@@ -1033,7 +1035,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!-- This img tag displays the framed image when the mouse is not over -->
      <img onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
@@ -2570,6 +2572,65 @@ img.level(white_point, gamma, black_point) -&gt; image # wrong!
     <h4>Magick API</h4>
 
     <p>MapImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="mask">mask</h3>
+
+    <p><span class="arg">img</span>.mask([<span class=
+    "arg">image</span> or <code>nil</code>]) -&gt;
+    <em>mask_image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Sets an image clip mask created from the specified mask
+    image. <span class="imquote">The mask image must have the same
+    dimensions as the image being masked.</span> If not, the mask
+    image is resized to match. <span class="imquote">If the mask
+    image has an alpha channel the opacity of each pixel is used to
+    define the mask. Otherwise, the intensity (gray level) of each
+    pixel is used.</span></p>
+
+    <p>In general, if the mask image does not have an alpha
+    channel, a white pixel in the mask prevents changes to the
+    corresponding pixel in the image being masked, while a black
+    pixel allows changes. A pixel that is neither black nor white
+    will allow partial changes depending on its intensity.</p>
+
+    <p>Use <a href="image1.html#alpha">alpha</a> to specify whether
+    or not the mask image has an alpha channel.</p>
+
+    <h4>Arguments</h4>
+
+    <p>If the value is an imagelist, uses the current image as the
+    mask image. To remove the mask, pass <code>nil</code> instead
+    of an image.</p>
+
+    <p>To get a copy of the current mask, omit the argument
+    entirely.</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('mask.rb.html')"><img src="ex/mask.jpg" alt=
+    "mask example" title="Click to see the example script"
+    onmouseover="this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/mask.jpg'" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Returns</h4>
+
+    <p>A copy of the current mask, or <code>nil</code> if no mask
+    is defined.</p>
+
+    <h4>Notes</h4>
+
+    <p>This method makes a copy of the image to use as the mask.
+    This means that if you want to change the mask you must call
+    this method to establish the changed image as the mask.</p>
   </div>
 
   <div class="sig">

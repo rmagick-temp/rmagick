@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.284 2008/03/07 01:40:36 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.285 2008/03/08 00:29:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5840,11 +5840,11 @@ Image_mask(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
-    if (argv == 0)
+    if (argc == 0)
     {
         return get_image_mask(image);
     }
-    if (argc != 1)
+    if (argc > 1)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (expected 0 or 1, got %d)", argc);
     }

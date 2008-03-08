@@ -25,13 +25,6 @@ class Image_Attributes_UT < Test::Unit::TestCase
         @hat = Magick::Image.read(FLOWER_HAT).first
     end
 
-    def test_alpha
-        assert_nothing_raised { @img.alpha = Magick::ActivateAlphaChannel }
-        assert_nothing_raised { @img.alpha = Magick::DeactivateAlphaChannel }
-        assert_nothing_raised { @img.alpha = Magick::ResetAlphaChannel }
-        assert_nothing_raised { @img.alpha = Magick::SetAlphaChannel }
-    end
-
     def test_background_color
         assert_nothing_raised { @img.background_color }
         assert_equal("white", @img.background_color)
@@ -242,6 +235,9 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal(Magick::BZipCompression, @img.compression)
         assert_nothing_raised { @img.compression = Magick::NoCompression }
         assert_nothing_raised { @img.compression = Magick::BZipCompression }
+        assert_nothing_raised { @img.compression = Magick::DXT1Compression }
+        assert_nothing_raised { @img.compression = Magick::DXT3Compression }
+        assert_nothing_raised { @img.compression = Magick::DXT5Compression }
         assert_nothing_raised { @img.compression = Magick::FaxCompression }
         assert_nothing_raised { @img.compression = Magick::Group4Compression }
         assert_nothing_raised { @img.compression = Magick::JPEGCompression }
@@ -415,23 +411,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.iptc_profile }
         assert_nil(@img.iptc_profile)
         assert_nothing_raised { @img.iptc_profile = 'xxx' }
-        # As of 6.3.1
-        assert_equal(@img.iptc_profile, "8BIM\004\004\000\000\000\000\001\340xxx")
         assert_raise(TypeError) { @img.iptc_profile = 2 }
-    end
-
-    def test_mask
-        cimg = Magick::Image.new(10,10)
-        assert_nothing_raised { @img.mask = cimg }
-        res = nil
-        assert_nothing_raised { res = @img.mask }
-        assert_not_nil(res)
-        assert_not_same(cimg, res)
-        assert_equal(100, res.columns)
-        assert_equal(100, res.rows)
-
-        # mask expects an Image and calls `cur_image'
-        assert_raise(NoMethodError) { @img.mask = 2 }
     end
 
     def test_matte

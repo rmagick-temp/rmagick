@@ -232,6 +232,17 @@ class Image1_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Image,  res)
     end
 
+    def test_alpha
+        assert_nothing_raised { @img.alpha? }
+        assert !@img.alpha?
+        assert_nothing_raised { @img.alpha Magick::ActivateAlphaChannel }
+        assert @img.alpha?
+        assert_nothing_raised { @img.alpha Magick::DeactivateAlphaChannel }
+        assert !@img.alpha?
+        assert_nothing_raised { @img.alpha Magick::ResetAlphaChannel }
+        assert_nothing_raised { @img.alpha Magick::SetAlphaChannel }
+    end
+
     def test_auto_orient
         assert_nothing_raised do
             res = @img.auto_orient

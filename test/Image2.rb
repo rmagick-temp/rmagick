@@ -789,6 +789,21 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.map }
     end
 
+
+    def test_mask
+        cimg = Magick::Image.new(10,10)
+        assert_nothing_raised { @img.mask(cimg) }
+        res = nil
+        assert_nothing_raised { res = @img.mask }
+        assert_not_nil(res)
+        assert_not_same(cimg, res)
+        assert_equal(20, res.columns)
+        assert_equal(20, res.rows)
+
+        # mask expects an Image and calls `cur_image'
+        assert_raise(NoMethodError) { @img.mask = 2 }
+    end
+
     def test_matte_fill_to_border
         assert_nothing_raised do
             res = @img.matte_fill_to_border(@img.columns/2, @img.rows/2)

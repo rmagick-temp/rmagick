@@ -31,10 +31,9 @@ ColorspaceTypes = [
 ]
 
 
-FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
-
 
 class Image3_UT < Test::Unit::TestCase
+    FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)

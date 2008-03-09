@@ -6,9 +6,9 @@ require 'test/unit/ui/console/testrunner'
 
 # TODO: improve exif tests - need a benchmark image with EXIF data
 
-FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
 class Image2_UT < Test::Unit::TestCase
+    FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
@@ -217,6 +217,7 @@ class Image2_UT < Test::Unit::TestCase
     def test_destroy2
         begin   # ensure Magick.trace_proc gets set to nil even if this test asserts
             images = {}
+            GC.disable
             Magick.trace_proc = Proc.new do |which, id, addr, method|
               m = id.split(/ /)
               name = File.basename m[0]
@@ -242,6 +243,7 @@ class Image2_UT < Test::Unit::TestCase
             map.destroy!
             mapped.each {|i| i.destroy!}
         ensure
+            GC.enable
             Magick.trace_proc = nil
         end
     end
@@ -802,6 +804,9 @@ class Image2_UT < Test::Unit::TestCase
 
         # mask expects an Image and calls `cur_image'
         assert_raise(NoMethodError) { @img.mask = 2 }
+
+        @img.freeze
+        assert_raise(FreezeError) { @img.mask cimg }
     end
 
     def test_matte_fill_to_border

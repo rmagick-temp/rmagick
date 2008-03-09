@@ -10,9 +10,9 @@ require 'test/unit/ui/console/testrunner'
 #   improve test_directory
 #   improve test_montage
 
-FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
 class Image_Attributes_UT < Test::Unit::TestCase
+    FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(100, 100)

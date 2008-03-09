@@ -10,9 +10,9 @@ end
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
-FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
 class Image1_UT < Test::Unit::TestCase
+    FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
@@ -241,6 +241,8 @@ class Image1_UT < Test::Unit::TestCase
         assert !@img.alpha?
         assert_nothing_raised { @img.alpha Magick::ResetAlphaChannel }
         assert_nothing_raised { @img.alpha Magick::SetAlphaChannel }
+        @img.freeze
+        assert_raise(FreezeError) { @img.alpha Magick::SetAlphaChannel }
     end
 
     def test_auto_orient

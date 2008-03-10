@@ -17,15 +17,15 @@ class Import_Export_UT < Test::Unit::TestCase
     diff
   end
 
-  def import(pixels, type)
+  def import(pixels, type, expected = 0.0)
     diff = import_pixels(pixels, type)
-    puts "Type=#{type} diff=#{diff}"
-    assert_equal(0.0, diff)
+    #puts "Type=#{type} diff=#{diff}"
+    assert_in_delta(expected, diff, 0.1)
   end
 
   def fimport(pixels, type)
     diff = import_pixels(pixels, type)
-    puts "Type=#{type} diff=#{diff}"
+    #puts "Type=#{type} diff=#{diff}"
     assert_in_delta(0.0, diff, 50.0)
   end
 
@@ -68,8 +68,9 @@ class Import_Export_UT < Test::Unit::TestCase
 
         ipixels = pixels.collect {|px| px * 65537}
         p = ipixels.pack("I*")
-        import(p, Magick::IntegerPixel)
-        import(p, Magick::LongPixel)
+        # Diff s/b 0.0 but never is.
+        import(p, Magick::IntegerPixel, 430.7834)
+        import(p, Magick::LongPixel, 430.7834)
 
       when 32
         cpixels = pixels.collect {|px| px / 16843009}

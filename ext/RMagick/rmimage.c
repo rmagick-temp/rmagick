@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.285 2008/03/08 00:29:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.286 2008/03/12 23:09:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -449,8 +449,7 @@ Image_alpha(VALUE self, VALUE type)
     return type;
 
 #else   // HAVE_ALPHACHANNELTYPE
-    argc = argc;
-    argv = argv;
+    type = type;
     self = self;
     rm_not_implemented();
     return(VALUE)0;

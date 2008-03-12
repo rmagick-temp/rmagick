@@ -163,6 +163,23 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
+    def test_decipher         # tests encipher, too.
+      res = res2 = nil
+      assert_nothing_raised do
+        res = @img.encipher "passphrase"
+        res2 = res.decipher "passphrase"
+     end
+    assert_instance_of(Magick::Image, res)
+    assert_not_same(@img, res)
+    assert_equal(@img.columns, res.columns)
+    assert_equal(@img.rows, res.rows)
+    assert_instance_of(Magick::Image, res2)
+    assert_not_same(@img, res2)
+    assert_equal(@img.columns, res2.columns)
+    assert_equal(@img.rows, res2.rows)
+    assert_equal(@img, res2)
+    end
+
     def test_despeckle
         assert_nothing_raised do
             res = @img.despeckle
@@ -767,6 +784,22 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 'x') }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 'x') }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, 'x') }
+    end
+
+    def test_liquid_rescale
+      res = nil
+      assert_nothing_raised do
+        res = @img.liquid_rescale(15, 15)
+      end
+      assert_equal(15, res.columns)
+      assert_equal(15, res.rows)
+      assert_nothing_raised { @img.liquid_rescale(15, 15, 0, 0) }
+      assert_raise(ArgumentError) { @img.liquid_rescale(15) }
+      assert_raise(ArgumentError) { @img.liquid_rescale(15, 15, 0, 0, 0) }
+      assert_raise(TypeError) { @img.liquid_rescale([], 15) }
+      assert_raise(TypeError) { @img.liquid_rescale(15, []) }
+      assert_raise(TypeError) { @img.liquid_rescale(15, 15, []) }
+      assert_raise(TypeError) { @img.liquid_rescale(15, 15, 0, []) }
     end
 
     def test_magnify

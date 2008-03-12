@@ -155,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 2.0.0 ($Date: 2008/02/16 20:50:15 $)
+    <code>This is RMagick 2.0.0 ($Date: 2008/03/12 23:10:38 $)
     Copyright (C) 2008 by Timothy P. Hunter<br />
     Built with ImageMagick 6.3.7 01/05/08 Q16
     http://www.imagemagick.org<br />
@@ -333,13 +333,44 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dd>No colorspace has been specified.</dd>
 
-    <dt>RGBColorspace</dt>
+    <dt>CMYColorspace</dt>
 
-    <dd class="imquote">Red-Green-Blue colorspace</dd>
+    <dt>CMYKColorspace</dt>
+
+    <dd class="imquote">Cyan-Magenta-Yellow-Black colorspace. CYMK
+    is a subtractive color system used by printers and
+    photographers for the rendering of colors with ink or emulsion,
+    normally on a white surface.</dd>
 
     <dt>GRAYColorspace</dt>
 
     <dd>Full-range grayscale</dd>
+
+    <dt>HSBColorspace</dt>
+
+    <dt>HSLColorspace</dt>
+
+    <dd>Hue, saturation, luminosity</dd>
+
+    <dt>HWBColorspace</dt>
+
+    <dd>Hue, whiteness, blackness</dd>
+
+    <dt>LABColorspace</dt>
+
+    <dt>LogColorspace</dt>
+
+    <dt>OHTAColorspace</dt>
+
+    <dt>RGBColorspace</dt>
+
+    <dd class="imquote">Red-Green-Blue colorspace</dd>
+
+    <dt>SRGBColorspace</dt>
+
+    <dd>Kodak PhotoCD sRGB. In ImageMagick, this constant is named
+    sRGBColorspace, but since Ruby constants must start with an
+    uppercase letter, I had to change it.</dd>
 
     <dt>TransparentColorspace</dt>
 
@@ -347,17 +378,15 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     uniquely in that it preserves the matte channel of the image if
     it exists.</dd>
 
-    <dt>OHTAColorspace</dt>
-
     <dt>XYZColorspace</dt>
 
     <dd>CIE XYZ</dd>
 
+    <dt>YCbCrColorspace</dt>
+
     <dt>YCCColorspace</dt>
 
     <dd>Kodak PhotoCD PhotoYCC</dd>
-
-    <dt>YCbCrColorspace</dt>
 
     <dt>YIQColorspace</dt>
 
@@ -368,33 +397,6 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dd class="imquote">Y-signal, U-signal, and V-signal
     colorspace. YUV is most widely used to encode color for use in
     television transmission.</dd>
-
-    <dt>CMYKColorspace</dt>
-
-    <dd class="imquote">Cyan-Magenta-Yellow-Black colorspace. CYMK
-    is a subtractive color system used by printers and
-    photographers for the rendering of colors with ink or emulsion,
-    normally on a white surface.</dd>
-
-    <dt>SRGBColorspace</dt>
-
-    <dd>Kodak PhotoCD sRGB. In ImageMagick, this constant is named
-    sRGBColorspace, but since Ruby constants must start with an
-    uppercase letter, I had to change it.</dd>
-
-    <dt>HSLColorspace</dt>
-
-    <dd>Hue, saturation, luminosity</dd>
-
-    <dt>HWBColorspace</dt>
-
-    <dd>Hue, whiteness, blackness</dd>
-
-    <dt>HSBColorspace</dt>
-
-    <dt>LogColorspace</dt>
-
-    <dt>LABColorspace</dt>
   </dl>
 
   <p>The colorspaces in this group are typically associated with

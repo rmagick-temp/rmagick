@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.148 2008/03/07 23:17:59 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.149 2008/03/14 23:03:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2636,7 +2636,7 @@ VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
 
     argv[0] = sym;
     argv[1] = val;
-    return rb_class_new_instance(2, argv, class);
+    return rb_obj_freeze(rb_class_new_instance(2, argv, class));
 }
 
 /*
@@ -2649,7 +2649,7 @@ VALUE Enum_alloc(VALUE class)
    volatile VALUE enumr;
 
    enumr = Data_Make_Struct(class, MagickEnum, NULL, NULL, magick_enum);
-   OBJ_FREEZE(enumr);
+   rb_obj_freeze(enumr);
    return enumr;
 }
 
@@ -2818,7 +2818,7 @@ static VALUE Enum_type_values(VALUE class)
         {
             (void) rb_ary_push(copy, rb_ary_entry(enumerators, x));
         }
-        OBJ_FREEZE(copy);
+        rb_obj_freeze(copy);
         rv = copy;
     }
 

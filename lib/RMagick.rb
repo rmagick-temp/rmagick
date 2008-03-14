@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.66 2008/02/24 18:26:36 rmagick Exp $
+# $Id: RMagick.rb,v 1.67 2008/03/14 23:02:02 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -32,11 +32,11 @@ class GeometryValue < Enum
     # no methods
 end
 
-PercentGeometry  = GeometryValue.new(:PercentGeometry, 1)
-AspectGeometry   = GeometryValue.new(:AspectGeometry, 2)
-LessGeometry     = GeometryValue.new(:LessGeometry, 3)
-GreaterGeometry  = GeometryValue.new(:GreaterGeometry, 4)
-AreaGeometry     = GeometryValue.new(:AreaGeometry, 5)
+PercentGeometry  = GeometryValue.new(:PercentGeometry, 1).freeze
+AspectGeometry   = GeometryValue.new(:AspectGeometry, 2).freeze
+LessGeometry     = GeometryValue.new(:LessGeometry, 3).freeze
+GreaterGeometry  = GeometryValue.new(:GreaterGeometry, 4).freeze
+AreaGeometry     = GeometryValue.new(:AreaGeometry, 5).freeze
 
 class Geometry
     FLAGS = ['', '%', '!', '<', '>', '@']

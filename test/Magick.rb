@@ -90,7 +90,7 @@ class Magick_UT < Test::Unit::TestCase
 
     def test_trace_proc
       Magick.trace_proc = lambda do |which, description, id, method|
-        assert (which == :c)
+        assert(which == :c)
         assert_instance_of(String, description)
         assert_instance_of(String, id)
         assert_equal(:initialize, method)

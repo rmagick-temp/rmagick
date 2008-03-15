@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.227 2008/03/07 01:40:36 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.228 2008/03/15 22:05:52 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -117,6 +117,7 @@
 #if !defined(RARRAY_LEN)
 #define RARRAY_LEN(a) RARRAY((a))->len
 #endif
+// Matz says this macro is read-only! (see http://www.ruby-forum.com/topic/146072)
 #if !defined(RARRAY_PTR)
 #define RARRAY_PTR(a) RARRAY((a))->ptr
 #endif

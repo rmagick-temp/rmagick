@@ -103,7 +103,7 @@ class Image1_UT < Test::Unit::TestCase
         if $base_64
           encoded = Base64.encode64(blob)
         else
-          encoded = blob.pack("m*")
+          encoded = [blob].pack("m*")
         end
         res = Magick::Image.read_inline(encoded)
         assert_instance_of(Array, res)

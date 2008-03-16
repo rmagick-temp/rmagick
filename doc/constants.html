@@ -155,7 +155,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 2.0.0 ($Date: 2008/03/12 23:10:38 $)
+    <code>This is RMagick 2.0.0 ($Date: 2008/03/16 15:21:45 $)
     Copyright (C) 2008 by Timothy P. Hunter<br />
     Built with ImageMagick 6.3.7 01/05/08 Q16
     http://www.imagemagick.org<br />
@@ -228,16 +228,32 @@
   <dl>
     <dt>UndefinedAlign</dt>
 
+    <dd>No alignment specified. Equivalent to LeftAlign.</dd>
+
     <dt>LeftAlign</dt>
+
+    <dd>Align the leftmost part of the text to the starting
+    point.</dd>
 
     <dt>CenterAlign</dt>
 
+    <dd>Center the text around the starting point.</dd>
+
     <dt>RightAlign</dt>
+
+    <dd>Align the rightmost part of the text to the starting
+    point.</dd>
   </dl>
 
   <h3 class="const" id="ChannelType">ChannelType</h3>
 
-  <p>Specify an image channel. See <a href=
+  <p>Specify an image channel. A channel is a color component of a
+  pixel. In the RGB colorspace the channels are red, green, and
+  blue. There may also be an alpha (transparency/opacity) channel.
+  In the CMYK colorspace the channels area cyan, magenta, yellow,
+  and black. In the HSL colorspace the channels are hue,
+  saturation, and lightness. In the Gray colorspace the only
+  channel is gray. See <a href=
   "image1.html#channel">Image#channel</a> and <a href=
   "info.html#channel">Image::Info#channel=</a>.</p>
 
@@ -261,6 +277,10 @@
     <dt>OpacityChannel</dt>
 
     <dt>AllChannels</dt>
+
+    <dd>In the RGB colorspace, the red, blue, green, and alpha
+    channels. In the CMYK colorspace, the cyan, magenta, yellow,
+    and black channels.</dd>
 
     <dt>GrayChannel</dt>
 
@@ -460,26 +480,11 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dd>No composite operator has been specified.</dd>
 
-    <dt>OverCompositeOp</dt>
+    <dt>AddCompositeOp</dt>
 
-    <dd><span class="imquote">The result is the union of the the
-    two image shapes with <code>composite image</code> obscuring
-    <code>image</code> in the region of overlap.</span> The matte
-    channel of the composite image is respected, so that if the
-    composite pixel is part or all transparent, the corresponding
-    image pixel will show through.</dd>
-
-    <dt>InCompositeOp</dt>
-
-    <dd class="imquote">The result is simply <code>composite
-    image</code> cut by the shape of <code>image</code>. None of
-    the image data of <code>image</code> is included in the
-    result.</dd>
-
-    <dt>OutCompositeOp</dt>
-
-    <dd class="imquote">The resulting image is <code>composite
-    image</code> with the shape of <code>image</code> cut out.</dd>
+    <dd class="imquote">The result of <code>composite image</code>
+    + <code>image</code>, with overflow wrapping around (mod
+    256).</dd>
 
     <dt>AtopCompositeOp</dt>
 
@@ -490,77 +495,66 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <code>composite image</code> outside of <code>image</code>'s
     shape does not appear in the result.</dd>
 
-    <dt>XorCompositeOp</dt>
-
-    <dd class="imquote">The result is the image data from both
-    <code>composite image</code> and <code>image</code> that is
-    outside the overlap region. The overlap region will be
-    blank.</dd>
-
-    <dt>PlusCompositeOp</dt>
-
-    <dd class="imquote">The result is just the sum of the image
-    data. Output values are cropped to 255 (no overflow). This
-    operation is independent of the matte channels.</dd>
-
-    <dt>MinusCompositeOp</dt>
-
-    <dd class="imquote">The result of composite image - image, with
-    overflow cropped to zero. The matte chanel is ignored (set to
-    255, full coverage).</dd>
-
-    <dt>AddCompositeOp</dt>
-
-    <dd class="imquote">The result of <code>composite image</code>
-    + <code>image</code>, with overflow wrapping around (mod
-    256).</dd>
-
-    <dt>SubtractCompositeOp</dt>
-
-    <dd class="imquote">The result of <code>composite image</code>
-    - <code>image</code>, with underflow wrapping around (mod 256).
-    The add and subtract operators can be used to perform
-    reversable transformations.</dd>
-
-    <dt>DifferenceCompositeOp</dt>
-
-    <dd class="imquote">The result of abs(<code>composite
-    image</code> - <code>image</code>). This is useful for
-    comparing two very similar images.</dd>
-
-    <dt>MultiplyCompositeOp</dt>
-
-    <dd class="imquote">Multiplies the color of each target image
-    pixel by the color of the corresponding composite image pixel.
-    The result color is always darker.</dd>
-
     <dt>BumpmapCompositeOp</dt>
 
     <dd class="imquote">The result <code>image</code> shaded by
     <code>composite image</code>.</dd>
 
-    <dt>ReplaceCompositeOp</dt>
+    <dt>ChangeMaskCompositeOp</dt>
 
-    <dd class="imquote">The resulting image is image replaced with
-    composite image. Here the matte information is ignored.</dd>
+    <dd class="imquote">Replace any destination pixel that is the
+    similar to the source image's pixel (as defined by the current
+    fuzz factor), with transparency.</dd>
+
+    <dt>ClearCompositeOp</dt>
+
+    <dd>Make the target image transparent. The composite image is
+    ignored.</dd>
+
+    <dt>ColorBurnCompositeOp</dt>
+
+    <dd class="imquote">Darkens the destination color to reflect
+    the source color. Painting with white produces no change.</dd>
+
+    <dt>ColorDodgeCompositeOp</dt>
+
+    <dd class="imquote">Brightens the destination color to reflect
+    the source color. Painting with black produces no change.</dd>
+
+    <dt>ColorizeCompositeOp</dt>
+
+    <dd class="imquote">Each pixel in the result image is the
+    combination of the brightness of the target image and the
+    saturation and hue of the composite image. This is the
+    <em>opposite</em> of LuminizeCompositeOp.</dd>
 
     <dt>CopyCompositeOp</dt>
 
     <dd>Replace the target image with the composite image.</dd>
 
-    <dt>CopyRedCompositeOp</dt>
+    <dt>CopyBlackCompositeOp</dt>
 
-    <dd>Copy the red channel from the composite image to the target
-    image.</dd>
+    <dd>Copy the black channel from the composite image to the
+    target image.</dd>
+
+    <dt>CopyBlueCompositeOp</dt>
+
+    <dd>Copy the blue channel from the composite image to the
+    target image.</dd>
+
+    <dt>CopyCyanCompositeOp</dt>
+
+    <dd>Copy the cyan channel from the composite image to the
+    target image.</dd>
 
     <dt>CopyGreenCompositeOp</dt>
 
     <dd>Copy the green channel from the composite image to the
     target image.</dd>
 
-    <dt>CopyBlueCompositeOp</dt>
+    <dt>CopyMagentaCompositeOp</dt>
 
-    <dd>Copy the blue channel from the composite image to the
+    <dd>Copy the magenta channel from the composite image to the
     target image.</dd>
 
     <dt>CopyOpacityCompositeOp</dt>
@@ -572,113 +566,51 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     pixel's opacity to the intensity of the corresponding pixel in
     the composite image.</dd>
 
-    <dt>ClearCompositeOp</dt>
+    <dt>CopyRedCompositeOp</dt>
 
-    <dd>Make the target image transparent. The composite image is
-    ignored.</dd>
-
-    <dt>DissolveCompositeOp</dt>
-
-    <dd>The operator used in the <a href=
-    "image1.html#dissolve">dissolve</a> method.</dd>
-
-    <dt>DisplaceCompositeOp</dt>
-
-    <dd>Displace target image pixels as defined by a displacement
-    map. The operator used by the <a href=
-    "image1.html#displace">Image#displace</a> method.</dd>
-
-    <dt>ModulateCompositeOp</dt>
-
-    <dd>Used by the <a href="image3.html#watermark">watermark</a>
-    method.</dd>
-
-    <dt>ThresholdCompositeOp</dt>
-
-    <dd>?</dd>
-
-    <dt>NoCompositeOp</dt>
-
-    <dd>No composite operator has been specified.</dd>
-
-    <dt>DarkenCompositeOp</dt>
-
-    <dd>Replace target image pixels with darker pixels from the
-    composite image.</dd>
-
-    <dt>LightenCompositeOp</dt>
-
-    <dd>Replace target image pixels with lighter pixels from the
-    composite image.</dd>
-
-    <dt>HueCompositeOp</dt>
-
-    <dd>Each pixel in the result image is the combination of the
-    hue of the target image and the saturation and brightness of
-    the composite image.</dd>
-
-    <dt>SaturateCompositeOp</dt>
-
-    <dd>Each pixel in the result image is the combination of the
-    saturation of the target image and the hue and brightness of
-    the composite image.</dd>
-
-    <dt>ColorizeCompositeOp</dt>
-
-    <dd>Each pixel in the result image is the combination of the
-    brightness of the target image and the saturation and hue of
-    the composite image. This is the <em>opposite</em> of
-    LuminizeCompositeOp.</dd>
-
-    <dt>LuminizeCompositeOp</dt>
-
-    <dd>Each pixel in the result image is the combination of the
-    brightness of the composite image and the saturation and hue of
-    the target image. This is the <em>opposite</em> of
-    ColorizeCompositeOp.</dd>
-
-    <dt>ScreenCompositeOp</dt>
-
-    <dd>Multiplies the inverse of each image's color
-    information.</dd>
-
-    <dt>OverlayCompositeOp</dt>
-
-    <dd class="imquote">Multiplies or screens the colors, dependent
-    on the destination color. Source colors overlay the destination
-    whilst preserving its highlights and shadows. The destination
-    color is not replaced, but is mixed with the source color to
-    reflect the lightness or darkness of the destination.</dd>
-
-    <dt>CopyCyanCompositeOp</dt>
-
-    <dd>Copy the cyan channel from the composite image to the
-    target image.</dd>
-
-    <dt>CopyMagentaCompositeOp</dt>
-
-    <dd>Copy the magenta channel from the composite image to the
-    target image.</dd>
+    <dd>Copy the red channel from the composite image to the target
+    image.</dd>
 
     <dt>CopyYellowCompositeOp</dt>
 
     <dd>Copy the yellow channel from the composite image to the
     target image.</dd>
 
-    <dt>CopyBlackCompositeOp</dt>
+    <dt>DarkenCompositeOp</dt>
 
-    <dd>Copy the black channel from the composite image to the
-    target image.</dd>
+    <dd>Replace target image pixels with darker pixels from the
+    composite image.</dd>
+
+    <dt>DifferenceCompositeOp</dt>
+
+    <dd class="imquote">The result of abs(<code>composite
+    image</code> - <code>image</code>). This is useful for
+    comparing two very similar images.</dd>
+
+    <dt>DisplaceCompositeOp</dt>
+
+    <dd>Displace target image pixels as defined by a displacement
+    map. The operator used by the <a href=
+    "image1.html#displace">displace</a> method.</dd>
+
+    <dt>DissolveCompositeOp</dt>
+
+    <dd>The operator used in the <a href=
+    "image1.html#dissolve">dissolve</a> method.</dd>
+
+    <dt>DivideCompositeOp</dt>
+
+    <dd>?</dd>
+
+    <dt>DstCompositeOp</dt>
+
+    <dd class="imquote">The destination is left untouched.</dd>
 
     <dt>DstAtopCompositeOp</dt>
 
     <dd class="imquote">The part of the destination lying inside of
     the source is composited over the source and replaces the
     destination.</dd>
-
-    <dt>DstCompositeOp</dt>
-
-    <dd class="imquote">The destination is left untouched.</dd>
 
     <dt>DstInCompositeOp</dt>
 
@@ -694,6 +626,133 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dd class="imquote">The destination is composited over the
     source and the result replaces the destination.</dd>
+
+    <dt>ExclusionCompositeOp</dt>
+
+    <dd class="imquote">Produces an effect similar to that of
+    'difference', but appears as lower contrast. Painting with
+    white inverts the destination color. Painting with black
+    produces no change.</dd>
+
+    <dt>HardLightCompositeOp</dt>
+
+    <dd class="imquote">Multiplies or screens the colors, dependent
+    on the source color value. If the source color is lighter than
+    0.5, the destination is lightened as if it were screened. If
+    the source color is darker than 0.5, the destination is
+    darkened, as if it were multiplied. The degree of lightening or
+    darkening is proportional to the difference between the source
+    color and 0.5. If it is equal to 0.5 the destination is
+    unchanged. Painting with pure black or white produces black or
+    white.</dd>
+
+    <dt>HueCompositeOp</dt>
+
+    <dd class="imquote">Each pixel in the result image is the
+    combination of the hue of the target image and the saturation
+    and brightness of the composite image.</dd>
+
+    <dt>InCompositeOp</dt>
+
+    <dd class="imquote">The result is simply <code>composite
+    image</code> cut by the shape of <code>image</code>. None of
+    the image data of <code>image</code> is included in the
+    result.</dd>
+
+    <dt>LightenCompositeOp</dt>
+
+    <dd>Replace target image pixels with lighter pixels from the
+    composite image.</dd>
+
+    <dt>LinearLightCompositeOp</dt>
+
+    <dd class="imquote">Increase contrast slightly with an impact
+    on the foreground's tonal values.</dd>
+
+    <dt>LuminizeCompositeOp</dt>
+
+    <dd class="imquote">Each pixel in the result image is the
+    combination of the brightness of the composite image and the
+    saturation and hue of the target image. This is the
+    <em>opposite</em> of ColorizeCompositeOp.</dd>
+
+    <dt>MinusCompositeOp</dt>
+
+    <dd class="imquote">The result of composite image - image, with
+    overflow cropped to zero. The matte chanel is ignored (set to
+    255, full coverage).</dd>
+
+    <dt>ModulateCompositeOp</dt>
+
+    <dd>Used by the <a href="image3.html#watermark">watermark</a>
+    method.</dd>
+
+    <dt>MultiplyCompositeOp</dt>
+
+    <dd class="imquote">Multiplies the color of each target image
+    pixel by the color of the corresponding composite image pixel.
+    The result color is always darker.</dd>
+
+    <dt>NoCompositeOp</dt>
+
+    <dd>No composite operator has been specified.</dd>
+
+    <dt>OutCompositeOp</dt>
+
+    <dd class="imquote">The resulting image is <code>composite
+    image</code> with the shape of <code>image</code> cut out.</dd>
+
+    <dt>OverCompositeOp</dt>
+
+    <dd><span class="imquote">The result is the union of the the
+    two image shapes with <code>composite image</code> obscuring
+    <code>image</code> in the region of overlap.</span> The matte
+    channel of the composite image is respected, so that if the
+    composite pixel is part or all transparent, the corresponding
+    image pixel will show through.</dd>
+
+    <dt>OverlayCompositeOp</dt>
+
+    <dd class="imquote">Multiplies or screens the colors, dependent
+    on the destination color. Source colors overlay the destination
+    whilst preserving its highlights and shadows. The destination
+    color is not replaced, but is mixed with the source color to
+    reflect the lightness or darkness of the destination.</dd>
+
+    <dt>PlusCompositeOp</dt>
+
+    <dd class="imquote">The result is just the sum of the image
+    data. Output values are cropped to 255 (no overflow). This
+    operation is independent of the matte channels.</dd>
+
+    <dt>ReplaceCompositeOp</dt>
+
+    <dd class="imquote">The resulting image is image replaced with
+    composite image. Here the matte information is ignored.</dd>
+
+    <dt>SaturateCompositeOp</dt>
+
+    <dd>Each pixel in the result image is the combination of the
+    saturation of the target image and the hue and brightness of
+    the composite image.</dd>
+
+    <dt>ScreenCompositeOp</dt>
+
+    <dd>Multiplies the inverse of each image's color
+    information.</dd>
+
+    <dt>SoftLightCompositeOp</dt>
+
+    <dd class="imquote">Darkens or lightens the colors, dependent
+    on the source color value. If the source color is lighter than
+    0.5, the destination is lightened. If the source color is
+    darker than 0.5, the destination is darkened, as if it were
+    burned in. The degree of darkening or lightening is
+    proportional to the difference between the source color and
+    0.5. If it is equal to 0.5, the destination is unchanged.
+    Painting with pure black or white produces a distinctly darker
+    or lighter area, but does not result in pure black or
+    white.</dd>
 
     <dt>SrcAtopCompositeOp</dt>
 
@@ -720,53 +779,23 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dd class="imquote">The source is composited over the
     destination.</dd>
 
-    <dt>ColorDodgeCompositeOp</dt>
+    <dt>SubtractCompositeOp</dt>
 
-    <dd class="imquote">Brightens the destination color to reflect
-    the source color. Painting with black produces no change.</dd>
+    <dd class="imquote">The result of <code>composite image</code>
+    - <code>image</code>, with underflow wrapping around (mod 256).
+    The add and subtract operators can be used to perform
+    reversable transformations.</dd>
 
-    <dt>ExclusionCompositeOp</dt>
+    <dt>ThresholdCompositeOp</dt>
 
-    <dd class="imquote">Produces an effect similar to that of
-    'difference', but appears as lower contrast. Painting with
-    white inverts the destination color. Painting with black
-    produces no change.</dd>
+    <dd>?</dd>
 
-    <dt>HardLightCompositeOp</dt>
+    <dt>XorCompositeOp</dt>
 
-    <dd class="imquote">Multiplies or screens the colors, dependent
-    on the source color value. If the source color is lighter than
-    0.5, the destination is lightened as if it were screened. If
-    the source color is darker than 0.5, the destination is
-    darkened, as if it were multiplied. The degree of lightening or
-    darkening is proportional to the difference between the source
-    color and 0.5. If it is equal to 0.5 the destination is
-    unchanged. Painting with pure black or white produces black or
-    white.</dd>
-
-    <dt>SoftLightCompositeOp</dt>
-
-    <dd class="imquote">Darkens or lightens the colors, dependent
-    on the source color value. If the source color is lighter than
-    0.5, the destination is lightened. If the source color is
-    darker than 0.5, the destination is darkened, as if it were
-    burned in. The degree of darkening or lightening is
-    proportional to the difference between the source color and
-    0.5. If it is equal to 0.5, the destination is unchanged.
-    Painting with pure black or white produces a distinctly darker
-    or lighter area, but does not result in pure black or
-    white.</dd>
-
-    <dt>ChangeMaskCompositeOp</dt>
-
-    <dd class="imquote">Replace any destination pixel that is the
-    similar to the source images pixel (as defined by the current
-    fuzz factor), with transparency.</dd>
-
-    <dt>LinearLightCompositeOp</dt>
-
-    <dd class="imquote">Increase contrast slightly with an impact
-    on the foreground's tonal values.</dd>
+    <dd class="imquote">The result is the image data from both
+    <code>composite image</code> and <code>image</code> that is
+    outside the overlap region. The overlap region will be
+    blank.</dd>
   </dl>
 
   <h3 class="const" id="CompressionType">CompressionType</h3>
@@ -911,47 +940,47 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
   <dl>
     <dt>UndefinedFilter</dt>
 
-    <dt>PointFilter</dt>
-
-    <dt>BoxFilter</dt>
-
-    <dt>TriangleFilter</dt>
-
-    <dt>HermiteFilter</dt>
-
-    <dt>HanningFilter</dt>
-
-    <dt>HammingFilter</dt>
-
-    <dt>BlackmanFilter</dt>
-
-    <dt>GaussianFilter</dt>
-
-    <dt>QuadraticFilter</dt>
-
-    <dt>CubicFilter</dt>
-
-    <dt>CatromFilter</dt>
-
-    <dt>MitchellFilter</dt>
-
-    <dt>LanczosFilter</dt>
+    <dt>Bartlett</dt>
 
     <dt>BesselFilter</dt>
 
-    <dt>SincFilter</dt>
-
-    <dt>KaiserFilter</dt>
-
-    <dt>WelshFilter</dt>
-
-    <dt>ParzenFilter</dt>
-
-    <dt>LagrangianFilter</dt>
+    <dt>BlackmanFilter</dt>
 
     <dt>Bohman</dt>
 
-    <dt>Bartlett</dt>
+    <dt>BoxFilter</dt>
+
+    <dt>CatromFilter</dt>
+
+    <dt>CubicFilter</dt>
+
+    <dt>GaussianFilter</dt>
+
+    <dt>HammingFilter</dt>
+
+    <dt>HanningFilter</dt>
+
+    <dt>HermiteFilter</dt>
+
+    <dt>KaiserFilter</dt>
+
+    <dt>LagrangianFilter</dt>
+
+    <dt>LanczosFilter</dt>
+
+    <dt>MitchellFilter</dt>
+
+    <dt>ParzenFilter</dt>
+
+    <dt>PointFilter</dt>
+
+    <dt>QuadraticFilter</dt>
+
+    <dt>SincFilter</dt>
+
+    <dt>TriangleFilter</dt>
+
+    <dt>WelshFilter</dt>
   </dl>
 
   <h3 class="const" id="GravityType">GravityType</h3>

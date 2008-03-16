@@ -1,12 +1,6 @@
 #! /usr/local/bin/ruby -w
 
 require 'RMagick'
-begin
-  require 'base64'
-  $base_64 = true
-rescue LoadError
-  $base_64 = false
-end
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
@@ -100,11 +94,7 @@ class Image1_UT < Test::Unit::TestCase
     def test_read_inline
         img = Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
         blob = img.to_blob
-        if $base_64
-          encoded = Base64.encode64(blob)
-        else
-          encoded = [blob].pack("m*")
-        end
+        encoded = [blob].pack("m*")
         res = Magick::Image.read_inline(encoded)
         assert_instance_of(Array, res)
         assert_instance_of(Magick::Image, res[0])

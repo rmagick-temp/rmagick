@@ -1,10 +1,13 @@
 RMagick 2.3.0
     o Added Image#encipher, Image#decipher (available with ImageMagick 6.3.8-6)
-    o Support :area resource type in Magick.limit_resource
-    o Added Image#alpha, #alpha?, deprecated Image#alpha=
     o Added DTX1Compression, DTX1Compression, and DTX1Compression
       CompressionType enums (available in ImageMagick 6.3.9-4)
-    o Changed Image#mask to accept a mask image, deprecated Image#mask=
+    o Support :area resource type in Magick.limit_resource
+    o The Pixel.from_HSL and Pixel#to_HSL are deprecated. Use Pixel.from_hsla
+      and Pixel#to_hsla instead.
+    o The Image#alpha and alpha= attributes are deprecated. Use alpha() and
+      alpha? instead.
+    o The Image#mask= attribute is deprecated. Use mask() instead.
     o Fix bug #18271, rvg width and height attributes wrong after a call to
       viewbox (reported by Greg Jarman)
 

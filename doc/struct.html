@@ -414,8 +414,8 @@
 
       <p>The Geometry class contains the same information as an
       ImageMagick <a href="imusage.html#geometry">geometry
-      string</a>. Geometry objects are interchangeable with geometry
-      strings.</p>
+      string</a>. Geometry objects are interchangeable with
+      geometry strings.</p>
     </div>
 
     <h3>class Geometry <span class="superclass">&lt;
@@ -657,17 +657,44 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     </div>
 
     <div class="sig">
-      <h4>from_HSL</h4>
+      <h4 id="from_hsla">from_hsla</h4>
 
-      <p>Pixel.from_HSL(<span class="arg">[hue, saturation,
-      luminosity]</span>) -&gt; <em>pixel</em></p>
+      <p>Pixel.from_hsla(<span class="arg">hue</span>, <span class=
+      "arg">saturation</span>, <span class="arg">lightness</span>,
+      <span class="arg">alpha</span>=1.0) -&gt; <em>pixel</em></p>
     </div>
 
     <div class="desc">
       <h5>Description</h5>
 
-      <p>Constructs a pixel object from the specified array of 3
-      values: hue, saturation, and luminosity.</p>
+      <p>Constructs a pixel object from the specified
+      arguments.</p>
+
+      <h5>Arguments</h5>
+
+      <dl>
+        <dt>hue</dt>
+
+        <dd>A value in the range [0.0, 360.0).</dd>
+
+        <dt>saturation</dt>
+
+        <dd>A value in the range [0.0, 100.0].</dd>
+
+        <dt>lightness</dt>
+
+        <dd>A value in the range 0.0, 100.0].</dd>
+
+        <dt>alpha</dt>
+
+        <dd>A value in the range [0.0, 1.0], where 1.0 is fully
+        opaque and 0.0 is fully transparent. This argument may be
+        omitted. The default is 1.0.</dd>
+      </dl>
+
+      <h5>See also</h5>
+
+      <p><a href="#to_hsla">to_hsla</a></p>
     </div>
 
     <div class="sig">
@@ -815,7 +842,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     </div>
 
     <div class="sig">
-      <h4>to_HSL</h4>
+      <h4>to_hsla</h4>
 
       <p><span class="arg">pixel</span>.to_HSL -&gt;
       <em>array</em></p>
@@ -825,12 +852,14 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <h5>Description</h5>
 
       <p>Converts the RGB representation of the pixel to hue,
-      saturation, and luminosity values.</p>
+      saturation, lightness, and alpha values.</p>
 
       <h5>Returns</h5>
 
-      <p>An array of the form <code>[hue, saturation,
-      luminosity]</code>.</p>
+      <p>An array of the form <code>[hue, saturation, lightness,
+      alpha]</code>. Each value is in the range specified for it,
+      as described in <a href="#from_hsla">from_hsla</a>,
+      above.</p>
     </div>
   </div>
 

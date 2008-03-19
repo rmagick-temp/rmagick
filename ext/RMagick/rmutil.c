@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.149 2008/03/14 23:03:34 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.150 2008/03/19 21:57:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -637,7 +637,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
 }
 
 /*
-    Method:     Pixel#to_HSL
+    Method:     Pixel#to_HSL    *** DEPRECATED ***
     Purpose:    Converts an RGB pixel to the array
                 [hue, saturation, luminosity].
 */
@@ -650,6 +650,7 @@ Pixel_to_HSL(VALUE self)
 
     Data_Get_Struct(self, Pixel, pixel);
 #if defined(HAVE_CONVERTRGBTOHSL)
+    rb_warning("Pixel#to_HSL is deprecated; use to_hsla");
     ConvertRGBToHSL(pixel->red, pixel->green, pixel->blue, &hue, &saturation, &luminosity);
 #else
     TransformHSL(pixel->red, pixel->green, pixel->blue, &hue, &saturation, &luminosity);
@@ -662,7 +663,7 @@ Pixel_to_HSL(VALUE self)
 }
 
 /*
-    Method:     Pixel.from_HSL
+    Method:     Pixel.from_HSL  *** DEPRECATED ***
     Purpose:    Constructs an RGB pixel from the array
                 [hue, saturation, luminosity].
 */
@@ -686,6 +687,7 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
     luminosity = NUM2DBL(rb_ary_entry(hsl, 2));
 
 #if defined(HAVE_CONVERTHSLTORGB)
+    rb_warning("Pixel#from_HSL is deprecated; use from_hsla");
     ConvertHSLToRGB(hue, saturation, luminosity,
                  &rgb.red, &rgb.green, &rgb.blue);
 #else
@@ -694,6 +696,113 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 #endif
     return Pixel_from_PixelPacket(&rgb);
 }
+
+
+
+/*
+    Method:     Pixel#from_hsla(hue, saturation, lightness, alpha=1)
+    Purpose:    Replace brain-dead from_HSL, above.
+    Notes:      0 <= hue < 360, 0 <= saturation <= 1, 0 <= lightness <= 1
+                0 <= alpha <= 1 (0 is transparent, 1 is opaque)
+*/
+VALUE
+Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
+{
+    double h, s, l, a = 1.0;
+    MagickPixelPacket pp;
+    ExceptionInfo exception;
+    char name[50];
+    MagickBooleanType alpha = MagickFalse;
+
+    switch (argc)
+    {
+        case 4:
+            a = NUM2DBL(argv[3]);
+            alpha = MagickTrue;
+        case 3:
+            l = NUM2DBL(argv[2]);
+            s = NUM2DBL(argv[1]);
+            h = NUM2DBL(argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 3 or 4)", argc);
+            break;
+    }
+
+    if (alpha && (a < 0.0 || a > 1.0))
+    {
+        rb_raise(rb_eRangeError, "alpha %g out of range [0.0, 1.0]", a);
+    }
+    if (l < 0.0 || l > 100.0)
+    {
+        rb_raise(rb_eRangeError, "lightness %g out of range [0.0, 100.0]", l);
+    }
+    if (s < 0.0 || s > 100.0)
+    {
+        rb_raise(rb_eRangeError, "saturation %g out of range [0.0, 100.0]", s);
+    }
+    if (h < 0.0 || h >= 360.0)
+    {
+        rb_raise(rb_eRangeError, "hue %g out of range [0.0, 360.0)", h);
+    }
+
+    memset(name, 0, sizeof(name));
+    if (alpha)
+    {
+        sprintf(name, "hsla(%-2.1f,%-2.1f,%-2.1f,%-2.1f)", h, s, l, a);
+    }
+    else
+    {
+        sprintf(name, "hsl(%-2.1f,%-2.1f,%-2.1f)", h, s, l);
+    }
+
+    GetExceptionInfo(&exception);
+
+    (void) QueryMagickColor(name, &pp, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    return Pixel_from_MagickPixelPacket(&pp);
+}
+
+
+/*
+    Method:     Pixel#to_hsla()
+    Purpose:    Replace brain-dead to_HSL, above.
+    Notes:      Returns [hue, saturation, lightness, alpha] in the same ranges as from_hsla()
+*/
+VALUE
+Pixel_to_hsla(VALUE self)
+{
+    double hue, sat, lum, alpha;
+    Pixel *pixel;
+    volatile VALUE hsla;
+
+    Data_Get_Struct(self, Pixel, pixel);
+
+    ConvertRGBToHSL(pixel->red, pixel->green, pixel->blue, &hue, &sat, &lum);
+    hue *= 360.0;
+    sat *= 100.0;
+    lum *= 100.0;
+
+    if (pixel->opacity == OpaqueOpacity)
+    {
+        alpha = 1.0;
+    }
+    else if (pixel->opacity == TransparentOpacity)
+    {
+        alpha = 0.0;
+    }
+    else
+    {
+        alpha = ROUND_TO_QUANTUM(QuantumRange - (pixel->opacity / QuantumRange));
+    }
+
+    hsla = rb_ary_new3(4, rb_float_new(hue), rb_float_new(sat), rb_float_new(lum), rb_float_new(alpha));
+    return hsla;
+}
+
 
 /*
     Method:     Pixel#eql?

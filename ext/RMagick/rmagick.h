@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.228 2008/03/15 22:05:52 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.229 2008/03/19 21:57:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1016,6 +1016,7 @@ extern VALUE  Pixel_eql_q(VALUE, VALUE);
 extern VALUE  Pixel_fcmp(int, VALUE *, VALUE);
 extern VALUE  Pixel_from_color(VALUE, VALUE);
 extern VALUE  Pixel_from_HSL(VALUE, VALUE);
+extern VALUE  Pixel_from_hsla(int, VALUE *, VALUE);
 extern VALUE  Pixel_hash(VALUE);
 extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
 extern VALUE  Pixel_init_copy(VALUE, VALUE);
@@ -1023,6 +1024,7 @@ extern VALUE  Pixel_intensity(VALUE);
 extern VALUE  Pixel_spaceship(VALUE, VALUE);
 extern VALUE  Pixel_to_color(int, VALUE *, VALUE);
 extern VALUE  Pixel_to_HSL(VALUE);
+extern VALUE  Pixel_to_hsla(VALUE);
 extern VALUE  Pixel_to_s(VALUE);
 extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);

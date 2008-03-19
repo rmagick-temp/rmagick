@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.243 2008/03/14 23:02:46 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.244 2008/03/19 21:57:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -789,6 +789,7 @@ Init_RMagick2(void)
     rb_define_alloc_func(Class_Pixel, Pixel_alloc);
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
+    rb_define_singleton_method(Class_Pixel, "from_hsla", Pixel_from_hsla, -1);
 
     // Define the RGBA attributes
     DCL_ATTR_ACCESSOR(Pixel, red)
@@ -816,6 +817,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
     rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
+    rb_define_method(Class_Pixel, "to_hsla", Pixel_to_hsla, 0);
     rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);
 
     /*-----------------------------------------------------------------------*/
@@ -1708,7 +1710,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/14 23:02:46 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/03/19 21:57:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

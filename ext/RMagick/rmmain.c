@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.244 2008/03/19 21:57:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.245 2008/03/19 23:33:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1119,7 +1119,7 @@ Init_RMagick2(void)
 
         // AllCompliance is 0xffff, not too useful for us!
         rb_define_const(Module_Magick, "AllCompliance"
-                  , rm_enum_new(Class_AnchorType
+                  , rm_enum_new(Class_ComplianceType
                   , ID2SYM(rb_intern("AllCompliance"))
                   , INT2FIX(SVGCompliance|X11Compliance|XPMCompliance)));
 
@@ -1710,7 +1710,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/19 21:57:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/03/19 23:33:27 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

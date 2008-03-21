@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.150 2008/03/19 21:57:59 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.151 2008/03/21 23:35:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -569,10 +569,27 @@ Pixel_from_color(VALUE class, VALUE name)
     return Pixel_from_PixelPacket(&pp);
 }
 
+
 /*
-    Method:     Magick::Pixel#to_color(compliance=Magick::???Compliance,
-                                      matte=False
-                                      depth=QuantumDepth)
+    Static:     rm_set_magick_pixel_packet
+    Purpose:    Convert a PixelPacket to a MagickPixelPacket
+    Notes:      Same code as the private function SetMagickPixelPacket
+                in ImageMagick.
+*/
+static void rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index, MagickPixelPacket *pp)
+{
+    pp->red     = (MagickRealType) pixel->red;
+    pp->green   = (MagickRealType) pixel->green;
+    pp->blue    = (MagickRealType) pixel->blue;
+    pp->opacity = (MagickRealType) (pp->matte ? pixel->opacity : OpaqueOpacity);
+    pp->index   = (MagickRealType) ((pp->colorspace == CMYKColorspace) && (index ? *index : 0));
+}
+
+
+
+/*
+    Method:     Magick::Pixel#to_color(compliance=AllCompliance, matte=false,
+                                       depth=QuantumDepth, hex=false)
     Purpose:    return the color name corresponding to the pixel values
     Notes:      the conversion respects the value of the 'opacity' field
                 in the Pixel.
@@ -583,6 +600,8 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     Info *info;
     Image *image;
     Pixel *pixel;
+    MagickPixelPacket mpp;
+    MagickBooleanType hex = MagickFalse;
     char name[MaxTextExtent];
     ExceptionInfo exception;
     ComplianceType compliance = AllCompliance;
@@ -591,6 +610,8 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
 
     switch (argc)
     {
+        case 4:
+            hex = RTEST(argv[3]);
         case 3:
             depth = NUM2UINT(argv[2]);
 
@@ -626,8 +647,12 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     image->depth = depth;
     image->matte = matte;
     (void) DestroyImageInfo(info);
+
+    GetMagickPixelPacket(image, &mpp);
+    rm_set_magick_pixel_packet(pixel, NULL, &mpp);
+
     GetExceptionInfo(&exception);
-    (void) QueryColorname(image, pixel, compliance, name, &exception);
+    (void) QueryMagickColorname(image, &mpp, compliance, hex, name, &exception);
     (void) DestroyImage(image);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);

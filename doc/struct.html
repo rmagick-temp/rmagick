@@ -796,7 +796,8 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <p><span class="arg">pixel</span>.to_color(<span class=
       "arg">compliance</span>=AllCompliance, <span class=
       "arg">matte</span>=<code>false</code>, <span class=
-      "arg">depth</span>=<code>QuantumDepth</code>) -&gt;
+      "arg">depth</span>=<code>QuantumDepth</code>, <span class=
+      "arg">hex</span>=<code>false</code>) -&gt;
       <em>string</em></p>
     </div>
 
@@ -806,8 +807,7 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <p>Returns the <a href="imusage.html#color_names">color
       name</a> corresponding the the pixel values. If there is no
       such named color in the specified color standard, returns a
-      string in the form "#RRGGBBOO" or, if the depth is 16,
-      "#RRRRGGGGBBBBOOOO".</p>
+      string in the form "rgb(r,g,b,a)".</p>
 
       <h5>Arguments</h5>
 
@@ -831,6 +831,12 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
         when ImageMagick was compiled. The values 16 and 32 can be
         used only when ImageMagick was compiled with the
         appropriate QuantumDepth.</dd>
+
+        <dt>hex</dt>
+
+        <dd>If true, represent the color name in hex (#rrggbbaa or
+        #rrrrggggbbbbaaaa) format. In this case <span class=
+        "arg">compliance</span> is meaningless.</dd>
       </dl>
 
       <h5>See also</h5>

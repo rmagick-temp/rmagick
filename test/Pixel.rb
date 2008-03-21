@@ -39,16 +39,55 @@ class Pixel_UT < Test::Unit::TestCase
     end
 
     def test_fcmp
-        red = Magick::Pixel.from_color('red')
-        blue = Magick::Pixel.from_color('blue')
-        assert_nothing_raised { red.fcmp(red) }
-        assert(red.fcmp(red))
-        assert(! red.fcmp(blue) )
+      red = Magick::Pixel.from_color('red')
+      blue = Magick::Pixel.from_color('blue')
+      assert_nothing_raised { red.fcmp(red) }
+      assert(red.fcmp(red))
+      assert(! red.fcmp(blue) )
 
-        assert_nothing_raised { red.fcmp(blue, 10) }
-        assert_nothing_raised { red.fcmp(blue, 10, Magick::RGBColorspace) }
-        assert_raises(TypeError) { red.fcmp(blue, 'x') }
-        assert_raises(TypeError) { red.fcmp(blue, 10, 'x') }
+      assert_nothing_raised { red.fcmp(blue, 10) }
+      assert_nothing_raised { red.fcmp(blue, 10, Magick::RGBColorspace) }
+      assert_raises(TypeError) { red.fcmp(blue, 'x') }
+      assert_raises(TypeError) { red.fcmp(blue, 10, 'x') }
+    end
+
+    def test_from_hsla
+      assert_nothing_raised { Magick::Pixel.from_hsla(127, 50, 50) }
+      assert_nothing_raised { Magick::Pixel.from_hsla(127, 50, 50, 0) }
+      assert_raise(TypeError) { Magick::Pixel.from_hsla([], 50, 50, 0) }
+      assert_raise(TypeError) { Magick::Pixel.from_hsla(127, [], 50, 0) }
+      assert_raise(TypeError) { Magick::Pixel.from_hsla(127, 50, [], 0) }
+      assert_raise(TypeError) { Magick::Pixel.from_hsla(127, 50, 50, []) }
+      assert_nothing_raised { @pixel.to_hsla }
+
+      360.times do |h|
+        25.times do |s|
+          25.times do |l|
+            5.times do |a|
+              args = [h, s+25, l+25, a/5]
+              px = Magick::Pixel.from_hsla(*args)
+              hsla = px.to_hsla()
+              assert_in_delta(args[0], hsla[0], 0.01, "red expected #{args[0]} got #{hsla[0]}")
+              assert_in_delta(args[1], hsla[1], 0.01, "green expected #{args[1]} got #{hsla[1]}")
+              assert_in_delta(args[2], hsla[2], 0.01, "blue expected #{args[2]} got #{hsla[2]}")
+              assert_in_delta(args[3], hsla[3], 0.005, "alpha expected #{args[3]} got #{hsla[3]}")
+            end
+          end
+        end
+      end
+    end
+
+    def test_to_color
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance) }
+      assert_nothing_raised { @pixel.to_color(Magick::SVGCompliance) }
+      assert_nothing_raised { @pixel.to_color(Magick::X11Compliance) }
+      assert_nothing_raised { @pixel.to_color(Magick::XPMCompliance) }
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, true) }
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false) }
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 8) }
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 16) }
+      assert_raise(ArgumentError) { @pixel.to_color(Magick::AllCompliance, false, 32) }
+      assert_raise(TypeError) { @pixel.to_color(1) }
     end
 
 end

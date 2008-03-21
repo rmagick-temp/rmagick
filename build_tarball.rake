@@ -187,6 +187,12 @@ GEM = Dist_Directory.downcase + ".gem"
 task :default => [:export, :collateral, :fix_files, :manifest] do
   sh "tar cvfz #{Release}.tar.gz #{Dist_Directory}"
   sh "tar cvfj #{Release}.tar.bz2 #{Dist_Directory}"
+  sh "tar cvf  #{Release}.tar #{Dist_Directory}"
+
+  # Extract with
+  #   7z e RMagick-x.y.z.tar.lzma -so | tar xv
+  sh "7z add -t7z -m0=lzma -mx=9 -mfb=64 -ms=32m -ms=on #{Release}.tar.lzma #{Release}.tar"
+  rm_rf Release+".tar", :verbose => true
   Dir.chdir(Dist_Directory) do
     sh "gem build rmagick.gemspec"
     mv GEM, "../", :verbose => true
@@ -200,6 +206,7 @@ task :clean do
   rm_rf Dist_Directory, :verbose => true
   rm_rf Release+".tar.gz", :verbose => true
   rm_rf Release+".tar.bz2", :verbose => true
+  rm_rf Release+".tar.lzma", :verbose => true
   rm_rf GEM, :verbose => true
 end
 

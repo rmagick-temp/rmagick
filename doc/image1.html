@@ -158,6 +158,8 @@ float: left;
 
           <li><a href="#border_bang">border!</a></li>
 
+          <li><a href="#bounding_box">bounding_box</a></li>
+
           <li><a href="#change_geometry">change_geometry</a></li>
 
           <li><a href="#changed_q">changed?</a></li>
@@ -1864,6 +1866,34 @@ img = Image.read_inline(content)
     <h4>Returns</h4>
 
     <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="bounding_box">bounding_box</h3>
+
+    <p><span class="arg">img</span>.bounding_box -&gt;
+    <em>rectangle</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The image's <em>bounding box</em>. The bounding box is the
+    rectangle that encloses all the pixels not in the border color.
+    Uses the current <a href="#fuzz">fuzz</a> value.</p>
+
+    <h4>Returns</h4>A <a href="struct.html#Rectangle">Rectangle</a>
+    object.
+
+    <h4>Example</h4>
+
+    <p>In this example, the bounding box is the gray square
+    enclosing the blue circle. (The coordinates and red circles
+    were added after the bounding box was computed.)</p>
+
+    <p><a href="javascript:popup('bounding_box.rb.html')"><img src=
+    "ex/bounding_box.gif" alt="ex/bounding_box.rb" title=
+    "Click to see the example script" /></a></p>
   </div>
 
   <div class="sig">

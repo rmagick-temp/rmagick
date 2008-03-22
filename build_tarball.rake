@@ -185,14 +185,16 @@ task :collateral => ["README.html", :gemspec, :extconf, :doc]
 GEM = Dist_Directory.downcase + ".gem"
 
 task :default => [:export, :collateral, :fix_files, :manifest] do
-  sh "tar cvfz #{Release}.tar.gz #{Dist_Directory}"
-  sh "tar cvfj #{Release}.tar.bz2 #{Dist_Directory}"
-  sh "tar cvf  #{Release}.tar #{Dist_Directory}"
+  sh "tar czf #{Release}.tar.gz #{Dist_Directory}"
+  sh "tar cjf #{Release}.tar.bz2 #{Dist_Directory}"
+  sh "tar c #{Release} | 7z a -t7z -m0=lzma -mx=9 -mfb=64 -ms=on -si#{Release}.tar #{Release}.tar.lzma"
 
   # Extract with
   #   7z e RMagick-x.y.z.tar.lzma -so | tar xv
-  sh "7z add -t7z -m0=lzma -mx=9 -mfb=64 -ms=32m -ms=on #{Release}.tar.lzma #{Release}.tar"
-  rm_rf Release+".tar", :verbose => true
+  #sh "tar cf  #{Release}.tar #{Dist_Directory}"
+  #sh "7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on #{Release}.tar.lzma #{Release}.tar"
+  #rm_rf Release+".tar", :verbose => true
+
   Dir.chdir(Dist_Directory) do
     sh "gem build rmagick.gemspec"
     mv GEM, "../", :verbose => true

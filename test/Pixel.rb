@@ -60,13 +60,14 @@ class Pixel_UT < Test::Unit::TestCase
       assert_raise(TypeError) { Magick::Pixel.from_hsla(127, 50, 50, []) }
       assert_nothing_raised { @pixel.to_hsla }
 
-      360.times do |h|
+      180.times do |h|
         25.times do |s|
           25.times do |l|
             5.times do |a|
-              args = [h, s+25, l+25, a/5]
+              args = [2*h, s+25, l+25, a/5]
               px = Magick::Pixel.from_hsla(*args)
               hsla = px.to_hsla()
+              #puts "[#{args.join(', ')}] = [#{hsla.join(', ')}]"
               assert_in_delta(args[0], hsla[0], 0.01, "red expected #{args[0]} got #{hsla[0]}")
               assert_in_delta(args[1], hsla[1], 0.01, "green expected #{args[1]} got #{hsla[1]}")
               assert_in_delta(args[2], hsla[2], 0.01, "blue expected #{args[2]} got #{hsla[2]}")

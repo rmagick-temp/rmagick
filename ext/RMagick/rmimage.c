@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.286 2008/03/12 23:09:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.287 2008/03/22 22:57:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -401,16 +401,34 @@ Image_add_profile(VALUE self, VALUE name)
     Method:         Image#alpha(type)
     Purpose:        Calls SetImageAlphaChannel
     Notes:          Replaces matte=, alpha=
+                    Originally there was an alpha attribute getter and setter.
+                    These are replaced with alpha? and alpha(type). We
+                    still define (but don't document) alpha=. For backward
+                    compatibility, if this method is called without an argument,
+                    make it act like the old alpha getter and return true if the
+                    matte channel is active, false otherwise.
 */
 VALUE
-Image_alpha(VALUE self, VALUE type)
+Image_alpha(int argc, VALUE *argv, VALUE self)
 {
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE)
     Image *image;
     AlphaChannelType alpha;
 
+
+    // For backward compatibility, make alpha() act like alpha?
+    if (argc == 0)
+    {
+        return Image_alpha_q(self);
+    }
+    else if (argc > 1)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 1)", argc);
+    }
+
+
     image = rm_check_frozen(self);
-    VALUE_TO_ENUM(type, alpha, AlphaChannelType);
+    VALUE_TO_ENUM(argv[0], alpha, AlphaChannelType);
 
 #if defined(HAVE_SETIMAGEALPHACHANNEL)
     // Added in 6.3.6-9
@@ -446,7 +464,7 @@ Image_alpha(VALUE self, VALUE type)
     }
 #endif
 
-    return type;
+    return argv[0];
 
 #else   // HAVE_ALPHACHANNELTYPE
     type = type;
@@ -486,7 +504,9 @@ VALUE
 Image_alpha_eq(VALUE self, VALUE type)
 {
 #if defined(HAVE_TYPE_ALPHACHANNELTYPE)
-    Image_alpha(self, type);
+    VALUE argv[1];
+    argv[0] = type;
+    Image_alpha(1, argv, self);
     return type;
 #else
     self = self;

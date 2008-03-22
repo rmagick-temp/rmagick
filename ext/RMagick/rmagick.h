@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.229 2008/03/19 21:57:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.230 2008/03/22 22:57:43 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -770,7 +770,7 @@ extern VALUE Image_add_noise(VALUE, VALUE);
 extern VALUE Image_add_noise_channel(int, VALUE *, VALUE);
 extern VALUE Image_add_profile(VALUE, VALUE);
 extern VALUE Image_affine_transform(VALUE, VALUE);
-extern VALUE Image_alpha(VALUE, VALUE);
+extern VALUE Image_alpha(int, VALUE *, VALUE);
 extern VALUE Image_alpha_q(VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);

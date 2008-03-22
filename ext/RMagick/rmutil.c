@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.151 2008/03/21 23:35:45 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.152 2008/03/22 22:55:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -739,6 +739,8 @@ Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
     char name[50];
     MagickBooleanType alpha = MagickFalse;
 
+    class = class;          // defeat "unused parameter" message.
+
     switch (argc)
     {
         case 4:
@@ -806,7 +808,11 @@ Pixel_to_hsla(VALUE self)
 
     Data_Get_Struct(self, Pixel, pixel);
 
+#if defined(HAVE_CONVERTRGBTOHSL)
     ConvertRGBToHSL(pixel->red, pixel->green, pixel->blue, &hue, &sat, &lum);
+#else
+    TransformHSL(pixel->red, pixel->green, pixel->blue, &hue, &sat, &lum);
+#endif
     hue *= 360.0;
     sat *= 100.0;
     lum *= 100.0;

@@ -222,6 +222,14 @@ class Image1_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Image,  res)
     end
 
+    # test alpha backward compatibility. Image#alpha w/o arguments acts like alpha?
+    def test_alpha_compat
+      assert_nothing_raised { @img.alpha }
+      assert !@img.alpha
+      assert_nothing_raised { @img.alpha Magick::ActivateAlphaChannel }
+      assert @img.alpha
+    end
+
     def test_alpha
         assert_nothing_raised { @img.alpha? }
         assert !@img.alpha?

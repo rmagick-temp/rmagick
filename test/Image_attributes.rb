@@ -25,6 +25,13 @@ class Image_Attributes_UT < Test::Unit::TestCase
         @hat = Magick::Image.read(FLOWER_HAT).first
     end
 
+    # Test old alpha attribute. New alpha() behavior is tested in Image1.rb
+    def test_alpha
+      assert(@img.alpha)
+      assert_nothing_raised { @img.alpha = Magick::DeactivateAlphaChannel }
+      assert(!@img.alpha)
+    end
+
     def test_background_color
         assert_nothing_raised { @img.background_color }
         assert_equal("white", @img.background_color)

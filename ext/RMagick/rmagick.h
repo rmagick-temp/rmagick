@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.230 2008/03/22 22:57:43 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.231 2008/03/29 15:23:12 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -311,12 +311,10 @@ EXTERN VALUE Class_VirtualPixelMethod;
 *   Commonly-used IDs
 */
 EXTERN ID rm_ID_trace_proc;        // "@trace_proc"
-EXTERN ID rm_ID__dummy_img_;       // "_dummy_img_"
 EXTERN ID rm_ID_call;              // "call"
 EXTERN ID rm_ID_changed;           // "changed"
 EXTERN ID rm_ID_cur_image;         // "cur_image"
 EXTERN ID rm_ID_dup;               // "dup"
-EXTERN ID rm_ID_enumerators;       // "enumerators"
 EXTERN ID rm_ID_fill;              // "fill"
 EXTERN ID rm_ID_flag;              // "flag"
 EXTERN ID rm_ID_from_s;            // "from_s"
@@ -329,7 +327,6 @@ EXTERN ID rm_ID_notify_observers;  // "notify_observers"
 EXTERN ID rm_ID_new;               // "new"
 EXTERN ID rm_ID_push;              // "push"
 EXTERN ID rm_ID_spaceship;         // "<=>
-EXTERN ID rm_ID__tmpnam_;          // "_tmpnam_"
 EXTERN ID rm_ID_to_i;              // "to_i"
 EXTERN ID rm_ID_to_s;              // "to_s"
 EXTERN ID rm_ID_values;            // "values"

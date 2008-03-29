@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.246 2008/03/22 22:57:43 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.247 2008/03/29 15:23:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -346,12 +346,10 @@ Init_RMagick2(void)
     /*-----------------------------------------------------------------------*/
 
     rm_ID_trace_proc       = rb_intern("@trace_proc");
-    rm_ID__dummy_img_      = rb_intern("_dummy_img_");
     rm_ID_call             = rb_intern("call");
     rm_ID_changed          = rb_intern("changed");
     rm_ID_cur_image        = rb_intern("cur_image");
     rm_ID_dup              = rb_intern("dup");
-    rm_ID_enumerators      = rb_intern("enumerators");
     rm_ID_fill             = rb_intern("fill");
     rm_ID_flag             = rb_intern("flag");
     rm_ID_from_s           = rb_intern("from_s");
@@ -364,7 +362,6 @@ Init_RMagick2(void)
     rm_ID_new              = rb_intern("new");
     rm_ID_push             = rb_intern("push");
     rm_ID_spaceship        = rb_intern("<=>");
-    rm_ID__tmpnam_         = rb_intern("_tmpnam_");
     rm_ID_to_i             = rb_intern("to_i");
     rm_ID_to_s             = rb_intern("to_s");
     rm_ID_values           = rb_intern("values");
@@ -1710,7 +1707,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/22 22:57:43 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/03/29 15:23:12 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

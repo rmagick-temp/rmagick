@@ -35,44 +35,23 @@ __Email:__ <rmagick@rubyforge.org>
 __RubyForge:__ <http://rubyforge.org/projects/rmagick/>
 
 <h2 id="new">What's new?</h2>
-RMagick 0.0.0$ incorporates all changes and bug fixes from RMagick 1.15.12.
-Additionally,
-
-* The installation procedure is pure Ruby.
-* The minimum version of Ruby is 1.8.2.
-* The minimum version of ImageMagick is 6.3.0.
-* GraphicsMagick is not supported.
-* The following GraphicsMagick-only methods are no longer available:
-Image#grayscale\_pseudo\_class, Image#statistics.
-* The following deprecated methods are no longer available:
-Image#random\_channel\_threshold, Image#channel\_threshold, Image#montage=,
-Image#image\_type=, Image::Info#tile\_info, Image#tile\_info=,
-Image::Info#tile, Image::Info#tile=, Image::Info#subimage, Image::Info#subimage=,
-Image::Info#subrange, Image::Info#subrange=, Magick.set_monitor.
-* The following methods have been added:
-Image::Info#stroke=, Image::Info#stroke\_width= and Image::Info#undercolor=,
-Draw#fill_pattern= and Draw#stroke\_pattern=, Image#destroy!, Image#destroyed?,
-Image#check\_destroyed, Magick.trace\_proc, Image.combine, Image#separate,
-Image#distort, Image#each\_pixel.
-* Magick::MaxRGB is deprecated (but still available). Use Magick::QuantumRange
-instead.
-* RMagick works with the Q32 version of ImageMagick.
-
-Various other minor bug fixes and upgrades.
+RMagick 2.0.0 incorporates all changes and bug fixes from RMagick 1.15.13.
+See the ChangeLog for additional changes and bug fixes in later releases.
 
 <h2 id="prereq">Prerequisites</h2>
 
 __O/S:__ Linux, Sun Solaris, Cygwin, FreeBSD, OS X.
 
 __Ruby__ 1.8.2 or later. You can get Ruby from <http://www.ruby-lang.org>.
+The use of versions of Ruby older than 1.8.4 is deprecated and may be
+removed in a future release.
 
 __ImageMagick__ 6.3.0 or later.  You can get ImageMagick from
 <http://www.imagemagick.org>.
 
 <h2 id="install">Installation</h2>
 
-The installation procedure for RMagick 0.0.0 is different from that used
-in earlier releases. Before installing RMagick, you must install ImageMagick.
+Before installing RMagick, you must install ImageMagick.
 Complete and up-to-date instructions for installing ImageMagick on Linux,
 *BSD, and other *nix-type O/S's are available
 at <http://rmagick.rubyforge.org/install-linux.html>, steps 0, 1, 2.
@@ -89,13 +68,12 @@ specify any of these options. You can get more information about setup.rb from
 his web site <http://i.loveruby.net>
 
 I assume you've already decompressed the tarball, or you wouldn't be reading
-this. If you have not decompressed the tarball, do so with this command:
+this. If you have not decompressed the tarball, do so with one of these commands,
+depending on which tarball you have:
 
-    tar xvzf RMagick-0.0.0$-tar.gz
-
-or
-
-    tar xvjf RMagick-0.0.0$-tar.bz2
+    tar xvzf RMagick-0.0.0$-tar.gz              (gzipped tarball)
+    tar xvjf RMagick-0.0.0$-tar.bz2             (bzipped tarball)
+    7z e RMagick-x.y.z.tar.lzma -so | tar xv    (7zipped tarball)
 
 Change to the RMagick-0.0.0 directory. If you are not using any
 configuration options (usually you don't need to) enter the command

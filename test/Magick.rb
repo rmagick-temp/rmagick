@@ -5,6 +5,32 @@ require 'RMagick'
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
+
+module Magick
+  def self._tmpnam_
+    @@_tmpnam_
+  end
+end
+
+class Magick::AlphaChannelType
+  def self.enumerators
+    @@enumerators
+  end
+end
+
+class Magick::AlignType
+  def self.enumerators
+    @@enumerators
+  end
+end
+
+class Magick::AnchorType
+  def self.enumerators
+    @@enumerators
+  end
+end
+
+
 class Magick_UT < Test::Unit::TestCase
 
     def test_colors
@@ -18,6 +44,29 @@ class Magick_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Pixel, c.color)
       end
       Magick.colors {|c| assert_instance_of(Magick::Color, c) }
+    end
+
+    # Test a few of the @@enumerator arrays in the Enum subclasses.
+    # No need to test all of them.
+    def test_enumerators
+      ary = nil
+      assert_nothing_raised do
+        ary = Magick::AlphaChannelType.enumerators
+      end
+      assert_instance_of(Array, ary)
+      assert_equal(5, ary.length)
+
+      assert_nothing_raised do
+        ary = Magick::AlignType.enumerators
+      end
+      assert_instance_of(Array, ary)
+      assert_equal(4, ary.length)
+
+      assert_nothing_raised do
+        ary = Magick::AnchorType.enumerators
+      end
+      assert_instance_of(Array, ary)
+      assert_equal(3, ary.length)
     end
 
     def test_fonts
@@ -85,6 +134,67 @@ class Magick_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { Magick::limit_resource("xxx") }
         assert_raise(ArgumentError) { Magick::limit_resource("map", 3500, 2) }
         assert_raise(ArgumentError) { Magick::limit_resource() }
+
+    end
+
+    # test the @@_tmpnam_ class variable
+    # the count is incremented by Image::Info#texture=,
+    # ImageList::Montage#texture=, and Draw.composite
+    def test_tmpnam
+
+      tmpfiles = Dir[ENV["HOME"] + "/tmp/magick*"].length
+
+      # does not exist at first
+      assert_raise(NameError) { Magick._tmpnam_ }
+
+      texture = Magick::Image.read("granite:") {self.size = "20x20" }.first
+
+      info = Magick::Image::Info.new
+      info.texture = texture
+      count = nil
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(1, count)
+
+      info.texture = texture
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(2, count)
+
+      mon = Magick::ImageList::Montage.new
+      mon.texture = texture
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(3, count)
+
+      mon.texture = texture
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(4, count)
+
+      gc = Magick::Draw.new
+      gc.composite(0, 0, 20, 20, texture)
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(5, count)
+
+      gc.composite(0, 0, 20, 20, texture)
+      assert_nothing_raised do
+        count = Magick._tmpnam_
+      end
+      assert_equal(6, count)
+
+      tmpfiles2 = Dir[ENV["HOME"] + "/tmp/magick*"].length
+
+      # The 2nd montage texture deletes the first
+      # The 2nd info texture deletes the first
+      # Therefore only 4 tmp files are left
+      assert_equal(tmpfiles+4, tmpfiles2)
 
     end
 

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.152 2008/03/22 22:55:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.153 2008/03/29 15:19:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -18,6 +18,7 @@ static VALUE Enum_type_inspect(VALUE);
 static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
 
+#define ENUMERATORS_CLASS_VAR "@@enumerators"
 
 /*
     Extern:     magick_safe_malloc, magick_malloc, magick_free, magick_realloc
@@ -2898,16 +2899,12 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
     super_argv[1] = val;
     (void) rb_call_super(2, (VALUE *)super_argv);
 
-    if (rb_cvar_defined(CLASS_OF(self), rm_ID_enumerators) != Qtrue)
+    if (rb_cvar_defined(CLASS_OF(self), rb_intern(ENUMERATORS_CLASS_VAR)) != Qtrue)
     {
-#if defined(HAVE_NEW_RB_CVAR_SET)
-        rb_cvar_set(CLASS_OF(self), rm_ID_enumerators, rb_ary_new());
-#else
-        rb_cvar_set(CLASS_OF(self), rm_ID_enumerators, rb_ary_new(), 0);
-#endif
+        rb_cv_set(CLASS_OF(self), ENUMERATORS_CLASS_VAR, rb_ary_new());
     }
 
-    enumerators = rb_cvar_get(CLASS_OF(self), rm_ID_enumerators);
+    enumerators = rb_cv_get(CLASS_OF(self), ENUMERATORS_CLASS_VAR);
     (void) rb_ary_push(enumerators, self);
 
     return self;
@@ -2941,7 +2938,7 @@ static VALUE Enum_type_values(VALUE class)
     volatile VALUE rv;
     int x;
 
-    enumerators = rb_cvar_get(class, rm_ID_enumerators);
+    enumerators = rb_cv_get(class, ENUMERATORS_CLASS_VAR);
 
     if (rb_block_given_p())
     {
@@ -3089,6 +3086,8 @@ rm_write_temp_image(Image *image, char *tmpnam)
 {
 
 #if defined(HAVE_SETIMAGEREGISTRY)
+#define TMPNAM_CLASS_VAR "@@_tmpnam_"
+
     MagickBooleanType okay;
     ExceptionInfo exception;
     volatile VALUE id_value;
@@ -3098,24 +3097,19 @@ rm_write_temp_image(Image *image, char *tmpnam)
 
 
     // 'id' is always the value of its previous use
-    if (rb_cvar_defined(Module_Magick, rm_ID__tmpnam_) == Qtrue)
+    if (rb_cvar_defined(Module_Magick, rb_intern(TMPNAM_CLASS_VAR)) == Qtrue)
     {
-        id_value = rb_cvar_get(Module_Magick, rm_ID__tmpnam_);
+        id_value = rb_cv_get(Module_Magick, TMPNAM_CLASS_VAR);
         id = FIX2INT(id_value);
     }
     else
     {
         id = 0;
-        rb_define_class_variable(Module_Magick, "@@__tmpnam__", INT2FIX(id));
+        rb_cv_set(Module_Magick, TMPNAM_CLASS_VAR, INT2FIX(id));
     }
 
     id += 1;
-#if defined(HAVE_NEW_RB_CVAR_SET)
-    rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id));
-#else
-    rb_cvar_set(Module_Magick, rm_ID__tmpnam_, INT2FIX(id), 0);
-#endif
-
+    rb_cv_set(Module_Magick, TMPNAM_CLASS_VAR, INT2FIX(id));
     sprintf(tmpnam, "mpri:%d", id);
 
     // Omit "mpri:" from filename to form the key

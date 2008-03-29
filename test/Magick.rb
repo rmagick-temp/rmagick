@@ -143,57 +143,39 @@ class Magick_UT < Test::Unit::TestCase
     def test_tmpnam
 
       tmpfiles = Dir[ENV["HOME"] + "/tmp/magick*"].length
+      texture = Magick::Image.read("granite:") {self.size = "20x20" }.first
+      info = Magick::Image::Info.new
 
       # does not exist at first
       assert_raise(NameError) { Magick._tmpnam_ }
-
-      texture = Magick::Image.read("granite:") {self.size = "20x20" }.first
-
-      info = Magick::Image::Info.new
       info.texture = texture
-      count = nil
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(1, count)
+
+      assert_nothing_raised { Magick._tmpnam_ }
+      assert_equal(1, Magick._tmpnam_)
 
       info.texture = texture
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(2, count)
+      assert_equal(2, Magick._tmpnam_)
 
       mon = Magick::ImageList::Montage.new
       mon.texture = texture
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(3, count)
+      assert_equal(3, Magick._tmpnam_)
 
       mon.texture = texture
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(4, count)
+      assert_equal(4, Magick._tmpnam_)
 
       gc = Magick::Draw.new
       gc.composite(0, 0, 20, 20, texture)
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(5, count)
+      assert_equal(5, Magick._tmpnam_)
 
       gc.composite(0, 0, 20, 20, texture)
-      assert_nothing_raised do
-        count = Magick._tmpnam_
-      end
-      assert_equal(6, count)
+      assert_equal(6, Magick._tmpnam_)
 
       tmpfiles2 = Dir[ENV["HOME"] + "/tmp/magick*"].length
 
-      # The 2nd montage texture deletes the first
-      # The 2nd info texture deletes the first
-      # Therefore only 4 tmp files are left
+      # The 2nd montage texture deletes the first.
+      # The 2nd info texture deletes the first.
+      # Both composite images are still alive.
+      # Therefore only 4 tmp files are left.
       assert_equal(tmpfiles+4, tmpfiles2)
 
     end

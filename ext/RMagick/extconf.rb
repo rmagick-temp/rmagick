@@ -29,25 +29,6 @@ end
 
 
 
-def have_new_rb_cvar_set(headers=nil, &b)
-  checking_for "rb_cvar_set with 3 arguments" do
-    if try_compile(<<"SRC", &b)
-#{COMMON_HEADERS}
-#{cpp_include(headers)}
-/*top*/
-int main() { rb_cvar_set(rb_cArray, rb_intern("x"), INT2FIX(0)); return 0; }
-SRC
-      $defs.push("-DHAVE_NEW_RB_CVAR_SET")
-      true
-    else
-      false
-    end
-  end
-end
-
-
-
-
 # Test for multiple values of the same enum type
 def have_enum_values(enum, values, headers=nil, &b)
   values.each do |value|
@@ -231,7 +212,6 @@ have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6
 # Now test Ruby 1.9.0 features.
 headers = ["ruby.h", "rubyio.h"]
 have_func("rb_frame_this_func", headers)
-have_new_rb_cvar_set(headers)
 
 
 

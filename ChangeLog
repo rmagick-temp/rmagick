@@ -10,6 +10,8 @@ RMagick 2.3.0
     o The Image#alpha and alpha= attributes are deprecated. Use alpha() and
       alpha? instead.
     o The Image#mask= attribute is deprecated. Use mask() instead.
+    o The use of Ruby older than version 1.8.4 with RMagick is deprecated and
+      will not be supported in a future release.
     o Fix bug #18271, rvg width and height attributes wrong after a call to
       viewbox (reported by Greg Jarman)
 

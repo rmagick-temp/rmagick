@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.61 2008/01/01 23:18:31 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.62 2008/03/29 15:20:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1192,6 +1192,7 @@ destroy_Montage(void *obj)
     if (montage->info && montage->info->texture != NULL)
     {
         rm_delete_temp_image(montage->info->texture);
+        magick_free(montage->info->texture);
         montage->info->texture = NULL;
     }
     if (montage->info)
@@ -1261,6 +1262,7 @@ Montage_texture_eq(VALUE self, VALUE texture)
     // remove it now in preparation for this new one.
     if (montage->info->texture)
     {
+        rm_delete_temp_image(montage->info->texture);
         magick_free(montage->info->texture);
         montage->info->texture = NULL;
     }
@@ -1403,11 +1405,12 @@ VALUE PolaroidOptions_border_color_eq(VALUE self, VALUE border)
 
 static VALUE get_dummy_tm_img(VALUE klass)
 {
+#define DUMMY_IMG_CLASS_VAR "@@_dummy_img_"
     volatile VALUE dummy_img = 0;
     Info *info;
     Image *image;
 
-    if (rb_cvar_defined(klass, rm_ID__dummy_img_) != Qtrue)
+    if (rb_cvar_defined(klass, rb_intern(DUMMY_IMG_CLASS_VAR)) != Qtrue)
     {
 
         info = CloneImageInfo(NULL);
@@ -1423,13 +1426,9 @@ static VALUE get_dummy_tm_img(VALUE klass)
         (void) DestroyImageInfo(info);
         dummy_img = rm_image_new(image);
 
-#if defined(HAVE_NEW_RB_CVAR_SET)
-        rb_cvar_set(klass, rm_ID__dummy_img_, dummy_img);
-#else
-        rb_cvar_set(klass, rm_ID__dummy_img_, dummy_img, 0);
-#endif
+        rb_cv_set(klass, DUMMY_IMG_CLASS_VAR, dummy_img);
     }
-    dummy_img = rb_cvar_get(klass, rm_ID__dummy_img_);
+    dummy_img = rb_cv_get(klass, DUMMY_IMG_CLASS_VAR);
 
     return dummy_img;
 }

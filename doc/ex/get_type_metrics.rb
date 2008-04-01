@@ -29,7 +29,7 @@ end
 Origin_x = 110
 Origin_y = 230
 Glyph = 'g'
-Face = RUBY_PLATFORM =~ /nswin/ ? "Verdana" : "Times"
+Face = RUBY_PLATFORM =~ /mswin/ ? "Verdana" : "Times"
 
 canvas = Magick::Image.new(410, 320, Magick::HatchFill.new('white', 'lightcyan2'))
 

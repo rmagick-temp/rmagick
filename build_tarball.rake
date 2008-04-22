@@ -9,7 +9,7 @@
 # Specify a beta Release as beta=beta1
 
 require 'rubygems'
-require 'bluecloth'
+require 'redcloth'
 require 'find'
 require 'fileutils'
 include FileUtils
@@ -93,19 +93,19 @@ end
 
 
 
-task "README.bc" do
+task "README.tmp" do
   Dir.chdir Dist_Directory do
-    reversion_file "README.txt"
-    body = File.readlines "README.txt"
-    body = BlueCloth.new(body.join).to_html + "\n"
-    File.open("README.bc", "w") { |f| f.write body }
+    reversion_file "README.rc"
+    body = File.readlines "README.rc"
+    body = RedCloth.new(body.join).to_html + "\n"
+    File.open("README.tmp", "w") { |f| f.write body }
   end
 end
 
 
 
 
-task README => "README.bc" do
+task README => "README.tmp" do
   puts "writing #{README}"
   Dir.chdir Dist_Directory do
     File.open(README, "w") do |html|
@@ -115,11 +115,11 @@ task README => "README.bc" do
   <head>
     <title>RMagick #{RMagick_Version2} README</title>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <meta name="GENERATOR" content="BlueCloth">
+    <meta name="GENERATOR" content="RedCloth">
   </head>
   <body>
 END_HTML_HEAD
-      html.write File.readlines("README.bc")
+      html.write File.readlines("README.tmp")
       html.write <<END_HTML_TAIL
   </body>
 </html>
@@ -146,7 +146,7 @@ task :fix_files do
     Dir.chdir Dist_Directory do
         rm_rf "test", :verbose => true
         rm "lib/rvg/to_c.rb", :verbose => true
-        rm "README.bc", :verbose => true
+        rm "README.rc", :verbose => true
         chmod 0644, FileList["doc/*.html", "doc/ex/*.rb", "doc/ex/images/*", "examples/*.rb"]
     end
 end

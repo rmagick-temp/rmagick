@@ -93,19 +93,19 @@ end
 
 
 
-task "README.tmp" do
+task "README.txt" do
   Dir.chdir Dist_Directory do
     reversion_file "README.rc"
     body = File.readlines "README.rc"
     body = RedCloth.new(body.join).to_html + "\n"
-    File.open("README.tmp", "w") { |f| f.write body }
+    File.open("README.txt", "w") { |f| f.write body }
   end
 end
 
 
 
 
-task README => "README.tmp" do
+task README => "README.txt" do
   puts "writing #{README}"
   Dir.chdir Dist_Directory do
     File.open(README, "w") do |html|
@@ -119,7 +119,7 @@ task README => "README.tmp" do
   </head>
   <body>
 END_HTML_HEAD
-      html.write File.readlines("README.tmp")
+      html.write File.readlines("README.txt")
       html.write <<END_HTML_TAIL
   </body>
 </html>
@@ -180,7 +180,7 @@ end
 
 
 
-task :collateral => ["README.html", :gemspec, :extconf, :doc]
+task :collateral => [README, :gemspec, :extconf, :doc]
 
 GEM = Dist_Directory.downcase + ".gem"
 

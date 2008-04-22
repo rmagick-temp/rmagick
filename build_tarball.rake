@@ -147,6 +147,7 @@ task :fix_files do
         rm_rf "test", :verbose => true
         rm "lib/rvg/to_c.rb", :verbose => true
         rm "README.rc", :verbose => true
+        rm "README.txt", :verbose => true
         chmod 0644, FileList["doc/*.html", "doc/ex/*.rb", "doc/ex/images/*", "examples/*.rb"]
     end
 end

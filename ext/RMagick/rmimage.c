@@ -1,6 +1,6 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.4 2007/12/21 15:17:58 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.5 2008/05/04 14:21:13 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2007 by Timothy P. Hunter
+|                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
 | Author:   Tim Hunter
 | Purpose:  Image class method definitions for RMagick
@@ -442,12 +442,13 @@ Image_add_profile(VALUE self, VALUE name)
     Image *image, *profile_image;
     ImageInfo *info;
     ExceptionInfo exception;
+#if !defined(HAVE_IMAGE_IPTC_PROFILE)
+    ProfileInfo profile_info;
+#endif
     char *profile_filename = NULL;
     long profile_filename_l = 0;
-    ProfileInfo *generic;
     const unsigned char *profile;
     size_t profile_l;
-    long x;
 
     rm_check_frozen(self);
     Data_Get_Struct(self, Image, image);
@@ -456,7 +457,13 @@ Image_add_profile(VALUE self, VALUE name)
     profile_filename = STRING_PTR_LEN(name, profile_filename_l);
 
     info = CloneImageInfo(NULL);
+#if !defined(HAVE_IMAGE_IPTC_PROFILE)
+    profile_info.name="IPTC";
+    profile_info.info=(unsigned char *) GetImageProfile(image, profile_info.name, &profile_info.length);
+    info->client_data=&profile_info;
+#else
     info->client_data= (void *) &image->iptc_profile;
+#endif
     strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
 
@@ -477,6 +484,26 @@ Image_add_profile(VALUE self, VALUE name)
             goto done;
         }
     }
+
+#if defined(HAVE_ALLOCATEIMAGEPROFILEITERATOR)
+    /* GraphicsMagick 1.2 */
+    {
+    ImageProfileIterator profile_iterator;
+    const char *profile_name;
+    size_t profile_length;
+
+    profile_iterator = AllocateImageProfileIterator(profile_image);
+    while (NextImageProfile(profile_iterator, &profile_name, &profile, &profile_length) != MagickFail)
+      {
+        if ((rm_strcasecmp(profile_name, "ICC") == 0) || (rm_strcasecmp(profile_name, "ICM") == 0))
+          (void) ProfileImage(image, profile_name, (unsigned char *) profile, profile_length, True);
+        else
+          (void) SetImageProfile(image, profile_name, profile, profile_length);
+      }
+    DeallocateImageProfileIterator(profile_iterator);
+    }
+
+#else
 
     /* ICC ICM Profile */
     profile = GetImageProfile(profile_image, "ICM", &profile_l);
@@ -499,6 +526,7 @@ Image_add_profile(VALUE self, VALUE name)
             break;
         }
     }
+#endif
 
 done:
     (void) DestroyImage(profile_image);
@@ -5574,19 +5602,19 @@ Image_inspect(VALUE self)
     x += sprintf(buffer+x, "%lu-bit", quantum_depth);
 
     // Print blob info if appropriate.
-    if (SizeBlob(image) != 0)
+    if (GetBlobSize(image) != 0)
     {
-        if (SizeBlob(image) >= (1 << 24))
+        if (GetBlobSize(image) >= (1 << 24))
         {
-            x += sprintf(buffer+x, " %lumb", (unsigned long) (SizeBlob(image)/1024/1024));
+            x += sprintf(buffer+x, " %lumb", (unsigned long) (GetBlobSize(image)/1024/1024));
         }
-        else if (SizeBlob(image) >= 1024)
+        else if (GetBlobSize(image) >= 1024)
         {
-            x += sprintf(buffer+x, " %lukb", (unsigned long) (SizeBlob(image)/1024));
+            x += sprintf(buffer+x, " %lukb", (unsigned long) (GetBlobSize(image)/1024));
         }
         else
         {
-            x += sprintf(buffer+x, " %lub", (unsigned long) SizeBlob(image));
+            x += sprintf(buffer+x, " %lub", (unsigned long) GetBlobSize(image));
         }
     }
 

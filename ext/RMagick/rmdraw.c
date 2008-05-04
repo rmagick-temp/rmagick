@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.62 2008/03/29 15:20:36 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.63 2008/05/04 23:16:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -489,7 +489,11 @@ VALUE Draw_annotate(
     }
 
     // Translate & store in Draw structure
+#if defined(HAVE_INTERPRETIMAGEPROPERTIES)
+    draw->info->text = InterpretImageProperties(NULL, image, StringValuePtr(text));
+#else
     draw->info->text = InterpretImageAttributes(NULL, image, StringValuePtr(text));
+#endif
     if (!draw->info->text)
     {
         rb_raise(rb_eArgError, "no text");
@@ -1500,7 +1504,11 @@ get_type_metrics(
     }
 
     Data_Get_Struct(self, Draw, draw);
+#if defined(HAVE_INTERPRETIMAGEPROPERTIES)
+    draw->info->text = InterpretImageProperties(NULL, image, text);
+#else
     draw->info->text = InterpretImageAttributes(NULL, image, text);
+#endif
     if (!draw->info->text)
     {
         rb_raise(rb_eArgError, "no text to measure");

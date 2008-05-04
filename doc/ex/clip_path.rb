@@ -26,14 +26,12 @@ girl.read("images/Flower_Hat.jpg")
 cols = rows = nil
 
 # Our final image is about 290 pixels wide, so here
-# we widen our picture to fit. The change_geometry
-# method will adjust the height proportionately.
+# we widen our picture to fit.
 
-girl.change_geometry("290") do |c,r|
-    pr.composite(0,0, c, r, girl)
-    cols = c
-    rows = r
-end
+girl.resize!(290.0/girl.columns)
+cols = girl.columns
+rows = girl.rows
+pr.composite(0, 0, cols, rows, girl)
 
 pr.pop
 
@@ -49,10 +47,6 @@ canvas = canvas.blur_image(0, 20)
 
 # Draw the star over the background
 pr.draw(canvas)
-
-# Crop away all the solid white border pixels.
-crop = canvas.bounding_box
-canvas.crop!(crop.x, crop.y, crop.width, crop.height)
 
 canvas.write("clip_path.gif")
 

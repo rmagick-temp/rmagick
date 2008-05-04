@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.288 2008/03/23 15:15:46 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.289 2008/05/04 14:59:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5363,19 +5363,19 @@ static void build_inspect_string(Image *image, char *buffer, size_t len)
     x += sprintf(buffer+x, "%lu-bit", quantum_depth);
 
     // Print blob info if appropriate.
-    if (SizeBlob(image) != 0)
+    if (GetBlobSize(image) != 0)
     {
-        if (SizeBlob(image) >= (1 << 24))
+        if (GetBlobSize(image) >= (1 << 24))
         {
-            x += sprintf(buffer+x, " %lumb", (unsigned long) (SizeBlob(image)/1024/1024));
+            x += sprintf(buffer+x, " %lumb", (unsigned long) (GetBlobSize(image)/1024/1024));
         }
-        else if (SizeBlob(image) >= 1024)
+        else if (GetBlobSize(image) >= 1024)
         {
-            x += sprintf(buffer+x, " %lukb", (unsigned long) (SizeBlob(image)/1024));
+            x += sprintf(buffer+x, " %lukb", (unsigned long) (GetBlobSize(image)/1024));
         }
         else
         {
-            x += sprintf(buffer+x, " %lub", (unsigned long) SizeBlob(image));
+            x += sprintf(buffer+x, " %lub", (unsigned long) GetBlobSize(image));
         }
     }
 
@@ -9573,7 +9573,6 @@ static VALUE
 trimmer(int bang, int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    RectangleInfo geometry;
     ExceptionInfo exception;
     int reset_page = 0;
 
@@ -9591,11 +9590,7 @@ trimmer(int bang, int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Image, image);
 
     GetExceptionInfo(&exception);
-
-    geometry = GetImageBoundingBox(image, &exception);
-    CHECK_EXCEPTION()
-
-    new_image = CropImage(image, &geometry, &exception);
+    new_image = TrimImage(image, &exception);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);

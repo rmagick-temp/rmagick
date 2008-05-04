@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152.2.4.2.1 2007/12/15 23:32:20 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.4.2.2 2008/05/04 14:18:13 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -236,6 +236,14 @@ typedef unsigned int MagickBooleanType;
 
 #if !defined(HAVE_SETIMAGEINFOFILE)
 #define SetImageInfoFile(info, fptr) (info)->file = (fptr)
+#endif
+
+#if !defined(HAVE_REMOVEFIRSTIMAGEFROMLIST)
+#define RemoveFirstImageFromList(i) ShiftImageList(i)
+#endif
+
+#if !defined(HAVE_GETBLOBSIZE)
+#define GetBlobSize(i) SizeBlob(i)
 #endif
 
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > MaxRGB ? MaxRGB : (value) + 0.5))

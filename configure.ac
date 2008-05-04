@@ -114,13 +114,13 @@ fi
 
 AC_CHECK_FUNCS([AdaptiveBlurImageChannel AdaptiveResizeImage AdaptiveSharpenImage])
 AC_CHECK_FUNCS([AdaptiveThresholdImage AddDefinitions])
-AC_CHECK_FUNCS([AddNoiseImageChannel BilevelImageChannel BlackThresholdImage])
+AC_CHECK_FUNCS([AddNoiseImageChannel AllocateImageProfileIterator BilevelImageChannel BlackThresholdImage])
 AC_CHECK_FUNCS([BlurImageChannel ClearMagickException CompareImageChannels])
 AC_CHECK_FUNCS([CompareImageLayers CompositeImageChannel ContrastStretchImageChannel])
 AC_CHECK_FUNCS([ConvertHSLToRGB ConvertRGBToHSL])
 AC_CHECK_FUNCS([ConvolveImageChannel EvaluateImageChannel ExportImagePixels])
 AC_CHECK_FUNCS([FuzzyColorCompare FxImageChannel GammaImageChannel])
-AC_CHECK_FUNCS([GaussianBlurImageChannel GetColorHistogram GetColorInfoArray])
+AC_CHECK_FUNCS([GaussianBlurImageChannel GetBlobSize GetColorHistogram GetColorInfoArray])
 
 # We need to be able to query these symbols later in the configure script, so set a shell
 # variable here as well as defining symbols.
@@ -176,7 +176,7 @@ AC_CHECK_FUNCS([NormalizeImageChannel OrderedPosterizeImageChannel])
 AC_CHECK_FUNCS([ParseSizeGeometry PolaroidImage PosterizeImage PreviewImage])
 AC_CHECK_FUNCS([QuantumOperatorRegionImage RadialBlurImage RadialBlurImageChannel])
 AC_CHECK_FUNCS([RandomChannelThresholdImage RandomThresholdImageChannel])
-AC_CHECK_FUNCS([RecolorImage SeparateImageChannel SepiaToneImage])
+AC_CHECK_FUNCS([RecolorImage RemoveFirstImageFromList SeparateImageChannel SepiaToneImage])
 AC_CHECK_FUNCS([SetImageBackgroundColor SetImageChannelDepth SetImageColorspace SetImageExtent])
 AC_CHECK_FUNCS([SetImageInfoFile SetImageOption SetImageProperty SetImageRegistry SetImageStorageClass])
 AC_CHECK_FUNCS([SetImageProgressMonitor ShadowImage SharpenImageChannel])
@@ -221,7 +221,8 @@ AC_CHECK_MEMBERS([ExceptionInfo.module],,,
                  #endif
                  #include "magick/api.h"])
 
-AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color],,,
+AC_CHECK_MEMBERS([Image.bias, Image.orientation, Image.quality, Image.ticks_per_second, Image.transparent_color,
+                  Image.iptc_profile, Image.generic_profile, Image.generic_profiles],,,
                 [#include <stdio.h>
                  #if HAVE_SYS_TYPES_H
                  #include <sys/types.h>

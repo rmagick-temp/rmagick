@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.289 2008/05/04 14:59:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.290 2008/05/04 23:17:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -602,13 +602,13 @@ Image_aref(VALUE self, VALUE key_arg)
     Returns:    self
     Notes:      Specify attr=nil to remove the key from the list.
 
-                SetImageAttribute normally APPENDS the new value
+                SetImageProperty normally APPENDS the new value
                 to any existing value. Since this usage is tremendously
                 counter-intuitive, this function always deletes the
                 existing value before setting the new value.
 
                 There's no use checking the return value since
-                SetImageAttribute returns "False" for many reasons,
+                SetImageProperty returns "False" for many reasons,
                 some legitimate.
 */
 VALUE
@@ -642,7 +642,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     }
 
 
-    // Delete existing value. SetImageAttribute returns False if
+    // Delete existing value. SetImageProperty returns False if
     // the attribute doesn't exist - we don't care.
     (void) rm_set_property(image, key, NULL);
     // Set new value
@@ -651,7 +651,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
         okay = rm_set_property(image, key, attr);
         if (!okay)
         {
-            rb_warning("SetImageAttribute failed (probably out of memory)");
+            rb_warning("SetImageProperty failed (probably out of memory)");
         }
     }
     return self;
@@ -5272,7 +5272,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     Purpose:    Overrides Object#inspect - returns a string description of the
                 image.
     Returns:    the string
-    Notes:      this is essentially the DescribeImage except the description is
+    Notes:      this is essentially the IdentifyImage except the description is
                 built in a char buffer instead of being written to a file.
 */
 static void build_inspect_string(Image *image, char *buffer, size_t len)
@@ -6429,9 +6429,9 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
 
     SetImageExtent(image, cols, rows);
 
-    // If the caller did not supply a fill argument, call SetImage to fill the
-    // image using the background color. The background color can be set by
-    // specifying it when creating the Info parm block.
+    // If the caller did not supply a fill argument, call SetImageBackgroundColor
+    // to fill the image using the background color. The background color can
+    // be set by specifying it when creating the Info parm block.
     if (!fill)
     {
         (void) SetImageBackgroundColor(image);
@@ -9450,7 +9450,7 @@ Image_total_colors(VALUE self)
 /*
     Method:     Image#transparent(color-name<, opacity>)
                 Image#transparent(pixel<, opacity>)
-    Purpose:    Call TransparentImage
+    Purpose:    Call TransparentPaintImage
     Notes:      Can use Magick::OpaqueOpacity or Magick::TransparentOpacity,
                 or any value >= 0 && <= QuantumRange. The default is
                 Magick::TransparentOpacity.

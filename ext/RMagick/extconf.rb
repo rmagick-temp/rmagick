@@ -143,6 +143,7 @@ have_func("snprintf", headers)
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetImageProperty",               # 6.3.1
    "GetNextImageProperty",           # 6.3.1
+   "InterpretImageProperties",       # 6.3.2
    "IsHistogramImage",               # 6.3.5
    "LinearStretchImage",             # 6.3.1
    "LiquidRescaleImage",             # 6.3.8-2

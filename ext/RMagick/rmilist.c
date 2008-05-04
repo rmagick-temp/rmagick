@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.46.2.1.2.1 2008/02/24 23:25:41 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.46.2.1.2.2 2008/05/04 14:21:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -653,7 +653,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
     // Create new ImageList object, convert mapped image sequence to images,
     // append to images array.
     new_imagelist = rm_imagelist_new();
-    while ((new_image = ShiftImageList(&new_images)))
+    while ((new_image = RemoveFirstImageFromList(&new_images)))
     {
         rm_imagelist_push(new_imagelist, rm_image_new(new_image));
     }

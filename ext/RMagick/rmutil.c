@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90.2.3.2.5 2008/02/24 23:26:39 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.3.2.6 2008/05/04 14:19:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3007,9 +3007,12 @@ rm_write_temp_image(Image *image, char *tmpnam)
 
     long registry_id;
 
+#if !defined(GRAPHICSMAGICK)
+    /* This leak doesn't occur in GraphicsMagick as far as I know. */
     rb_warn("`%s' can cause memory leaks when RMagick was built with " Q(MAGICKNAME) " " MagickLibVersionText
             ".\nUpgrade to ImageMagick 6.3.4 or later to prevent this behavior."
           , rb_id2name(rb_frame_last_func()));
+#endif
 
     registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
     rm_check_image_exception(image, RetainOnError);

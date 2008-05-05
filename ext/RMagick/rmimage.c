@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.5 2008/05/04 14:21:13 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.6 2008/05/05 22:59:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -504,6 +504,9 @@ Image_add_profile(VALUE self, VALUE name)
     }
 
 #else
+    {
+    long x;
+    ProfileInfo *generic;
 
     /* ICC ICM Profile */
     profile = GetImageProfile(profile_image, "ICM", &profile_l);
@@ -525,6 +528,7 @@ Image_add_profile(VALUE self, VALUE name)
         {
             break;
         }
+    }
     }
 #endif
 

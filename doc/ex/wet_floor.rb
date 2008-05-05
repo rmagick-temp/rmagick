@@ -2,25 +2,31 @@
 
 require 'RMagick'
 
+if Magick::Magick_version =~ /ImageMagick/
+  y = -15
+else
+  y = 1
+end
 
 results = Magick::ImageList.new
 
 img = Magick::Image.new(270, 60)
+img.matte = true
 
 gc = Magick::Draw.new
-gc.annotate(img, 0, 0, 0, -15, "RUBY!") do
+gc.annotate(img, 0, 0, 0, y, "RUBY!") do
     gc.fill = '#c00'
     gc.stroke = 'black'
     gc.stroke_width = 2
     gc.font_weight = Magick::BoldWeight
     gc.gravity = Magick::SouthGravity
-	if RUBY_PLATFORM =~ /mswin32/
-		gc.font_family = "Georgia"
-	    gc.pointsize = 76
-	else
-	    gc.font_family = "times"
-		gc.pointsize = 80
-	end
+  if RUBY_PLATFORM =~ /mswin32/
+    gc.font_family = "Georgia"
+      gc.pointsize = 76
+  else
+      gc.font_family = "times"
+    gc.pointsize = 80
+  end
 end
 
 # Add a little bit of shading

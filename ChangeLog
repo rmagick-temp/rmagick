@@ -1,3 +1,10 @@
+RMagick 1.15.14
+     o Fix bug #18271, change rvg#width, rvg#height to return user-space
+       coordinates (bug report by Greg Jarman)
+     o Miscellaneous changes to work with GraphicsMagick 1.2
+     o Change clip_path.rb example to produce the same output in GraphicsMagick
+       and ImageMagick.
+
 RMagick 1.15.13
      o Fix bug #18016, check for InitializeMagick in libMagickCore (bug report
        by Dan Gilbert)

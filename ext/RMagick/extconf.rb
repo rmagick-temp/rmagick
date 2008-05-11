@@ -119,7 +119,7 @@ end
 
 if RUBY_PLATFORM !~ /mswin/
 
-  unless have_library("Magick", "InitializeMagick", headers) || have_library("MagickCore", "InitializeMagick")
+  unless have_library("Magick", "InitializeMagick", headers) || have_library("MagickCore", "InitializeMagick", headers)
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
            "Can't find libMagick or libMagickCore, or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"
@@ -140,6 +140,7 @@ have_func("snprintf", headers)
    "EqualizeImageChannel",           # 6.3.6-9
    "ExcerptImage",                   # 6.3.5-8
    "ExtentImage",                    # 6.3.1
+   "FloodfillPaintImage",            # 6.3.7
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetImageProperty",               # 6.3.1
    "GetNextImageProperty",           # 6.3.1

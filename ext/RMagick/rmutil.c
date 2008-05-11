@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.153 2008/03/29 15:19:15 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.154 2008/05/11 16:21:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2204,10 +2204,10 @@ Color_to_MagickPixelPacket(Image *image, MagickPixelPacket *mpp, VALUE color)
 
     memset(&pp, '\0', sizeof(pp));
     Color_to_PixelPacket(&pp, color);
-    mpp->red = pp.red;
-    mpp->green = pp.green;
-    mpp->blue = pp.blue;
-    mpp->opacity = pp.opacity;
+    mpp->red = (MagickRealType) pp.red;
+    mpp->green = (MagickRealType) pp.green;
+    mpp->blue = (MagickRealType) pp.blue;
+    mpp->opacity = (MagickRealType) pp.opacity;
 }
 
 

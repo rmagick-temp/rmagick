@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.247 2008/03/29 15:23:12 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.248 2008/05/11 16:22:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -782,7 +782,8 @@ Init_RMagick2(void)
     // include Comparable
     rb_include_module(Class_Pixel, rb_mComparable);
 
-    // Magick::Pixel has 3 constructors: "new" "from_color", and "from_HSL".
+    // Magick::Pixel has 4 constructors: "new" "from_color", "from_hsla",
+    // and the deprecated "from_HSL".
     rb_define_alloc_func(Class_Pixel, Pixel_alloc);
     rb_define_singleton_method(Class_Pixel, "from_color", Pixel_from_color, 1);
     rb_define_singleton_method(Class_Pixel, "from_HSL", Pixel_from_HSL, 1);
@@ -813,7 +814,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Pixel, "hash", Pixel_hash, 0);
     rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
-    rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);
+    rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);   // deprecated
     rb_define_method(Class_Pixel, "to_hsla", Pixel_to_hsla, 0);
     rb_define_method(Class_Pixel, "to_s", Pixel_to_s, 0);
 
@@ -1707,7 +1708,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/03/29 15:23:12 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/05/11 16:22:45 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.290 2008/05/04 23:17:44 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.291 2008/05/11 16:23:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2067,7 +2067,32 @@ Image_color_flood_fill(
 
     new_image = rm_clone_image(image);
 
+#if defined(HAVE_FLOODFILLPAINTIMAGE)
+    {
+    MagickPixelPacket target_mpp;
+    MagickBooleanType invert;
+
+    GetMagickPixelPacket(new_image, &target_mpp);
+    if (fill_method == FillToBorderMethod)
+    {
+        invert = MagickTrue;
+        target_mpp.red   = (MagickRealType) image->border_color.red;
+        target_mpp.green = (MagickRealType) image->border_color.green;
+        target_mpp.blue  = (MagickRealType) image->border_color.blue;
+    }
+    else
+    {
+        invert = MagickFalse;
+        target_mpp.red   = (MagickRealType) target.red;
+        target_mpp.green = (MagickRealType) target.green;
+        target_mpp.blue  = (MagickRealType) target.blue;
+    }
+
+    (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &target_mpp, x, y, invert);
+    }
+#else
     (void) ColorFloodfillImage(new_image, draw_info, target, x, y, (PaintMethod)fill_method);
+#endif
     // No need to check for error
 
     (void) DestroyDrawInfo(draw_info);
@@ -6009,7 +6034,7 @@ Image_matte_color_eq(VALUE self, VALUE color)
 }
 
 /*
-    Method:     Image#matte_flood_fill(color, opacity, x, y, method)
+    Method:     Image#matte_flood_fill(color, opacity, x, y, method_obj)
     Purpose:    Call MatteFloodFillImage
 */
 VALUE
@@ -6019,24 +6044,24 @@ Image_matte_flood_fill(
                       VALUE opacity,
                       VALUE x_obj,
                       VALUE y_obj,
-                      VALUE method)
+                      VALUE method_obj)
 {
     Image *image, *new_image;
     PixelPacket target;
     Quantum op;
     long x, y;
-    PaintMethod pm;
+    PaintMethod method;
 
     image = rm_check_destroyed(self);
     Color_to_PixelPacket(&target, color);
 
     op = APP2QUANTUM(opacity);
 
-    VALUE_TO_ENUM(method, pm, PaintMethod);
-    if (!(pm == FloodfillMethod || pm == FillToBorderMethod))
+    VALUE_TO_ENUM(method_obj, method, PaintMethod);
+    if (!(method == FloodfillMethod || method == FillToBorderMethod))
     {
-        rb_raise(rb_eArgError, "paint method must be FloodfillMethod or "
-                 "FillToBorderMethod (%d given)", pm);
+        rb_raise(rb_eArgError, "paint method_obj must be FloodfillMethod or "
+                 "FillToBorderMethod (%d given)", method);
     }
     x = NUM2LONG(x_obj);
     y = NUM2LONG(y_obj);
@@ -6049,7 +6074,40 @@ Image_matte_flood_fill(
 
     new_image = rm_clone_image(image);
 
-    (void) MatteFloodfillImage(new_image, target, op, x, y, pm);
+#if defined(HAVE_FLOODFILLPAINTIMAGE)
+    {
+    DrawInfo *draw_info;
+    MagickPixelPacket target_mpp;
+    MagickBooleanType invert;
+
+    // FloodfillPaintImage looks for the opacity in the DrawInfo.fill field.
+    draw_info = CloneDrawInfo(NULL, NULL);
+    if (!draw_info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    draw_info->fill.opacity = op;
+
+    if (method == FillToBorderMethod)
+    {
+        invert = MagickTrue;
+        target_mpp.red   = (MagickRealType) image->border_color.red;
+        target_mpp.green = (MagickRealType) image->border_color.green;
+        target_mpp.blue  = (MagickRealType) image->border_color.blue;
+    }
+    else
+    {
+        invert = MagickFalse;
+        target_mpp.red   = (MagickRealType) target.red;
+        target_mpp.green = (MagickRealType) target.green;
+        target_mpp.blue  = (MagickRealType) target.blue;
+    }
+
+    (void) FloodfillPaintImage(new_image, OpacityChannel, draw_info, &target_mpp, x, y, invert);
+    }
+#else
+    (void) MatteFloodfillImage(new_image, target, op, x, y, method);
+#endif
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -9059,6 +9117,32 @@ Image_texture_flood_fill(
     draw_info->fill_pattern = rm_clone_image(texture_image);
     new_image = rm_clone_image(image);
 
+
+#if defined(HAVE_FLOODFILLPAINTIMAGE)
+    {
+    MagickPixelPacket color_mpp;
+    MagickBooleanType invert;
+
+    GetMagickPixelPacket(new_image, &color_mpp);
+    if (method == FillToBorderMethod)
+    {
+        invert = MagickTrue;
+        color_mpp.red   = (MagickRealType) image->border_color.red;
+        color_mpp.green = (MagickRealType) image->border_color.green;
+        color_mpp.blue  = (MagickRealType) image->border_color.blue;
+    }
+    else
+    {
+        invert = MagickFalse;
+        color_mpp.red   = (MagickRealType) color.red;
+        color_mpp.green = (MagickRealType) color.green;
+        color_mpp.blue  = (MagickRealType) color.blue;
+    }
+
+    (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &color_mpp, x, y, invert);
+    }
+
+#else
     // Hack: By-pass bug in ColorFloodfillImage that tests
     // the fill color even though the fill color isn't used.
     if (method == FillToBorderMethod)
@@ -9069,6 +9153,7 @@ Image_texture_flood_fill(
     }
 
     (void) ColorFloodfillImage(new_image, draw_info, color, x, y, method);
+#endif
 
     (void) DestroyDrawInfo(draw_info);
     rm_check_image_exception(new_image, DestroyOnError);

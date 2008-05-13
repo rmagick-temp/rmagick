@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.291 2008/05/11 16:23:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.292 2008/05/13 22:52:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9143,15 +9143,6 @@ Image_texture_flood_fill(
     }
 
 #else
-    // Hack: By-pass bug in ColorFloodfillImage that tests
-    // the fill color even though the fill color isn't used.
-    if (method == FillToBorderMethod)
-    {
-        draw_info->fill.red = ROUND_TO_QUANTUM(color.red + new_image->fuzz + 1);
-        draw_info->fill.green = color.green;
-        draw_info->fill.blue = color.blue;
-    }
-
     (void) ColorFloodfillImage(new_image, draw_info, color, x, y, method);
 #endif
 

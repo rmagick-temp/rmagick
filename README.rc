@@ -87,7 +87,7 @@ prefix specified by --prefix. For example, to install the
 documentation in /Users/me/RMagick, specify:
 
 <pre>
-    ./configure --doc-dir=/Users/me/RMagick
+    ruby setup.rb --doc-dir=/Users/me/RMagick
 </pre>
 
 h4. --allow-example-errors

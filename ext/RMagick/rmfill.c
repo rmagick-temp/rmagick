@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.26 2008/01/01 23:18:31 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.27 2008/05/15 22:26:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -134,17 +134,7 @@ vertical_fill(
     volatile PixelPacket *master;
     MagickRealType red_step, green_step, blue_step;
 
-    // Keep in mind that x1 could be < 0 or > image->columns. If steps
-    // is negative, swap the start and end colors and use the absolute
-    // value.
     steps = FMAX(x1, ((long)image->columns)-x1);
-    if (steps < 0)
-    {
-        PixelPacket t = *start_color;
-        *start_color = *stop_color;
-        *stop_color = t;
-        steps = -steps;
-    }
 
     // If x is to the left of the x-axis, add that many steps so that
     // the color at the right side will be that many steps away from
@@ -207,16 +197,7 @@ horizontal_fill(
     volatile PixelPacket *master;
     MagickRealType red_step, green_step, blue_step;
 
-    // Bear in mind that y1 could be < 0 or > image->rows. If steps is
-    // negative, swap the start and end colors and use the absolute value.
     steps = FMAX(y1, ((long)image->rows)-y1);
-    if (steps < 0)
-    {
-        PixelPacket t = *start_color;
-        *start_color = *stop_color;
-        *stop_color = t;
-        steps = -steps;
-    }
 
     // If the line is below the y-axis, add that many steps so the color
     // at the bottom of the image is that many steps away from the stop color
@@ -452,8 +433,7 @@ GradientFill_fill(VALUE self, VALUE image_obj)
             point_fill(image, x1, y1, &start_color, &stop_color);
         }
 
-        // A vertical line is a special case. (Yes, really do pass x1
-        // as both the 2nd and 4th arguments!)
+        // A vertical line is a special case.
         else
         {
             vertical_fill(image, x1, &start_color, &stop_color);
@@ -463,7 +443,6 @@ GradientFill_fill(VALUE self, VALUE image_obj)
     // A horizontal line is a special case.
     else if (fabs(y2-y1) < 0.5)
     {
-        // Pass y1 as both the 3rd and 5th arguments!
         horizontal_fill(image, y1, &start_color, &stop_color);
     }
 

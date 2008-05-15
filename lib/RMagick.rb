@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.67 2008/03/14 23:02:02 rmagick Exp $
+# $Id: RMagick.rb,v 1.68 2008/05/15 22:27:32 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -917,7 +917,7 @@ class Image
     # Force an image to exact dimensions without changing the aspect ratio.
     # Resize and crop if necessary. (Thanks to Jerett Taylor!)
     def resize_to_fill(ncols, nrows=nil, gravity=CenterGravity)
-        copy.crop_resized!(ncols, nrows, gravity)
+        copy.resize_to_fill!(ncols, nrows, gravity)
     end
 
     def resize_to_fill!(ncols, nrows=nil, gravity=CenterGravity)

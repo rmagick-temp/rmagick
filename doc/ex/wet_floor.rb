@@ -5,22 +5,22 @@ require 'RMagick'
 
 results = Magick::ImageList.new
 
-img = Magick::Image.new(270, 60)
+img = Magick::Image.new(270, 60) {self.background_color = "black" }
 
 gc = Magick::Draw.new
 gc.annotate(img, 0, 0, 0, -15, "RUBY!") do
-    gc.fill = '#c00'
-    gc.stroke = 'black'
+    gc.fill = '#a00'
+    gc.stroke = '#f00'
     gc.stroke_width = 2
     gc.font_weight = Magick::BoldWeight
     gc.gravity = Magick::SouthGravity
-	if RUBY_PLATFORM =~ /mswin32/
-		gc.font_family = "Georgia"
-	    gc.pointsize = 76
-	else
-	    gc.font_family = "times"
-		gc.pointsize = 80
-	end
+  if RUBY_PLATFORM =~ /mswin32/
+    gc.font_family = "Georgia"
+      gc.pointsize = 76
+  else
+      gc.font_family = "times"
+    gc.pointsize = 80
+  end
 end
 
 # Add a little bit of shading
@@ -46,7 +46,7 @@ ilist[1] = ilist[1].affine_transform(xform)
 results << ilist.append(true)
 
 # Add a ripple
-ilist[1] = ilist[1].rotate(90).wave(2, 20).rotate(-90)
+ilist[1] = ilist[1].rotate(90).wave(2, 10).rotate(-90)
 results << ilist.append(true)
 
 # Montage into a single demo image. Use a white background so
@@ -54,6 +54,6 @@ results << ilist.append(true)
 result = results.montage do
     self.geometry = '270x120'
     self.tile = '1x4'
-    self.background_color = 'white'
+    self.background_color = 'black'
 end
 result.write('wet_floor.gif')

@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.27 2008/05/15 22:26:24 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.28 2008/05/21 22:32:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -131,7 +131,7 @@ vertical_fill(
 {
     double steps;
     unsigned long x, y;
-    volatile PixelPacket *master;
+    PixelPacket *master;
     MagickRealType red_step, green_step, blue_step;
 
     steps = FMAX(x1, ((long)image->columns)-x1);
@@ -171,14 +171,14 @@ vertical_fill(
             rm_check_image_exception(image, RetainOnError);
         }
 
-        memcpy(row_pixels, (PixelPacket *)master, image->columns * sizeof(PixelPacket));
+        memcpy(row_pixels, master, image->columns * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
             rm_check_image_exception(image, RetainOnError);
         }
     }
 
-    xfree((PixelPacket *)master);
+    xfree((void *)master);
 }
 
 /*
@@ -194,7 +194,7 @@ horizontal_fill(
 {
     double steps;
     unsigned long x, y;
-    volatile PixelPacket *master;
+    PixelPacket *master;
     MagickRealType red_step, green_step, blue_step;
 
     steps = FMAX(y1, ((long)image->rows)-y1);
@@ -231,7 +231,7 @@ horizontal_fill(
         {
             rm_check_image_exception(image, RetainOnError);
         }
-        memcpy(col_pixels, (PixelPacket *)master, image->rows * sizeof(PixelPacket));
+        memcpy(col_pixels, master, image->rows * sizeof(PixelPacket));
         if (!SyncImagePixels(image))
         {
             rm_check_image_exception(image, RetainOnError);

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.154 2008/05/11 16:21:41 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.155 2008/05/21 22:32:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -16,7 +16,7 @@ static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 static VALUE Enum_type_values(VALUE);
 static VALUE Enum_type_inspect(VALUE);
 static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
-static VALUE Pixel_from_MagickPixelPacket(MagickPixelPacket *);
+static VALUE Pixel_from_MagickPixelPacket(const MagickPixelPacket *);
 
 #define ENUMERATORS_CLASS_VAR "@@enumerators"
 
@@ -577,13 +577,13 @@ Pixel_from_color(VALUE class, VALUE name)
     Notes:      Same code as the private function SetMagickPixelPacket
                 in ImageMagick.
 */
-static void rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index, MagickPixelPacket *pp)
+static void rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, MagickPixelPacket *pp)
 {
     pp->red     = (MagickRealType) pixel->red;
     pp->green   = (MagickRealType) pixel->green;
     pp->blue    = (MagickRealType) pixel->blue;
     pp->opacity = (MagickRealType) (pp->matte ? pixel->opacity : OpaqueOpacity);
-    pp->index   = (MagickRealType) ((pp->colorspace == CMYKColorspace) && (index ? *index : 0));
+    pp->index   = (MagickRealType) ((pp->colorspace == CMYKColorspace) && (index_packet ? *index_packet : 0));
 }
 
 
@@ -1741,7 +1741,7 @@ GravityType_new(GravityType type)
     Static:     ImageType_name
     Purpose:    Return the name of a ImageType enum as a string
 */
-static char *
+static const char *
 ImageType_name(ImageType type)
 {
     switch(type)
@@ -2026,7 +2026,7 @@ Color_from_ColorInfo(const ColorInfo *ci)
 
     compliance_type = ci->compliance;
     compliance = ComplianceType_new(compliance_type);
-    color      = Pixel_from_MagickPixelPacket((MagickPixelPacket *)(&(ci->color)));
+    color      = Pixel_from_MagickPixelPacket(&(ci->color));
 
     return rb_funcall(Class_Color, rm_ID_new, 3
                     , name, compliance, color);
@@ -2121,7 +2121,7 @@ Color_to_s(VALUE self)
     Notes:      bypasses normal Pixel.new, Pixel#initialize methods
 */
 VALUE
-Pixel_from_PixelPacket(PixelPacket *pp)
+Pixel_from_PixelPacket(const PixelPacket *pp)
 {
     Pixel *pixel;
 
@@ -2137,7 +2137,7 @@ Pixel_from_PixelPacket(PixelPacket *pp)
     Notes:      bypasses normal Pixel.new, Pixel#initialize methods
 */
 static VALUE
-Pixel_from_MagickPixelPacket(MagickPixelPacket *pp)
+Pixel_from_MagickPixelPacket(const MagickPixelPacket *pp)
 {
     Pixel *pixel;
 
@@ -2475,7 +2475,7 @@ StyleType_new(StyleType style)
     Purpose:    Convert a TypeInfo structure to a Magick::Font
 */
 VALUE
-Font_from_TypeInfo(TypeInfo *ti)
+Font_from_TypeInfo(const TypeInfo *ti)
 {
     volatile VALUE name, description, family;
     volatile VALUE style, stretch, weight;
@@ -2754,7 +2754,7 @@ VirtualPixelMethod_new(VirtualPixelMethod style)
  *  Extern:     rm_define_enum_type
  *  Purpose:    set up a subclass of Enum
 */
-VALUE rm_define_enum_type(char *tag)
+VALUE rm_define_enum_type(const char *tag)
 {
     VALUE class;
 
@@ -2892,12 +2892,12 @@ VALUE Enum_case_eq(VALUE self, VALUE other)
 */
 VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 {
-    volatile VALUE super_argv[2];
+    VALUE super_argv[2];
     volatile VALUE enumerators;
 
     super_argv[0] = sym;
     super_argv[1] = val;
-    (void) rb_call_super(2, (VALUE *)super_argv);
+    (void) rb_call_super(2, (const VALUE *)super_argv);
 
     if (rb_cvar_defined(CLASS_OF(self), rb_intern(ENUMERATORS_CLASS_VAR)) != Qtrue)
     {
@@ -3078,11 +3078,11 @@ StyleType_name(StyleType style)
     External:   write_temp_image
     Purpose:    Write a temporary copy of the image to the IM registry
     Returns:    the "filename" of the registered image
-    Notes:      The `tmpnam' argument must point to an char array
+    Notes:      The `temp_name' argument must point to an char array
                 of size MaxTextExtent.
 */
 void
-rm_write_temp_image(Image *image, char *tmpnam)
+rm_write_temp_image(Image *image, char *temp_name)
 {
 
 #if defined(HAVE_SETIMAGEREGISTRY)
@@ -3110,10 +3110,10 @@ rm_write_temp_image(Image *image, char *tmpnam)
 
     id += 1;
     rb_cv_set(Module_Magick, TMPNAM_CLASS_VAR, INT2FIX(id));
-    sprintf(tmpnam, "mpri:%d", id);
+    sprintf(temp_name, "mpri:%d", id);
 
     // Omit "mpri:" from filename to form the key
-    okay = SetImageRegistry(ImageRegistryType, tmpnam+5, image, &exception);
+    okay = SetImageRegistry(ImageRegistryType, temp_name+5, image, &exception);
     CHECK_EXCEPTION()
     DestroyExceptionInfo(&exception);
     if (!okay)
@@ -3136,7 +3136,7 @@ rm_write_temp_image(Image *image, char *tmpnam)
         rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
     }
 
-    sprintf(tmpnam, "mpri:%ld", registry_id);
+    sprintf(temp_name, "mpri:%ld", registry_id);
 #endif
 
 }
@@ -3148,19 +3148,19 @@ rm_write_temp_image(Image *image, char *tmpnam)
 */
 
 void
-rm_delete_temp_image(char *tmpnam)
+rm_delete_temp_image(char *temp_name)
 {
 #if defined(HAVE_SETIMAGEREGISTRY)
-    MagickBooleanType okay = DeleteImageRegistry(tmpnam+5);
+    MagickBooleanType okay = DeleteImageRegistry(temp_name+5);
 
     if (!okay)
     {
-        rb_warn("DeleteImageRegistry failed for `%s'", tmpnam);
+        rb_warn("DeleteImageRegistry failed for `%s'", temp_name);
     }
 #else
     long registry_id = -1;
 
-    sscanf(tmpnam, "mpri:%ld", &registry_id);
+    sscanf(temp_name, "mpri:%ld", &registry_id);
     if (registry_id >= 0)
     {
         (void) DeleteMagickRegistry(registry_id);
@@ -3211,7 +3211,7 @@ rm_magick_error(const char *msg, const char *loc)
 VALUE
 ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 {
-    volatile VALUE super_argv[1] = {(VALUE)0};
+    VALUE super_argv[1] = {(VALUE)0};
     int super_argc = 0;
     volatile VALUE extra = Qnil;
 
@@ -3228,7 +3228,7 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
     }
 
-    (void) rb_call_super(super_argc, (VALUE *)super_argv);
+    (void) rb_call_super(super_argc, (const VALUE *)super_argv);
     (void) rb_iv_set(self, "@"MAGICK_LOC, extra);
 
 

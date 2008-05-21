@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.70 2008/05/04 15:00:16 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.71 2008/05/21 22:32:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -611,7 +611,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     Notes:      this simply calls ImageList.new() in RMagick.rb
 */
 static VALUE
-ImageList_new()
+ImageList_new(void)
 {
     return rb_funcall(Class_ImageList, rm_ID_new, 0);
 }

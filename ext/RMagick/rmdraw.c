@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.63 2008/05/04 23:16:27 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.64 2008/05/21 22:32:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -565,7 +565,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     CompositeOperator cop = OverCompositeOp;
     volatile VALUE image;
     Image *comp_img;
-    struct TmpFile_Name *tmpfile;
+    struct TmpFile_Name *tmpfile_name;
     char name[MaxTextExtent];
     // Buffer for "image" primitive
     char primitive[MaxTextExtent];
@@ -660,10 +660,10 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     // Add the temp filename to the filename array.
     // Use Magick storage since we need to keep the list around
     // until destroy_Draw is called.
-    tmpfile = magick_malloc(sizeof(struct TmpFile_Name)+strlen(name));
-    strcpy(tmpfile->name, name);
-    tmpfile->next = draw->tmpfile_ary;
-    draw->tmpfile_ary = tmpfile;
+    tmpfile_name = magick_malloc(sizeof(struct TmpFile_Name)+strlen(name));
+    strcpy(tmpfile_name->name, name);
+    tmpfile_name->next = draw->tmpfile_ary;
+    draw->tmpfile_ary = tmpfile_name;
 
     // Form the drawing primitive
     (void) sprintf(primitive, "image %s %g,%g,%g,%g '%s'", op, x, y, width, height, name);
@@ -883,7 +883,7 @@ static void
 destroy_Draw(void *drawptr)
 {
     Draw *draw = (Draw *)drawptr;
-    struct TmpFile_Name *tmpfile;
+    struct TmpFile_Name *tmpfile_name;
 
     if (draw->info)
     {
@@ -894,10 +894,10 @@ destroy_Draw(void *drawptr)
     // Erase any temporary image files.
     while (draw->tmpfile_ary)
     {
-        tmpfile = draw->tmpfile_ary;
+        tmpfile_name = draw->tmpfile_ary;
         draw->tmpfile_ary = draw->tmpfile_ary->next;
-        rm_delete_temp_image(tmpfile->name);
-        magick_free(tmpfile);
+        rm_delete_temp_image(tmpfile_name->name);
+        magick_free(tmpfile_name);
     }
 
     xfree(drawptr);
@@ -1258,7 +1258,7 @@ Montage_texture_eq(VALUE self, VALUE texture)
 {
     Montage *montage;
     Image *texture_image;
-    char tmpnam[MaxTextExtent];
+    char temp_name[MaxTextExtent];
 
     Data_Get_Struct(self, Montage, montage);
 
@@ -1275,8 +1275,8 @@ Montage_texture_eq(VALUE self, VALUE texture)
     texture_image = rm_check_destroyed(texture);
 
     // Write a temp copy of the image & save its name.
-    rm_write_temp_image(texture_image, tmpnam);
-    magick_clone_string(&montage->info->texture, tmpnam);
+    rm_write_temp_image(texture_image, temp_name);
+    magick_clone_string(&montage->info->texture, temp_name);
 
     return self;
 }

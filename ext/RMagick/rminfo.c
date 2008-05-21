@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.70 2008/01/02 15:52:19 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.71 2008/05/21 22:32:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -235,7 +235,7 @@ Info_aset(int argc, VALUE *argv, VALUE self)
 {
     Info *info;
     volatile VALUE value;
-    char *format_p, *key_p, *value_p = "";
+    char *format_p, *key_p, *value_p = NULL;
     long format_l, key_l;
     char ckey[MaxTextExtent];
     unsigned int okay;
@@ -528,7 +528,8 @@ VALUE
 Info_define(int argc, VALUE *argv, VALUE self)
 {
     Info *info;
-    char *format, *key, *value = "";
+    char *format, *key;
+    const char *value = "";
     long format_l, key_l;
     char ckey[100];
     unsigned int okay;
@@ -541,7 +542,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
         case 3:
             /* Allow any argument that supports to_s */
             fmt_arg = rb_funcall(argv[2], rm_ID_to_s, 0);
-            value = StringValuePtr(fmt_arg);
+            value = (const char *)StringValuePtr(fmt_arg);
         case 2:
             key = rm_str2cstr(argv[1], &key_l);
             format = rm_str2cstr(argv[0], &format_l);
@@ -720,8 +721,8 @@ Info_depth_eq(VALUE self, VALUE depth)
 */
 static struct
 {
-    char *string;
-    char *enum_name;
+    const char *string;
+    const char *enum_name;
     DisposeType enumerator;
 } Dispose_Option[] = {
     { "Background", "BackgroundDispose", BackgroundDispose},
@@ -774,7 +775,7 @@ Info_dispose_eq(VALUE self, VALUE disp)
 {
     Info *info;
     DisposeType dispose;
-    char *option;
+    const char *option;
     int x;
 
     Data_Get_Struct(self, Info, info);
@@ -1006,8 +1007,8 @@ VALUE Info_fuzz_eq(VALUE self, VALUE fuzz)
 
 static struct
 {
-    char *string;
-    char *enum_name;
+    const char *string;
+    const char *enum_name;
     GravityType enumerator;
 } Gravity_Option[] = {
     { "Undefined",  "UndefinedGravity", UndefinedGravity},
@@ -1064,7 +1065,7 @@ Info_gravity_eq(VALUE self, VALUE grav)
 {
     Info *info;
     GravityType gravity;
-    char *option;
+    const char *option;
     int x;
 
     Data_Get_Struct(self, Info, info);
@@ -1742,7 +1743,7 @@ Info_alloc(VALUE class)
     Notes:      takes no parameters, but runs the parm block if present
 */
 VALUE
-rm_info_new()
+rm_info_new(void)
 {
     volatile VALUE info_obj;
 

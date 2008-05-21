@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.231 2008/03/29 15:23:12 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.232 2008/05/21 22:32:40 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -530,6 +530,14 @@ Pixel_##_cmyk_channel_(VALUE self) \
 // declaration can refer to a function defined in another source file or
 // the same source file.
 
+
+// rmmain.c
+extern void Init_RMagick2(void);
+extern VALUE Magick_colors(VALUE);
+extern VALUE Magick_fonts(VALUE);
+extern VALUE Magick_init_formats(VALUE);
+
+
 // rmdraw.c
 ATTR_WRITER(Draw, affine)
 ATTR_WRITER(Draw, align)
@@ -596,10 +604,6 @@ extern VALUE PolaroidOptions_initialize(VALUE);
 extern VALUE rm_polaroid_new(void);
 ATTR_WRITER(PolaroidOptions, shadow_color);
 ATTR_WRITER(PolaroidOptions, border_color);
-
-
-// rmmain.c
-extern VALUE rm_montage_new(void);
 
 
  // rmilist.c
@@ -1025,7 +1029,7 @@ extern VALUE  Pixel_to_hsla(VALUE);
 extern VALUE  Pixel_to_s(VALUE);
 extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
-extern VALUE  Pixel_from_PixelPacket(PixelPacket *);
+extern VALUE  Pixel_from_PixelPacket(const PixelPacket *);
 
 extern void   Point_to_PointInfo(PointInfo *, VALUE);
 extern VALUE  PointInfo_to_Point(PointInfo *);
@@ -1047,11 +1051,12 @@ extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
 extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);
 extern void   Font_to_TypeInfo(TypeInfo *, VALUE);
 extern void   TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
-extern VALUE  Font_from_TypeInfo(TypeInfo *);
+extern VALUE  Font_from_TypeInfo(const TypeInfo *);
 extern VALUE  TypeMetric_to_s(VALUE);
 extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
+extern VALUE  LAYERMETHODTYPE_NEW(LAYERMETHODTYPE);
 
 extern VALUE  Enum_alloc(VALUE);
 extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
@@ -1086,7 +1091,7 @@ extern double rm_fuzz_to_dbl(VALUE);
 extern Quantum rm_app2quantum(VALUE);
 extern double rm_percentage(VALUE);
 extern double rm_str_to_pct(VALUE);
-extern VALUE  rm_define_enum_type(char *);
+extern VALUE  rm_define_enum_type(const char *);
 extern void   rm_write_temp_image(Image *, char *);
 extern void   rm_delete_temp_image(char *);
 extern void   rm_not_implemented(void);

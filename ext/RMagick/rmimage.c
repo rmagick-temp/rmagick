@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.292 2008/05/13 22:52:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.293 2008/05/21 22:32:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -26,7 +26,7 @@ static VALUE scale(int, int, VALUE *, VALUE, scaler_t);
 static VALUE threshold_image(int, VALUE *, VALUE, thresholder_t);
 static VALUE xform_image(int, VALUE, VALUE, VALUE, VALUE, VALUE, xformer_t);
 static VALUE array_from_images(Image *);
-static void call_trace_proc(Image *, char *);
+static void call_trace_proc(Image *, const char *);
 
 static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation";
 
@@ -146,7 +146,7 @@ Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#adaptive_resize(scale)
+    Method:     Image#adaptive_resize(scale_val)
                 Image#adaptive_resize(cols, rows)
     Purpose:    Call AdaptiveResizeImage
 */
@@ -155,7 +155,7 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     unsigned long rows, columns;
-    double scale, drows, dcols;
+    double scale_val, drows, dcols;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
@@ -167,13 +167,13 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
             columns = NUM2ULONG(argv[0]);
             break;
         case 1:
-            scale = NUM2DBL(argv[0]);
-            if (scale < 0.0)
+            scale_val = NUM2DBL(argv[0]);
+            if (scale_val < 0.0)
             {
-                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+                rb_raise(rb_eArgError, "invalid scale_val value (%g given)", scale_val);
             }
-            drows = scale * image->rows + 0.5;
-            dcols = scale * image->columns + 0.5;
+            drows = scale_val * image->rows + 0.5;
+            dcols = scale_val * image->columns + 0.5;
             if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
@@ -360,7 +360,7 @@ Image_add_profile(VALUE self, VALUE name)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-    info->client_data= (void *)GetImageProfile(image,"8bim");
+    info->client_data = GetImageProfile(image, "8bim");
 
     strncpy(info->filename, profile_filename, min((size_t)profile_filename_l, sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
@@ -924,7 +924,7 @@ VALUE
 Image_black_point_compensation_eq(VALUE self, VALUE arg)
 {
     Image *image;
-    char *value;
+    const char *value;
 
     image = rm_check_frozen(self);
     (void) rm_set_property(image, BlackPointCompensationKey, NULL);
@@ -960,7 +960,7 @@ get_relative_offsets(
                     long *x_offset,
                     long *y_offset)
 {
-    MagickEnum *magick_enum;
+    MagickEnum *m_enum;
     GravityType gravity;
 
     VALUE_TO_ENUM(grav, gravity, GravityType);
@@ -999,8 +999,8 @@ get_relative_offsets(
             // Don't let these run into the default case
             break;
         default:
-            Data_Get_Struct(grav, MagickEnum, magick_enum);
-            rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+            Data_Get_Struct(grav, MagickEnum, m_enum);
+            rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
             break;
     }
 
@@ -2166,7 +2166,7 @@ VALUE
 Image_colormap(int argc, VALUE *argv, VALUE self)
 {
     Image *image;
-    unsigned long index;
+    unsigned long idx;
     PixelPacket color, new_color;
 
     image = rm_check_destroyed(self);
@@ -2177,8 +2177,8 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
     }
 
-    index = NUM2ULONG(argv[0]);
-    if (index > QuantumRange)
+    idx = NUM2ULONG(argv[0]);
+    if (idx > QuantumRange)
     {
         rb_raise(rb_eIndexError, "index out of range");
     }
@@ -2192,11 +2192,11 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
         }
         // Validate the index
 
-        if (index > image->colors-1)
+        if (idx > image->colors-1)
         {
             rb_raise(rb_eIndexError, "index out of range");
         }
-        return PixelPacket_to_Color_Name(image, &image->colormap[index]);
+        return PixelPacket_to_Color_Name(image, &image->colormap[idx]);
     }
 
     // This is a "set" operation. Things are different.
@@ -2208,7 +2208,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     Color_to_PixelPacket(&new_color, argv[1]);
 
     // Handle no colormap or current colormap too small.
-    if (!image->colormap || index > image->colors-1)
+    if (!image->colormap || idx > image->colors-1)
     {
         PixelPacket black;
         unsigned long i;
@@ -2217,24 +2217,24 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
 
         if (!image->colormap)
         {
-            image->colormap = (PixelPacket *)magick_safe_malloc((index+1), sizeof(PixelPacket));
+            image->colormap = (PixelPacket *)magick_safe_malloc((idx+1), sizeof(PixelPacket));
             image->colors = 0;
         }
         else
         {
-            image->colormap = (PixelPacket *)magick_safe_realloc(image->colormap, (index+1), sizeof(PixelPacket));
+            image->colormap = (PixelPacket *)magick_safe_realloc(image->colormap, (idx+1), sizeof(PixelPacket));
         }
 
-        for (i = image->colors; i < index; i++)
+        for (i = image->colors; i < idx; i++)
         {
             image->colormap[i] = black;
         }
-        image->colors = index+1;
+        image->colors = idx+1;
     }
 
     // Save the current color so we can return it. Set the new color.
-    color = image->colormap[index];
-    image->colormap[index] = new_color;
+    color = image->colormap[idx];
+    image->colormap[idx] = new_color;
 
     return PixelPacket_to_Color_Name(image, &color);
 }
@@ -2464,7 +2464,7 @@ static VALUE composite(
     Image *comp_image;
     CompositeOperator operator = UndefinedCompositeOp;
     GravityType gravity;
-    MagickEnum *magick_enum;
+    MagickEnum *m_enum;
     volatile VALUE comp;
     signed long x_offset = 0;
     signed long y_offset = 0;
@@ -2582,8 +2582,8 @@ static VALUE composite(
                     // Don't let these run into the default case
                     break;
                 default:
-                    Data_Get_Struct(argv[1], MagickEnum, magick_enum);
-                    rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+                    Data_Get_Struct(argv[1], MagickEnum, m_enum);
+                    rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
                     break;
             }
             break;
@@ -2638,15 +2638,15 @@ Image_composite_affine(
                       VALUE source,
                       VALUE affine_matrix)
 {
-    Image *image, *composite, *new_image;
+    Image *image, *composite_image, *new_image;
     AffineMatrix affine;
 
     image = rm_check_destroyed(self);
-    composite = rm_check_destroyed(source);
+    composite_image = rm_check_destroyed(source);
     new_image = rm_clone_image(image);
 
     AffineMatrix_to_AffineMatrix(&affine, affine_matrix);
-    (void) DrawAffineImage(new_image, composite, &affine);
+    (void) DrawAffineImage(new_image, composite_image, &affine);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -2755,11 +2755,11 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     long x, npixels;
     char *map;
     long map_l;
-    union
+    volatile union
     {
-        volatile double *f;
-        volatile Quantum *i;
-        volatile void *v;
+        double *f;
+        Quantum *i;
+        void *v;
     } pixels;
     volatile VALUE pixel_class;
     StorageType stg_type;
@@ -2792,13 +2792,13 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     pixel0 = rb_ary_entry(pixels_arg, 0);
     if (rb_obj_is_kind_of(pixel0, rb_cFloat) == Qtrue)
     {
-        pixels.f = ALLOC_N(volatile double, npixels);
+        pixels.f = ALLOC_N(double, npixels);
         stg_type = DoublePixel;
         pixel_class = rb_cFloat;
     }
     else if (rb_obj_is_kind_of(pixel0, rb_cInteger) == Qtrue)
     {
-        pixels.i = ALLOC_N(volatile Quantum, npixels);
+        pixels.i = ALLOC_N(Quantum, npixels);
         stg_type = QuantumPixel;
         pixel_class = rb_cInteger;
     }
@@ -2849,8 +2849,8 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     (void) SetImageBackgroundColor(image);
     rm_check_image_exception(image, DestroyOnError);
 
-    (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
-    xfree((void *)pixels.v);
+    (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (const void *)pixels.v);
+    xfree(pixels.v);
     rm_check_image_exception(image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -2994,7 +2994,7 @@ Image_convolve(
               VALUE kernel_arg)
 {
     Image *image, *new_image;
-    volatile double *kernel;
+    double *kernel;
     unsigned int x, order;
     ExceptionInfo exception;
 
@@ -3007,7 +3007,7 @@ Image_convolve(
 
     // Convert the kernel array argument to an array of doubles
 
-    kernel = (volatile double *)ALLOC_N(double, order*order);
+    kernel = (double *)ALLOC_N(double, order*order);
     for (x = 0; x < order*order; x++)
     {
         kernel[x] = NUM2DBL(rb_ary_entry(kernel_arg, (long)x));
@@ -3015,8 +3015,8 @@ Image_convolve(
 
     GetExceptionInfo(&exception);
 
-    new_image = ConvolveImage(image, order, (double *)kernel, &exception);
-    xfree((double *)kernel);
+    new_image = ConvolveImage((const Image *)image, order, (double *)kernel, &exception);
+    xfree((void *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -3038,7 +3038,7 @@ Image_convolve_channel(
                       VALUE self)
 {
     Image *image, *new_image;
-    volatile double *kernel;
+    double *kernel;
     volatile VALUE ary;
     unsigned int x, order;
     ChannelType channels;
@@ -3073,8 +3073,8 @@ Image_convolve_channel(
 
     GetExceptionInfo(&exception);
 
-    new_image = ConvolveImageChannel(image, channels, order, (double *)kernel, &exception);
-    xfree((double *)kernel);
+    new_image = ConvolveImageChannel(image, channels, order, kernel, &exception);
+    xfree((void *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -3484,11 +3484,11 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     long mapL;
     MagickBooleanType okay;
     ExceptionInfo exception;
-    union
+    volatile union
     {
-        volatile Quantum *i;
-        volatile double *f;
-        volatile void *v;
+        Quantum *i;
+        double *f;
+        void *v;
     } pixels;
 
     (void) rm_check_destroyed(self);
@@ -3604,7 +3604,7 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 /*
     Method:     Image#dissolve(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
                 Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
-    Purpose:    Corresponds to the composite -dissolve operation
+    Purpose:    Corresponds to the composite_image -dissolve operation
     Notes:      `percent' can be a number or a string in the form "NN%"
                 The "default" value of dst_percent is -1.0, which tells
                 blend_geometry to leave it out of the geometry string.
@@ -3615,7 +3615,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     Image *image, *overlay;
     double src_percent, dst_percent = -1.0;
     long x_offset = 0L, y_offset = 0L;
-    volatile VALUE composite, ovly;
+    volatile VALUE composite_image, ovly;
 
     image = rm_check_destroyed(self);
 
@@ -3646,10 +3646,10 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    composite =  special_composite(image, overlay, src_percent, dst_percent
-                                   , x_offset, y_offset, DissolveCompositeOp);
+    composite_image =  special_composite(image, overlay, src_percent, dst_percent
+                                       , x_offset, y_offset, DissolveCompositeOp);
 
-    return composite;
+    return composite_image;
 }
 
 
@@ -4199,8 +4199,8 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     unsigned long cols, rows;
     long n, npixels;
     unsigned int okay;
-    char *map = "RGB";
-    volatile Quantum *pixels;
+    const char *map = "RGB";
+    Quantum *pixels;
     volatile VALUE ary;
     ExceptionInfo exception;
 
@@ -4248,7 +4248,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, QuantumPixel, (void *)pixels, &exception);
     if (!okay)
     {
-        xfree((unsigned int *)pixels);
+        xfree((void *)pixels);
         CHECK_EXCEPTION()
 
         // Should never get here...
@@ -4263,7 +4263,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
         (void) rb_ary_push(ary, QUANTUM2NUM(pixels[n]));
     }
 
-    xfree((unsigned int *)pixels);
+    xfree((void *)pixels);
 
     return ary;
 }
@@ -4349,7 +4349,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     unsigned long npixels;
     size_t sz;
     unsigned int okay;
-    char *map = "RGB";
+    const char *map = "RGB";
     StorageType type = CharPixel;
     volatile VALUE string;
     char *str;
@@ -4852,7 +4852,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double red_gamma, green_gamma, blue_gamma;
-    char gamma[50];
+    char gamma_arg[50];
 
     image = rm_check_destroyed(self);
     switch (argc)
@@ -4884,11 +4884,11 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    sprintf(gamma, "%f,%f,%f", red_gamma, green_gamma, blue_gamma);
+    sprintf(gamma_arg, "%f,%f,%f", red_gamma, green_gamma, blue_gamma);
 
     new_image = rm_clone_image(image);
 
-    (void) GammaImage(new_image, gamma);
+    (void) GammaImage(new_image, gamma_arg);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -5001,7 +5001,7 @@ Image_get_pixels(
                 VALUE rows_arg)
 {
     Image *image;
-    PixelPacket *pixels;
+    const PixelPacket *pixels;
     ExceptionInfo exception;
     long x, y;
     unsigned long columns, rows;
@@ -5023,7 +5023,7 @@ Image_get_pixels(
     // Cast AcquireImagePixels to get rid of the const qualifier. We're not going
     // to change the pixels but I don't want to make "pixels" const.
     GetExceptionInfo(&exception);
-    pixels = (PixelPacket *)AcquireImagePixels(image, x, y, columns, rows, &exception);
+    pixels = AcquireImagePixels(image, x, y, columns, rows, &exception);
     CHECK_EXCEPTION()
 
     (void) DestroyExceptionInfo(&exception);
@@ -5145,9 +5145,9 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     volatile VALUE pixel_arg, pixel_ary;
     StorageType stg_type = CharPixel;
     size_t type_sz, map_l;
-    volatile Quantum *pixels = NULL;
-    volatile double *fpixels = NULL;
-    volatile void *buffer;
+    Quantum *pixels = NULL;
+    double *fpixels = NULL;
+    void *buffer;
     unsigned int okay;
 
     image = rm_check_frozen(self);
@@ -5270,7 +5270,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     }
 
 
-    okay = ImportImagePixels(image, x_off, y_off, cols, rows, map, stg_type, (const void *)buffer);
+    okay = ImportImagePixels(image, x_off, y_off, cols, rows, map, stg_type, buffer);
 
     // Free pixel array before checking for errors.
     if (pixels)
@@ -5509,7 +5509,7 @@ VALUE
 Image_level2(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double black_point = 0.0, gamma = 1.0, white_point = (double)QuantumRange;
+    double black_point = 0.0, gamma_val = 1.0, white_point = (double)QuantumRange;
     char level[50];
 
     image = rm_check_destroyed(self);
@@ -5528,7 +5528,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
         case 3:
             black_point = NUM2DBL(argv[0]);
             white_point = NUM2DBL(argv[1]);
-            gamma       = NUM2DBL(argv[2]);
+            gamma_val   = NUM2DBL(argv[2]);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 3)", argc);
@@ -5537,7 +5537,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    sprintf(level, "%gx%g+%g", black_point, white_point, gamma);
+    sprintf(level, "%gx%g+%g", black_point, white_point, gamma_val);
     (void) LevelImage(new_image, level);
     rm_check_image_exception(new_image, DestroyOnError);
 
@@ -5553,7 +5553,7 @@ VALUE
 Image_level_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double black_point = 0.0, gamma = 1.0, white_point = (double)QuantumRange;
+    double black_point = 0.0, gamma_val = 1.0, white_point = (double)QuantumRange;
     ChannelType channel;
 
     image = rm_check_destroyed(self);
@@ -5572,7 +5572,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
         case 4:
             black_point = NUM2DBL(argv[1]);
             white_point = NUM2DBL(argv[2]);
-            gamma       = NUM2DBL(argv[3]);
+            gamma_val   = NUM2DBL(argv[3]);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
@@ -5583,7 +5583,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    (void) LevelImageChannel(new_image, channel, black_point, white_point, gamma);
+    (void) LevelImageChannel(new_image, channel, black_point, white_point, gamma_val);
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
@@ -6911,7 +6911,7 @@ Image_paint_transparent(int argc, VALUE *argv, VALUE self)
     keep = new_image->fuzz;
     new_image->fuzz = fuzz;
 
-    okay = TransparentPaintImage(new_image, &color, opacity, invert);
+    okay = TransparentPaintImage(new_image, (const MagickPixelPacket *)&color, opacity, invert);
     new_image->fuzz = keep;
 
     // Is it possible for TransparentPaintImage to silently fail?
@@ -7817,7 +7817,7 @@ static VALUE
 resize(int bang, int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    double scale;
+    double scale_arg;
     FilterTypes filter;
     unsigned long rows, columns;
     double blur, drows, dcols;
@@ -7846,13 +7846,13 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
             }
             break;
         case 1:
-            scale = NUM2DBL(argv[0]);
-            if (scale < 0.0)
+            scale_arg = NUM2DBL(argv[0]);
+            if (scale_arg < 0.0)
             {
-                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+                rb_raise(rb_eArgError, "invalid scale_arg value (%g given)", scale_arg);
             }
-            drows = scale * image->rows + 0.5;
-            dcols = scale * image->columns + 0.5;
+            drows = scale_arg * image->rows + 0.5;
+            dcols = scale_arg * image->columns + 0.5;
             if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
@@ -8051,7 +8051,7 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 {
     Image *image, *new_image;
     unsigned long columns, rows;
-    double scale, drows, dcols;
+    double scale_arg, drows, dcols;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -8067,13 +8067,13 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
             }
             break;
         case 1:
-            scale = NUM2DBL(argv[0]);
-            if (scale <= 0)
+            scale_arg = NUM2DBL(argv[0]);
+            if (scale_arg <= 0)
             {
-                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale_arg);
             }
-            drows = scale * image->rows + 0.5;
-            dcols = scale * image->columns + 0.5;
+            drows = scale_arg * image->rows + 0.5;
+            dcols = scale_arg * image->columns + 0.5;
             if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
@@ -8781,14 +8781,14 @@ VALUE
 Image_spread(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
-    unsigned int radius = 3;
+    double radius = 3.0;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
     switch (argc)
     {
         case 1:
-            radius = NUM2UINT(argv[0]);
+            radius = NUM2DBL(argv[0]);
         case 0:
             break;
         default:
@@ -9240,7 +9240,7 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     unsigned long columns, rows;
-    double scale, drows, dcols;
+    double scale_arg, drows, dcols;
     ExceptionInfo exception;
 
     Data_Get_Struct(self, Image, image);
@@ -9256,13 +9256,13 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
             }
             break;
         case 1:
-            scale = NUM2DBL(argv[0]);
-            if (scale < 0.0)
+            scale_arg = NUM2DBL(argv[0]);
+            if (scale_arg < 0.0)
             {
-                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale);
+                rb_raise(rb_eArgError, "invalid scale value (%g given)", scale_arg);
             }
-            drows = scale * image->rows + 0.5;
-            dcols = scale * image->columns + 0.5;
+            drows = scale_arg * image->rows + 0.5;
+            dcols = scale_arg * image->columns + 0.5;
             if (drows > (double)ULONG_MAX || dcols > (double)ULONG_MAX)
             {
                 rb_raise(rb_eRangeError, "resized image too big");
@@ -10143,13 +10143,14 @@ VALUE
 Image_wet_floor(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *reflection, *flip_image;
-    PixelPacket *p, *q;
+    const PixelPacket *p;
+    PixelPacket *q;
     RectangleInfo geometry;
     long x, y, max_rows;
     double initial = 0.5;
     double rate = 1.0;
     double opacity, step;
-    char *func;
+    const char *func;
     MagickBooleanType okay;
     ExceptionInfo exception;
 
@@ -10222,7 +10223,7 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
             opacity = TransparentOpacity;
         }
 
-        p = (PixelPacket *)AcquireImagePixels(reflection, 0, y, image->columns, 1, &exception);
+        p = AcquireImagePixels(reflection, 0, y, image->columns, 1, &exception);
         rm_check_exception(&exception, reflection, RetainOnError);
 
         q = SetImagePixels(reflection, 0, y, image->columns, 1);
@@ -10367,7 +10368,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     unsigned long columns, rows;
     int reset_page = 0;
     GravityType gravity;
-    MagickEnum *magick_enum;
+    MagickEnum *m_enum;
     Image *image;
     VALUE cropped;
 
@@ -10438,8 +10439,8 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
                     // Don't let these run into the default case
                     break;
                 default:
-                    Data_Get_Struct(argv[0], MagickEnum, magick_enum);
-                    rb_warning("gravity type `%s' has no effect", rb_id2name(magick_enum->id));
+                    Data_Get_Struct(argv[0], MagickEnum, m_enum);
+                    rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
                     break;
             }
 
@@ -10646,10 +10647,10 @@ raise_ChannelType_error(VALUE arg)
     Purpose:    If Magick.trace_proc is not nil, build an argument
                 list and call the proc.
 */
-static void call_trace_proc(Image *image, char *which)
+static void call_trace_proc(Image *image, const char *which)
 {
     volatile VALUE trace;
-    volatile VALUE trace_args[4];
+    VALUE trace_args[4];
 
     if (rb_ivar_defined(Module_Magick, rm_ID_trace_proc) == Qtrue)
     {

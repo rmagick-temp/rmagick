@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.248 2008/05/11 16:22:45 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.249 2008/05/21 22:32:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -88,7 +88,7 @@ Magick_fonts(VALUE class)
     {
         for (x = 0; x < number_types; x++)
         {
-            (void) rb_yield(Font_from_TypeInfo((TypeInfo *)type_info[x]));
+            (void) rb_yield(Font_from_TypeInfo((const TypeInfo *)type_info[x]));
         }
         magick_free((void *)type_info);
         return class;
@@ -98,7 +98,7 @@ Magick_fonts(VALUE class)
         ary = rb_ary_new2((long)number_types);
         for (x = 0; x < number_types; x++)
         {
-            (void) rb_ary_push(ary, Font_from_TypeInfo((TypeInfo *)type_info[x]));
+            (void) rb_ary_push(ary, Font_from_TypeInfo((const TypeInfo *)type_info[x]));
         }
         magick_free((void *)type_info);
         return ary;
@@ -123,7 +123,7 @@ Magick_fonts(VALUE class)
             There are 3 implementations.
 */
 
-static VALUE MagickInfo_to_format(MagickInfo *magick_info)
+static VALUE MagickInfo_to_format(const MagickInfo *magick_info)
 {
     char mode[4];
 
@@ -157,7 +157,7 @@ Magick_init_formats(VALUE class)
     {
         (void) rb_hash_aset(formats
                             , rb_str_new2(magick_info[x]->name)
-                            , MagickInfo_to_format((MagickInfo *)magick_info[x]));
+                            , MagickInfo_to_format((const MagickInfo *)magick_info[x]));
     }
     return formats;
 }
@@ -249,7 +249,7 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 
     if (argc > 1)
     {
-        (void) SetMagickResourceLimit(res, NUM2ULONG(limit));
+        (void) SetMagickResourceLimit(res, (MagickSizeType)NUM2ULONG(limit));
     }
 
     return ULONG2NUM(cur_limit);
@@ -268,8 +268,8 @@ static VALUE
 Magick_set_cache_threshold(VALUE class, VALUE threshold)
 {
     unsigned long thrshld = NUM2ULONG(threshold);
-    (void) SetMagickResourceLimit(MemoryResource,thrshld);
-    (void) SetMagickResourceLimit(MapResource,2*thrshld);
+    (void) SetMagickResourceLimit(MemoryResource, (MagickSizeType)thrshld);
+    (void) SetMagickResourceLimit(MapResource, (MagickSizeType)(2*thrshld));
     return class;
 }
 
@@ -1708,7 +1708,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/05/11 16:22:45 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/05/21 22:32:41 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -48,6 +48,15 @@ end
 
 
 
+if RUBY_PLATFORM =~ /mswin/
+  abort "\nThis rmagick gem is for use only on Linux, BSD, OS X, and similar systems." +
+        "\nUse the rmagick-win32 gem to install RMagick on Windows." +
+        "\nSee http://rmagick.rubyforge.org/install-faq.html for more information.\n"
+end
+
+
+
+
 unless checking_for("Ruby version >= #{MIN_RUBY_VERS}") do
   version = RUBY_VERSION.tr(".","").to_i
   version >= MIN_RUBY_VERS_NO
@@ -57,8 +66,16 @@ end
 
 
 
+
 # Magick-config is not available on Windows
 if RUBY_PLATFORM !~ /mswin/
+
+  # Check for compiler. Extract first word so ENV['CC'] can be a program name with arguments.
+  cc = (ENV["CC"] or Config::CONFIG["CC"] or "gcc").split(' ').first
+  unless find_executable(cc)
+    exit_failure "No C compiler found in ${ENV['PATH']}. See mkmf.log for details."
+  end
+
   # Check for Magick-config
   unless find_executable("Magick-config")
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}\n"
@@ -119,9 +136,9 @@ end
 
 if RUBY_PLATFORM !~ /mswin/
 
-  unless have_library("Magick", "InitializeMagick", headers) || have_library("MagickCore", "InitializeMagick", headers)
+  unless have_library("Magick", "InitializeMagick", headers) || have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick++", "InitializeMagick")
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
-           "Can't find libMagick or libMagickCore, or one of the dependent libraries. " +
+           "Can't find the ImageMagick library or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"
   end
 end

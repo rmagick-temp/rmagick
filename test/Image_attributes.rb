@@ -151,7 +151,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal(0, @img.colors)
         img = @img.copy
         img.class_type = Magick::PseudoClass
-        assert_equal(40, img.colors)
+        assert_equal(260, img.colors)
         assert_raise(NoMethodError) { img.colors = 2 }
     end
 

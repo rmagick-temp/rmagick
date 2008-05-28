@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.28 2008/05/21 22:32:40 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.29 2008/05/28 22:40:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -212,7 +212,7 @@ horizontal_fill(
 
     // All the columns are the same, so make a master column and copy it to
     // each of the "real" columns.
-    master = ALLOC_N(volatile PixelPacket, image->rows);
+    master = ALLOC_N(PixelPacket, image->rows);
 
     for (y = 0; y < image->rows; y++)
     {

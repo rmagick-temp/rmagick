@@ -161,6 +161,7 @@ have_func("snprintf", headers)
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetImageProperty",               # 6.3.1
    "GetNextImageProperty",           # 6.3.1
+   "GetStringInfoDatum",             # 6.3.2
    "InterpretImageProperties",       # 6.3.2
    "IsHistogramImage",               # 6.3.5
    "LinearStretchImage",             # 6.3.1
@@ -181,8 +182,9 @@ have_func("snprintf", headers)
   end
 
 
-have_type("AlphaChannelType", headers)  # 6.3.5
-have_type("ImageLayerMethod", headers)  # 6.3.6 replaces MagickLayerMethod
+have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
+have_type("AlphaChannelType", headers)                # 6.3.5
+have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod
 have_type("long double", headers)
 have_type("unsigned long long", headers)
 have_type("uint64_t", headers)

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.293 2008/05/21 22:32:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.294 2008/05/28 22:41:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -360,8 +360,15 @@ Image_add_profile(VALUE self, VALUE name)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
+#if defined(HAVE_ST_PROFILE)
+    profile = GetImageProfile(image, "iptc");
+    if (profile)
+    {
+        info->profile = (void *)CloneStringInfo(profile);
+    }
+#else
     info->client_data = GetImageProfile(image, "8bim");
-
+#endif
     strncpy(info->filename, profile_filename, min((size_t)profile_filename_l, sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
 
@@ -379,7 +386,8 @@ Image_add_profile(VALUE self, VALUE name)
         profile = GetImageProfile(profile_image, profile_name);
         if (profile)
         {
-            (void)ProfileImage(image, profile_name, profile->datum, (unsigned long)profile->length, MagickFalse);
+            (void)ProfileImage(image, profile_name, GetStringInfoDatum(profile)
+                             , GetStringInfoLength(profile), MagickFalse);
             if (image->exception.severity >= ErrorException)
             {
                 break;

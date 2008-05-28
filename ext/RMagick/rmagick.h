@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.232 2008/05/21 22:32:40 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.233 2008/05/28 22:41:30 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -120,6 +120,12 @@
 // Matz says this macro is read-only! (see http://www.ruby-forum.com/topic/146072)
 #if !defined(RARRAY_PTR)
 #define RARRAY_PTR(a) RARRAY((a))->ptr
+#endif
+
+// These two functions are defined in IM starting with 6.3.2.
+#if !defined(HAVE_GETSTRINGINFODATUM)
+#define GetStringInfoDatum(p) (unsigned char *)((p)->datum)
+#define GetStringInfoLength(p) (size_t)((p)->length)
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6

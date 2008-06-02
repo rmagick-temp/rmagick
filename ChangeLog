@@ -1,3 +1,6 @@
+RMagick 2.4.0
+    o Added Image#image_type= (feature #20490)
+
 RMagick 2.3.0
     o Added Image#encipher, Image#decipher (available with ImageMagick 6.3.8-6)
     o Added DTX1Compression, DTX1Compression, and DTX1Compression

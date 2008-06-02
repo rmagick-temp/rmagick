@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.68 2008/05/15 22:27:32 rmagick Exp $
+# $Id: RMagick.rb,v 1.69 2008/06/02 22:46:51 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1381,7 +1381,7 @@ public
     end
 
     [:at, :each, :each_index, :empty?, :fetch,
-     :first, :include?, :index, :length, :nitems, :rindex, :sort!].each do |mth|
+     :first, :hash, :include?, :index, :length, :nitems, :rindex, :sort!].each do |mth|
         module_eval <<-END_SIMPLE_DELEGATES
             def #{mth}(*args, &block)
                 @images.#{mth}(*args, &block)

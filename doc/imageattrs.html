@@ -198,7 +198,7 @@
     <p>The image's background color. By default the background
     color is "white".</p>
 
-    <h4>Arguments</h4>Either a <a href=
+    <h4>Argument</h4>Either a <a href=
     "imusage.html#color_names">color name</a> or a <a href=
     "struct.html#Pixel">Pixel</a> object.
 
@@ -318,7 +318,7 @@
     <h4>Description</h4>The image's border color. The default
     border color is "#dfdfdf" (gray).
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>Either a <a href="imusage.html#color_names">color name</a>
     or a <a href="struct.html#Pixel">Pixel</a> object.</p>
@@ -343,7 +343,7 @@
     <p>The <span class="imquote">red, green, blue, and white-point
     chromaticity values.</span>.</p>
 
-    <h4>Arguments</h4>A <a href=
+    <h4>Argument</h4>A <a href=
     "struct.html#Chromaticity">Chromaticity</a> object.
 
     <h4>Returns</h4>A <a href=
@@ -367,7 +367,7 @@
     If PseudoClass then the image has a colormap referenced by the
     pixel's index member.</span></p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="constants.html#ClassType">ClassType</a>
     constant.</p>
@@ -393,7 +393,7 @@
     <p>The <a href="http://www.color.org/icc_specs2.html">ICC color
     profile</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A color profile is represented as a string. If the argument
     is <code>nil</code> instead of <span class="arg">string</span>
@@ -452,7 +452,7 @@
     CMYKColorspace, the pixels are cyan, yellow, magenta, black.
     Otherwise the colorspace is ignored.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="constants.html#ColorspaceType">ColorspaceType</a>
     constant.</p>
@@ -492,7 +492,7 @@
     OverCompositeOp. See <a href=
     "ilist.html#montage">montage</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="constants.html#CompositeOperator">composite
     operator</a> constant.</p>
@@ -516,7 +516,7 @@
     <h4>Description</h4>The image compression type. The default is
     the compression type of the specified image file.
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href=
     "constants.html#CompressionType">CompressionType</a>
@@ -547,7 +547,7 @@
     can be changed via the <a href=
     "#ticks_per_second">ticks_per_second</a> attribute.</p>
 
-    <h4>Arguments</h4>An integer value between 0 and 65535,
+    <h4>Argument</h4>An integer value between 0 and 65535,
     inclusive.
 
     <h4>Returns</h4>
@@ -570,7 +570,7 @@
     <p>The <span class="imquote">vertical and horizontal resolution
     in pixels of the image.</span> The default is "72x72".</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>The density may be expressed either as a string or a
     <a href="struct.html#Geometry">Geometry</a> object. If a
@@ -642,7 +642,7 @@
     preceding image is disposed of) when creating a GIF
     animation.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>An integer corresponding to the disposal method.</p>
 
@@ -665,7 +665,7 @@
     <p>Get or set the endian attribute. <em>(As best I can tell,
     only the TIFF format supports this attribute.)</em></p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>An <a href="constants.html#EndianType">EndianType</a>
     value.</p>
@@ -692,7 +692,7 @@
     rectangle specified when the image was constituted. See
     <a href="info.html#extract">extract=</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
 
@@ -745,7 +745,7 @@
     default filter is Lanczos which has been shown to produce high
     quality results when reducing most images.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="constants.html#FilterTypes">FilterTypes</a>
     constant.</p>
@@ -769,7 +769,7 @@
     <p>The image encoding format. For example, "GIF" or "PNG". See
     <a href="magick.html#formats">formats</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>The format name.</p>
 
@@ -799,7 +799,7 @@
     "image3.html#texture_floodfill">texture_floodfill</a>, and
     <a href="image3.html#transparent">transparent</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>The argument may be a floating-point numeric value or a
     string in the form "NN%". In the second case, the argument is
@@ -845,7 +845,7 @@
     <p class="imquote">Preferred size of the image when
     encoding.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="imusage.html#geometry">geometry string</a> or a
     <a href="struct.html#Geometry">Geometry</a> object.</p>
@@ -858,9 +858,9 @@
   <div class="sig">
     <h3 id="gravity">gravity</h3>
 
-    <p>image.<span class="arg">gravity</span> -&gt;
+    <p><span class="arg">img</span>.gravity -&gt;
     <em>gravity</em><br />
-    image.<span class="arg">gravity =</span> <span class=
+    <span class="arg">img</span>.gravity = <span class=
     "arg">gravity</span></p>
   </div>
 
@@ -872,7 +872,12 @@
     method. <span class="imquote">The direction that the image
     gravitates within the composite.</span></p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
+
+    <p>A <a href="constants.html#GravityType">GravityType</a>
+    value.</p>
+
+    <h4>Returns</h4>
 
     <p>A <a href="constants.html#GravityType">GravityType</a>
     value.</p>
@@ -882,7 +887,9 @@
     <h3 id="image_type">image_type</h3>
 
     <p><span class="arg">img.</span>image_type -&gt;
-    <em>type</em></p>
+    <em>type</em><br />
+    <span class="arg">img</span>.image_type = <span class=
+    "arg">type</span></p>
   </div>
 
   <div class="desc">
@@ -891,6 +898,11 @@
     <p>The image type classification. For example, GrayscaleType.
     Don't confuse this attribute with the <a href=
     "#format">format</a>, that is "GIF" or "JPG". Get-only.</p>
+
+    <h4>Argument</h4>
+
+    <p>An <a href="constants.html#ImageType">ImageType</a>
+    value.</p>
 
     <h4>Returns</h4>
 
@@ -920,7 +932,7 @@
     and image.B). Use LineInterlace or PlaneInterlace to create an
     interlaced GIF or progressive JPEG image.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>An <a href="constants.html#InterlaceType">InterlaceType</a>
     constant.</p>
@@ -946,7 +958,7 @@
     <p>The <a href="http://www.iptc.org/IIM/">International Press
     Telecommunications Council profile</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A IPTC profile is represented as a string. If the argument
     is <code>nil</code> instead of <span class="arg">string</span>
@@ -1206,7 +1218,7 @@ blur_image is 100% complete.
     are blended with the supplied transparency value.</span>
     Set-only.</p>
 
-    <h4>Arguments</h4>A number between 0 and QuantumRange. Higher
+    <h4>Argument</h4>A number between 0 and QuantumRange. Higher
     numbers increase transparency.
   </div>
 
@@ -1251,7 +1263,7 @@ blur_image is 100% complete.
     "ilist.html#flatten_images">flatten_images</a>, and <a href=
     "ilist.html#mosaic">mosaic</a>.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="struct.html#Rectangle">Rectangle</a> object.</p>
 
@@ -1350,7 +1362,7 @@ blur_image is 100% complete.
     "http://www.cambridgeincolour.com/tutorials/color-space-conversion.htm">
     http://www.cambridgeincolour.com/tutorials/color-space-conversion.htm</a></p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href=
     "constants.html#RenderingIntent">RenderingIntent</a>
@@ -1457,7 +1469,7 @@ blur_image is 100% complete.
 
     <p class="imquote">Units of image resolution.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>A <a href="constants.html#ResolutionType">ResolutionType</a>
     constant.</p>
@@ -1491,7 +1503,7 @@ blur_image is 100% complete.
     <a href="image3.html#sharpen">sharpen</a>, and <a href=
     "image3.html#wave">wave</a> use virtual pixels.</p>
 
-    <h4>Arguments</h4>
+    <h4>Argument</h4>
 
     <p>The virtual pixel method can be any one of the following
     <code>VirtualPixelMethod</code> constants:</p>

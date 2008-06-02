@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.249 2008/05/21 22:32:41 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.250 2008/06/02 22:47:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -434,7 +434,7 @@ Init_RMagick2(void)
     DCL_ATTR_ACCESSOR(Image, gamma)
     DCL_ATTR_ACCESSOR(Image, geometry)
     DCL_ATTR_ACCESSOR(Image, gravity)
-    DCL_ATTR_READER(Image, image_type)
+    DCL_ATTR_ACCESSOR(Image, image_type)
     DCL_ATTR_ACCESSOR(Image, interlace)
     DCL_ATTR_ACCESSOR(Image, iptc_profile)
     DCL_ATTR_ACCESSOR(Image, iterations)        // do not document! Only used by Image#iterations=
@@ -1708,7 +1708,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/05/21 22:32:41 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/06/02 22:47:37 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

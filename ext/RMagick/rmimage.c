@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.294 2008/05/28 22:41:30 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.295 2008/06/02 22:47:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9737,8 +9737,8 @@ VALUE Image_gravity_eq(VALUE self, VALUE gravity)
 
 
 /*
-    Method:     Image#image_type
-    Purpose:    Call GetImageType to get the image type
+    Method:     Image#image_type, image_type=
+    Purpose:    Call GetImageType/SetImageType to get/set the image type
 */
 VALUE Image_image_type(VALUE self)
 {
@@ -9754,6 +9754,18 @@ VALUE Image_image_type(VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return ImageType_new(type);
+}
+
+
+VALUE Image_image_type_eq(VALUE self, VALUE image_type)
+{
+    Image *image;
+    ImageType type;
+
+    image = rm_check_frozen(self);
+    VALUE_TO_ENUM(image_type, type, ImageType);
+    SetImageType(image, type);
+    return image_type;
 }
 
 

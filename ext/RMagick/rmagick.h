@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.233 2008/05/28 22:41:30 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.234 2008/06/02 22:47:37 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -729,7 +729,7 @@ ATTR_ACCESSOR(Image, fuzz)
 ATTR_ACCESSOR(Image, gamma)
 ATTR_ACCESSOR(Image, geometry)
 ATTR_ACCESSOR(Image, gravity)
-ATTR_READER(Image, image_type)
+ATTR_ACCESSOR(Image, image_type)
 ATTR_ACCESSOR(Image, interlace)
 ATTR_ACCESSOR(Image, iptc_profile)
 ATTR_ACCESSOR(Image, iterations)

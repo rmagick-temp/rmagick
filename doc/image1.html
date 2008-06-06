@@ -121,12 +121,14 @@ float: left;
           <li><a href=
           "#adaptive_threshold">adaptive_threshold</a></li>
 
-          <li><a href="#add_noise">add_noise</a></li>
+          <li><a href="#add_compose_mask">add_compose_mask</a></li>
 
-          <li><a href="#add_profile">add_profile</a></li>
+          <li><a href="#add_noise">add_noise</a></li>
 
           <li><a href=
           "#add_noise_channel">add_noise_channel</a></li>
+
+          <li><a href="#add_profile">add_profile</a></li>
 
           <li><a href="#affine_transform">affine_transform</a></li>
 
@@ -232,6 +234,9 @@ float: left;
           <li><a href="#cycle_colormap">cycle_colormap</a></li>
 
           <li><a href="#decipher">decipher</a></li>
+
+          <li><a href=
+          "#delete_compose_mask">delete_compose_mask</a></li>
 
           <li><a href="#delete_profile">delete_profile</a></li>
 
@@ -1143,6 +1148,96 @@ img = Image.read_inline(content)
   </div>
 
   <div class="sig">
+    <h3 id="add_compose_mask">add_compose_mask</h3>
+
+    <p><span class="arg">img</span>.add_compose_mask(<span class=
+    "arg">mask</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Associates a mask with an image that will be used as the
+    destination image in a <a href="#composite">composite</a>
+    operation. The areas of the destination image that are masked
+    by white pixels will be modified by the <a href=
+    "#composite">composite</a> method, while areas masked by black
+    pixels are unchanged.</p>
+
+    <p>See <a href=
+    "http://www.imagemagick.org/Usage/compose/#mask">Using a
+    Compose Mask to Limit the Composed Area</a> in Anthony
+    Thyssen's <a href="http://www.imagemagick.org/Usage/">Examples
+    of ImageMagick Usage</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <p>The mask image must have the same dimensions as the
+    destination image.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <div>
+      <table>
+        <tr>
+          <td><a href=
+          "javascript:add_popup('compose_mask.rb.html')"><img src=
+          "ex/images/Flower_Hat.jpg" width="100" height="125" alt=
+          "Source image for add_compose_mask example" title=
+          "Click to see the example script" /></a></td>
+
+          <td><a href=
+          "javascript:add_popup('compose_mask.rb.html')"><img src=
+          "ex/images/compose_mask_source.gif" width="100" height="125"
+          alt="Background image for add_compose_mask example"
+          title="Click to see the example script" /></a></td>
+
+          <td><a href=
+          "javascript:add_popup('compose_mask.rb.html')"><img src=
+          "ex/images/compose_mask.gif" width="100" height="125" alt=
+          "Mask image for compose_mask example" title=
+          "Click to see the example script" /></a></td>
+
+          <td><a href=
+          "javascript:add_popup('compose_mask.rb.html')"><img src=
+          "ex/images/compose_mask_example.jpg" width="93" height=
+          "125" alt="Result image for compose_mask example" title=
+          "Click to see the example script" /></a></td>
+        </tr>
+
+        <tr>
+          <td align="center">Background</td>
+
+          <td align="center">Source</td>
+
+          <td align="center">Mask</td>
+
+          <td align="center">Result</td>
+        </tr>
+      </table>
+    </div>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite">composite</a>, <a href=
+    "#delete_compose_mask">delete_compose_mask</a></p>
+
+    <h4>Notes</h4>
+
+    <p>This method uses a <em>copy</em> of the argument as the
+    mask. If you change the mask image you must call this method
+    again to update the mask.</p>
+
+    <h4>Magick API</h4>
+
+    <p>SetImageMask</p>
+  </div>
+
+  <div class="sig">
     <h3 id="add_noise">add_noise</h3>
 
     <p><span class="arg">img</span>.add_noise(<span class=
@@ -1723,8 +1818,9 @@ img = Image.read_inline(content)
 
       <dd>One or more <a href=
       "constants.html#ChannelType">ChannelType</a> values. If none
-      are specified, the red, green, and blue channels are blurred. This is the
-      equivalent of <a href="#blur_image">blur_image</a>.</dd>
+      are specified, the red, green, and blue channels are blurred.
+      This is the equivalent of <a href=
+      "#blur_image">blur_image</a>.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1880,7 +1976,8 @@ img = Image.read_inline(content)
 
     <p>The image's <em>bounding box</em>. The bounding box is the
     rectangle that encloses all the pixels not in the border color.
-    Uses the current <a href="imageattrs.html#fuzz">fuzz</a> value.</p>
+    Uses the current <a href="imageattrs.html#fuzz">fuzz</a>
+    value.</p>
 
     <h4>Returns</h4>A <a href="struct.html#Rectangle">Rectangle</a>
     object.
@@ -3533,6 +3630,32 @@ deciphered_img = img.decipher("magic word")
     <h4>See also</h4>
 
     <p><a href="image2.html#encipher">encipher</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="delete_compose_mask">delete_compose_mask</h3>
+
+    <p><span class="arg">img</span>.delete_compose_mask() -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Deletes the mask added by <a href=
+    "#add_compose_mask">add_compose_mask</a>.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#add_compose_mask">add_compose_mask</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SetImageMask</p>
   </div>
 
   <div class="sig">

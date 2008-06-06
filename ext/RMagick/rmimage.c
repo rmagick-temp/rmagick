@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.295 2008/06/02 22:47:37 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.296 2008/06/06 00:24:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -264,6 +264,52 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
+
+/*
+    Method:     Image#add_compose_mask(mask)
+    Purpose:    Set the image composite mask
+    Ref:        SetImageMask
+    Notes:      Returns self
+    See also:   Image#mask(), #delete_compose_mask()
+*/
+VALUE
+Image_add_compose_mask(VALUE self, VALUE mask)
+{
+    Image *image;
+    Image *mask_image = NULL;
+
+    image = rm_check_frozen(self);
+    mask_image = rm_check_destroyed(mask);
+    if (image->columns != mask_image->columns || image->rows != mask_image->rows)
+    {
+        rb_raise(rb_eArgError, "mask must be the same size as image");
+    }
+
+    // Delete any previously-existing mask image.
+    // Store a clone of the new mask image.
+#if defined(HAVE_SETIMAGEMASK)
+    (void) SetImageMask(image, mask_image);
+#else
+    if (image->mask)
+    {
+        image->mask = DestroyImage(image->mask);
+    }
+    image->mask = NewImageList();
+    if (SetImageStorageClass(image, DirectClass) == MagickFalse)
+    {
+        rm_magick_error("SetImageStorageClass failed", NULL);
+    }
+    image->mask = rm_clone_image(mask_image);
+#endif
+
+    // Since both Set and GetImageMask clone the mask image I don't see any
+    // way to negate the mask without referencing it directly. Sigh.
+    (void) NegateImage(image->mask, MagickFalse);
+
+    return self;
+}
+
 
 /*
     Method:     Image#add_noise(noise_type)
@@ -3312,6 +3358,36 @@ Image_decipher(VALUE self, VALUE passphrase)
 
 
 DEF_ATTR_ACCESSOR(Image, delay, ulong)
+
+
+/*
+    Method:     Image#delete_compose_mask()
+    Purpose:    Delete the image composite mask
+    Ref:        SetImageMask
+    Notes:      Returns self
+    See also:   #add_compose_mask()
+*/
+VALUE
+Image_delete_compose_mask(VALUE self)
+{
+    Image *image = rm_check_frozen(self);
+
+    // Store a clone of the mask image
+#if defined(HAVE_SETIMAGEMASK)
+    {
+    (void) SetImageMask(image, NULL);
+    rm_check_image_exception(image, RetainOnError);
+    }
+#else
+    if (image->mask)
+    {
+        image->mask = DestroyImage(image->mask);
+    }
+    image->mask = NewImageList();
+#endif
+
+    return self;
+}
 
 
 /*

@@ -180,6 +180,16 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.adaptive_threshold(2,4,1,2) }
     end
 
+    def test_add_compose_mask
+        mask = Magick::Image.new(20,20)
+        assert_nothing_raised { @img.add_compose_mask(mask) }
+        assert_nothing_raised { @img.delete_compose_mask() }
+        assert_nothing_raised { @img.add_compose_mask(mask) }
+        assert_nothing_raised { @img.add_compose_mask(mask) }
+        assert_nothing_raised { @img.delete_compose_mask() }
+        assert_nothing_raised { @img.delete_compose_mask() }
+    end
+
     def test_add_noise
         assert_nothing_raised { @img.add_noise(Magick::UniformNoise) }
         assert_nothing_raised { @img.add_noise(Magick::GaussianNoise) }

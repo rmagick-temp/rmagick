@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.296 2008/06/06 00:24:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.297 2008/06/06 22:39:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -290,22 +290,23 @@ Image_add_compose_mask(VALUE self, VALUE mask)
     // Store a clone of the new mask image.
 #if defined(HAVE_SETIMAGEMASK)
     (void) SetImageMask(image, mask_image);
+    (void) NegateImage(image->mask, MagickFalse);
 #else
-    if (image->mask)
+    if (image->clip_mask)
     {
-        image->mask = DestroyImage(image->mask);
+        image->clip_mask = DestroyImage(image->clip_mask);
     }
-    image->mask = NewImageList();
+    image->clip_mask = NewImageList();
     if (SetImageStorageClass(image, DirectClass) == MagickFalse)
     {
         rm_magick_error("SetImageStorageClass failed", NULL);
     }
-    image->mask = rm_clone_image(mask_image);
+    image->clip_mask = rm_clone_image(mask_image);
+    (void) NegateImage(image->clip_mask, MagickFalse);
 #endif
 
     // Since both Set and GetImageMask clone the mask image I don't see any
     // way to negate the mask without referencing it directly. Sigh.
-    (void) NegateImage(image->mask, MagickFalse);
 
     return self;
 }
@@ -3379,11 +3380,11 @@ Image_delete_compose_mask(VALUE self)
     rm_check_image_exception(image, RetainOnError);
     }
 #else
-    if (image->mask)
+    if (image->clip_mask)
     {
-        image->mask = DestroyImage(image->mask);
+        image->clip_mask = DestroyImage(image->clip_mask);
     }
-    image->mask = NewImageList();
+    image->clip_mask = NewImageList();
 #endif
 
     return self;

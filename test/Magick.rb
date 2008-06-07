@@ -99,6 +99,123 @@ class Magick_UT < Test::Unit::TestCase
       Magick.formats.each { |f, v| assert_not_nil(f); assert_not_nil(v) }
     end
 
+    def test_geometry
+      g, gs, g2, gs2 = nil, nil, nil, nil
+      assert_nothing_raised { g = Magick::Geometry.new() }
+      assert_nothing_raised { gs = g.to_s }
+      assert_equal("", gs)
+
+      g = Magick::Geometry.new(40)
+      gs = g.to_s
+      assert_equal("40x", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50)
+      gs = g.to_s
+      assert_equal("40x50", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 10)
+      gs = g.to_s
+      assert_equal("40x50+10+0", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 10, -15)
+      gs = g.to_s
+      assert_equal("40x50+10-15", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 0, 0, Magick::AreaGeometry)
+      gs = g.to_s
+      assert_equal("40x50@", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 0, 0, Magick::AspectGeometry)
+      gs = g.to_s
+      assert_equal("40x50!", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 0, 0, Magick::LessGeometry)
+      gs = g.to_s
+      assert_equal("40x50<", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 0, 0, Magick::GreaterGeometry)
+      gs = g.to_s
+      assert_equal("40x50>", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 50, 0, 0, Magick::MinimumGeometry)
+      gs = g.to_s
+      assert_equal("40x50^", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 0, 0, 0, Magick::PercentGeometry)
+      gs = g.to_s
+      assert_equal("40%", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 60, 0, 0, Magick::PercentGeometry)
+      gs = g.to_s
+      assert_equal("40%x60%", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 60, 10, 0, Magick::PercentGeometry)
+      gs = g.to_s
+      assert_equal("40%x60%+10+0", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40, 60, 10, 20, Magick::PercentGeometry)
+      gs = g.to_s
+      assert_equal("40%x60%+10+20", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      assert_raise(ArgumentError) { Magick::Geometry.new(Magick::AreaGeometry) }
+      assert_raise(ArgumentError) { Magick::Geometry.new(40, Magick::AreaGeometry) }
+      assert_raise(ArgumentError) { Magick::Geometry.new(40, 20, Magick::AreaGeometry) }
+      assert_raise(ArgumentError) { Magick::Geometry.new(40, 20, 10, Magick::AreaGeometry) }
+
+    end
+
     def test_set_log_event_mask
       assert_nothing_raised { Magick.set_log_event_mask("Module,Coder") }
     end

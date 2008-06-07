@@ -1,3 +1,6 @@
+RMagick 2.5.0
+    o Added Image#add_compose_mask, #delete_compose_mask (feature #20531)
+
 RMagick 2.4.0
     o Added Image#image_type= (feature #20490)
 

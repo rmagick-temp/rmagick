@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.69 2008/06/02 22:46:51 rmagick Exp $
+# $Id: RMagick.rb,v 1.70 2008/06/07 23:54:36 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -37,18 +37,24 @@ AspectGeometry   = GeometryValue.new(:AspectGeometry, 2).freeze
 LessGeometry     = GeometryValue.new(:LessGeometry, 3).freeze
 GreaterGeometry  = GeometryValue.new(:GreaterGeometry, 4).freeze
 AreaGeometry     = GeometryValue.new(:AreaGeometry, 5).freeze
+MinimumGeometry  = GeometryValue.new(:MinimumGeometry, 6).freeze
 
 class Geometry
-    FLAGS = ['', '%', '!', '<', '>', '@']
+    FLAGS = ['', '%', '!', '<', '>', '@', '^']
     RFLAGS = { '%' => PercentGeometry,
                '!' => AspectGeometry,
                '<' => LessGeometry,
                '>' => GreaterGeometry,
-               '@' => AreaGeometry }
+               '@' => AreaGeometry,
+               '^' => MinimumGeometry }
 
     attr_accessor :width, :height, :x, :y, :flag
 
     def initialize(width=nil, height=nil, x=nil, y=nil, flag=nil)
+        raise(ArgumentError, "width set to #{width.to_s}") if width.is_a? GeometryValue
+        raise(ArgumentError, "height set to #{height.to_s}") if height.is_a? GeometryValue
+        raise(ArgumentError, "x set to #{x.to_s}") if x.is_a? GeometryValue
+        raise(ArgumentError, "y set to #{y.to_s}") if y.is_a? GeometryValue
 
         # Support floating-point width and height arguments so Geometry
         # objects can be used to specify Image#density= arguments.
@@ -70,23 +76,31 @@ class Geometry
         @x    = x.to_i
         @y    = y.to_i
         @flag = flag
+
     end
 
     # Construct an object from a geometry string
-    RE = /\A(\d*)(?:x(\d+))?([-+]\d+)?([-+]\d+)?([%!<>@]?)\Z/
+    W = /(\d*%?)|(\d+\.\d+%?)/
+    H = W
+    X = /(?:([-+]\d+))?/
+    Y = X
+    RE = /\A#{W}x?#{H}#{X}#{Y}([!<>@\^]?)\Z/
 
     def Geometry.from_s(str)
         Kernel.raise(ArgumentError, "no geometry string specified") unless str
 
         m = RE.match(str)
         if m
-            width  = m[1].to_i
-            height = m[2].to_i
-            x      = m[3].to_i
-            y      = m[4].to_i
-            flag   = RFLAGS[m[5]]
+            width  = (m[1] || m[2]).to_i
+            height = (m[3] || m[4]).to_i
+            x      = m[5].to_i
+            y      = m[6].to_i
+            flag   = RFLAGS[m[7]]
         else
             Kernel.raise ArgumentError, "invalid geometry format"
+        end
+        if str['%']
+          flag = PercentGeometry
         end
         Geometry.new(width, height, x, y, flag)
     end
@@ -94,11 +108,26 @@ class Geometry
     # Convert object to a geometry string
     def to_s
         str = ''
-        str << sprintf("%d", @width+0.5) if @width > 0
-        str << 'x' if (@width > 0 || @height > 0)
-        str << sprintf("%d", @height+0.5) if @height > 0
-        str << sprintf("%+d%+d", @x+0.5, @y+0.5) if (@x != 0 || @y != 0)
-        str << FLAGS[@flag.to_i]
+        if @width > 0
+          fmt = @width.truncate == @width ? "%d" : "%.2f"
+          str << sprintf(fmt, @width)
+          str << '%' if @flag == PercentGeometry
+        end
+
+        if (@width > 0 && @flag != PercentGeometry) || (@height > 0 || @y != 0 || @x != 0)
+          str << 'x'
+        end
+
+        if @height > 0 || @x != 0 || @y != 0
+          fmt = @height.truncate == @height ? "%d" : "%.2f"
+          str << sprintf(fmt, @height)
+          str << '%' if @flag == PercentGeometry
+        end
+        str << sprintf("%+d%+d", @x, @y) if (@x != 0 || @y != 0)
+        if @flag != PercentGeometry
+          str << FLAGS[@flag.to_i]
+        end
+        str
     end
 end
 

@@ -476,9 +476,9 @@
         </tr>
 
         <tr>
-          <td>PercentGeometry</td>
+          <td valign="top">PercentGeometry</td>
 
-          <td align="center">%</td>
+          <td valign="top" align="center">%</td>
 
           <td>Normally the attributes are treated as pixels. Use
           this flag when the <code>width</code> and
@@ -490,9 +490,9 @@
         </tr>
 
         <tr>
-          <td>AspectGeometry</td>
+          <td valign="top">AspectGeometry</td>
 
-          <td align="center">!</td>
+          <td valign="top" align="center">!</td>
 
           <td>Use this flag when you want to force the new image to
           have exactly the size specified by the the
@@ -501,9 +501,9 @@
         </tr>
 
         <tr>
-          <td>LessGeometry</td>
+          <td valign="top">LessGeometry</td>
 
-          <td align="center">&lt;</td>
+          <td valign="top" align="center">&lt;</td>
 
           <td>Use this flag when you want to change the size of the
           image only if both its width and height are smaller the
@@ -512,9 +512,9 @@
         </tr>
 
         <tr>
-          <td>GreaterGeometry</td>
+          <td valign="top">GreaterGeometry</td>
 
-          <td align="center">&gt;</td>
+          <td valign="top" align="center">&gt;</td>
 
           <td>Use this flag when you want to change the size of the
           image if either its width and height exceed the values
@@ -523,14 +523,28 @@
         </tr>
 
         <tr>
-          <td>AreaGeometry</td>
+          <td valign="top">AreaGeometry</td>
 
-          <td align="center">@</td>
+          <td valign="top" align="center">@</td>
 
           <td>This flag is useful only with a single
           <code>width</code> attribute. When present, it means the
           <code>width</code> attribute represents the total area of
           the image in pixels.</td>
+        </tr>
+
+        <tr>
+          <td valign="top">MinimumGeometry</td>
+
+          <td valign="top" align="center">^</td>
+
+          <td class="imquote">Use ^ to set a minimum image size
+          limit. The geometry 640x480^, for example, means the
+          image width will not be less than 640 and the image
+          height will not be less than 480 pixels after the resize.
+          One of those dimensions will match the requested size,
+          but the image will likely overflow the space requested to
+          preserve its aspect ratio.</td>
         </tr>
       </table>
 

@@ -290,9 +290,8 @@
   <p><em>Hint:</em> You can specify the transparent color as
   "none", "transparent", or "#000000ff".</p>
 
-  <p><a href=
-  "http://www.imagemagick.org/script/command-line-options.php#fill">
-  This</a> is ImageMagick's page about color names.</p>
+  <p><a href="http://www.imagemagick.org/script/color.php">This</a>
+  is ImageMagick's page about color names.</p>
 
   <h2 id="geometry">The geometry string</h2>
 
@@ -308,7 +307,7 @@
 </pre>
 
   <p><a href=
-  "http://www.imagemagick.org/script/command-line-options.php#geometry">
+  "http://www.imagemagick.org/script/command-line-options.php#resize">
   This</a> is the ImageMagick description of the geometry
   string:</p>
 
@@ -340,12 +339,19 @@
     '640x480&gt;' and the image size is 256x256, the image size
     does not change. However, if the image is 512x512 or 1024x1024,
     it is resized to 480x480.</p>
+
+    <p>Use ^ to set a minimum image size limit. The geometry
+    640x480^, for example, means the image width will not be less
+    than 640 and the image height will not be less than 480 pixels
+    after the resize. One of those dimensions will match the
+    requested size, but the image will likely overflow the space
+    requested to preserve its aspect ratio.</p>
   </div>
 
-  <p>The x and y offsets, if present, can be preceded with either
-  a + or - sign. The + causes x and y to be measured from the left
-  or top edges, respectively. Conversely, - measures from the right
-  or bottom edges. Offsets are always measured in pixels.</p>
+  <p>The x and y offsets, if present, can be preceded with either a
+  + or - sign. The + causes x and y to be measured from the left or
+  top edges, respectively. Conversely, - measures from the right or
+  bottom edges. Offsets are always measured in pixels.</p>
 
   <p>Any method that accepts a geometry string will also accept a
   <a href="struct.html#Geometry"><code>Geometry</code></a>
@@ -472,8 +478,10 @@ i = Image.read("gradient:red-blue") { self.size = "100x200" }
     be referenced by specifying the pattern name. For example,
     <code>pattern:checkerboard</code>. For a list of acceptable
     patterns, see <a href=
-    "http://www.imagemagick.org/script/formats.php">this
-    page.</a></p>
+    "http://www.imagemagick.org/script/formats.php">this page.</a>
+    If you do not specify a size the pattern's default size is
+    used. If you specify a size the pattern will be repeated as
+    necessary to fill the image.</p>
 
     <h4>plasma<sup>*</sup></h4>
 

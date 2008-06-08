@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.71 2008/06/08 13:09:49 rmagick Exp $
+# $Id: RMagick.rb,v 1.72 2008/06/08 13:41:39 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -87,7 +87,6 @@ class Geometry
     RE = /\A#{W}x?#{H}#{X}#{Y}([!<>@\^]?)\Z/
 
     def Geometry.from_s(str)
-        Kernel.raise(ArgumentError, "no geometry string specified") unless str
 
         m = RE.match(str)
         if m
@@ -114,11 +113,11 @@ class Geometry
           str << '%' if @flag == PercentGeometry
         end
 
-        if (@width > 0 && @flag != PercentGeometry) || (@height > 0 || @y != 0 || @x != 0)
+        if (@width > 0 && @flag != PercentGeometry) || (@height > 0)
           str << 'x'
         end
 
-        if @height > 0 || @x != 0 || @y != 0
+        if @height > 0
           fmt = @height.truncate == @height ? "%d" : "%.2f"
           str << sprintf(fmt, @height)
           str << '%' if @flag == PercentGeometry

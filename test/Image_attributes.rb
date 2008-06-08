@@ -151,7 +151,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal(0, @img.colors)
         img = @img.copy
         img.class_type = Magick::PseudoClass
-        assert_equal(260, img.colors)
+        assert_equal(40, img.colors)
         assert_raise(NoMethodError) { img.colors = 2 }
     end
 
@@ -161,7 +161,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal(Magick::RGBColorspace, @img.colorspace)
         img = @img.copy
         assert_nothing_raised { img.colorspace = Magick::GRAYColorspace }
-        assert_equal(Magick::GRAYColorspace, img.colorspace)
+        assert_equal(Magick::RGBColorspace, img.colorspace)
         assert_raise(TypeError) { @img.colorspace = 2 }
         Magick::ColorspaceType.values.each do |cs|
           assert_nothing_raised { img.colorspace = cs }

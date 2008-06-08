@@ -209,6 +209,22 @@ class Magick_UT < Test::Unit::TestCase
       gs2 = g2.to_s
       assert_equal(gs, gs2)
 
+      g = Magick::Geometry.new(40.5, 60.75)
+      gs = g.to_s
+      assert_equal("40.50x60.75", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
+      g = Magick::Geometry.new(40.5, 60.75, 0, 0, Magick::PercentGeometry)
+      gs = g.to_s
+      assert_equal("40.50%x60.75%", gs)
+
+      assert_nothing_raised { g2 = Magick::Geometry.from_s(gs) }
+      gs2 = g2.to_s
+      assert_equal(gs, gs2)
+
       assert_raise(ArgumentError) { Magick::Geometry.new(Magick::AreaGeometry) }
       assert_raise(ArgumentError) { Magick::Geometry.new(40, Magick::AreaGeometry) }
       assert_raise(ArgumentError) { Magick::Geometry.new(40, 20, Magick::AreaGeometry) }

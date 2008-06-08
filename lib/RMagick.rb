@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.70 2008/06/07 23:54:36 rmagick Exp $
+# $Id: RMagick.rb,v 1.71 2008/06/08 13:09:49 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -80,7 +80,7 @@ class Geometry
     end
 
     # Construct an object from a geometry string
-    W = /(\d*%?)|(\d+\.\d+%?)/
+    W = /(\d+\.\d+%?)|(\d*%?)/
     H = W
     X = /(?:([-+]\d+))?/
     Y = X
@@ -91,8 +91,8 @@ class Geometry
 
         m = RE.match(str)
         if m
-            width  = (m[1] || m[2]).to_i
-            height = (m[3] || m[4]).to_i
+            width  = (m[1] || m[2]).to_f
+            height = (m[3] || m[4]).to_f
             x      = m[5].to_i
             y      = m[6].to_i
             flag   = RFLAGS[m[7]]

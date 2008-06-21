@@ -1,3 +1,7 @@
+RMagick 2.5.1
+    o Update Pixel#to_color to work with the new QueryMagickColorname API in
+      ImageMagick 6.4.1-9.
+
 RMagick 2.5.0
     o Added Image#add_compose_mask, #delete_compose_mask (feature #20531)
 

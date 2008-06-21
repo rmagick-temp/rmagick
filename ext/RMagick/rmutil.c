@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.155 2008/05/21 22:32:41 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.156 2008/06/21 00:24:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -653,7 +653,26 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     rm_set_magick_pixel_packet(pixel, NULL, &mpp);
 
     GetExceptionInfo(&exception);
+
+#if defined(HAVE_NEW_QUERYMAGICKCOLORNAME)
+    // Support for hex-format color names moved out of QueryMagickColorname
+    // in 6.4.1-9. The 'hex' argument was removed as well.
+    if (hex)
+    {
+        if (compliance == XPMCompliance)
+        {
+            mpp.matte = MagickFalse;
+            mpp.depth = (unsigned long) min(1.0 * image->depth, 16.0);
+        }
+        (void) GetColorTuple(&mpp, MagickTrue, name);
+    }
+    else
+    {
+        (void) QueryMagickColorname(image, &mpp, compliance, name, &exception);
+    }
+#else
     (void) QueryMagickColorname(image, &mpp, compliance, hex, name, &exception);
+#endif
     (void) DestroyImage(image);
     CHECK_EXCEPTION()
     (void) DestroyExceptionInfo(&exception);

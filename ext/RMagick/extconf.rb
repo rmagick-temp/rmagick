@@ -183,6 +183,33 @@ have_func("snprintf", headers)
   end
 
 
+
+
+checking_for("QueryMagickColorname() new signature")  do
+  if try_compile(<<"SRC")
+#{COMMON_HEADERS}
+#{cpp_include(headers)}
+/*top*/
+int main() {
+  MagickBooleanType okay;
+  Image image;
+  MagickPixelPacket color;
+  char name;
+  ExceptionInfo exception;
+  okay = QueryMagickColorname(&image, &color, SVGCompliance, &name, &exception);
+  return 0;
+  }
+SRC
+    $defs.push("-DHAVE_NEW_QUERYMAGICKCOLORNAME")
+    true
+  else
+    false
+  end
+end
+
+
+
+
 have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
 have_type("AlphaChannelType", headers)                # 6.3.5
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod

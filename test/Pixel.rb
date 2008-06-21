@@ -87,6 +87,13 @@ class Pixel_UT < Test::Unit::TestCase
       assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false) }
       assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 8) }
       assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 16) }
+      # test "hex" format
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 8, true) }
+      assert_nothing_raised { @pixel.to_color(Magick::AllCompliance, false, 16, true) }
+
+      assert_equal("#A52A2A", @pixel.to_color(Magick::AllCompliance, false, 8, true))
+      assert_equal("#A5A52A2A2A2A", @pixel.to_color(Magick::AllCompliance, false, 16, true))
+
       assert_raise(ArgumentError) { @pixel.to_color(Magick::AllCompliance, false, 32) }
       assert_raise(TypeError) { @pixel.to_color(1) }
     end

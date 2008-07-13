@@ -1528,19 +1528,30 @@ ilist.new_image(100, 100) { self.background_color = "red" }
       method corresponds to <a href=
       "#flatten_images">flatten_images</a>, above.</dd>
 
+      <dt>MergeLayers</dt>
+
+      <dd class="imquote">As [FlattenLayer] but merging all the
+      given image layers into a new layer image just large enough
+      to hold all the image without clipping or extra space. The
+      new image's virtual offset will prevere the position of the
+      new layer, even if this offset is negative. the virtual
+      canvas size of the first image is preserved. Caution is
+      advised when handling image layers with negative offsets as
+      few image file formats handle them correctly.</dd>
+
       <dt>MosaicLayer</dt>
 
-      <dd><span class="imquote">As FlattenLayer method but
-      expanding the initial canvas size of the first image so as to
-      hold all the image layers. However as a virtual canvas is
-      'locked' to the origin, by definition, image layers with a
-      negative offsets will still be clipped by the top and left
-      edges. This method is commonly used to layout individual
-      image using various offset but without knowing the final
-      canvas size. The resulting image will, like FlattenLayer not
-      have any virtual offset, so can be saved to any image file
-      format.</span> This method corresponds to <a href=
-      "#mosaic">mosaic</a>, above.</dd>
+      <dd><span class="imquote">As [FlattenLayer] but expanding the
+      initial canvas size of the first image so as to hold all the
+      image layers. However as a virtual canvas is 'locked' to the
+      origin, by definition, image layers with a negative offsets
+      will still be clipped by the top and left edges. This method
+      is commonly used to layout individual image using various
+      offset but without knowing the final canvas size. The
+      resulting image will, like FlattenLayer not have any virtual
+      offset, so can be saved to any image file format.</span> This
+      method corresponds to <a href="#mosaic">mosaic</a>,
+      above.</dd>
 
       <dt>OptimizeImageLayer</dt>
 

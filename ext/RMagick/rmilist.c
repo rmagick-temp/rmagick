@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.72 2008/07/13 14:14:55 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.73 2008/07/13 14:31:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -590,9 +590,19 @@ ImageList_optimize_layers(VALUE self, VALUE method)
         case CompareOverlayLayer:
             new_images = CompareImageLayers(images, mthd, &exception);
             break;
+#if defined(HAVE_ENUM_MOSAICLAYER)
+        case MosaicLayer:
+            new_images = MergeImageLayers(images, mthd, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_FLATTENLAYER)
+        case FlattenLayer:
+            new_images = MergeImageLayers(images, mthd, &exception);
+            break;
+#endif
 #if defined(HAVE_ENUM_MERGELAYER)
         case MergeLayer:
-            new_images = MergeImageLayers(images, MergeLayer, &exception);
+            new_images = MergeImageLayers(images, mthd, &exception);
             break;
 #endif
         default:

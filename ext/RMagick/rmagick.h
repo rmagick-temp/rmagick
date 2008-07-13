@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.235 2008/06/06 00:24:14 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.236 2008/07/13 21:18:27 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -233,7 +233,10 @@ typedef enum _QuantumExpressionOperator
     OrQuantumOperator,
     RShiftQuantumOperator,
     SubtractQuantumOperator,
-    XorQuantumOperator
+    XorQuantumOperator,
+#if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
+    PowQuantumOperator,
+#endif
 } QuantumExpressionOperator ;
 
 

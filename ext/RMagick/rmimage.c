@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.297 2008/06/06 22:39:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.298 2008/07/13 21:18:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7422,6 +7422,11 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
         case XorQuantumOperator:
             qop = XorEvaluateOperator;
             break;
+#if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
+        case PowQuantumOperator:
+            qop = PowEvaluateOperator;
+            break;
+#endif
     }
 
     GetExceptionInfo(&exception);

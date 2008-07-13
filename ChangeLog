@@ -1,6 +1,8 @@
 RMagick 2.5.2
     o Add support for MergeLayer to Magick::ImageList#optimize_layers (patch
       #21189, submitted by Andrew Watson)
+    o Add PowQuantumOperator argument for Image#quantum_operator (available
+      in ImageMagick 6.4.1-9)
 
 RMagick 2.5.1
     o Update Pixel#to_color to work with the new QueryMagickColorname API in

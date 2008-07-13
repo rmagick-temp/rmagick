@@ -242,6 +242,7 @@ have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers) # 6
 have_enum_values("InterlaceType", ["GIFInterlace",                           # 6.3.4
                                   "JPEGInterlace",                           # 6.3.4
                                   "PNGInterlace"], headers)                  # 6.3.4
+have_enum_value("MagickEvaluateOperator", "PowEvaluateOperator", headers)    # 6.4.1-9
 have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                 # 6.3.3-4
                                        "RemoveDupsLayer",                    # 6.3.3-6
                                        "RemoveZeroLayer",                    # 6.3.3-6

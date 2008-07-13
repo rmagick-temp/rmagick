@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.71 2008/05/21 22:32:40 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.72 2008/07/13 14:14:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -555,7 +555,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         case CompositeLayer:
-            rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not yet supported.");
+            rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not supported. Use the composite_layers method instead.");
             break;
 #endif
 #if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
@@ -590,6 +590,11 @@ ImageList_optimize_layers(VALUE self, VALUE method)
         case CompareOverlayLayer:
             new_images = CompareImageLayers(images, mthd, &exception);
             break;
+#if defined(HAVE_ENUM_MERGELAYER)
+        case MergeLayer:
+            new_images = MergeImageLayers(images, MergeLayer, &exception);
+            break;
+#endif
         default:
             rb_raise(rb_eArgError, "undefined layer method");
             break;

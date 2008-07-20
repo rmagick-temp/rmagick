@@ -874,13 +874,46 @@ class Image3_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Image,  res)
     end
 
-    # I'm not going to spend a lot of time testing this
-    # since so many other tests rely on it working.
+    # test write with #format= attribute
     def test_write
-        assert_nothing_raised do
-            @img.write('temp.gif')
-            FileUtils.rm('temp.gif')
+        @img.write('temp.gif')
+        img = Magick::Image.read('temp.gif')
+        assert_equal("GIF", img.first.format)
+        FileUtils.rm('temp.gif')
+
+        @img.write("jpg:temp.foo")
+        img = Magick::Image.read('temp.foo')
+        assert_equal("JPEG", img.first.format)
+        FileUtils.rm('temp.foo')
+
+        @img.write("temp.0") { self.format = "JPEG" }
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+
+        # JPEG has two names.
+        @img.write("jpeg:temp.0") { self.format = "JPEG" }
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+
+        @img.write("jpg:temp.0") { self.format = "JPG" }
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+
+        @img.write("jpg:temp.0") { self.format = "JPEG" }
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+
+        @img.write("jpeg:temp.0") { self.format = "JPG" }
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+
+        assert_raise(RuntimeError) do
+          @img.write("gif:temp.0") { self.format = "JPEG" }
         end
+
+        img = Magick::Image.read('temp.0')
+        assert_equal("JPEG", img.first.format)
+        FileUtils.rm('temp.0')
     end
 
 

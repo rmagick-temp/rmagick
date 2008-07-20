@@ -36,9 +36,11 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.background_color }
         assert_equal("white", @img.background_color)
         assert_nothing_raised { @img.background_color = "#dfdfdf" }
-        assert_equal("rgb(223,223,223)", @img.background_color)
+        #assert_equal("rgb(223,223,223)", @img.background_color)
+        assert_equal("#DFDFDFDFDFDF", @img.background_color)
         assert_nothing_raised { @img.background_color = Magick::Pixel.new(Magick::QuantumRange, Magick::QuantumRange/2.0, Magick::QuantumRange/2.0) }
-        assert_equal("rgb(100%,49.9992%,49.9992%)", @img.background_color)
+        #assert_equal("rgb(100%,49.9992%,49.9992%)", @img.background_color)
+        assert_equal("#FFFF7FFF7FFF", @img.background_color)
         assert_raise(TypeError) { @img.background_color = 2 }
     end
 
@@ -91,11 +93,13 @@ class Image_Attributes_UT < Test::Unit::TestCase
 
     def test_border_color
         assert_nothing_raised { @img.border_color }
-        assert_equal("rgb(223,223,223)", @img.border_color)
+        #assert_equal("rgb(223,223,223)", @img.border_color)
+        assert_equal("#DFDFDFDFDFDF", @img.border_color)
         assert_nothing_raised { @img.border_color = "red" }
         assert_equal("red", @img.border_color)
         assert_nothing_raised { @img.border_color = Magick::Pixel.new(Magick::QuantumRange, Magick::QuantumRange/2, Magick::QuantumRange/2) }
-        assert_equal("rgb(100%,49.9992%,49.9992%)", @img.border_color)
+        #assert_equal("rgb(100%,49.9992%,49.9992%)", @img.border_color)
+        assert_equal("#FFFF7FFF7FFF", @img.border_color)
         assert_raise(TypeError) { @img.border_color = 2 }
     end
 

@@ -300,7 +300,7 @@ class Magick_UT < Test::Unit::TestCase
       info = Magick::Image::Info.new
 
       # does not exist at first
-      assert_raise(NameError) { x = Magick._tmpnam_ }
+      # assert_raise(NameError) { x = Magick._tmpnam_ }
       info.texture = texture
 
       # now it exists

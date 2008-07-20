@@ -1374,7 +1374,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" />
+    alt="resize_to_fill example" /> 
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1469,7 +1469,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
@@ -4169,6 +4169,24 @@ end
     <h4>Example</h4>
 
     <p>Almost all of the examples call <code>write</code>.</p>
+
+    <h4>Notes</h4>
+
+    <p>When the argument is a filename, specify the output format
+    via the filename extension (for example ".jpg" or ".gif") or by
+    prefixing the filename with the desired format (for example,
+    "jpeg:myfile"), not via <code>format=</code>.</p>
+
+    <p><em>Do not</em> use a StringIO object or a Tempfile object
+    as the argument. Neither of these work. Use
+    <code>to_blob</code> to write to a String. Instead of a
+    tempfile, get the path of the tempfile from the
+    <code>path</code> method. Prefix the path with the desired
+    image format. For example,</p>
+    <pre>
+temp = Tempfile.new("image")
+img.write("jpeg:"+ temp.path)
+</pre>
 
     <h4>See also</h4>
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.298 2008/07/13 21:18:28 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.299 2008/07/20 23:13:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10379,6 +10379,91 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
 
 
 /*
+   Copy the filename to the Info and to the Image. Add format
+   prefix if necessary. This complicated code is necessary to handle filenames
+   like the kind Tempfile.new produces, which have an "extension" in the form
+   ".n", which confuses SetMagickInfo. So we don't use SetMagickInfo any longer.
+*/
+static void add_format_prefix(Info *info, VALUE file)
+{
+    char *filename;
+    long filename_l;
+    const MagickInfo *magick_info, *magick_info2;
+    ExceptionInfo exception;
+    char magic[MaxTextExtent];
+    size_t magic_l;
+    size_t prefix_l;
+    void *p;
+
+    // Convert arg to string. If an exception occurs raise an error condition.
+    file = rb_rescue(rb_String, file, file_arg_rescue, file);
+
+    filename = rm_str2cstr(file, &filename_l);
+
+    if (*info->magick == '\0')
+    {
+        memset(info->filename, 0, sizeof(info->filename));
+        memcpy(info->filename, filename, (size_t)min(filename_l, MaxTextExtent-1));
+        return;
+    }
+
+    // If the filename starts with a prefix, and it's a valid image format
+    // prefix, then check for a conflict. If it's not a valid format prefix,
+    // ignore it.
+    p = memchr(filename, ':', (size_t)filename_l);
+    if (p)
+    {
+        memset(magic, '\0', sizeof(magic));
+        magic_l = p - (void *)filename;
+        memcpy(magic, filename, magic_l);
+
+        GetExceptionInfo(&exception);
+        magick_info = GetMagickInfo(magic, &exception);
+        CHECK_EXCEPTION();
+        DestroyExceptionInfo(&exception);
+
+        if (magick_info && magick_info->module)
+        {
+            // We have to compare the module names because some formats have
+            // more than one name. JPG and JPEG, for example.
+            GetExceptionInfo(&exception);
+            magick_info2 = GetMagickInfo(info->magick, &exception);
+            CHECK_EXCEPTION();
+            DestroyExceptionInfo(&exception);
+
+            if (magick_info2->module && strcmp(magick_info->module, magick_info2->module) != 0)
+            {
+                rb_raise(rb_eRuntimeError
+                    , "filename prefix `%s' conflicts with output format `%s'"
+                    , magick_info->name, info->magick);
+            }
+
+            // The filename prefix already matches the specified format.
+            // Just copy the filename as-is.
+            memset(info->filename, 0, sizeof(info->filename));
+            filename_l = min((size_t)filename_l, sizeof(info->filename));
+            memcpy(info->filename, filename, (size_t)filename_l);
+            return;
+        }
+    }
+
+    // The filename doesn't start with a format prefix. Add the format from
+    // the image info as the filename prefix.
+
+    memset(info->filename, 0, sizeof(info->filename));
+    prefix_l = min(sizeof(info->filename)-1, strlen(info->magick));
+    memcpy(info->filename, info->magick, prefix_l);
+    info->filename[prefix_l++] = ':';
+
+    filename_l = min(sizeof(info->filename) - prefix_l - 1, (size_t)filename_l);
+    memcpy(info->filename+prefix_l, filename, (size_t)filename_l);
+    info->filename[prefix_l+filename_l] = '\0';
+
+    return;
+}
+
+
+/*
   Method:   Image#write(filename)
   Purpose:  Write the image to the file.
   Returns:  self
@@ -10389,9 +10474,6 @@ Image_write(VALUE self, VALUE file)
     Image *image;
     Info *info;
     volatile VALUE info_obj;
-    char *filename;
-    long filename_l;
-    ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
 
@@ -10409,28 +10491,9 @@ Image_write(VALUE self, VALUE file)
     }
     else
     {
-        // Copy the filename to the Info and to the Image, then call
-        // SetImageInfo. (Ref: ImageMagick's utilities/convert.c.)
-
-        // Convert arg to string. If an exception occurs raise an error condition.
-        file = rb_rescue(rb_String, file, file_arg_rescue, file);
-
-        filename = rm_str2cstr(file, &filename_l);
-        filename_l = min(filename_l, MaxTextExtent-1);
-        memcpy(info->filename, filename, (size_t)filename_l);
-        info->filename[filename_l] = '\0';
+        add_format_prefix(info, file);
         strcpy(image->filename, info->filename);
 
-        GetExceptionInfo(&exception);
-        (void) SetImageInfo(info, MagickTrue, &exception);
-        CHECK_EXCEPTION()
-
-        (void) DestroyExceptionInfo(&exception);
-
-        if (*info->magick == '\0')
-        {
-            return Qnil;
-        }
         SetImageInfoFile(info, NULL);
     }
 

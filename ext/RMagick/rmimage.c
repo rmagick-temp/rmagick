@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.299 2008/07/20 23:13:54 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.300 2008/07/21 22:25:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10384,7 +10384,7 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
    like the kind Tempfile.new produces, which have an "extension" in the form
    ".n", which confuses SetMagickInfo. So we don't use SetMagickInfo any longer.
 */
-static void add_format_prefix(Info *info, VALUE file)
+void add_format_prefix(Info *info, VALUE file)
 {
     char *filename;
     long filename_l;
@@ -10488,12 +10488,12 @@ Image_write(VALUE self, VALUE file)
         GetOpenFile(file, fptr);
         rb_io_check_writable(fptr);
         SetImageInfoFile(info, GetWriteFile(fptr));
+        memset(image->filename, 0, sizeof(image->filename));
     }
     else
     {
         add_format_prefix(info, file);
         strcpy(image->filename, info->filename);
-
         SetImageInfoFile(info, NULL);
     }
 

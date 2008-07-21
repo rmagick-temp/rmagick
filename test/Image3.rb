@@ -876,6 +876,7 @@ class Image3_UT < Test::Unit::TestCase
 
     # test write with #format= attribute
     def test_write
+
         @img.write('temp.gif')
         img = Magick::Image.read('temp.gif')
         assert_equal("GIF", img.first.format)
@@ -911,9 +912,12 @@ class Image3_UT < Test::Unit::TestCase
           @img.write("gif:temp.0") { self.format = "JPEG" }
         end
 
-        img = Magick::Image.read('temp.0')
+        f = File.new("test.0", "w")
+        @img.write(f) { self.format = "JPEG" }
+        f.close
+        img = Magick::Image.read('test.0')
         assert_equal("JPEG", img.first.format)
-        FileUtils.rm('temp.0')
+        FileUtils.rm('test.0')
     end
 
 

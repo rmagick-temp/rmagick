@@ -323,14 +323,31 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_equal(1, img.scene)
     end
 
-    # I'm not going to spend a lot of time testing this
-    # since so many other tests rely on it working.
     def test_write
         @ilist.read(IMAGES_DIR+'/Button_0.gif')
         assert_nothing_raised do
             @ilist.write('temp.gif')
-            FileUtils.rm('temp.gif')
         end
+        list = Magick::ImageList.new('temp.gif')
+        assert_equal('GIF', list.format)
+        FileUtils.rm('temp.gif')
+
+        @ilist.write("jpg:temp.foo")
+        list = Magick::ImageList.new('temp.foo')
+        assert_equal('JPEG', list.format)
+        FileUtils.rm('temp.foo')
+
+        @ilist.write("temp.0") { self.format = "JPEG" }
+        list = Magick::ImageList.new('temp.0')
+        assert_equal("JPEG", list.format)
+        FileUtils.rm('temp.0')
+
+        f = File.new("test.0", "w")
+        @ilist.write(f) { self.format = "JPEG" }
+        f.close
+        list = Magick::ImageList.new('test.0')
+        assert_equal("JPEG", list.format)
+        FileUtils.rm('test.0')
     end
 
 end

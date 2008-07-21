@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.73 2008/07/13 14:31:37 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.74 2008/07/21 22:25:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -889,17 +889,6 @@ ImageList_to_blob(VALUE self)
 
 
 /*
- *  Static:     file_arg_rescue
- *  Purpose:    called when `arg_to_str' raised an exception
-*/
-static VALUE file_arg_rescue(VALUE arg)
-{
-    rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
-             rb_class2name(CLASS_OF(arg)));
-}
-
-
-/*
   Method:   ImageList#write(file)
   Purpose:  Write all the images to the specified file. If the file format
             supports multi-image files, and the @images array contains more
@@ -914,8 +903,6 @@ ImageList_write(VALUE self, VALUE file)
     Info *info;
     const MagickInfo *m;
     volatile VALUE info_obj;
-    char *filename;
-    long filename_l;
     unsigned long scene;
     ExceptionInfo exception;
 
@@ -933,32 +920,20 @@ ImageList_write(VALUE self, VALUE file)
     }
     else
     {
-        // Convert arg to string. Catch exceptions.
-        file = rb_rescue(rb_String, file, file_arg_rescue, file);
-
-        // Copy the filename to the Info and to the Image.
-        filename = rm_str2cstr(file, &filename_l);
-        filename_l = min(filename_l, MaxTextExtent-1);
-        memcpy(info->filename, filename, (size_t)filename_l);
-        info->filename[filename_l] = '\0';
+        add_format_prefix(info, file);
         SetImageInfoFile(info, NULL);
     }
 
     // Convert the images array to an images sequence.
     images = images_from_imagelist(self);
 
-    // Copy the filename into each images. Set a scene number to be used if
+    // Copy the filename into each image. Set a scene number to be used if
     // writing multiple files. (Ref: ImageMagick's utilities/convert.c
     for (scene = 0, img = images; img; img = GetNextImageInList(img))
     {
         img->scene = scene++;
         strcpy(img->filename, info->filename);
     }
-
-    GetExceptionInfo(&exception);
-    (void) SetImageInfo(info, MagickTrue, &exception);
-    rm_check_exception(&exception, images, RetainOnError);
-    (void) DestroyExceptionInfo(&exception);
 
     // Find out if the format supports multi-images files.
     GetExceptionInfo(&exception);

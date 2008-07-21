@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.236 2008/07/13 21:18:27 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.237 2008/07/21 22:25:46 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -767,6 +767,7 @@ ATTR_ACCESSOR(Image, y_resolution)
 
 extern ChannelType extract_channels(int *, VALUE *);
 extern void raise_ChannelType_error(VALUE);
+extern void add_format_prefix(Info *, VALUE);
 
 extern VALUE Image_alloc(VALUE);
 extern VALUE Image_initialize(int, VALUE *, VALUE);

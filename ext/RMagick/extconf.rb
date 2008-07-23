@@ -230,7 +230,9 @@ have_enum_values("CompressionType", ["DXT1Compression",                      # 6
                                      "DXT3Compression",                      # 6.3.9-3
                                      "DXT5Compression"], headers)            # 6.3.9-3
 have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
-                               "PerspectiveProjectionDistortion"], headers)  # 6.3.5-9
+                                        "PerspectiveProjectionDistortion",   # 6.3.5-9
+                                        "PolynomialDistortion",              # 6.4.2-4
+                                        "ShepardsDistortion"], headers)      # 6.4.2-4
 have_enum_values("FilterTypes", ["KaiserFilter",                             # 6.3.6
                                  "WelshFilter",                              # 6.3.6-4
                                  "ParzenFilter",                             # 6.3.6-4

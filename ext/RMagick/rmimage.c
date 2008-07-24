@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.300 2008/07/21 22:25:18 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.301 2008/07/24 22:19:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -37,11 +37,9 @@ static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation
     Static:     adaptive_method
     Purpose:    call Adaptive(Blur|Sharpen)Image
 */
-static VALUE adaptive_method(
-                            int argc,
-                            VALUE *argv,
-                            VALUE self,
-                            Image *fp(const Image *, const double, const double, ExceptionInfo *))
+static VALUE
+adaptive_method(int argc, VALUE *argv, VALUE self
+              , Image *fp(const Image *, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -81,11 +79,9 @@ static VALUE adaptive_method(
     Static:     adaptive_channel_method
     Purpose:    call Adaptive(Blur|Sharpen)ImageChannel
 */
-static VALUE adaptive_channel_method(
-                                    int argc,
-                                    VALUE *argv,
-                                    VALUE self,
-                                    Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
+static VALUE
+adaptive_channel_method(int argc, VALUE *argv, VALUE self
+                      , Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -718,10 +714,7 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
     Purpose:    Handle #transverse, #transform methods
 */
 static VALUE
-crisscross(
-          int bang,
-          VALUE self,
-          Image *fp(const Image *, ExceptionInfo *))
+crisscross(int bang, VALUE self, Image *fp(const Image *, ExceptionInfo *))
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -754,7 +747,8 @@ crisscross(
                 automatically orient image based on EXIF orientation value
     Notes:      See mogrify.c in ImageMagick 6.2.8.
 */
-static VALUE auto_orient(int bang, VALUE self)
+static VALUE
+auto_orient(int bang, VALUE self)
 {
     Image *image;
     volatile VALUE new_image;
@@ -815,6 +809,7 @@ Image_auto_orient(VALUE self)
     return auto_orient(False, self);
 }
 
+
 /*
     Returns nil if the image is already properly oriented
 */
@@ -855,7 +850,8 @@ Image_background_color_eq(VALUE self, VALUE color)
     Method:     Image#base_columns
     Purpose:    Return the number of rows (before transformations)
 */
-VALUE Image_base_columns(VALUE self)
+VALUE
+Image_base_columns(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
     return INT2FIX(image->magick_columns);
@@ -866,7 +862,8 @@ VALUE Image_base_columns(VALUE self)
     Purpose:    Return the image filename (before transformations)
     Notes:      If there is no base filename, return the current filename.
 */
-VALUE Image_base_filename(VALUE self)
+VALUE
+Image_base_filename(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
     if (*image->magick_filename)
@@ -883,7 +880,8 @@ VALUE Image_base_filename(VALUE self)
     Method:     Image#base_rows
     Purpose:    Return the number of rows (before transformations)
 */
-VALUE Image_base_rows(VALUE self)
+VALUE
+Image_base_rows(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
     return INT2FIX(image->magick_rows);
@@ -895,14 +893,16 @@ VALUE Image_base_rows(VALUE self)
                 Image#bias = a number between 0.0 and 1.0 or "NN%"
     Purpose:    Get/set image bias (used when convolving an image)
 */
-VALUE Image_bias(VALUE self)
+VALUE
+Image_bias(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
     return rb_float_new(image->bias);
 }
 
 
-VALUE Image_bias_eq(VALUE self, VALUE pct)
+VALUE
+Image_bias_eq(VALUE self, VALUE pct)
 {
     Image *image;
     double bias;
@@ -1008,12 +1008,7 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
                 offsets are relative to
 */
 static void
-get_relative_offsets(
-                    VALUE grav,
-                    Image *image,
-                    Image *mark,
-                    long *x_offset,
-                    long *y_offset)
+get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long *y_offset)
 {
     MagickEnum *m_enum;
     GravityType gravity;
@@ -1067,12 +1062,8 @@ get_relative_offsets(
     Purpose:    compute watermark offsets from gravity type
 */
 static void
-get_offsets_from_gravity(
-                        GravityType gravity,
-                        Image *image,
-                        Image *mark,
-                        long *x_offset,
-                        long *y_offset)
+get_offsets_from_gravity(GravityType gravity, Image *image, Image *mark
+                        , long *x_offset, long *y_offset)
 {
 
     switch (gravity)
@@ -1125,7 +1116,8 @@ get_offsets_from_gravity(
     Purpose:    called from rb_protect, returns the number if obj is really
                 a numeric value.
 */
-static VALUE check_for_long_value(VALUE obj)
+static VALUE
+check_for_long_value(VALUE obj)
 {
     long t;
     t = NUM2LONG(obj);
@@ -1138,13 +1130,9 @@ static VALUE check_for_long_value(VALUE obj)
     Static:     get_composite_offsets
     Purpose:    compute x- and y-offset of source image for a compositing method
 */
-static void get_composite_offsets(
-                                 int argc,
-                                 VALUE *argv,
-                                 Image *dest,
-                                 Image *src,
-                                 long *x_offset,
-                                 long *y_offset)
+static void
+get_composite_offsets(int argc, VALUE *argv, Image *dest, Image *src
+                    , long *x_offset, long *y_offset)
 {
     GravityType gravity;
     int exc = 0;
@@ -1199,11 +1187,7 @@ static void get_composite_offsets(
                 is far in excess of what xMagick will allow.
 */
 static void
-blend_geometry(
-              char *geometry,
-              size_t geometry_l,
-              double src_percent,
-              double dst_percent)
+blend_geometry(char *geometry, size_t geometry_l, double src_percent, double dst_percent)
 {
     size_t sz = 0;
     int fw, prec;
@@ -1259,14 +1243,8 @@ blend_geometry(
 
 
 static VALUE
-special_composite(
-                 Image *image,
-                 Image *overlay,
-                 double image_pct,
-                 double overlay_pct,
-                 long x_off,
-                 long y_off,
-                 CompositeOperator op)
+special_composite(Image *image, Image *overlay, double image_pct, double overlay_pct
+                 , long x_off, long y_off, CompositeOperator op)
 {
     Image *new_image;
     char geometry[20];
@@ -1398,12 +1376,8 @@ Image_blur_image(int argc, VALUE *argv, VALUE self)
     Purpose:    surrounds the image with a border of the specified width,
                 height, and named color
 */
-static VALUE border(
-                   int bang,
-                   VALUE self,
-                   VALUE width,
-                   VALUE height,
-                   VALUE color)
+static VALUE
+border(int bang, VALUE self, VALUE width, VALUE height, VALUE color)
 {
     Image *image, *new_image;
     PixelPacket old_border;
@@ -1441,11 +1415,7 @@ static VALUE border(
 }
 
 VALUE
-Image_border_bang(
-                 VALUE self,
-                 VALUE width,
-                 VALUE height,
-                 VALUE color)
+Image_border_bang(VALUE self, VALUE width, VALUE height, VALUE color)
 {
     (void) rm_check_frozen(self);
     return border(True, self, width, height, color);
@@ -1453,11 +1423,7 @@ Image_border_bang(
 
 
 VALUE
-Image_border(
-            VALUE self,
-            VALUE width,
-            VALUE height,
-            VALUE color)
+Image_border(VALUE self, VALUE width, VALUE height, VALUE color)
 {
     (void) rm_check_destroyed(self);
     return border(False, self, width, height, color);
@@ -1474,6 +1440,7 @@ Image_border_color(VALUE self)
     Image *image = rm_check_destroyed(self);
     return PixelPacket_to_Color_Name(image, &image->border_color);
 }
+
 
 /*
     Method:     Image#border_color=
@@ -1492,7 +1459,8 @@ Image_border_color_eq(VALUE self, VALUE color)
     Method:     Image#bounding_box
     Purpose:    returns the bounding box of an image canvas
 */
-VALUE Image_bounding_box(VALUE self)
+VALUE
+Image_bounding_box(VALUE self)
 {
     Image *image;
     RectangleInfo box;
@@ -1518,10 +1486,7 @@ VALUE Image_bounding_box(VALUE self)
     Purpose:    do a screen capture
 */
 VALUE
-Image_capture(
-             int argc,
-             VALUE *argv,
-             VALUE self)
+Image_capture(int argc, VALUE *argv, VALUE self)
 {
     Image *image;
     ImageInfo *image_info;
@@ -1785,16 +1750,12 @@ Image_check_destroyed(VALUE self)
                 the removed portion
 */
 VALUE
-Image_chop(
-          VALUE self,
-          VALUE x,
-          VALUE y,
-          VALUE width,
-          VALUE height)
+Image_chop(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
     (void) rm_check_destroyed(self);
     return xform_image(False, self, x, y, width, height, ChopImage);
 }
+
 
 /*
     Method:     Image#chromaticity
@@ -1807,6 +1768,7 @@ Image_chromaticity(VALUE self)
     Image *image = rm_check_destroyed(self);
     return ChromaticityInfo_new(&image->chromaticity);
 }
+
 
 /*
     Method:     Image#chromaticity=
@@ -1840,11 +1802,11 @@ Image_clone(VALUE self)
     return clone;
 }
 
+
 /*
     Method:     Image#clut_channel
     Purpose:    Equivalent to -clut option.
 */
-
 VALUE
 Image_clut_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -1890,6 +1852,7 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
     return(VALUE)0;
 #endif
 }
+
 
 /*
     Method:     Image_color_histogram(VALUE self);
@@ -1959,14 +1922,14 @@ Image_color_histogram(VALUE self)
 }
 
 
-
 /*
     Static:     set_profile(target_image, name, profile_image)
     Purpose:    The `profile_image' argument is an IPTC or ICC profile. Store
                 all the profiles in the profile in the target image.
                 Called from Image_color_profile_eq and Image_iptc_profile_eq
 */
-static VALUE set_profile(VALUE self, const char *name, VALUE profile)
+static VALUE
+set_profile(VALUE self, const char *name, VALUE profile)
 {
     Image *image, *profile_image;
     ImageInfo *info;
@@ -2051,6 +2014,7 @@ Image_color_profile(VALUE self)
 
 }
 
+
 /*
     Method:     Image#color_profile=(String)
     Purpose:    Set the ICC color profile. The argument is a string.
@@ -2068,6 +2032,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
     return self;
 }
 
+
 /*
     Method:     Image#color_flood_fill(target_color, fill_color, x, y, method)
     Purpose:    changes the color value of any pixel that matches target_color
@@ -2076,13 +2041,8 @@ Image_color_profile_eq(VALUE self, VALUE profile)
                 Accepts either the FloodfillMethod or the FillToBorderMethod
 */
 VALUE
-Image_color_flood_fill(
-                      VALUE self,
-                      VALUE target_color,
-                      VALUE fill_color,
-                      VALUE xv,
-                      VALUE yv,
-                      VALUE method)
+Image_color_flood_fill( VALUE self, VALUE target_color, VALUE fill_color
+                      , VALUE xv, VALUE yv, VALUE method)
 {
     Image *image, *new_image;
     PixelPacket target;
@@ -2154,6 +2114,7 @@ Image_color_flood_fill(
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#colorize(r, g, b, target)
     Purpose:    blends the fill color specified by "target" with each pixel in
@@ -2161,10 +2122,7 @@ Image_color_flood_fill(
                 component.
 */
 VALUE
-Image_colorize(
-              int argc,
-              VALUE *argv,
-              VALUE self)
+Image_colorize(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double red, green, blue, matte;
@@ -2313,6 +2271,7 @@ Image_colorspace(VALUE self)
     return ColorspaceType_new(image->colorspace);
 }
 
+
 /*
     Method:     Image#colorspace=Magick::ColorspaceType
     Purpose:    Set the image's colorspace
@@ -2420,10 +2379,8 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
                 the method to compare_channel but kept channel_compare as
                 an alias.
 */
-VALUE Image_compare_channel(
-                           int argc,
-                           VALUE *argv,
-                           VALUE self)
+VALUE
+Image_compare_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *r_image, *difference_image;
     double distortion;
@@ -2475,7 +2432,8 @@ VALUE Image_compare_channel(
     Method:     Image#compose -> composite_op
     Purpose:    Return the composite operator attribute
 */
-VALUE Image_compose(VALUE self)
+VALUE
+Image_compose(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
     return CompositeOperator_new(image->compose);
@@ -2486,9 +2444,8 @@ VALUE Image_compose(VALUE self)
     Method:     Image#compose=composite_op
     Purpose:    Set the composite operator attribute
 */
-VALUE Image_compose_eq(
-                      VALUE self,
-                      VALUE compose_arg)
+VALUE
+Image_compose_eq(VALUE self, VALUE compose_arg)
 {
     Image *image = rm_check_frozen(self);
     VALUE_TO_ENUM(compose_arg, image->compose, CompositeOperator);
@@ -2508,12 +2465,8 @@ VALUE Image_compose_eq(
     Returns:    new composited image, or nil
 */
 
-static VALUE composite(
-                      int bang,
-                      int argc,
-                      VALUE *argv,
-                      VALUE self,
-                      ChannelType channels)
+static VALUE
+composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
 {
     Image *image, *new_image;
     Image *comp_image;
@@ -2664,19 +2617,15 @@ static VALUE composite(
 }
 
 
-VALUE Image_composite_bang(
-                          int argc,
-                          VALUE *argv,
-                          VALUE self)
+VALUE
+Image_composite_bang(int argc, VALUE *argv, VALUE self)
 {
     return composite(True, argc, argv, self, DefaultChannels);
 }
 
 
-VALUE Image_composite(
-                     int argc,
-                     VALUE *argv,
-                     VALUE self)
+VALUE
+Image_composite(int argc, VALUE *argv, VALUE self)
 {
     return composite(False, argc, argv, self, DefaultChannels);
 }
@@ -2688,10 +2637,7 @@ VALUE Image_composite(
                 dictated by the affine transform.
 */
 VALUE
-Image_composite_affine(
-                      VALUE self,
-                      VALUE source,
-                      VALUE affine_matrix)
+Image_composite_affine(VALUE self, VALUE source, VALUE affine_matrix)
 {
     Image *image, *composite_image, *new_image;
     AffineMatrix affine;
@@ -2952,12 +2898,8 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
     Purpose:    Convert percentages to #pixels. If the white-point (2nd)
                 argument is not supplied set it to #pixels - black-point.
 */
-static void get_black_white_point(
-                                 Image *image,
-                                 int argc,
-                                 VALUE *argv,
-                                 double *black_point,
-                                 double *white_point)
+static void
+get_black_white_point(Image *image, int argc, VALUE *argv, double *black_point, double *white_point)
 {
     double pixels;
 
@@ -3043,10 +2985,7 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
                 "kernel" is an order**2 array of doubles
 */
 VALUE
-Image_convolve(
-              VALUE self,
-              VALUE order_arg,
-              VALUE kernel_arg)
+Image_convolve(VALUE self, VALUE order_arg, VALUE kernel_arg)
 {
     Image *image, *new_image;
     double *kernel;
@@ -3087,10 +3026,7 @@ Image_convolve(
  *  Purpose:    call ConvolveImageChannel
 */
 VALUE
-Image_convolve_channel(
-                      int argc,
-                      VALUE *argv,
-                      VALUE self)
+Image_convolve_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     double *kernel;
@@ -3182,12 +3118,14 @@ Image_crop(int argc, VALUE *argv, VALUE self)
     return cropper(False, argc, argv, self);
 }
 
+
 VALUE
 Image_crop_bang(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_frozen(self);
     return cropper(True, argc, argv, self);
 }
+
 
 /*
     Method:     Image#cycle_colormap
@@ -3209,6 +3147,7 @@ Image_cycle_colormap(VALUE self, VALUE amount)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#density
     Purpose:    Get the x & y resolutions.
@@ -3225,6 +3164,7 @@ Image_density(VALUE self)
     sprintf(density, "%gx%g", image->x_resolution, image->y_resolution);
     return rb_str_new2(density);
 }
+
 
 /*
     Method:     Image#density="XxY"
@@ -3292,6 +3232,7 @@ Image_density_eq(VALUE self, VALUE density_arg)
 
     return self;
 }
+
 
 /*
     Method:     Image#depth
@@ -3437,7 +3378,8 @@ Image_despeckle(VALUE self)
     Method:     Image#destroy!
     Purpose:    Free all the memory associated with an image
 */
-VALUE Image_destroy_bang(VALUE self)
+VALUE
+Image_destroy_bang(VALUE self)
 {
     Image *image;
 
@@ -3453,7 +3395,8 @@ VALUE Image_destroy_bang(VALUE self)
     Method:     Image#destroyed?
     Purpose:    Returns true if the image has been destroyed, false otherwise
 */
-VALUE Image_destroyed_q(VALUE self)
+VALUE
+Image_destroyed_q(VALUE self)
 {
     Image *image;
 
@@ -3471,7 +3414,8 @@ VALUE Image_destroyed_q(VALUE self)
                 [2] normalized maximum error
     Notes:      "other" can be either an Image or an Image
 */
-VALUE Image_difference(VALUE self, VALUE other)
+VALUE
+Image_difference(VALUE self, VALUE other)
 {
     Image *image;
     Image *image2;
@@ -3636,11 +3580,13 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     return pixels_ary;
 }
 
+
 /*
     Method:     Image#display
     Purpose:    display the image to an X window screen
 */
-VALUE Image_display(VALUE self)
+VALUE
+Image_display(VALUE self)
 {
     Image *image;
     Info *info;
@@ -3662,6 +3608,7 @@ VALUE Image_display(VALUE self)
     return self;
 }
 
+
 /*
     Method:     Image#dispose
     Purpose:    Return the dispose attribute as a DisposeType enum
@@ -3672,6 +3619,7 @@ Image_dispose(VALUE self)
     Image *image = rm_check_destroyed(self);
     return DisposeType_new(image->dispose);
 }
+
 
 /*
     Method:     Image#dispose=
@@ -3837,6 +3785,7 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
     return rb_float_new(distortion);
 }
 
+
 /*
     Method:     Image#_dump(aDepth)
     Purpose:    implement marshalling
@@ -3896,6 +3845,7 @@ Image__dump(VALUE self, VALUE depth)
     return rb_str_cat(str, (char *)blob, (long)length);
 }
 
+
 /*
     Method:     Image#dup
     Purpose:    Construct a new image object and call initialize_copy
@@ -3913,6 +3863,7 @@ Image_dup(VALUE self)
     }
     return rb_funcall(dup, rm_ID_initialize_copy, 1, self);
 }
+
 
 /*
     Method:  Image#each_profile
@@ -3953,6 +3904,7 @@ Image_each_profile(VALUE self)
     return val;
 }
 
+
 /*
     Method:     Image#edge(radius=0)
     Purpose:    finds edges in an image. "radius" defines the radius of the
@@ -3991,16 +3943,13 @@ Image_edge(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Static:     effect_image
     Purpose:    call one of the effects methods
 */
 static VALUE
-effect_image(
-            VALUE self,
-            int argc,
-            VALUE *argv,
-            effector_t effector)
+effect_image(VALUE self, int argc, VALUE *argv, effector_t effector)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -4036,6 +3985,7 @@ effect_image(
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image#emboss(radius=0.0, sigma=1.0)
@@ -4135,6 +4085,7 @@ Image_enhance(VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#equalize
     Purpose:    applies a histogram equalization to the image
@@ -4156,6 +4107,7 @@ Image_equalize(VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image#equalize_channel
@@ -4195,6 +4147,7 @@ Image_equalize_channel(int argc, VALUE *argv, VALUE self)
 #endif
 }
 
+
 /*
     Method:     Image#erase!
     Purpose:    reset the image to the background color
@@ -4211,6 +4164,7 @@ Image_erase_bang(VALUE self)
 
     return self;
 }
+
 
 /*
     Method:     Image#excerpt(x, y, width, height)
@@ -4258,6 +4212,7 @@ excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 #endif
 }
 
+
 VALUE
 Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
@@ -4265,12 +4220,14 @@ Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
     return excerpt(False, self, x, y, width, height);
 }
 
+
 VALUE
 Image_excerpt_bang(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
     (void) rm_check_frozen(self);
     return excerpt(True, self, x, y, width, height);
 }
+
 
 /*
     Method:     Image#export_pixels(x=0, y=0, cols=self.columns, rows=self.rows, map="RGB")
@@ -4527,6 +4484,7 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
     return string;
 }
 
+
 /*
     Method:     Image#extract_info, extract_info=
     Purpose:    the extract_info attribute accessors
@@ -4537,6 +4495,7 @@ Image_extract_info(VALUE self)
     Image *image = rm_check_destroyed(self);
     return Rectangle_from_RectangleInfo(&image->extract_info);
 }
+
 
 VALUE
 Image_extract_info_eq(VALUE self, VALUE rect)
@@ -4571,6 +4530,7 @@ Image_filter(VALUE self)
     Image *image = rm_check_destroyed(self);
     return FilterTypes_new(image->filter);
 }
+
 
 VALUE
 Image_filter_eq(VALUE self, VALUE filter)
@@ -4665,6 +4625,7 @@ flipflop(int bang, VALUE self, flipper_t flipflopper)
     return rm_image_new(new_image);
 }
 
+
 VALUE
 Image_flip(VALUE self)
 {
@@ -4672,12 +4633,14 @@ Image_flip(VALUE self)
     return flipflop(False, self, FlipImage);
 }
 
+
 VALUE
 Image_flip_bang(VALUE self)
 {
     (void) rm_check_frozen(self);
     return flipflop(True, self, FlipImage);
 }
+
 
 /*
     Method:     Image#flop
@@ -4693,6 +4656,7 @@ Image_flop(VALUE self)
     (void) rm_check_destroyed(self);
     return flipflop(False, self, FlopImage);
 }
+
 
 VALUE
 Image_flop_bang(VALUE self)
@@ -4840,6 +4804,7 @@ Image_frame(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image.from_blob(blob) <{ parm block }>
     Purpose:    Call BlobToImage
@@ -4875,14 +4840,17 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     return array_from_images(images);
 }
 
+
 DEF_ATTR_READER(Image, fuzz, dbl)
+
 
 /*
     Method:     Image#fuzz=number
                 Image#fuzz=NN%
     Notes:      See Info#fuzz.
 */
-VALUE Image_fuzz_eq(VALUE self, VALUE fuzz)
+VALUE
+Image_fuzz_eq(VALUE self, VALUE fuzz)
 {
     Image *image = rm_check_frozen(self);
     image->fuzz = rm_fuzz_to_dbl(fuzz);
@@ -4979,6 +4947,7 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#gaussian_blur(radius, sigma)
     Purpose:    blur the image
@@ -5037,6 +5006,7 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 */
 DEF_ATTR_READER(Image, geometry, str)
 
+
 VALUE
 Image_geometry_eq(
                  VALUE self,
@@ -5078,12 +5048,7 @@ Image_geometry_eq(
                 store_pixels calls GetImagePixels, then SyncImage
 */
 VALUE
-Image_get_pixels(
-                VALUE self,
-                VALUE x_arg,
-                VALUE y_arg,
-                VALUE cols_arg,
-                VALUE rows_arg)
+Image_get_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg, VALUE rows_arg)
 {
     Image *image;
     const PixelPacket *pixels;
@@ -5133,7 +5098,8 @@ Image_get_pixels(
 }
 
 
-static VALUE has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, ExceptionInfo *))
+static VALUE
+has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, ExceptionInfo *))
 {
     Image *image;
     ExceptionInfo exception;
@@ -5377,6 +5343,7 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+
 /*
     Method:     Image#inspect
     Purpose:    Overrides Object#inspect - returns a string description of the
@@ -5385,7 +5352,8 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
     Notes:      this is essentially the IdentifyImage except the description is
                 built in a char buffer instead of being written to a file.
 */
-static void build_inspect_string(Image *image, char *buffer, size_t len)
+static void
+build_inspect_string(Image *image, char *buffer, size_t len)
 {
     unsigned long quantum_depth;
     int x = 0;                  // # bytes used in buffer
@@ -5578,6 +5546,7 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
     return self;
 }
 
+
 /*
     These are undocumented methods. The writer is
     called only by Image#iterations=.
@@ -5629,6 +5598,7 @@ Image_level2(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#level_channel(aChannelType, black=0, white=QuantumRange, gamma=1.0)
     Purpose:    similar to Image#level but applies to a single channel only
@@ -5673,6 +5643,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image_linear_stretch(black_point <, white_point>)
@@ -5751,6 +5722,7 @@ Image_liquid_rescale(int argc, VALUE *argv, VALUE self)
     return(VALUE)0;
 #endif
 }
+
 
 /*
     Method:     Image._load
@@ -5860,12 +5832,14 @@ magnify(int bang, VALUE self, magnifier_t magnifier)
     return rm_image_new(new_image);
 }
 
+
 VALUE
 Image_magnify(VALUE self)
 {
     (void) rm_check_destroyed(self);
     return magnify(False, self, MagnifyImage);
 }
+
 
 VALUE
 Image_magnify_bang(VALUE self)
@@ -5874,12 +5848,12 @@ Image_magnify_bang(VALUE self)
     return magnify(True, self, MagnifyImage);
 }
 
+
 /*
     Method:     Image#map(map_image, dither=false)
     Purpose:    Call MapImage
     Returns:    a new image
 */
-
 VALUE
 Image_map(int argc, VALUE *argv, VALUE self)
 {
@@ -6118,18 +6092,13 @@ Image_matte_color_eq(VALUE self, VALUE color)
     return self;
 }
 
+
 /*
     Method:     Image#matte_flood_fill(color, opacity, x, y, method_obj)
     Purpose:    Call MatteFloodFillImage
 */
 VALUE
-Image_matte_flood_fill(
-                      VALUE self,
-                      VALUE color,
-                      VALUE opacity,
-                      VALUE x_obj,
-                      VALUE y_obj,
-                      VALUE method_obj)
+Image_matte_flood_fill(VALUE self, VALUE color, VALUE opacity, VALUE x_obj, VALUE y_obj, VALUE method_obj)
 {
     Image *image, *new_image;
     PixelPacket target;
@@ -6198,6 +6167,7 @@ Image_matte_flood_fill(
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#median_filter(radius=0.0)
     Purpose:    applies a digital filter that improves the quality of a noisy
@@ -6236,7 +6206,9 @@ Image_median_filter(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 DEF_ATTR_READERF(Image, mean_error_per_pixel, error.mean_error_per_pixel, dbl)
+
 
 /*
     Method:     Image#mime_type
@@ -6264,6 +6236,7 @@ Image_mime_type(VALUE self)
     return mime_type;
 }
 
+
 /*
     Method:     Image#minify
                 Image#minify!
@@ -6278,12 +6251,14 @@ Image_minify(VALUE self)
     return magnify(False, self, MinifyImage);
 }
 
+
 VALUE
 Image_minify_bang(VALUE self)
 {
     (void) rm_check_frozen(self);
     return magnify(True, self, MinifyImage);
 }
+
 
 /*
     Method:     Image#modulate(<brightness<, saturation<, hue>>>)
@@ -6330,6 +6305,7 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#monitor= proc
     Purpose:    Establish a progress monitor
@@ -6357,8 +6333,6 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 }
 
 
-
-
 /*
     Method:     Image#monochrome?
     Purpose:    return true if all the pixels in the image have the same red,
@@ -6370,6 +6344,7 @@ Image_monochrome_q(VALUE self)
 {
     return has_attribute(self, IsMonochromeImage);
 }
+
 
 /*
     Method:     Image#montage
@@ -6384,11 +6359,8 @@ DEF_ATTR_READER(Image, montage, str)
     Purpose:    called from Image_motion_blur and Image_sketch
 */
 static VALUE
-motion_blur(
-           int argc,
-           VALUE *argv,
-           VALUE self,
-           Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
+motion_blur(int argc, VALUE *argv, VALUE self
+          , Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -6476,7 +6448,6 @@ Image_negate(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
-
 
 
 /*
@@ -6608,6 +6579,7 @@ rm_image_new(Image *image)
     return Data_Wrap_Struct(Class_Image, NULL, rm_image_destroy, image);
 }
 
+
 /*
     Method:     Image#normalize
     Purpose:    enhances the contrast of a color image by adjusting the pixels
@@ -6654,8 +6626,10 @@ Image_normalize_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 DEF_ATTR_READERF(Image, normalized_mean_error, error.normalized_mean_error, dbl)
 DEF_ATTR_READERF(Image, normalized_maximum_error, error.normalized_maximum_error, dbl)
+
 
 /*
     Method:     Image#number_colors
@@ -6679,7 +6653,9 @@ Image_number_colors(VALUE self)
     return ULONG2NUM(n);
 }
 
+
 DEF_ATTR_ACCESSOR(Image, offset, long)
+
 
 /*
     Method:     Image#oil_paint(radius=3.0)
@@ -6715,6 +6691,7 @@ Image_oil_paint(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image#opaque(target-color-name, fill-color-name)
@@ -6831,7 +6808,6 @@ Image_opaque_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-
 /*
     Method:     Image#opaque?
     Purpose:    return true if any of the pixels in the image have an opacity
@@ -6842,6 +6818,7 @@ Image_opaque_q(VALUE self)
 {
     return has_attribute(self, IsOpaqueImage);
 }
+
 
 /*
     Method:     Image#ordered_dither(threshold_map='2x2')
@@ -7030,6 +7007,7 @@ Image_palette_q(VALUE self)
     return has_attribute(self, IsPaletteImage);
 }
 
+
 /*
     Method:     Image.ping(file)
     Purpose:    Call ImagePing
@@ -7042,6 +7020,7 @@ Image_ping(VALUE class, VALUE file_arg)
     return rd_image(class, file_arg, PingImage);
 }
 
+
 /*
     Method:     Image#pixel_color(x, y<, color>)
     Purpose:    Gets/sets the color of the pixel at x,y
@@ -7052,10 +7031,7 @@ Image_ping(VALUE class, VALUE file_arg)
                 Based on Magick++'s Magick::pixelColor methods
 */
 VALUE
-Image_pixel_color(
-                 int argc,
-                 VALUE *argv,
-                 VALUE self)
+Image_pixel_color(int argc, VALUE *argv, VALUE self)
 {
     Image *image;
     PixelPacket old_color, new_color, *pixel;
@@ -7229,8 +7205,6 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 }
 
 
-
-
 /*
     Method:     posterize
     Purpose:    call PosterizeImage
@@ -7265,6 +7239,7 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:  preview
@@ -7481,7 +7456,6 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
 }
 
 
-
 /*
     Method:     Image#radial_blur(angle)
     Purpose:    Call RadialBlurImage
@@ -7505,6 +7479,7 @@ Image_radial_blur(VALUE self, VALUE angle)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image#radial_blur_channel(angle[, channel..])
@@ -7551,10 +7526,7 @@ Image_radial_blur_channel(
     PUrpose:    Call RandomThresholdImageChannel
 */
 VALUE
-Image_random_threshold_channel(
-                              int argc,
-                              VALUE *argv,
-                              VALUE self)
+Image_random_threshold_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     ChannelType channels;
@@ -7636,6 +7608,7 @@ Image_raise(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image.read(file)
@@ -7829,7 +7802,8 @@ Image_read_inline(VALUE self, VALUE content)
      Static:    array_from_images
      Purpose:   convert a list of images to an array of Image objects
 */
-static VALUE array_from_images(Image *images)
+static VALUE
+array_from_images(Image *images)
 {
     volatile VALUE image_obj, image_ary;
     Image *image;
@@ -7870,6 +7844,7 @@ Image_reduce_noise(VALUE self, VALUE radius)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#rendering_intent=
     Purpose:    get rendering_intent
@@ -7880,6 +7855,7 @@ Image_rendering_intent(VALUE self)
     Image *image = rm_check_destroyed(self);
     return RenderingIntent_new(image->rendering_intent);
 }
+
 
 /*
     Method:     Image#rendering_intent=
@@ -7892,6 +7868,7 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
     VALUE_TO_ENUM(ri, image->rendering_intent, RenderingIntent);
     return self;
 }
+
 
 /*
     Method:     Image#resize(scale) or (cols, rows<, filter<, blur>>)
@@ -7972,6 +7949,7 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 VALUE
 Image_resize(int argc, VALUE *argv, VALUE self)
 {
@@ -7979,12 +7957,14 @@ Image_resize(int argc, VALUE *argv, VALUE self)
     return resize(False, argc, argv, self);
 }
 
+
 VALUE
 Image_resize_bang(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_frozen(self);
     return resize(True, argc, argv, self);
 }
+
 
 /*
     Method:     Image#roll(x_offset, y_offset)
@@ -8072,12 +8052,14 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 VALUE
 Image_rotate(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_destroyed(self);
     return rotate(False, argc, argv, self);
 }
+
 
 VALUE
 Image_rotate_bang(int argc, VALUE *argv, VALUE self)
@@ -8086,7 +8068,9 @@ Image_rotate_bang(int argc, VALUE *argv, VALUE self)
     return rotate(True, argc, argv, self);
 }
 
+
 DEF_ATTR_READER(Image, rows, int)
+
 
 /*
     Method:     Image#sample(scale) or (cols, rows)
@@ -8102,12 +8086,14 @@ Image_sample(int argc, VALUE *argv, VALUE self)
     return scale(False, argc, argv, self, SampleImage);
 }
 
+
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_frozen(self);
     return scale(True, argc, argv, self, SampleImage);
 }
+
 
 /*
     Method:     Image#scale(scale) or (cols, rows)
@@ -8123,12 +8109,14 @@ Image_scale(int argc, VALUE *argv, VALUE self)
     return scale(False, argc, argv, self, ScaleImage);
 }
 
+
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_frozen(self);
     return scale(True, argc, argv, self, ScaleImage);
 }
+
 
 /*
     Static:     scale
@@ -8193,6 +8181,7 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 
     return rm_image_new(new_image);
 }
+
 
 DEF_ATTR_READER(Image, scene, ulong)
 
@@ -8329,6 +8318,7 @@ Image_segment(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     Image#opacity=
@@ -8544,6 +8534,7 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#sharpen(radius=0, sigma=1)
     Purpose:    sharpens an image
@@ -8607,10 +8598,7 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
                 shave!: self, shaved
 */
 VALUE
-Image_shave(
-           VALUE self,
-           VALUE width,
-           VALUE height)
+Image_shave(VALUE self, VALUE width, VALUE height)
 {
     (void) rm_check_destroyed(self);
     return xform_image(False, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
@@ -8618,10 +8606,7 @@ Image_shave(
 
 
 VALUE
-Image_shave_bang(
-                VALUE self,
-                VALUE width,
-                VALUE height)
+Image_shave_bang(VALUE self, VALUE width, VALUE height)
 {
     (void) rm_check_frozen(self);
     return xform_image(True, self, INT2FIX(0), INT2FIX(0), width, height, ShaveImage);
@@ -8635,10 +8620,7 @@ Image_shave_bang(
     Returns:    a new image
 */
 VALUE
-Image_shear(
-           VALUE self,
-           VALUE x_shear,
-           VALUE y_shear)
+Image_shear(VALUE self, VALUE x_shear, VALUE y_shear)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -8695,6 +8677,7 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#signature
     Purpose:    computes a message digest from an image pixel stream with an
@@ -8717,7 +8700,6 @@ Image_signature(VALUE self)
     }
     return rb_str_new(signature, 64);
 }
-
 
 
 /*
@@ -8769,6 +8751,7 @@ Image_solarize(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#spaceship     (a <=> b)
     Purpose:    compare two images
@@ -8805,6 +8788,7 @@ Image_spaceship(VALUE self, VALUE other)
 
     return INT2FIX(res);
 }
+
 
 /*
     Method:     Image#splice(x, y, width, height[, color])
@@ -8862,6 +8846,7 @@ Image_splice(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#spread(radius=3)
     Purpose:    randomly displaces each pixel in a block defined by "radius"
@@ -8896,6 +8881,7 @@ Image_spread(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 DEF_ATTR_ACCESSOR(Image, start_loop, bool)
 
 
@@ -8908,10 +8894,7 @@ DEF_ATTR_ACCESSOR(Image, start_loop, bool)
     Returns:    a new image
 */
 VALUE
-Image_stegano(
-             VALUE self,
-             VALUE watermark_image,
-             VALUE offset)
+Image_stegano(VALUE self, VALUE watermark_image, VALUE offset)
 {
     Image *image, *new_image;
     volatile VALUE wm_image;
@@ -8936,6 +8919,7 @@ Image_stegano(
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#stereo(offset_image)
     Purpose:    combines two images and produces a single image that is the
@@ -8945,9 +8929,7 @@ Image_stegano(
     Returns:    a new image
 */
 VALUE
-Image_stereo(
-            VALUE self,
-            VALUE offset_image_arg)
+Image_stereo(VALUE self, VALUE offset_image_arg)
 {
     Image *image, *new_image;
     volatile VALUE offset_image;
@@ -8970,6 +8952,7 @@ Image_stereo(
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#class_type
     Purpose:    return the image's storage class (a.k.a. storage type, class type)
@@ -8981,6 +8964,7 @@ Image_class_type(VALUE self)
     Image *image = rm_check_destroyed(self);
     return ClassType_new(image->storage_class);
 }
+
 
 /*
     Method:     Image#class_type=
@@ -9015,6 +8999,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
     return self;
 }
 
+
 /*
     Method:     Image#store_pixels
     Purpose:    Replace the pixels in the specified rectangle
@@ -9024,13 +9009,8 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
                 "new_pixels" argument.
 */
 VALUE
-Image_store_pixels(
-                  VALUE self,
-                  VALUE x_arg,
-                  VALUE y_arg,
-                  VALUE cols_arg,
-                  VALUE rows_arg,
-                  VALUE new_pixels)
+Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
+                 , VALUE rows_arg, VALUE new_pixels)
 {
     Image *image;
     Pixel *pixels, *pixel;
@@ -9160,13 +9140,8 @@ Image_sync_profiles(VALUE self)
                 stopping at pixels matching the specified color."
 */
 VALUE
-Image_texture_flood_fill(
-                        VALUE self,
-                        VALUE color_obj,
-                        VALUE texture_obj,
-                        VALUE x_obj,
-                        VALUE y_obj,
-                        VALUE method_obj)
+Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
+                       , VALUE x_obj, VALUE y_obj, VALUE method_obj)
 {
     Image *image, *new_image;
     Image *texture_image;
@@ -9243,6 +9218,7 @@ Image_texture_flood_fill(
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#threshold(threshold)
     Purpose:    changes the value of individual pixels based on the intensity of
@@ -9269,11 +9245,7 @@ Image_threshold(VALUE self, VALUE threshold)
  *  Purpose:    call one of the xxxxThresholdImage methods
 */
 static
-VALUE threshold_image(
-                     int argc,
-                     VALUE *argv,
-                     VALUE self,
-                     thresholder_t thresholder)
+VALUE threshold_image(int argc, VALUE *argv, VALUE self, thresholder_t thresholder)
 {
     Image *image, *new_image;
     double red, green, blue, opacity;
@@ -9383,12 +9355,14 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 VALUE
 Image_thumbnail(int argc, VALUE *argv, VALUE self)
 {
     (void) rm_check_destroyed(self);
     return thumbnail(False, argc, argv, self);
 }
+
 
 VALUE
 Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
@@ -9490,6 +9464,7 @@ Image_tint(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     Image#to_blob
     Purpose:    Return a "blob" (a String) from the image
@@ -9569,6 +9544,7 @@ Image_to_blob(VALUE self)
     return blob_str;
 }
 
+
 /*
     Method:     Image#to_color
     Purpose:    Return a color name for the color intensity specified by the
@@ -9601,6 +9577,7 @@ Image_to_color(VALUE self, VALUE pixel_arg)
 
 }
 
+
 /*
     Method:     Image#total_colors
     Purpose:    alias for Image#number_colors
@@ -9612,6 +9589,7 @@ Image_total_colors(VALUE self)
 {
     return Image_number_colors(self);
 }
+
 
 /*
     Method:     Image#transparent(color-name<, opacity>)
@@ -9791,6 +9769,7 @@ Image_trim(int argc, VALUE *argv, VALUE self)
     return trimmer(False, argc, argv, self);
 }
 
+
 VALUE
 Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -9885,6 +9864,7 @@ Image_units(VALUE self)
     return ResolutionType_new(image->units);
 }
 
+
 /*
     Method:     Image#units=
     Purpose:    Set the resolution type field
@@ -9932,6 +9912,7 @@ Image_units_eq(
     return self;
 }
 
+
 /*
     Method:     Image#unsharp_mask(radius=0.0, sigma=1.0, amount=1.0, threshold=0.05)
     Purpose:    sharpens an image. "amount" is the percentage of the difference
@@ -9940,13 +9921,8 @@ Image_units_eq(
                 apply the diffence amount.
 */
 static void
-unsharp_mask_args(
-                 int argc,
-                 VALUE *argv,
-                 double *radius,
-                 double *sigma,
-                 double *amount,
-                 double *threshold)
+unsharp_mask_args(int argc, VALUE *argv, double *radius, double *sigma
+                , double *amount, double *threshold)
 {
     switch (argc)
     {
@@ -10126,8 +10102,6 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
 }
 
 
-
-
 /*
   Method:   Image#watermark(mark, brightness=100.0, saturation=100.0
                           , [gravity,] x_off=0, y_off=0)
@@ -10184,6 +10158,7 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
   Method:   Image#wave(amplitude=25.0, wavelength=150.0)
@@ -10703,21 +10678,13 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
-
 /*
     Static:     xform_image
     Purpose:    call one of the image transformation functions
     Returns:    a new image, or transformed self
 */
 static VALUE
-xform_image(
-           int bang,
-           VALUE self,
-           VALUE x,
-           VALUE y,
-           VALUE width,
-           VALUE height,
-           xformer_t xformer)
+xform_image(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height, xformer_t xformer)
 {
     Image *image, *new_image;
     RectangleInfo rect;
@@ -10762,9 +10729,7 @@ xform_image(
                 no channel arguments were found. Returns the
                 number of remaining arguments.
 */
-ChannelType extract_channels(
-                            int *argc,
-                            VALUE *argv)
+ChannelType extract_channels(int *argc, VALUE *argv)
 {
     volatile VALUE arg;
     ChannelType channels, ch_arg;

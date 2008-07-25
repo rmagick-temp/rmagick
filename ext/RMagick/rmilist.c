@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.74 2008/07/21 22:25:46 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.75 2008/07/25 23:45:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -937,6 +937,9 @@ ImageList_write(VALUE self, VALUE file)
 
     // Find out if the format supports multi-images files.
     GetExceptionInfo(&exception);
+    (void) SetImageInfo(info, MagickTrue, &exception);
+    rm_check_exception(&exception, images, RetainOnError);
+
     m = GetMagickInfo(info->magick, &exception);
     rm_check_exception(&exception, images, RetainOnError);
     (void) DestroyExceptionInfo(&exception);

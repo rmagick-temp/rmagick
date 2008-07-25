@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.156 2008/06/21 00:24:10 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.157 2008/07/25 23:44:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -225,6 +225,7 @@ VALUE
 rm_no_freeze(VALUE obj)
 {
     rb_raise(rb_eTypeError, "can't freeze %s", rb_class2name(CLASS_OF(obj)));
+    return (VALUE)0;
 }
 
 
@@ -268,6 +269,7 @@ rescue_not_str(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be a number or a string in the form 'NN%%' (%s given)",
             rb_class2name(CLASS_OF(arg)));
+    return (VALUE)0;
 }
 
 /*
@@ -2180,6 +2182,7 @@ color_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be color name or pixel (%s given)",
             rb_class2name(CLASS_OF(arg)));
+    return (VALUE)0;
 }
 
 /*

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.253 2008/07/23 23:35:11 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.254 2008/07/26 19:47:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -66,6 +66,7 @@ Magick_colors(VALUE class)
     }
 }
 
+
 /*
   Method:   Magick::fonts [ { |fontinfo| } ]
   Purpose:  If called with the optional block, iterates over the fonts,
@@ -123,7 +124,8 @@ Magick_fonts(VALUE class)
             There are 3 implementations.
 */
 
-static VALUE MagickInfo_to_format(const MagickInfo *magick_info)
+static VALUE
+MagickInfo_to_format(const MagickInfo *magick_info)
 {
     char mode[4];
 
@@ -134,6 +136,7 @@ static VALUE MagickInfo_to_format(const MagickInfo *magick_info)
 
     return rb_str_new(mode, sizeof(mode));
 }
+
 
 VALUE
 Magick_init_formats(VALUE class)
@@ -256,7 +259,6 @@ Magick_limit_resource(int argc, VALUE *argv, VALUE class)
 }
 
 
-
 /*
     Method      Magick.set_cache_threshold(megabytes)
     Purpose:    sets the amount of free memory allocated for the
@@ -272,6 +274,7 @@ Magick_set_cache_threshold(VALUE class, VALUE threshold)
     (void) SetMagickResourceLimit(MapResource, (MagickSizeType)(2*thrshld));
     return class;
 }
+
 
 /*
     Method:     Magick.set_log_event_mask(event,...) -> Magick
@@ -318,14 +321,12 @@ Magick_set_log_format(VALUE class, VALUE format)
 }
 
 
-
 /*
   External:     Init_RMagick2
   Purpose:      define the classes and constants
   Arguments:    void
   Returns:      void
 */
-
 void
 Init_RMagick2(void)
 {
@@ -1662,7 +1663,8 @@ Init_RMagick2(void)
  *  Notes:      Bypass the test by defining the constant RMAGICK_BYPASS_VERSION_TEST
  *              to 'true' at the top level, before requiring 'RMagick'
 */
-static void test_Magick_version(void)
+static void
+test_Magick_version(void)
 {
     unsigned long version_number;
     const char *version_str;
@@ -1702,7 +1704,8 @@ static void test_Magick_version(void)
     Static:     version_constants
     Purpose:    create Version, Magick_version, and Version_long constants.
 */
-static void version_constants(void)
+static void
+version_constants(void)
 {
     const char *mgk_version;
     volatile VALUE str;
@@ -1719,7 +1722,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/07/23 23:35:11 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/07/26 19:47:30 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

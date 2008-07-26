@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.75 2008/07/25 23:45:42 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.76 2008/07/26 19:46:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -62,6 +62,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+
 /*
     Method:     ImageList#append(stack)
     Purpose:    Append all the images by calling ImageAppend
@@ -92,6 +93,7 @@ ImageList_append(VALUE self, VALUE stack_arg)
     return rm_image_new(new_image);
 }
 
+
 /*
     Method:     ImageList#average
     Purpose:    Average all images together by calling AverageImages
@@ -116,6 +118,7 @@ ImageList_average(VALUE self)
 
     return rm_image_new(new_image);
 }
+
 
 /*
     Method:     ImageList#coalesce
@@ -234,6 +237,7 @@ ImageList_deconstruct(VALUE self)
     return rm_imagelist_from_images(new_images);
 }
 
+
 /*
     Method:     ImageList#display
     Purpose:    Display all the images to an X window screen.
@@ -258,6 +262,7 @@ ImageList_display(VALUE self)
 
     return self;
 }
+
 
 /*
     Method:     ImageList#flatten_images
@@ -329,7 +334,6 @@ ImageList_fx(int argc, VALUE *argv, VALUE self)
 }
 
 
-
 /*
     Method:     ImageList#map(reference, dither=false)
     Purpose:    Call MapImages
@@ -386,6 +390,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     return new_imagelist;
 }
 
+
 /*
     Method:     ImageList#montage <{parm block}>
     Purpose:    Call MontageImages
@@ -436,6 +441,7 @@ ImageList_montage(VALUE self)
     return rm_imagelist_from_images(new_images);
 }
 
+
 /*
     Method:     ImageList#morph(number_images)
     Purpose:    requires a minimum of two images. The first image is
@@ -474,6 +480,7 @@ ImageList_morph(VALUE self, VALUE nimages)
 
     return rm_imagelist_from_images(new_images);
 }
+
 
 /*
     Method:     ImageList#mosaic
@@ -706,6 +713,7 @@ imagelist_scene_eq(VALUE imagelist, VALUE scene)
     return scene;
 }
 
+
 /*
     Static:    imagelist_length
     Purpose:   return the # of images in an imagelist
@@ -716,6 +724,7 @@ imagelist_length(VALUE imagelist)
     volatile VALUE images = rb_iv_get(imagelist, "@images");
     return RARRAY_LEN(images);
 }
+
 
 /*
     Static:     imagelist_push
@@ -825,6 +834,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
 
     return new_imagelist;
 }
+
 
 /*
     Method:     ImageList#to_blob

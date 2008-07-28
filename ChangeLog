@@ -1,8 +1,8 @@
 RMagick 2.5.3
     o Fix bug #21237, Image::write ignores format attribute when called with a
       Tempfile pathname (bug report by Jack Shedd)
-    o Add the PolynomialDistortion and ShepardsDistortion MagickDistortion
-      Method enum values
+    o Add the BarrelDistortion, PolynomialDistortion, and ShepardsDistortion
+      MagickDistortion Method enum values
 
 RMagick 2.5.2
     o Add support for MergeLayer to Magick::ImageList#optimize_layers (patch

@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" -->
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -244,6 +244,8 @@ float: left;
           "#delete_compose_mask">delete_compose_mask</a></li>
 
           <li><a href="#delete_profile">delete_profile</a></li>
+
+          <li><a href="#deskew">deskew</a></li>
 
           <li><a href="#despeckle">despeckle</a></li>
 
@@ -3777,6 +3779,48 @@ deciphered_img = img.decipher("magic word")
     <h4>Magick API</h4>
 
     <p>ProfileImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="deskew">deskew</h3>
+
+    <p><span class="arg">img</span>.deskew(<span class=
+    "arg">threshold</span>=0.40, <span class=
+    "arg">auto_crop_width</span>=nil) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Straightens an image. A <span class=
+    "arg">threshold</span> of 40% works for most images.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>threshold</dt>
+
+      <dd>A percentage of QuantumRange. Either a Float between 0
+      and 1.0, inclusive, or a string in the form "NN%" where NN is
+      between 0 and 100.</dd>
+
+      <dt>auto_crop_width</dt>
+
+      <dd>Specify a value for this argument to cause the deskewed
+      image to be auto-cropped. The argument is the pixel width of
+      the image background (e.g. 40).</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+img2 = img.deskew
+</pre>
+
+    <h4>Magick API</h4>DeskewImage (available in 6.4.2)
   </div>
 
   <div class="sig">

@@ -151,13 +151,13 @@ float: left;
           <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
+
+          <li><a href="#border">border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#border">border</a></li>
-
           <li><a href="#border_bang">border!</a></li>
 
           <li><a href="#bounding_box">bounding_box</a></li>
@@ -204,12 +204,17 @@ float: left;
           <li><a href="#composite">composite</a></li>
 
           <li><a href="#composite_bang">composite!</a></li>
+
+          <li><a href="#composite_affine">composite_affine</a></li>
+
+          <li><a href="#composite_tiled">composite_tiled</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#composite_affine">composite_affine</a></li>
+          <li><a href=
+          "#composite_tiled_bang">composite_tiled!</a></li>
 
           <li><a href=
           "#compress_colormap_bang">compress_colormap!</a></li>
@@ -3062,6 +3067,88 @@ f.color_reset!(red)
     <h4>Magick API</h4>
 
     <p>DrawAffineImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="composite_tiled">composite_tiled</h3>
+
+    <p><span class="arg">img</span>.composite_tiled(<span class=
+    "arg">src</span>, <span class="arg">composite_op</span> =
+    Magick::OverCompositeOp) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Composites multiple copies of the source image across and
+    down the image, producing the same results as ImageMagick's
+    composite command with the -tile option.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>src</dt>
+
+      <dd>The source image</dd>
+
+      <dt>composite_op</dt>
+
+      <dd>A <a href=
+      "constants.html#CompositeOperator">CompositeOperator</a>
+      value</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite">composite</a>, <a href=
+    "#composite_tiled_bang">composite_tiled!</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>CompositeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="composite_tiled_bang">composite_tiled!</h3>
+
+    <p><span class="arg">img</span>.composite_tiled!(<span class=
+    "arg">src</span>, <span class="arg">composite_op</span> =
+    Magick::OverCompositeOp) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>In-place form of <a href=
+    "#composite_tiled">composite_tiled</a>.</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('composite_tiled.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/composite_tiled.jpg'" src=
+    "ex/composite_tiled.jpg" alt="composite_tiled example" title=
+    "Click the image to see the example script" /></a> <img src=
+    "ex/images/spin.gif" alt="" class="spin" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite_bang">composite!</a>, <a href=
+    "#composite_tiled">composite_tiled</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>CompositeImage</p>
   </div>
 
   <div class="sig">

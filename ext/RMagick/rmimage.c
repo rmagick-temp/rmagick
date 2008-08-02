@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.301 2008/07/24 22:19:31 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.302 2008/08/02 19:26:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2682,15 +2682,99 @@ composite_channel(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
-VALUE Image_composite_channel(int argc, VALUE *argv, VALUE self)
+VALUE
+Image_composite_channel(int argc, VALUE *argv, VALUE self)
 {
     return composite_channel(False, argc, argv, self);
 }
 
 
-VALUE Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
+VALUE
+Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
 {
     return composite_channel(True, argc, argv, self);
+}
+
+
+/*
+    Method:     Image#composite_tiled(src [, composite_op = Magick::OverCompositeOp][, channel...])
+    Purpose:    Emulate the -tile option to the composite command.
+    Returns:    new image
+    Notes:      Ref: wand/composite.c (6.2.4)
+*/
+static VALUE
+composite_tiled(int bang, int argc, VALUE *argv, VALUE self)
+{
+    Image *image;
+    Image *comp_image;
+    CompositeOperator operator = OverCompositeOp;
+    long x, y;
+    unsigned long columns;
+    ChannelType channels;
+    MagickStatusType status;
+
+    // Ensure image and composite_image aren't destroyed.
+    image = rm_check_destroyed(self);
+    if (argc > 0)
+    {
+        comp_image = rm_check_destroyed(ImageList_cur_image(argv[0]));
+    }
+
+    channels = extract_channels(&argc, argv);
+
+    switch (argc)
+    {
+        case 2:
+            VALUE_TO_ENUM(argv[1], operator, CompositeOperator);
+        case 1:
+            break;
+        case 0:
+            rb_raise(rb_eArgError, "wrong number of arguments (0 for 1 or more)");
+            break;
+        default:
+            raise_ChannelType_error(argv[argc-1]);
+            break;
+    }
+
+    if (!bang)
+    {
+        image = rm_clone_image(image);
+    }
+
+#if defined(HAVE_SETIMAGEARTIFACT)
+    (void) SetImageArtifact(comp_image,"modify-outside-overlay", "false");
+#else
+    (void) SetImageAttribute(comp_image, "[modify-outside-overlay]", "false");
+#endif
+
+    status = MagickTrue;
+    columns = comp_image->columns;
+
+    // Tile
+    for (y = 0; y < (long) image->rows; y += comp_image->rows)
+    {
+        for (x = 0; status == MagickTrue && x < (long) image->columns; x += columns)
+        {
+            status = CompositeImageChannel(image, channels, operator, comp_image, x, y);
+            rm_check_image_exception(image, bang ? RetainOnError: DestroyOnError);
+        }
+    }
+
+    return bang ? self : rm_image_new(image);
+}
+
+
+VALUE
+Image_composite_tiled(int argc, VALUE *argv, VALUE self)
+{
+    return composite_tiled(False, argc, argv, self);
+}
+
+
+VALUE
+Image_composite_tiled_bang(int argc, VALUE *argv, VALUE self)
+{
+    return composite_tiled(True, argc, argv, self);
 }
 
 

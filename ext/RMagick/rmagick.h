@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.237 2008/07/21 22:25:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.238 2008/08/02 19:26:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -815,10 +815,12 @@ extern VALUE Image_colorize(int, VALUE *, VALUE);
 extern VALUE Image_colormap(int, VALUE *, VALUE);
 extern VALUE Image_combine(int, VALUE *, VALUE);
 extern VALUE Image_composite(int, VALUE *, VALUE);
+extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
 extern VALUE Image_composite_bang(int, VALUE *, VALUE);
 extern VALUE Image_composite_channel(int, VALUE *, VALUE);
 extern VALUE Image_composite_channel_bang(int, VALUE *, VALUE);
-extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
+extern VALUE Image_composite_tiled(int, VALUE *, VALUE);
+extern VALUE Image_composite_tiled_bang(int, VALUE *, VALUE);
 extern VALUE Image_compress_colormap_bang(VALUE);
 extern VALUE Image_constitute(VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_contrast(int, VALUE *, VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.255 2008/07/28 22:28:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.256 2008/08/02 19:26:21 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -518,6 +518,8 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
     rb_define_method(Class_Image, "composite_channel", Image_composite_channel, -1);
     rb_define_method(Class_Image, "composite_channel!", Image_composite_channel_bang, -1);
+    rb_define_method(Class_Image, "composite_tiled", Image_composite_tiled, -1);
+    rb_define_method(Class_Image, "composite_tiled!", Image_composite_tiled_bang, -1);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
     rb_define_method(Class_Image, "contrast", Image_contrast, -1);
     rb_define_method(Class_Image, "contrast_stretch_channel", Image_contrast_stretch_channel, -1);
@@ -1725,7 +1727,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/07/28 22:28:20 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/02 19:26:21 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

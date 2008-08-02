@@ -173,6 +173,7 @@ have_func("snprintf", headers)
    "ResetImagePage",                 # 6.3.3
    "ResizeQuantumMemory",            # 6.3.5-9
    "SetImageAlphaChannel",           # 6.3.6-9
+   "SetImageArtifact",               # 6.3.6
    "SetImageMask",                   # 6.3.1
    "SetImageProperty",               # 6.3.1
    "SetImageRegistry",               # 6.3.4-?

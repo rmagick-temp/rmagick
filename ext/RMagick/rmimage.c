@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.302 2008/08/02 19:26:21 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.303 2008/08/02 22:59:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2714,7 +2714,15 @@ composite_tiled(int bang, int argc, VALUE *argv, VALUE self)
     MagickStatusType status;
 
     // Ensure image and composite_image aren't destroyed.
-    image = rm_check_destroyed(self);
+    if (bang)
+    {
+        image = rm_check_frozen(self);
+    }
+    else
+    {
+        image = rm_check_destroyed(self);
+    }
+
     if (argc > 0)
     {
         comp_image = rm_check_destroyed(ImageList_cur_image(argv[0]));
@@ -3319,32 +3327,6 @@ Image_density_eq(VALUE self, VALUE density_arg)
 
 
 /*
-    Method:     Image#depth
-    Purpose:    Return the image depth (8 or 16).
-    Note:       If all pixels have lower-order bytes equal to higher-order
-                bytes, the depth will be reported as 8 even if the depth
-                field in the Image structure says 16.
-*/
-VALUE
-Image_depth(VALUE self)
-{
-    Image *image;
-    unsigned long depth = 0;
-    ExceptionInfo exception;
-
-    image = rm_check_destroyed(self);
-    GetExceptionInfo(&exception);
-
-    depth = GetImageDepth(image, &exception);
-    CHECK_EXCEPTION()
-
-    (void) DestroyExceptionInfo(&exception);
-
-    return INT2FIX(depth);
-}
-
-
-/*
     Method:     Image#decipher(passphrase)
     Purpose:    call DecipherImage
 */
@@ -3429,6 +3411,81 @@ Image_delete_profile(VALUE self, VALUE name)
     rm_check_image_exception(image, RetainOnError);
 
     return self;
+}
+
+
+/*
+    Method:     Image#depth
+    Purpose:    Return the image depth (8 or 16).
+    Note:       If all pixels have lower-order bytes equal to higher-order
+                bytes, the depth will be reported as 8 even if the depth
+                field in the Image structure says 16.
+*/
+VALUE
+Image_depth(VALUE self)
+{
+    Image *image;
+    unsigned long depth = 0;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+    GetExceptionInfo(&exception);
+
+    depth = GetImageDepth(image, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    return INT2FIX(depth);
+}
+
+
+/*
+    Method:     Image#deskew(threshold=0.40, auto-crop-width)
+    Purpose:    Implement convert -deskew option
+*/
+VALUE
+Image_deskew(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_DESKEWIMAGE)
+    Image *image, *new_image;
+    double threshold = 40.0 * QuantumRange / 100.0;
+    unsigned long width;
+    char auto_crop_width[20];
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+
+    switch (argc)
+    {
+        case 2:
+            width = NUM2ULONG(argv[1]);
+            memset(auto_crop_width, 0, sizeof(auto_crop_width));
+            sprintf(auto_crop_width, "%ld", width);
+            SetImageArtifact(image, "deskew:auto-crop", auto_crop_width);
+        case 1:
+            threshold = rm_percentage(argv[0]) * QuantumRange;
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = DeskewImage(image, threshold, &exception);
+    CHECK_EXCEPTION()
+
+    (void) DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+#else
+    self = self;        // defeat "unused parameter" message
+    argv = argv;
+    argc = argc;
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

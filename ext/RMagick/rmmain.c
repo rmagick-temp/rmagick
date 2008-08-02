@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.256 2008/08/02 19:26:21 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.257 2008/08/02 22:59:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -530,6 +530,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "crop!", Image_crop_bang, -1);
     rb_define_method(Class_Image, "cycle_colormap", Image_cycle_colormap, 1);
     rb_define_method(Class_Image, "decipher", Image_decipher, 1);
+    rb_define_method(Class_Image, "deskew", Image_deskew, -1);
     rb_define_method(Class_Image, "delete_compose_mask", Image_delete_compose_mask, 0);
     rb_define_method(Class_Image, "delete_profile", Image_delete_profile, 1);
     rb_define_method(Class_Image, "despeckle", Image_despeckle, 0);
@@ -1727,7 +1728,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/08/02 19:26:21 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/02 22:59:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

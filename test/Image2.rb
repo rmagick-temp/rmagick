@@ -35,6 +35,22 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
+    def composite_tiled
+      bg = Magick::Image.new(200,200)
+      fg = Magick::Image.new(50,100) { self.foreground = 'white' }
+      assert_nothing_raised do
+        res = bg.composite_tiled(fg)
+        assert_instance_of(Magick::Image, res)
+        assert_not_same(bg, res)
+      end
+      assert_nothing_raised { bg.composite_tiled!(fg) }
+      assert_nothing_raised { bg.composite_tiled(fg, Magick::AtopCompositeOp) }
+      assert_nothing_raised { bg.composite_tiled(fg, Magick::OverCompositeOp) }
+      assert_nothing_raised { bg.composite_tiled(fg, Magick::RedChannel) }
+      assert_nothing_raised { bg.composite_tiled(fg, Magick::RedChannel, Magick::GreenChannel) }
+
+    end
+
     def test_compress_colormap!
         # DirectClass images are converted to PseudoClass
         assert_equal(Magick::DirectClass, @img.class_type)
@@ -168,16 +184,30 @@ class Image2_UT < Test::Unit::TestCase
       assert_nothing_raised do
         res = @img.encipher "passphrase"
         res2 = res.decipher "passphrase"
-     end
-    assert_instance_of(Magick::Image, res)
-    assert_not_same(@img, res)
-    assert_equal(@img.columns, res.columns)
-    assert_equal(@img.rows, res.rows)
-    assert_instance_of(Magick::Image, res2)
-    assert_not_same(@img, res2)
-    assert_equal(@img.columns, res2.columns)
-    assert_equal(@img.rows, res2.rows)
-    assert_equal(@img, res2)
+      end
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(@img, res)
+      assert_equal(@img.columns, res.columns)
+      assert_equal(@img.rows, res.rows)
+      assert_instance_of(Magick::Image, res2)
+      assert_not_same(@img, res2)
+      assert_equal(@img.columns, res2.columns)
+      assert_equal(@img.rows, res2.rows)
+      assert_equal(@img, res2)
+    end
+
+    def test_deskew
+       assert_nothing_raised do
+        res = @img.deskew
+        assert_instance_of(Magick::Image, res)
+        assert_not_same(@img, res)
+      end
+
+      assert_nothing_raised { @img.deskew(0.10) }
+      assert_nothing_raised { @img.deskew("95%") }
+      assert_raise(ArgumentError) { @img.deskew("x") }
+      assert_raise(TypeError) {@img.deskew(0.40, "x") }
+      assert_raise(ArgumentError) {@img.deskew(0.40, 20, [1]) }
     end
 
     def test_despeckle

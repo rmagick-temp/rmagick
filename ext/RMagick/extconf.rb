@@ -152,6 +152,7 @@ have_func("snprintf", headers)
    "CompositeLayers",                # 6.3.3-?
    "ConvertHSLToRGB",                # 6.3.5-9
    "ConvertRGBToHSL",                # 6.3.5-9
+   "DeskewImage",                    # 6.4.2-5
    "DistortImage",                   # 6.3.5
    "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9

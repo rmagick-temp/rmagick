@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.258 2008/08/03 20:43:32 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.259 2008/08/03 20:51:18 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1248,6 +1248,12 @@ Init_RMagick2(void)
 #if defined(HAVE_ENUM_ARCDISTORTION)
         ENUMERATOR(ArcDistortion)
 #endif
+#if defined(HAVE_ENUM_POLARDISTORTION)
+        ENUMERATOR(PolarDistortion)
+#endif
+#if defined(HAVE_ENUM_DEPOLARDISTORTION)
+        ENUMERATOR(DePolarDistortion)
+#endif
 #if defined(HAVE_ENUM_BARRELDISTORTION)
         ENUMERATOR(BarrelDistortion)
 #endif
@@ -1734,7 +1740,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/08/03 20:43:32 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/03 20:51:18 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

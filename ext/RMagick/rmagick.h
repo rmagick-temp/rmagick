@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.239 2008/08/02 22:59:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.240 2008/08/03 23:59:24 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -310,6 +310,9 @@ EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
 EXTERN VALUE Class_ResolutionType;
+#if defined(HAVE_SPARSECOLORINTERPOLATE)
+EXTERN VALUE Class_SparseColorInterpolateMethod;
+#endif
 EXTERN VALUE Class_StorageType;
 EXTERN VALUE Class_StretchType;
 EXTERN VALUE Class_StyleType;
@@ -947,6 +950,7 @@ extern VALUE Image_signature(VALUE);
 extern VALUE Image_sketch(int, VALUE *, VALUE);
 extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
+extern VALUE Image_sparse_color(VALUE, VALUE, VALUE);
 extern VALUE Image_splice(int, VALUE *, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);

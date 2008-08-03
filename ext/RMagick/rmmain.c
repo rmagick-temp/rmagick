@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.259 2008/08/03 20:51:18 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.260 2008/08/03 23:59:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -641,6 +641,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "sketch", Image_sketch, -1);
     rb_define_method(Class_Image, "solarize", Image_solarize, -1);
     rb_define_method(Class_Image, "<=>", Image_spaceship, 1);
+    rb_define_method(Class_Image, "sparse_color", Image_sparse_color, 2);
     rb_define_method(Class_Image, "splice", Image_splice, -1);
     rb_define_method(Class_Image, "spread", Image_spread, -1);
     rb_define_method(Class_Image, "stegano", Image_stegano, 2);
@@ -1535,6 +1536,17 @@ Init_RMagick2(void)
         ENUMERATOR(PixelsPerCentimeterResolution)
     END_ENUM
 
+#if defined(HAVE_SPARSECOLORINTERPOLATE)
+    DEF_ENUM(SparseColorInterpolateMethod)
+        ENUMERATOR(UndefinedColorInterpolate)
+        ENUMERATOR(BarycentricColorInterpolate)
+        ENUMERATOR(BilinearColorInterpolate)
+        ENUMERATOR(PolynomialColorInterpolate)
+        ENUMERATOR(ShepardsColorInterpolate)
+        ENUMERATOR(VoronoiColorInterpolate)
+    END_ENUM
+#endif
+
     // StorageType
     DEF_ENUM(StorageType)
         ENUMERATOR(UndefinedPixel)
@@ -1740,7 +1752,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/08/03 20:51:18 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/03 23:59:24 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

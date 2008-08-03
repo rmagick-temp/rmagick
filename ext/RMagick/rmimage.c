@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.303 2008/08/02 22:59:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.304 2008/08/03 23:59:24 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3475,6 +3475,7 @@ Image_deskew(int argc, VALUE *argv, VALUE self)
     GetExceptionInfo(&exception);
     new_image = DeskewImage(image, threshold, &exception);
     CHECK_EXCEPTION()
+    rm_ensure_result(new_image);
 
     (void) DestroyExceptionInfo(&exception);
 
@@ -8928,6 +8929,51 @@ Image_spaceship(VALUE self, VALUE other)
     res = res > 0 ? 1 : (res < 0 ? -1 :  0);    // reduce to 1, -1, 0
 
     return INT2FIX(res);
+}
+
+
+/*
+    Method:     Image#sparse_color(method, arguments)
+    Purpose:    Call SparseColorInterpolate
+*/
+VALUE
+Image_sparse_color(VALUE self, VALUE method, VALUE pts)
+{
+#if defined(HAVE_SPARSECOLORINTERPOLATE)
+    Image *image, *new_image;
+    unsigned long n, npoints;
+    SparseColorInterpolateMethod interpolate_method;
+    double *points;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+    VALUE_TO_ENUM(method, interpolate_method, SparseColorInterpolateMethod);
+    npoints = RARRAY_LEN(points);
+
+    // Allocate points array from Ruby's memory. If an error occurs Ruby will
+    // be able to clean it up.
+    points = ALLOC_N(double, npoints);
+
+    for (n = 0; n < npoints; n++)
+    {
+        points[n] = NUM2DBL(rb_ary_entry(pts, n));
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = SparseColorInterpolate(image, interpolate_method, npoints, points, &exception);
+    xfree(points);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    (void) DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
+#else
+    self = self;
+    method = method;
+    arguments = arguments;
+    rm_not_implemented();
+#endif
 }
 
 

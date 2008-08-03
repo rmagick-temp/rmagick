@@ -261,6 +261,8 @@ have_enum_value("NoiseType", "RandomNoise", headers)                         # 6
 have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6.3.3
                                         "BlackVirtualPixelMethod",           # 6.3.5
                                         "GrayVirtualPixelMethod",            # 6.3.5
+                                        "HorizontalTileVirtualPixelMethod",  # 6.4.2-6
+                                        "VerticalTileVirtualPixelMethod",    # 6.4.2-6
                                         "WhiteVirtualPixelMethod"], headers) # 6.3.5
 
 

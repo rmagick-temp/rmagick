@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.260 2008/08/03 23:59:24 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.261 2008/08/05 22:17:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -530,6 +530,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "crop!", Image_crop_bang, -1);
     rb_define_method(Class_Image, "cycle_colormap", Image_cycle_colormap, 1);
     rb_define_method(Class_Image, "decipher", Image_decipher, 1);
+    rb_define_method(Class_Image, "define", Image_define, 2);
     rb_define_method(Class_Image, "deskew", Image_deskew, -1);
     rb_define_method(Class_Image, "delete_compose_mask", Image_delete_compose_mask, 0);
     rb_define_method(Class_Image, "delete_profile", Image_delete_profile, 1);
@@ -664,6 +665,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "transverse!", Image_transverse_bang, 0);
     rb_define_method(Class_Image, "trim", Image_trim, -1);
     rb_define_method(Class_Image, "trim!", Image_trim_bang, -1);
+    rb_define_method(Class_Image, "undefine", Image_undefine, 1);
     rb_define_method(Class_Image, "unique_colors", Image_unique_colors, 0);
     rb_define_method(Class_Image, "unsharp_mask", Image_unsharp_mask, -1);
     rb_define_method(Class_Image, "unsharp_mask_channel", Image_unsharp_mask_channel, -1);
@@ -1752,7 +1754,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/08/03 23:59:24 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/05 22:17:40 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

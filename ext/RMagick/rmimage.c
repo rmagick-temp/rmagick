@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.304 2008/08/03 23:59:24 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.305 2008/08/05 22:17:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3360,6 +3360,47 @@ Image_decipher(VALUE self, VALUE passphrase)
     self = self;
     passphrase = passphrase;
     rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Method:     value = Image#define(artifact, value)
+    Purpose:    Emergency (undocumented) call to SetImageArtifact
+    Note:       Normally a script should never call this method. Any calls
+                to SetImageArtifact will be part of the methods in which they're
+                needed.
+*/
+VALUE
+Image_define(VALUE self, VALUE artifact, VALUE value)
+{
+#if defined(HAVE_SETIMAGEARTIFACT)
+    Image *image;
+    volatile VALUE value_str;
+    char *key, *val;
+    long key_l, val_l;
+    MagickBooleanType status;
+
+    image = rm_check_frozen(self);
+
+    key = rm_str2cstr(artifact, &key_l);
+    /* Allow any argument that supports to_s */
+    value_str = rb_funcall(value, rm_ID_to_s, 0);
+    val = rm_str2cstr(value_str, &val_l);
+
+    status = SetImageArtifact(image, key, val);
+    if (!status)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+
+    return value;
+#else
+    rm_not_implemented();
+    artifact = artifact;
+    value = value;
+    self = self;
     return (VALUE)0;
 #endif
 }
@@ -10014,6 +10055,33 @@ VALUE Image_image_type_eq(VALUE self, VALUE image_type)
     VALUE_TO_ENUM(image_type, type, ImageType);
     SetImageType(image, type);
     return image_type;
+}
+
+
+/*
+    Method:     Image#undefine(artifact)
+    Purpose:    Emergency (undocumented) call to RemoveImageArtifact
+    Note:       Normally a script should never call this method.
+                See Image_define.
+*/
+VALUE
+Image_undefine(VALUE self, VALUE artifact)
+{
+#if defined(HAVE_REMOVEIMAGEARTIFACT)
+    Image *image;
+    char *key;
+    long key_l;
+
+    image = rm_check_frozen(self);
+    key = rm_str2cstr(artifact, &key_l);
+    (void) RemoveImageArtifact(image, key);
+    return self;
+#else
+    rm_not_implemented();
+    artifact = artifact;
+    self = self;
+    return (VALUE)0;
+#endif
 }
 
 

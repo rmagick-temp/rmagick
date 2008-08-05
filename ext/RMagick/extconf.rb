@@ -171,6 +171,7 @@ have_func("snprintf", headers)
    "OpaquePaintImageChannel",        # 6.3.7-10
    "PolaroidImage",                  # 6.3.1-6
    "RecolorImage",                   # 6.3.1-3
+   "RemoveImageArtifact",            # 6.3.6
    "ResetImagePage",                 # 6.3.3
    "ResizeQuantumMemory",            # 6.3.5-9
    "SetImageAlphaChannel",           # 6.3.6-9

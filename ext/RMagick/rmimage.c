@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.305 2008/08/05 22:17:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.306 2008/08/05 22:22:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8989,7 +8989,7 @@ Image_sparse_color(VALUE self, VALUE method, VALUE pts)
 
     image = rm_check_destroyed(self);
     VALUE_TO_ENUM(method, interpolate_method, SparseColorInterpolateMethod);
-    npoints = RARRAY_LEN(points);
+    npoints = RARRAY_LEN(pts);
 
     // Allocate points array from Ruby's memory. If an error occurs Ruby will
     // be able to clean it up.
@@ -9012,8 +9012,9 @@ Image_sparse_color(VALUE self, VALUE method, VALUE pts)
 #else
     self = self;
     method = method;
-    arguments = arguments;
+    pts = pts;
     rm_not_implemented();
+    return (VALUE)0;
 #endif
 }
 

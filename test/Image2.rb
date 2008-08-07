@@ -196,6 +196,11 @@ class Image2_UT < Test::Unit::TestCase
       assert_equal(@img, res2)
     end
 
+    def test_define
+      assert_nothing_raised { @img.define("deskew:auto-crop", 40) }
+      assert_nothing_raised { @img.undefine("deskew:auto-crop") }
+    end
+
     def test_deskew
        assert_nothing_raised do
         res = @img.deskew
@@ -815,7 +820,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 'x') }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, 'x') }
     end
-
+=begin
     def test_liquid_rescale
       res = nil
       assert_nothing_raised do
@@ -831,7 +836,7 @@ class Image2_UT < Test::Unit::TestCase
       assert_raise(TypeError) { @img.liquid_rescale(15, 15, []) }
       assert_raise(TypeError) { @img.liquid_rescale(15, 15, 0, []) }
     end
-
+=end
     def test_magnify
         assert_nothing_raised do
             res = @img.magnify

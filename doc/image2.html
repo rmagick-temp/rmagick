@@ -111,13 +111,13 @@ td.ds {
           <li><a href="#flop_bang">flop!</a></li>
 
           <li><a href="#frame">frame</a></li>
+
+          <li><a href="#freeze">freeze</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#freeze">freeze</a></li>
-
           <li><a href="#gamma_channel">gamma_channel</a></li>
 
           <li><a href="#gamma_correct">gamma_correct</a></li>
@@ -152,6 +152,10 @@ td.ds {
           <li><a href="#level">level</a></li>
 
           <li><a href="#level_channel">level_channel</a></li>
+
+          <li><a href="#level_colors">level_colors</a></li>
+
+          <li><a href="#levelize_channel">levelize_channel</a></li>
 
           <li><a href="#linear_stretch">linear_stretch</a></li>
 
@@ -2361,7 +2365,7 @@ img.level(white_point, gamma, black_point) -&gt; image # wrong!
       "constants.html#Miscellaneous_constants">QuantumRange</a>.
       The default is 0.0.</dd>
 
-      <dt>mid_point</dt>
+      <dt>white_point</dt>
 
       <dd>A white point level in the range 0..QuantumRange. The
       default is <a href=
@@ -2380,11 +2384,140 @@ img.level(white_point, gamma, black_point) -&gt; image # wrong!
 
     <h4>See also</h4>
 
-    <p><a href="#level">level</a></p>
+    <p><a href="#level">level</a>, <a href=
+    "#levelize_channel">levelize_channel</a></p>
 
     <h4>Magick API</h4>
 
     <p>LevelImageChannel</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="level_colors">level_colors</h3>
+
+    <p><span class="arg">img</span>.level_colors(<span class=
+    "arg">black_color</span>="black", <span class=
+    "arg">white_color</span>="white", <span class=
+    "arg">invert</span>=<code>true</code>) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>When <span class="arg">invert</span> is true, black and
+    white will be mapped to the <span class=
+    "arg">black_color</span> and <span class=
+    "arg">white_color</span> colors, compressing all other colors
+    linearly. When <span class="arg">invert</span> is false, black
+    and white will be mapped to the <span class=
+    "arg">black_color</span> and <span class=
+    "arg">white_color</span> colors, stretching all other colors
+    linearly. The default is <code>true</code>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>black_color</dt>
+
+      <dd>The color to be mapped to black. The default is
+      "black".</dd>
+
+      <dt>white_color</dt>
+
+      <dd>The color to be mapped to white. The default is
+      "white".</dd>
+
+      <dt>invert</dt>
+
+      <dd>See the description above.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('level_colors.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/level_colors.jpg'" src="ex/level_colors.jpg"
+    title="Click to see the example script" alt=
+    "level_colors example" /></a> <img src="ex/images/spin.gif"
+    alt="" class="spin" title=
+    "Mouse over the image to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p>This method corresponds to the +level-colors option. See
+    <a href=
+    "http://www.imagemagick.org/Usage/color/#level-colors">Examples
+    of ImageMagick Usage</a> for more information.</p>
+
+    <h4>Magick API</h4>
+
+    <p>LevelImageColors</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="levelize_channel">levelize_channel</h3>
+
+    <p><span class="arg">img</span>.levelize_channel(<span class=
+    "arg">black_point</span>, <span class="arg">white_point</span>,
+    <span class="arg">gamma</span>=1.0 [, <span class=
+    "arg">channel</span>...]) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Maps black and white to the specified points. The reverse of
+    <a href="#level_channel">level_channel</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>black_point</dt>
+
+      <dd>A black point level in the range 0..<a href=
+      "constants.html#Miscellaneous_constants">QuantumRange</a>.
+      This argument is required.</dd>
+
+      <dt>white_point</dt>
+
+      <dd>A white point level in the range 0..QuantumRange. The
+      default is QuantumRange - <span class=
+      "arg">black_point</span>.</dd>
+
+      <dt>gamma</dt>
+
+      <dd>A gamma correction in the range 0.0-10.0 The default is
+      1.0.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, the default channels are the red,
+      green, and blue channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#level">level</a>, <a href=
+    "#level_channel">level_channel</a></p>
+
+    <p>This method corresponds to the +level option. See <a href=
+    "http://www.imagemagick.org/Usage/color/#level_plus">Examples
+    of ImageMagick Usage</a> for more information.</p>
+
+    <h4>Magick API</h4>
+
+    <p>LevelizeImageChannel</p>
   </div>
 
   <div class="sig">

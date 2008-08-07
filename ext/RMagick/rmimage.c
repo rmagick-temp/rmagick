@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.306 2008/08/05 22:22:43 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.307 2008/08/07 00:08:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5825,6 +5825,84 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#level_colors(black_color="black", white_color="white", invert=false [, channel...])
+*/
+VALUE
+Image_level_colors(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_LEVELIMAGECOLORS)
+    Image *image, *new_image;
+    MagickPixelPacket black_color, white_color;
+    ChannelType channels;
+    ExceptionInfo exception;
+    MagickBooleanType invert = MagickFalse;
+    MagickBooleanType status;
+
+    image = rm_check_destroyed(self);
+
+    channels = extract_channels(&argc, argv);
+
+    switch (argc)
+    {
+        case 3:
+            invert = RTEST(argv[2]);
+
+        case 2:
+            Color_to_MagickPixelPacket(image, &white_color, argv[1]);
+            Color_to_MagickPixelPacket(image, &black_color, argv[0]);
+            break;
+
+        case 1:
+            Color_to_MagickPixelPacket(image, &black_color, argv[0]);
+            GetExceptionInfo(&exception);
+
+            GetMagickPixelPacket(image, &white_color);
+            (void) QueryMagickColor("white", &white_color, &exception);
+            CHECK_EXCEPTION()
+
+            DestroyExceptionInfo(&exception);
+
+        case 0:
+            GetExceptionInfo(&exception);
+
+            GetMagickPixelPacket(image, &white_color);
+            (void) QueryMagickColor("white", &white_color, &exception);
+            CHECK_EXCEPTION()
+
+            GetMagickPixelPacket(image, &black_color);
+            (void) QueryMagickColor("black", &black_color, &exception);
+            CHECK_EXCEPTION()
+
+            DestroyExceptionInfo(&exception);
+            break;
+
+        default:
+            raise_ChannelType_error(argv[argc-1]);
+            break;
+    }
+
+    new_image = rm_clone_image(image);
+
+    status = LevelImageColors(new_image, channels, &black_color, &white_color, invert);
+    rm_check_image_exception(new_image, DestroyOnError);
+    if (!status)
+    {
+        rb_raise(rb_eRuntimeError, "LevelImageColors failed for unknown reason.");
+    }
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    self = self;
+    argc = argc;
+    argv = argv;
+    return (VALUE)0;
+#endif
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.307 2008/08/07 00:08:33 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.308 2008/08/07 23:57:01 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5829,7 +5829,8 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#level_colors(black_color="black", white_color="white", invert=false [, channel...])
+    Method:     Image#level_colors(black_color="black", white_color="white", invert=true [, channel...])
+    Purpose:    Implement +level_colors blank_color,white_color
 */
 VALUE
 Image_level_colors(int argc, VALUE *argv, VALUE self)
@@ -5839,7 +5840,7 @@ Image_level_colors(int argc, VALUE *argv, VALUE self)
     MagickPixelPacket black_color, white_color;
     ChannelType channels;
     ExceptionInfo exception;
-    MagickBooleanType invert = MagickFalse;
+    MagickBooleanType invert = MagickTrue;
     MagickBooleanType status;
 
     image = rm_check_destroyed(self);
@@ -5896,6 +5897,63 @@ Image_level_colors(int argc, VALUE *argv, VALUE self)
 
     return rm_image_new(new_image);
 
+#else
+    rm_not_implemented();
+    self = self;
+    argc = argc;
+    argv = argv;
+    return (VALUE)0;
+#endif
+}
+
+
+
+/*
+    Method:     Image#levelize_channel(black_point[, white_point[, gamma=1.0[, channel...]])
+*/
+VALUE
+Image_levelize_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_LEVELIZEIMAGECHANNEL)
+    Image *image, *new_image;
+    ChannelType channels;
+    double black_point, white_point;
+    double gamma = 1.0;
+    MagickBooleanType status;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+    if (argc > 3)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    switch (argc)
+    {
+        case 3:
+            gamma = NUM2DBL(argv[2]);
+        case 2:
+            white_point = NUM2DBL(argv[1]);
+            black_point = NUM2DBL(argv[0]);
+            break;
+        case 1:
+            black_point = NUM2DBL(argv[0]);
+            white_point = QuantumRange - black_point;
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or more)", argc);
+            break;
+    }
+
+    new_image = rm_clone_image(image);
+    status = LevelizeImageChannel(new_image, channels, black_point, white_point, gamma);
+
+    rm_check_image_exception(new_image, DestroyOnError);
+    if (!status)
+    {
+        rb_raise(rb_eRuntimeError, "LevelizeImageChannel failed for unknown reason.");
+    }
+    return rm_image_new(new_image);
 #else
     rm_not_implemented();
     self = self;

@@ -166,6 +166,7 @@ have_func("snprintf", headers)
    "InterpretImageProperties",       # 6.3.2
    "IsHistogramImage",               # 6.3.5
    "LevelImageColors",               # 6.4.2
+   "LevelizeImageChannel",           # 6.4.2
    "LinearStretchImage",             # 6.3.1
    "LiquidRescaleImage",             # 6.3.8-2
    "MagickCoreGenesis",              # 6.3.4

@@ -6,6 +6,8 @@ RMagick 2.6.0
     o Add Image#deskew (available with ImageMagick 6.4.2-5)
     o Add Image#sparse_color (available in ImageMagick 6.4.2-5)
     o Add Image#define, Image#undefine (available in ImageMagick 6.3.6)
+    o Add Image#level_colors (available in ImageMagick 6.4.2-1)
+    o Add Image#levelize_channel (available in ImageMagick 6.4.2-1)
     o Add the BarrelDistortion, PolynomialDistortion, ShepardsDistortion,
       PolarDistortion, and DePolarDistortion MagickDistortion Method enum values
       (available in ImageMagick 6.4.2-6)

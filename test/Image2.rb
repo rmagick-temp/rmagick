@@ -32,6 +32,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = img1.composite_affine(img2, affine)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -65,6 +66,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.contrast
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.contrast(true) }
         assert_raise(ArgumentError) { @img.contrast(true, 2) }
@@ -74,6 +76,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.contrast_stretch_channel(25)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.contrast_stretch_channel(25, 50) }
         assert_nothing_raised { @img.contrast_stretch_channel('10%') }
@@ -93,6 +96,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.convolve(order, kernel)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_raise(ArgumentError) { @img.convolve }
         assert_raise(ArgumentError) { @img.convolve(order) }
@@ -110,6 +114,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.convolve_channel(order, kernel, Magick::RedChannel)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
 
         assert_nothing_raised { @img.convolve_channel(order, kernel, Magick::RedChannel, Magick:: BlueChannel) }
@@ -134,6 +139,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.crop(0, 0, @img.columns/2, @img.rows/2)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         gravity = [
                 Magick::NorthEastGravity,
@@ -175,6 +181,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.cycle_colormap(5)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
             assert_equal(Magick::PseudoClass, res.class_type)
         end
     end
@@ -219,9 +226,11 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.despeckle
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
+    # ensure methods detect destroyed images
     def test_destroy
       methods = Magick::Image.instance_methods(false).sort
       if RUBY_VERSION == '1.9.0'
@@ -266,6 +275,7 @@ class Image2_UT < Test::Unit::TestCase
       end
     end
 
+    # ensure destroy! works
     def test_destroy2
         begin   # ensure Magick.trace_proc gets set to nil even if this test asserts
             images = {}
@@ -320,6 +330,7 @@ class Image2_UT < Test::Unit::TestCase
       assert_nothing_raised { @img.displace(@img2, 25) }
       res = @img.displace(@img2, 25)
       assert_instance_of(Magick::Image, res)
+      assert_not_same(@img, res)
       assert_nothing_raised { @img.displace(@img2, 25, 25) }
       assert_nothing_raised { @img.displace(@img2, 25, 25, 10) }
       assert_nothing_raised { @img.displace(@img2, 25, 25, 10, 10) }
@@ -409,6 +420,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.edge
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.edge(2.0) }
         assert_raise(ArgumentError) { @img.edge(2.0, 2) }
@@ -419,6 +431,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.emboss
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.emboss(1.0) }
         assert_nothing_raised { @img.emboss(1.0, 0.5) }
@@ -431,6 +444,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.enhance
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -439,6 +453,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.equalize
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -446,6 +461,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.equalize_channel
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.equalize_channel }
         assert_nothing_raised { @img.equalize_channel(Magick::RedChannel) }
@@ -555,6 +571,7 @@ class Image2_UT < Test::Unit::TestCase
       assert_nothing_raised { @img.extent(40, 40) }
       res = @img.extent(40, 40)
       assert_instance_of(Magick::Image, res)
+      assert_not_same(@img, res)
       assert_equal(40, res.columns)
       assert_equal(40, res.rows)
       assert_nothing_raised { @img.extent(40, 40, 5) }
@@ -610,6 +627,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.flip
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -624,6 +642,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.flop
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -638,6 +657,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.frame
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.frame(50) }
         assert_nothing_raised { @img.frame(50, 50) }
@@ -655,6 +675,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.gamma_channel(0.8)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_raise(ArgumentError) { @img.gamma_channel }
         assert_nothing_raised { @img.gamma_channel(0.8, Magick::RedChannel) }
@@ -669,6 +690,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.gamma_correct(0.8)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.gamma_correct(0.8, 0.9) }
         assert_nothing_raised { @img.gamma_correct(0.8, 0.9, 1.0) }
@@ -681,6 +703,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.gaussian_blur
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.gaussian_blur(0.0) }
         assert_nothing_raised { @img.gaussian_blur(0.0, 3.0) }
@@ -693,6 +716,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.gaussian_blur_channel
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.gaussian_blur_channel(0.0) }
         assert_nothing_raised { @img.gaussian_blur_channel(0.0, 3.0) }
@@ -746,6 +770,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.implode(0.5)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -782,6 +807,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.level
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.level(0.0) }
         assert_nothing_raised { @img.level(0.0, 1.0) }
@@ -808,6 +834,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.level_channel(Magick::RedChannel)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
 
         assert_nothing_raised { @img.level_channel(Magick::RedChannel, 0.0) }
@@ -820,8 +847,54 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 'x') }
         assert_raise(TypeError) { @img.level_channel(Magick::RedChannel, 0.0, 1.0, 'x') }
     end
+
+    def level_colors
+      res = nil
+      assert_nothing_raised do
+        res = @img.level_colors()
+      end
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(@img, res)
+
+      assert_nothing_raised { @img.level_colors("black") }
+      assert_nothing_raised { @img.level_colors("black", Pixel.new(0,0,0)) }
+      assert_nothing_raised { @img.level_colors(Pixel.new(0,0,0), Pixel.new(Magick::QuantumRange,Magick::QuantumRange,Magick::QuantumRange)) }
+      assert_nothing_raised { @img.level_colors("black", "white") }
+      assert_nothing_raised { @img.level_colors("black", "white", false) }
+      # too many arguments
+      assert_raises(ArgumentError) { @img.level_colors("black", "white", false, 1) }
+      # not a pixel or a string
+      assert_raises(ArgumentError) { @img.level_colors([]) }
+      # not a color name
+      assert_raises(ArgumentError) { @img.level_colors("xxx") }
+    end
+
+    def levelize_channel
+      res = nil
+      assert_nothing_raised do
+        res = @img.levelize_channel(0, Magick::QuantumRange)
+      end
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(@img, res)
+
+      assert_nothing_raised { @img.levelize_channel(0, Magick::QuantumRange, 0.5) }
+      assert_nothing_raised { @img.levelize_channel(0, Magick::QuantumRange, 0.5, Magick::RedChannel) }
+      assert_nothing_raised { @img.levelize_channel(0, Magick::QuantumRange, 0.5, Magick::RedChannel, Magick::BlueChannel) }
+      # too many arguments
+      assert_raise(ArgumentError) { @img.levelize_channel(0, Magick::QuantumRange, 0.5, 1, Magick::RedChannel) }
+      # not enough arguments
+      assert_raise(ArgumentError) { @img.levelize_channel() }
+    end
+
 =begin
     def test_liquid_rescale
+      begin
+        @img.liquid_rescale(15,15)
+      rescue NotImplementedError
+        puts "liquid_rescale not implemented."
+        return
+      end
+
       res = nil
       assert_nothing_raised do
         res = @img.liquid_rescale(15, 15)
@@ -837,10 +910,12 @@ class Image2_UT < Test::Unit::TestCase
       assert_raise(TypeError) { @img.liquid_rescale(15, 15, 0, []) }
     end
 =end
+
     def test_magnify
         assert_nothing_raised do
             res = @img.magnify
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
 
         res = @img.magnify!
@@ -852,6 +927,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.map(map)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.map(map, true) }
         assert_raise(NoMethodError) { @img.map(2) }
@@ -881,6 +957,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.matte_fill_to_border(@img.columns/2, @img.rows/2)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.matte_fill_to_border(@img.columns, @img.rows) }
         assert_raise(ArgumentError) { @img.matte_fill_to_border(@img.columns+1, @img.rows) }
@@ -891,6 +968,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.matte_floodfill(@img.columns/2, @img.rows/2)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.matte_floodfill(@img.columns, @img.rows) }
         assert_raise(ArgumentError) { @img.matte_floodfill(@img.columns+1, @img.rows) }
@@ -901,6 +979,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.matte_replace(@img.columns/2, @img.rows/2)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
     end
 
@@ -915,6 +994,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.median_filter
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.median_filter(0.5) }
         assert_raise(ArgumentError) { @img.median_filter(0.5, 'x') }
@@ -925,6 +1005,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.minify
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
 
         res = @img.minify!
@@ -935,6 +1016,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.modulate
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.modulate(0.5) }
         assert_nothing_raised { @img.modulate(0.5, 0.5) }
@@ -955,6 +1037,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.motion_blur(1.0, 7.0, 180)
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_raise(ArgumentError) { @img.motion_blur(1.0, 0.0, 180) }
         assert_nothing_raised { @img.motion_blur(1.0, -1.0, 180) }
@@ -964,6 +1047,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.negate
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.negate(true) }
         assert_raise(ArgumentError) { @img.negate(true, 2) }
@@ -973,6 +1057,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.negate_channel
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.negate_channel(true) }
         assert_nothing_raised { @img.negate_channel(true, Magick::RedChannel) }
@@ -992,6 +1077,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.normalize_channel
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.normalize_channel(Magick::RedChannel) }
         assert_nothing_raised { @img.normalize_channel(Magick::RedChannel, Magick::BlueChannel) }
@@ -1002,6 +1088,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.oil_paint
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.oil_paint(2.0) }
         assert_raise(ArgumentError) { @img.oil_paint(2.0, 1.0) }
@@ -1011,6 +1098,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.opaque('white', 'red')
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         red = Magick::Pixel.new(Magick::QuantumRange)
         blue = Magick::Pixel.new(0, 0, Magick::QuantumRange)
@@ -1045,9 +1133,6 @@ class Image2_UT < Test::Unit::TestCase
         end
         @img.opacity = Magick::TransparentOpacity
         assert_block { ! @img.opaque? }
-    end
-
-    def test_optimize
     end
 
     def test_ordered_dither
@@ -1121,6 +1206,7 @@ class Image2_UT < Test::Unit::TestCase
         assert_nothing_raised do
             res = @img.posterize
             assert_instance_of(Magick::Image, res)
+            assert_not_same(@img, res)
         end
         assert_nothing_raised { @img.posterize(5) }
         assert_nothing_raised { @img.posterize(5, true) }

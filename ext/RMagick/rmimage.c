@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.308 2008/08/07 23:57:01 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.309 2008/08/14 22:59:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7950,6 +7950,7 @@ file_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
              rb_class2name(CLASS_OF(arg)));
+    return (VALUE)0;
 }
 
 

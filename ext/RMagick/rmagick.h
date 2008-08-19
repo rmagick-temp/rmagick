@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.243 2008/08/07 23:56:42 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.244 2008/08/19 22:29:01 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -953,7 +953,7 @@ extern VALUE Image_signature(VALUE);
 extern VALUE Image_sketch(int, VALUE *, VALUE);
 extern VALUE Image_solarize(int, VALUE *, VALUE);
 extern VALUE Image_spaceship(VALUE, VALUE);
-extern VALUE Image_sparse_color(VALUE, VALUE, VALUE);
+extern VALUE Image_sparse_color(int, VALUE *, VALUE);
 extern VALUE Image_splice(int, VALUE *, VALUE);
 extern VALUE Image_spread(int, VALUE *, VALUE);
 extern VALUE Image_stegano(VALUE, VALUE, VALUE);

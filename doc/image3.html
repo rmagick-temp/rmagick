@@ -171,6 +171,8 @@
 
           <li><a href="#solarize">solarize</a></li>
 
+          <li><a href="#sparse_color">sparse_color</a></li>
+
           <li><a href="#splice">splice</a></li>
 
           <li><a href="#spread">spread</a></li>
@@ -182,13 +184,13 @@
           <li><a href="#store_pixels">store_pixels</a></li>
 
           <li><a href="#strip_bang">strip!</a></li>
-
-          <li><a href="#swirl">swirl</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#swirl">swirl</a></li>
+
           <li><a href="#sync_profiles">sync_profiles</a></li>
 
           <li><a href=
@@ -1374,7 +1376,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" /> 
+    alt="resize_to_fill example" />
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1469,7 +1471,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" /> 
+    "Click to see the example script" />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
@@ -2525,6 +2527,65 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SolarizeImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="sparse_color">sparse_color</h3>
+
+    <p><span class="arg">img</span>.sparse_color(<span class=
+    "arg">method</span>, <span class="arg">points</span>[,
+    <span class="arg">channel</span>...]) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Given a set of coordinates interpolates the
+    colors found at those coordinates, across the whole image,
+    using various methods.</p>
+
+    <p>For more information about this method see the ImageMagick
+    documentation for the -sparse-color option.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>method</dt>
+
+      <dd>
+        One of the following interpolation methods:
+
+        <dl>
+          <dt>BarycentricColorInterpolate</dt>
+
+          <dt>BilinearColorInterpolate</dt>
+
+          <dt>PolynomialColorInterpolate</dt>
+
+          <dt>ShepardsColorInterpolate</dt>
+
+          <dt>VoronoiColorInterpolate</dt>
+        </dl>
+      </dd>
+
+      <dt>points</dt>
+
+      <dd>An array of coordinates. The number of coordinates varies
+      according to the method.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>SparseColorInterpolate (available in 6.4.2)</p>
   </div>
 
   <div class="sig">

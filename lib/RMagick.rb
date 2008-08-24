@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.72 2008/06/08 13:41:39 rmagick Exp $
+# $Id: RMagick.rb,v 1.73 2008/08/24 21:15:24 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1832,6 +1832,37 @@ public
     alias_method :indices, :values_at
 
 end # Magick::ImageList
+
+
+#  Collects non-specific optional method arguments
+class OptionalMethodArguments
+    def initialize(img)
+       @img = img
+    end
+
+    # miscellaneous options like -verbose
+    def method_missing(mth, val)
+       @img.define(mth.to_s.tr('_', '-'), val)
+    end
+
+    # set(key, val) corresponds to -set option:key val
+    def define(key, val = nil)
+       @img.define(key, val)
+    end
+
+    # accepts Pixel object or color name
+    def highlight_color(color)
+       color = @img.to_color(color) if color.respond_to?(:to_color)
+       @img.define("highlight-color", color)
+    end
+
+    # accepts Pixel object or color name
+    def lowlight_color(color)
+       color = @img.to_color(color) if color.respond_to?(:to_color)
+       @img.define("lowlight-color", color)
+    end
+end
+
 
 # Example fill class. Fills the image with the specified background
 # color, then crosshatches with the specified crosshatch color.

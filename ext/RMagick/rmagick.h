@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.244 2008/08/19 22:29:01 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.245 2008/08/24 21:16:06 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -332,6 +332,7 @@ EXTERN ID rm_ID_flag;              // "flag"
 EXTERN ID rm_ID_from_s;            // "from_s"
 EXTERN ID rm_ID_Geometry;          // "Geometry"
 EXTERN ID rm_ID_GeometryValue;     // "GeometryValue"
+EXTERN ID rm_ID_has_key_q;         // "has_key?"
 EXTERN ID rm_ID_height;            // "height"
 EXTERN ID rm_ID_initialize_copy;   // "initialize_copy"
 EXTERN ID rm_ID_length;            // "length"
@@ -1099,10 +1100,6 @@ extern void  *magick_safe_realloc(void *, const size_t, const size_t);
 extern void   magick_clone_string(char **, const char *);
 extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);
 extern VALUE  rm_no_freeze(VALUE);
-#if !defined(StringValuePtr)
-extern char  *rm_string_value_ptr(volatile VALUE *);
-#endif
-extern char  *rm_string_value_ptr_len(volatile VALUE *, long *);
 extern int    rm_strcasecmp(const char *, const char *);
 extern int    rm_strncasecmp(const char *, const char *, size_t);
 extern void   rm_check_ary_len(VALUE, long);
@@ -1138,6 +1135,7 @@ extern Image *rm_clone_image(Image *);
 extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetType, const MagickSizeType, void *);
 extern VALUE  rm_exif_by_entry(Image *);
 extern VALUE  rm_exif_by_number(Image *);
+extern void   rm_get_optional_arguments(VALUE);
 
 #endif
 

@@ -14,6 +14,12 @@ RMagick 2.6.0
     o Add the HorizontalTileVirtualPixelMethod and
       VerticalTileVirtualPixelMethod VirtualPixelMethod enum values
       (available in ImageMagick 6.4.2-6)
+    o Added general-purpose OptionalMethodArguments class to handle ad-hoc
+      optional arguments.
+    o Support optional "distort:viewport" and "distort:scale" arguments to
+      Image#distort
+    o Support optional highlight_color and lowlight_color arguments
+      to Image#compare_channel
 
 RMagick 2.5.2
     o Add support for MergeLayer to Magick::ImageList#optimize_layers (patch

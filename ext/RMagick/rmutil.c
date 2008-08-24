@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.158 2008/08/03 20:43:32 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.159 2008/08/24 21:16:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3268,7 +3268,8 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
     Function:   rm_get_property
     Purpose:    Backport GetImageProperty for pre-6.3.1 versions of ImageMagick
 */
-const char *rm_get_property(const Image *img, const char *property)
+const char *
+rm_get_property(const Image *img, const char *property)
 {
 #if defined(HAVE_GETIMAGEPROPERTY)
     return GetImageProperty(img, property);
@@ -3285,7 +3286,8 @@ const char *rm_get_property(const Image *img, const char *property)
     Function:   rm_set_property
     Purpose:    Backport SetImageProperty for pre-6.3.1 versions of ImageMagick
 */
-MagickBooleanType rm_set_property(Image *image, const char *property, const char *value)
+MagickBooleanType
+rm_set_property(Image *image, const char *property, const char *value)
 {
 #if defined(HAVE_SETIMAGEPROPERTY)
     return SetImageProperty(image, property, value);
@@ -3293,6 +3295,34 @@ MagickBooleanType rm_set_property(Image *image, const char *property, const char
     return SetImageAttribute(image, property, value);
 #endif
 }
+
+
+/*
+    Function:   rm_get_optional_arguments
+    Purpose:    Collect optional method arguments via Magick::OptionalMethodArguments
+    Notes:      Creates an instance of Magick::OptionalMethodArguments, then yields
+                to a block in the context of the instance.
+*/
+void
+rm_get_optional_arguments(VALUE img)
+{
+  volatile VALUE OptionalMethodArguments;
+  volatile VALUE opt_args;
+  VALUE argv[1];
+
+  // opt_args = Magick::OptionalMethodArguments.new(img)
+  // opt_args.instance_eval { block }
+  if (rb_block_given_p())
+  {
+      OptionalMethodArguments = rb_const_get_from(Module_Magick, rb_intern("OptionalMethodArguments"));
+      argv[0] = img;
+      opt_args = rb_class_new_instance(1, argv, OptionalMethodArguments);
+      (void) rb_obj_instance_eval(0, NULL, opt_args);
+  }
+
+  return;
+}
+
 
 
 /*

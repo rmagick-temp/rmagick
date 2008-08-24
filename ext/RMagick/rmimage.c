@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.310 2008/08/19 22:29:01 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.311 2008/08/24 21:18:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2365,7 +2365,7 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
 
 
 /*
-    Method:     Image#compare_channel(ref_image, metric [, channel...])
+    Method:     Image#compare_channel(ref_image, metric [, channel...]) { optional arguments }
     Purpose:    compares one or more channels in two images and returns
                 the specified distortion metric and a comparison image.
     Notes:      If no channels are specified, the default is AllChannels.
@@ -2378,6 +2378,11 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
                 arguments have names that end in _channel.  So I renamed
                 the method to compare_channel but kept channel_compare as
                 an alias.
+
+                The optional arguments are specified thusly:
+                    self.highlight_color color
+                    self.lowlight-color color
+                where color is either a color name or a Pixel.
 */
 VALUE
 Image_compare_channel(int argc, VALUE *argv, VALUE self)
@@ -2401,6 +2406,8 @@ Image_compare_channel(int argc, VALUE *argv, VALUE self)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
+
+    rm_get_optional_arguments(self);
 
     ref = ImageList_cur_image(argv[0]);
     r_image = rm_check_destroyed(ref);
@@ -3367,32 +3374,34 @@ Image_decipher(VALUE self, VALUE passphrase)
 
 /*
     Method:     value = Image#define(artifact, value)
-    Purpose:    Emergency (undocumented) call to SetImageArtifact
+    Purpose:    Call SetImageArtifact
     Note:       Normally a script should never call this method. Any calls
                 to SetImageArtifact will be part of the methods in which they're
-                needed.
+                needed, or be called via the OptionalMethodArguments class.
 */
 VALUE
 Image_define(VALUE self, VALUE artifact, VALUE value)
 {
 #if defined(HAVE_SETIMAGEARTIFACT)
     Image *image;
-    volatile VALUE value_str;
     char *key, *val;
-    long key_l, val_l;
     MagickBooleanType status;
 
     image = rm_check_frozen(self);
+    key = rm_str2cstr(artifact, NULL);
 
-    key = rm_str2cstr(artifact, &key_l);
-    /* Allow any argument that supports to_s */
-    value_str = rb_funcall(value, rm_ID_to_s, 0);
-    val = rm_str2cstr(value_str, &val_l);
-
-    status = SetImageArtifact(image, key, val);
-    if (!status)
+    if (value == Qnil)
     {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
+      (void) DeleteImageArtifact(image, key);
+    }
+    else
+    {
+      val = rm_str2cstr(value, NULL);
+      status = SetImageArtifact(image, key, val);
+      if (!status)
+      {
+          rb_raise(rb_eNoMemError, "not enough memory to continue");
+      }
     }
 
     return value;
@@ -3870,10 +3879,16 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 
 
 /*
- *  Method:     Image#distort(type, points, bestfit=false)
+ *  Method:     Image#distort(type, points, bestfit=false) { optional arguments }
  *  Purpose:    Call DistortImage
  *  Notes:      points is an Array of Numeric values
+ *              optional arguments are
+ *                self.define "distort:viewport", WxH+X+Y
+ *                self.define "distort:scale", N
+ *                self.verbose true
 */
+
+
 VALUE
 Image_distort(int argc, VALUE *argv, VALUE self)
 {
@@ -3887,6 +3902,7 @@ Image_distort(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
+    rm_get_optional_arguments(self);
 
     switch (argc)
     {
@@ -10207,7 +10223,7 @@ VALUE Image_image_type_eq(VALUE self, VALUE image_type)
 
 /*
     Method:     Image#undefine(artifact)
-    Purpose:    Emergency (undocumented) call to RemoveImageArtifact
+    Purpose:    Call RemoveImageArtifact
     Note:       Normally a script should never call this method.
                 See Image_define.
 */

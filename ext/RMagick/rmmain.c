@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.264 2008/08/19 22:29:01 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.265 2008/08/24 21:17:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -356,6 +356,7 @@ Init_RMagick2(void)
     rm_ID_from_s           = rb_intern("from_s");
     rm_ID_Geometry         = rb_intern("Geometry");
     rm_ID_GeometryValue    = rb_intern("GeometryValue");
+    rm_ID_has_key_q        = rb_intern("has_key?");
     rm_ID_height           = rb_intern("height");
     rm_ID_initialize_copy  = rb_intern("initialize_copy");
     rm_ID_length           = rb_intern("length");
@@ -1756,7 +1757,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/08/19 22:29:01 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/08/24 21:17:09 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

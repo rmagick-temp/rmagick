@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.64 2008/05/21 22:32:40 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.65 2008/08/26 22:36:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1074,7 +1074,7 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
     volatile VALUE frame;
 
     Data_Get_Struct(self, Montage, montage);
-    frame = rb_funcall(frame_arg, rm_ID_to_s, 0);
+    frame = rm_to_s(frame_arg);
     magick_clone_string(&montage->info->frame, StringValuePtr(frame));
 
     return self;
@@ -1091,7 +1091,7 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
     volatile VALUE geometry;
 
     Data_Get_Struct(self, Montage, montage);
-    geometry = rb_funcall(geometry_arg, rm_ID_to_s, 0);
+    geometry = rm_to_s(geometry_arg);
     magick_clone_string(&montage->info->geometry, StringValuePtr(geometry));
 
     return self;
@@ -1292,7 +1292,7 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
     volatile VALUE tile;
 
     Data_Get_Struct(self, Montage, montage);
-    tile = rb_funcall(tile_arg, rm_ID_to_s, 0);
+    tile = rm_to_s(tile_arg);
     magick_clone_string(&montage->info->tile, StringValuePtr(tile));
 
     return self;

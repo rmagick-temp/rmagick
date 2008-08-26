@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.71 2008/05/21 22:32:41 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.72 2008/08/26 22:36:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -278,7 +278,7 @@ Info_aset(int argc, VALUE *argv, VALUE self)
     else
     {
         /* Allow any argument that supports to_s */
-        value = rb_funcall(value, rm_ID_to_s, 0);
+        value = rm_to_s(value);
         value_p = StringValuePtr(value);
 
         (void) RemoveImageOption(info, ckey);
@@ -541,7 +541,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
     {
         case 3:
             /* Allow any argument that supports to_s */
-            fmt_arg = rb_funcall(argv[2], rm_ID_to_s, 0);
+            fmt_arg = rb_String(argv[2]);
             value = (const char *)StringValuePtr(fmt_arg);
         case 2:
             key = rm_str2cstr(argv[1], &key_l);
@@ -665,7 +665,7 @@ Info_density_eq(VALUE self, VALUE density_arg)
         return self;
     }
 
-    density = rb_funcall(density_arg, rm_ID_to_s, 0);
+    density = rm_to_s(density_arg);
     dens = StringValuePtr(density);
     if (!IsGeometry(dens))
     {
@@ -830,7 +830,7 @@ Info_extract_eq(VALUE self, VALUE extract_arg)
         return self;
     }
 
-    extract = rb_funcall(extract_arg, rm_ID_to_s, 0);
+    extract = rm_to_s(extract_arg);
     extr = StringValuePtr(extract);
     if (!IsGeometry(extr))
     {
@@ -1283,7 +1283,7 @@ Info_origin_eq(VALUE self, VALUE origin_arg)
         return self;
     }
 
-    origin_str = rb_funcall(origin_arg, rm_ID_to_s, 0);
+    origin_str = rm_to_s(origin_arg);
     origin = GetPageGeometry(StringValuePtr(origin_str));
 
     if (IsGeometry(origin) == MagickFalse)
@@ -1326,7 +1326,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         info->page = NULL;
         return self;
     }
-    geom_str = rb_funcall(page_arg, rm_ID_to_s, 0);
+    geom_str = rm_to_s(page_arg);
     geometry=GetPageGeometry(StringValuePtr(geom_str));
     if (*geometry == '\0')
     {
@@ -1442,7 +1442,7 @@ Info_size_eq(VALUE self, VALUE size_arg)
         return self;
     }
 
-    size = rb_funcall(size_arg, rm_ID_to_s, 0);
+    size = rm_to_s(size_arg);
     sz = StringValuePtr(size);
     if (!IsGeometry(sz))
     {
@@ -1549,7 +1549,7 @@ Info_tile_offset_eq(VALUE self, VALUE offset)
     volatile VALUE offset_str;
     char *tile_offset;
 
-    offset_str = rb_funcall(offset, rm_ID_to_s, 0);
+    offset_str = rm_to_s(offset);
     tile_offset = StringValuePtr(offset_str);
     if (!IsGeometry(tile_offset))
     {

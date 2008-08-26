@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.245 2008/08/24 21:16:06 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.246 2008/08/26 22:35:35 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1105,6 +1105,7 @@ extern int    rm_strncasecmp(const char *, const char *, size_t);
 extern void   rm_check_ary_len(VALUE, long);
 extern Image *rm_check_destroyed(VALUE);
 extern Image *rm_check_frozen(VALUE);
+extern VALUE  rm_to_s(VALUE);
 extern char  *rm_str2cstr(VALUE, long *);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);

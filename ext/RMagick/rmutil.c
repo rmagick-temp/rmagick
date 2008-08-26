@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.159 2008/08/24 21:16:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.160 2008/08/26 22:35:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -228,6 +228,22 @@ rm_no_freeze(VALUE obj)
     return (VALUE)0;
 }
 
+
+
+/*
+    Extern:     rm_to_s
+    Purpose:    return obj.to_s, or obj if obj is already a string.
+*/
+VALUE
+rm_to_s(VALUE obj)
+{
+
+    if (TYPE(obj) != T_STRING)
+    {
+        return rb_funcall(obj, rm_ID_to_s, 0);
+    }
+    return obj;
+}
 
 /*
     Extern:     rm_str2cstr(str, &len);

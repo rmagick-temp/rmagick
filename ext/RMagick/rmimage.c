@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.311 2008/08/24 21:18:41 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.312 2008/08/26 22:36:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -39,7 +39,7 @@ static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation
 */
 static VALUE
 adaptive_method(int argc, VALUE *argv, VALUE self
-              , Image *fp(const Image *, const double, const double, ExceptionInfo *))
+                , Image *fp(const Image *, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -81,7 +81,7 @@ adaptive_method(int argc, VALUE *argv, VALUE self
 */
 static VALUE
 adaptive_channel_method(int argc, VALUE *argv, VALUE self
-                      , Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
+                        , Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -430,7 +430,7 @@ Image_add_profile(VALUE self, VALUE name)
         if (profile)
         {
             (void)ProfileImage(image, profile_name, GetStringInfoDatum(profile)
-                             , GetStringInfoLength(profile), MagickFalse);
+                               , GetStringInfoLength(profile), MagickFalse);
             if (image->exception.severity >= ErrorException)
             {
                 break;
@@ -1063,7 +1063,7 @@ get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long
 */
 static void
 get_offsets_from_gravity(GravityType gravity, Image *image, Image *mark
-                        , long *x_offset, long *y_offset)
+                         , long *x_offset, long *y_offset)
 {
 
     switch (gravity)
@@ -1132,7 +1132,7 @@ check_for_long_value(VALUE obj)
 */
 static void
 get_composite_offsets(int argc, VALUE *argv, Image *dest, Image *src
-                    , long *x_offset, long *y_offset)
+                      , long *x_offset, long *y_offset)
 {
     GravityType gravity;
     int exc = 0;
@@ -1244,7 +1244,7 @@ blend_geometry(char *geometry, size_t geometry_l, double src_percent, double dst
 
 static VALUE
 special_composite(Image *image, Image *overlay, double image_pct, double overlay_pct
-                 , long x_off, long y_off, CompositeOperator op)
+                  , long x_off, long y_off, CompositeOperator op)
 {
     Image *new_image;
     char geometry[20];
@@ -1547,7 +1547,7 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
     volatile VALUE ary;
 
     image = rm_check_destroyed(self);
-    geom_str = rb_funcall(geom_arg, rm_ID_to_s, 0);
+    geom_str = rm_to_s(geom_arg);
     geometry = StringValuePtr(geom_str);
 
     memset(&rect, 0, sizeof(rect));
@@ -2042,7 +2042,7 @@ Image_color_profile_eq(VALUE self, VALUE profile)
 */
 VALUE
 Image_color_flood_fill( VALUE self, VALUE target_color, VALUE fill_color
-                      , VALUE xv, VALUE yv, VALUE method)
+                        , VALUE xv, VALUE yv, VALUE method)
 {
     Image *image, *new_image;
     PixelPacket target;
@@ -2084,26 +2084,26 @@ Image_color_flood_fill( VALUE self, VALUE target_color, VALUE fill_color
 
 #if defined(HAVE_FLOODFILLPAINTIMAGE)
     {
-    MagickPixelPacket target_mpp;
-    MagickBooleanType invert;
+        MagickPixelPacket target_mpp;
+        MagickBooleanType invert;
 
-    GetMagickPixelPacket(new_image, &target_mpp);
-    if (fill_method == FillToBorderMethod)
-    {
-        invert = MagickTrue;
-        target_mpp.red   = (MagickRealType) image->border_color.red;
-        target_mpp.green = (MagickRealType) image->border_color.green;
-        target_mpp.blue  = (MagickRealType) image->border_color.blue;
-    }
-    else
-    {
-        invert = MagickFalse;
-        target_mpp.red   = (MagickRealType) target.red;
-        target_mpp.green = (MagickRealType) target.green;
-        target_mpp.blue  = (MagickRealType) target.blue;
-    }
+        GetMagickPixelPacket(new_image, &target_mpp);
+        if (fill_method == FillToBorderMethod)
+        {
+            invert = MagickTrue;
+            target_mpp.red   = (MagickRealType) image->border_color.red;
+            target_mpp.green = (MagickRealType) image->border_color.green;
+            target_mpp.blue  = (MagickRealType) image->border_color.blue;
+        }
+        else
+        {
+            invert = MagickFalse;
+            target_mpp.red   = (MagickRealType) target.red;
+            target_mpp.green = (MagickRealType) target.green;
+            target_mpp.blue  = (MagickRealType) target.blue;
+        }
 
-    (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &target_mpp, x, y, invert);
+        (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &target_mpp, x, y, invert);
     }
 #else
     (void) ColorFloodfillImage(new_image, draw_info, target, x, y, (PaintMethod)fill_method);
@@ -3367,7 +3367,7 @@ Image_decipher(VALUE self, VALUE passphrase)
     self = self;
     passphrase = passphrase;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -3388,20 +3388,22 @@ Image_define(VALUE self, VALUE artifact, VALUE value)
     MagickBooleanType status;
 
     image = rm_check_frozen(self);
-    key = rm_str2cstr(artifact, NULL);
+    artifact = rb_String(artifact);
+    key = StringValuePtr(artifact);
 
     if (value == Qnil)
     {
-      (void) DeleteImageArtifact(image, key);
+        (void) DeleteImageArtifact(image, key);
     }
     else
     {
-      val = rm_str2cstr(value, NULL);
-      status = SetImageArtifact(image, key, val);
-      if (!status)
-      {
-          rb_raise(rb_eNoMemError, "not enough memory to continue");
-      }
+        value = rb_String(value);
+        val = StringValuePtr(value);
+        status = SetImageArtifact(image, key, val);
+        if (!status)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
     }
 
     return value;
@@ -3410,7 +3412,7 @@ Image_define(VALUE self, VALUE artifact, VALUE value)
     artifact = artifact;
     value = value;
     self = self;
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -3433,8 +3435,8 @@ Image_delete_compose_mask(VALUE self)
     // Store a clone of the mask image
 #if defined(HAVE_SETIMAGEMASK)
     {
-    (void) SetImageMask(image, NULL);
-    rm_check_image_exception(image, RetainOnError);
+        (void) SetImageMask(image, NULL);
+        rm_check_image_exception(image, RetainOnError);
     }
 #else
     if (image->clip_mask)
@@ -3535,7 +3537,7 @@ Image_deskew(int argc, VALUE *argv, VALUE self)
     argv = argv;
     argc = argc;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -3872,7 +3874,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     }
 
     composite_image =  special_composite(image, overlay, src_percent, dst_percent
-                                       , x_offset, y_offset, DissolveCompositeOp);
+                                         , x_offset, y_offset, DissolveCompositeOp);
 
     return composite_image;
 }
@@ -4231,7 +4233,7 @@ Image_encipher(VALUE self, VALUE passphrase)
     self = self;
     passphrase = passphrase;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -4342,7 +4344,7 @@ Image_equalize_channel(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE) 0;
+    return(VALUE) 0;
 #endif
 }
 
@@ -5225,7 +5227,7 @@ Image_geometry_eq(
     }
 
 
-    geom_str = rb_funcall(geometry, rm_ID_to_s, 0);
+    geom_str = rm_to_s(geometry);
     geom = StringValuePtr(geom_str);
     if (!IsGeometry(geom))
     {
@@ -5918,7 +5920,7 @@ Image_level_colors(int argc, VALUE *argv, VALUE self)
     self = self;
     argc = argc;
     argv = argv;
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -5975,7 +5977,7 @@ Image_levelize_channel(int argc, VALUE *argv, VALUE self)
     self = self;
     argc = argc;
     argv = argv;
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -6465,34 +6467,34 @@ Image_matte_flood_fill(VALUE self, VALUE color, VALUE opacity, VALUE x_obj, VALU
 
 #if defined(HAVE_FLOODFILLPAINTIMAGE)
     {
-    DrawInfo *draw_info;
-    MagickPixelPacket target_mpp;
-    MagickBooleanType invert;
+        DrawInfo *draw_info;
+        MagickPixelPacket target_mpp;
+        MagickBooleanType invert;
 
-    // FloodfillPaintImage looks for the opacity in the DrawInfo.fill field.
-    draw_info = CloneDrawInfo(NULL, NULL);
-    if (!draw_info)
-    {
-        rb_raise(rb_eNoMemError, "not enough memory to continue");
-    }
-    draw_info->fill.opacity = op;
+        // FloodfillPaintImage looks for the opacity in the DrawInfo.fill field.
+        draw_info = CloneDrawInfo(NULL, NULL);
+        if (!draw_info)
+        {
+            rb_raise(rb_eNoMemError, "not enough memory to continue");
+        }
+        draw_info->fill.opacity = op;
 
-    if (method == FillToBorderMethod)
-    {
-        invert = MagickTrue;
-        target_mpp.red   = (MagickRealType) image->border_color.red;
-        target_mpp.green = (MagickRealType) image->border_color.green;
-        target_mpp.blue  = (MagickRealType) image->border_color.blue;
-    }
-    else
-    {
-        invert = MagickFalse;
-        target_mpp.red   = (MagickRealType) target.red;
-        target_mpp.green = (MagickRealType) target.green;
-        target_mpp.blue  = (MagickRealType) target.blue;
-    }
+        if (method == FillToBorderMethod)
+        {
+            invert = MagickTrue;
+            target_mpp.red   = (MagickRealType) image->border_color.red;
+            target_mpp.green = (MagickRealType) image->border_color.green;
+            target_mpp.blue  = (MagickRealType) image->border_color.blue;
+        }
+        else
+        {
+            invert = MagickFalse;
+            target_mpp.red   = (MagickRealType) target.red;
+            target_mpp.green = (MagickRealType) target.green;
+            target_mpp.blue  = (MagickRealType) target.blue;
+        }
 
-    (void) FloodfillPaintImage(new_image, OpacityChannel, draw_info, &target_mpp, x, y, invert);
+        (void) FloodfillPaintImage(new_image, OpacityChannel, draw_info, &target_mpp, x, y, invert);
     }
 #else
     (void) MatteFloodfillImage(new_image, target, op, x, y, method);
@@ -6695,7 +6697,7 @@ DEF_ATTR_READER(Image, montage, str)
 */
 static VALUE
 motion_blur(int argc, VALUE *argv, VALUE self
-          , Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
+            , Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
 {
     Image *image, *new_image;
     double radius = 0.0;
@@ -7138,7 +7140,7 @@ Image_opaque_channel(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -7326,7 +7328,7 @@ Image_paint_transparent(int argc, VALUE *argv, VALUE self)
     argv = argv;
     self = self;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -7884,7 +7886,7 @@ Image_random_threshold_channel(int argc, VALUE *argv, VALUE self)
     }
 
     // Accept any argument that has a to_s method.
-    geom_str = rb_funcall(argv[0], rm_ID_to_s, 0);
+    geom_str = rm_to_s(argv[0]);
     thresholds = StringValuePtr(geom_str);
 
     new_image = rm_clone_image(image);
@@ -7966,7 +7968,7 @@ file_arg_rescue(VALUE arg)
 {
     rb_raise(rb_eTypeError, "argument must be path name or open file (%s given)",
              rb_class2name(CLASS_OF(arg)));
-    return (VALUE)0;
+    return(VALUE)0;
 }
 
 
@@ -9176,7 +9178,7 @@ Image_sparse_color(int argc, VALUE *argv, VALUE self)
     method = method;
     pts = pts;
     rm_not_implemented();
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -9401,7 +9403,7 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
 */
 VALUE
 Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
-                 , VALUE rows_arg, VALUE new_pixels)
+                   , VALUE rows_arg, VALUE new_pixels)
 {
     Image *image;
     Pixel *pixels, *pixel;
@@ -9532,7 +9534,7 @@ Image_sync_profiles(VALUE self)
 */
 VALUE
 Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
-                       , VALUE x_obj, VALUE y_obj, VALUE method_obj)
+                         , VALUE x_obj, VALUE y_obj, VALUE method_obj)
 {
     Image *image, *new_image;
     Image *texture_image;
@@ -9576,26 +9578,26 @@ Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
 
 #if defined(HAVE_FLOODFILLPAINTIMAGE)
     {
-    MagickPixelPacket color_mpp;
-    MagickBooleanType invert;
+        MagickPixelPacket color_mpp;
+        MagickBooleanType invert;
 
-    GetMagickPixelPacket(new_image, &color_mpp);
-    if (method == FillToBorderMethod)
-    {
-        invert = MagickTrue;
-        color_mpp.red   = (MagickRealType) image->border_color.red;
-        color_mpp.green = (MagickRealType) image->border_color.green;
-        color_mpp.blue  = (MagickRealType) image->border_color.blue;
-    }
-    else
-    {
-        invert = MagickFalse;
-        color_mpp.red   = (MagickRealType) color.red;
-        color_mpp.green = (MagickRealType) color.green;
-        color_mpp.blue  = (MagickRealType) color.blue;
-    }
+        GetMagickPixelPacket(new_image, &color_mpp);
+        if (method == FillToBorderMethod)
+        {
+            invert = MagickTrue;
+            color_mpp.red   = (MagickRealType) image->border_color.red;
+            color_mpp.green = (MagickRealType) image->border_color.green;
+            color_mpp.blue  = (MagickRealType) image->border_color.blue;
+        }
+        else
+        {
+            invert = MagickFalse;
+            color_mpp.red   = (MagickRealType) color.red;
+            color_mpp.green = (MagickRealType) color.green;
+            color_mpp.blue  = (MagickRealType) color.blue;
+        }
 
-    (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &color_mpp, x, y, invert);
+        (void) FloodfillPaintImage(new_image, DefaultChannels, draw_info, &color_mpp, x, y, invert);
     }
 
 #else
@@ -10243,7 +10245,7 @@ Image_undefine(VALUE self, VALUE artifact)
     rm_not_implemented();
     artifact = artifact;
     self = self;
-    return (VALUE)0;
+    return(VALUE)0;
 #endif
 }
 
@@ -10312,8 +10314,8 @@ Image_units_eq(
             case PixelsPerCentimeterResolution:
                 if (units == PixelsPerInchResolution)
                 {
-                  image->x_resolution *= 2.54;
-                  image->y_resolution *= 2.54;
+                    image->x_resolution *= 2.54;
+                    image->y_resolution *= 2.54;
                 }
                 break;
 
@@ -10340,7 +10342,7 @@ Image_units_eq(
 */
 static void
 unsharp_mask_args(int argc, VALUE *argv, double *radius, double *sigma
-                , double *amount, double *threshold)
+                  , double *amount, double *threshold)
 {
     switch (argc)
     {
@@ -10827,8 +10829,8 @@ void add_format_prefix(Info *info, VALUE file)
             if (magick_info2->module && strcmp(magick_info->module, magick_info2->module) != 0)
             {
                 rb_raise(rb_eRuntimeError
-                    , "filename prefix `%s' conflicts with output format `%s'"
-                    , magick_info->name, info->magick);
+                         , "filename prefix `%s' conflicts with output format `%s'"
+                         , magick_info->name, info->magick);
             }
 
             // The filename prefix already matches the specified format.

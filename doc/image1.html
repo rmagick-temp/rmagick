@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -4224,58 +4224,110 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
 
     <p><span class="arg">img</span>.distort(<span class=
     "arg">type</span>, <span class="arg">points</span>,
-    <span class="arg">bestfit</span>=<code>false</code>) -&gt;
-    <em>image</em></p>
+    <span class="arg">bestfit</span>=<code>false</code>) [
+    <span class="arg">{&nbsp;optional arguments&nbsp;}</span> ]
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
     <p>Distort an image using the specified distortion type and its
-    required arguments. This method is the equivalent of
-    ImageMagick's -distort option.</p>
+    required arguments. This method is equivalent to ImageMagick's
+    -distort option.</p>
 
     <h4>Arguments</h4>
 
-    <p>Specify one of the following values for the distortion
-    <span class="arg">type</span>:</p>
+    <dl>
+      <dt>type</dt>
 
-    <ul>
-      <li>AffineDistortion</li>
+      <dd>
+        One of the following values:
 
-      <li>AffineProjectionDistortion</li>
+        <ul>
+          <li>AffineDistortion</li>
 
-      <li>ArcDistortion</li>
+          <li>AffineProjectionDistortion</li>
 
-      <li>BarrelDistortion</li>
+          <li>ArcDistortion</li>
 
-      <li>BilinearDistortion</li>
+          <li>BarrelDistortion</li>
 
-      <li>PerspectiveDistortion</li>
+          <li>BilinearDistortion</li>
 
-      <li>PerspectiveProjectionDistortion</li>
+          <li>PerspectiveDistortion</li>
 
-      <li>PolynomialDistortion</li>
+          <li>PerspectiveProjectionDistortion</li>
 
-      <li>ScaleRotateTranslateDistortion</li>
+          <li>PolynomialDistortion</li>
 
-      <li>ShepardsDistortion</li>
-    </ul>
+          <li>ScaleRotateTranslateDistortion</li>
 
-    <p>The <span class="arg">points</span> argument is an array of
-    numbers. The size of the array depends on the distortion
-    type.</p>
+          <li>ShepardsDistortion</li>
+        </ul>
+      </dd>
 
-    <p class="imquote">If <span class="arg">bestfit</span> is
-    enabled, and the distortion allows it, the destination image is
-    adjusted to ensure the whole source image will just fit within
-    the final destination image, which will be sized and offset
-    accordingly. Also in many cases the virtual offset of the
-    source image will be taken into account in the mapping.</p>
+      <dt>points</dt>
+
+      <dd>An array of numbers. The size of the array depends on the
+      distortion type.</dd>
+
+      <dt>bestfit</dt>
+
+      <dd class="imquote">If <span class="arg">bestfit</span> is
+      enabled, and the distortion allows it, the destination image
+      is adjusted to ensure the whole source image will just fit
+      within the final destination image, which will be sized and
+      offset accordingly. Also in many cases the virtual offset of
+      the source image will be taken into account in the
+      mapping.</dd>
+
+      <dt>optional arguments</dt>
+
+      <dd>
+        If present, <code>distort</code> yields to a block in which
+        you can set optional arguments by calling methods on
+        <em>self</em>.
+
+        <dl>
+          <dt>self.define("distort:viewport", "WxH+X+Y")</dt>
+
+          <dd>Specify the size and offset of the generated viewport
+          image of the distorted image space. W and H are the width
+          and height, and X and Y are the offset.</dd>
+
+          <dt>self.define("distort:scale", N)</dt>
+
+          <dd>N is an integer factor. <span class="imquote">Scale
+          the output image (viewport or otherwise) by that factor
+          without changing the viewed contents of the distorted
+          image. This can be used either for 'super-sampling' the
+          image for a higher quality result, or for panning and
+          zooming around the image (with appropriate viewport
+          changes, or post-distort cropping and
+          resizing).</span></dd>
+
+          <dt>self.verbose(true)</dt>
+
+          <dd class="imquote">Attempt to output the internal
+          coefficients, and the -fx equivalent to the distortion,
+          for expert study, and debugging purposes. This many not
+          be available for all distorts.</dd>
+        </dl>
+      </dd>
+    </dl>
 
     <h4>Returns</h4>
 
     <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+result = img.distort(Magick::ScaleRotateTranslateDistortion, [0]) do
+                     self.define "distort:viewport", "44x44+15+0"
+                     self.define "distort:scale", 2
+                  end
+</pre>
 
     <h4>Note</h4>
 

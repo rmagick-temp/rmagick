@@ -2545,7 +2545,11 @@ img.properties &raquo;
     using various methods.</p>
 
     <p>For more information about this method see the ImageMagick
-    documentation for the -sparse-color option.</p>
+    documentation for the -sparse-color option. Also see <a href=
+    "http://www.imagemagick.org/Usage/canvas/#sparse-color">Sparse
+    Points of Color</a> at <a href=
+    "http://www.imagemagick.org/Usage/">Examples of ImageMagick
+    Usage</a>.</p>
 
     <h4>Arguments</h4>
 
@@ -2558,13 +2562,31 @@ img.properties &raquo;
         <dl>
           <dt>BarycentricColorInterpolate</dt>
 
+          <dd class="imquote">Three point triangle of color given 3
+          points. Giving only 2 points will form a linear gradient
+          between those points. Gradient is however not restricted
+          to just the triangle or line.</dd>
+
           <dt>BilinearColorInterpolate</dt>
 
-          <dt>PolynomialColorInterpolate</dt>
+          <dd class="imquote">Like barycentric but for 4 points.
+          Less than 4 points fall back to barycentric.</dd>
 
           <dt>ShepardsColorInterpolate</dt>
 
+          <dd class="imquote">Colors points basied on the ratio of
+          inverse distance squared. Generating spots of color in a
+          sea of the average of colors.</dd>
+
           <dt>VoronoiColorInterpolate</dt>
+
+          <dd class="imquote">Simply map each pixel to the to
+          nearest color point given. The result are polygonal
+          'cells' of solid color.</dd>
+
+          <dt>PolynomialColorInterpolate</dt>
+
+          <dd class="imquote">&nbsp;</dd>
         </dl>
       </dd>
 

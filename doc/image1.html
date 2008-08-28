@@ -1922,7 +1922,7 @@ img = Image.read_inline(content)
 
       <dd>Border color. Use a <a href=
       "imusage.html#color_names">named color</a> or a <a href=
-      "struct.html#Pixel">Pixel</a> object.</dd>
+      "struct.html#Pixel">pixel</a> object.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2564,7 +2564,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
     <h4>Returns</h4>
 
     <p>A hash. Each key in the hash is a <a href=
-    "struct.html#Pixel">Pixel</a> representing a color that appears
+    "struct.html#Pixel">pixel</a> representing a color that appears
     in the image. The value associated with the key is the number
     of times that color appears in the image. <em>Caution:</em> if
     the image contains many colors the hash will be very large. You
@@ -2617,7 +2617,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
       <dt>fill</dt>
 
       <dd>A color name or a <a href="struct.html#Pixel">Pixel</a>
-      structure</dd>
+      </dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2683,7 +2683,7 @@ mona.change_geometry!('320x240') { |cols, rows, img|
 
       <dd>Optional. If specified, may be either a <a href=
       "imusage.html#color_names">color name</a> or a <a href=
-      "struct.html#Pixel">Pixel</a>.</dd>
+      "struct.html#Pixel">pixel</a>.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -2775,8 +2775,9 @@ f.color_reset!(red)
 
     <p><span class="arg">img</span>.compare_channel(<span class=
     "arg">img</span>, <span class="arg">metric</span> [,
-    <span class="arg">channel...</span>]) -&gt; [<em>image</em>,
-    <em>float</em>]</p>
+    <span class="arg">channel...</span>]) [ <span class=
+    "arg">{&nbsp;optional arguments&nbsp;}</span> ] -&gt;
+    [<em>image</em>, <em>float</em>]</p>
   </div>
 
   <div class="desc">
@@ -2804,6 +2805,29 @@ f.color_reset!(red)
       specified channels contribute to the comparison and the
       distortion value. If no channels are specified, compares all
       channels.</dd>
+
+      <dt>optional arguments</dt>
+
+      <dd>
+        If present, <code>compare_channel</code> yields to a block
+        in which you can set optional arguments by setting attributes
+        on <em>self</em>. In both cases <span class=
+        "arg">color</span> may be either a <a href=
+        "imusage.html#color_names">color name</a> or a <a href=
+        "struct.html#Pixel">pixel</a>.
+
+        <dl>
+          <dt>self.highlight_color = color</dt>
+
+          <dd>Emphasize pixel differences with this color. The
+          default is partially transparent red.</dd>
+
+          <dt>self.lowlight_color = color</dt>
+
+          <dd>Demphasize pixel differences with this color. The
+          default is partially transparent white.</dd>
+        </dl>
+      </dd>
     </dl>
 
     <h4>Returns</h4>

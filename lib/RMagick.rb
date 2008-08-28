@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.73 2008/08/24 21:15:24 rmagick Exp $
+# $Id: RMagick.rb,v 1.74 2008/08/28 23:25:46 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1851,13 +1851,13 @@ class OptionalMethodArguments
     end
 
     # accepts Pixel object or color name
-    def highlight_color(color)
+    def highlight_color=(color)
        color = @img.to_color(color) if color.respond_to?(:to_color)
        @img.define("highlight-color", color)
     end
 
     # accepts Pixel object or color name
-    def lowlight_color(color)
+    def lowlight_color=(color)
        color = @img.to_color(color) if color.respond_to?(:to_color)
        @img.define("lowlight-color", color)
     end

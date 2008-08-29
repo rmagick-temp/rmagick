@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.312 2008/08/26 22:36:51 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.313 2008/08/29 23:00:38 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9175,8 +9175,8 @@ Image_sparse_color(int argc, VALUE *argv, VALUE self)
 
 #else
     self = self;
-    method = method;
-    pts = pts;
+    argc = argc;
+    argv = argv;
     rm_not_implemented();
     return(VALUE)0;
 #endif

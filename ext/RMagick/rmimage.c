@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.313 2008/08/29 23:00:38 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.314 2008/08/31 20:02:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -560,6 +560,55 @@ Image_alpha_eq(VALUE self, VALUE type)
     argv[0] = type;
     Image_alpha(1, argv, self);
     return type;
+#else
+    self = self;
+    type = type;
+    rm_not_implemented();
+    return(VALUE)0;
+#endif
+}
+
+
+
+/*
+     Method:    Image#affinity(affinity_image, dither_method=RiemersmaDitherMethod)
+     Purpose:   Call AffinityImage
+     Notes:     Immediate - modifies image in-place
+*/
+VALUE
+Image_affinity(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_AFFINITYIMAGE)
+    Image *image, *affinity_image;
+    QuantizeInfo quantize_info;
+
+    image = rm_check_frozen(self);
+    if (argc > 0)
+    {
+        volatile VALUE t = ImageList_cur_image(argv[0]);
+        affinity_image = rm_check_destroyed(t);
+    }
+
+    GetQuantizeInfo(&quantize_info);
+
+    switch (argc)
+    {
+        case 2:
+            VALUE_TO_ENUM(argv[1], quantize_info.dither_method, DitherMethod);
+            quantize_info.dither = MagickTrue;
+            break;
+        case 1:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+
+    (void) AffinityImage(&quantize_info, image, affinity_image);
+    rm_check_image_exception(image, RetainOnError);
+
+    return self;
 #else
     self = self;
     type = type;
@@ -6200,6 +6249,11 @@ Image_map(int argc, VALUE *argv, VALUE self)
     unsigned int dither = MagickFalse;
 
     image = rm_check_destroyed(self);
+
+#if defined(HAVE_AFFINITYIMAGE)
+    rb_warning("Image#map is deprecated. Use Image#affinity instead");
+#endif
+
     switch (argc)
     {
         case 2:

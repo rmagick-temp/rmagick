@@ -148,6 +148,8 @@ have_func("snprintf", headers)
 
 
   ["AcquireQuantumMemory",           # 6.3.5-9
+   "AffinityImage",                  # 6.4.3-6
+   "AffinityImages",                 # 6.4.3-6
    "ClutImageChannel",               # 6.3.5-8
    "CompositeLayers",                # 6.3.3-?
    "ConvertHSLToRGB",                # 6.3.5-9
@@ -218,6 +220,7 @@ end
 
 have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
 have_type("AlphaChannelType", headers)                # 6.3.5
+have_type("DitherMethod", headers)                    # 6.4.2
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod
 have_type("long double", headers)
 have_type("unsigned long long", headers)

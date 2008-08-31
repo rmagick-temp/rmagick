@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.246 2008/08/26 22:35:35 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.247 2008/08/31 20:01:53 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -296,6 +296,9 @@ EXTERN VALUE Class_DecorationType;
 EXTERN VALUE Class_DisposeType;
 #if defined(HAVE_DISTORTIMAGE)
 EXTERN VALUE Class_DistortImageMethod;
+#endif
+#if defined(HAVE_TYPE_DITHERMETHOD)
+EXTERN VALUE Class_DitherMethod;
 #endif
 EXTERN VALUE Class_EndianType;
 EXTERN VALUE Class_FilterTypes;
@@ -620,6 +623,7 @@ ATTR_WRITER(PolaroidOptions, border_color);
 
 
  // rmilist.c
+extern VALUE ImageList_affinity(int, VALUE *, VALUE);
 extern VALUE ImageList_animate(int, VALUE *, VALUE);
 extern VALUE ImageList_append(VALUE, VALUE);
 extern VALUE ImageList_average(VALUE);
@@ -786,6 +790,7 @@ extern VALUE Image_add_noise(VALUE, VALUE);
 extern VALUE Image_add_noise_channel(int, VALUE *, VALUE);
 extern VALUE Image_add_profile(VALUE, VALUE);
 extern VALUE Image_affine_transform(VALUE, VALUE);
+extern VALUE Image_affinity(int, VALUE *, VALUE);
 extern VALUE Image_alpha(int, VALUE *, VALUE);
 extern VALUE Image_alpha_q(VALUE);
 extern VALUE Image_aref(VALUE, VALUE);

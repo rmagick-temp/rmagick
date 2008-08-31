@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.78 2008/08/31 20:42:34 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.79 2008/08/31 22:46:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -56,7 +56,8 @@ ImageList_affinity(int argc, VALUE *argv, VALUE self)
     return self;
 #else
     self = self;
-    type = type;
+    argc = argc;
+    argv = argv;
     rm_not_implemented();
     return(VALUE)0;
 #endif

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.315 2008/08/31 20:42:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.316 2008/08/31 22:46:29 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -611,7 +611,8 @@ Image_affinity(int argc, VALUE *argv, VALUE self)
     return self;
 #else
     self = self;
-    type = type;
+    argc = argc;
+    argv = argv;
     rm_not_implemented();
     return(VALUE)0;
 #endif

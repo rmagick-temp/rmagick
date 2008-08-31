@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.314 2008/08/31 20:02:15 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.315 2008/08/31 20:42:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7826,7 +7826,15 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
         case 4:
             quantize_info.tree_depth = NUM2UINT(argv[3]);
         case 3:
+#if defined(HAVE_TYPE_DITHERMETHOD)
+            if (rb_obj_is_kind_of(argv[2], Class_DitherMethod))
+            {
+                VALUE_TO_ENUM(argv[2], quantize_info.dither_method, DitherMethod);
+                quantize_info.dither = MagickTrue;
+            }
+#else
             quantize_info.dither = (MagickBooleanType) RTEST(argv[2]);
+#endif
         case 2:
             VALUE_TO_ENUM(argv[1], quantize_info.colorspace, ColorspaceType);
         case 1:

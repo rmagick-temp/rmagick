@@ -103,6 +103,8 @@
       <ul>
         <li><a href="#DisposeType">DisposeType</a></li>
 
+        <li><a href="#DitherMethod">DitherMethod</a></li>
+
         <li><a href="#EndianType">EndianType</a></li>
 
         <li><a href="#FilterTypes">FilterTypes</a></li>
@@ -117,13 +119,13 @@
         "#InterpolatePixelMethod">InterpolatePixelMethod</a></li>
 
         <li><a href="#MetricType">MetricType</a></li>
-
-        <li><a href="#NoiseType">NoiseType</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#NoiseType">NoiseType</a></li>
+
         <li><a href="#Opacity">Opacity</a></li>
 
         <li><a href="#OrientationType">OrientationType</a></li>
@@ -155,7 +157,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 2.0.0 ($Date: 2008/03/16 15:21:45 $)
+    <code>This is RMagick 2.0.0 ($Date: 2008/08/31 20:02:57 $)
     Copyright (C) 2008 by Timothy P. Hunter<br />
     Built with ImageMagick 6.3.7 01/05/08 Q16
     http://www.imagemagick.org<br />
@@ -908,6 +910,21 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dd>Overwrite the image area with what was there prior to
     rendering the image.</dd>
+  </dl>
+
+  <h3 class="const" id="DitherMethod">DitherMethod</h3>
+
+  <p>Specify the method of dithering for <a href=
+  "image1.html#affinity">affinity</a>, <a href=
+  "image3.html#quantize">quantize</a>, <a href=
+  "image3.html#posterize">posterize</a>, etc.</p>
+
+  <dl>
+    <dt>NoDitherMethod</dt>
+
+    <dt>RiemersmaDitherMethod</dt>
+
+    <dt>FloydSteinbergDitherMethod</dt>
   </dl>
 
   <h3 class="const" id="EndianType">EndianType</h3>

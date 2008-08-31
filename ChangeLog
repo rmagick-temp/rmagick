@@ -8,6 +8,8 @@ RMagick 2.6.0
     o Add Image#define, Image#undefine (available in ImageMagick 6.3.6)
     o Add Image#level_colors (available in ImageMagick 6.4.2-1)
     o Add Image#levelize_channel (available in ImageMagick 6.4.2-1)
+    o Add Image#affinity, ImageList#affinity (available in ImageMagick 6.4.3-6).
+      These methods replace Image#map and ImageList#map.
     o Add the BarrelDistortion, PolynomialDistortion, ShepardsDistortion,
       PolarDistortion, and DePolarDistortion MagickDistortion Method enum values
       (available in ImageMagick 6.4.2-6)

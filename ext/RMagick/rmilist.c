@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.76 2008/07/26 19:46:06 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.77 2008/08/31 20:01:11 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -14,6 +14,53 @@ static long imagelist_length(VALUE);
 static VALUE imagelist_scene_eq(VALUE, VALUE);
 static void imagelist_push(VALUE, VALUE);
 static VALUE ImageList_new(void);
+
+
+
+/*
+    Method:     ImageList#affinity(affinity_image=nil, dither_method=RiemersmaDitherMethod)
+    Purpose:    Call AffinityImages
+    Note:       See Image_affinity. Immediate - modifies images in-place
+*/
+VALUE
+ImageList_affinity(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_AFFINITYIMAGES)
+    Image *images, *affinity_image = NULL;
+    QuantizeInfo quantize_info;
+
+    images = images_from_imagelist(self);
+
+    if (argc > 0 && argv[0] != Qnil)
+    {
+        volatile VALUE t = ImageList_cur_image(argv[0]);
+        affinity_image = rm_check_destroyed(t);
+    }
+
+    GetQuantizeInfo(&quantize_info);
+
+    if (argc > 1)
+    {
+        VALUE_TO_ENUM(argv[1], quantize_info.dither_method, DitherMethod);
+        quantize_info.dither = MagickTrue;
+    }
+    else if (argc > 2)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+    }
+
+    (void) AffinityImages(&quantize_info, images, affinity_image);
+    rm_check_image_exception(images, RetainOnError);
+    rm_split(images);
+
+    return self;
+#else
+    self = self;
+    type = type;
+    rm_not_implemented();
+    return(VALUE)0;
+#endif
+}
 
 
 /*
@@ -347,6 +394,10 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     unsigned int dither = MagickFalse;
     volatile VALUE scene, new_imagelist, t;
     ExceptionInfo exception;
+
+#if defined(HAVE_AFFINITYIMAGES)
+    rb_warning("ImageList#map is deprecated. Use ImageList#affinity instead.");
+#endif
 
     switch (argc)
     {

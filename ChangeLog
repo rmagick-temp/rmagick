@@ -10,12 +10,15 @@ RMagick 2.6.0
     o Add Image#levelize_channel (available in ImageMagick 6.4.2-1)
     o Add Image#affinity, ImageList#affinity (available in ImageMagick 6.4.3-6).
       These methods replace Image#map and ImageList#map.
+    o Accept DitherMethod values for the dither argument to Image#quantize,
+      ImageList#quantize
     o Add the BarrelDistortion, PolynomialDistortion, ShepardsDistortion,
       PolarDistortion, and DePolarDistortion MagickDistortion Method enum values
       (available in ImageMagick 6.4.2-6)
     o Add the HorizontalTileVirtualPixelMethod and
       VerticalTileVirtualPixelMethod VirtualPixelMethod enum values
       (available in ImageMagick 6.4.2-6)
+    o Add DitherMethod enum class
     o Added general-purpose OptionalMethodArguments class to handle ad-hoc
       optional arguments.
     o Support optional "distort:viewport" and "distort:scale" arguments to

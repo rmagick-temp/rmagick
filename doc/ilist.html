@@ -1744,8 +1744,8 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
     <h3 id="quantize">quantize</h3>
 
     <p><span class="arg">ilist.</span>quantize(nc=256,
-    colorspace=<code>Magick::RGBColorspace</code>,
-    dither=<code>true</code>, tree_depth=0,
+    colorspace=<code>RGBColorspace</code>,
+    dither=<code>RiemersmaDitherMethod</code>, tree_depth=0,
     measure_error=<code>false</code>) -&gt; <em>imagelist</em></p>
   </div>
 
@@ -1780,11 +1780,10 @@ puts "The image has #{i.columns} columns and #{i.rows} rows." &raquo;
 
       <dt>dither</dt>
 
-      <dd class="imquote">Apply Floyd/Steinberg error diffusion to
-      the image. When the size of the color palette is less than
-      the image colors, this trades off spacial resolution for
-      color resolution by dithering to achieve a similar looking
-      image.</dd>
+      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
+      value. See the documentation for the <a href=
+      "http://redux.imagemagick.org/script/command-line-options.php#dither">
+      ImageMagick -dither option</a> for more information.</dd>
 
       <dt>tree_depth</dt>
 

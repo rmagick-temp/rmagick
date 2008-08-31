@@ -716,8 +716,8 @@ end
     <p><span class="arg">img</span>.quantize(<span class=
     "arg">number_colors</span>=256, <span class=
     "arg">colorspace</span>=RGBColorspace, <span class=
-    "arg">dither</span>=<code>true</code>, <span class=
-    "arg">tree_depth</span>=0, <span class=
+    "arg">dither</span>=<code>RiemersmaDitherMethod</code>,
+    <span class="arg">tree_depth</span>=0, <span class=
     "arg">measure_error</span>=<code>false</code>) -&gt;
     <em>image</em></p>
   </div>
@@ -754,8 +754,9 @@ end
 
       <dt>dither</dt>
 
-      <dd>Set to <code>false</code> to disable dithering. See the
-      documentation for the <a href=
+      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
+      value. Set to <code>NoDitherMethod</code> to disable
+      dithering. See the documentation for the <a href=
       "http://redux.imagemagick.org/script/command-line-options.php#dither">
       ImageMagick -dither option</a> for more information.</dd>
 
@@ -1376,7 +1377,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" />
+    alt="resize_to_fill example" /> 
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1471,7 +1472,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"

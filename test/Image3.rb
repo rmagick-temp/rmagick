@@ -64,6 +64,10 @@ class Image3_UT < Test::Unit::TestCase
             assert_nothing_raised { @img.quantize(256, cs) }
         end
         assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, false) }
+        assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, true) }
+        assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, Magick::NoDitherMethod) }
+        assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, Magick::RiemersmaDitherMethod) }
+        assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, Magick::FloydSteinbergDitherMethod) }
         assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, true, 2) }
         assert_nothing_raised { @img.quantize(256, Magick::RGBColorspace, true, 2, true) }
         assert_raise(TypeError) { @img.quantize('x') }

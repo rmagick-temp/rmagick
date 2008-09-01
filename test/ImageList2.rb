@@ -310,6 +310,11 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace) }
         assert_raise(TypeError) { @ilist.quantize(128, 'x') }
         assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, true, 0) }
+        assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, true) }
+        assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, false) }
+        assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, Magick::NoDitherMethod) }
+        assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, Magick::RiemersmaDitherMethod) }
+        assert_nothing_raised { @ilist.quantize(128, Magick::RGBColorspace, Magick::FloydSteinbergDitherMethod) }
         assert_raise(TypeError) { @ilist.quantize(128, Magick::RGBColorspace, true, 'x' ) }
         assert_raise(ArgumentError) { @ilist.quantize(128, Magick::RGBColorspace, true, 0, false, 'extra') }
     end

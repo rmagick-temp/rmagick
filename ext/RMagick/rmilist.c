@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.79 2008/08/31 22:46:27 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.80 2008/09/01 01:05:25 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -44,7 +44,7 @@ ImageList_affinity(int argc, VALUE *argv, VALUE self)
         VALUE_TO_ENUM(argv[1], quantize_info.dither_method, DitherMethod);
         quantize_info.dither = MagickTrue;
     }
-    else if (argc > 2)
+    if (argc > 2)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
     }

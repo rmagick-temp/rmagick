@@ -8,10 +8,14 @@ result = Magick::ImageList.new
 result += images
 result << rose
 
-result += images.copy.affinity(rose)
+begin
+   result += images.copy.affinity(rose)
+   montage = result.montage { self.tile = "4x2" }
+   montage.alpha Magick::DeactivateAlphaChannel
+rescue NotImplementedError
+   montage = Magick::Image.read("images/notimplemented.gif").first
+end
 
-montage = result.montage { self.tile = "4x2" }
-montage.alpha Magick::DeactivateAlphaChannel
 montage.write("affinity_images.jpg")
 
 

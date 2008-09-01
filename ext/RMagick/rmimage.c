@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.316 2008/08/31 22:46:29 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.317 2008/09/01 16:07:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7831,7 +7831,7 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
             if (rb_obj_is_kind_of(argv[2], Class_DitherMethod))
             {
                 VALUE_TO_ENUM(argv[2], quantize_info.dither_method, DitherMethod);
-                quantize_info.dither = MagickTrue;
+                quantize_info.dither = quantize_info.dither_method != NoDitherMethod;
             }
 #else
             quantize_info.dither = (MagickBooleanType) RTEST(argv[2]);

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.80 2008/09/01 01:05:25 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.81 2008/09/01 16:07:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -845,7 +845,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
             if (rb_obj_is_kind_of(argv[2], Class_DitherMethod))
             {
                 VALUE_TO_ENUM(argv[2], quantize_info.dither_method, DitherMethod);
-                quantize_info.dither = MagickTrue;
+                quantize_info.dither = quantize_info.dither_method != NoDitherMethod;
             }
 #else
             quantize_info.dither = (MagickBooleanType) RTEST(argv[2]);

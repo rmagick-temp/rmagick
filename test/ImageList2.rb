@@ -13,6 +13,18 @@ class ImageList2_UT < Test::Unit::TestCase
         @ilist = Magick::ImageList.new
     end
 
+    def test_affinity
+       @ilist.read(*Dir[IMAGES_DIR+'/Button_*.gif'])
+       assert_nothing_raised { @ilist.affinity }
+       affinity_image = Magick::Image.new(20,20) {self.background_color = "green"}
+       assert_nothing_raised { @ilist.affinity(affinity_image) }
+       assert_nothing_raised { @ilist.affinity(affinity_image, Magick::NoDitherMethod) }
+       assert_nothing_raised { @ilist.affinity(affinity_image, Magick::RiemersmaDitherMethod) }
+       assert_nothing_raised { @ilist.affinity(affinity_image, Magick::FloydSteinbergDitherMethod) }
+       assert_raise(ArgumentError) { @ilist.affinity(affinity_image, Magick::NoDitherMethod, 1) }
+       #assert_raise(TypeError) { @ilist.affinity(affinity_image, 1) }
+    end
+
     def test_append
         @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_0.gif')
         assert_nothing_raised do

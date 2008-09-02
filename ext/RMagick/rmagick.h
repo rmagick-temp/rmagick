@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.247 2008/08/31 20:01:53 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.248 2008/09/02 23:40:18 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1024,7 +1024,7 @@ extern VALUE  EndianType_new(EndianType);
 extern VALUE  FilterTypes_new(FilterTypes);
 extern VALUE  GravityType_new(GravityType);
 extern VALUE  Font_to_s(VALUE);
-extern VALUE  ImageList_cur_image(VALUE);
+extern VALUE  rm_cur_image(VALUE);
 extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE  ImageType_new(ImageType);
 extern VALUE  InterlaceType_new(InterlaceType);

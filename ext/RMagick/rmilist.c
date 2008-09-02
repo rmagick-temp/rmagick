@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.81 2008/09/01 16:07:08 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.82 2008/09/02 23:40:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -33,7 +33,7 @@ ImageList_affinity(int argc, VALUE *argv, VALUE self)
 
     if (argc > 0 && argv[0] != Qnil)
     {
-        volatile VALUE t = ImageList_cur_image(argv[0]);
+        volatile VALUE t = rm_cur_image(argv[0]);
         affinity_image = rm_check_destroyed(t);
     }
 
@@ -405,7 +405,7 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
         case 2:
             dither = RTEST(argv[1]);
         case 1:
-            t = ImageList_cur_image(argv[0]);
+            t = rm_cur_image(argv[0]);
             map = rm_check_destroyed(t);
             break;
         default:

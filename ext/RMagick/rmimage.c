@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.317 2008/09/01 16:07:08 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.318 2008/09/02 23:40:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -585,7 +585,7 @@ Image_affinity(int argc, VALUE *argv, VALUE self)
     image = rm_check_frozen(self);
     if (argc > 0)
     {
-        volatile VALUE t = ImageList_cur_image(argv[0]);
+        volatile VALUE t = rm_cur_image(argv[0]);
         affinity_image = rm_check_destroyed(t);
     }
 
@@ -1333,7 +1333,7 @@ Image_blend(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
-    ovly = ImageList_cur_image(argv[0]);
+    ovly = rm_cur_image(argv[0]);
     overlay = rm_check_destroyed(ovly);
 
     if (argc > 3)
@@ -2459,7 +2459,7 @@ Image_compare_channel(int argc, VALUE *argv, VALUE self)
 
     rm_get_optional_arguments(self);
 
-    ref = ImageList_cur_image(argv[0]);
+    ref = rm_cur_image(argv[0]);
     r_image = rm_check_destroyed(ref);
 
     VALUE_TO_ENUM(argv[1], metric_type, MetricType);
@@ -2546,7 +2546,7 @@ composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
     }
 
 
-    comp = ImageList_cur_image(argv[0]);
+    comp = rm_cur_image(argv[0]);
     comp_image = rm_check_destroyed(comp);
 
     switch (argc)
@@ -2782,7 +2782,7 @@ composite_tiled(int bang, int argc, VALUE *argv, VALUE self)
 
     if (argc > 0)
     {
-        comp_image = rm_check_destroyed(ImageList_cur_image(argv[0]));
+        comp_image = rm_check_destroyed(rm_cur_image(argv[0]));
     }
 
     channels = extract_channels(&argc, argv);
@@ -3666,7 +3666,7 @@ Image_difference(VALUE self, VALUE other)
     volatile VALUE mean, nmean, nmax;
 
     image = rm_check_destroyed(self);
-    other = ImageList_cur_image(other);
+    other = rm_cur_image(other);
     image2 = rm_check_destroyed(other);
 
     (void) IsImagesEqual(image, image2);
@@ -3703,7 +3703,7 @@ Image_displace(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
-    dmap = ImageList_cur_image(argv[0]);
+    dmap = rm_cur_image(argv[0]);
     displacement_map = rm_check_destroyed(dmap);
 
     if (argc > 3)
@@ -3901,7 +3901,7 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
-    ovly = ImageList_cur_image(argv[0]);
+    ovly = rm_cur_image(argv[0]);
     overlay = rm_check_destroyed(ovly);
 
     if (argc > 3)
@@ -4023,7 +4023,7 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or more)", argc);
     }
 
-    rec = ImageList_cur_image(argv[0]);
+    rec = rm_cur_image(argv[0]);
     reconstruct = rm_check_destroyed(rec);
     VALUE_TO_ENUM(argv[1], metric, MetricType);
     GetExceptionInfo(&exception);
@@ -4815,7 +4815,7 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
         case 2:
             x = NUM2LONG(argv[1]);
         case 1:
-            targ = ImageList_cur_image(argv[0]);
+            targ = rm_cur_image(argv[0]);
             target = rm_check_destroyed(targ);
             break;
         default:
@@ -6269,7 +6269,7 @@ Image_map(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
-    map_obj = ImageList_cur_image(map_arg);
+    map_obj = rm_cur_image(map_arg);
     map = rm_check_destroyed(map_obj);
     (void) MapImage(new_image, map, dither);
     rm_check_image_exception(new_image, DestroyOnError);
@@ -6350,7 +6350,7 @@ Image_mask(int argc, VALUE *argv, VALUE self)
 
     if (mask != Qnil)
     {
-        mask = ImageList_cur_image(mask);
+        mask = rm_cur_image(mask);
         mask_image = rm_check_destroyed(mask);
         clip_mask = rm_clone_image(mask_image);
 
@@ -9359,7 +9359,7 @@ Image_stegano(VALUE self, VALUE watermark_image, VALUE offset)
 
     image = rm_check_destroyed(self);
 
-    wm_image = ImageList_cur_image(watermark_image);
+    wm_image = rm_cur_image(watermark_image);
     watermark = rm_check_destroyed(wm_image);
 
     image->offset = NUM2LONG(offset);
@@ -9394,7 +9394,7 @@ Image_stereo(VALUE self, VALUE offset_image_arg)
 
     image = rm_check_destroyed(self);
 
-    offset_image = ImageList_cur_image(offset_image_arg);
+    offset_image = rm_cur_image(offset_image_arg);
     offset = rm_check_destroyed(offset_image);
 
     GetExceptionInfo(&exception);
@@ -9610,7 +9610,7 @@ Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
     image = rm_check_destroyed(self);
 
     Color_to_PixelPacket(&color, color_obj);
-    texture = ImageList_cur_image(texture_obj);
+    texture = rm_cur_image(texture_obj);
     texture_image = rm_check_destroyed(texture);
 
     x = NUM2LONG(x_obj);
@@ -10608,7 +10608,7 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
     }
 
-    ovly = ImageList_cur_image(argv[0]);
+    ovly = rm_cur_image(argv[0]);
     overlay = rm_check_destroyed(ovly);
 
     if (argc > 3)

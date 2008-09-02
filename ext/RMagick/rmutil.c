@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.160 2008/08/26 22:35:35 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.161 2008/09/02 23:40:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -491,7 +491,7 @@ rm_app2quantum(VALUE obj)
 
 
 /*
-    Extern:     ImageList_cur_image
+    Extern:     rm_cur_image
     Purpose:    Sends the "cur_image" method to the object. If 'img'
                 is an ImageList, then cur_image is self[@scene].
                 If 'img' is an image, then cur_image is simply
@@ -499,7 +499,7 @@ rm_app2quantum(VALUE obj)
     Returns:    the return value from "cur_image"
 */
 VALUE
-ImageList_cur_image(VALUE img)
+rm_cur_image(VALUE img)
 {
     return rb_funcall(img, rm_ID_cur_image, 0);
 }

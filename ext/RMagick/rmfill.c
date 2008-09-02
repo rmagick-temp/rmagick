@@ -1,4 +1,4 @@
-/* $Id: rmfill.c,v 1.29 2008/05/28 22:40:15 rmagick Exp $ */
+/* $Id: rmfill.c,v 1.30 2008/09/02 23:40:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmfill.c
@@ -511,7 +511,7 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
 
     Data_Get_Struct(self, rm_TextureFill, fill);
 
-    texture_image = ImageList_cur_image(texture_arg);
+    texture_image = rm_cur_image(texture_arg);
 
     // Bump the reference count on the texture image.
     texture = rm_check_destroyed(texture_image);

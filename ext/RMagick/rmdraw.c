@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.66 2008/09/02 23:40:19 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.67 2008/09/03 00:08:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -34,6 +34,7 @@ Draw_affine_eq(VALUE self, VALUE matrix)
     return self;
 }
 
+
 /*
     Method:     Draw#align=
     Purpose:    set the text alignment
@@ -49,6 +50,7 @@ Draw_align_eq(VALUE self, VALUE align)
     return self;
 }
 
+
 /*
     Method:     Draw#decorate=
     Purpose:    decorate attribute writer
@@ -63,6 +65,7 @@ Draw_decorate_eq(VALUE self, VALUE decorate)
     VALUE_TO_ENUM(decorate, draw->info->decorate, DecorationType);
     return self;
 }
+
 
 /*
     Method:     Draw#density=
@@ -80,6 +83,7 @@ Draw_density_eq(VALUE self, VALUE density)
     return self;
 }
 
+
 /*
     Method:     Draw#encoding=
     Purpose:    encoding attribute writer
@@ -96,6 +100,7 @@ Draw_encoding_eq(VALUE self, VALUE encoding)
     return self;
 }
 
+
 /*
     Method:     Draw#fill=
     Purpose:    fill attribute writer
@@ -110,6 +115,7 @@ Draw_fill_eq(VALUE self, VALUE fill)
     Color_to_PixelPacket(&draw->info->fill, fill);
     return self;
 }
+
 
 /*
     Method:     Draw#fill_pattern=
@@ -143,6 +149,7 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
     return self;
 }
 
+
 /*
     Method:     Draw#font=
     Purpose:    font attribute writer
@@ -158,6 +165,7 @@ Draw_font_eq(VALUE self, VALUE font)
 
     return self;
 }
+
 
 /*
     Method:     Draw#font_family=
@@ -175,6 +183,7 @@ Draw_font_family_eq(VALUE self, VALUE family)
     return self;
 }
 
+
 /*
     Method:     Draw#font_stretch=
     Purpose:    font_stretch attribute writer
@@ -189,6 +198,7 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
     VALUE_TO_ENUM(stretch, draw->info->stretch, StretchType);
     return self;
 }
+
 
 /*
     Method:     Draw#font_style=
@@ -205,14 +215,13 @@ Draw_font_style_eq(VALUE self, VALUE style)
     return self;
 }
 
+
 /*
     Method:     Draw#font_weight=
     Purpose:    font_weight attribute writer
     Notes:      The font weight can be one of the font weight constants
                 or a number between 100 and 900
 */
-
-
 VALUE
 Draw_font_weight_eq(VALUE self, VALUE weight)
 {
@@ -262,6 +271,7 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
     return self;
 }
 
+
 /*
     Method:     Draw#gravity=
     Purpose:    gravity attribute writer
@@ -289,6 +299,7 @@ Draw_gravity_eq(VALUE self, VALUE grav)
     return self;
 }
 
+
 /*
     Method:     Draw#pointsize=
     Purpose:    pointsize attribute writer
@@ -303,6 +314,7 @@ Draw_pointsize_eq(VALUE self, VALUE pointsize)
     draw->info->pointsize = NUM2DBL(pointsize);
     return self;
 }
+
 
 /*
     Method:     Magick::Draw#rotation=degrees
@@ -346,6 +358,7 @@ Draw_rotation_eq(VALUE self, VALUE deg)
     return self;
 }
 
+
 /*
     Method:     Draw#stroke=
     Purpose:    stroke attribute writer
@@ -360,6 +373,7 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
     Color_to_PixelPacket(&draw->info->stroke, stroke);
     return self;
 }
+
 
 /*
     Method:     Draw#stroke_pattern=
@@ -394,6 +408,7 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
     return self;
 }
 
+
 /*
     Method:     Draw#stroke_width=
     Purpose:    stroke_width attribute writer
@@ -408,6 +423,7 @@ Draw_stroke_width_eq(VALUE self, VALUE stroke_width)
     draw->info->stroke_width = NUM2DBL(stroke_width);
     return self;
 }
+
 
 /*
     Method:     Draw#text_antialias=
@@ -424,6 +440,7 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
     return self;
 }
 
+
 /*
     Method:     Draw#tile=
     Purpose:    tile attribute writer
@@ -433,6 +450,7 @@ Draw_tile_eq(VALUE self, VALUE image)
 {
     return Draw_fill_pattern_eq(self, image);
 }
+
 
 /*
     Method:     Draw#undercolor=
@@ -448,6 +466,7 @@ Draw_undercolor_eq(VALUE self, VALUE undercolor)
     Color_to_PixelPacket(&draw->info->undercolor, undercolor);
     return self;
 }
+
 
 /*
     Method:     Draw#annotate(img, w, h, x, y, text) <{optional parms}>
@@ -675,6 +694,7 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
     return self;
 }
 
+
 /*
     Method:     Draw#draw(i)
     Purpose:    Execute the stored drawing primitives on the current image
@@ -757,6 +777,7 @@ Draw_get_multiline_type_metrics(
     return get_type_metrics(argc, argv, self, GetMultilineTypeMetrics);
 }
 
+
 /*
     Method:     Draw#initialize_copy
     Purpose:    initialize clone, dup methods
@@ -803,6 +824,7 @@ Draw_initialize(VALUE self)
     return self;
 }
 
+
 /*
     Method:     inspect
     Purpose:    display the primitives
@@ -816,12 +838,12 @@ Draw_inspect(VALUE self)
     return draw->primitives ? draw->primitives : rb_str_new2("(no primitives defined)");
 }
 
+
 /*
     Method:     Draw.new/Draw.allocate
     Purpose:    Create a new Draw object
     Raises:     ImageMagickError if no memory
 */
-
 VALUE Draw_alloc(VALUE class)
 {
     Draw *draw;
@@ -833,6 +855,7 @@ VALUE Draw_alloc(VALUE class)
 
     return draw_obj;
 }
+
 
 /*
     Method:     Draw#primitive
@@ -860,6 +883,7 @@ Draw_primitive(VALUE self, VALUE primitive)
     return self;
 }
 
+
 /*
     Static:     mark_Draw
     Purpose:    mark referenced objects
@@ -874,6 +898,7 @@ mark_Draw(void *drawptr)
         rb_gc_mark(draw->primitives);
     }
 }
+
 
 /*
     Static:     destroy_Draw
@@ -908,7 +933,8 @@ destroy_Draw(void *drawptr)
     Static:     new_DrawOptions
     Purpose:    Allocate & initialize a DrawOptions object.
 */
-static VALUE new_DrawOptions(void)
+static VALUE
+new_DrawOptions(void)
 {
     return DrawOptions_initialize(Draw_alloc(Class_DrawOptions));
 }
@@ -921,7 +947,8 @@ static VALUE new_DrawOptions(void)
     Notes:      The DrawOptions class is the same as the Draw class except
                 is has only the attribute writer functions.
 */
-VALUE DrawOptions_alloc(VALUE class)
+VALUE
+DrawOptions_alloc(VALUE class)
 {
     Draw *draw_options;
     volatile VALUE draw_options_obj;
@@ -938,7 +965,8 @@ VALUE DrawOptions_alloc(VALUE class)
     Method:     DrawOptions#initialize
     Purpose:    Initialize a DrawOptions object
 */
-VALUE DrawOptions_initialize(VALUE self)
+VALUE
+DrawOptions_initialize(VALUE self)
 {
     Draw *draw_options;
 
@@ -975,6 +1003,7 @@ Montage_background_color_eq(VALUE self, VALUE color)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#border_color(color-name)
     Purpose:    set border_color value
@@ -988,6 +1017,7 @@ Montage_border_color_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&montage->info->border_color, color);
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#border_width(width)
@@ -1003,6 +1033,7 @@ Montage_border_width_eq(VALUE self, VALUE width)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#compose(width)
     Purpose:    set a composition operator
@@ -1016,6 +1047,7 @@ Montage_compose_eq(VALUE self, VALUE compose)
     VALUE_TO_ENUM(compose, montage->compose, CompositeOperator);
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#filename(name)
@@ -1031,6 +1063,7 @@ Montage_filename_eq(VALUE self, VALUE filename)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#fill(color-name)
     Purpose:    set fill value
@@ -1044,6 +1077,7 @@ Montage_fill_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&montage->info->fill, color);
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#font(font-name)
@@ -1059,6 +1093,7 @@ Montage_font_eq(VALUE self, VALUE font)
 
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#frame(frame-geometry)
@@ -1080,6 +1115,7 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#geometry(geometry)
     Purpose:    set geometry value
@@ -1097,6 +1133,7 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#gravity(gravity-type)
     Purpose:    set gravity value
@@ -1111,6 +1148,7 @@ Montage_gravity_eq(VALUE self, VALUE gravity)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#initialize
     Purpose:    Place-holder
@@ -1121,6 +1159,7 @@ Montage_initialize(VALUE self)
     // Nothing to do!
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#matte_color(color-name)
@@ -1135,6 +1174,7 @@ Montage_matte_color_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&montage->info->matte_color, color);
     return self;
 }
+
 
 /*
     Method:     Montage.new
@@ -1171,12 +1211,14 @@ Montage_alloc(VALUE class)
     return montage_obj;
 }
 
+
 /*
     Extern:     rm_montage_new()
     Purpose:    Return a new Magick::Montage object
 */
 
-VALUE rm_montage_new(void)
+VALUE
+rm_montage_new(void)
 {
     return Montage_initialize(Montage_alloc(Class_Montage));
 }
@@ -1207,6 +1249,7 @@ destroy_Montage(void *obj)
     xfree(montage);
 }
 
+
 /*
     Method:     Magick::Montage#pointsize=size
     Purpose:    set pointsize value
@@ -1220,6 +1263,7 @@ Montage_pointsize_eq(VALUE self, VALUE size)
     montage->info->pointsize = NUM2DBL(size);
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#shadow=shadow
@@ -1235,6 +1279,7 @@ Montage_shadow_eq(VALUE self, VALUE shadow)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#stroke(color-name)
     Purpose:    set stroke value
@@ -1248,6 +1293,7 @@ Montage_stroke_eq(VALUE self, VALUE color)
     Color_to_PixelPacket(&montage->info->stroke, color);
     return self;
 }
+
 
 /*
     Method:     Montage#texture(texture-image)
@@ -1281,6 +1327,7 @@ Montage_texture_eq(VALUE self, VALUE texture)
     return self;
 }
 
+
 /*
     Method:     Magick::Montage#tile(tile)
     Purpose:    set tile value
@@ -1297,6 +1344,7 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
 
     return self;
 }
+
 
 /*
     Method:     Magick::Montage#title(title)
@@ -1373,7 +1421,8 @@ PolaroidOptions_initialize(VALUE self)
     Purpose:    allocate a PolaroidOptions instance
     Notes:      Internal use
 */
-VALUE rm_polaroid_new(void)
+VALUE
+rm_polaroid_new(void)
 {
     return PolaroidOptions_initialize(PolaroidOptions_alloc(Class_PolaroidOptions));
 }
@@ -1383,7 +1432,8 @@ VALUE rm_polaroid_new(void)
     Method:     PolaroidOptions#shadow_color=
     Purpose:    Set the shadow color attribute
 */
-VALUE PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
+VALUE
+PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
 {
     Draw *draw;
 
@@ -1397,7 +1447,8 @@ VALUE PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
     Method:     PolaroidOptions#border_color=
     Purpose:    Set the border color attribute
 */
-VALUE PolaroidOptions_border_color_eq(VALUE self, VALUE border)
+VALUE
+PolaroidOptions_border_color_eq(VALUE self, VALUE border)
 {
     Draw *draw;
 
@@ -1407,7 +1458,8 @@ VALUE PolaroidOptions_border_color_eq(VALUE self, VALUE border)
 }
 
 
-static VALUE get_dummy_tm_img(VALUE klass)
+static VALUE
+get_dummy_tm_img(VALUE klass)
 {
 #define DUMMY_IMG_CLASS_VAR "@@_dummy_img_"
     volatile VALUE dummy_img = 0;

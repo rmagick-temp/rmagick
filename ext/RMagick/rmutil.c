@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.161 2008/09/02 23:40:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.162 2008/09/03 00:00:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -32,7 +32,8 @@ static VALUE Pixel_from_MagickPixelPacket(const MagickPixelPacket *);
                 caused by integer overflow. Added in 6.3.5-9 but backwards
                 compatible with prior releases.
 */
-void *magick_safe_malloc(const size_t count, const size_t quantum)
+void *
+magick_safe_malloc(const size_t count, const size_t quantum)
 {
 #if defined(HAVE_ACQUIREQUANTUMMEMORY)
     void *ptr;
@@ -57,7 +58,9 @@ void *magick_safe_malloc(const size_t count, const size_t quantum)
 #endif
 }
 
-void *magick_malloc(const size_t size)
+
+void *
+magick_malloc(const size_t size)
 {
     void *ptr;
     ptr = AcquireMagickMemory(size);
@@ -69,12 +72,16 @@ void *magick_malloc(const size_t size)
     return ptr;
 }
 
-void magick_free(void *ptr)
+
+void
+magick_free(void *ptr)
 {
     (void) RelinquishMagickMemory(ptr);
 }
 
-void *magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
+
+void *
+magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
 {
 #if defined(HAVE_RESIZEQUANTUMMEMORY)
     void *v;
@@ -96,7 +103,9 @@ void *magick_safe_realloc(void *memory, const size_t count, const size_t quantum
 #endif
 }
 
-void *magick_realloc(void *ptr, const size_t size)
+
+void *
+magick_realloc(void *ptr, const size_t size)
 {
     void *v;
     v = ResizeMagickMemory(ptr, size);
@@ -107,6 +116,7 @@ void *magick_realloc(void *ptr, const size_t size)
     return v;
 }
 
+
 /*
     Extern:     magick_clone_string
     Purpose:    make a copy of a string in malloc'd memory
@@ -115,7 +125,8 @@ void *magick_realloc(void *ptr, const size_t size)
                 its return value.
 
 */
-void magick_clone_string(char **new_str, const char *str)
+void
+ magick_clone_string(char **new_str, const char *str)
 {
     (void) CloneString(new_str, str);
 }
@@ -142,8 +153,6 @@ rm_strcasecmp(const char *s1, const char *s2)
 }
 
 
-
-
 /*
  *  Extern:     rm_strncasecmp(s1, s2, n)
  *  Purpose:    compare s1 and s2 ignoring case
@@ -167,7 +176,6 @@ rm_strncasecmp(const char *s1, const char *s2, size_t n)
     }
     return (int)(*s1 - *s2);
 }
-
 
 
 /*
@@ -229,7 +237,6 @@ rm_no_freeze(VALUE obj)
 }
 
 
-
 /*
     Extern:     rm_to_s
     Purpose:    return obj.to_s, or obj if obj is already a string.
@@ -244,6 +251,7 @@ rm_to_s(VALUE obj)
     }
     return obj;
 }
+
 
 /*
     Extern:     rm_str2cstr(str, &len);
@@ -287,6 +295,7 @@ rescue_not_str(VALUE arg)
             rb_class2name(CLASS_OF(arg)));
     return (VALUE)0;
 }
+
 
 /*
  *  Extern:     rm_percentage(obj)
@@ -375,7 +384,8 @@ rescue_not_dbl(VALUE ignored)
     Extern:     rm_check_num2dbl
     Purpose:    Return 1 if the object can be converted to a double, 0 otherwise.
 */
-int rm_check_num2dbl(VALUE obj)
+int
+rm_check_num2dbl(VALUE obj)
 {
     return FIX2INT(rb_rescue(check_num2dbl, obj, rescue_not_dbl, (VALUE)0));
 }
@@ -386,7 +396,8 @@ int rm_check_num2dbl(VALUE obj)
  *  Purpose:    Given a string in the form NN% return the corresponding double.
  *
 */
-double rm_str_to_pct(VALUE str)
+double
+rm_str_to_pct(VALUE str)
 {
     long pct;
     char *pct_str, *end;
@@ -504,6 +515,7 @@ rm_cur_image(VALUE img)
     return rb_funcall(img, rm_ID_cur_image, 0);
 }
 
+
 /*
     Method:     Magick::PrimaryInfo#to_s
     Purpose:    Create a string representation of a Magick::PrimaryInfo
@@ -518,6 +530,7 @@ PrimaryInfo_to_s(VALUE self)
     sprintf(buff, "x=%g, y=%g, z=%g", pi.x, pi.y, pi.z);
     return rb_str_new2(buff);
 }
+
 
 /*
     Method:     Magick::Chromaticity#to_s
@@ -541,6 +554,7 @@ ChromaticityInfo_to_s(VALUE self)
     return rb_str_new2(buff);
 }
 
+
 /*
     Method:     Magick::Pixel#to_s
     Purpose:    Create a string representation of a Magick::Pixel
@@ -556,6 +570,7 @@ Pixel_to_s(VALUE self)
           , pixel->red, pixel->green, pixel->blue, pixel->opacity);
     return rb_str_new2(buff);
 }
+
 
 /*
     Method:     Magick::Pixel.from_color(string)
@@ -595,7 +610,8 @@ Pixel_from_color(VALUE class, VALUE name)
     Notes:      Same code as the private function SetMagickPixelPacket
                 in ImageMagick.
 */
-static void rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, MagickPixelPacket *pp)
+static void
+rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, MagickPixelPacket *pp)
 {
     pp->red     = (MagickRealType) pixel->red;
     pp->green   = (MagickRealType) pixel->green;
@@ -603,7 +619,6 @@ static void rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, 
     pp->opacity = (MagickRealType) (pp->matte ? pixel->opacity : OpaqueOpacity);
     pp->index   = (MagickRealType) ((pp->colorspace == CMYKColorspace) && (index_packet ? *index_packet : 0));
 }
-
 
 
 /*
@@ -699,6 +714,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     return rb_str_new2(name);
 }
 
+
 /*
     Method:     Pixel#to_HSL    *** DEPRECATED ***
     Purpose:    Converts an RGB pixel to the array
@@ -724,6 +740,7 @@ Pixel_to_HSL(VALUE self)
 
     return hsl;
 }
+
 
 /*
     Method:     Pixel.from_HSL  *** DEPRECATED ***
@@ -759,7 +776,6 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 #endif
     return Pixel_from_PixelPacket(&rgb);
 }
-
 
 
 /*
@@ -883,6 +899,7 @@ Pixel_eql_q(VALUE self, VALUE other)
     return NUM2INT(Pixel_spaceship(self, other)) == 0 ? Qtrue : Qfalse;
 }
 
+
 /*
     Method:  Pixel#fcmp(other[, fuzz[, colorspace]])
     Purpose: Compare pixel values for equality
@@ -967,6 +984,7 @@ Pixel_hash(VALUE self)
 
 }
 
+
 /*
     Method:  Pixel#intensity
     Purpose: Return the "intensity" of a pixel
@@ -1018,12 +1036,12 @@ DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(yellow, blue)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(black, opacity)
 
 
-
 /*
     Method:     Pixel#<=>
     Purpose:    Support Comparable mixin
 */
-VALUE Pixel_spaceship(VALUE self, VALUE other)
+VALUE
+Pixel_spaceship(VALUE self, VALUE other)
 {
     Pixel *this, *that;
 
@@ -1128,7 +1146,8 @@ Pixel_initialize(int argc, VALUE *argv, VALUE self)
     Purpose:    "Case equal" operator for Pixel
 */
 
-VALUE Pixel_case_eq(VALUE self, VALUE other)
+VALUE
+Pixel_case_eq(VALUE self, VALUE other)
 {
     Pixel *this, *that;
 
@@ -1186,7 +1205,8 @@ Pixel_clone(VALUE self)
     Method:     Pixel#initialize_copy
     Purpose:    initialize clone, dup methods
 */
-VALUE Pixel_init_copy(VALUE self, VALUE orig)
+VALUE
+Pixel_init_copy(VALUE self, VALUE orig)
 {
     Pixel *copy, *original;
 
@@ -1197,7 +1217,6 @@ VALUE Pixel_init_copy(VALUE self, VALUE orig)
 
     return self;
 }
-
 
 
 /*
@@ -1216,6 +1235,7 @@ RectangleInfo_to_s(VALUE self)
     return rb_str_new2(buff);
 }
 
+
 /*
     Method:     Magick::SegmentInfo#to_s
     Purpose:    Create a string representation of a Magick::Segment
@@ -1231,6 +1251,7 @@ SegmentInfo_to_s(VALUE self)
           , segment.x1, segment.y1, segment.x2, segment.y2);
     return rb_str_new2(buff);
 }
+
 
 /*
     Extern:     PixelPacket_to_Color_Name
@@ -1253,6 +1274,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
 
     return rb_str_new2(name);
 }
+
 
 /*
     Extern:     PixelPacket_to_Color_Name_Info
@@ -1286,6 +1308,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
 
     return color_name;
 }
+
 
 /*
     Static:     Color_Name_to_PixelPacket
@@ -1457,6 +1480,7 @@ ColorspaceType_new(ColorspaceType cs)
 
 }
 
+
 /*
  *  Static:     ComplianceType_new
     Purpose:    construct a ComplianceType enum object for the specified value
@@ -1548,6 +1572,7 @@ CompositeOperator_name(CompositeOperator op)
 
     return "UndefinedCompositeOp";
 }
+
 
 /*
    External:    CompositeOperator_new
@@ -1705,7 +1730,6 @@ FilterTypes_new(FilterTypes type)
 }
 
 
-
 /*
     Static:     EndianType_name
     Purpose:    Return the name of a EndianType enum as a string
@@ -1721,6 +1745,7 @@ EndianType_name(EndianType type)
     }
     return "UndefinedEndian";
 }
+
 
 /*
     External:   EndianType.new
@@ -1771,7 +1796,6 @@ GravityType_new(GravityType type)
     const char *name = GravityType_name(type);
     return rm_enum_new(Class_GravityType, ID2SYM(rb_intern(name)), INT2FIX(type));
 }
-
 
 
 /*
@@ -1939,6 +1963,7 @@ LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
     return "UndefinedLayer";
 }
 
+
 VALUE
 LAYERMETHODTYPE_NEW(LAYERMETHODTYPE method)
 {
@@ -1965,7 +1990,6 @@ RenderingIntent_name(RenderingIntent intent)
 
     return "UndefinedIntent";
 }
-
 
 
 /*
@@ -2115,6 +2139,7 @@ Color_to_ColorInfo(ColorInfo *ci, VALUE st)
     }
 }
 
+
 /*
     Static:     destroy_ColorInfo
     Purpose:    free the storage allocated by Color_to_ColorInfo, above.
@@ -2125,6 +2150,7 @@ destroy_ColorInfo(ColorInfo *ci)
     magick_free((void*)ci->name);
     ci->name = NULL;
 }
+
 
 /*
     Method:     Color#to_s
@@ -2151,6 +2177,7 @@ Color_to_s(VALUE self)
     destroy_ColorInfo(&ci);
     return rb_str_new2(buff);
 }
+
 
 /*
     Extern:     Pixel_from_PixelPacket
@@ -2200,6 +2227,7 @@ color_arg_rescue(VALUE arg)
             rb_class2name(CLASS_OF(arg)));
     return (VALUE)0;
 }
+
 
 /*
     Extern:     Color_to_PixelPacket
@@ -2260,6 +2288,7 @@ PrimaryInfo_from_PrimaryInfo(PrimaryInfo *p)
                     , INT2FIX(p->x), INT2FIX(p->y), INT2FIX(p->z));
 }
 
+
 /*
     Extern:     PrimaryInfo_to_PrimaryInfo
     Purpose:    Convert a Magick::PrimaryInfo object to a PrimaryInfo structure
@@ -2283,6 +2312,7 @@ PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
     pi->z = m == Qnil ? 0.0 : NUM2DBL(m);
 }
 
+
 /*
     Extern:     PointInfo_to_Point(pp)
     Purpose:    Create a Magick::Point object from a PointInfo structure.
@@ -2293,6 +2323,7 @@ PointInfo_to_Point(PointInfo *p)
     return rb_funcall(Class_Point, rm_ID_new, 2
                     , INT2FIX(p->x), INT2FIX(p->y));
 }
+
 
 /*
     Extern:     Point_to_PointInfo
@@ -2316,7 +2347,6 @@ Point_to_PointInfo(PointInfo *pi, VALUE sp)
 }
 
 
-
 /*
     Extern:     ChromaticityInfo_new(pp)
     Purpose:    Create a Magick::ChromaticityInfo object from a
@@ -2338,6 +2368,7 @@ ChromaticityInfo_new(ChromaticityInfo *ci)
     return rb_funcall(Class_Chromaticity, rm_ID_new, 4
                     , red_primary, green_primary, blue_primary, white_point);
 }
+
 
 /*
     Extern:     ChromaticityInfo_to_ChromaticityInfo
@@ -2399,6 +2430,7 @@ ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
     ci->white_point.z = 0.0;
 }
 
+
 /*
     External:   Rectangle_from_RectangleInfo
     Purpose:    Convert a RectangleInfo structure to a Magick::Rectangle
@@ -2417,6 +2449,7 @@ Rectangle_from_RectangleInfo(RectangleInfo *rect)
     return rb_funcall(Class_Rectangle, rm_ID_new, 4
                     , width, height, x, y);
 }
+
 
 /*
     External:   Rectangle_to_RectangleInfo
@@ -2443,6 +2476,7 @@ Rectangle_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
     rect->y      = m == Qnil ? 0 : NUM2LONG (m);
 }
 
+
 /*
     External:   Segment_from_SegmentInfo
     Purpose:    Convert a SegmentInfo structure to a Magick::Segment
@@ -2458,6 +2492,7 @@ Segment_from_SegmentInfo(SegmentInfo *segment)
     y2 = rb_float_new(segment->y2);
     return rb_funcall(Class_Segment, rm_ID_new, 4, x1, y1, x2, y2);
 }
+
 
 /*
     External:   Segment_to_SegmentInfo
@@ -2485,6 +2520,7 @@ Segment_to_SegmentInfo(SegmentInfo *segment, VALUE s)
     segment->y2 = m == Qnil ? 0.0 : NUM2DBL(m);
 }
 
+
 /*
     Static:     StretchType_new
     Purpose:    Construct a StretchType enum for a specified StretchType value
@@ -2507,6 +2543,7 @@ StyleType_new(StyleType style)
     const char *name = StyleType_name(style);
     return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
+
 
 /*
     External:   Font_from_TypeInfo
@@ -2533,6 +2570,7 @@ Font_from_TypeInfo(const TypeInfo *ti)
                     , name, description, family, style
                     , stretch, weight, encoding, foundry, format);
 }
+
 
 /*
     External:   Font_to_TypeInfo
@@ -2604,6 +2642,7 @@ destroy_TypeInfo(TypeInfo *ti)
     ti->format = NULL;
 }
 
+
 /*
     External:   Font_to_s
     Purpose:    implement the Font#to_s method
@@ -2648,6 +2687,7 @@ Font_to_s(VALUE self)
 
 }
 
+
 /*
     External:   TypeMetric_from_TypeMetric
     Purpose:    Convert a TypeMetric structure to a Magick::TypeMetric
@@ -2675,6 +2715,7 @@ TypeMetric_from_TypeMetric(TypeMetric *tm)
                     , height, max_advance, bounds
                     , underline_position, underline_thickness);
 }
+
 
 /*
     External:   TypeMetric_to_TypeMetric
@@ -2716,6 +2757,7 @@ TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
     tm->underline_thickness = m == Qnil ? 0.0 : NUM2DBL(m);
 }
 
+
 /*
     Method:     Magick::TypeMetric#to_s
     Purpose:    Create a string representation of a Magick::TypeMetric
@@ -2737,7 +2779,6 @@ TypeMetric_to_s(VALUE self)
                   tm.underline_position, tm.underline_thickness);
     return rb_str_new2(buff);
 }
-
 
 
 /*
@@ -2798,7 +2839,8 @@ VirtualPixelMethod_new(VirtualPixelMethod style)
  *  Extern:     rm_define_enum_type
  *  Purpose:    set up a subclass of Enum
 */
-VALUE rm_define_enum_type(const char *tag)
+VALUE
+rm_define_enum_type(const char *tag)
 {
     VALUE class;
 
@@ -2815,7 +2857,8 @@ VALUE rm_define_enum_type(const char *tag)
     Extern:  rm_enum_new (1.8)
     Purpose: Construct a new Enum subclass instance
 */
-VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
+VALUE
+rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
     VALUE argv[2];
 
@@ -2824,11 +2867,13 @@ VALUE rm_enum_new(VALUE class, VALUE sym, VALUE val)
     return rb_obj_freeze(rb_class_new_instance(2, argv, class));
 }
 
+
 /*
     Extern:  Enum_alloc (1.8)
     Purpose: Enum class alloc function
 */
-VALUE Enum_alloc(VALUE class)
+VALUE
+Enum_alloc(VALUE class)
 {
    MagickEnum *magick_enum;
    volatile VALUE enumr;
@@ -2843,7 +2888,8 @@ VALUE Enum_alloc(VALUE class)
     Method:  Enum#initialize
     Purpose: Initialize a new Enum instance
 */
-VALUE Enum_initialize(VALUE self, VALUE sym, VALUE val)
+VALUE
+Enum_initialize(VALUE self, VALUE sym, VALUE val)
 {
    MagickEnum *magick_enum;
 
@@ -2859,7 +2905,8 @@ VALUE Enum_initialize(VALUE self, VALUE sym, VALUE val)
     Method:  Enum#to_s
     Purpose: Return the name of an enum
 */
-VALUE Enum_to_s(VALUE self)
+VALUE
+Enum_to_s(VALUE self)
 {
    MagickEnum *magick_enum;
 
@@ -2872,7 +2919,8 @@ VALUE Enum_to_s(VALUE self)
     Method:  Enum#to_i
     Purpose: Return the value of an enum
 */
-VALUE Enum_to_i(VALUE self)
+VALUE
+Enum_to_i(VALUE self)
 {
    MagickEnum *magick_enum;
 
@@ -2887,7 +2935,8 @@ VALUE Enum_to_i(VALUE self)
     Returns: -1, 0, 1, or nil
     Notes:   Enums must be instances of the same class to be equal.
 */
-VALUE Enum_spaceship(VALUE self, VALUE other)
+VALUE
+Enum_spaceship(VALUE self, VALUE other)
 {
     MagickEnum *this, *that;
 
@@ -2915,7 +2964,8 @@ VALUE Enum_spaceship(VALUE self, VALUE other)
     Returns: true or false
     Notes:   Yes, I know "case equal" is a misnomer.
 */
-VALUE Enum_case_eq(VALUE self, VALUE other)
+VALUE
+Enum_case_eq(VALUE self, VALUE other)
 {
     MagickEnum *this, *that;
 
@@ -2934,7 +2984,8 @@ VALUE Enum_case_eq(VALUE self, VALUE other)
  *  Method:     xxx#initialize
  *  Purpose:    initialize method for all Enum subclasses
 */
-VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
+VALUE
+Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 {
     VALUE super_argv[2];
     volatile VALUE enumerators;
@@ -2959,7 +3010,8 @@ VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
  *  Method:     xxx#inspect
  *  Purpose:    Enum subclass #inspect
 */
-static VALUE Enum_type_inspect(VALUE self)
+static VALUE
+Enum_type_inspect(VALUE self)
 {
     char str[100];
     MagickEnum *magick_enum;
@@ -2976,7 +3028,8 @@ static VALUE Enum_type_inspect(VALUE self)
  *  Purpose:    Behaves like #each if a block is present, otherwise like #to_a.
  *  Notes:      defined for each Enum subclass
 */
-static VALUE Enum_type_values(VALUE class)
+static VALUE
+Enum_type_values(VALUE class)
 {
     volatile VALUE enumerators, copy;
     volatile VALUE rv;
@@ -3071,6 +3124,7 @@ StorageType_name(StorageType type)
 
     return "UndefinedPixel";
 }
+
 
 /*
     Static:     StretchType_name
@@ -3185,6 +3239,7 @@ rm_write_temp_image(Image *image, char *temp_name)
 
 }
 
+
 /*
     External:   delete_temp_image
     Purpose:    Delete the temporary image from the registry
@@ -3212,6 +3267,7 @@ rm_delete_temp_image(char *temp_name)
 #endif
 }
 
+
 /*
     External:   rm_not_implemented
     Purpose:    raise NotImplementedError
@@ -3225,6 +3281,7 @@ rm_not_implemented(void)
     rb_raise(rb_eNotImpError, "the `%s' method is not supported by ImageMagick "
             MagickLibVersionText, rb_id2name(THIS_FUNC()));
 }
+
 
 /*
     Static:     rm_magick_error(msg, loc)
@@ -3338,7 +3395,6 @@ rm_get_optional_arguments(VALUE img)
 
   return;
 }
-
 
 
 /*
@@ -3577,7 +3633,8 @@ rm_get_geometry(
  *  Notes:      don't trace creation - the clone may not be used as an Image
  *              object. Let the caller do the trace if desired.
  */
-Image *rm_clone_image(Image *image)
+Image *
+rm_clone_image(Image *image)
 {
     Image *clone;
     ExceptionInfo exception;
@@ -3600,7 +3657,8 @@ Image *rm_clone_image(Image *image)
     Purpose:    SetImage(Info)ProgressMonitor exit
     Notes:      ImageMagick's "tag" argument is unused. We pass along the method name instead.
 */
-MagickBooleanType rm_progress_monitor(
+MagickBooleanType
+rm_progress_monitor(
     const char *tag,
     const MagickOffsetType of,
     const MagickSizeType sp,
@@ -3639,7 +3697,7 @@ rm_split(Image *image)
 
     if (!image)
     {
-        rb_bug("RMagick FATAL: unseq called with NULL argument.");
+        rb_bug("RMagick FATAL: split called with NULL argument.");
     }
     while (image)
     {
@@ -3806,7 +3864,8 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
  *  Extern:     rm_ensure_result
  *  Purpose:    RMagick expected a result. If it got NULL instead raise an exception.
  */
-void rm_ensure_result(Image *image)
+void
+rm_ensure_result(Image *image)
 {
     if (!image)
     {

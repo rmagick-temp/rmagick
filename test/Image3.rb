@@ -599,6 +599,9 @@ class Image3_UT < Test::Unit::TestCase
             res = @img.stegano(watermark, 0)
             assert_instance_of(Magick::Image, res)
         end
+
+        watermark.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.stegano(watermark, 0) }
     end
 
     def test_stereo
@@ -606,6 +609,10 @@ class Image3_UT < Test::Unit::TestCase
             res = @img.stereo(@img)
             assert_instance_of(Magick::Image, res)
         end
+
+        img = Magick::Image.new(20,20)
+        img.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.stereo(img) }
     end
 
     def test_store_pixels
@@ -658,6 +665,8 @@ class Image3_UT < Test::Unit::TestCase
             assert_instance_of(Magick::Image, res)
         end
         assert_raise(NoMethodError) { @img.texture_floodfill(@img.columns/2, @img.rows/2, 'x') }
+        texture.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.texture_floodfill(@img.columns/2, @img.rows/2, texture) }
     end
 
     def test_threshold
@@ -853,6 +862,9 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, 'x') }
         assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 'x') }
         assert_raise(TypeError) { @img.watermark(mark, 0.50, 0.50, Magick::NorthEastGravity, 10, 'x') }
+
+        mark.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.watermark(mark) }
     end
 
     def test_wave

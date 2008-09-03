@@ -22,6 +22,9 @@ class ImageList2_UT < Test::Unit::TestCase
        assert_nothing_raised { @ilist.affinity(affinity_image, Magick::RiemersmaDitherMethod) }
        assert_nothing_raised { @ilist.affinity(affinity_image, Magick::FloydSteinbergDitherMethod) }
        assert_raise(ArgumentError) { @ilist.affinity(affinity_image, Magick::NoDitherMethod, 1) }
+
+       affinity_image.destroy!
+       assert_raise(Magick::DestroyedImageError) { @ilist.affinity(affinity_image) }
        #assert_raise(TypeError) { @ilist.affinity(affinity_image, 1) }
     end
 

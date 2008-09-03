@@ -50,6 +50,8 @@ class Image2_UT < Test::Unit::TestCase
       assert_nothing_raised { bg.composite_tiled(fg, Magick::RedChannel) }
       assert_nothing_raised { bg.composite_tiled(fg, Magick::RedChannel, Magick::GreenChannel) }
 
+      fg.destroy!
+      assert_raise(Magick::DestroyedImageError) { bg.composite_tiled(fg) }
     end
 
     def test_compress_colormap!
@@ -323,6 +325,8 @@ class Image2_UT < Test::Unit::TestCase
         end
 
         assert_raise(NoMethodError) { img1.difference(2) }
+        img2.destroy!
+        assert_raise(Magick::DestroyedImageError) { img1.difference(img2) }
     end
 
     def test_displace
@@ -343,6 +347,9 @@ class Image2_UT < Test::Unit::TestCase
       assert_raise(TypeError) { @img.displace(@img2, 25, 25, 'x') }
       assert_raise(TypeError) { @img.displace(@img2, 25, 25, Magick::CenterGravity, 'x') }
       assert_raise(TypeError) { @img.displace(@img2, 25, 25, Magick::CenterGravity, 10, []) }
+
+      @img2.destroy!
+      assert_raise(Magick::DestroyedImageError) { @img.displace(@img2, 25, 25) }
     end
 
     def test_dissolve
@@ -362,6 +369,9 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { @img.dissolve(src, 0.50, 'x') }
         assert_raise(TypeError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 'x') }
         assert_raise(TypeError) { @img.dissolve(src, 0.50, Magick::NorthEastGravity, 10, 'x') }
+
+        src.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.dissolve(src, 0.50) }
     end
 
     def test_distort
@@ -391,6 +401,10 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.distortion_channel(@img, Magick::RootMeanSquaredErrorMetric, 2) }
         assert_raise(ArgumentError) { @img.distortion_channel }
         assert_raise(ArgumentError) { @img.distortion_channel(@img) }
+
+        img = Magick::Image.new(20,20)
+        img.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.distortion_channel(img, Magick::MeanSquaredErrorMetric) }
     end
 
     def test_dup
@@ -620,6 +634,9 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(ArgumentError) { girl.find_similar_region(region, 10, 10, 10) }
         assert_raise(TypeError) { girl.find_similar_region(region, 10, 'x') }
         assert_raise(TypeError) { girl.find_similar_region(region, 'x') }
+
+        region.destroy!
+        assert_raise(Magick::DestroyedImageError) { girl.find_similar_region(region) }
 
     end
 
@@ -933,6 +950,8 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(NoMethodError) { @img.map(2) }
         assert_raise(ArgumentError) { @img.map(map, true, 2) }
         assert_raise(ArgumentError) { @img.map }
+        map.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.map(map, true) }
     end
 
 
@@ -949,8 +968,11 @@ class Image2_UT < Test::Unit::TestCase
         # mask expects an Image and calls `cur_image'
         assert_raise(NoMethodError) { @img.mask = 2 }
 
-        @img.freeze
-        assert_raise(FreezeError) { @img.mask cimg }
+        img = @img.copy.freeze
+        assert_raise(FreezeError) { img.mask cimg }
+
+        @img.destroy!
+        assert_raise(Magick::DestroyedImageError) { @img.mask cimg }
     end
 
     def test_matte_fill_to_border

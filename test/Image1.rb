@@ -309,6 +309,9 @@ class Image1_UT < Test::Unit::TestCase
       assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, 'x') }
       assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 'x') }
       assert_raise(TypeError) { @img.blend(@img2, 0.25, 0.75, Magick::CenterGravity, 10, []) }
+
+      @img2.destroy!
+      assert_raise(Magick::DestroyedImageError) { @img.blend(@img2, '25%') }
     end
 
     def test_blur_channel
@@ -621,6 +624,9 @@ class Image1_UT < Test::Unit::TestCase
         assert_instance_of(Array, res)
         assert_instance_of(Magick::Image, res[0])
         assert_instance_of(Float, res[1])
+
+        img2.destroy!
+        assert_raise(Magick::DestroyedImageError) { img1.compare_channel(img2, Magick::MeanAbsoluteErrorMetric) }
     end
 
     def test_composite
@@ -721,6 +727,9 @@ class Image1_UT < Test::Unit::TestCase
                 end
         end
         assert_raise(TypeError) { img1.composite(img2, 0, 0, 2, Magick::OverCompositeOp) }
+
+        img2.destroy!
+        assert_raise(Magick::DestroyedImageError) { img1.composite(img2, Magick::CenterGravity, Magick::OverCompositeOp) }
     end
 
 

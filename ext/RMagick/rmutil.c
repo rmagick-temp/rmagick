@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.90.2.3.2.6 2008/05/04 14:19:41 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.90.2.3.2.7 2008/09/10 23:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -353,6 +353,7 @@ check_num2dbl(VALUE obj)
 static VALUE
 rescue_not_dbl(VALUE ignored)
 {
+    ignored = ignored; // defeat gcc message
     return INT2FIX(0);
 }
 
@@ -2717,12 +2718,12 @@ VALUE Enum_case_eq(VALUE self, VALUE other)
 */
 VALUE Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 {
-    volatile VALUE super_argv[2];
+    VALUE super_argv[2];
     volatile VALUE enumerators;
 
     super_argv[0] = sym;
     super_argv[1] = val;
-    (void) rb_call_super(2, (VALUE *)super_argv);
+    (void) rb_call_super(2, super_argv);
 
     if (rb_cvar_defined(CLASS_OF(self), rm_ID_enumerators) != Qtrue)
     {
@@ -3099,7 +3100,7 @@ rm_magick_error(const char *msg, const char *loc)
 VALUE
 ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 {
-    volatile VALUE super_argv[1] = {(VALUE)0};
+    VALUE super_argv[1] = {(VALUE)0};
     int super_argc = 0;
     volatile VALUE extra = Qnil;
 
@@ -3116,7 +3117,7 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 to 2)", argc);
     }
 
-    (void) rb_call_super(super_argc, (VALUE *)super_argv);
+    (void) rb_call_super(super_argc, super_argv);
     (void) rb_iv_set(self, "@"MAGICK_LOC, extra);
 
 
@@ -3421,6 +3422,8 @@ MagickBooleanType rm_progress_monitor(
 {
     volatile VALUE rval;
     volatile VALUE method, offset, span;
+
+    tag = tag;                  // defeat gcc message
 
 #if defined(HAVE_LONG_LONG)     // defined in Ruby's defines.h
     offset = rb_ll2inum(of);

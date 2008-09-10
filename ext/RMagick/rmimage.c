@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.6 2008/05/05 22:59:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.7 2008/09/10 23:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -3078,9 +3078,9 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     long map_l;
     union
     {
-       volatile float *f;
-       volatile Quantum *i;
-       volatile void *v;
+       float *f;
+       Quantum *i;
+       void *v;
     } pixels;
     int type;
     StorageType stg_type;
@@ -3113,12 +3113,12 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     pixel0 = rb_ary_entry(pixels_arg, 0);
     if (TYPE(pixel0) == T_FLOAT)
     {
-        pixels.f = ALLOC_N(volatile float, npixels);
+        pixels.f = ALLOC_N(float, npixels);
         stg_type = FloatPixel;
     }
     else if (TYPE(pixel0) == T_FIXNUM)
     {
-        pixels.i = ALLOC_N(volatile Quantum, npixels);
+        pixels.i = ALLOC_N(Quantum, npixels);
         stg_type = FIX_STG_TYPE;
     }
     else
@@ -3167,17 +3167,17 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     SetImageExtent(image, width, height);
     (void) SetImageBackgroundColor(image);
 
-    (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, (void *)pixels.v);
+    (void) ImportImagePixels(image, 0, 0, width, height, map, stg_type, pixels.v);
     rm_check_image_exception(image, DestroyOnError);
 #else
-    image = ConstituteImage(width, height, map, stg_type, (void *)pixels.v, &exception);
+    image = ConstituteImage(width, height, map, stg_type, pixels.v, &exception);
     rm_check_exception(&exception, image, DestroyOnError);
 #endif
 
     (void) DestroyExceptionInfo(&exception);
     DestroyConstitute();
 
-    xfree((void *)pixels.v);
+    xfree(pixels.v);
 
     return rm_image_new(image);
 }
@@ -3346,7 +3346,7 @@ Image_convolve(
     GetExceptionInfo(&exception);
 
     new_image = ConvolveImage(image, order, (double *)kernel, &exception);
-    xfree((double *)kernel);
+    xfree((void *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -3405,7 +3405,7 @@ Image_convolve_channel(
     GetExceptionInfo(&exception);
 
     new_image = ConvolveImageChannel(image, channels, order, (double *)kernel, &exception);
-    xfree((double *)kernel);
+    xfree((void *)kernel);
     rm_check_exception(&exception, new_image, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
@@ -3753,9 +3753,9 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
     union
     {
-        volatile Quantum *i;
-        volatile double *f;
-        volatile void *v;
+        Quantum *i;
+        double *f;
+        void *v;
     } pixels;
 
     if (argc < 5 || argc > 6)
@@ -3790,7 +3790,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
 #else
            DispatchImage
 #endif
-                        (image, x, y, columns, rows, map, stg_type, (void *)pixels.v, &exception);
+                        (image, x, y, columns, rows, map, stg_type, pixels.v, &exception);
 
     if (!okay)
     {
@@ -3818,7 +3818,7 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
     }
 
 exit:
-    xfree((void *)pixels.v);
+    xfree(pixels.v);
     return pixels_ary;
 }
 
@@ -4415,7 +4415,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
     okay = ExportImagePixels(image, x_off, y_off, cols, rows, map, QuantumPixel, (void *)pixels, &exception);
     if (!okay)
     {
-        xfree((unsigned int *)pixels);
+        xfree((void *)pixels);
         CHECK_EXCEPTION()
 
         // Should never get here...
@@ -4430,7 +4430,7 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
         (void) rb_ary_push(ary, UINT2NUM((unsigned int)pixels[n]));
     }
 
-    xfree((unsigned int *)pixels);
+    xfree((Quantum *)pixels);
 
     return ary;
 
@@ -4908,6 +4908,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     void *blob;
     long length;
 
+    class = class;      // defeat gcc message
     blob = (void *) STRING_PTR_LEN(blob_arg, length);
 
     // Get a new Info object - run the parm block if supplied
@@ -5152,7 +5153,7 @@ Image_get_pixels(
     VALUE rows_arg)
 {
     Image *image;
-    PixelPacket *pixels;
+    const PixelPacket *pixels;
     ExceptionInfo exception;
     long x, y;
     unsigned long columns, rows;
@@ -5165,7 +5166,7 @@ Image_get_pixels(
     columns = NUM2ULONG(cols_arg);
     rows    = NUM2ULONG(rows_arg);
 
-    if ((x+columns) > image->columns || (y+rows) > image->rows || columns < 0 || rows < 0)
+    if ((x+columns) > image->columns || (y+rows) > image->rows)
     {
         rb_raise(rb_eRangeError, "geometry (%lux%lu%+ld%+ld) exceeds image bounds"
                , columns, rows, x, y);
@@ -5174,7 +5175,7 @@ Image_get_pixels(
     // Cast AcquireImagePixels to get rid of the const qualifier. We're not going
     // to change the pixels but I don't want to make "pixels" const.
     GetExceptionInfo(&exception);
-    pixels = (PixelPacket *)AcquireImagePixels(image, x, y, columns, rows, &exception);
+    pixels = AcquireImagePixels(image, x, y, columns, rows, &exception);
     CHECK_EXCEPTION()
 
     (void) DestroyExceptionInfo(&exception);
@@ -5622,7 +5623,7 @@ Image_inspect(VALUE self)
         }
     }
 
-    assert(x < sizeof(buffer)-1);
+    assert(x < ((int)sizeof(buffer)-1));
     buffer[x] = '\0';
 
     return rb_str_new2(buffer);
@@ -5867,7 +5868,7 @@ Image__load(VALUE class, VALUE str)
     blob = STRING_PTR_LEN(str, length);
 
     // Must be as least as big as the 1st 4 fields in DumpedImage
-    if (length <= sizeof(DumpedImage)-MaxTextExtent)
+    if (length <= (long)sizeof(DumpedImage)-MaxTextExtent)
     {
         rb_raise(rb_eTypeError, "image is invalid or corrupted (too short)");
     }
@@ -5893,7 +5894,7 @@ Image__load(VALUE class, VALUE str)
     mi.len = ((DumpedImage *)blob)->len;
 
     // Must be bigger than the header
-    if (length <= mi.len+sizeof(DumpedImage)-MaxTextExtent)
+    if (length <= mi.len+((long)sizeof(DumpedImage))-MaxTextExtent)
     {
         rb_raise(rb_eTypeError, "image is invalid or corrupted (too short)");
     }

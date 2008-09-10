@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.45.2.2.2.2 2008/02/24 23:26:38 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.45.2.2.2.3 2008/09/10 23:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -386,7 +386,7 @@ Info_define(int argc, VALUE *argv, VALUE self)
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 or 3)", argc);
     }
 
-    if (2 + format_l + key_l > sizeof(ckey))
+    if (2 + format_l + key_l > (int)sizeof(ckey))
     {
         rb_raise(rb_eArgError, "%.20s:%.20s not defined - format or key too long", format, key);
     }
@@ -643,7 +643,7 @@ Info_dispose(VALUE self)
 {
 #if defined(HAVE_SETIMAGEOPTION)
     Info *info;
-    int x;
+    unsigned int x;
     ID dispose_id;
     const char *dispose;
 
@@ -684,7 +684,7 @@ Info_dispose_eq(VALUE self, VALUE disp)
     Info *info;
     DisposeType dispose;
     char *option;
-    int x;
+    unsigned int x;
 
     Data_Get_Struct(self, Info, info);
 
@@ -1853,7 +1853,7 @@ Info_alloc(VALUE class)
     Notes:      takes no parameters, but runs the parm block if present
 */
 VALUE
-rm_info_new()
+rm_info_new(void)
 {
     volatile VALUE info_obj;
 

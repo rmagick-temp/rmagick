@@ -1,3 +1,7 @@
+RMagick 1.15.15
+     o Fix bug #21897, a bug that causes ImageList#to_blob to abend when certain
+       corrupt JPEG images are used
+
 RMagick 1.15.14
      o Fix bug #18271, change rvg#width, rvg#height to return user-space
        coordinates (bug report by Greg Jarman)

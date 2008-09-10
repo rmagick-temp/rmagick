@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.46.2.1.2.2 2008/05/04 14:21:58 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.46.2.1.2.3 2008/09/10 23:25:13 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -491,7 +491,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     Notes:      this simply calls ImageList.new() in RMagick.rb
 */
 VALUE
-rm_imagelist_new()
+rm_imagelist_new(void)
 {
     return rb_funcall(Class_ImageList, rm_ID_new, 0);
 }
@@ -710,9 +710,11 @@ ImageList_to_blob(VALUE self)
 #else
     blob = ImageToBlob(info, images, &length, &exception);
 #endif
-    if (exception.severity != UndefinedException)
+    if (blob && exception.severity >= ErrorException)
     {
         magick_free((void*)blob);
+        blob = NULL;
+        length = 0;
     }
     rm_split(images);
     CHECK_EXCEPTION()

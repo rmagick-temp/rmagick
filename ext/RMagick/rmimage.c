@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.318 2008/09/02 23:40:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.319 2008/09/10 22:16:58 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9198,7 +9198,7 @@ Image_spaceship(VALUE self, VALUE other)
 VALUE
 Image_sparse_color(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SPARSECOLORINTERPOLATE)
+#if defined(HAVE_SPARSECOLORINTERPOLATE) && 0
     Image *image, *new_image;
     unsigned long n, npoints;
     SparseColorInterpolateMethod interpolate_method;

@@ -1,10 +1,11 @@
 RMagick 2.6.0
     o Fix bug #21237, Image::write ignores format attribute when called with a
       Tempfile pathname (bug report by Jack Shedd)
+    o Fix bug #21897, ImageList#from_blob abends when certain corrupt JPEG
+      images are used (bug report by Peter Szabo)
     o Add Image#composite_tiled, Image#composite_tiled! (ref:
       http://rubyforge.org/forum/forum.php?thread_id=27347&forum_id=33)
     o Add Image#deskew (available with ImageMagick 6.4.2-5)
-    o Add Image#sparse_color (available in ImageMagick 6.4.2-10)
     o Add Image#define, Image#undefine (available in ImageMagick 6.3.6)
     o Add Image#level_colors (available in ImageMagick 6.4.2-1)
     o Add Image#levelize_channel (available in ImageMagick 6.4.2-1)

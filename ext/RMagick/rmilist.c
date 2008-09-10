@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.83 2008/09/10 22:04:59 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.84 2008/09/10 22:08:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -937,7 +937,7 @@ ImageList_to_blob(VALUE self)
     // doesn't support multi-image files.
     info->adjoin = MagickTrue;
     blob = ImagesToBlob(info, images, &length, &exception);
-    if (exception.severity >= ErrorException)
+    if (blob && exception.severity >= ErrorException)
     {
         magick_free((void*)blob);
         blob = NULL;

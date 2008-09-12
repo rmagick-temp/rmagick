@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.319 2008/09/10 22:16:58 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.320 2008/09/12 00:31:15 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10851,7 +10851,7 @@ void add_format_prefix(Info *info, VALUE file)
     char magic[MaxTextExtent];
     size_t magic_l;
     size_t prefix_l;
-    void *p;
+    char *p;
 
     // Convert arg to string. If an exception occurs raise an error condition.
     file = rb_rescue(rb_String, file, file_arg_rescue, file);
@@ -10872,7 +10872,7 @@ void add_format_prefix(Info *info, VALUE file)
     if (p)
     {
         memset(magic, '\0', sizeof(magic));
-        magic_l = p - (void *)filename;
+        magic_l = p - filename;
         memcpy(magic, filename, magic_l);
 
         GetExceptionInfo(&exception);

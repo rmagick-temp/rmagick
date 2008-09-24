@@ -101,10 +101,10 @@ if RUBY_PLATFORM !~ /mswin/
   end
 
   # Save flags
-  $CFLAGS = ENV["CFLAGS"].to_s + " " + `Magick-config --cflags`.chomp
-  $CPPFLAGS = `Magick-config --cppflags`.chomp
-  $LDFLAGS = `Magick-config --ldflags`.chomp
-  $LOCAL_LIBS = `Magick-config --libs`.chomp
+  $CFLAGS     = ENV["CFLAGS"].to_s   + " " + `Magick-config --cflags`.chomp
+  $CPPFLAGS   = ENV["CPPFLAGS"].to_s + " " + `Magick-config --cppflags`.chomp
+  $LDFLAGS    = ENV["LDFLAGS"].to_s  + " " + `Magick-config --ldflags`.chomp
+  $LOCAL_LIBS = ENV["LIBS"].to_s     + " " + `Magick-config --libs`.chomp
 
 else  # mswin
 

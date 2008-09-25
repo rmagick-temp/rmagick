@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.162 2008/09/03 00:00:35 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.163 2008/09/25 23:25:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1957,7 +1957,9 @@ LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
 #if defined(HAVE_ENUM_FLATTENLAYER)
         ENUM_TO_NAME(FlattenLayer)
 #endif
-
+#if defined(HAVE_ENUM_TRIMBOUNDSLAYER)
+        ENUM_TO_NAME(TrimBoundsLayer)
+#endif
     }
 
     return "UndefinedLayer";

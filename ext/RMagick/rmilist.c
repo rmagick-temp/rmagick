@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.84 2008/09/10 22:08:55 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.85 2008/09/25 23:25:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -661,6 +661,11 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 #endif
 #if defined(HAVE_ENUM_MERGELAYER)
         case MergeLayer:
+            new_images = MergeImageLayers(images, mthd, &exception);
+            break;
+#endif
+#if defined(HAVE_ENUM_TRIMBOUNDSLAYER)
+        case TrimBoundsLayer:
             new_images = MergeImageLayers(images, mthd, &exception);
             break;
 #endif

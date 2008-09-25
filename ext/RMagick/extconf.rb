@@ -240,6 +240,7 @@ have_enum_values("CompressionType", ["DXT1Compression",                      # 6
                                      "DXT5Compression"], headers)            # 6.3.9-3
 have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
                                         "BarrelDistortion",                  # 6.4.2-5
+                                        "BarrelInverseDistortion",           # 6.4.3-8
                                         "DePolarDistortion",                 # 6.4.2-6
                                         "PerspectiveProjectionDistortion",   # 6.3.5-9
                                         "PolarDistortion",                   # 6.4.2-6

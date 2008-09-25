@@ -1,3 +1,9 @@
+RMagick 2.6.1
+    o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment
+      variable (bug report by Joseph Sokol-Margolis)
+    o Add the TrimBoundsLayer ImageLayerMethod enum value (available in
+      ImageMagick 6.4.3-8)
+
 RMagick 2.6.0
     o Fix bug #21237, Image::write ignores format attribute when called with a
       Tempfile pathname (bug report by Jack Shedd)

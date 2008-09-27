@@ -231,6 +231,7 @@ check_sizeof("unsigned long", headers)
 check_sizeof("Image *", headers)
 
 
+have_enum_value("AlphaChannelType", "CopyAlphaChannel", headers)             # 6.4.3-7
 have_enum_value("ColorspaceType", "CMYColorspace", headers)                  # 6.3.5
 have_enum_values("CompositeOperator", ["ChangeMaskCompositeOp",              # 6.3.3
                                        "LinearLightCompositeOp",             # 6.3.5

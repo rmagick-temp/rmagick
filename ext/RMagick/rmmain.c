@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.269 2008/09/27 19:39:12 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.270 2008/09/27 20:23:38 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1032,8 +1032,15 @@ Init_RMagick2(void)
         ENUMERATOR(UndefinedAlphaChannel)
         ENUMERATOR(ActivateAlphaChannel)
         ENUMERATOR(DeactivateAlphaChannel)
-        ENUMERATOR(ResetAlphaChannel)
+        ENUMERATOR(ResetAlphaChannel)  /* deprecated */
         ENUMERATOR(SetAlphaChannel)
+#if defined(HAVE_ENUM_COPYALPHACHANNEL)
+        ENUMERATOR(CopyAlphaChannel)
+        ENUMERATOR(ExtractAlphaChannel)
+        ENUMERATOR(OpaqueAlphaChannel)
+        ENUMERATOR(ShapeAlphaChannel)
+        ENUMERATOR(TransparentAlphaChannel)
+#endif
     END_ENUM
 #endif
 
@@ -1776,7 +1783,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/09/27 19:39:12 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/09/27 20:23:38 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

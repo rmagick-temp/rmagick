@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (class methods and instance
   methods a-d)</title>
@@ -14,37 +14,37 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<script type="text/javascript">
+  <script type="text/javascript">
 //<![CDATA[
-<!-- Pre-load this image so that the browser knows how big it is. -->
-flower_hat = new Image();
-flower_hat.src = "ex/images/Flower_Hat.jpg";
-function show_noise(type)
-{
-if (type == null)
-{
-document.getElementById("add_noise_example").src = "ex/images/Flower_Hat.jpg";
-}
-else
-{
-document.getElementById("add_noise_example").src = "ex/add_noise_" + type + ".jpg";
-}
-}
-//]]>
-</script>
-<style type="text/css">
+  <!-- Pre-load this image so that the browser knows how big it is. -->
+  flower_hat = new Image();
+  flower_hat.src = "ex/images/Flower_Hat.jpg";
+  function show_noise(type)
+  {
+  if (type == null)
+  {
+  document.getElementById("add_noise_example").src = "ex/images/Flower_Hat.jpg";
+  }
+  else
+  {
+  document.getElementById("add_noise_example").src = "ex/add_noise_" + type + ".jpg";
+  }
+  }
+  //]]>
+  </script>
+  <style type="text/css">
 /*<![CDATA[*/
-.noise_example_wrapper img {
-float: left;
-}
-.noise_example_wrapper p, .noise_example_wrapper ul {
-margin-left: 4px;
-float: left;
-}
-/*]]>*/
-</style>
+  .noise_example_wrapper img {
+  float: left;
+  }
+  .noise_example_wrapper p, .noise_example_wrapper ul {
+  margin-left: 4px;
+  float: left;
+  }
+  /*]]>*/
+  </style>
 </head>
 
 <body>
@@ -1461,7 +1461,8 @@ img = Image.read_inline(content)
 
     <p><span class="arg">img</span>.affinity(<span class=
     "arg">affinity_image</span>, <span class=
-    "arg">dither</span>=RiemersmaDitherMethod) -&gt; <em>self</em></p>
+    "arg">dither</span>=RiemersmaDitherMethod) -&gt;
+    <em>self</em></p>
   </div>
 
   <div class="desc">
@@ -1533,20 +1534,62 @@ img = Image.read_inline(content)
     <dl>
       <dt>ActivateAlphaChannel</dt>
 
-      <dd>Use alpha channel data.</dd>
+      <dd class="imquote">Enable the images use of transparency. If
+      transparency data did not exist, allocate the data and set to
+      opaque. If the image previously had transparency data, the
+      data is again enable as it was when turned off. The
+      transparency data is not changed or modified in any way.</dd>
+
+      <dt>CopyAlphaChannel</dt>
+
+      <dd class="imquote">Turns on the alpha/matte channel, then
+      copies the gray-scale intensity of the image, as an alpha
+      mask, into the alpha channel, converting a gray-scale mask
+      into a transparent shaped image ready to be colored
+      appropriately. The color channels are not modified.</dd>
 
       <dt>DeactivateAlphaChannel</dt>
 
-      <dd>Do not use alpha channel data.</dd>
+      <dd class="imquote">Disables the image's transparency
+      channel. Does not delete or change the existing data, just
+      turns of the use of that data. This is the same as assigning
+      false to the old matte= attribute.</dd>
+
+      <dt>ExtractAlphaChannel</dt>
+
+      <dd>Creates a grayscale mask of the image's shape by copying
+      the alpha channel values into all the color channels, and
+      then turning off the image's transparency. The inverse of
+      CopyAlphaChannel</dd>
+
+      <dt>OpaqueAlphaChannel</dt>
+
+      <dd class="imquote">Turns on the alpha/matte channel and
+      forces it to be fully opaque.</dd>
 
       <dt>ResetAlphaChannel</dt>
 
-      <dd>Set the alpha channel to fully opaque.</dd>
+      <dd>(Deprecated as of IM 6.4.3-7.) Set the alpha channel to
+      fully opaque.</dd>
 
       <dt>SetAlphaChannel</dt>
 
-      <dd>Sets the alpha channel to the intensity of the
-      image.</dd>
+      <dd class="imquote">Turns on the alpha/matte channel and if
+      it was previously turned off resets the channel to opaque. If
+      the image already had the alpha channel turned on, it will
+      have no effect.</dd>
+
+      <dt>ShapeAlphaChannel</dt>
+
+      <dd class="imquote">As CopyAlphaChannel but also colors the
+      resulting shape mask with the current background color.</dd>
+
+      <dt>TransparentAlphaChannel</dt>
+
+      <dd class="imquote">Turns on the alpha/matte channel and
+      forces it to be fully transparent. This effectivally creates
+      a transparent image the same size as the original, with all
+      its meta-data still attached.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -4334,6 +4377,8 @@ pixels = f.dispatch(0, 0, f.columns, f.rows, "RGB")
           <li>ArcDistortion</li>
 
           <li>BarrelDistortion</li>
+
+          <li>BarrelInverseDistortion</li>
 
           <li>BilinearDistortion</li>
 

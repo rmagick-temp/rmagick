@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class ImageList</title>
   <meta http-equiv="Content-Type" content=
@@ -13,9 +13,9 @@
   <meta name="Copyright" content=
   "Copyright (C) 2005 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
 </head>
 
@@ -1660,6 +1660,17 @@ ilist.new_image(100, 100) { self.background_color = "red" }
       partial intermediary updates between the frames that are
       actually displayed to users. These frames are usually added
       for improved frame optimization in GIF animations.</dd>
+
+      <dt>TrimBoundsLayer</dt>
+
+      <dd class="imquote">Find the minimal bounds of all the images
+      in the current image sequence, then adjust the offsets so all
+      images are contained on a minimal positive canvas. None of
+      the image data is modified, only the virtual canvas size and
+      offset. Then all the images will have the same canvas size,
+      and all will have a positive offset, at least one image will
+      touch every edge of that canvas with actual pixel data,
+      though that data may be transparent.</dd>
     </dl>
 
     <p>Some of these values are not supported by older versions of

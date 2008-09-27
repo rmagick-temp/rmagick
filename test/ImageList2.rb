@@ -13,7 +13,7 @@ class ImageList2_UT < Test::Unit::TestCase
         @ilist = Magick::ImageList.new
     end
 
-    def test_affinity
+    def xtest_affinity
        @ilist.read(*Dir[IMAGES_DIR+'/Button_*.gif'])
        assert_nothing_raised { @ilist.affinity }
        affinity_image = Magick::Image.new(20,20) {self.background_color = "green"}

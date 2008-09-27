@@ -54,7 +54,7 @@ class Magick_UT < Test::Unit::TestCase
         ary = Magick::AlphaChannelType.enumerators
       end
       assert_instance_of(Array, ary)
-      assert_equal(5, ary.length)
+      assert_equal(10, ary.length)
 
       assert_nothing_raised do
         ary = Magick::AlignType.enumerators
@@ -264,12 +264,12 @@ class Magick_UT < Test::Unit::TestCase
         cur = new = nil
 
         assert_nothing_raised {cur = Magick::limit_resource(:memory, 500)}
-        assert_equal(792336384, cur)
+        assert_equal(791930880, cur)
         assert_nothing_raised {new = Magick::limit_resource("memory")}
         assert_equal(500, new)
 
         assert_nothing_raised {cur = Magick::limit_resource(:map, 3500)}
-        assert_equal(2112897024, cur)
+        assert_equal(2111815680, cur)
         assert_nothing_raised {new = Magick::limit_resource("map")}
         assert_equal(3500, new)
 

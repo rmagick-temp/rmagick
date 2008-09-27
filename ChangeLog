@@ -5,6 +5,9 @@ RMagick 2.6.1
       ImageMagick 6.4.2
     o Add the TrimBoundsLayer ImageLayerMethod enum value (available in
       ImageMagick 6.4.3-8)
+    o Add the CopyAlphaChannel, ExtractAlphaChannel, OpaqueAlphaChannel,
+      ShapeAlphaChannel, and TransparentAlphaChannel AlphaChannelType enum
+      values (available in ImageMagick 6.4.3-7)
 
 RMagick 2.6.0
     o Fix bug #21237, Image::write ignores format attribute when called with a

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.85 2008/09/25 23:25:36 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.86 2008/09/27 19:39:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -846,7 +846,7 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
         case 4:
             quantize_info.tree_depth = (unsigned long)NUM2INT(argv[3]);
         case 3:
-#if defined(HAVE_TYPE_DITHERMETHOD)
+#if defined(HAVE_TYPE_DITHERMETHOD) && defined(HAVE_ENUM_NODITHERMETHOD)
             if (rb_obj_is_kind_of(argv[2], Class_DitherMethod))
             {
                 VALUE_TO_ENUM(argv[2], quantize_info.dither_method, DitherMethod);

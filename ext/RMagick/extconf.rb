@@ -246,6 +246,7 @@ have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6
                                         "PolarDistortion",                   # 6.4.2-6
                                         "PolynomialDistortion",              # 6.4.2-4
                                         "ShepardsDistortion"], headers)      # 6.4.2-4
+have_enum_values("DitherMethod", "NoDitherMethod", headers)                  # 6.4.3
 have_enum_values("FilterTypes", ["KaiserFilter",                             # 6.3.6
                                  "WelshFilter",                              # 6.3.6-4
                                  "ParzenFilter",                             # 6.3.6-4

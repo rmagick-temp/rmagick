@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.268 2008/09/25 23:59:13 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.269 2008/09/27 19:39:12 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1286,7 +1286,9 @@ Init_RMagick2(void)
 #if defined(HAVE_TYPE_DITHERMETHOD)
     DEF_ENUM(DitherMethod)
         ENUMERATOR(UndefinedDitherMethod)
+#if defined(HAVE_ENUM_NODITHERMETHOD)
         ENUMERATOR(NoDitherMethod)
+#endif
         ENUMERATOR(RiemersmaDitherMethod)
         ENUMERATOR(FloydSteinbergDitherMethod)
     END_ENUM
@@ -1774,7 +1776,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/09/25 23:59:13 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/09/27 19:39:12 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

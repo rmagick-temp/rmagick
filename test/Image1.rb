@@ -232,16 +232,16 @@ class Image1_UT < Test::Unit::TestCase
         assert_instance_of(Magick::Image,  res)
     end
 
-    def test_affinity
-       affinity_image = Magick::Image.new(20,20) {self.background_color = "green"}
-       assert_nothing_raised { @img.affinity(affinity_image) }
-       assert_nothing_raised { @img.affinity(affinity_image, Magick::NoDitherMethod) }
-       assert_nothing_raised { @img.affinity(affinity_image, Magick::RiemersmaDitherMethod) }
-       assert_nothing_raised { @img.affinity(affinity_image, Magick::FloydSteinbergDitherMethod) }
+    def test_remap
+       remap_image = Magick::Image.new(20,20) {self.background_color = "green"}
+       assert_nothing_raised { @img.remap(remap_image) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::NoDitherMethod) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::RiemersmaDitherMethod) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::FloydSteinbergDitherMethod) }
 
-       assert_raise(ArgumentError) {@img.affinity() }
-       assert_raise(ArgumentError) {@img.affinity(affinity_image, Magick::NoDitherMethod, 1) }
-       assert_raise(TypeError) {@img.affinity(affinity_image, 1) }
+       assert_raise(ArgumentError) {@img.remap() }
+       assert_raise(ArgumentError) {@img.remap(remap_image, Magick::NoDitherMethod, 1) }
+       assert_raise(TypeError) {@img.remap(remap_image, 1) }
     end
 
     # test alpha backward compatibility. Image#alpha w/o arguments acts like alpha?

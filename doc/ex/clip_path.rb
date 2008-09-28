@@ -25,11 +25,11 @@ girl.read("images/Flower_Hat.jpg")
 
 cols = rows = nil
 
-# Our final image is about 290 pixels wide, so here
+# Our final image is about 280 pixels wide, so here
 # we widen our picture to fit. The change_geometry
 # method will adjust the height proportionately.
 
-girl.change_geometry("290") do |c,r|
+girl.change_geometry("280") do |c,r|
     pr.composite(0,0, c, r, girl)
     cols = c
     rows = r

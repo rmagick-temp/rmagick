@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.74 2008/08/28 23:25:46 rmagick Exp $
+# $Id: RMagick.rb,v 1.75 2008/09/28 00:24:41 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -734,6 +734,8 @@ end # module Magick::IPTC
 class Image
     include Comparable
 
+    alias_method :affinity, :remap
+
     # Provide an alternate version of Draw#annotate, for folks who
     # want to find it in this class.
     def annotate(draw, width, height, x, y, text, &block)
@@ -1466,6 +1468,9 @@ public
     alias_method :__map__, :collect
     alias_method :map!, :collect!
     alias_method :__map__!, :collect!
+
+    # ImageMagic used affinity in 6.4.3, switch to remap in 6.4.4.
+    alias_method :affinity, :remap
 
     def compact
         current = get_current()

@@ -8,6 +8,9 @@ RMagick 2.6.1
     o Add the CopyAlphaChannel, ExtractAlphaChannel, OpaqueAlphaChannel,
       ShapeAlphaChannel, and TransparentAlphaChannel AlphaChannelType enum
       values (available in ImageMagick 6.4.3-7)
+    o Rename Image#affinity and ImageList#affinity to Image#remap and
+      ImageList#remap. Retain the old names as aliases. (Changed in ImageMagick
+      6.4.4-0)
 
 RMagick 2.6.0
     o Fix bug #21237, Image::write ignores format attribute when called with a

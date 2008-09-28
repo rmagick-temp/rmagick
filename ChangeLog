@@ -1,4 +1,4 @@
-RMagick 2.6.1
+RMagick 2.7.0
     o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment
       variable (bug report by Joseph Sokol-Margolis)
     o Fix bug #22190, the NoDitherMethod enum value is not defined in

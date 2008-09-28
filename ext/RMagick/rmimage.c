@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.321 2008/09/27 19:39:12 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.322 2008/09/28 00:23:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -563,56 +563,6 @@ Image_alpha_eq(VALUE self, VALUE type)
 #else
     self = self;
     type = type;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
-}
-
-
-
-/*
-     Method:    Image#affinity(affinity_image, dither_method=RiemersmaDitherMethod)
-     Purpose:   Call AffinityImage
-     Notes:     Immediate - modifies image in-place
-*/
-VALUE
-Image_affinity(int argc, VALUE *argv, VALUE self)
-{
-#if defined(HAVE_AFFINITYIMAGE)
-    Image *image, *affinity_image;
-    QuantizeInfo quantize_info;
-
-    image = rm_check_frozen(self);
-    if (argc > 0)
-    {
-        volatile VALUE t = rm_cur_image(argv[0]);
-        affinity_image = rm_check_destroyed(t);
-    }
-
-    GetQuantizeInfo(&quantize_info);
-
-    switch (argc)
-    {
-        case 2:
-            VALUE_TO_ENUM(argv[1], quantize_info.dither_method, DitherMethod);
-            quantize_info.dither = MagickTrue;
-            break;
-        case 1:
-            break;
-        default:
-            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
-            break;
-    }
-
-
-    (void) AffinityImage(&quantize_info, image, affinity_image);
-    rm_check_image_exception(image, RetainOnError);
-
-    return self;
-#else
-    self = self;
-    argc = argc;
-    argv = argv;
     rm_not_implemented();
     return(VALUE)0;
 #endif
@@ -6251,8 +6201,8 @@ Image_map(int argc, VALUE *argv, VALUE self)
 
     image = rm_check_destroyed(self);
 
-#if defined(HAVE_AFFINITYIMAGE)
-    rb_warning("Image#map is deprecated. Use Image#affinity instead");
+#if defined(HAVE_REMAPIMAGE)
+    rb_warning("Image#map is deprecated. Use Image#remap instead");
 #endif
 
     switch (argc)
@@ -8243,6 +8193,58 @@ Image_reduce_noise(VALUE self, VALUE radius)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+     Method:    Image#remap(remap_image, dither_method=RiemersmaDitherMethod)
+     Purpose:   Call RemapImage
+     Notes:     Immediate - modifies image in-place
+*/
+VALUE
+Image_remap(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_REMAPIMAGE) || defined(HAVE_AFFINITYIMAGE)
+    Image *image, *remap_image;
+    QuantizeInfo quantize_info;
+
+    image = rm_check_frozen(self);
+    if (argc > 0)
+    {
+        volatile VALUE t = rm_cur_image(argv[0]);
+        remap_image = rm_check_destroyed(t);
+    }
+
+    GetQuantizeInfo(&quantize_info);
+
+    switch (argc)
+    {
+        case 2:
+            VALUE_TO_ENUM(argv[1], quantize_info.dither_method, DitherMethod);
+            quantize_info.dither = MagickTrue;
+            break;
+        case 1:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
+            break;
+    }
+
+#if defined(HAVE_REMAPIMAGE)
+    (void) RemapImage(&quantize_info, image, remap_image);
+#else
+    (void) AffinityImage(&quantize_info, image, remap_image);
+#endif
+    rm_check_image_exception(image, RetainOnError);
+
+    return self;
+#else
+    self = self;
+    argc = argc;
+    argv = argv;
+    rm_not_implemented();
+    return(VALUE)0;
+#endif
 }
 
 

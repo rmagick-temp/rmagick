@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: How to use RMagick</title>
   <meta http-equiv="Content-Type" content=
@@ -13,10 +13,10 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
+  <style type="text/css">
+/*<![CDATA[*/
 
   /* Styles local to this page. */
 
@@ -83,10 +83,10 @@
   .sup {
     vertical-align: super;
     font-size: x-small;
-}
+  }
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -613,32 +613,11 @@ exit
     <h4>Reduce the number of colors</h4>
 
     <dl>
-      <dt><a href="image1.html#affinity">affinity</a></dt>
-
-      <dd>Change the colors in the image to the colors in a
-      reference image.</dd>
-
-      <dt class="ilist"><a href=
-      "ilist.html#affinity">affinity</a></dt>
-
-      <dd class="ilist">Change the images in the imagelist to use a
-      common color map.</dd>
-
       <dt><a href=
       "image1.html#compress_colormap_bang">compress_colormap!</a></dt>
 
       <dd>Remove duplicate or unused entries in the image's
       colormap</dd>
-
-      <dt><a href="image2.html#map">map</a></dt>
-
-      <dd>Replace the colors of the image with the nearest colors
-      from a reference image</dd>
-
-      <dt class="ilist"><a href="ilist.html#map">map</a></dt>
-
-      <dd class="ilist">Replace the colors of all the images in the
-      imagelist with the nearest colors from a reference image</dd>
 
       <dt><a href=
       "image2.html#ordered_dither">ordered_dither</a></dt>
@@ -659,6 +638,16 @@ exit
 
       <dd class="ilist">Choose a fixed number of colors to
       represent all the images in the imagelist</dd>
+
+      <dt><a href="image1.html#remap">remap</a></dt>
+
+      <dd>Change the colors in the image to the colors in a
+      reference image.</dd>
+
+      <dt class="ilist"><a href="ilist.html#remap">remap</a></dt>
+
+      <dd class="ilist">Change the images in the imagelist to use a
+      common color map.</dd>
     </dl>
 
     <h4>Resize</h4>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (instance methods p-w)</title>
   <meta http-equiv="Content-Type" content=
@@ -13,19 +13,19 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<script type="text/javascript">
-  //<![CDATA[
+  <script type="text/javascript">
+//<![CDATA[
     <!-- Pre-load this image so that the browser knows how big it is. -->
     <!-- Begin
     flower_hat = new Image();
     flower_hat.src = "ex/images/Flower_Hat.jpg";
     // End -->
   //]]>
-</script>
-<style type="text/css">
-  /*<![CDATA[*/
+  </script>
+  <style type="text/css">
+/*<![CDATA[*/
 
   /*
    * This style is used for the list of PreviewType
@@ -47,7 +47,7 @@
   }
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -106,6 +106,8 @@
 
           <li><a href="#reduce_noise">reduce_noise</a></li>
 
+          <li><a href="#remap">remap</a></li>
+
           <li><a href="#resample">resample</a></li>
 
           <li><a href="#resize">resize</a></li>
@@ -124,13 +126,13 @@
           <li><a href="#roll">roll</a></li>
 
           <li><a href="#rotate">rotate</a></li>
-
-          <li><a href="#rotate_bang">rotate!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#rotate_bang">rotate!</a></li>
+
           <li><a href="#sample">sample</a></li>
 
           <li><a href="#sample_bang">sample!</a></li>
@@ -170,7 +172,6 @@
           <li><a href="#sketch">sketch</a></li>
 
           <li><a href="#solarize">solarize</a></li>
-
           <!-- <li><a href="#sparse_color">sparse_color</a></li> -->
 
           <li><a href="#splice">splice</a></li>
@@ -1177,6 +1178,63 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="remap">remap</h3>
+
+    <p><span class="arg">img</span>.remap(<span class=
+    "arg">remap_image</span>, <span class=
+    "arg">dither</span>=RiemersmaDitherMethod) -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Reduce the number of colors in <span class="arg">img</span>
+    to the colors used by <span class="arg">remap_image</span>. If
+    a dither method is specified <span class="imquote">then the
+    given colors are dithered over the image as necessary,
+    otherwise the closest color (in RGB colorspace) is selected to
+    replace that pixel in the image.</span></p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>remap_image</dt>
+
+      <dd>The reference image</dd>
+
+      <dt>dither</dt>
+
+      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
+      value. RiemersmaDitherMethod is the default. To disable
+      dithering specify NoDitherMethod.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p class="rollover"><a href=
+    "javascript:popup('remap.rb.html')"><img onmouseover=
+    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
+    "this.src='ex/remap.jpg'" src="ex/remap.jpg" alt=
+    "remap example" title="Click to see the example script" /></a>
+    <img src="ex/images/spin.gif" alt="" class="spin" style=
+    "left: 202px;" title=
+    "Mouse over the example to see the original image" /></p>
+
+    <h4>See also</h4>
+
+    <p><a href="ilist.html#remap">ImageList#remap</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>RemapImage (available in ImageMagick 6.4.3-6)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="resample">resample</h3>
 
     <p><span class="arg">img</span>.resample(<span class=
@@ -1377,7 +1435,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" />
+    alt="resize_to_fill example" /> 
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1472,7 +1530,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
@@ -2528,9 +2586,7 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SolarizeImage</p>
-  </div>
-
-  <!--
+  </div><!--
   <div class="sig">
     <h3 id="sparse_color">sparse_color</h3>
 
@@ -2612,6 +2668,7 @@ img.properties &raquo;
     <p>SparseColorInterpolate (available in 6.4.2)</p>
   </div>
 -->
+
   <div class="sig">
     <h3 id="splice">splice</h3>
 

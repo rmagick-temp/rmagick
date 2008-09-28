@@ -132,8 +132,6 @@
 
           <li><a href="#affine_transform">affine_transform</a></li>
 
-          <li><a href="#affinity">affinity</a></li>
-
           <li><a href="#alpha">alpha</a></li>
 
           <li><a href="#alpha_q">alpha?</a></li>
@@ -153,13 +151,13 @@
           <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
+
+          <li><a href="#border">border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#border">border</a></li>
-
           <li><a href="#border_bang">border!</a></li>
 
           <li><a href="#bounding_box">bounding_box</a></li>
@@ -1454,63 +1452,6 @@ img = Image.read_inline(content)
     <h4>Magick API</h4>
 
     <p>AffineTransformImage</p>
-  </div>
-
-  <div class="sig">
-    <h3 id="affinity">affinity</h3>
-
-    <p><span class="arg">img</span>.affinity(<span class=
-    "arg">affinity_image</span>, <span class=
-    "arg">dither</span>=RiemersmaDitherMethod) -&gt;
-    <em>self</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Reduce the number of colors in <span class="arg">img</span>
-    to the colors used by <span class="arg">affinity_image</span>.
-    If a dither method is specified <span class="imquote">then the
-    given colors are dithered over the image as necessary,
-    otherwise the closest color (in RGB colorspace) is selected to
-    replace that pixel in the image.</span></p>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>affinity_image</dt>
-
-      <dd>The reference image</dd>
-
-      <dt>dither</dt>
-
-      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
-      value. RiemersmaDitherMethod is the default. To disable
-      dithering specify NoDitherMethod.</dd>
-    </dl>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
-
-    <h4>Example</h4>
-
-    <p class="rollover"><a href=
-    "javascript:popup('affinity.rb.html')"><img onmouseover=
-    "this.src='ex/images/Flower_Hat.jpg'" onmouseout=
-    "this.src='ex/affinity.jpg'" src="ex/affinity.jpg" alt=
-    "affinity example" title=
-    "Click to see the example script" /></a> <img src=
-    "ex/images/spin.gif" alt="" class="spin" style="left: 202px;"
-    title="Mouse over the example to see the original image" /></p>
-
-    <h4>See also</h4>
-
-    <p><a href="ilist.html#affinity">ImageList#affinity</a></p>
-
-    <h4>Magick API</h4>
-
-    <p>AffinityImage (available in ImageMagick 6.4.3-6)</p>
   </div>
 
   <div class="sig">

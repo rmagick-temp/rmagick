@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.248 2008/09/02 23:40:18 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.249 2008/09/28 00:23:10 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -623,7 +623,6 @@ ATTR_WRITER(PolaroidOptions, border_color);
 
 
  // rmilist.c
-extern VALUE ImageList_affinity(int, VALUE *, VALUE);
 extern VALUE ImageList_animate(int, VALUE *, VALUE);
 extern VALUE ImageList_append(VALUE, VALUE);
 extern VALUE ImageList_average(VALUE);
@@ -639,6 +638,7 @@ extern VALUE ImageList_morph(VALUE, VALUE);
 extern VALUE ImageList_mosaic(VALUE);
 extern VALUE ImageList_optimize_layers(VALUE, VALUE);
 extern VALUE ImageList_quantize(int, VALUE*, VALUE);
+extern VALUE ImageList_remap(int, VALUE *, VALUE);
 extern VALUE ImageList_to_blob(VALUE);
 extern VALUE ImageList_write(VALUE, VALUE);
 
@@ -790,7 +790,6 @@ extern VALUE Image_add_noise(VALUE, VALUE);
 extern VALUE Image_add_noise_channel(int, VALUE *, VALUE);
 extern VALUE Image_add_profile(VALUE, VALUE);
 extern VALUE Image_affine_transform(VALUE, VALUE);
-extern VALUE Image_affinity(int, VALUE *, VALUE);
 extern VALUE Image_alpha(int, VALUE *, VALUE);
 extern VALUE Image_alpha_q(VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
@@ -934,6 +933,7 @@ extern VALUE Image_read(VALUE, VALUE);
 extern VALUE Image_read_inline(VALUE, VALUE);
 extern VALUE Image_recolor(VALUE, VALUE);
 extern VALUE Image_reduce_noise(VALUE, VALUE);
+extern VALUE Image_remap(int, VALUE *, VALUE);
 extern VALUE Image_resize(int, VALUE *, VALUE);
 extern VALUE Image_resize_bang(int, VALUE *, VALUE);
 extern VALUE Image_roll(VALUE, VALUE, VALUE);

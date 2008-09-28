@@ -62,8 +62,6 @@
 
         <li><a href="#spaceship">&lt;=&gt;</a></li>
 
-        <li><a href="#affinity">affinity</a></li>
-
         <li><a href="#animate">animate</a></li>
 
         <li><a href="#append">append</a></li>
@@ -77,13 +75,13 @@
         <li><a href="#composite_layers">composite_layers</a></li>
 
         <li><a href="#copy">copy</a></li>
+
+        <li><a href="#cur_image">cur_image</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#cur_image">cur_image</a></li>
-
         <li><a href="#deconstruct">deconstruct</a></li>
 
         <li><a href="#dup">dup</a></li>
@@ -101,13 +99,13 @@
         <li><a href="#map">map</a></li>
 
         <li><a href="#montage">montage</a></li>
+
+        <li><a href="#morph">morph</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#morph">morph</a></li>
-
         <li><a href="#mosaic">mosaic</a></li>
 
         <li><a href="#new_image">new_image</a></li>
@@ -119,6 +117,8 @@
         <li><a href="#quantize">quantize</a></li>
 
         <li><a href="#read">read</a></li>
+
+        <li><a href="#remap">remap</a></li>
 
         <li><a href="#to_a">to_a</a></li>
 
@@ -438,59 +438,6 @@ example &lt;&lt; model.add_noise Magick::LaplacisanNoise
 
     <p><a href="image1.html#spaceship">Image#&lt;=&gt;</a>,
     <a href="image3.html#signature">signature</a></p>
-  </div>
-
-  <div class="sig">
-    <h3 id="affinity">affinity</h3>
-
-    <p><span class="arg">ilist</span>.affinity(<span class=
-    "arg">affinity_image</span>=nil, <span class=
-    "arg">dither</span>=RiemersmaDitherMethod) -&gt;
-    <em>self</em></p>
-  </div>
-
-  <div class="desc">
-    <h4>Description</h4>
-
-    <p>Reduce the colors used in the imagelist to the set of colors
-    in <span id="arg">affinity_image</span>.</p>
-
-    <h4>Arguments</h4>
-
-    <dl>
-      <dt>affinity_image</dt>
-
-      <dd>The reference image</dd>
-
-      <dt>dither</dt>
-
-      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
-      value. RiemersmaDitherMethod is the default. To disable
-      dithering specify NoDitherMethod.</dd>
-    </dl>
-
-    <h4>Returns</h4>
-
-    <p>self</p>
-
-    <h4>Example</h4>
-
-    <p>This example shows the effect of reducing the colors used in
-    the apple, beach scene, and leaf images to the set of colors
-    used in the yellow rose image.</p>
-
-    <p><a href=
-    "javascript:popup('affinity_images.rb.html')"><img alt=
-    "affinity_images example" src="ex/affinity_images.jpg" title=
-    "Click to see the example script" /></a></p>
-
-    <h4>See also</h4>
-
-    <p><a href="image1.html#affinity">Image#affinity</a></p>
-
-    <h4>Magick API</h4>
-
-    <p>AffinityImages (available in ImageMagick 6.4.3-6)</p>
   </div>
 
   <div class="sig">
@@ -1132,7 +1079,7 @@ scene=1
     <h4>Notes</h4>
 
     <p>This method is deprecated when using ImageMagick 6.4.3-6 and
-    later. Use <a href="#affinity">affinity</a> instead.</p>
+    later. Use <a href="#remap">remap</a> instead.</p>
 
     <h4>See also</h4>
 
@@ -1908,6 +1855,58 @@ number = '0'
     <p>You can create images using ImageMagick's built-in formats
     with the <code>read</code> method. See <a href=
     "imusage.html#builtin_formats">Built-in image formats</a>.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="remap">remap</h3>
+
+    <p><span class="arg">ilist</span>.remap(<span class=
+    "arg">remap_image</span>=nil, <span class=
+    "arg">dither</span>=RiemersmaDitherMethod) -&gt;
+    <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Reduce the colors used in the imagelist to the set of colors
+    in <span id="arg">remap_image</span>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>remap_image</dt>
+
+      <dd>The reference image</dd>
+
+      <dt>dither</dt>
+
+      <dd>A <a href="constants.html#DitherMethod">DitherMethod</a>
+      value. RiemersmaDitherMethod is the default. To disable
+      dithering specify NoDitherMethod.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+
+    <h4>Example</h4>
+
+    <p>This example shows the effect of reducing the colors used in
+    the apple, beach scene, and leaf images to the set of colors
+    used in the yellow rose image.</p>
+
+    <p><a href="javascript:popup('remap_images.rb.html')"><img alt=
+    "remap_images example" src="ex/remap_images.jpg" title=
+    "Click to see the example script" /></a></p>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#remap">Image#remap</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>RemapImages (available in ImageMagick 6.4.3-6)</p>
   </div>
 
   <div class="sig">

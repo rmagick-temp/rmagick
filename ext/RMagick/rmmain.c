@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.270 2008/09/27 20:23:38 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.271 2008/09/28 00:23:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -481,7 +481,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "add_noise_channel", Image_add_noise_channel, -1);
     rb_define_method(Class_Image, "add_profile", Image_add_profile, 1);
     rb_define_method(Class_Image, "affine_transform", Image_affine_transform, 1);
-    rb_define_method(Class_Image, "affinity", Image_affinity, -1);
+    rb_define_method(Class_Image, "remap", Image_remap, -1);
     rb_define_method(Class_Image, "alpha", Image_alpha, -1);
     rb_define_method(Class_Image, "alpha?", Image_alpha_q, 0);
     rb_define_method(Class_Image, "[]", Image_aref, 1);
@@ -688,7 +688,7 @@ Init_RMagick2(void)
 
     // Define an alias for Object#display before we override it
     rb_define_alias(Class_ImageList, "__display__", "display");
-    rb_define_method(Class_ImageList, "affinity", ImageList_affinity, -1);
+    rb_define_method(Class_ImageList, "remap", ImageList_remap, -1);
     rb_define_method(Class_ImageList, "animate", ImageList_animate, -1);
     rb_define_method(Class_ImageList, "append", ImageList_append, 1);
     rb_define_method(Class_ImageList, "average", ImageList_average, 0);
@@ -1783,7 +1783,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/09/27 20:23:38 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/09/28 00:23:10 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

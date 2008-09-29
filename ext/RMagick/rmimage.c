@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.322 2008/09/28 00:23:10 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.323 2008/09/29 22:15:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2937,7 +2937,7 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     GetExceptionInfo(&exception);
 
     // This is based on ConstituteImage in IM 5.5.7
-    image = AllocateImage(NULL);
+    image = AcquireImage(NULL);
     if (!image)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue.");
@@ -6874,7 +6874,7 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
-    image = AllocateImage(info);
+    image = AcquireImage(info);
     if (!image)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");

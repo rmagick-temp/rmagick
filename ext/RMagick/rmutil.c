@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.163 2008/09/25 23:25:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.164 2008/09/29 22:15:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -677,7 +677,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     Data_Get_Struct(self, Pixel, pixel);
 
     info = CloneImageInfo(NULL);
-    image = AllocateImage(info);
+    image = AcquireImage(info);
     image->depth = depth;
     image->matte = matte;
     (void) DestroyImageInfo(info);
@@ -941,7 +941,7 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
 
-    image = AllocateImage(info);
+    image = AcquireImage(info);
 
     // Delete Info now in case we have to raise an exception
     (void) DestroyImageInfo(info);
@@ -1297,7 +1297,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
 
     my_info = info ? info : CloneImageInfo(NULL);
 
-    image = AllocateImage(info);
+    image = AcquireImage(info);
     image->matte = MagickFalse;
     color_name = PixelPacket_to_Color_Name(image, color);
     (void) DestroyImage(image);

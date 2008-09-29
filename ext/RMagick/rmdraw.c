@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.67 2008/09/03 00:08:35 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.68 2008/09/29 22:15:16 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -1474,7 +1474,7 @@ get_dummy_tm_img(VALUE klass)
         {
             rb_raise(rb_eNoMemError, "not enough memory to continue");
         }
-        image = AllocateImage(info);
+        image = AcquireImage(info);
         if (!image)
         {
             rb_raise(rb_eNoMemError, "not enough memory to continue");

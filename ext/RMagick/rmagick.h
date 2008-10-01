@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.152.2.4.2.2 2008/05/04 14:18:13 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.152.2.4.2.3 2008/10/01 22:50:58 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2006 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -296,7 +296,7 @@ EXTERN VALUE Class_Primary;
 EXTERN VALUE Class_Rectangle;
 EXTERN VALUE Class_Segment;
 EXTERN VALUE Class_TypeMetric;
-#if defined(HAVE_COMPAREIMAGECHANNELS)
+#if defined(HAVE_COMPAREIMAGECHANNELS) || defined(HAVE_GETIMAGECHANNELDISTORTION)
 EXTERN VALUE Class_MetricType;
 #endif
 #if defined(HAVE_QUANTUMOPERATORREGIONIMAGE) || defined(HAVE_EVALUATEIMAGECHANNEL)

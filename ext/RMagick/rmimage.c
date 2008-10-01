@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.192.2.5.2.7 2008/09/10 23:22:46 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.192.2.5.2.8 2008/10/01 22:51:55 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -464,7 +464,7 @@ Image_add_profile(VALUE self, VALUE name)
 #else
     info->client_data= (void *) &image->iptc_profile;
 #endif
-    strncpy(info->filename, profile_filename, min(profile_filename_l, sizeof(info->filename)));
+    strncpy(info->filename, profile_filename, min(profile_filename_l, (long)sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
 
     GetExceptionInfo(&exception);

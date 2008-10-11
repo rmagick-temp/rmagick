@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.249 2008/09/28 00:23:10 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.250 2008/10/11 22:35:58 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -126,6 +126,10 @@
 #if !defined(HAVE_GETSTRINGINFODATUM)
 #define GetStringInfoDatum(p) (unsigned char *)((p)->datum)
 #define GetStringInfoLength(p) (size_t)((p)->length)
+#endif
+
+#if !defined(HAVE_ACQUIREIMAGE)
+#define AcquireImage(info) AllocateImage(info)
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6
@@ -316,6 +320,7 @@ EXTERN VALUE Class_ResolutionType;
 #if defined(HAVE_SPARSECOLORINTERPOLATE)
 EXTERN VALUE Class_SparseColorInterpolateMethod;
 #endif
+EXTERN VALUE Class_SpreadMethod;
 EXTERN VALUE Class_StorageType;
 EXTERN VALUE Class_StretchType;
 EXTERN VALUE Class_StyleType;

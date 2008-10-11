@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.271 2008/09/28 00:23:10 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.272 2008/10/11 22:36:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1578,6 +1578,20 @@ Init_RMagick2(void)
     END_ENUM
 #endif
 
+    // SpreadMethod
+#if defined(HAVE_TYPE_SPREADMETHOD)
+    // In 6.3.0 ReflectSpread is misspelled as ReflectSpead.
+#if !defined(HAVE_ENUM_REFLECTSPREAD)
+#define ReflectSpread 2
+#endif
+    DEF_ENUM(SpreadMethod)
+        ENUMERATOR(UndefinedSpread)
+        ENUMERATOR(PadSpread)
+        ENUMERATOR(ReflectSpread)
+        ENUMERATOR(RepeatSpread)
+    END_ENUM
+#endif
+
     // StorageType
     DEF_ENUM(StorageType)
         ENUMERATOR(UndefinedPixel)
@@ -1783,7 +1797,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/09/28 00:23:10 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/10/11 22:36:42 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.250 2008/10/11 22:35:58 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.251 2008/10/21 22:23:49 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -518,7 +518,7 @@ Pixel_##_cmyk_channel_(VALUE self) \
    _cls =  Class_##tag = rm_define_enum_type(#tag);
 
 #define ENUMERATOR(val)\
-   _enum = rm_enum_new(_cls, ID2SYM(rb_intern(#val)), INT2FIX(val));\
+   _enum = rm_enum_new(_cls, ID2SYM(rb_intern(#val)), INT2NUM(val));\
    rb_define_const(Module_Magick, #val, _enum);
 #define END_ENUM }
 

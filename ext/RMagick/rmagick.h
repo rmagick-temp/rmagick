@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.251 2008/10/21 22:23:49 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.252 2008/10/21 22:42:29 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -25,7 +25,11 @@
 #include <sys/types.h>
 #endif
 #include "ruby.h"
+#if defined(HAVE_RUBY_IO_H)
+#include "ruby/io.h"        // >= 1.9.0-5
+#else
 #include "rubyio.h"
+#endif
 
 
 // Undef Ruby's versions of these symbols

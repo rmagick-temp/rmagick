@@ -1,3 +1,7 @@
+RMagick 2.7.1
+    o Fix bug #22471, Magick::fonts can abend on 64-bit systems (bug report and
+      patch by James Le Cuirot)
+
 RMagick 2.7.0
     o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment
       variable (bug report by Joseph Sokol-Margolis)

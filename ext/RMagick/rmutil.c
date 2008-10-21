@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.164 2008/09/29 22:15:16 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.165 2008/10/21 22:23:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2531,7 +2531,7 @@ static VALUE
 StretchType_new(StretchType stretch)
 {
     const char *name = StretchType_name(stretch);
-    return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2FIX(stretch));
+    return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2NUM(stretch));
 }
 
 
@@ -2543,7 +2543,7 @@ static VALUE
 StyleType_new(StyleType style)
 {
     const char *name = StyleType_name(style);
-    return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
+    return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2NUM(style));
 }
 
 
@@ -2562,7 +2562,7 @@ Font_from_TypeInfo(const TypeInfo *ti)
     family      = rb_str_new2(ti->family);
     style       = StyleType_new(ti->style);
     stretch     = StretchType_new(ti->stretch);
-    weight      = UINT2NUM(ti->weight);
+    weight      = ULONG2NUM(ti->weight);
     description = ti->description ? rb_str_new2(ti->description) : Qnil;
     encoding    = ti->encoding    ? rb_str_new2(ti->encoding) : Qnil;
     foundry     = ti->foundry     ? rb_str_new2(ti->foundry)  : Qnil;

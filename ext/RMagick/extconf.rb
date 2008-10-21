@@ -284,7 +284,13 @@ have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6
 
 
 # Now test Ruby 1.9.0 features.
-headers = ["ruby.h", "rubyio.h"]
+headers = ["ruby.h"]
+if have_header("ruby/io.h")
+   headers << "ruby/io.h"
+else
+   headers << "rubyio.h"
+end
+
 have_func("rb_frame_this_func", headers)
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.165 2008/10/21 22:23:05 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.166 2008/10/22 22:27:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -2531,7 +2531,7 @@ static VALUE
 StretchType_new(StretchType stretch)
 {
     const char *name = StretchType_name(stretch);
-    return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2NUM(stretch));
+    return rm_enum_new(Class_StretchType, ID2SYM(rb_intern(name)), INT2FIX(stretch));
 }
 
 
@@ -2543,7 +2543,7 @@ static VALUE
 StyleType_new(StyleType style)
 {
     const char *name = StyleType_name(style);
-    return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2NUM(style));
+    return rm_enum_new(Class_StyleType, ID2SYM(rb_intern(name)), INT2FIX(style));
 }
 
 

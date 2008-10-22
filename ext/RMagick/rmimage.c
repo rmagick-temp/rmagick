@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.323 2008/09/29 22:15:16 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.324 2008/10/22 22:50:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5324,7 +5324,7 @@ has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, Exception
 VALUE
 Image_gray_q(VALUE self)
 {
-    return has_attribute(self, IsGrayImage);
+    return has_attribute(self, (MagickBooleanType (*)(const Image *, ExceptionInfo *))IsGrayImage);
 }
 
 
@@ -6684,7 +6684,7 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 VALUE
 Image_monochrome_q(VALUE self)
 {
-    return has_attribute(self, IsMonochromeImage);
+    return has_attribute(self, (MagickBooleanType (*)(const Image *, ExceptionInfo *))IsMonochromeImage);
 }
 
 

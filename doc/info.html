@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image::Info - Optional method
   arguments</title>
@@ -14,10 +14,10 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
+  <style type="text/css">
+/*<![CDATA[*/
 
   /* Styles local to this page. */
 
@@ -40,7 +40,7 @@
   }
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -246,6 +246,30 @@
       can be any object that responds to <code>to_s</code>. Use
       <code>nil</code> to set the key to a null value.</dd>
     </dl>
+
+    <h4 id="user_option">The "user" option</h4>
+
+    <p>The "user" option is unique to RMagick. It may be set to any
+    string. If this option is used when creating an image via one
+    of the methods listed below then the new image gets the value
+    assigned as a property as if <code>img["user"]</code> had been
+    used. In addition, the value is displayed in the string
+    returned by <code>Image#inspect</code>. The "user" property can
+    be used to help distinguish otherwise similar images when
+    debugging.</p>
+
+    <p>For example,</p>
+    <pre>
+img = Magick::Image.new(10,10) do
+   self['user'] = __FILE__ + ':' + __LINE__.to_s
+end &raquo; 10x10 DirectClass 16-bit user:test.rb:3
+</pre>
+
+    <p>These methods propogate the value of the "user" option to
+    new image(s): <code>Image.new, ImageList.new,
+    ImageList.new_image, Image.capture, Image.from_blob,
+    ImageList.from_blob, Image.read, ImageList.read,
+    Image.read_inline, and Image.ping</code>.</p>
 
     <h4>Returns</h4>
 
@@ -1083,8 +1107,8 @@ p img.first['caption'] &raquo; "a new caption"
     optional arguments such as <code>read</code> and
     <code>write</code>. To stop monitoring, set the monitor to
     <code>nil</code>. See <a href=
-    "imageattrs.html#monitor">Image#monitor</a> for more information
-    about the proc. This attribute is set-only.</p>
+    "imageattrs.html#monitor">Image#monitor</a> for more
+    information about the proc. This attribute is set-only.</p>
 
     <p>If you assign a monitor to an image with
     <code>self.monitor=</code> when the image is created, the image

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.75 2008/09/28 00:24:41 rmagick Exp $
+# $Id: RMagick.rb,v 1.76 2008/10/27 22:17:54 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1576,11 +1576,11 @@ public
     end
 
     # Initialize new instances
-    def initialize(*filenames)
+    def initialize(*filenames, &block)
         @images = []
         @scene = nil
         filenames.each { |f|
-            Magick::Image.read(f).each { |n| @images << n }
+            Magick::Image.read(f, &block).each { |n| @images << n }
             }
         if length > 0
             @scene = length - 1     # last image in array

@@ -1,6 +1,10 @@
 RMagick 2.7.1
     o Fix bug #22471, Magick::fonts can abend on 64-bit systems (bug report and
       patch by James Le Cuirot)
+    o ImageList.new accepts a block which is passed on to Image::read when
+      reading the input  images. The block is executed in the context of an
+      Image::Info object.
+    o Add support for the "user" image property.
 
 RMagick 2.7.0
     o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment

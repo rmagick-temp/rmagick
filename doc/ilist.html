@@ -134,9 +134,11 @@
   <div class="sig">
     <h3 id="new">new</h3>
 
-    <p>Magick::ImageList.new -&gt; <em>imagelist</em><br />
+    <p>Magick::ImageList.new <span class="arg">[&nbsp;{ optional
+    arguments }&nbsp;]</span> -&gt; <em>imagelist</em><br />
     Magick::ImageList.new(<span class="arg">filename[,
-    filename...]]</span>) -&gt; <em>imagelist</em></p>
+    filename...]]</span>) <span class="arg">[&nbsp;{ optional
+    arguments }&nbsp;]</span> -&gt; <em>imagelist</em></p>
   </div>
 
   <div class="desc">
@@ -150,7 +152,10 @@
 
     <h4>Arguments</h4>
 
-    <p>Zero or more image file names.</p>
+    <p>Zero or more image file names. You can also specify optional
+    arguments to be used when reading the file(s) by setting
+    <a href="info.html">Image::Info</a> attributes in the optional
+    block.</p>
 
     <h4>Returns</h4>
 

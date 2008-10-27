@@ -226,12 +226,12 @@ have_type("DitherMethod", headers)                    # 6.4.2
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod
 have_type("SpreadMethod", headers)                    # 6.3.1
 have_type("long double", headers)
-have_type("unsigned long long", headers)
-have_type("uint64_t", headers)
-have_type("__int64", headers)
-have_type("uintmax_t", headers)
-check_sizeof("unsigned long", headers)
-check_sizeof("Image *", headers)
+#have_type("unsigned long long", headers)
+#have_type("uint64_t", headers)
+#have_type("__int64", headers)
+#have_type("uintmax_t", headers)
+#check_sizeof("unsigned long", headers)
+#check_sizeof("Image *", headers)
 
 
 have_enum_value("AlphaChannelType", "CopyAlphaChannel", headers)             # 6.4.3-7

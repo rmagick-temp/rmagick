@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.252 2008/10/21 22:42:29 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.253 2008/10/27 22:17:07 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1134,6 +1134,7 @@ extern void   rm_attr_write(VALUE, VALUE);
 extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned long *, int *);
 extern const char *rm_get_property(const Image *, const char *);
 extern MagickBooleanType rm_set_property(Image *, const char *, const char *);
+extern void   rm_set_user_artifact(Image *, Info *);
 extern void   rm_split(Image *);
 extern void   rm_magick_error(const char *, const char *);
 

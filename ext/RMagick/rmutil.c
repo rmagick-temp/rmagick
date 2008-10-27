@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.166 2008/10/22 22:27:05 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.167 2008/10/27 22:16:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3368,6 +3368,31 @@ rm_set_property(Image *image, const char *property, const char *value)
     return SetImageProperty(image, property, value);
 #else
     return SetImageAttribute(image, property, value);
+#endif
+}
+
+
+/*
+    Function:   rm_set_user_artifact
+    Purpose:    If a "user" option is present in the Info, assign its value to
+                a "user" artifact in each image.
+*/
+void rm_set_user_artifact(Image *images, Info *info)
+{
+#if defined(HAVE_SETIMAGEARTIFACT)
+    Image *image;
+    const char *value;
+
+    value = GetImageOption(info, "user");
+    if (value)
+    {
+        image = GetFirstImageInList(images);
+        while (image)
+        {
+            (void) SetImageArtifact(image, "user", value);
+            image = GetNextImageInList(image);
+        }
+    }
 #endif
 }
 

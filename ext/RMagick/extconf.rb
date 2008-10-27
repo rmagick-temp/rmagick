@@ -185,7 +185,7 @@ have_func("snprintf", headers)
    "SetImageMask",                   # 6.3.1
    "SetImageProperty",               # 6.3.1
    "SetImageRegistry",               # 6.3.4
-   "SparseColorInterpolate",         # 6.3.4-5
+   "SparseColorImage",               # 6.3.4-?
    "SyncImageProfiles",              # 6.3.2
    "TransparentPaintImage",          # 6.3.7-10
    ].each do |func|

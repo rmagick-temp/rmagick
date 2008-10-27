@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.324 2008/10/22 22:50:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.325 2008/10/27 22:16:09 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1527,6 +1527,8 @@ Image_capture(int argc, VALUE *argv, VALUE self)
     image = XImportImage(image_info, &ximage_info);
     rm_check_image_exception(image, DestroyOnError);
     rm_ensure_result(image);
+
+    rm_set_user_artifact(image, image_info);
 
     return rm_image_new(image);
 }
@@ -5037,6 +5039,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     (void) DestroyExceptionInfo(&exception);
 
     rm_ensure_result(images);
+    rm_set_user_artifact(images, info);
 
     return array_from_images(images);
 }
@@ -5658,6 +5661,24 @@ build_inspect_string(Image *image, char *buffer, size_t len)
         }
     }
 
+
+#if defined(HAVE_SETIMAGEARTIFACT)
+    if (len-1-x > 6)
+    {
+        size_t value_l;
+        const char *value = GetImageArtifact(image, "user");
+        if (value)
+        {
+            strcpy(buffer+x, " user:");
+            x += 6;
+            value_l = len - x - 1;
+            value_l = min(strlen(value), value_l);
+            memcpy(buffer+x, value, value_l);
+            x += value_l;
+        }
+    }
+#endif
+
     assert(x < (int)(len-1));
     buffer[x] = '\0';
 
@@ -6078,7 +6099,7 @@ Image__load(VALUE class, VALUE str)
 
     class = class;  // Suppress "never referenced" message from icc
 
-            info = CloneImageInfo(NULL);
+    info = CloneImageInfo(NULL);
 
     blob = rm_str2cstr(str, &length);
 
@@ -6879,6 +6900,8 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
+
+    rm_set_user_artifact(image, info);
 
     // NOW store a real image in the image object.
     UPDATE_DATA_PTR(self, image);
@@ -8004,8 +8027,8 @@ rd_image(VALUE class, VALUE file, reader_t reader)
 
     class = class;  // defeat gcc message
 
-            // Create a new Info structure for this read/ping
-            info_obj = rm_info_new();
+    // Create a new Info structure for this read/ping
+    info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
 
     if (TYPE(file) == T_FILE)
@@ -8033,7 +8056,7 @@ rd_image(VALUE class, VALUE file, reader_t reader)
 
     images = (reader)(info, &exception);
     rm_check_exception(&exception, images, DestroyOnError);
-
+    rm_set_user_artifact(images, info);
     (void) DestroyExceptionInfo(&exception);
 
     return array_from_images(images);
@@ -8144,6 +8167,7 @@ Image_read_inline(VALUE self, VALUE content)
     rm_check_exception(&exception, images, DestroyOnError);
 
     (void) DestroyExceptionInfo(&exception);
+    rm_set_user_artifact(images, info);
 
     return array_from_images(images);
 }
@@ -11281,25 +11305,9 @@ static void call_trace_proc(Image *image, const char *which)
             build_inspect_string(image, buffer, sizeof(buffer));
             trace_args[1] = rb_str_new2(buffer);
 
-#if SIZEOF_IMAGE_ > 4
-#if HAVE_TYPE_UNSIGNED_LONG_LONG
-            n = sprintf(buffer, "%016llx", (unsigned long long)image);
-#elif HAVE_TYPE_UINT64_T
-            n = sprintf(buffer, "%016llx", (uint64_t)image);
-#elif HAVE_TYPE_UINTMAX_T
-            n = sprintf(buffer, "%016llx", (uintmax_t)image);
-#elif HAVE_TYPE___INT64
-            n = sprintf(buffer, "%016llx", (__int64)image);
-#elif SIZEOF_UNSIGNED_LONG == 8
-            n = sprintf(buffer, "%016lx", (unsigned long)image);
-#else
-#error "No 64-bit type detected."
-#endif
-#else
-            n = sprintf(buffer, "%08lx", (unsigned long)image);
-#endif
+            n = sprintf(buffer, "%p", (void *)image);
             buffer[n] = '\0';
-            trace_args[2] = rb_str_new2(buffer);
+            trace_args[2] = rb_str_new2(buffer+2);      // don't use leading 0x
             trace_args[3] = ID2SYM(THIS_FUNC());
             (void) rb_funcall2(trace, rm_ID_call, 4, (VALUE *)trace_args);
         }

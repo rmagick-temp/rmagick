@@ -5,6 +5,8 @@ RMagick 2.7.1
       reading the input  images. The block is executed in the context of an
       Image::Info object.
     o Add support for the "user" image property.
+    o Define the Magick::FatalImageMagickError exception class, raised if
+      ImageMagick raises a fatal (unrecoverable) exception.
 
 RMagick 2.7.0
     o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment

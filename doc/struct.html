@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: Miscellaneous classes</title>
   <meta http-equiv="Content-Type" content=
@@ -14,16 +14,16 @@
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
   <link rel="stylesheet" type="text/css" href="css/ref.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
+  <style type="text/css">
+/*<![CDATA[*/
 
   /* Styles local to this page. */
 
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -90,6 +90,9 @@
 
     <ul>
       <li><a href="#MagickError">ImageMagickError</a></li>
+
+      <li><a href=
+      "#FatalImageMagickError">FatalImageMagickError</a></li>
 
       <li><a href=
       "#DestroyedImageError">DestroyedImageError</a></li>
@@ -1293,8 +1296,18 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="desc">
       <h4>Description</h4>
 
-      <p>When an ImageMagick function returns an error condition,
-      RMagick raises this exception.</p>
+      <p>RMagick raises this exception when an ImageMagick function
+      returns an error condition.</p>
+    </div>
+
+    <h3 id="FatalImageMagickError">class FatalImageMagickError
+    <span class="superclass">&lt; StandardError</span></h3>
+
+    <div class="desc">
+      <h4>Description</h4>
+
+      <p>RMagick raises this exception when ImageMagick raises a
+      fatal (unrecoverable) error condition.</p>
     </div>
 
     <h3 id="DestroyedImageError">class DestroyedImageError
@@ -1303,11 +1316,11 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
     <div class="desc">
       <h4>Description</h4>
 
-      <p>When any Image method (except <a href=
-      "image1.html#destroyed_q">destroyed?</a> and <a href=
-      "image2.html#inspect">inspect</a>) is called after an image
-      has been <a href="image1.html#destroy_bang">destroyed</a>,
-      RMagick raises this exception.</p>
+      <p>RMagick raises this exception when any Image method
+      (except <a href="image1.html#destroyed_q">destroyed?</a> and
+      <a href="image2.html#inspect">inspect</a>) is called after an
+      image has been <a href=
+      "image1.html#destroy_bang">destroyed</a>.</p>
     </div>
   </div>
 

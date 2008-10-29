@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.272 2008/10/11 22:36:42 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.273 2008/10/29 22:42:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -980,11 +980,14 @@ Init_RMagick2(void)
 
     /*-----------------------------------------------------------------------*/
     /* Class Magick::ImageMagickError < StandardError                        */
+    /* Class Magick::FatalImageMagickError < StandardError                   */
     /*-----------------------------------------------------------------------*/
 
     Class_ImageMagickError = rb_define_class_under(Module_Magick, "ImageMagickError", rb_eStandardError);
     rb_define_method(Class_ImageMagickError, "initialize", ImageMagickError_initialize, -1);
     rb_define_attr(Class_ImageMagickError, MAGICK_LOC, True, False);
+
+    Class_FatalImageMagickError = rb_define_class_under(Module_Magick, "FatalImageMagickError", rb_eStandardError);
 
 
     /*-----------------------------------------------------------------------*/
@@ -1726,6 +1729,12 @@ Init_RMagick2(void)
     rb_define_const(Module_Magick, "TypeMetric", Class_TypeMetric);
 
 
+    /*-----------------------------------------------------------------------*/
+    /* Error handlers                                                        */
+    /*-----------------------------------------------------------------------*/
+
+    SetFatalErrorHandler(rm_fatal_error_handler);
+
 }
 
 
@@ -1797,7 +1806,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/10/11 22:36:42 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/10/29 22:42:49 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

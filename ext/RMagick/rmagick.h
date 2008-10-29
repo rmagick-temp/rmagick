@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.253 2008/10/27 22:17:07 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.254 2008/10/29 22:42:49 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -270,6 +270,7 @@ EXTERN VALUE Class_DrawOptions;
 EXTERN VALUE Class_Image;
 EXTERN VALUE Class_Montage;
 EXTERN VALUE Class_ImageMagickError;
+EXTERN VALUE Class_FatalImageMagickError;
 EXTERN VALUE Class_DestroyedImageError;
 EXTERN VALUE Class_GradientFill;
 EXTERN VALUE Class_TextureFill;
@@ -1152,6 +1153,6 @@ extern MagickBooleanType rm_progress_monitor(const char *, const MagickOffsetTyp
 extern VALUE  rm_exif_by_entry(Image *);
 extern VALUE  rm_exif_by_number(Image *);
 extern void   rm_get_optional_arguments(VALUE);
-
+extern void   rm_fatal_error_handler(const ExceptionType, const char *, const char *);
 #endif
 

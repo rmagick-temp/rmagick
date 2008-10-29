@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.167 2008/10/27 22:16:52 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.168 2008/10/29 22:42:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3792,6 +3792,18 @@ rm_check_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention rete
     }
 
     handle_exception(exception, imglist, retention);
+}
+
+
+/*
+ *  Extern:     rm_fatal_error_handler
+ *  Purpose:    called from ImageMagick for a fatal error
+*/
+void
+rm_fatal_error_handler(const ExceptionType severity, const char *reason, const char *description)
+{
+    rb_raise(Class_FatalImageMagickError, GetLocaleExceptionMessage(severity, reason));
+    description = description;
 }
 
 

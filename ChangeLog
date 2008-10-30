@@ -7,6 +7,7 @@ RMagick 2.7.1
     o Add support for the "user" image property.
     o Define the Magick::FatalImageMagickError exception class, raised if
       ImageMagick raises a fatal (unrecoverable) exception.
+    o Added feature #22618, Image#total_ink_density (request by F. Behrens)
 
 RMagick 2.7.0
     o Fix bug #22152, extconf.rb does not respect the LDFLAGS environment

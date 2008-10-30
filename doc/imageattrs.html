@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (attribute methods)</title>
   <meta http-equiv="Content-Type" content=
@@ -13,15 +13,15 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
+  <style type="text/css">
+/*<![CDATA[*/
 
   /* Styles local to this page. */
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -83,13 +83,13 @@
           <li><a href="#density">density</a></li>
 
           <li><a href="#depth">depth</a></li>
+
+          <li><a href="#directory">directory</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#directory">directory</a></li>
-
           <li><a href="#dispose">dispose</a></li>
 
           <li><a href="#endian">endian</a></li>
@@ -128,14 +128,14 @@
           <li><a href="#monitor">monitor</a></li>
 
           <li><a href="#montage">montage</a></li>
+
+          <li><a href=
+          "#normalized_mean_error">normalized_mean_error</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href=
-          "#normalized_mean_error">normalized_mean_error</a></li>
-
           <li><a href=
           "#normalized_maximum_error">normalized_maximum_error</a></li>
 
@@ -167,6 +167,9 @@
           <li><a href="#ticks_per_second">ticks_per_second</a></li>
 
           <li><a href="#total_colors">total_colors</a></li>
+
+          <li><a href=
+          "#total_ink_density">total_ink_density</a></li>
 
           <li><a href="#units">units</a></li>
 
@@ -1453,6 +1456,22 @@ blur_image is 100% complete.
     "ilist.html#quantize">[ImageList]</a><a href=
     "image3.html#quantize">[Image]</a> if the
     <code>measure_error</code> argument is <code>true</code>.
+    Get-only.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="total_ink_density">total_ink_density</h3>
+
+    <p><span class="arg">img</span>.total_ink_density -&gt;
+    float</p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">The total ink density for a CMYK
+    image. Total Ink Density (TID) is determined by adding the CMYK
+    values in the darkest shadow area in an image.</span>
     Get-only.</p>
   </div>
 

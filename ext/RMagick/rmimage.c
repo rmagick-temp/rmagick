@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.327 2008/10/30 22:14:17 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.328 2008/10/30 22:23:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10073,6 +10073,11 @@ Image_total_colors(VALUE self)
 }
 
 
+/*
+    Method:     Image#total_ink_density
+    Purpose:    Return value from GetImageTotalInkDensity
+    Notes:      Raises an exception if the image is not CMYK
+*/
 VALUE
 Image_total_ink_density(VALUE self)
 {

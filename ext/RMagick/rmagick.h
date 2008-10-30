@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.254 2008/10/29 22:42:49 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.255 2008/10/30 22:05:20 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -777,6 +777,7 @@ ATTR_READER(Image, scene)
 ATTR_ACCESSOR(Image, start_loop)
 ATTR_ACCESSOR(Image, ticks_per_second)
 ATTR_READER(Image, total_colors)
+ATTR_READER(Image, total_ink_density)
 ATTR_ACCESSOR(Image, transparent_color)
 ATTR_ACCESSOR(Image, units)
 ATTR_ACCESSOR(Image, virtual_pixel_method)

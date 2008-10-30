@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.325 2008/10/27 22:16:09 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.326 2008/10/30 22:05:20 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10070,6 +10070,18 @@ VALUE
 Image_total_colors(VALUE self)
 {
     return Image_number_colors(self);
+}
+
+
+VALUE
+Image_total_ink_density(VALUE self)
+{
+    Image *image;
+    double density;
+
+    image = rm_check_destroyed(self);
+    density = GetImageTotalInkDensity(image);
+    return rb_float_new(density);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.326 2008/10/30 22:05:20 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.327 2008/10/30 22:14:17 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10081,6 +10081,7 @@ Image_total_ink_density(VALUE self)
 
     image = rm_check_destroyed(self);
     density = GetImageTotalInkDensity(image);
+    rm_check_image_exception(image, RetainOnError);
     return rb_float_new(density);
 }
 

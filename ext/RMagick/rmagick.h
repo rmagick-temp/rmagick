@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.255 2008/10/30 22:05:20 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.256 2008/10/30 23:22:46 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1155,5 +1155,7 @@ extern VALUE  rm_exif_by_entry(Image *);
 extern VALUE  rm_exif_by_number(Image *);
 extern void   rm_get_optional_arguments(VALUE);
 extern void   rm_fatal_error_handler(const ExceptionType, const char *, const char *);
+extern void   rm_error_handler(const ExceptionType, const char *, const char *);
+extern void   rm_warning_handler(const ExceptionType, const char *, const char *);
 #endif
 

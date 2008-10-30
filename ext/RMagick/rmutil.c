@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.168 2008/10/29 22:42:49 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.169 2008/10/30 23:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3792,6 +3792,47 @@ rm_check_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention rete
     }
 
     handle_exception(exception, imglist, retention);
+}
+
+
+
+/*
+ *  Extern:     rm_warning_handler
+ *  Purpose:    called from ImageMagick for a warning
+*/
+void
+rm_warning_handler(const ExceptionType severity, const char *reason, const char *description)
+{
+    ExceptionType dummy;
+
+    rb_warning("RMagick: %s: `%s'", reason, description);
+    dummy = severity;
+    dummy = dummy;
+}
+
+
+/*
+ *  Extern:     rm_error_handler
+ *  Purpose:    called from ImageMagick for a error
+*/
+void
+rm_error_handler(const ExceptionType severity, const char *reason, const char *description)
+{
+    char msg[500];
+    int len;
+    ExceptionType dummy;
+
+    memset(msg, 0, sizeof(msg));
+#if defined(HAVE_SNPRINTF)
+    len = snprintf(msg, sizeof(msg), "%s: `%s'", reason, description);
+#else
+    len = sprintf(msg, "%.250s: `%.240s'", reason, description);
+#endif
+    msg[len] = '\0';
+
+    rm_magick_error(msg, NULL);
+    dummy = severity;
+    dummy = dummy;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.274 2008/10/30 22:05:21 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.275 2008/10/30 23:22:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1735,6 +1735,8 @@ Init_RMagick2(void)
     /*-----------------------------------------------------------------------*/
 
     SetFatalErrorHandler(rm_fatal_error_handler);
+    SetErrorHandler(rm_error_handler);
+    SetWarningHandler(rm_warning_handler);
 
 }
 
@@ -1807,7 +1809,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/10/30 22:05:21 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/10/30 23:22:46 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.169 2008/10/30 23:22:46 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.170 2008/11/01 22:27:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3393,6 +3393,9 @@ void rm_set_user_artifact(Image *images, Info *info)
             image = GetNextImageInList(image);
         }
     }
+#else
+    images = images;
+    info = info;
 #endif
 }
 

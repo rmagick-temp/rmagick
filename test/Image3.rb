@@ -154,6 +154,18 @@ class Image3_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.reduce_noise(4) }
     end
 
+    def test_remap
+       remap_image = Magick::Image.new(20,20) {self.background_color = "green"}
+       assert_nothing_raised { @img.remap(remap_image) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::NoDitherMethod) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::RiemersmaDitherMethod) }
+       assert_nothing_raised { @img.remap(remap_image, Magick::FloydSteinbergDitherMethod) }
+
+       assert_raise(ArgumentError) {@img.remap() }
+       assert_raise(ArgumentError) {@img.remap(remap_image, Magick::NoDitherMethod, 1) }
+       assert_raise(TypeError) {@img.remap(remap_image, 1) }
+    end
+
     def test_resample
         assert_nothing_raised { @img.resample }
         assert_nothing_raised { @img.resample(100) }

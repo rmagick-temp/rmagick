@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.87 2008/09/28 00:23:10 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.88 2008/11/08 23:38:28 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -11,6 +11,7 @@
 static Image *clone_imagelist(Image *);
 static Image *images_from_imagelist(VALUE);
 static long imagelist_length(VALUE);
+static long check_imagelist_length(VALUE);
 static VALUE imagelist_scene_eq(VALUE, VALUE);
 static void imagelist_push(VALUE, VALUE);
 static VALUE ImageList_new(void);
@@ -369,11 +370,6 @@ ImageList_map(int argc, VALUE *argv, VALUE self)
     }
 
 
-    if (imagelist_length(self) == 0L)
-    {
-        rb_raise(rb_eArgError, "no images in this image list");
-    }
-
     // Convert image array to image sequence, clone image sequence.
     GetExceptionInfo(&exception);
 
@@ -464,10 +460,6 @@ ImageList_morph(VALUE self, VALUE nimages)
     ExceptionInfo exception;
     long number_images;
 
-    if (imagelist_length(self) < 1L)
-    {
-        rb_raise(rb_eArgError, "no images in this image list");
-    }
 
     // Use a signed long so we can test for a negative argument.
     number_images = NUM2LONG(nimages);
@@ -569,6 +561,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
 #endif
 #if defined(HAVE_ENUM_COMPOSITELAYER)
         case CompositeLayer:
+            rm_split(images);
             rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not supported. Use the composite_layers method instead.");
             break;
 #endif
@@ -625,6 +618,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             break;
 #endif
         default:
+            rm_split(images);
             rb_raise(rb_eArgError, "undefined layer method");
             break;
     }
@@ -693,11 +687,7 @@ images_from_imagelist(VALUE imagelist)
     Image *head = NULL;
     volatile VALUE images, t;
 
-    len = imagelist_length(imagelist);
-    if (len == 0)
-    {
-        rb_raise(rb_eArgError, "no images in this image list");
-    }
+    len = check_imagelist_length(imagelist);
 
     images = rb_iv_get(imagelist, "@images");
     for (x = 0; x < len; x++)
@@ -735,6 +725,24 @@ imagelist_length(VALUE imagelist)
 {
     volatile VALUE images = rb_iv_get(imagelist, "@images");
     return RARRAY_LEN(images);
+}
+
+
+/*
+    Static:    check_imagelist_length
+    Purpose:   raise exception if imagelist is emtpy
+*/
+static long
+check_imagelist_length(VALUE imagelist)
+{
+    long len = imagelist_length(imagelist);
+
+    if (len == 0)
+    {
+        rb_raise(rb_eArgError, "no images in this image list");
+    }
+
+    return len;
 }
 
 
@@ -821,10 +829,6 @@ ImageList_quantize(int argc, VALUE *argv, VALUE self)
             break;
     }
 
-    if (imagelist_length(self) == 0L)
-    {
-        rb_raise(rb_eArgError, "no images in this image list");
-    }
 
     // Convert image array to image sequence, clone image sequence.
     GetExceptionInfo(&exception);
@@ -868,7 +872,6 @@ ImageList_remap(int argc, VALUE *argv, VALUE self)
     Image *images, *remap_image = NULL;
     QuantizeInfo quantize_info;
 
-    images = images_from_imagelist(self);
 
     if (argc > 0 && argv[0] != Qnil)
     {
@@ -887,6 +890,8 @@ ImageList_remap(int argc, VALUE *argv, VALUE self)
     {
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 or 2)", argc);
     }
+
+    images = images_from_imagelist(self);
 
 #if defined(HAVE_REMAPIMAGES)
     (void) RemapImages(&quantize_info, images, remap_image);

@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.88 2008/11/08 23:38:28 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.89 2008/11/08 23:43:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -39,6 +39,9 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
         rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
     }
 
+    // Create a new Info object to use with this call
+    info_obj = rm_info_new();
+
     // Convert the images array to an images sequence.
     images = images_from_imagelist(self);
 
@@ -54,11 +57,7 @@ ImageList_animate(int argc, VALUE *argv, VALUE self)
         }
     }
 
-
-    // Create a new Info object to use with this call
-    info_obj = rm_info_new();
     Data_Get_Struct(info_obj, Info, info);
-
     (void) AnimateImages(info, images);
     rm_check_image_exception(images, RetainOnError);
     rm_split(images);

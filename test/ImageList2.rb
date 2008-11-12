@@ -13,21 +13,6 @@ class ImageList2_UT < Test::Unit::TestCase
         @ilist = Magick::ImageList.new
     end
 
-    def test_remap
-       @ilist.read(*Dir[IMAGES_DIR+'/Button_*.gif'])
-       assert_nothing_raised { @ilist.remap }
-       remap_image = Magick::Image.new(20,20) {self.background_color = "green"}
-       assert_nothing_raised { @ilist.remap(remap_image) }
-       assert_nothing_raised { @ilist.remap(remap_image, Magick::NoDitherMethod) }
-       assert_nothing_raised { @ilist.remap(remap_image, Magick::RiemersmaDitherMethod) }
-       assert_nothing_raised { @ilist.remap(remap_image, Magick::FloydSteinbergDitherMethod) }
-       assert_raise(ArgumentError) { @ilist.remap(remap_image, Magick::NoDitherMethod, 1) }
-
-       remap_image.destroy!
-       assert_raise(Magick::DestroyedImageError) { @ilist.remap(remap_image) }
-       #assert_raise(TypeError) { @ilist.affinity(affinity_image, 1) }
-    end
-
     def test_append
         @ilist.read(IMAGES_DIR+'/Button_0.gif', IMAGES_DIR+'/Button_0.gif')
         assert_nothing_raised do
@@ -332,6 +317,21 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_nothing_raised { @ilist.read(FLOWER_HAT) { self.background_color = 'red ' } }
         assert_equal(4, @ilist.length)
         assert_equal(3, @ilist.scene)
+    end
+
+    def test_remap
+       @ilist.read(*Dir[IMAGES_DIR+'/Button_*.gif'])
+       assert_nothing_raised { @ilist.remap }
+       remap_image = Magick::Image.new(20,20) {self.background_color = "green"}
+       assert_nothing_raised { @ilist.remap(remap_image) }
+       assert_nothing_raised { @ilist.remap(remap_image, Magick::NoDitherMethod) }
+       assert_nothing_raised { @ilist.remap(remap_image, Magick::RiemersmaDitherMethod) }
+       assert_nothing_raised { @ilist.remap(remap_image, Magick::FloydSteinbergDitherMethod) }
+       assert_raise(ArgumentError) { @ilist.remap(remap_image, Magick::NoDitherMethod, 1) }
+
+       remap_image.destroy!
+       assert_raise(Magick::DestroyedImageError) { @ilist.remap(remap_image) }
+       #assert_raise(TypeError) { @ilist.affinity(affinity_image, 1) }
     end
 
     def test_to_blob

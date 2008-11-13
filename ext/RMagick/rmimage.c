@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.328 2008/10/30 22:23:39 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.329 2008/11/13 00:04:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10009,6 +10009,8 @@ Image_to_blob(VALUE self)
         }
     }
 
+    rm_sync_image_options(image, info);
+
     blob = ImageToBlob(info, image, &length, &exception);
     CHECK_EXCEPTION()
 
@@ -10998,6 +11000,8 @@ Image_write(VALUE self, VALUE file)
         strcpy(image->filename, info->filename);
         SetImageInfoFile(info, NULL);
     }
+
+    rm_sync_image_options(image, info);
 
     info->adjoin = MagickFalse;
     (void) WriteImage(info, image);

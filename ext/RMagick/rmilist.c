@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.89 2008/11/08 23:43:23 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.90 2008/11/13 00:03:32 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -920,7 +920,7 @@ ImageList_remap(int argc, VALUE *argv, VALUE self)
 VALUE
 ImageList_to_blob(VALUE self)
 {
-    Image *images;
+    Image *images, *image;
     Info *info;
     volatile VALUE info_obj;
     volatile VALUE blob_str;
@@ -945,6 +945,11 @@ ImageList_to_blob(VALUE self)
         {
             strncpy(img->magick, info->magick, sizeof(info->magick)-1);
         }
+    }
+
+    for (image = images; image; image = GetNextImageInList(image))
+    {
+        rm_sync_image_options(image, info);
     }
 
     // Unconditionally request multi-images support. The worst that
@@ -1039,6 +1044,7 @@ ImageList_write(VALUE self, VALUE file)
 
     for (img = images; img; img = GetNextImageInList(img))
     {
+        rm_sync_image_options(img, info);
         (void) WriteImage(info, img);
         // images will be split before raising an exception
         rm_check_image_exception(images, RetainOnError);

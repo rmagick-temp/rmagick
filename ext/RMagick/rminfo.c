@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.72 2008/08/26 22:36:15 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.73 2008/11/13 00:06:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -159,6 +159,21 @@ static VALUE set_dbl_option(VALUE self, const char *option, VALUE value)
     }
 
     return self;
+}
+
+
+/*
+    Static:     pixel_packet_to_hexname(pp, name)
+    Purpose:    convert a PixelPacket to a hex-format color name
+*/
+static char *pixel_packet_to_hexname(PixelPacket *pp, char *name)
+{
+    MagickPixelPacket mpp;
+
+    GetMagickPixelPacket(NULL, &mpp);
+    rm_set_magick_pixel_packet(pp, NULL, &mpp);
+    (void) GetColorTuple(&mpp, MagickTrue, name);
+    return name;
 }
 
 
@@ -368,6 +383,7 @@ Info_background_color(VALUE self)
     return PixelPacket_to_Color_Name_Info(info, &info->background_color);
 }
 
+
 /*
     Method:     Info#background_color=<aString>
     Purpose:    set the background color
@@ -377,9 +393,11 @@ VALUE
 Info_background_color_eq(VALUE self, VALUE bc_arg)
 {
     Info *info;
+    char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->background_color, bc_arg);
+    SetImageOption(info, "background", pixel_packet_to_hexname(&info->background_color, colorname));
     return self;
 }
 
@@ -406,9 +424,11 @@ VALUE
 Info_border_color_eq(VALUE self, VALUE bc_arg)
 {
     Info *info;
+    char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->border_color, bc_arg);
+    SetImageOption(info, "bordercolor", pixel_packet_to_hexname(&info->border_color, colorname));
     return self;
 }
 
@@ -736,6 +756,25 @@ static struct
 };
 #define N_DISPOSE_OPTIONS (int)(sizeof(Dispose_Option)/sizeof(Dispose_Option[0]))
 
+
+DisposeType rm_dispose_to_enum(const char *name)
+{
+    DisposeType dispose = UndefinedDispose;
+    int x;
+
+    for (x = 0; x < N_DISPOSE_OPTIONS; x++)
+    {
+        if (strcmp(Dispose_Option[x].string, name) == 0)
+        {
+            dispose = Dispose_Option[x].enumerator;
+            break;
+        }
+    }
+
+    return dispose;
+}
+
+
 VALUE
 Info_dispose(VALUE self)
 {
@@ -1027,6 +1066,25 @@ static struct
 };
 #define N_GRAVITY_OPTIONS (int)(sizeof(Gravity_Option)/sizeof(Gravity_Option[0]))
 
+
+GravityType rm_gravity_to_enum(const char *name)
+{
+    GravityType gravity = UndefinedGravity;
+    int x;
+
+    for (x = 0; x < N_GRAVITY_OPTIONS; x++)
+    {
+        if (strcmp(name, Gravity_Option[x].string) == 0)
+        {
+            gravity = Gravity_Option[x].enumerator;
+            break;
+        }
+    }
+
+    return gravity;
+}
+
+
 VALUE Info_gravity(VALUE self)
 {
     Info *info;
@@ -1178,9 +1236,11 @@ VALUE
 Info_matte_color_eq(VALUE self, VALUE matte_arg)
 {
     Info *info;
+    char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->matte_color, matte_arg);
+    SetImageOption(info, "mattecolor", pixel_packet_to_hexname(&info->matte_color, colorname));
     return self;
 }
 

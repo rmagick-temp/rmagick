@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.256 2008/10/30 23:22:46 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.257 2008/11/13 00:01:34 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -714,7 +714,8 @@ extern VALUE Info_channel(int, VALUE *, VALUE);
 extern VALUE Info_undefine(VALUE, VALUE, VALUE);
 extern VALUE Info_initialize(VALUE);
 extern VALUE rm_info_new(void);
-
+extern DisposeType rm_dispose_to_enum(const char *);
+extern GravityType rm_gravity_to_enum(const char *);
 
 // rmimage.c
 ATTR_WRITER(Image, alpha)
@@ -1137,6 +1138,8 @@ extern void   rm_get_geometry(VALUE, long *, long *, unsigned long *, unsigned l
 extern const char *rm_get_property(const Image *, const char *);
 extern MagickBooleanType rm_set_property(Image *, const char *, const char *);
 extern void   rm_set_user_artifact(Image *, Info *);
+void          rm_set_magick_pixel_packet(Pixel *, IndexPacket *, MagickPixelPacket *);
+extern void   rm_sync_image_options(Image *, Info *);
 extern void   rm_split(Image *);
 extern void   rm_magick_error(const char *, const char *);
 

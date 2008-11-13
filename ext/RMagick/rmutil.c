@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.170 2008/11/01 22:27:05 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.171 2008/11/13 00:02:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -610,7 +610,7 @@ Pixel_from_color(VALUE class, VALUE name)
     Notes:      Same code as the private function SetMagickPixelPacket
                 in ImageMagick.
 */
-static void
+void
 rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, MagickPixelPacket *pp)
 {
     pp->red     = (MagickRealType) pixel->red;
@@ -3424,6 +3424,200 @@ rm_get_optional_arguments(VALUE img)
   }
 
   return;
+}
+
+
+/*
+    Static:     copy_options
+    Purpose:    copy image options from the Info structure to the Image structure
+*/
+#if defined(HAVE_SETIMAGEARTIFACT)
+static void copy_options(Image *image, Info *info)
+{
+    char property[MaxTextExtent];
+    const char *value, *option;
+
+    ResetImageOptionIterator(info);
+    for (option = GetNextImageOption(info); option; option = GetNextImageOption(info))
+    {
+        value = GetImageOption(info,option);
+        if (value)
+        {
+            strncpy(property, value, MaxTextExtent);
+            property[MaxTextExtent-1] = '\0';
+            (void) SetImageArtifact(image, property, value);
+        }
+    }
+}
+#endif
+
+
+/*
+    Extern:     rm_sync_image_options
+    Purpose:    Propagate ImageInfo values to the Image
+    Ref:        SyncImageSettings (in mogrify.c)
+*/
+void rm_sync_image_options(Image *image, Info *info)
+{
+    MagickStatusType flags;
+    GeometryInfo geometry_info;
+    const char *option;
+
+    // The option strings will be set only when their attribute values were
+    // set in the optional argument block.
+    option = GetImageOption(info,"background");
+    if (option)
+    {
+        image->background_color = info->background_color;
+    }
+
+    option = GetImageOption(info,"bordercolor");
+    if (option)
+    {
+        image->border_color = info->border_color;
+    }
+
+    if (info->colors != 0)
+    {
+        image->colors = info->colors;
+    }
+
+    if (info->colorspace != UndefinedColorspace)
+    {
+        image->colorspace = info->colorspace;
+    }
+
+    if (info->compression != UndefinedCompression)
+    {
+        image->compression = info->compression;
+    }
+
+    option = GetImageOption(info, "delay");
+    if (option)
+    {
+        image->delay = strtoul(option, NULL, 0);
+    }
+
+    if (info->density)
+    {
+        flags = ParseGeometry(info->density, &geometry_info);
+        image->x_resolution = geometry_info.rho;
+        image->y_resolution = geometry_info.sigma;
+        if ((flags & SigmaValue) == 0)
+        {
+            image->y_resolution = image->x_resolution;
+        }
+    }
+
+    if (info->depth != 0)
+    {
+        image->depth = info->depth;
+    }
+
+    option = GetImageOption(info, "dispose");
+    if (option)
+    {
+        image->dispose = rm_dispose_to_enum(option);
+    }
+
+    if (info->extract)
+    {
+        ParseAbsoluteGeometry(info->extract, &image->extract_info);
+    }
+
+    if (info->fuzz != 0.0)
+    {
+        image->fuzz = info->fuzz;
+    }
+
+    option = GetImageOption(info, "gravity");
+    if (option)
+    {
+        image->gravity = rm_gravity_to_enum(option);
+    }
+
+    if (info->interlace != NoInterlace)
+    {
+        image->interlace = info->interlace;
+    }
+
+    option = GetImageOption(info,"mattecolor");
+    if (option)
+    {
+        image->matte_color = info->matte_color;
+    }
+
+    if (info->orientation != UndefinedOrientation)
+    {
+        image->orientation = info->orientation;
+    }
+
+    if (info->page)
+    {
+        (void)ParseAbsoluteGeometry(info->page, &image->page);
+    }
+
+    if (info->quality != 0UL)
+    {
+        image->quality = info->quality;
+    }
+
+#if defined(HAVE_ST_TILE_OFFSET)
+    option = GetImageOption(info, "tile-offset");
+    if (option)
+    {
+        (void)ParseAbsoluteGeometry(option, &image->tile_offset);
+    }
+#endif
+
+    option = GetImageOption(info, "transparent-color");
+    if (option)
+    {
+        image->transparent_color = info->transparent_color;
+    }
+
+#if defined(HAVE_ST_TYPE)
+    if (info->type != UndefinedType)
+    {
+        image->type = info->type;
+    }
+#endif
+
+    if (info->units != UndefinedResolution)
+    {
+        if (image->units != info->units)
+        {
+            switch (image->units)
+            {
+              case PixelsPerInchResolution:
+              {
+                if (info->units == PixelsPerCentimeterResolution)
+                {
+                    image->x_resolution /= 2.54;
+                    image->y_resolution /= 2.54;
+                }
+                break;
+              }
+              case PixelsPerCentimeterResolution:
+              {
+                if (info->units == PixelsPerInchResolution)
+                {
+                    image->x_resolution *= 2.54;
+                    image->y_resolution *= 2.54;
+                }
+                break;
+              }
+              default:
+                break;
+            }
+        }
+
+        image->units = info->units;
+    }
+
+#if defined(HAVE_SETIMAGEARTIFACT)
+    copy_options(image, info);
+#endif
 }
 
 

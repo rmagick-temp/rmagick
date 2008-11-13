@@ -1,3 +1,7 @@
+RMagick 2.7.2
+    o Fix bug #22740, some Image::Info attribute values are not propogated to
+      the image object (bug report by Thomas Watson)
+
 RMagick 2.7.1
     o Fix bug #22471, Magick::fonts can abend on 64-bit systems (bug report and
       patch by James Le Cuirot)

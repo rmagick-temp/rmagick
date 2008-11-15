@@ -162,10 +162,12 @@ have_func("snprintf", headers)
    "ExcerptImage",                   # 6.3.5-8
    "ExtentImage",                    # 6.3.1
    "FloodfillPaintImage",            # 6.3.7
+   "GetAuthenticPixels",             # 6.4.5-6
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetImageProperty",               # 6.3.1
    "GetNextImageProperty",           # 6.3.1
    "GetStringInfoDatum",             # 6.3.2
+   "GetVirtualPixels",               # 6.4.5-6
    "InterpretImageProperties",       # 6.3.2
    "IsHistogramImage",               # 6.3.5
    "LevelImageColors",               # 6.4.2
@@ -188,6 +190,7 @@ have_func("snprintf", headers)
    "SparseColorImage",               # 6.3.4-?
    "SyncImageProfiles",              # 6.3.2
    "TransparentPaintImage",          # 6.3.7-10
+   "TransparentPaintImageChroma"     # 6.4.5-6
    ].each do |func|
     have_func(func, headers)
   end

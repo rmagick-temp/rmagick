@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.73 2008/11/13 00:06:57 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.74 2008/11/15 21:30:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -845,6 +845,38 @@ DEF_ATTR_ACCESSOR(Info, dither, bool)
 
 
 /*
+    Method:     Info#endian
+                Info#endian = Maigck::MSBEndian or LSBEndian
+    Purpose:    Set the Image::Info#endian attribute for reading
+*/
+VALUE
+Info_endian(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return EndianType_new(info->endian);
+}
+
+
+VALUE
+Info_endian_eq(VALUE self, VALUE endian)
+{
+    Info *info;
+    EndianType type = UndefinedEndian;
+
+    if (endian != Qnil)
+    {
+        VALUE_TO_ENUM(endian, type, EndianType);
+    }
+
+    Data_Get_Struct(self, Info, info);
+    info->endian = type;
+    return self;
+}
+
+
+/*
     Method:     aString=Info#extract
                 Info#extract=aString
     Purpose:    Get/set the extract string, e.g. "200x200+100+100"
@@ -1451,8 +1483,44 @@ Info_sampling_factor_eq(VALUE self, VALUE sampling_factor)
     return self;
 }
 
-DEF_ATTR_ACCESSOR(Info, scene, ulong)
+
+/*
+    Method:     Info#scene
+                Info#scene=
+    Purpose:    Get/Set the scene number
+*/
+VALUE
+Info_scene(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return  ULONG2NUM(info->scene);
+}
+
+
+VALUE
+Info_scene_eq(VALUE self, VALUE scene)
+{
+    Info *info;
+    char buf[25];
+
+    Data_Get_Struct(self, Info, info);
+    info->scene = NUM2ULONG(scene);
+
+#if defined(HAVE_SNPRINTF)
+    (void) snprintf(buf, sizeof(buf), "%-ld", info->scene);
+#else
+    (void) sprintf(buf, "%-l", info->scene);
+#endif
+    (void) SetImageOption(info, "scene", buf);
+
+    return self;
+}
+
+
 DEF_ATTR_READER(Info, server_name, str)
+
 
 /*
     Method:     Info#server_name=<aString>
@@ -1620,6 +1688,39 @@ Info_tile_offset_eq(VALUE self, VALUE offset)
 
     (void) DeleteImageOption(info, "tile-offset");
     (void) SetImageOption(info, "tile-offset", tile_offset);
+    return self;
+}
+
+
+/*
+    Method:     Info#transparent_color
+    Purpose:    return the name of the transparent color as a String
+    Note:       Compare with Image#transparent_color!
+*/
+VALUE
+Info_transparent_color(VALUE self)
+{
+    Info *info;
+
+    Data_Get_Struct(self, Info, info);
+    return PixelPacket_to_Color_Name_Info(info, &info->transparent_color);
+}
+
+
+/*
+    Method:     Info#transparent_color=<aString>
+    Purpose:    set the transparent color
+    Raises:     ArgumentError
+*/
+VALUE
+Info_transparent_color_eq(VALUE self, VALUE tc_arg)
+{
+    Info *info;
+    char colorname[MaxTextExtent];
+
+    Data_Get_Struct(self, Info, info);
+    Color_to_PixelPacket(&info->transparent_color, tc_arg);
+    SetImageOption(info, "transparent", pixel_packet_to_hexname(&info->transparent_color, colorname));
     return self;
 }
 

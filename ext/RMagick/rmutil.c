@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.171 2008/11/13 00:02:22 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.172 2008/11/15 21:30:51 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -3477,11 +3477,6 @@ void rm_sync_image_options(Image *image, Info *info)
         image->border_color = info->border_color;
     }
 
-    if (info->colors != 0)
-    {
-        image->colors = info->colors;
-    }
-
     if (info->colorspace != UndefinedColorspace)
     {
         image->colorspace = info->colorspace;
@@ -3562,6 +3557,12 @@ void rm_sync_image_options(Image *image, Info *info)
         image->quality = info->quality;
     }
 
+    option = GetImageOption(info, "scene");
+    if (option)
+    {
+        image->scene = info->scene;
+    }
+
 #if defined(HAVE_ST_TILE_OFFSET)
     option = GetImageOption(info, "tile-offset");
     if (option)
@@ -3570,7 +3571,7 @@ void rm_sync_image_options(Image *image, Info *info)
     }
 #endif
 
-    option = GetImageOption(info, "transparent-color");
+    option = GetImageOption(info, "transparent");
     if (option)
     {
         image->transparent_color = info->transparent_color;

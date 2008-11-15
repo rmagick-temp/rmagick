@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.329 2008/11/13 00:04:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.330 2008/11/15 21:30:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10136,10 +10136,62 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
     {
         // Force exception
         DestroyImage(new_image);
-        rm_ensure_result(NULL);
+        rm_magick_error("TransparentPaintImage failed with no explanation", NULL);
     }
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#transparent_chroma(low, high, opacity=TransparentOpacity, invert=false)
+    Purpose:    Call TransparentPaintImageChroma (>= 6.4.5-6)
+*/
+VALUE
+Image_transparent_chroma(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_TRANSPARENTPAINTIMAGECHROMA)
+    Image *image, *new_image;
+    Quantum opacity = TransparentOpacity;
+    MagickPixelPacket low, high;
+    MagickBooleanType invert = MagickFalse;
+    MagickBooleanType okay;
+
+    image = rm_check_frozen(self);
+
+    switch (argc)
+    {
+        case 4:
+            invert = RTEST(argv[3]);
+        case 3:
+            opacity = APP2QUANTUM(argv[2]);
+        case 2:
+            Color_to_MagickPixelPacket(image, &high, argv[1]);
+            Color_to_MagickPixelPacket(image, &low, argv[0]);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 2, 3 or 4)", argc);
+            break;
+    }
+
+    new_image = rm_clone_image(image);
+
+    okay = TransparentPaintImageChroma(new_image, &low, &high, opacity, invert);
+    rm_check_image_exception(new_image, DestroyOnError);
+    if (!okay)
+    {
+        // Force exception
+        DestroyImage(new_image);
+        rm_magick_error("TransparentPaintImageChroma failed with no explanation", NULL);
+    }
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
 }
 
 

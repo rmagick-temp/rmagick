@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.275 2008/10/30 23:22:46 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.276 2008/11/15 21:30:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -664,6 +664,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "to_color", Image_to_color, 1);
     rb_define_method(Class_Image, "to_blob", Image_to_blob, 0);
     rb_define_method(Class_Image, "transparent", Image_transparent, -1);
+    rb_define_method(Class_Image, "transparent_chroma", Image_transparent_chroma, -1);
     rb_define_method(Class_Image, "transpose", Image_transpose, 0);
     rb_define_method(Class_Image, "transpose!", Image_transpose_bang, 0);
     rb_define_method(Class_Image, "transverse", Image_transverse, 0);
@@ -893,6 +894,7 @@ Init_RMagick2(void)
     DCL_ATTR_ACCESSOR(Info, depth)
     DCL_ATTR_ACCESSOR(Info, dispose)
     DCL_ATTR_ACCESSOR(Info, dither)
+    DCL_ATTR_ACCESSOR(Info, endian)
     DCL_ATTR_ACCESSOR(Info, extract)
     DCL_ATTR_ACCESSOR(Info, filename)
     DCL_ATTR_ACCESSOR(Info, fill)
@@ -921,6 +923,7 @@ Init_RMagick2(void)
     DCL_ATTR_ACCESSOR(Info, stroke_width)
     DCL_ATTR_WRITER(Info, texture)
     DCL_ATTR_ACCESSOR(Info, tile_offset)
+    DCL_ATTR_ACCESSOR(Info, transparent_color)
     DCL_ATTR_ACCESSOR(Info, undercolor)
     DCL_ATTR_ACCESSOR(Info, units)
     DCL_ATTR_ACCESSOR(Info, view)
@@ -1809,7 +1812,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/10/30 23:22:46 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/11/15 21:30:50 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

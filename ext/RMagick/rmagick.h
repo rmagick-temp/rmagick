@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.257 2008/11/13 00:01:34 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.258 2008/11/15 21:30:50 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -670,6 +670,8 @@ ATTR_ACCESSOR(Info, density)
 ATTR_ACCESSOR(Info, depth)
 ATTR_ACCESSOR(Info, dispose)
 ATTR_ACCESSOR(Info, dither)
+ATTR_ACCESSOR(Info, encoding)
+ATTR_ACCESSOR(Info, endian)
 ATTR_ACCESSOR(Info, extract)
 ATTR_ACCESSOR(Info, filename)
 ATTR_ACCESSOR(Info, fill)
@@ -700,6 +702,7 @@ ATTR_ACCESSOR(Info, stroke)
 ATTR_ACCESSOR(Info, stroke_width)
 ATTR_WRITER(Info, texture)
 ATTR_ACCESSOR(Info, tile_offset)
+ATTR_ACCESSOR(Info, transparent_color)
 ATTR_ACCESSOR(Info, undercolor)
 ATTR_ACCESSOR(Info, units)
 ATTR_ACCESSOR(Info, view)
@@ -988,6 +991,7 @@ extern VALUE Image_tint(int, VALUE *, VALUE);
 extern VALUE Image_to_blob(VALUE);
 extern VALUE Image_to_color(VALUE, VALUE);
 extern VALUE Image_transparent(int, VALUE *, VALUE);
+extern VALUE Image_transparent_chroma(int, VALUE *, VALUE);
 extern VALUE Image_transpose(VALUE);
 extern VALUE Image_transpose_bang(VALUE);
 extern VALUE Image_transverse(VALUE);

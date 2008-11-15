@@ -102,6 +102,8 @@
         <li><a href="#dispose">dispose</a></li>
 
         <li><a href="#dither">dither</a></li>
+
+        <li><a href="#endian">endian</a></li>
       </ul>
     </div>
 
@@ -134,13 +136,13 @@
         <li><a href="#monochrome">monochrome</a></li>
 
         <li><a href="#orientation">orientation</a></li>
+
+        <li><a href="#origin">origin</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#origin">origin</a></li>
-
         <li><a href="#page">page</a></li>
 
         <li><a href="#pointsize">pointsize</a></li>
@@ -148,6 +150,8 @@
         <li><a href="#quality">quality</a></li>
 
         <li><a href="#sampling_factor">sampling_factor</a></li>
+
+        <li><a href="#scene">scene</a></li>
 
         <li><a href="#server_name">server_name</a></li>
 
@@ -160,6 +164,8 @@
         <li><a href="#tile_offset">tile_offset</a></li>
 
         <li><a href="#texture">texture</a></li>
+
+        <li><a href="#transparent_color">transparent_color</a></li>
 
         <li><a href="#undercolor">undercolor</a></li>
 
@@ -869,6 +875,30 @@ p img.first['caption'] &raquo; "a new caption"
   </div>
 
   <div class="sig">
+    <h3 id="endian">endian</h3>
+
+    <p><span class="arg">self</span>.endian= <span class=
+    "arg">type</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Specify the endianess of the image when reading the image
+    file.</p>
+
+    <h4>Argument</h4>
+
+    <p>One of the following Magick::EndianType enum values:</p>
+
+    <ul>
+      <li>MSBEndian</li>
+
+      <li>LSBEndian</li>
+    </ul>
+  </div>
+
+  <div class="sig">
     <h3 id="extract">extract</h3>
 
     <p><span class="arg"><em>self.</em></span>extract= <span class=
@@ -1249,6 +1279,20 @@ p img.first['caption'] &raquo; "a new caption"
   </div>
 
   <div class="sig">
+    <h3 id="scene">scene</h3>
+
+    <p><span class="arg">self</span>.scene= <span class=
+    "arg">number</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Set the scene number of an image or the first image in a
+    sequence.</p>
+  </div>
+
+  <div class="sig">
     <h3 id="server_name">server_name</h3>
 
     <p><span class="arg">self.</span>server_name= <span class=
@@ -1343,6 +1387,33 @@ p img.first['caption'] &raquo; "a new caption"
     <h4>Argument</h4>
 
     <p>An image</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="transparent_color">transparent_color</h3>
+
+    <p><span class="arg">self</span>.transparent_color=
+    <span class="arg">string</span> or <span class=
+    "arg">pixel</span></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">The transparent color. Sometimes used for
+    saving to image formats such as GIF and PNG8 which uses this
+    color to represent boolean transparency. This does not make a
+    color transparent, just defines what color the transparent
+    color will be in the color pallette of the saved image.</p>
+
+    <p class="imquote">This attribute allows you to have both a
+    opaque visible color as well as a transparent color of the same
+    color value without conflict. That is you can use the same
+    color for both the transparent and opaque color areas within an
+    image. This in turn frees to you to select a transparenct color
+    that is appropriate when a image is displayed by application
+    that does not handle a transparent color index, while allowing
+    RMagick to correctly handle images of this type.</p>
   </div>
 
   <div class="sig">

@@ -212,6 +212,9 @@
 
           <li><a href="#transparent">transparent</a></li>
 
+          <li><a href=
+          "#transparent_chroma">transparent_chroma</a></li>
+
           <li><a href="#transpose">transpose</a></li>
 
           <li><a href="#transpose_bang">transpose!</a></li>
@@ -1435,7 +1438,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" />
+    alt="resize_to_fill example" /> 
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1530,7 +1533,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
@@ -3416,11 +3419,65 @@ img.to_color(pixel)
 
     <p><a href="image2.html#matte_replace">matte_replace</a>,
     <a href="draw.html#matte">Draw#matte</a>, <a href=
-    "#paint_transparent">paint_transparent</a></p>
+    "#paint_transparent">paint_transparent</a>, <a href=
+    "#transparent_chroma">transparent_chroma</a></p>
 
     <h4>Magick API</h4>
 
     <p>TransparentPaintImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="transparent_chroma">transparent_chroma</h3>
+
+    <p><span class="arg">img</span>.transparent_chroma(<span class=
+    "arg">low</span>, <span class="arg">high</span>, <span class=
+    "arg">opacity</span>=TransparentOpacity, <span class=
+    "arg">invert</span>=<code>false</code>) -&gt;
+    <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Changes the opacity value associated with any pixel between
+    <span class="arg">low</span> and <span class="arg">high</span>
+    to the value defined by <span class="arg">opacity</span>.</p>
+
+    <p class="imquote">As there is one fuzz value for the all the
+    channels, the <a href="#transparent">transparent</a> method is
+    not suitable for the operations like chroma, where the
+    tolerance for similarity of two color components (RGB) can be
+    different, Thus we define this method take two target pixels
+    (one low and one high) and all the pixels of an image which are
+    lying between these two pixels are made transparent.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>low, high</dt>
+
+      <dd>The low and high ends of the pixel range</dd>
+
+      <dt>opacity</dt>
+
+      <dd>The desired opacity. The default value is
+      transparent.</dd>
+
+      <dt>invert</dt>
+
+      <dd>If true, all pixels outside the range are set to
+      <span class="arg">opacity</span>.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Magick API</h4>
+
+    <p>TransparentPaintImageChroma (available in ImageMagick
+    6.4.5-6)</p>
   </div>
 
   <div class="sig">

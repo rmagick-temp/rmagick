@@ -1,3 +1,9 @@
+RMagick 2.8.0
+    o Add the endian, scene, and transparent_color attributes to Image::Info
+    o Deprecate Image#endian attribute
+    o Add the transparent_chroma method to the Image class (available in
+      ImageMagick 6.4.5-6)
+
 RMagick 2.7.2
     o Fix bug #22740, some Image::Info attribute values are not propogated to
       the image object (bug report by Thomas Watson)

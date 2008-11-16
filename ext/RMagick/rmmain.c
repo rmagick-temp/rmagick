@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.276 2008/11/15 21:30:50 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.277 2008/11/16 17:05:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1574,8 +1574,8 @@ Init_RMagick2(void)
         ENUMERATOR(PixelsPerCentimeterResolution)
     END_ENUM
 
-#if defined(HAVE_SPARSECOLORINTERPOLATE)
-    DEF_ENUM(SparseColorInterpolateMethod)
+#if defined(HAVE_SPARSECOLORIMAGE)
+    DEF_ENUM(SparseColorMethod)
         ENUMERATOR(UndefinedColorInterpolate)
         ENUMERATOR(BarycentricColorInterpolate)
         ENUMERATOR(BilinearColorInterpolate)
@@ -1812,7 +1812,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/11/15 21:30:50 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/11/16 17:05:34 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

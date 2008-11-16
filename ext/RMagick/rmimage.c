@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.330 2008/11/15 21:30:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.331 2008/11/16 17:05:34 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9218,46 +9218,122 @@ Image_spaceship(VALUE self, VALUE other)
 
 
 /*
-    Method:     Image#sparse_color(method, pts[, channel...])
+    Method:     Image#sparse_color(method, x1, y1, color [, xn, yn,  color] [, channel...])
     Purpose:    Call SparseColorInterpolate
+    Notes:      As usual, 'color' can be either a color name or a pixel
 */
+#if defined(HAVE_SPARSECOLORIMAGE)
+static unsigned long
+count_channels(Image *image, ChannelType *channels)
+{
+    unsigned long ncolors = 0UL;
+
+    if (image->colorspace != CMYKColorspace)
+    {
+        *channels = (ChannelType) (*channels & ~IndexChannel);  /* remove index channels from count */
+    }
+    if ( image->matte == MagickFalse )
+    {
+        *channels = (ChannelType) (*channels & ~OpacityChannel);  /* remove matte/alpha *channels from count */
+    }
+
+    if (*channels & RedChannel)
+    {
+        ncolors += 1;
+    }
+    if (*channels & GreenChannel)
+    {
+        ncolors += 1;
+    }
+    if (*channels & BlueChannel)
+    {
+        ncolors += 1;
+    }
+    if (*channels & IndexChannel)
+    {
+        ncolors += 1;
+    }
+    if (*channels & OpacityChannel)
+    {
+        ncolors += 1;
+    }
+
+    return ncolors;
+}
+#endif
+
+
 VALUE
 Image_sparse_color(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_SPARSECOLORINTERPOLATE) && 0
+#if defined(HAVE_SPARSECOLORIMAGE)
     Image *image, *new_image;
-    unsigned long n, npoints;
-    SparseColorInterpolateMethod interpolate_method;
-    double *points;
+    unsigned long x, nargs, ncolors;
+    SparseColorMethod method;
+    int n, exp;
+    double * volatile args;
     ChannelType channels;
-
+    MagickPixelPacket pp;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
     channels = extract_channels(&argc, argv);
 
-    if (argc != 2)
+    if (argc < 4 || argc % 3 != 1)
     {
-        raise_ChannelType_error(argv[argc-1]);
+        exp = argc - 1;
+        exp = (argc + 2) / 3 * 3;
+        exp = max(exp, 3);
+        rb_raise(rb_eArgError, "wrong number of arguments (expected at least %d, got %d)", exp+1,  argc);
     }
 
-    VALUE_TO_ENUM(argv[0], interpolate_method, SparseColorInterpolateMethod);
-    npoints = RARRAY_LEN(argv[1]);
+    // Get the method from the argument list
+    VALUE_TO_ENUM(argv[0], method, SparseColorMethod);
+    argv += 1;
+    argc -= 1;
 
-    // Allocate points array from Ruby's memory. If an error occurs Ruby will
-    // be able to clean it up.
-    points = ALLOC_N(double, npoints);
+    // A lot of the following code is based on SparseColorOption, in wand/mogrify.c
+    ncolors = count_channels(image, &channels);
+    nargs = (argc / 3) * (2 + ncolors);
 
-    for (n = 0; n < npoints; n++)
+    // Allocate args from Ruby's memory so that GC will collect it if one of
+    // the type conversions below raises an exception.
+    args = ALLOC_N(double, nargs);
+    memset(args, 0, nargs * sizeof(double));
+
+    x = 0;
+    n = 0;
+    while (n < argc)
     {
-        points[n] = NUM2DBL(rb_ary_entry(argv[1], n));
+        args[x++] = NUM2DBL(argv[n++]);
+        args[x++] = NUM2DBL(argv[n++]);
+        Color_to_MagickPixelPacket(NULL, &pp, argv[n++]);
+        if (channels & RedChannel)
+        {
+            args[x++] = pp.red / QuantumRange;
+        }
+        if (channels & GreenChannel)
+        {
+            args[x++] = pp.green / QuantumRange;
+        }
+        if (channels & BlueChannel)
+        {
+            args[x++] = pp.blue / QuantumRange;
+        }
+        if (channels & IndexChannel)
+        {
+            args[x++] = pp.index / QuantumRange;
+        }
+        if (channels & OpacityChannel)
+        {
+            args[x++] = pp.opacity / QuantumRange;
+        }
     }
 
     GetExceptionInfo(&exception);
-    new_image = SparseColorInterpolate(image, interpolate_method, npoints, points, channels, &exception);
-    xfree(points);
-    rm_check_exception(&exception, new_image, DestroyOnError);
-    (void) DestroyExceptionInfo(&exception);
+    new_image = SparseColorImage(image, channels, method, nargs, args, &exception);
+    xfree(args);
+    CHECK_EXCEPTION();
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
@@ -10157,7 +10233,7 @@ Image_transparent_chroma(int argc, VALUE *argv, VALUE self)
     MagickBooleanType invert = MagickFalse;
     MagickBooleanType okay;
 
-    image = rm_check_frozen(self);
+    image = rm_check_destroyed(self);
 
     switch (argc)
     {

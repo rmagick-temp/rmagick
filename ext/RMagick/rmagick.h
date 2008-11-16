@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.258 2008/11/15 21:30:50 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.259 2008/11/16 17:05:34 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -322,8 +322,8 @@ EXTERN VALUE Class_PaintMethod;
 EXTERN VALUE Class_PreviewType;
 EXTERN VALUE Class_RenderingIntent;
 EXTERN VALUE Class_ResolutionType;
-#if defined(HAVE_SPARSECOLORINTERPOLATE)
-EXTERN VALUE Class_SparseColorInterpolateMethod;
+#if defined(HAVE_SPARSECOLORIMAGE)
+EXTERN VALUE Class_SparseColorMethod;
 #endif
 EXTERN VALUE Class_SpreadMethod;
 EXTERN VALUE Class_StorageType;

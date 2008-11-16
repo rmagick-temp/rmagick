@@ -172,7 +172,8 @@
           <li><a href="#sketch">sketch</a></li>
 
           <li><a href="#solarize">solarize</a></li>
-          <!-- <li><a href="#sparse_color">sparse_color</a></li> -->
+
+          <li><a href="#sparse_color">sparse_color</a></li>
 
           <li><a href="#splice">splice</a></li>
 
@@ -2589,21 +2590,27 @@ img.properties &raquo;
     <h4>Magick API</h4>
 
     <p>SolarizeImage</p>
-  </div><!--
+  </div>
+
   <div class="sig">
     <h3 id="sparse_color">sparse_color</h3>
 
     <p><span class="arg">img</span>.sparse_color(<span class=
-    "arg">method</span>, <span class="arg">points</span>[,
-    <span class="arg">channel</span>...]) -&gt; <em>image</em></p>
+    "arg">method</span>, <span class="arg">x1</span>, <span class=
+    "arg">y1</span>, <span class="arg">color1</span>[, <span class=
+    "arg">x2</span>, <span class="arg">y2</span>, <span class=
+    "arg">color2</span>...][, <span class="arg">channel</span>...])
+    -&gt; <em>image</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p class="imquote">Given a set of coordinates interpolates the
-    colors found at those coordinates, across the whole image,
-    using various methods.</p>
+    <p>Fills the image with the specified <span class=
+    "arg">color</span> or colors, starting at the <span class=
+    "arg">x</span>,<span class="arg">y</span> coordinates
+    associated with the color and using the specified interpolation
+    <span class="arg">method</span>.</p>
 
     <p>For more information about this method see the ImageMagick
     documentation for the -sparse-color option. Also see <a href=
@@ -2644,23 +2651,30 @@ img.properties &raquo;
           <dd class="imquote">Simply map each pixel to the to
           nearest color point given. The result are polygonal
           'cells' of solid color.</dd>
-
-          <dt>PolynomialColorInterpolate</dt>
-
-          <dd class="imquote">&nbsp;</dd>
         </dl>
       </dd>
 
-      <dt>points</dt>
+      <dt>xn, yn, colorn</dt>
 
-      <dd>An array of coordinates. The number of coordinates varies
-      according to the method.</dd>
+      <dd>One or more <span class="arg">x</span>,<span class=
+      "arg">y</span>, <span class="arg">color</span> triplets.
+      <span class="arg">X</span> and <span class="arg">y</span> are
+      floating-point values. <span class="arg">Color</span> can be
+      either a <a href="imusage.html#color_names">color name</a> or
+      a <a href="struct.html#Pixel">pixel</a>.</dd>
 
       <dt>channel...</dt>
 
       <dd>0 or more <a href=
-      "constants.html#ChannelType">ChannelType</a> arguments.</dd>
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified then DefaultChannels is used.</dd>
     </dl>
+
+    <h4>Example</h4>
+
+    <p><a href="javascript:popup('sparse_color.rb.html')"><img src=
+    "ex/sparse_color.png" title="Click to see the example script"
+    alt="sparse_color example" /></a></p>
 
     <h4>Returns</h4>
 
@@ -2668,9 +2682,8 @@ img.properties &raquo;
 
     <h4>Magick API</h4>
 
-    <p>SparseColorInterpolate (available in 6.4.2)</p>
+    <p>SparseColorImage (available in 6.4.3)</p>
   </div>
--->
 
   <div class="sig">
     <h3 id="splice">splice</h3>

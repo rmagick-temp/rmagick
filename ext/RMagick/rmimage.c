@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.331 2008/11/16 17:05:34 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.332 2008/11/17 23:46:50 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -9277,14 +9277,19 @@ Image_sparse_color(int argc, VALUE *argv, VALUE self)
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
-    channels = extract_channels(&argc, argv);
 
+    n = argc;
+    channels = extract_channels(&argc, argv);
+    n -= argc;  // n is now the number of channel arguments
+
+    // After the channel arguments have been removed, and not counting the first
+    // (method) argument, the number of arguments should be a multiple of 3.
     if (argc < 4 || argc % 3 != 1)
     {
         exp = argc - 1;
         exp = (argc + 2) / 3 * 3;
         exp = max(exp, 3);
-        rb_raise(rb_eArgError, "wrong number of arguments (expected at least %d, got %d)", exp+1,  argc);
+        rb_raise(rb_eArgError, "wrong number of arguments (expected at least %d, got %d)", n+exp+1,  n+argc);
     }
 
     // Get the method from the argument list

@@ -578,6 +578,34 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.solarize('x') }
     end
 
+    def test_sparse_color
+        img = Magick::Image.new(100, 100)
+        args = [30, 10, 'red', 10, 80, 'blue', 70, 60, 'lime', 80, 20, 'yellow']
+        # assert good calls work
+        Magick::SparseColorMethod.values do |v|
+            next if v == Magick::UndefinedColorInterpolate
+            assert_nothing_raised { img.sparse_color(v, *args) }
+        end
+        args << Magick::RedChannel
+        assert_nothing_raised { img.sparse_color(Magick::VoronoiColorInterpolate, *args) }
+        args << Magick::GreenChannel
+        assert_nothing_raised { img.sparse_color(Magick::VoronoiColorInterpolate, *args) }
+        args << Magick::BlueChannel
+        assert_nothing_raised { img.sparse_color(Magick::VoronoiColorInterpolate, *args) }
+
+        # bad calls
+        args = [30, 10, 'red', 10, 80, 'blue', 70, 60, 'lime', 80, 20, 'yellow']
+        # invalid method
+        assert_raise(TypeError) { img.sparse_color(1, *args) }
+        # missing arguments
+        assert_raise(ArgumentError) { img.sparse_color(Magick::VoronoiColorInterpolate) }
+        args << 10   # too many arguments
+        assert_raise(ArgumentError) { img.sparse_color(Magick::VoronoiColorInterpolate, *args) }
+        args.shift
+        args.shift  # too few
+        assert_raise(ArgumentError) { img.sparse_color(Magick::VoronoiColorInterpolate, *args) }
+    end
+
     def test_splice
         assert_nothing_raised do
             res = @img.splice(0, 0, 2, 2)

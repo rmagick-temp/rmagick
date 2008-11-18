@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.277 2008/11/16 17:05:34 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.278 2008/11/18 23:43:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1579,7 +1579,7 @@ Init_RMagick2(void)
         ENUMERATOR(UndefinedColorInterpolate)
         ENUMERATOR(BarycentricColorInterpolate)
         ENUMERATOR(BilinearColorInterpolate)
-        ENUMERATOR(PolynomialColorInterpolate)
+        //ENUMERATOR(PolynomialColorInterpolate)
         ENUMERATOR(ShepardsColorInterpolate)
         ENUMERATOR(VoronoiColorInterpolate)
     END_ENUM
@@ -1812,7 +1812,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/11/16 17:05:34 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/11/18 23:43:10 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

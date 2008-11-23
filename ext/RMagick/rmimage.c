@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.332 2008/11/17 23:46:50 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.333 2008/11/23 15:56:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6342,6 +6342,7 @@ Image_mask(int argc, VALUE *argv, VALUE self)
         for (y = 0; y < (long) clip_mask->rows; y++)
         {
             q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
+            rm_check_image_exception(clip_mask, DestroyOnError);
             if (!q)
             {
                 break;
@@ -6357,18 +6358,12 @@ Image_mask(int argc, VALUE *argv, VALUE self)
                 q->blue = q->opacity;
                 q += 1;
             }
-            if (SyncImagePixels(clip_mask) == (MagickBooleanType)MagickFalse)
-            {
-                (void) DestroyImage(clip_mask);
-                rm_magick_error("SyncImagePixels failed", NULL);
-            }
+            SyncImagePixels(clip_mask);
+            rm_check_image_exception(clip_mask, DestroyOnError);
         }
 
-        if (SetImageStorageClass(clip_mask, DirectClass) == (MagickBooleanType)MagickFalse)
-        {
-            (void) DestroyImage(clip_mask);
-            rm_magick_error("SetImageStorageClass failed", NULL);
-        }
+        SetImageStorageClass(clip_mask, DirectClass);
+        rm_check_image_exception(clip_mask, DestroyOnError);
 
         clip_mask->matte = MagickTrue;
 
@@ -7479,12 +7474,8 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
         }
     }
     *pixel = new_color;
-    okay = SyncImagePixels(image);
+    SyncImagePixels(image);
     rm_check_image_exception(image, RetainOnError);
-    if (!okay)
-    {
-        rb_raise(Class_ImageMagickError, "image pixels could not be synced");
-    }
 
     return Pixel_from_PixelPacket(&old_color);
 }
@@ -9619,12 +9610,8 @@ Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
             pixels[n] = *pixel;
         }
 
-        okay = SyncImagePixels(image);
+        SyncImagePixels(image);
         rm_check_image_exception(image, RetainOnError);
-        if (!okay)
-        {
-            rb_raise(Class_ImageMagickError, "SyncImagePixels failed. Can't store pixels.");
-        }
     }
 
     return self;
@@ -10890,7 +10877,6 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
     double rate = 1.0;
     double opacity, step;
     const char *func;
-    MagickBooleanType okay;
     ExceptionInfo exception;
 
     image = rm_check_destroyed(self);
@@ -10964,6 +10950,11 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
 
         p = AcquireImagePixels(reflection, 0, y, image->columns, 1, &exception);
         rm_check_exception(&exception, reflection, RetainOnError);
+        if (!p)
+        {
+            func = "AcquireImagePixels";
+            goto error;
+        }
 
         q = SetImagePixels(reflection, 0, y, image->columns, 1);
         rm_check_image_exception(reflection, DestroyOnError);
@@ -10980,13 +10971,8 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
             q[x].opacity = max(q[x].opacity, (Quantum)opacity);
         }
 
-        okay = SyncImagePixels(reflection);
+        SyncImagePixels(reflection);
         rm_check_image_exception(reflection, DestroyOnError);
-        if (!okay)
-        {
-            func = "SyncImagePixels";
-            goto error;
-        }
 
         opacity += step;
     }

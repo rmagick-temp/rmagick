@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.278 2008/11/18 23:43:10 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.279 2008/11/23 15:55:22 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -169,7 +169,7 @@ Magick_init_formats(VALUE class)
 /*
   Method:   Magick.limit_resource(resource[, limit])
   Purpose:  Get/set resource limits. If a limit is specified the old limit
-            is set to the new value. Either way the current/new limit is returned.
+            is set to the new value. Either way the current/old limit is returned.
 */
 static VALUE
 Magick_limit_resource(int argc, VALUE *argv, VALUE class)
@@ -1812,7 +1812,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/11/18 23:43:10 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/11/23 15:55:22 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

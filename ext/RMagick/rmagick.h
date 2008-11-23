@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.259 2008/11/16 17:05:34 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.260 2008/11/23 15:57:15 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -132,6 +132,8 @@
 #define GetStringInfoLength(p) (size_t)((p)->length)
 #endif
 
+// IM 6.4.1 replaced AllocateImage with AcquireImage.
+// Both have the same signature.
 #if !defined(HAVE_ACQUIREIMAGE)
 #define AcquireImage(info) AllocateImage(info)
 #endif

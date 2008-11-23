@@ -260,6 +260,7 @@ class Magick_UT < Test::Unit::TestCase
       assert_nothing_raised { Magick.set_log_format("format %d%e%f") }
     end
 
+    # put old limits back in place after testing
     def test_limit_resources
         cur = new = nil
 
@@ -267,21 +268,25 @@ class Magick_UT < Test::Unit::TestCase
         assert_equal(791930880, cur)
         assert_nothing_raised {new = Magick::limit_resource("memory")}
         assert_equal(500, new)
+        Magick::limit_resource(:memory, cur)
 
         assert_nothing_raised {cur = Magick::limit_resource(:map, 3500)}
         assert_equal(2111815680, cur)
         assert_nothing_raised {new = Magick::limit_resource("map")}
         assert_equal(3500, new)
+        Magick::limit_resource(:map, cur)
 
         assert_nothing_raised {cur = Magick::limit_resource(:disk, 3*1024*1024*1024)}
         assert_equal(4294967295, cur)
         assert_nothing_raised {new = Magick::limit_resource("disk")}
         assert_equal(3221225472, new)
+        Magick::limit_resource(:disk, cur)
 
         assert_nothing_raised {cur = Magick::limit_resource(:file, 500)}
         assert_equal(768, cur)
         assert_nothing_raised {new = Magick::limit_resource("file")}
         assert_equal(500, new)
+        Magick::limit_resource(:file, cur)
 
         assert_raise(ArgumentError) { Magick::limit_resource(:xxx) }
         assert_raise(ArgumentError) { Magick::limit_resource("xxx") }
@@ -334,7 +339,7 @@ class Magick_UT < Test::Unit::TestCase
       # Therefore only 4 tmp files are left.
       #assert_equal(tmpfiles+4, tmpfiles2)
       # 6.4.1-5 - only 1 tmpfile?
-      assert_equal(tmpfiles+1, tmpfiles2)
+      assert_equal(tmpfiles, tmpfiles2)
 
     end
 

@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.159.2.2.2.1 2008/02/24 23:26:38 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.159.2.2.2.2 2008/11/25 23:18:36 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1865,7 +1865,8 @@ Init_RMagick(void)
 /*
  *  Static:     test_Magick_version
  *  Purpose:    Ensure the version of ImageMagick we're running with matches
- *              the version we were compiled with.
+ *              the version we were compiled with. We were compiled with MagickLibVersion.
+ *              GetMagickVersion returns the runtime version.
  *  Notes:      Bypass the test by defining the constant RMAGICK_BYPASS_VERSION_TEST
  *              to 'true' at the top level, before requiring 'RMagick'
 */
@@ -1873,13 +1874,6 @@ static void test_Magick_version(void)
 {
     unsigned long version_number;
     const char *version_str;
-    const char *web_site =
-#if defined(MagickHomeURL)
-        MagickHomeURL
-#else
-        MagickWebSite
-#endif
-        ;
     int x, n;
     ID bypass = rb_intern("RMAGICK_BYPASS_VERSION_TEST");
 
@@ -1889,7 +1883,11 @@ static void test_Magick_version(void)
     }
 
     version_str = GetMagickVersion(&version_number);
+#if defined(GRAPHICSMAGICK)
+    if ((version_number & 0xff0000) != (MagickLibVersion & 0xff0000))
+#else
     if (version_number != MagickLibVersion)
+#endif
     {
         // Extract the string "ImageMagick X.Y.Z"
         n = 0;
@@ -1903,11 +1901,8 @@ static void test_Magick_version(void)
 
         rb_raise(rb_eRuntimeError,
             "This version of RMagick was created to run with %s %s\n"
-            "but %.*s is installed on this system. You should either\n"
-            "   1) Configure and build RMagick for %.*s, or\n"
-            "   2) download %s %s from %s and install it.\n" ,
-            MagickPackageName, MagickLibVersionText, x, version_str, x, version_str,
-            MagickPackageName, MagickLibVersionText, web_site);
+            "but %.*s is installed on this system.\n" ,
+            MagickPackageName, MagickLibVersionText, x, version_str);
     }
 
 }
@@ -1937,7 +1932,7 @@ static void version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-        "This is %s ($Date: 2008/02/24 23:26:38 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+        "This is %s ($Date: 2008/11/25 23:18:36 $) Copyright (C) 2008 by Timothy P. Hunter\n"
         "Built with %s\n"
         "Built for %s\n"
         "Web page: http://rmagick.rubyforge.org\n"

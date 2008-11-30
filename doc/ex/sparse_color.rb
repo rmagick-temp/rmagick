@@ -16,6 +16,7 @@ imgl = Magick::ImageList.new
 img = Magick::Image.new(100, 100)
 
 begin
+
   img2 = img.sparse_color(Magick::VoronoiColorInterpolate, 30, 10, "red",
                              10, 80, "blue", 70, 60, "lime", 80, 20, "yellow")
   img2["Label"] = "Voroni"
@@ -36,7 +37,6 @@ begin
   img2["Label"] = "Barycentric"
   imgl << draw_centers(img2, false)
 
-
   montage = imgl.montage do
               self.background_color = "none"
               self.geometry = "100x100+10+10"
@@ -44,8 +44,12 @@ begin
             end
 
   montage.write("sparse_color.png")
+
 rescue NotImplementedError, NameError
+
   img = Magick::Image.read("images/notimplemented.gif").first
+  img.resize!(240, 272)
   img.write("sparse_color.png")
+
 end
 

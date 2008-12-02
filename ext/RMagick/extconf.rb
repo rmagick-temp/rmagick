@@ -48,10 +48,43 @@ end
 
 
 
+# Seems like lots of people have multiple versions of ImageMagick installed.
+def check_multiple_imagemagick_versions()
+   versions = []
+   path = ENV['PATH'].split(File::PATH_SEPARATOR)
+   path.each do |dir|
+      file = File.join(dir, "Magick-config")
+      if File.executable? file
+         vers = `#{file} --version`.chomp.strip
+         prefix = `#{file} --prefix`.chomp.strip
+         versions << [vers, prefix, dir]
+      end
+   end
+   versions.uniq!
+   if versions.size > 1
+      msg = "\nWarning: Found more than one ImageMagick installation. This could cause problems at runtime.\n"
+      versions.each do |vers, prefix, dir|
+         msg << "         #{dir}/Magick-config reports version #{vers} is installed in #{prefix}\n"
+      end
+      msg << "Using #{versions[0][0]} from #{versions[0][1]}.\n\n"
+      Logging::message msg
+      message msg
+   end
+end
+
+
+
+
 if RUBY_PLATFORM =~ /mswin/
-  abort "\nThis rmagick gem is for use only on Linux, BSD, OS X, and similar systems." +
-        "\nUse the rmagick-win32 gem to install RMagick on Windows." +
-        "\nSee http://rmagick.rubyforge.org/install-faq.html for more information.\n"
+  abort <<END_MSWIN
++----------------------------------------------------------------------------+
+| This rmagick gem is for use only on Linux, BSD, OS X, and similar systems  |
+| that have a gnu or similar toolchain installed. The rmagick-win32 gem is a |
+| pre-compiled version of RMagick bundled with ImageMagick for use on        |
+| Microsoft Windows systems. The rmagick-win32 gem is available on RubyForge.|
+| See http://rmagick.rubyforge.org/install-faq.html for more information.    |
++----------------------------------------------------------------------------+
+END_MSWIN
 end
 
 
@@ -80,6 +113,8 @@ if RUBY_PLATFORM !~ /mswin/
   unless find_executable("Magick-config")
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find Magick-config in #{ENV['PATH']}\n"
   end
+
+  check_multiple_imagemagick_versions()
 
   # Ensure minimum ImageMagick version
   unless checking_for("ImageMagick version >= #{MIN_IM_VERS}")  do

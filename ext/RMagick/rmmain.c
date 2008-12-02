@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.279 2008/11/23 15:55:22 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.280 2008/12/02 22:57:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1780,7 +1780,7 @@ test_Magick_version(void)
         }
 
         rb_raise(rb_eRuntimeError,
-                 "This version of RMagick was created to run with %s %s but %.*s is in use.\n" ,
+                 "This version of RMagick was configured with %s %s but %.*s is in use.\n" ,
                  MagickPackageName, MagickLibVersionText, x, version_str);
     }
 
@@ -1812,7 +1812,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/11/23 15:55:22 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/12/02 22:57:42 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

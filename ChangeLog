@@ -5,6 +5,10 @@ RMagick 2.8.0
       ImageMagick 6.4.5-6)
     o Add the sparse_color method to the Image class (available in ImageMagick
       6.4.3)
+    o Detect change to ParseSizeGeometry signature in ImageMagick 6.4.6-9 and
+      compile accordingly.
+    o Update Image#change_geometry to work with the new ParseSizeGeometry API
+      in ImageMagick 6.4.6-9.
 
 RMagick 2.7.2
     o Fix bug #22740, some Image::Info attribute values are not propogated to

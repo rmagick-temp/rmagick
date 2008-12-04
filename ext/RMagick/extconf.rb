@@ -258,6 +258,31 @@ end
 
 
 
+# 6.4.6-9 or so
+checking_for("ParseSizeGeometry() new signature") do
+     if try_compile(<<"SRC")
+#{COMMON_HEADERS}
+#{cpp_include(headers)}
+/*top*/
+int main() {
+  MagickStatusType okay;
+  Image *image;
+  const char *geometry;
+  RectangleInfo *rectangle;
+  ExceptionInfo *exception;
+  okay = ParseSizeGeometry(image, geometry, rectangle, exception);
+  return 0;
+  }
+SRC
+       $defs.push("-DHAVE_NEWPARSESIZEGEOMETRY")
+       true
+     else
+       false
+     end
+end
+
+
+
 
 have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
 have_struct_member("Image", "tile_offset", headers)   # 6.3.4

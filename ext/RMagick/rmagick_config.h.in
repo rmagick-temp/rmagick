@@ -189,6 +189,8 @@
 #undef HAVE_PALETTEBILEVELMATTETYPE
 /* Introduced in IM 5.5.4 - Not available in GM */
 #undef HAVE_PARSESIZEGEOMETRY
+/* New signature in IM 6.4.6-9 */
+#undef HAVE_NEW_PARSESIZEGEOMETRY
 /* Introduced in IM 6.3.1-6 */
 #undef HAVE_POLAROIDIMAGE
 /* Introduced in IM 6.0.0 */

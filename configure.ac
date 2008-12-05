@@ -678,6 +678,25 @@ if test "$rm_have_getmagickpixelpacket" = yes; then
    fi
 fi
 
+# IM 6.4.6-9 changed the number of arguments to ParseSizeGeometry
+AC_CACHE_CHECK(if ParseSizeGeometry has 4 arguments, rv_cv_have_new_parsesizegeometry,
+  [AC_TRY_COMPILE(
+[#include <stdio.h>
+#if HAVE_SYS_TYPES_H
+#include <sys/types.h>
+#endif
+#include "magick/api.h"],
+     [MagickStatusType okay; Image *image; const char *geometry;
+      RectangleInfo *rectangle; ExceptionInfo *exception;
+      okay = ParseSizeGeometry(image, geometry, rectangle, exception);],
+     rv_cv_have_new_parsesizegeometry='yes',
+     rv_cv_have_new_parsesizegeometry='no')])
+
+if test "$rv_cv_have_new_parsesizegeometry" = yes; then
+   AC_DEFINE(HAVE_NEW_PARSESIZEGEOMETRY)
+fi
+
+
 # Where is ****Magick installed?
 MAGICKPREFIX=`${MAGICKCONFIG} --prefix`
 

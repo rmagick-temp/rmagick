@@ -1,3 +1,6 @@
+RMagick 2.8.1
+    o Fix #23209, improve RVG's letter spacing (patch from Jonah Fox)
+
 RMagick 2.8.0
     o Add the endian, scene, and transparent_color attributes to Image::Info
     o Deprecate Image#endian= attribute setter
@@ -5,8 +8,6 @@ RMagick 2.8.0
       ImageMagick 6.4.5-6)
     o Add the sparse_color method to the Image class (available in ImageMagick
       6.4.3)
-    o Detect change to ParseSizeGeometry signature in ImageMagick 6.4.6-9 and
-      compile accordingly.
     o Update Image#change_geometry to work with the new ParseSizeGeometry API
       in ImageMagick 6.4.6-9.
 

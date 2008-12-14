@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.12 2008/02/24 18:26:36 rmagick Exp $
+# $Id: misc.rb,v 1.13 2008/12/14 00:45:46 rmagick Exp $
 # Copyright (C) 2008 Timothy P. Hunter
 module Magick
     class RVG
@@ -105,8 +105,8 @@ module Magick
 
                 def glyph_metrics(glyph_orientation, glyph)
                     glyph_metrics = @ctx.shadow.get_type_metrics(glyph)
-                    h = glyph_metrics.ascent - glyph_metrics.descent
-                    w = glyph_metrics.width
+                    h = (glyph_metrics.ascent - glyph_metrics.descent + 0.5).to_i
+                    w = glyph_metrics.width + glyph_metrics.bounds.x1
                     if glyph_orientation == 0 || glyph_orientation == 180
                         [w, h]
                     else

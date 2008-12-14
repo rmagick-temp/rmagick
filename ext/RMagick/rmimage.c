@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.334 2008/12/04 23:50:23 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.335 2008/12/14 00:43:47 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -4051,7 +4051,9 @@ Image__dump(VALUE self, VALUE depth)
 
     // Concatenate the blob onto the header & return the result
     str = rb_str_new((char *)&mi, (long)(mi.len+offsetof(DumpedImage,magick)));
-    return rb_str_cat(str, (char *)blob, (long)length);
+    str = rb_str_buf_cat(str, (char *)blob, (long)length);
+    magick_free((void*)blob);
+    return str;
 }
 
 

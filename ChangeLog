@@ -1,5 +1,6 @@
-RMagick 2.8.1
+RMagick 2.9.0
     o Fix #23209, improve RVG's letter spacing (patch from Jonah Fox)
+    o Add Draw#kerning= attribute setter (available in ImageMagick 6.4.7-8)
 
 RMagick 2.8.0
     o Add the endian, scene, and transparent_color attributes to Image::Info

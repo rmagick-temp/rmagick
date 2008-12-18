@@ -287,6 +287,7 @@ end
 have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
 have_struct_member("Image", "tile_offset", headers)   # 6.3.4
 have_struct_member("Image", "type", headers)          # ???
+have_struct_member("DrawInfo", "kerning", headers)    # 6.4.7-8
 have_type("AlphaChannelType", headers)                # 6.3.5
 have_type("DitherMethod", headers)                    # 6.4.2
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod

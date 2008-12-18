@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.260 2008/11/23 15:57:15 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.261 2008/12/18 00:17:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -581,6 +581,7 @@ ATTR_WRITER(Draw, font_stretch)
 ATTR_WRITER(Draw, font_style)
 ATTR_WRITER(Draw, font_weight)
 ATTR_WRITER(Draw, gravity)
+ATTR_WRITER(Draw, kerning)
 ATTR_WRITER(Draw, pointsize)
 ATTR_WRITER(Draw, rotation)
 ATTR_WRITER(Draw, stroke)

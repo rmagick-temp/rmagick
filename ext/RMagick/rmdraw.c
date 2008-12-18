@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.68 2008/09/29 22:15:16 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.69 2008/12/18 00:17:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -297,6 +297,28 @@ Draw_gravity_eq(VALUE self, VALUE grav)
     VALUE_TO_ENUM(grav, draw->info->gravity, GravityType);
 
     return self;
+}
+
+
+/*
+    Method:     Draw#kerning=float
+    Purpose:    space between two letters
+    Notes:      new for 6.4.7-8
+*/
+VALUE
+Draw_kerning_eq(VALUE self, VALUE kerning)
+{
+#if defined(HAVE_ST_KERNING)
+    Draw *draw;
+
+    rb_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+    draw->info->kerning = NUM2DBL(kerning);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
 }
 
 

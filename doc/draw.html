@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 1 September 2005), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -13,15 +13,15 @@
   <meta name="Copyright" content=
   "Copyright (C) 2006 by Timothy P. Hunter" />
   <link rel="stylesheet" type="text/css" href="css/doc.css" />
-<script type="text/javascript" src="scripts/doc.js">
+  <script type="text/javascript" src="scripts/doc.js">
 </script>
-<style type="text/css">
-  /*<![CDATA[*/
+  <style type="text/css">
+/*<![CDATA[*/
 
   /* Styles local to this page. */
 
   /*]]>*/
-</style>
+  </style>
 </head>
 
 <body>
@@ -219,12 +219,14 @@
 
         <li><a href="#gravity_eq">gravity</a></li>
 
-        <li><a href="#pointsize_eq">pointsize</a></li>
+        <li><a href="#kerning_eq">kerning</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#pointsize_eq">pointsize</a></li>
+
         <li><a href="#rotation_eq">rotation</a></li>
 
         <li><a href="#stroke_eq">stroke</a></li>
@@ -2969,6 +2971,27 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#GravityType">GravityType</a>
     constant.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="kerning_eq">kerning=</h3>
+
+    <p><span class="arg">draw</span>.kerning =
+    <em>distance</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>The space between two letters.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A numeric value. May be positive or negative.</p>
+
+    <h4>Notes</h4>
+
+    <p>Available in ImageMagick 6.4.7-8.</p>
   </div>
 
   <div class="sig">

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.262 2008/12/23 20:41:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.263 2008/12/23 22:31:45 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1046,6 +1046,40 @@ extern VALUE  TextureFill_initialize(VALUE, VALUE);
 extern VALUE  TextureFill_fill(VALUE, VALUE);
 
 
+// rmpixel.c
+
+
+ATTR_ACCESSOR(Pixel, red)
+ATTR_ACCESSOR(Pixel, green)
+ATTR_ACCESSOR(Pixel, blue)
+ATTR_ACCESSOR(Pixel, opacity)
+ATTR_ACCESSOR(Pixel, cyan)
+ATTR_ACCESSOR(Pixel, magenta)
+ATTR_ACCESSOR(Pixel, yellow)
+ATTR_ACCESSOR(Pixel, black)
+extern void   destroy_Pixel(Pixel *);
+extern VALUE  Pixel_alloc(VALUE);
+extern VALUE  Pixel_case_eq(VALUE, VALUE);
+extern VALUE  Pixel_clone(VALUE);
+extern VALUE  Pixel_dup(VALUE);
+extern VALUE  Pixel_eql_q(VALUE, VALUE);
+extern VALUE  Pixel_fcmp(int, VALUE *, VALUE);
+extern VALUE  Pixel_from_color(VALUE, VALUE);
+extern VALUE  Pixel_from_HSL(VALUE, VALUE);
+extern VALUE  Pixel_from_hsla(int, VALUE *, VALUE);
+extern VALUE  Pixel_hash(VALUE);
+extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
+extern VALUE  Pixel_init_copy(VALUE, VALUE);
+extern VALUE  Pixel_intensity(VALUE);
+extern VALUE  Pixel_marshal_dump(VALUE);
+extern VALUE  Pixel_marshal_load(VALUE, VALUE);
+extern VALUE  Pixel_spaceship(VALUE, VALUE);
+extern VALUE  Pixel_to_color(int, VALUE *, VALUE);
+extern VALUE  Pixel_to_HSL(VALUE);
+extern VALUE  Pixel_to_hsla(VALUE);
+extern VALUE  Pixel_to_s(VALUE);
+
+
 // rmutil.c
 extern VALUE  ChromaticityInfo_to_s(VALUE);
 extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
@@ -1066,40 +1100,10 @@ extern VALUE  rm_cur_image(VALUE);
 extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE  ImageType_new(ImageType);
 extern VALUE  InterlaceType_new(InterlaceType);
-
-extern VALUE   Pixel_alloc(VALUE);
-
-ATTR_ACCESSOR(Pixel, red)
-ATTR_ACCESSOR(Pixel, green)
-ATTR_ACCESSOR(Pixel, blue)
-ATTR_ACCESSOR(Pixel, opacity)
-ATTR_ACCESSOR(Pixel, cyan)
-ATTR_ACCESSOR(Pixel, magenta)
-ATTR_ACCESSOR(Pixel, yellow)
-ATTR_ACCESSOR(Pixel, black)
-extern VALUE  Pixel_case_eq(VALUE, VALUE);
-extern VALUE  Pixel_clone(VALUE);
-extern VALUE  Pixel_dup(VALUE);
-extern VALUE  Pixel_eql_q(VALUE, VALUE);
-extern VALUE  Pixel_fcmp(int, VALUE *, VALUE);
-extern VALUE  Pixel_from_color(VALUE, VALUE);
-extern VALUE  Pixel_from_HSL(VALUE, VALUE);
-extern VALUE  Pixel_from_hsla(int, VALUE *, VALUE);
-extern VALUE  Pixel_hash(VALUE);
-extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
-extern VALUE  Pixel_init_copy(VALUE, VALUE);
-extern VALUE  Pixel_intensity(VALUE);
-extern VALUE  Pixel_marshal_dump(VALUE);
-extern VALUE  Pixel_marshal_load(VALUE, VALUE);
-extern VALUE  Pixel_spaceship(VALUE, VALUE);
-extern VALUE  Pixel_to_color(int, VALUE *, VALUE);
-extern VALUE  Pixel_to_HSL(VALUE);
-extern VALUE  Pixel_to_hsla(VALUE);
-extern VALUE  Pixel_to_s(VALUE);
 extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
+extern VALUE  Pixel_from_MagickPixelPacket(const MagickPixelPacket *);
 extern VALUE  Pixel_from_PixelPacket(const PixelPacket *);
-
 extern void   Point_to_PointInfo(PointInfo *, VALUE);
 extern VALUE  PointInfo_to_Point(PointInfo *);
 extern VALUE  PrimaryInfo_to_s(VALUE);

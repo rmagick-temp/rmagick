@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.76 2008/10/27 22:17:54 rmagick Exp $
+# $Id: RMagick.rb,v 1.77 2008/12/23 20:32:15 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1624,6 +1624,19 @@ public
           a = ilist
         end
         return a
+    end
+
+    # Custom marshal/unmarshal for Ruby 1.8.
+    def marshal_dump()
+       ary = [@scene]
+       @images.each {|i| ary << Marshal.dump(i)}
+       ary
+    end
+
+    def marshal_load(ary)
+       @scene = ary.shift
+       @images = []
+       ary.each {|a| @images << Marshal.load(a)}
     end
 
     # The ImageList class supports the Magick::Image class methods by simply sending

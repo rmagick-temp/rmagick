@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.335 2008/12/14 00:43:47 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.336 2008/12/23 20:41:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6254,6 +6254,81 @@ Image_map(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
+}
+
+
+/*
+    Method:     Image#marshal_dump
+    Purpose:    Support Marshal.dump >= 1.8
+    Returns:    [img.filename, img.to_blob]
+*/
+VALUE
+Image_marshal_dump(VALUE self)
+{
+    Image *image;
+    Info *info;
+    unsigned char *blob;
+    size_t length;
+    VALUE ary;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
+    }
+
+    // Include actual format in dump, but dump image as MIFF
+    ary = rb_ary_new2(3);
+    rb_ary_store(ary, 0, rb_str_new2(image->filename));
+
+    GetExceptionInfo(&exception);
+    blob = ImageToBlob(info, image, &length, &exception);
+
+    // Destroy info before raising an exception
+    DestroyImageInfo(info);
+    CHECK_EXCEPTION()
+    (void) DestroyExceptionInfo(&exception);
+
+    rb_ary_store(ary, 1, rb_str_new((char *)blob, (long)length));
+    magick_free((void*)blob);
+
+    return ary;
+}
+
+
+/*
+    Method:     Image#marshal_load
+    Purpose:    Support Marshal.load >= 1.8
+    Notes:      On entry, ary is the array returned from marshal_dump.
+*/
+VALUE
+Image_marshal_load(VALUE self, VALUE ary)
+{
+    VALUE blob, filename;
+    Info *info;
+    Image *image;
+    ExceptionInfo exception;
+
+    info = CloneImageInfo(NULL);
+    if (!info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
+    }
+
+    filename = rb_ary_shift(ary);
+    blob = rb_ary_shift(ary);
+
+    GetExceptionInfo(&exception);
+    strcpy(info->filename, RSTRING(filename)->ptr);
+    image = BlobToImage(info, RSTRING(blob)->ptr, RSTRING(blob)->len, &exception);
+    (void) DestroyExceptionInfo(&exception);
+    CHECK_EXCEPTION();
+    UPDATE_DATA_PTR(self, image);
+
+    return self;
 }
 
 

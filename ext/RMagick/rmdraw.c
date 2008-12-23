@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.69 2008/12/18 00:17:59 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.70 2008/12/23 20:41:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -319,6 +319,248 @@ Draw_kerning_eq(VALUE self, VALUE kerning)
     rm_not_implemented();
     return (VALUE)0;
 #endif
+}
+
+
+/*
+    Method:     Draw#interword_spacing
+    Purpose:    space between two words
+    Notes:      new for 6.4.8-0
+*/
+VALUE
+Draw_interword_spacing_eq(VALUE self, VALUE spacing)
+{
+#if defined(HAVE_ST_INTERWORD_SPACING)
+    Draw *draw;
+
+    rb_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+    draw->info->interword_spacing = NUM2DBL(spacing);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+#endif
+}
+
+
+/*
+    Static:     image_to_str
+    Purpose:    Convert an image to a blob and the blob to a String
+    Notes:      Returns Qnil if there is no image
+*/
+static VALUE
+image_to_str(Image *image)
+{
+    volatile VALUE dimg = Qnil;
+    unsigned char *blob;
+    size_t length;
+    Info *info;
+    ExceptionInfo exception;
+
+    if (image)
+    {
+        info = CloneImageInfo(NULL);
+        GetExceptionInfo(&exception);
+        blob = ImageToBlob(info, image, &length, &exception);
+        DestroyImageInfo(info);
+        CHECK_EXCEPTION();
+        DestroyExceptionInfo(&exception);
+        dimg = rb_str_new((char *)blob, (long)length);
+        magick_free((void*)blob);
+    }
+
+    return dimg;
+}
+
+
+/*
+    Static:     str_to_image
+    Purpose:    Undo the image_to_str, above.
+    Notes:      Returns NULL if the argument is Qnil
+*/
+static
+Image *str_to_image(VALUE str)
+{
+    Image *image = NULL;
+    Info *info;
+    ExceptionInfo exception;
+
+    if (str != Qnil)
+    {
+        info = CloneImageInfo(NULL);
+        GetExceptionInfo(&exception);
+        image = BlobToImage(info, RSTRING(str)->ptr, RSTRING(str)->len, &exception);
+        DestroyImageInfo(info);
+        CHECK_EXCEPTION();
+        DestroyExceptionInfo(&exception);
+    }
+
+    return image;
+}
+
+
+/*
+    Method:     Draw#marshal_dump
+    Purpose:    Custom marshal for Draw objects
+    Notes:      Instead of trying to replicate Ruby's support for cross-system
+                marshalling, exploit it. Convert the Draw fields to Ruby objects
+                and store them in a hash. Let Ruby marshal the hash.
+
+                Commented out code that dumps/loads fields that are used internally
+                by ImageMagick and shouldn't be marshaled. I left the code as
+                placeholders so I'll know which fields have been deliberately
+                omitted.
+    To do:      Handle gradients when christy gets the new gradient support added (23Dec08)
+*/
+VALUE
+Draw_marshal_dump(VALUE self)
+{
+    Draw *draw;
+    VALUE ddraw;
+
+    Data_Get_Struct(self, Draw, draw);
+
+    // Raise an exception if the Draw has a non-NULL gradient or element_reference field
+    if (draw->info->element_reference.type != UndefinedReference
+        || draw->info->gradient.type != UndefinedGradient)
+    {
+        rb_raise(rb_eTypeError, "can't dump gradient definition");
+    }
+
+    ddraw = rb_hash_new();
+
+    // rb_hash_aset(ddraw, CSTR2SYM("primitive"), MAGICK_STRING_TO_OBJ(draw->info->primitive)); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("geometry"), MAGICK_STRING_TO_OBJ(draw->info->geometry)); set by "text" primitive
+    // rb_hash_aset(ddraw, CSTR2SYM("viewbox"), Rectangle_from_RectangleInfo(&draw->info->viewbox)); internal
+    rb_hash_aset(ddraw, CSTR2SYM("affine"), AffineMatrix_from_AffineMatrix(&draw->info->affine));
+    rb_hash_aset(ddraw, CSTR2SYM("gravity"), INT2FIX(draw->info->gravity));
+    rb_hash_aset(ddraw, CSTR2SYM("fill"), Pixel_from_PixelPacket(&draw->info->fill));
+    rb_hash_aset(ddraw, CSTR2SYM("stroke"), Pixel_from_PixelPacket(&draw->info->stroke));
+    rb_hash_aset(ddraw, CSTR2SYM("stroke_width"), rb_float_new(draw->info->stroke_width));
+    // rb_hash_aset(ddraw, CSTR2SYM("gradient"), Qnil);  // not used yet
+    rb_hash_aset(ddraw, CSTR2SYM("fill_pattern"), image_to_str(draw->info->fill_pattern));
+    rb_hash_aset(ddraw, CSTR2SYM("tile"), Qnil); // deprecated
+    rb_hash_aset(ddraw, CSTR2SYM("stroke_pattern"), image_to_str(draw->info->stroke_pattern));
+    rb_hash_aset(ddraw, CSTR2SYM("stroke_antialias"), draw->info->stroke_antialias ? Qtrue : Qfalse);
+    rb_hash_aset(ddraw, CSTR2SYM("text_antialias"), draw->info->text_antialias ? Qtrue : Qfalse);
+    // rb_hash_aset(ddraw, CSTR2SYM("fill_rule"), INT2FIX(draw->info->fill_rule)); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("linecap"), INT2FIX(draw->info->linecap));
+    // rb_hash_aset(ddraw, CSTR2SYM("linejoin"), INT2FIX(draw->info->linejoin));
+    // rb_hash_aset(ddraw, CSTR2SYM("miterlimit"), ULONG2NUM(draw->info->miterlimit));
+    // rb_hash_aset(ddraw, CSTR2SYM("dash_offset"), rb_float_new(draw->info->dash_offset));
+    rb_hash_aset(ddraw, CSTR2SYM("decorate"), INT2FIX(draw->info->decorate));
+    // rb_hash_aset(ddraw, CSTR2SYM("compose"), INT2FIX(draw->info->compose)); set via "image" primitive
+    // rb_hash_aset(ddraw, CSTR2SYM("text"), MAGICK_STRING_TO_OBJ(draw->info->text)); set via "text" primitive
+    // rb_hash_aset(ddraw, CSTR2SYM("face"), Qnil);  internal
+    rb_hash_aset(ddraw, CSTR2SYM("font"), MAGICK_STRING_TO_OBJ(draw->info->font));
+    // rb_hash_aset(ddraw, CSTR2SYM("metrics"), Qnil);   internal
+    rb_hash_aset(ddraw, CSTR2SYM("family"), MAGICK_STRING_TO_OBJ(draw->info->family));
+    rb_hash_aset(ddraw, CSTR2SYM("style"), INT2FIX(draw->info->style));
+    rb_hash_aset(ddraw, CSTR2SYM("stretch"), INT2FIX(draw->info->stretch));
+    rb_hash_aset(ddraw, CSTR2SYM("weight"), ULONG2NUM(draw->info->weight));
+    rb_hash_aset(ddraw, CSTR2SYM("encoding"), MAGICK_STRING_TO_OBJ(draw->info->encoding));
+    rb_hash_aset(ddraw, CSTR2SYM("pointsize"), rb_float_new(draw->info->pointsize));
+    rb_hash_aset(ddraw, CSTR2SYM("density"), MAGICK_STRING_TO_OBJ(draw->info->density));
+    rb_hash_aset(ddraw, CSTR2SYM("align"), INT2FIX(draw->info->align));
+    rb_hash_aset(ddraw, CSTR2SYM("undercolor"), Pixel_from_PixelPacket(&draw->info->undercolor));
+    // rb_hash_aset(ddraw, CSTR2SYM("border_color"), Pixel_from_PixelPacket(&draw->info->border_color)); Montage and Polaroid
+    // rb_hash_aset(ddraw, CSTR2SYM("server_name"), MAGICK_STRING_TO_OBJ(draw->info->server_name));
+    // rb_hash_aset(ddraw, CSTR2SYM("dash_pattern"), dash_pattern_to_array(draw->info->dash_pattern)); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("clip_mask"), MAGICK_STRING_TO_OBJ(draw->info->clip_mask)); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("bounds"), Segment_from_SegmentInfo(&draw->info->bounds)); internal
+    rb_hash_aset(ddraw, CSTR2SYM("clip_units"), INT2FIX(draw->info->clip_units));
+    rb_hash_aset(ddraw, CSTR2SYM("opacity"), QUANTUM2NUM(draw->info->opacity));
+    // rb_hash_aset(ddraw, CSTR2SYM("render"), draw->info->render ? Qtrue : Qfalse); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("element_reference"), Qnil);     // not used yet
+    // rb_hash_aset(ddraw, CSTR2SYM("debug"), draw->info->debug ? Qtrue : Qfalse);
+#if defined(HAVE_ST_KERNING)
+    rb_hash_aset(ddraw, CSTR2SYM("kerning"), rb_float_new(draw->info->kerning));
+#endif
+#if defined(HAVE_ST_INTERWORD_SPACING)
+    rb_hash_aset(ddraw, CSTR2SYM("interword_spacing"), rb_float_new(draw->info->interword_spacing));
+#endif
+
+    // Non-DrawInfo fields
+    rb_hash_aset(ddraw, CSTR2SYM("primitives"), draw->primitives);
+    // rb_hash_aset(ddraw, CSTR2SYM("shadow_color"), Pixel_from_PixelPacket(&draw->shadow_color)); Polaroid-only
+
+    return ddraw;
+}
+
+
+/*
+    Method:     Draw#marshal_load
+    Purpose:    Support Marsal.load
+    Notes:      On entry all fields are all-bits-0
+*/
+VALUE
+Draw_marshal_load(VALUE self, VALUE ddraw)
+{
+    Draw *draw;
+    Pixel *pixel;
+    volatile VALUE val;
+
+    Data_Get_Struct(self, Draw, draw);
+
+    draw->info = magick_malloc(sizeof(DrawInfo));
+    if (!draw->info)
+    {
+        rb_raise(rb_eNoMemError, "not enough memory to continue");
+    }
+    GetDrawInfo(NULL, draw->info);
+
+    OBJ_TO_MAGICK_STRING(draw->info->geometry, rb_hash_aref(ddraw, CSTR2SYM("geometry")));
+
+    //val = rb_hash_aref(ddraw, CSTR2SYM("viewbox"));
+    //Rectangle_to_RectangleInfo(&draw->info->viewbox, val);
+
+    val = rb_hash_aref(ddraw, CSTR2SYM("affine"));
+    AffineMatrix_to_AffineMatrix(&draw->info->affine, val);
+
+    draw->info->gravity = (GravityType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("gravity")));
+
+    val = rb_hash_aref(ddraw, CSTR2SYM("fill"));
+    Data_Get_Struct(val, Pixel, pixel);
+    draw->info->fill =  *pixel;
+
+    val = rb_hash_aref(ddraw, CSTR2SYM("stroke"));
+    Data_Get_Struct(val, Pixel, pixel);
+    draw->info->stroke = *pixel;
+
+    draw->info->stroke_width = NUM2DBL(rb_hash_aref(ddraw, CSTR2SYM("stroke_width")));
+    draw->info->fill_pattern = str_to_image(rb_hash_aref(ddraw, CSTR2SYM("fill_pattern")));
+    draw->info->stroke_pattern = str_to_image(rb_hash_aref(ddraw, CSTR2SYM("stroke_pattern")));
+    draw->info->stroke_antialias = RTEST(rb_hash_aref(ddraw, CSTR2SYM("stroke_antialias")));
+    draw->info->text_antialias = RTEST(rb_hash_aref(ddraw, CSTR2SYM("text_antialias")));
+    draw->info->decorate = (DecorationType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("decorate")));
+    OBJ_TO_MAGICK_STRING(draw->info->font, rb_hash_aref(ddraw, CSTR2SYM("font")));
+    OBJ_TO_MAGICK_STRING(draw->info->family, rb_hash_aref(ddraw, CSTR2SYM("family")));
+
+    draw->info->style = (StyleType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("style")));
+    draw->info->stretch = (StretchType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("stretch")));
+    draw->info->weight = NUM2ULONG(rb_hash_aref(ddraw, CSTR2SYM("weight")));
+    OBJ_TO_MAGICK_STRING(draw->info->encoding, rb_hash_aref(ddraw, CSTR2SYM("encoding")));
+    draw->info->pointsize = NUM2DBL(rb_hash_aref(ddraw, CSTR2SYM("pointsize")));
+    OBJ_TO_MAGICK_STRING(draw->info->density, rb_hash_aref(ddraw, CSTR2SYM("density")));
+    draw->info->align = (AlignType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("align")));
+
+    val = rb_hash_aref(ddraw, CSTR2SYM("undercolor"));
+    Data_Get_Struct(val, Pixel, pixel);
+    draw->info->undercolor = *pixel;
+
+    draw->info->clip_units = FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("clip_units")));
+    draw->info->opacity = NUM2QUANTUM(rb_hash_aref(ddraw, CSTR2SYM("opacity")));
+#if defined(HAVE_ST_KERNING)
+    draw->info->kerning = NUM2DBL(rb_hash_aref(ddraw, CSTR2SYM("kerning")));
+#endif
+#if defined(HAVE_ST_INTERWORD_SPACING)
+    draw->info->interword_spacing = NUM2DBL(rb_hash_aref(ddraw, CSTR2SYM("interword_spacing")));
+#endif
+
+    draw->primitives = rb_hash_aref(ddraw, CSTR2SYM("primitives"));
+
+    return self;
 }
 
 

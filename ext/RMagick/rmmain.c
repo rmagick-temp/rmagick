@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.281 2008/12/18 00:17:59 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.282 2008/12/23 20:41:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -589,6 +589,8 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "magnify", Image_magnify, 0);
     rb_define_method(Class_Image, "magnify!", Image_magnify_bang, 0);
     rb_define_method(Class_Image, "map", Image_map, -1);
+    rb_define_method(Class_Image, "marshal_dump", Image_marshal_dump, 0);
+    rb_define_method(Class_Image, "marshal_load", Image_marshal_load, 1);
     rb_define_method(Class_Image, "mask", Image_mask, -1);
     rb_define_method(Class_Image, "matte_flood_fill", Image_matte_flood_fill, 5);
     rb_define_method(Class_Image, "median_filter", Image_median_filter, -1);
@@ -729,6 +731,7 @@ Init_RMagick2(void)
     DCL_ATTR_WRITER(Draw, font_style)
     DCL_ATTR_WRITER(Draw, font_weight)
     DCL_ATTR_WRITER(Draw, gravity)
+    DCL_ATTR_WRITER(Draw, interword_spacing)
     DCL_ATTR_WRITER(Draw, kerning)
     DCL_ATTR_WRITER(Draw, pointsize)
     DCL_ATTR_WRITER(Draw, rotation)
@@ -749,6 +752,8 @@ Init_RMagick2(void)
     rb_define_method(Class_Draw, "initialize", Draw_initialize, 0);
     rb_define_method(Class_Draw, "initialize_copy", Draw_init_copy, 1);
     rb_define_method(Class_Draw, "inspect", Draw_inspect, 0);
+    rb_define_method(Class_Draw, "marshal_dump", Draw_marshal_dump, 0);
+    rb_define_method(Class_Draw, "marshal_load", Draw_marshal_load, 1);
     rb_define_method(Class_Draw, "primitive", Draw_primitive, 1);
 
     /*-----------------------------------------------------------------------*/
@@ -830,6 +835,8 @@ Init_RMagick2(void)
     rb_define_method(Class_Pixel, "fcmp", Pixel_fcmp, -1);
     rb_define_method(Class_Pixel, "hash", Pixel_hash, 0);
     rb_define_method(Class_Pixel, "intensity", Pixel_intensity, 0);
+    rb_define_method(Class_Pixel, "marshal_dump", Pixel_marshal_dump, 0);
+    rb_define_method(Class_Pixel, "marshal_load", Pixel_marshal_load, 1);
     rb_define_method(Class_Pixel, "to_color", Pixel_to_color, -1);
     rb_define_method(Class_Pixel, "to_HSL", Pixel_to_HSL, 0);   // deprecated
     rb_define_method(Class_Pixel, "to_hsla", Pixel_to_hsla, 0);
@@ -1813,7 +1820,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/12/18 00:17:59 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2008/12/23 20:41:45 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

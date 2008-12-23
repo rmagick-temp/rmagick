@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.261 2008/12/18 00:17:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.262 2008/12/23 20:41:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -125,6 +125,20 @@
 #if !defined(RARRAY_PTR)
 #define RARRAY_PTR(a) RARRAY((a))->ptr
 #endif
+
+
+// Convert a C string to a Ruby symbol. Used in marshal_dump/marshal_load methods
+#define CSTR2SYM(s) ID2SYM(rb_intern(s))
+// Convert a C string to a Ruby String, or nil if the ptr is NULL
+#define MAGICK_STRING_TO_OBJ(f) (f) ? rb_str_new2(f) : Qnil
+// Copy the C string in a Ruby String object to ImageMagick memory, or set
+// the pointer to NULL if the object is nil.
+#define OBJ_TO_MAGICK_STRING(f, obj) \
+    if ((obj) != Qnil)\
+        magick_clone_string(&f, RSTRING(obj)->ptr);\
+    else\
+        f = NULL;
+
 
 // These two functions are defined in IM starting with 6.3.2.
 #if !defined(HAVE_GETSTRINGINFODATUM)
@@ -581,6 +595,7 @@ ATTR_WRITER(Draw, font_stretch)
 ATTR_WRITER(Draw, font_style)
 ATTR_WRITER(Draw, font_weight)
 ATTR_WRITER(Draw, gravity)
+ATTR_WRITER(Draw, interword_spacing)
 ATTR_WRITER(Draw, kerning)
 ATTR_WRITER(Draw, pointsize)
 ATTR_WRITER(Draw, rotation)
@@ -590,6 +605,7 @@ ATTR_WRITER(Draw, stroke_width)
 ATTR_WRITER(Draw, text_antialias)
 ATTR_WRITER(Draw, tile)
 ATTR_WRITER(Draw, undercolor)
+extern VALUE Draw_alloc(VALUE);
 extern VALUE Draw_annotate(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Draw_clone(VALUE);
 extern VALUE Draw_composite(int, VALUE *, VALUE);
@@ -600,9 +616,10 @@ extern VALUE Draw_get_type_metrics(int, VALUE *, VALUE);
 extern VALUE Draw_init_copy(VALUE, VALUE);
 extern VALUE Draw_initialize(VALUE);
 extern VALUE Draw_inspect(VALUE);
-extern VALUE Draw_alloc(VALUE);
-extern VALUE DrawOptions_alloc(VALUE);
+extern VALUE Draw_marshal_dump(VALUE);
+extern VALUE Draw_marshal_load(VALUE, VALUE);
 extern VALUE Draw_primitive(VALUE, VALUE);
+extern VALUE DrawOptions_alloc(VALUE);
 extern VALUE DrawOptions_initialize(VALUE);
 
 
@@ -915,6 +932,8 @@ extern VALUE Image__load(VALUE, VALUE);
 extern VALUE Image_magnify(VALUE);
 extern VALUE Image_magnify_bang(VALUE);
 extern VALUE Image_map(int, VALUE *, VALUE);
+extern VALUE Image_marshal_dump(VALUE);
+extern VALUE Image_marshal_load(VALUE, VALUE);
 extern VALUE Image_mask(int, VALUE *, VALUE);
 extern VALUE Image_matte_flood_fill(VALUE, VALUE, VALUE, VALUE, VALUE, VALUE);
 extern VALUE Image_median_filter(int, VALUE *, VALUE);
@@ -1070,6 +1089,8 @@ extern VALUE  Pixel_hash(VALUE);
 extern VALUE  Pixel_initialize(int, VALUE *, VALUE);
 extern VALUE  Pixel_init_copy(VALUE, VALUE);
 extern VALUE  Pixel_intensity(VALUE);
+extern VALUE  Pixel_marshal_dump(VALUE);
+extern VALUE  Pixel_marshal_load(VALUE, VALUE);
 extern VALUE  Pixel_spaceship(VALUE, VALUE);
 extern VALUE  Pixel_to_color(int, VALUE *, VALUE);
 extern VALUE  Pixel_to_HSL(VALUE);
@@ -1090,6 +1111,7 @@ extern VALUE  ResolutionType_new(ResolutionType);
 extern VALUE  SegmentInfo_to_s(VALUE);
 extern VALUE  Segment_from_SegmentInfo(SegmentInfo *);
 extern void   AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
+extern VALUE  AffineMatrix_from_AffineMatrix(AffineMatrix *);
 extern void   ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
 extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
 extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);

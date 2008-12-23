@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.336 2008/12/23 20:41:45 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.337 2008/12/23 22:30:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6280,9 +6280,15 @@ Image_marshal_dump(VALUE self)
         rb_raise(rb_eNoMemError, "not enough memory to initialize Info object");
     }
 
-    // Include actual format in dump, but dump image as MIFF
-    ary = rb_ary_new2(3);
-    rb_ary_store(ary, 0, rb_str_new2(image->filename));
+    ary = rb_ary_new2(2);
+    if (image->filename)
+    {
+        rb_ary_store(ary, 0, rb_str_new2(image->filename));
+    }
+    else
+    {
+        rb_ary_store(ary, 0, Qnil);
+    }
 
     GetExceptionInfo(&exception);
     blob = ImageToBlob(info, image, &length, &exception);
@@ -6322,7 +6328,10 @@ Image_marshal_load(VALUE self, VALUE ary)
     blob = rb_ary_shift(ary);
 
     GetExceptionInfo(&exception);
-    strcpy(info->filename, RSTRING(filename)->ptr);
+    if (filename != Qnil)
+    {
+        strcpy(info->filename, RSTRING(filename)->ptr);
+    }
     image = BlobToImage(info, RSTRING(blob)->ptr, RSTRING(blob)->len, &exception);
     (void) DestroyExceptionInfo(&exception);
     CHECK_EXCEPTION();

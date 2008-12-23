@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.172 2008/11/15 21:30:51 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.173 2008/12/23 20:33:14 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -1037,6 +1037,44 @@ DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(black, opacity)
 
 
 /*
+    Method:     Pixel#marshal_dump
+    Purpose:    Support Marshal.dump
+*/
+VALUE
+Pixel_marshal_dump(VALUE self)
+{
+    Pixel *pixel;
+    volatile VALUE dpixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    dpixel = rb_hash_new();
+    rb_hash_aset(dpixel, CSTR2SYM("red"), QUANTUM2NUM(pixel->red));
+    rb_hash_aset(dpixel, CSTR2SYM("green"), QUANTUM2NUM(pixel->green));
+    rb_hash_aset(dpixel, CSTR2SYM("blue"), QUANTUM2NUM(pixel->blue));
+    rb_hash_aset(dpixel, CSTR2SYM("opacity"), QUANTUM2NUM(pixel->opacity));
+    return dpixel;
+}
+
+
+/*
+    Method:     Pixel#marshal_load
+    Purpose:    Support Marshal.load
+*/
+VALUE
+Pixel_marshal_load(VALUE self, VALUE dpixel)
+{
+    Pixel *pixel;
+
+    Data_Get_Struct(self, Pixel, pixel);
+    pixel->red = NUM2QUANTUM(rb_hash_aref(dpixel, CSTR2SYM("red")));
+    pixel->green = NUM2QUANTUM(rb_hash_aref(dpixel, CSTR2SYM("green")));
+    pixel->blue = NUM2QUANTUM(rb_hash_aref(dpixel, CSTR2SYM("blue")));
+    pixel->opacity = NUM2QUANTUM(rb_hash_aref(dpixel, CSTR2SYM("opacity")));
+    return self;
+}
+
+
+/*
     Method:     Pixel#<=>
     Purpose:    Support Comparable mixin
 */
@@ -1361,6 +1399,27 @@ AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
     am->tx = v == Qnil ? 0.0 : NUM2DBL(v);
     v = rb_ary_entry(values, 5);
     am->ty = v == Qnil ? 0.0 : NUM2DBL(v);
+}
+
+
+/*
+    Extern:     AffineMatrix_from_AffineMatrix
+    Purpose:    Given a C AffineMatrix, create the equivalent
+                AffineMatrix object.
+    Notes:      am = Magick::AffineMatrix.new(sx, rx, ry, sy, tx, ty)
+*/
+VALUE
+AffineMatrix_from_AffineMatrix(AffineMatrix *affine)
+{
+    VALUE argv[6];
+
+    argv[0] = rb_float_new(affine->sx);
+    argv[1] = rb_float_new(affine->rx);
+    argv[2] = rb_float_new(affine->ry);
+    argv[3] = rb_float_new(affine->sy);
+    argv[4] = rb_float_new(affine->tx);
+    argv[5] = rb_float_new(affine->ty);
+    return rb_class_new_instance(6, argv, Class_AffineMatrix);
 }
 
 

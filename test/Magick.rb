@@ -265,7 +265,7 @@ class Magick_UT < Test::Unit::TestCase
         cur = new = nil
 
         assert_nothing_raised {cur = Magick::limit_resource(:memory, 500)}
-        assert_equal(791930880, cur)
+        assert_equal(789958656, cur)
         assert_nothing_raised {new = Magick::limit_resource("memory")}
         assert_equal(500, new)
         Magick::limit_resource(:memory, cur)

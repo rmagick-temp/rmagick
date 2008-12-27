@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.70 2008/12/23 20:41:44 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.71 2008/12/27 00:16:37 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -318,6 +318,8 @@ Draw_kerning_eq(VALUE self, VALUE kerning)
 #else
     rm_not_implemented();
     return (VALUE)0;
+    self = self;
+    kerning = kerning;
 #endif
 }
 
@@ -340,6 +342,8 @@ Draw_interword_spacing_eq(VALUE self, VALUE spacing)
 #else
     rm_not_implemented();
     return (VALUE)0;
+    self = self;
+    spacing = spacing;
 #endif
 }
 

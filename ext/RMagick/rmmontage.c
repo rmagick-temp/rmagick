@@ -1,10 +1,9 @@
-/* $Id: rmmontage.c,v 1.1 2008/12/27 00:32:49 rmagick Exp $ */
+/* $Id: rmmontage.c,v 1.2 2008/12/27 00:46:23 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
 | Author:   Tim Hunter
-| Purpose:  Contains Draw class methods.
-|           Contains Montage class methods.
+| Purpose:  Contains Montage class methods.
 \============================================================================*/
 
 #include "rmagick.h"

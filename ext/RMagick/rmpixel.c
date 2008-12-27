@@ -1,4 +1,4 @@
-/* $Id: rmpixel.c,v 1.1 2008/12/23 22:30:27 rmagick Exp $ */
+/* $Id: rmpixel.c,v 1.2 2008/12/27 00:15:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmpixel.c
@@ -9,6 +9,9 @@
 #include "rmagick.h"
 
 
+
+
+static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 
 
 
@@ -52,6 +55,69 @@ DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(cyan, red)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(magenta, green)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(yellow, blue)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(black, opacity)
+
+
+/*
+ *  Static:     color_arg_rescue
+ *  Purpose:    raise ArgumentError if the color name cannot be converted
+ *              to a string via rb_str_to_str.
+*/
+static VALUE
+color_arg_rescue(VALUE arg)
+{
+    rb_raise(rb_eTypeError, "argument must be color name or pixel (%s given)",
+            rb_class2name(CLASS_OF(arg)));
+    return (VALUE)0;
+}
+
+
+/*
+    Extern:     Color_to_PixelPacket
+    Purpose:    Convert either a String color name or
+                a Magick::Pixel to a PixelPacket
+*/
+void
+Color_to_PixelPacket(PixelPacket *pp, VALUE color)
+{
+    Pixel *pixel;
+
+    // Allow color name or Pixel
+    if (CLASS_OF(color) == Class_Pixel)
+    {
+        Data_Get_Struct(color, Pixel, pixel);
+        *pp = *pixel;
+    }
+    else
+    {
+        // require 'to_str' here instead of just 'to_s'.
+        color = rb_rescue(rb_str_to_str, color, color_arg_rescue, color);
+        Color_Name_to_PixelPacket(pp, color);
+    }
+}
+
+
+/*
+    Static:     Color_Name_to_PixelPacket
+    Purpose:    Convert a color name to a PixelPacket
+    Raises:     ArgumentError
+*/
+static void
+Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
+{
+    MagickBooleanType okay;
+    char *name;
+    ExceptionInfo exception;
+
+    GetExceptionInfo(&exception);
+    name = StringValuePtr(name_arg);
+    okay = QueryColorDatabase(name, color, &exception);
+    (void) DestroyExceptionInfo(&exception);
+    if (!okay)
+    {
+        rb_raise(rb_eArgError, "invalid color name %s", name);
+    }
+}
+
 
 
 /*
@@ -336,6 +402,42 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
                  &rgb.red, &rgb.green, &rgb.blue);
 #endif
     return Pixel_from_PixelPacket(&rgb);
+}
+
+
+/*
+    Static:     Pixel_from_MagickPixelPacket
+    Purpose:    Create a Magick::Pixel object from a MagickPixelPacket structure.
+    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
+*/
+VALUE
+Pixel_from_MagickPixelPacket(const MagickPixelPacket *pp)
+{
+    Pixel *pixel;
+
+    pixel          = ALLOC(Pixel);
+    pixel->red     = ROUND_TO_QUANTUM(pp->red);
+    pixel->green   = ROUND_TO_QUANTUM(pp->green);
+    pixel->blue    = ROUND_TO_QUANTUM(pp->blue);
+    pixel->opacity = ROUND_TO_QUANTUM(pp->opacity);
+
+    return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
+}
+
+
+/*
+    Extern:     Pixel_from_PixelPacket
+    Purpose:    Create a Magick::Pixel object from a PixelPacket structure.
+    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
+*/
+VALUE
+Pixel_from_PixelPacket(const PixelPacket *pp)
+{
+    Pixel *pixel;
+
+    pixel = ALLOC(Pixel);
+    *pixel = *pp;
+    return Data_Wrap_Struct(Class_Pixel, NULL, destroy_Pixel, pixel);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.337 2008/12/23 22:30:14 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.338 2008/12/27 00:17:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -10348,6 +10348,7 @@ Image_transparent_chroma(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 #else
     rm_not_implemented();
+    return (VALUE)0;
     argc = argc;
     argv = argv;
     self = self;

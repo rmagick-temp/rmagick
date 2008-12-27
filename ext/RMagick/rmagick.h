@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.263 2008/12/23 22:31:45 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.264 2008/12/27 00:46:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -578,6 +578,13 @@ extern void Init_RMagick2(void);
 extern VALUE Magick_colors(VALUE);
 extern VALUE Magick_fonts(VALUE);
 extern VALUE Magick_init_formats(VALUE);
+
+
+// rmagick.c
+VALUE Magick_limit_resource(int, VALUE *, VALUE);
+VALUE Magick_set_cache_threshold(VALUE, VALUE);
+VALUE Magick_set_log_event_mask(int, VALUE *, VALUE);
+VALUE Magick_set_log_format(VALUE, VALUE);
 
 
 // rmdraw.c

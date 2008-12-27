@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.73 2008/12/27 00:46:13 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.74 2008/12/27 17:16:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -28,7 +28,7 @@ Draw_affine_eq(VALUE self, VALUE matrix)
 
     rb_check_frozen(self);
     Data_Get_Struct(self, Draw, draw);
-    AffineMatrix_to_AffineMatrix(&draw->info->affine, matrix);
+    Export_AffineMatrix(&draw->info->affine, matrix);
     return self;
 }
 
@@ -434,8 +434,8 @@ Draw_marshal_dump(VALUE self)
 
     // rb_hash_aset(ddraw, CSTR2SYM("primitive"), MAGICK_STRING_TO_OBJ(draw->info->primitive)); internal
     // rb_hash_aset(ddraw, CSTR2SYM("geometry"), MAGICK_STRING_TO_OBJ(draw->info->geometry)); set by "text" primitive
-    // rb_hash_aset(ddraw, CSTR2SYM("viewbox"), Rectangle_from_RectangleInfo(&draw->info->viewbox)); internal
-    rb_hash_aset(ddraw, CSTR2SYM("affine"), AffineMatrix_from_AffineMatrix(&draw->info->affine));
+    // rb_hash_aset(ddraw, CSTR2SYM("viewbox"), Import_RectangleInfo(&draw->info->viewbox)); internal
+    rb_hash_aset(ddraw, CSTR2SYM("affine"), Import_AffineMatrix(&draw->info->affine));
     rb_hash_aset(ddraw, CSTR2SYM("gravity"), INT2FIX(draw->info->gravity));
     rb_hash_aset(ddraw, CSTR2SYM("fill"), Pixel_from_PixelPacket(&draw->info->fill));
     rb_hash_aset(ddraw, CSTR2SYM("stroke"), Pixel_from_PixelPacket(&draw->info->stroke));
@@ -470,7 +470,7 @@ Draw_marshal_dump(VALUE self)
     // rb_hash_aset(ddraw, CSTR2SYM("server_name"), MAGICK_STRING_TO_OBJ(draw->info->server_name));
     // rb_hash_aset(ddraw, CSTR2SYM("dash_pattern"), dash_pattern_to_array(draw->info->dash_pattern)); internal
     // rb_hash_aset(ddraw, CSTR2SYM("clip_mask"), MAGICK_STRING_TO_OBJ(draw->info->clip_mask)); internal
-    // rb_hash_aset(ddraw, CSTR2SYM("bounds"), Segment_from_SegmentInfo(&draw->info->bounds)); internal
+    // rb_hash_aset(ddraw, CSTR2SYM("bounds"), Import_SegmentInfo(&draw->info->bounds)); internal
     rb_hash_aset(ddraw, CSTR2SYM("clip_units"), INT2FIX(draw->info->clip_units));
     rb_hash_aset(ddraw, CSTR2SYM("opacity"), QUANTUM2NUM(draw->info->opacity));
     // rb_hash_aset(ddraw, CSTR2SYM("render"), draw->info->render ? Qtrue : Qfalse); internal
@@ -515,10 +515,10 @@ Draw_marshal_load(VALUE self, VALUE ddraw)
     OBJ_TO_MAGICK_STRING(draw->info->geometry, rb_hash_aref(ddraw, CSTR2SYM("geometry")));
 
     //val = rb_hash_aref(ddraw, CSTR2SYM("viewbox"));
-    //Rectangle_to_RectangleInfo(&draw->info->viewbox, val);
+    //Export_RectangleInfo(&draw->info->viewbox, val);
 
     val = rb_hash_aref(ddraw, CSTR2SYM("affine"));
-    AffineMatrix_to_AffineMatrix(&draw->info->affine, val);
+    Export_AffineMatrix(&draw->info->affine, val);
 
     draw->info->gravity = (GravityType) FIX2INT(rb_hash_aref(ddraw, CSTR2SYM("gravity")));
 
@@ -1473,5 +1473,5 @@ get_type_metrics(
         rb_raise(rb_eRuntimeError, "Can't measure text. Are the fonts installed? "
                  "Is the FreeType library installed?");
     }
-    return TypeMetric_from_TypeMetric(&metrics);
+    return Import_TypeMetric(&metrics);
 }

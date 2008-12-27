@@ -1,4 +1,4 @@
-/* $Id: rmagick.c,v 1.1 2008/12/27 00:46:59 rmagick Exp $ */
+/* $Id: rmagick.c,v 1.2 2008/12/27 17:16:03 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.c
@@ -38,7 +38,7 @@ Magick_colors(VALUE class)
     {
         for (x = 0; x < number_colors; x++)
         {
-            (void) rb_yield(Color_from_ColorInfo(color_info_list[x]));
+            (void) rb_yield(Import_ColorInfo(color_info_list[x]));
         }
         magick_free((void *)color_info_list);
         return class;
@@ -48,7 +48,7 @@ Magick_colors(VALUE class)
         ary = rb_ary_new2((long) number_colors);
         for (x = 0; x < number_colors; x++)
         {
-            (void) rb_ary_push(ary, Color_from_ColorInfo(color_info_list[x]));
+            (void) rb_ary_push(ary, Import_ColorInfo(color_info_list[x]));
         }
 
         magick_free((void *)color_info_list);
@@ -79,7 +79,7 @@ Magick_fonts(VALUE class)
     {
         for (x = 0; x < number_types; x++)
         {
-            (void) rb_yield(Font_from_TypeInfo((const TypeInfo *)type_info[x]));
+            (void) rb_yield(Import_TypeInfo((const TypeInfo *)type_info[x]));
         }
         magick_free((void *)type_info);
         return class;
@@ -89,7 +89,7 @@ Magick_fonts(VALUE class)
         ary = rb_ary_new2((long)number_types);
         for (x = 0; x < number_types; x++)
         {
-            (void) rb_ary_push(ary, Font_from_TypeInfo((const TypeInfo *)type_info[x]));
+            (void) rb_ary_push(ary, Import_TypeInfo((const TypeInfo *)type_info[x]));
         }
         magick_free((void *)type_info);
         return ary;

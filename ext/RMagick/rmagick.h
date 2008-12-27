@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.264 2008/12/27 00:46:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.265 2008/12/27 17:16:03 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1093,7 +1093,7 @@ extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
 extern void   Color_to_PixelPacket(PixelPacket *, VALUE);
 extern void   Color_to_MagickPixelPacket(Image *, MagickPixelPacket *, VALUE);
 extern VALUE  Color_to_s(VALUE);
-extern VALUE  Color_from_ColorInfo(const ColorInfo *);
+extern VALUE  Import_ColorInfo(const ColorInfo *);
 extern VALUE  ClassType_new(ClassType);
 extern VALUE  ColorspaceType_new(ColorspaceType);
 extern VALUE  CompositeOperator_new(CompositeOperator);
@@ -1111,30 +1111,30 @@ extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
 extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE  Pixel_from_MagickPixelPacket(const MagickPixelPacket *);
 extern VALUE  Pixel_from_PixelPacket(const PixelPacket *);
-extern void   Point_to_PointInfo(PointInfo *, VALUE);
-extern VALUE  PointInfo_to_Point(PointInfo *);
+extern void   Export_PointInfo(PointInfo *, VALUE);
+extern VALUE  Import_PointInfo(PointInfo *);
 extern VALUE  PrimaryInfo_to_s(VALUE);
-extern VALUE  PrimaryInfo_from_PrimaryInfo(PrimaryInfo *);
+extern VALUE  Import_PrimaryInfo(PrimaryInfo *);
 extern VALUE  RectangleInfo_to_s(VALUE);
-extern VALUE  Rectangle_from_RectangleInfo(RectangleInfo *);
+extern VALUE  Import_RectangleInfo(RectangleInfo *);
 extern VALUE  RenderingIntent_new(RenderingIntent);
 extern VALUE  ResolutionType_new(ResolutionType);
 extern VALUE  SegmentInfo_to_s(VALUE);
-extern VALUE  Segment_from_SegmentInfo(SegmentInfo *);
-extern void   AffineMatrix_to_AffineMatrix(AffineMatrix *, VALUE);
-extern VALUE  AffineMatrix_from_AffineMatrix(AffineMatrix *);
-extern void   ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *, VALUE);
-extern void   Color_to_ColorInfo(ColorInfo *, VALUE);
+extern VALUE  Import_SegmentInfo(SegmentInfo *);
+extern void   Export_AffineMatrix(AffineMatrix *, VALUE);
+extern VALUE  Import_AffineMatrix(AffineMatrix *);
+extern void   Export_ChromaticityInfo(ChromaticityInfo *, VALUE);
+extern void   Export_ColorInfo(ColorInfo *, VALUE);
 extern VALUE  InterpolatePixelMethod_new(InterpolatePixelMethod);
 extern VALUE  OrientationType_new(OrientationType);
-extern void   PrimaryInfo_to_PrimaryInfo(PrimaryInfo *, VALUE);
-extern void   Rectangle_to_RectangleInfo(RectangleInfo *, VALUE);
-extern void   Segment_to_SegmentInfo(SegmentInfo *, VALUE);
+extern void   Export_PrimaryInfo(PrimaryInfo *, VALUE);
+extern void   Export_RectangleInfo(RectangleInfo *, VALUE);
+extern void   Export_SegmentInfo(SegmentInfo *, VALUE);
 extern void   Font_to_TypeInfo(TypeInfo *, VALUE);
-extern void   TypeMetric_to_TypeMetric(TypeMetric *, VALUE);
-extern VALUE  Font_from_TypeInfo(const TypeInfo *);
+extern void   Export_TypeMetric(TypeMetric *, VALUE);
+extern VALUE  Import_TypeInfo(const TypeInfo *);
 extern VALUE  TypeMetric_to_s(VALUE);
-extern VALUE  TypeMetric_from_TypeMetric(TypeMetric *);
+extern VALUE  Import_TypeMetric(TypeMetric *);
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 extern VALUE  LAYERMETHODTYPE_NEW(LAYERMETHODTYPE);

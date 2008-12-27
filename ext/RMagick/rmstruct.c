@@ -1,4 +1,4 @@
-/* $Id: rmstruct.c,v 1.1 2008/12/27 00:15:13 rmagick Exp $ */
+/* $Id: rmstruct.c,v 1.2 2008/12/27 17:16:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmstruct.c
@@ -22,13 +22,13 @@ static VALUE StyleType_new(StyleType);
 
 
 /*
-    Extern:     AffineMatrix_from_AffineMatrix
+    Extern:     Import_AffineMatrix
     Purpose:    Given a C AffineMatrix, create the equivalent
                 AffineMatrix object.
     Notes:      am = Magick::AffineMatrix.new(sx, rx, ry, sy, tx, ty)
 */
 VALUE
-AffineMatrix_from_AffineMatrix(AffineMatrix *affine)
+Import_AffineMatrix(AffineMatrix *affine)
 {
     VALUE argv[6];
 
@@ -43,12 +43,12 @@ AffineMatrix_from_AffineMatrix(AffineMatrix *affine)
 
 
 /*
-    Extern:     AffineMatrix_to_AffineMatrix
+    Extern:     Export_AffineMatrix
     Purpose:    Convert a Magick::AffineMatrix object to a AffineMatrix structure.
     Notes:      If not initialized, the defaults are [sx,rx,ry,sy,tx,ty] = [1,0,0,1,0,0]
 */
 void
-AffineMatrix_to_AffineMatrix(AffineMatrix *am, VALUE st)
+Export_AffineMatrix(AffineMatrix *am, VALUE st)
 {
     volatile VALUE values, v;
 
@@ -86,10 +86,10 @@ ChromaticityInfo_new(ChromaticityInfo *ci)
     volatile VALUE blue_primary;
     volatile VALUE white_point;
 
-    red_primary   = PrimaryInfo_from_PrimaryInfo(&ci->red_primary);
-    green_primary = PrimaryInfo_from_PrimaryInfo(&ci->green_primary);
-    blue_primary  = PrimaryInfo_from_PrimaryInfo(&ci->blue_primary);
-    white_point   = PrimaryInfo_from_PrimaryInfo(&ci->white_point);
+    red_primary   = Import_PrimaryInfo(&ci->red_primary);
+    green_primary = Import_PrimaryInfo(&ci->green_primary);
+    blue_primary  = Import_PrimaryInfo(&ci->blue_primary);
+    white_point   = Import_PrimaryInfo(&ci->white_point);
 
     return rb_funcall(Class_Chromaticity, rm_ID_new, 4
                     , red_primary, green_primary, blue_primary, white_point);
@@ -97,12 +97,12 @@ ChromaticityInfo_new(ChromaticityInfo *ci)
 
 
 /*
-    Extern:     ChromaticityInfo_to_ChromaticityInfo
+    Extern:     Export_ChromaticityInfo
     Purpose:    Extract the elements from a Magick::ChromaticityInfo
                 and store in a ChromaticityInfo structure.
 */
 void
-ChromaticityInfo_to_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
+Export_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 {
     volatile VALUE chrom_members;
     volatile VALUE red_primary, green_primary, blue_primary, white_point;
@@ -167,7 +167,7 @@ ChromaticityInfo_to_s(VALUE self)
     ChromaticityInfo ci;
     char buff[200];
 
-    ChromaticityInfo_to_ChromaticityInfo(&ci, self);
+    Export_ChromaticityInfo(&ci, self);
     sprintf(buff, "red_primary=(x=%g,y=%g) "
                   "green_primary=(x=%g,y=%g) "
                   "blue_primary=(x=%g,y=%g) "
@@ -181,11 +181,11 @@ ChromaticityInfo_to_s(VALUE self)
 
 
 /*
-    External:   Color_from_ColorInfo
+    External:   Import_ColorInfo
     Purpose:    Convert a ColorInfo structure to a Magick::Color
 */
 VALUE
-Color_from_ColorInfo(const ColorInfo *ci)
+Import_ColorInfo(const ColorInfo *ci)
 {
     ComplianceType compliance_type;
     volatile VALUE name;
@@ -204,11 +204,11 @@ Color_from_ColorInfo(const ColorInfo *ci)
 
 
 /*
-    External:   Color_to_ColorInfo
+    External:   Export_ColorInfo
     Purpose:    Convert a Magick::Color to a ColorInfo structure
 */
 void
-Color_to_ColorInfo(ColorInfo *ci, VALUE st)
+Export_ColorInfo(ColorInfo *ci, VALUE st)
 {
     Pixel *pixel;
     volatile VALUE members, m;
@@ -274,7 +274,7 @@ Color_to_MagickPixelPacket(Image *image, MagickPixelPacket *mpp, VALUE color)
 
 /*
     Static:     destroy_ColorInfo
-    Purpose:    free the storage allocated by Color_to_ColorInfo, above.
+    Purpose:    free the storage allocated by Export_ColorInfo, above.
 */
 static void
 destroy_ColorInfo(ColorInfo *ci)
@@ -294,7 +294,7 @@ Color_to_s(VALUE self)
     ColorInfo ci;
     char buff[1024];
 
-    Color_to_ColorInfo(&ci, self);
+    Export_ColorInfo(&ci, self);
 
     sprintf(buff, "name=%s, compliance=%s, "
 #if (QuantumDepth == 32 || QuantumDepth == 64) && defined(HAVE_TYPE_LONG_DOUBLE)
@@ -371,11 +371,11 @@ ComplianceType_new(ComplianceType compliance)
 
 
 /*
-    External:   Font_from_TypeInfo
+    External:   Import_TypeInfo
     Purpose:    Convert a TypeInfo structure to a Magick::Font
 */
 VALUE
-Font_from_TypeInfo(const TypeInfo *ti)
+Import_TypeInfo(const TypeInfo *ti)
 {
     volatile VALUE name, description, family;
     volatile VALUE style, stretch, weight;
@@ -398,11 +398,11 @@ Font_from_TypeInfo(const TypeInfo *ti)
 
 
 /*
-    External:   Font_to_TypeInfo
+    External:   Export_TypeInfo
     Purpose:    Convert a Magick::Font to a TypeInfo structure
 */
 void
-Font_to_TypeInfo(TypeInfo *ti, VALUE st)
+Export_TypeInfo(TypeInfo *ti, VALUE st)
 {
     volatile VALUE members, m;
 
@@ -448,7 +448,7 @@ Font_to_TypeInfo(TypeInfo *ti, VALUE st)
 
 /*
     Static:     destroy_TypeInfo
-    Purpose:    free the storage allocated by Font_to_TypeInfo, above.
+    Purpose:    free the storage allocated by Export_TypeInfo, above.
 */
 static void
 destroy_TypeInfo(TypeInfo *ti)
@@ -479,7 +479,7 @@ Font_to_s(VALUE self)
     char weight[20];
     char buff[1024];
 
-    Font_to_TypeInfo(&ti, self);
+    Export_TypeInfo(&ti, self);
 
     switch (ti.weight)
     {
@@ -514,11 +514,11 @@ Font_to_s(VALUE self)
 
 
 /*
-    Extern:     PointInfo_to_Point(pp)
+    Extern:     Import_PointInfo(pp)
     Purpose:    Create a Magick::Point object from a PointInfo structure.
 */
 VALUE
-PointInfo_to_Point(PointInfo *p)
+Import_PointInfo(PointInfo *p)
 {
     return rb_funcall(Class_Point, rm_ID_new, 2
                     , INT2FIX(p->x), INT2FIX(p->y));
@@ -526,11 +526,11 @@ PointInfo_to_Point(PointInfo *p)
 
 
 /*
-    Extern:     Point_to_PointInfo
+    Extern:     Export_PointInfo
     Purpose:    Convert a Magick::Point object to a PointInfo structure
 */
 void
-Point_to_PointInfo(PointInfo *pi, VALUE sp)
+Export_PointInfo(PointInfo *pi, VALUE sp)
 {
     volatile VALUE members, m;
 
@@ -548,11 +548,11 @@ Point_to_PointInfo(PointInfo *pi, VALUE sp)
 
 
 /*
-    Extern:     PrimaryInfo_from_PrimaryInfo(pp)
+    Extern:     Import_PrimaryInfo(pp)
     Purpose:    Create a Magick::PrimaryInfo object from a PrimaryInfo structure.
 */
 VALUE
-PrimaryInfo_from_PrimaryInfo(PrimaryInfo *p)
+Import_PrimaryInfo(PrimaryInfo *p)
 {
     return rb_funcall(Class_Primary, rm_ID_new, 3
                     , INT2FIX(p->x), INT2FIX(p->y), INT2FIX(p->z));
@@ -560,11 +560,11 @@ PrimaryInfo_from_PrimaryInfo(PrimaryInfo *p)
 
 
 /*
-    Extern:     PrimaryInfo_to_PrimaryInfo
+    Extern:     Export_PrimaryInfo
     Purpose:    Convert a Magick::PrimaryInfo object to a PrimaryInfo structure
 */
 void
-PrimaryInfo_to_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
+Export_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 {
     volatile VALUE members, m;
 
@@ -593,18 +593,18 @@ PrimaryInfo_to_s(VALUE self)
     PrimaryInfo pi;
     char buff[100];
 
-    PrimaryInfo_to_PrimaryInfo(&pi, self);
+    Export_PrimaryInfo(&pi, self);
     sprintf(buff, "x=%g, y=%g, z=%g", pi.x, pi.y, pi.z);
     return rb_str_new2(buff);
 }
 
 
 /*
-    External:   Rectangle_from_RectangleInfo
+    External:   Import_RectangleInfo
     Purpose:    Convert a RectangleInfo structure to a Magick::Rectangle
 */
 VALUE
-Rectangle_from_RectangleInfo(RectangleInfo *rect)
+Import_RectangleInfo(RectangleInfo *rect)
 {
     volatile VALUE width;
     volatile VALUE height;
@@ -620,11 +620,11 @@ Rectangle_from_RectangleInfo(RectangleInfo *rect)
 
 
 /*
-    External:   Rectangle_to_RectangleInfo
+    External:   Export_RectangleInfo
     Purpose:    Convert a Magick::Rectangle to a RectangleInfo structure.
 */
 void
-Rectangle_to_RectangleInfo(RectangleInfo *rect, VALUE sr)
+Export_RectangleInfo(RectangleInfo *rect, VALUE sr)
 {
     volatile VALUE members, m;
 
@@ -655,7 +655,7 @@ RectangleInfo_to_s(VALUE self)
     RectangleInfo rect;
     char buff[100];
 
-    Rectangle_to_RectangleInfo(&rect, self);
+    Export_RectangleInfo(&rect, self);
     sprintf(buff, "width=%lu, height=%lu, x=%ld, y=%ld"
           , rect.width, rect.height, rect.x, rect.y);
     return rb_str_new2(buff);
@@ -663,11 +663,11 @@ RectangleInfo_to_s(VALUE self)
 
 
 /*
-    External:   Segment_from_SegmentInfo
+    External:   Import_SegmentInfo
     Purpose:    Convert a SegmentInfo structure to a Magick::Segment
 */
 VALUE
-Segment_from_SegmentInfo(SegmentInfo *segment)
+Import_SegmentInfo(SegmentInfo *segment)
 {
     volatile VALUE x1, y1, x2, y2;
 
@@ -680,11 +680,11 @@ Segment_from_SegmentInfo(SegmentInfo *segment)
 
 
 /*
-    External:   Segment_to_SegmentInfo
+    External:   Export_SegmentInfo
     Purpose:    Convert a Magick::Segment to a SegmentInfo structure.
 */
 void
-Segment_to_SegmentInfo(SegmentInfo *segment, VALUE s)
+Export_SegmentInfo(SegmentInfo *segment, VALUE s)
 {
     volatile VALUE members, m;
 
@@ -716,7 +716,7 @@ SegmentInfo_to_s(VALUE self)
     SegmentInfo segment;
     char buff[100];
 
-    Segment_to_SegmentInfo(&segment, self);
+    Export_SegmentInfo(&segment, self);
     sprintf(buff, "x1=%g, y1=%g, x2=%g, y2=%g"
           , segment.x1, segment.y1, segment.x2, segment.y2);
     return rb_str_new2(buff);
@@ -794,24 +794,24 @@ StyleType_new(StyleType style)
 
 
 /*
-    External:   TypeMetric_from_TypeMetric
+    External:   Import_TypeMetric
     Purpose:    Convert a TypeMetric structure to a Magick::TypeMetric
 */
 VALUE
-TypeMetric_from_TypeMetric(TypeMetric *tm)
+Import_TypeMetric(TypeMetric *tm)
 {
     volatile VALUE pixels_per_em;
     volatile VALUE ascent, descent;
     volatile VALUE width, height, max_advance;
     volatile VALUE bounds, underline_position, underline_thickness;
 
-    pixels_per_em       = PointInfo_to_Point(&tm->pixels_per_em);
+    pixels_per_em       = Import_PointInfo(&tm->pixels_per_em);
     ascent              = rb_float_new(tm->ascent);
     descent             = rb_float_new(tm->descent);
     width               = rb_float_new(tm->width);
     height              = rb_float_new(tm->height);
     max_advance         = rb_float_new(tm->max_advance);
-    bounds              = Segment_from_SegmentInfo(&tm->bounds);
+    bounds              = Import_SegmentInfo(&tm->bounds);
     underline_position  = rb_float_new(tm->underline_position);
     underline_thickness = rb_float_new(tm->underline_position);
 
@@ -823,11 +823,11 @@ TypeMetric_from_TypeMetric(TypeMetric *tm)
 
 
 /*
-    External:   TypeMetric_to_TypeMetric
+    External:   Export_TypeMetric
     Purpose:    Convert a Magick::TypeMetric to a TypeMetric structure.
 */
 void
-TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
+Export_TypeMetric(TypeMetric *tm, VALUE st)
 {
     volatile VALUE members, m;
     volatile VALUE pixels_per_em;
@@ -840,7 +840,7 @@ TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
     members = rb_funcall(st, rm_ID_values, 0);
 
     pixels_per_em   = rb_ary_entry(members, 0);
-    Point_to_PointInfo(&tm->pixels_per_em, pixels_per_em);
+    Export_PointInfo(&tm->pixels_per_em, pixels_per_em);
 
     m = rb_ary_entry(members, 1);
     tm->ascent      = m == Qnil ? 0.0 : NUM2DBL(m);
@@ -854,7 +854,7 @@ TypeMetric_to_TypeMetric(TypeMetric *tm, VALUE st)
     tm->max_advance = m == Qnil ? 0.0 : NUM2DBL(m);
 
     m = rb_ary_entry(members, 6);
-    Segment_to_SegmentInfo(&tm->bounds, m);
+    Export_SegmentInfo(&tm->bounds, m);
 
     m = rb_ary_entry(members, 7);
     tm->underline_position  = m == Qnil ? 0.0 : NUM2DBL(m);
@@ -873,7 +873,7 @@ TypeMetric_to_s(VALUE self)
     TypeMetric tm;
     char buff[200];
 
-    TypeMetric_to_TypeMetric(&tm, self);
+    Export_TypeMetric(&tm, self);
     sprintf(buff, "pixels_per_em=(x=%g,y=%g) "
                   "ascent=%g descent=%g width=%g height=%g max_advance=%g "
                   "bounds.x1=%g bounds.y1=%g bounds.x2=%g bounds.y2=%g "

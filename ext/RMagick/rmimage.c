@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.338 2008/12/27 00:17:52 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.339 2008/12/27 17:16:04 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -584,7 +584,7 @@ Image_affine_transform(VALUE self, VALUE affine)
     image = rm_check_destroyed(self);
 
     // Convert Magick::AffineMatrix to AffineMatrix structure.
-    AffineMatrix_to_AffineMatrix(&matrix, affine);
+    Export_AffineMatrix(&matrix, affine);
 
     GetExceptionInfo(&exception);
     new_image = AffineTransformImage(image, &matrix, &exception);
@@ -1473,7 +1473,7 @@ Image_bounding_box(VALUE self)
 
     (void) DestroyExceptionInfo(&exception);
 
-    return Rectangle_from_RectangleInfo(&box);
+    return Import_RectangleInfo(&box);
 }
 
 
@@ -1787,7 +1787,7 @@ VALUE
 Image_chromaticity_eq(VALUE self, VALUE chroma)
 {
     Image *image = rm_check_frozen(self);
-    ChromaticityInfo_to_ChromaticityInfo(&image->chromaticity, chroma);
+    Export_ChromaticityInfo(&image->chromaticity, chroma);
     return self;
 }
 
@@ -2661,7 +2661,7 @@ Image_composite_affine(VALUE self, VALUE source, VALUE affine_matrix)
     composite_image = rm_check_destroyed(source);
     new_image = rm_clone_image(image);
 
-    AffineMatrix_to_AffineMatrix(&affine, affine_matrix);
+    Export_AffineMatrix(&affine, affine_matrix);
     (void) DrawAffineImage(new_image, composite_image, &affine);
     rm_check_image_exception(new_image, DestroyOnError);
 
@@ -4704,7 +4704,7 @@ VALUE
 Image_extract_info(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return Rectangle_from_RectangleInfo(&image->extract_info);
+    return Import_RectangleInfo(&image->extract_info);
 }
 
 
@@ -4712,7 +4712,7 @@ VALUE
 Image_extract_info_eq(VALUE self, VALUE rect)
 {
     Image *image = rm_check_frozen(self);
-    Rectangle_to_RectangleInfo(&image->extract_info, rect);
+    Export_RectangleInfo(&image->extract_info, rect);
     return self;
 }
 
@@ -7367,7 +7367,7 @@ VALUE
 Image_page(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return Rectangle_from_RectangleInfo(&image->page);
+    return Import_RectangleInfo(&image->page);
 }
 
 
@@ -7379,7 +7379,7 @@ VALUE
 Image_page_eq(VALUE self, VALUE rect)
 {
     Image *image = rm_check_frozen(self);
-    Rectangle_to_RectangleInfo(&image->page, rect);
+    Export_RectangleInfo(&image->page, rect);
     return self;
 }
 

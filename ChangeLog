@@ -1,8 +1,10 @@
 RMagick 2.9.0
     o Fix #23209, improve RVG's letter spacing (patch from Jonah Fox)
-    o Add Draw#kerning= attribute setter (available in ImageMagick 6.4.7-8)
-    o Add Draw#interword_spacing attribute writer (available in ImageMagick
+    o Add Draw#kerning= attribute(available in ImageMagick 6.4.7-8)
+    o Add Draw#interword_spacing= attribute (available in ImageMagick
       6.4.8-0)
+    o Add Draw#kerning, Draw#interword_spacing primitive methods (available in
+      ImageMagick 6.4.8-3)
     o Feature #23171, support ImageList, Draw, Pixel marshaling.
 
 RMagick 2.8.0

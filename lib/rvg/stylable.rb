@@ -1,5 +1,5 @@
 #--
-# $Id: stylable.rb,v 1.5 2008/02/24 18:26:37 rmagick Exp $
+# $Id: stylable.rb,v 1.6 2008/12/30 00:21:06 rmagick Exp $
 # Copyright (C) 2008 Timothy P. Hunter
 #++
 
@@ -80,6 +80,7 @@ module Magick
             # This method can be used with any RVG, Group, Use, Text, or
             # shape object. The argument is a hash. The style names are
             # the hash keys. The style names and values are:
+            # [:baseline_shift] modify the text baseline
             # [:clip_path] clipping path defined by clip_path
             # [:clip_rule] 'evenodd' or 'nozero'
             # [:fill] color name
@@ -94,6 +95,9 @@ module Magick
             # [:font_style] 'normal','italic','oblique'
             # [:font_weight] 'normal','bold','bolder','lighter', or
             #                a multiple of 100 between 100 and 900.
+            # [:glyph_orientation_horizontal] 0, 90, 180, 270
+            # [:glyph_orientation_vertical] 0, 90, 180, 270
+            # [:letter_spacing] modify the spacing between letters
             # [:opacity] both fill and stroke opacity, 0.0<=N<=1.0
             # [:stroke] color name
             # [:stroke_dasharray] dash pattern (Array)
@@ -105,6 +109,8 @@ module Magick
             # [:stroke_width] stroke width
             # [:text_anchor] 'start','middle','end'
             # [:text_decoration] 'none','underline','overline','line_through'
+            # [:word_spacing] modify the spacing between words
+            # [:writing_mode] 'lr-tb', 'lr', 'rt-tb', 'rl', 'tb-rl', 'tb'
             def styles(styles)
                 @styles.set(styles)
                 yield(self) if block_given?

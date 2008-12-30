@@ -115,6 +115,10 @@
 
         <li><a href="#gravity">gravity</a></li>
 
+        <li><a href="#interword_spacing">interword_spacing</a></li>
+
+        <li><a href="#kerning">kerning</a></li>
+
         <li><a href="#line">line</a></li>
 
         <li><a href="#matte">matte</a></li>
@@ -140,13 +144,13 @@
         <li><a href="#rectangle">rectangle</a></li>
 
         <li><a href="#rotate">rotate</a></li>
-
-        <li><a href="#roundrectangle">roundrectangle</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
+        <li><a href="#roundrectangle">roundrectangle</a></li>
+
         <li><a href="#scale">scale</a></li>
 
         <li><a href="#skewx">skewx</a></li>
@@ -218,6 +222,9 @@
         <li><a href="#font_weight_eq">font_weight</a></li>
 
         <li><a href="#gravity_eq">gravity</a></li>
+
+        <li><a href=
+        "#interword_spacing_eq">interword_spacing</a></li>
 
         <li><a href="#kerning_eq">kerning</a></li>
       </ul>
@@ -1620,6 +1627,57 @@ draw.decorate(LineThroughDecoration)
   </div>
 
   <div class="sig">
+    <h3 id="interword_spacing">interword_spacing</h3>
+
+    <p><span class="arg">draw</span>.interword_spacing(<span class=
+    "arg">space</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Modify the spacing between words in text.</p>
+
+    <h4>Argument</h4>
+
+    <p>A numeric value. If positive, inserts additional space
+    between words. If negative, removes space between words. The
+    amount of space inserted or removed depends on the font.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="kerning">kerning</h3>
+
+    <p><span class="arg">draw</span>.kerning(<span class=
+    "arg">space</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Modify the spacing between letters in text.</p>
+
+    <h4>Argument</h4>
+
+    <p>A numeric value. If positive, inserts additional space
+    between letters. If negative, removes space between letters.
+    The amount of space inserted or removed depends on the font but
+    is usually measured in pixels. That is, the following call adds
+    <em>about</em> 5 pixels between each letter.</p>
+    <pre>
+gc.kerning(5)
+</pre>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
+  </div>
+
+  <div class="sig">
     <h3 id="line">line</h3>
 
     <p><span class="arg">draw</span>.line(<span class=
@@ -2974,16 +3032,36 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
   </div>
 
   <div class="sig">
-    <h3 id="kerning_eq">kerning=</h3>
+    <h3 id="interword_spacing_eq">interword_spacing=</h3>
 
-    <p><span class="arg">draw</span>.kerning =
-    <em>distance</em></p>
+    <p><span class="arg">draw</span>.interword_spacing =
+    <em>space</em></p>
   </div>
 
   <div class="desc">
     <h4>Description</h4>
 
-    <p>The space between two letters, measured in pixels.</p>
+    <p>Modifies the space between two words.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A numeric value. May be positive or negative.</p>
+
+    <h4>Notes</h4>
+
+    <p>Available in ImageMagick 6.4.8-0.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="kerning_eq">kerning=</h3>
+
+    <p><span class="arg">draw</span>.kerning = <em>space</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Modifies the space between two letters.</p>
 
     <h4>Arguments</h4>
 

@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.77 2008/12/23 20:32:15 rmagick Exp $
+# $Id: RMagick.rb,v 1.78 2008/12/30 00:23:31 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -362,6 +362,26 @@ class Draw
             Kernel.raise ArgumentError, "Unknown text positioning gravity"
         end
         primitive "gravity #{GRAVITY_NAMES[grav.to_i]}"
+    end
+
+    # IM 6.4.8-3 and later
+    def interword_spacing(space)
+        begin
+            Float(space)
+        rescue ArgumentError, TypeError
+            Kernel.raise ArgumentError, "Expected number, got #{space.class}"
+        end
+        primitive "interword-spacing #{space}"
+    end
+
+    # IM 6.4.8-3 and later
+    def kerning(space)
+        begin
+            Float(space)
+        rescue ArgumentError, TypeError
+            Kernel.raise ArgumentError, "Expected number, got #{space.class}"
+        end
+        primitive "kerning #{space}"
     end
 
     # Draw a line

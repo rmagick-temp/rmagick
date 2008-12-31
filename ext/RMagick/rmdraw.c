@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.74 2008/12/27 17:16:03 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.75 2008/12/31 00:46:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -392,7 +392,7 @@ Image *str_to_image(VALUE str)
     {
         info = CloneImageInfo(NULL);
         GetExceptionInfo(&exception);
-        image = BlobToImage(info, RSTRING(str)->ptr, RSTRING(str)->len, &exception);
+        image = BlobToImage(info, RSTRING_PTR(str), RSTRING_LEN(str), &exception);
         DestroyImageInfo(info);
         CHECK_EXCEPTION();
         DestroyExceptionInfo(&exception);

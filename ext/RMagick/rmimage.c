@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.339 2008/12/27 17:16:04 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.340 2008/12/31 00:46:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6330,9 +6330,9 @@ Image_marshal_load(VALUE self, VALUE ary)
     GetExceptionInfo(&exception);
     if (filename != Qnil)
     {
-        strcpy(info->filename, RSTRING(filename)->ptr);
+        strcpy(info->filename, RSTRING_PTR(filename));
     }
-    image = BlobToImage(info, RSTRING(blob)->ptr, RSTRING(blob)->len, &exception);
+    image = BlobToImage(info, RSTRING_PTR(blob), RSTRING_LEN(blob), &exception);
     (void) DestroyExceptionInfo(&exception);
     CHECK_EXCEPTION();
     UPDATE_DATA_PTR(self, image);

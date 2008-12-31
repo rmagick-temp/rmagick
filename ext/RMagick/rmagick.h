@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.265 2008/12/27 17:16:03 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.266 2008/12/31 00:46:45 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -109,7 +109,7 @@
 #define OpenFile rb_io_t
 #endif
 
-// These macros are needed in 1.9.0 but aren't defined prior to 1.8.6.
+// These macros are required in 1.9.1 but aren't defined prior to 1.8.6.
 #if !defined(RSTRING_LEN)
 #define RSTRING_LEN(s) (RSTRING((s))->len)
 #endif
@@ -135,7 +135,7 @@
 // the pointer to NULL if the object is nil.
 #define OBJ_TO_MAGICK_STRING(f, obj) \
     if ((obj) != Qnil)\
-        magick_clone_string(&f, RSTRING(obj)->ptr);\
+        magick_clone_string(&f, RSTRING_PTR(obj));\
     else\
         f = NULL;
 

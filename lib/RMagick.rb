@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.78 2008/12/30 00:23:31 rmagick Exp $
+# $Id: RMagick.rb,v 1.79 2008/12/31 00:08:01 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -368,8 +368,10 @@ class Draw
     def interword_spacing(space)
         begin
             Float(space)
-        rescue ArgumentError, TypeError
-            Kernel.raise ArgumentError, "Expected number, got #{space.class}"
+        rescue ArgumentError
+            Kernel.raise ArgumentError, "invalid value for interword_spacing"
+        rescue TypeError
+            Kernel.raise TypeError, "can't convert #{space.class} into Float"
         end
         primitive "interword-spacing #{space}"
     end
@@ -378,8 +380,10 @@ class Draw
     def kerning(space)
         begin
             Float(space)
-        rescue ArgumentError, TypeError
-            Kernel.raise ArgumentError, "Expected number, got #{space.class}"
+        rescue ArgumentError
+            Kernel.raise ArgumentError, "invalid value for kerning"
+        rescue TypeError
+            Kernel.raise TypeError, "can't convert #{space.class} into Float"
         end
         primitive "kerning #{space}"
     end

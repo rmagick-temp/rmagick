@@ -1,4 +1,4 @@
-/* $Id: rmmontage.c,v 1.2 2008/12/27 00:46:23 rmagick Exp $ */
+/* $Id: rmmontage.c,v 1.3 2009/01/01 23:22:45 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -7,11 +7,6 @@
 \============================================================================*/
 
 #include "rmagick.h"
-
-
-
-
-static void destroy_Montage(void *);
 
 
 

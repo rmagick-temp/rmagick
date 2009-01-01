@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.341 2009/01/01 15:16:27 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.342 2009/01/01 23:35:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -829,7 +829,7 @@ VALUE
 Image_background_color(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return PixelPacket_to_Color_Name(image, &image->background_color);
+    return rm_pixelpacket_to_color_name(image, &image->background_color);
 }
 
 
@@ -1438,7 +1438,7 @@ VALUE
 Image_border_color(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return PixelPacket_to_Color_Name(image, &image->border_color);
+    return rm_pixelpacket_to_color_name(image, &image->border_color);
 }
 
 
@@ -2217,7 +2217,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
         {
             rb_raise(rb_eIndexError, "index out of range");
         }
-        return PixelPacket_to_Color_Name(image, &image->colormap[idx]);
+        return rm_pixelpacket_to_color_name(image, &image->colormap[idx]);
     }
 
     // This is a "set" operation. Things are different.
@@ -2257,7 +2257,7 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     color = image->colormap[idx];
     image->colormap[idx] = new_color;
 
-    return PixelPacket_to_Color_Name(image, &color);
+    return rm_pixelpacket_to_color_name(image, &color);
 }
 
 DEF_ATTR_READER(Image, colors, ulong)
@@ -6531,7 +6531,7 @@ VALUE
 Image_matte_color(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return PixelPacket_to_Color_Name(image, &image->matte_color);
+    return rm_pixelpacket_to_color_name(image, &image->matte_color);
 }
 
 /*
@@ -10368,7 +10368,7 @@ VALUE
 Image_transparent_color(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
-    return PixelPacket_to_Color_Name(image, &image->transparent_color);
+    return rm_pixelpacket_to_color_name(image, &image->transparent_color);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.266 2008/12/31 00:46:45 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.267 2009/01/01 23:35:59 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -575,17 +575,16 @@ Pixel_##_cmyk_channel_(VALUE self) \
 
 // rmmain.c
 extern void Init_RMagick2(void);
-extern VALUE Magick_colors(VALUE);
-extern VALUE Magick_fonts(VALUE);
-extern VALUE Magick_init_formats(VALUE);
 
 
 // rmagick.c
-VALUE Magick_limit_resource(int, VALUE *, VALUE);
-VALUE Magick_set_cache_threshold(VALUE, VALUE);
-VALUE Magick_set_log_event_mask(int, VALUE *, VALUE);
-VALUE Magick_set_log_format(VALUE, VALUE);
-
+extern VALUE Magick_colors(VALUE);
+extern VALUE Magick_fonts(VALUE);
+extern VALUE Magick_init_formats(VALUE);
+extern VALUE Magick_limit_resource(int, VALUE *, VALUE);
+extern VALUE Magick_set_cache_threshold(VALUE, VALUE);
+extern VALUE Magick_set_log_event_mask(int, VALUE *, VALUE);
+extern VALUE Magick_set_log_format(VALUE, VALUE);
 
 // rmdraw.c
 ATTR_WRITER(Draw, affine)
@@ -630,6 +629,14 @@ extern VALUE DrawOptions_alloc(VALUE);
 extern VALUE DrawOptions_initialize(VALUE);
 
 
+extern VALUE PolaroidOptions_alloc(VALUE);
+extern VALUE PolaroidOptions_initialize(VALUE);
+extern VALUE rm_polaroid_new(void);
+ATTR_WRITER(PolaroidOptions, shadow_color);
+ATTR_WRITER(PolaroidOptions, border_color);
+
+
+// rmmontage.c
 ATTR_WRITER(Montage, background_color)
 ATTR_WRITER(Montage, border_color)
 ATTR_WRITER(Montage, border_width)
@@ -652,14 +659,7 @@ extern VALUE Montage_alloc(VALUE);
 extern VALUE rm_montage_new(void);
 
 
-extern VALUE PolaroidOptions_alloc(VALUE);
-extern VALUE PolaroidOptions_initialize(VALUE);
-extern VALUE rm_polaroid_new(void);
-ATTR_WRITER(PolaroidOptions, shadow_color);
-ATTR_WRITER(PolaroidOptions, border_color);
-
-
- // rmilist.c
+// rmilist.c
 extern VALUE ImageList_animate(int, VALUE *, VALUE);
 extern VALUE ImageList_append(VALUE, VALUE);
 extern VALUE ImageList_average(VALUE);
@@ -1087,7 +1087,19 @@ extern VALUE  Pixel_to_hsla(VALUE);
 extern VALUE  Pixel_to_s(VALUE);
 
 
-// rmutil.c
+// rmenum.c
+extern VALUE  Enum_alloc(VALUE);
+extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
+extern VALUE  Enum_to_s(VALUE);
+extern VALUE  Enum_to_i(VALUE);
+extern VALUE  Enum_spaceship(VALUE, VALUE);
+extern VALUE  Enum_case_eq(VALUE, VALUE);
+extern VALUE  Enum_type_initialize(VALUE, VALUE, VALUE);
+extern VALUE  Enum_type_each(VALUE);
+extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);
+
+
+// rmstruct.c
 extern VALUE  ChromaticityInfo_to_s(VALUE);
 extern VALUE  ChromaticityInfo_new(ChromaticityInfo *);
 extern void   Color_to_PixelPacket(PixelPacket *, VALUE);
@@ -1103,12 +1115,8 @@ extern VALUE  EndianType_new(EndianType);
 extern VALUE  FilterTypes_new(FilterTypes);
 extern VALUE  GravityType_new(GravityType);
 extern VALUE  Font_to_s(VALUE);
-extern VALUE  rm_cur_image(VALUE);
-extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern VALUE  ImageType_new(ImageType);
 extern VALUE  InterlaceType_new(InterlaceType);
-extern VALUE  PixelPacket_to_Color_Name(Image *, PixelPacket *);
-extern VALUE  PixelPacket_to_Color_Name_Info(Info *, PixelPacket *);
 extern VALUE  Pixel_from_MagickPixelPacket(const MagickPixelPacket *);
 extern VALUE  Pixel_from_PixelPacket(const PixelPacket *);
 extern void   Export_PointInfo(PointInfo *, VALUE);
@@ -1139,23 +1147,18 @@ extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);
 extern VALUE  LAYERMETHODTYPE_NEW(LAYERMETHODTYPE);
 
-extern VALUE  Enum_alloc(VALUE);
-extern VALUE  Enum_initialize(VALUE, VALUE, VALUE);
-extern VALUE  Enum_to_s(VALUE);
-extern VALUE  Enum_to_i(VALUE);
-extern VALUE  Enum_spaceship(VALUE, VALUE);
-extern VALUE  Enum_case_eq(VALUE, VALUE);
-extern VALUE  Enum_type_initialize(VALUE, VALUE, VALUE);
-extern VALUE  Enum_type_each(VALUE);
 
-
+// rmutil.c
+extern VALUE  ImageMagickError_initialize(int, VALUE *, VALUE);
 extern void  *magick_malloc(const size_t);
 extern void  *magick_safe_malloc(const size_t, const size_t);
 extern void   magick_free(void *);
 extern void  *magick_realloc(void *, const size_t);
 extern void  *magick_safe_realloc(void *, const size_t, const size_t);
 extern void   magick_clone_string(char **, const char *);
-extern VALUE  rm_enum_new(VALUE, VALUE, VALUE);
+extern VALUE  rm_cur_image(VALUE);
+extern VALUE  rm_pixelpacket_to_color_name(Image *, PixelPacket *);
+extern VALUE  rm_pixelpacket_to_color_name_info(Info *, PixelPacket *);
 extern VALUE  rm_no_freeze(VALUE);
 extern int    rm_strcasecmp(const char *, const char *);
 extern int    rm_strncasecmp(const char *, const char *, size_t);

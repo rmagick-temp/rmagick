@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.74 2008/11/15 21:30:50 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.75 2009/01/01 23:36:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -380,7 +380,7 @@ Info_background_color(VALUE self)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    return PixelPacket_to_Color_Name_Info(info, &info->background_color);
+    return rm_pixelpacket_to_color_name_info(info, &info->background_color);
 }
 
 
@@ -412,7 +412,7 @@ Info_border_color(VALUE self)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    return PixelPacket_to_Color_Name_Info(info, &info->border_color);
+    return rm_pixelpacket_to_color_name_info(info, &info->border_color);
 }
 
 /*
@@ -1256,7 +1256,7 @@ Info_matte_color(VALUE self)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    return PixelPacket_to_Color_Name_Info(info, &info->matte_color);
+    return rm_pixelpacket_to_color_name_info(info, &info->matte_color);
 }
 
 /*
@@ -1703,7 +1703,7 @@ Info_transparent_color(VALUE self)
     Info *info;
 
     Data_Get_Struct(self, Info, info);
-    return PixelPacket_to_Color_Name_Info(info, &info->transparent_color);
+    return rm_pixelpacket_to_color_name_info(info, &info->transparent_color);
 }
 
 

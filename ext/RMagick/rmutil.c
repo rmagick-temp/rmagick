@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.176 2008/12/27 16:49:20 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.177 2009/01/01 23:36:00 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -509,14 +509,14 @@ rm_cur_image(VALUE img)
 
 
 /*
-    Extern:     PixelPacket_to_Color_Name
+    Extern:     rm_pixelpacket_to_color_name
     Purpose:    Map the color intensity to a named color
     Returns:    the named color as a String
     Notes:      See below for the equivalent function that accepts an Info
                 structure instead of an Image.
 */
 VALUE
-PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
+rm_pixelpacket_to_color_name(Image *image, PixelPacket *color)
 {
     char name[MaxTextExtent];
     ExceptionInfo exception;
@@ -532,7 +532,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
 
 
 /*
-    Extern:     PixelPacket_to_Color_Name_Info
+    Extern:     rm_pixelpacket_to_color_name_info
     Purpose:    Map the color intensity to a named color
     Returns:    the named color as a String
     Notes:      Accepts an Info structure instead of an Image (see above).
@@ -544,7 +544,7 @@ PixelPacket_to_Color_Name(Image *image, PixelPacket *color)
                 value is set to False, which means "don't use the alpha channel".
 */
 VALUE
-PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
+rm_pixelpacket_to_color_name_info(Info *info, PixelPacket *color)
 {
     Image *image;
     Info *my_info;
@@ -554,7 +554,7 @@ PixelPacket_to_Color_Name_Info(Info *info, PixelPacket *color)
 
     image = AcquireImage(info);
     image->matte = MagickFalse;
-    color_name = PixelPacket_to_Color_Name(image, color);
+    color_name = rm_pixelpacket_to_color_name(image, color);
     (void) DestroyImage(image);
     if (!info)
     {

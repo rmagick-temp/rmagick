@@ -954,6 +954,14 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(Magick::DestroyedImageError) { @img.map(map, true) }
     end
 
+    def test_marshal
+        img =  Magick::Image.read(IMAGES_DIR+'/Button_0.gif').first
+        d = nil
+        img2 = nil
+        assert_nothing_raised { d = Marshal.dump(img) }
+        assert_nothing_raised { img2 = Marshal.load(d) }
+        assert_equal(img, img2)
+    end
 
     def test_mask
         cimg = Magick::Image.new(10,10)

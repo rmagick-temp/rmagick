@@ -138,6 +138,15 @@ class ImageList2_UT < Test::Unit::TestCase
         assert_instance_of(Magick::ImageList, img)
     end
 
+    def test_marshal
+       ilist1 = Magick::ImageList.new(*Dir[IMAGES_DIR+'/Button_*.gif'])
+       d = nil
+       ilist2 = nil
+       assert_nothing_raised { d = Marshal.dump(ilist1) }
+       assert_nothing_raised { ilist2 = Marshal.load(d) }
+       assert_equal(ilist1, ilist2)
+    end
+
     def test_montage
         @ilist.read(*Dir[IMAGES_DIR+'/Button_*.gif'])
         ilist = @ilist.copy

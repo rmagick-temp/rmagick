@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.79 2008/12/31 00:08:01 rmagick Exp $
+# $Id: RMagick.rb,v 1.80 2009/01/02 21:08:14 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2008 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -1435,7 +1435,7 @@ public
     end
 
     [:at, :each, :each_index, :empty?, :fetch,
-     :first, :hash, :include?, :index, :length, :nitems, :rindex, :sort!].each do |mth|
+     :first, :hash, :include?, :index, :length, :rindex, :sort!].each do |mth|
         module_eval <<-END_SIMPLE_DELEGATES
             def #{mth}(*args, &block)
                 @images.#{mth}(*args, &block)
@@ -1443,6 +1443,13 @@ public
         END_SIMPLE_DELEGATES
     end
     alias_method :size, :length
+
+    # Array#nitems is not available in 1.9
+    if Array.instance_methods.include?("nitems")
+       def nitems()
+          @images.nitems()
+       end
+    end
 
     def clear
         @scene = nil

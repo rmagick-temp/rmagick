@@ -2,7 +2,7 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'
+require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
 require 'fileutils'
 
 ColorspaceTypes = [
@@ -33,7 +33,7 @@ ColorspaceTypes = [
 
 
 class Image3_UT < Test::Unit::TestCase
-    FreezeError = RUBY_VERSION == '1.9.0' ? RuntimeError : TypeError
+    FreezeError = RUBY_VERSION == '1.9.1' ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
@@ -982,5 +982,5 @@ end
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
 FILES = Dir[IMAGES_DIR+'/Button_*.gif']
-Test::Unit::UI::Console::TestRunner.run(Image3_UT)
+Test::Unit::UI::Console::TestRunner.run(Image3_UT) if RUBY_VERSION != '1.9.1'
 end

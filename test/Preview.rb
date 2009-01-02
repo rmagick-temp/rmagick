@@ -2,7 +2,7 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'
+require 'test/unit/ui/console/testrunner' if RUBY_VERSION != '1.9.1'
 
 
 class Preview_UT < Test::Unit::TestCase
@@ -57,6 +57,6 @@ end
 
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
-Test::Unit::UI::Console::TestRunner.run(Preview_UT)
+Test::Unit::UI::Console::TestRunner.run(Preview_UT) if RUBY_VERSION != '1.9.1'
 end
 

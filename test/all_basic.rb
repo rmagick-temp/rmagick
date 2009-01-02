@@ -1,7 +1,7 @@
 #! /usr/local/bin/ruby -w
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'
+require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
 
 
 module Test
@@ -9,7 +9,8 @@ module Test
         class TestCase
             alias :_old_run_ :run
             def run(result, &blk)
-                puts "Running #{@method_name}"
+                method_name = RUBY_VERSION == '1.9.1' ? self.name : @method_name
+                puts "Running #{method_name}"
                 _old_run_(result, &blk)
             end
         end

@@ -3,7 +3,7 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'
+require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
 
 class Magick::Draw
   def self._dummy_img_
@@ -109,6 +109,6 @@ class Draw_UT < Test::Unit::TestCase
 end
 
 if __FILE__ == $0
-Test::Unit::UI::Console::TestRunner.run(Draw_UT)
+Test::Unit::UI::Console::TestRunner.run(Draw_UT)  if RUBY_VERSION != '1.9.1'
 end
 

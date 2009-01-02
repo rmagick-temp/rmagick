@@ -3,7 +3,7 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'
+require 'test/unit/ui/console/testrunner' if RUBY_VERSION != '1.9.1'
 
 
 class Info_UT < Test::Unit::TestCase

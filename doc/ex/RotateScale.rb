@@ -16,7 +16,7 @@ rvg = Magick::RVG.new(400, 120) do |canvas|
                 grp3.line(0, 0, 50, 0)
                 grp3.line(0, 0, 0, 50)
             end
-            grp2.text(0, 0, "ABC (rotate)").styles(:font_size=>20, :fill=>'blue', :font_family=>'Verdana')
+            grp2.text(0, 0, "ABC (rotate)").styles(:font_size=>20, :fill=>'blue', :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal')
         end
     end
 
@@ -28,7 +28,7 @@ rvg = Magick::RVG.new(400, 120) do |canvas|
                 grp3.line(0, 0, 50, 0)
                 grp3.line(0, 0, 0, 50)
             end
-            grp2.text(0, 0, "ABC (scale)").styles(:font_size=>20, :fill=>'blue', :font_family=>'Verdana')
+            grp2.text(0, 0, "ABC (scale)").styles(:font_size=>20, :fill=>'blue', :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal')
         end
     end
 end

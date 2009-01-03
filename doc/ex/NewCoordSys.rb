@@ -10,7 +10,7 @@ rvg = Magick::RVG.new(400, 150) do |canvas|
     end
 
     canvas.g do |grp|
-        grp.text(30, 30, 'ABC (orig coord system)').styles(:font_size=>20, :font_family=>'Verdana')
+        grp.text(30, 30, 'ABC (orig coord system)').styles(:font_size=>20, :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal')
     end
 
     # Establish a new coordinate system, which is
@@ -23,7 +23,7 @@ rvg = Magick::RVG.new(400, 150) do |canvas|
             grp2.line(0, 0, 50, 0)
             grp2.line(0, 0, 0, 50)
         end
-        grp.text(30, 30, 'ABC (translated coord system)').styles(:font_size=>20, :font_family=>'Verdana')
+        grp.text(30, 30, 'ABC (translated coord system)').styles(:font_size=>20, :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal')
     end
 
 end

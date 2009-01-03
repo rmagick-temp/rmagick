@@ -22,7 +22,7 @@ def example(cols, rows)
         canvas.path("M 750,100 L 250,900 L 1250,900 z").styles(:fill=>'red')
 
         # A text string that spans most of the viewport
-        canvas.text(100, 600, 'Stretch to fit').styles(:font_size=>200, :font_family=>'Verdana')
+        canvas.text(100, 600, 'Stretch to fit').styles(:font_size=>200, :font_style=>'normal', :font_weight=>'normal', :font_family=>'Verdana')
 
     end
     return rvg.draw

@@ -25,6 +25,8 @@ gc.line(10, 140, 490, 140)
 
 gc.fill('black')
 gc.stroke('transparent')
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 
 gc.gravity(Magick::CenterGravity)
 gc.text( 0, -60, "'gc.stroke_dasharray(30, 10, 10, 10)'")

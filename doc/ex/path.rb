@@ -39,6 +39,8 @@ gc.stroke_width 3
 gc.circle 170,220, 173,223
 
 # Add labels
+gc.font_weight Magick::NormalWeight
+gc.font_style Magick::NormalStyle
 gc.stroke "none"       # unset stroke color
 gc.fill 'black'
 

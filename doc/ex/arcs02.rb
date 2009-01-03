@@ -23,7 +23,7 @@ rvg = Magick::RVG.new(12.cm, (5.25).cm).viewbox(0, 0, 1200, 525) do |canvas|
 
     canvas.rect(1196, 522, 1, 1).styles(:fill=>'none', :stroke=>'blue', :stroke_width=>1)
 
-    canvas.g.styles(:font_size=>30, :font_family=>'Verdana') do |grp|
+    canvas.g.styles(:font_size=>30, :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal') do |grp|
 
         grp.use(base_ellipses)
 

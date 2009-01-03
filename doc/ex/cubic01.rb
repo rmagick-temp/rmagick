@@ -8,7 +8,7 @@ SamplePath   = {:fill=>'none', :stroke=>'red',  :stroke_width=>5}
 EndPoint     = {:fill=>'none', :stroke=>'#888', :stroke_width=>2}
 CtlPoint     = {:fill=>'#888', :stroke=>'none'}
 AutoCtlPoint = {:fill=>'none', :stroke=>'blue', :stroke_width=>4}
-Label        = {:font_size=>22, :font_family=>'Verdana'}
+Label        = {:font_size=>22, :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal'}
 
 rvg = Magick::RVG.new(5.cm, 4.cm).viewbox(0, 0, 500, 400) do |canvas|
     canvas.title = "Example cubic01 - cubic Bezier commands in path data"

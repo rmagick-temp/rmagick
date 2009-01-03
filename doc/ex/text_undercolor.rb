@@ -7,6 +7,8 @@ canvas = Magick::Image.new(250, 100)  {self.background_color ='white'}
 
 gc = Magick::Draw.new
 
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('transparent')
 gc.pointsize(16)
 gc.gravity(Magick::CenterGravity)

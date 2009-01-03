@@ -18,14 +18,16 @@ gc.circle(250, 114, 250+3, 114)
 gc.circle(146,  50, 146+3,  50)
 
 # Annotate
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('transparent')
 gc.fill("black")
 gc.fill_opacity(1)
 
 # xMagick recognizes the braces as delimiters.
 gc.gravity(Magick::NorthWestGravity)
-gc.text(43, 45, "{40, 50}")
-gc.text(195, 118, "{0 degrees}")
+gc.text(42, 37, "{40, 50}")
+gc.text(188, 108, "{0 degrees}")
 
 gc.gravity(Magick::SouthEastGravity)
 gc.text(300-250, 220-195, "{250, 180}")

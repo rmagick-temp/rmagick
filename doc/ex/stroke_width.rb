@@ -33,6 +33,8 @@ gc.stroke_width(1)
 gc.line(10,30,490,30)
 
 # Annotate
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(60,70,"'5'")

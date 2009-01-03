@@ -12,7 +12,7 @@ rvg = Magick::RVG.new(300, 100) do |canvas|
         grp.rect(3, 3, 297,  0)
         grp.rect(3, 3,   0, 97)
     end
-    canvas.g.styles(:font_size=>14, :font_family=>'Verdana') do |grp|
+    canvas.g.styles(:font_size=>14, :font_family=>'Verdana', :font_weight=>'normal', :font_style=>'normal') do |grp|
         grp.text(10, 20, '(0,0)')
         grp.text(240, 20, '(300,0)')
         grp.text(10, 90, '(0,100)')

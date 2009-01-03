@@ -26,6 +26,8 @@ gc.circle(25,50, 28,53)
 gc.circle(475,50, 478,53)
 
 # Annotate
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(107,150, "'100,150'")

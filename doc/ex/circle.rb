@@ -21,6 +21,8 @@ gc.fill_opacity(1)
 gc.circle(125,125, 128,128)
 
 # Annotate the dots
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(132,125, "'125,125'")

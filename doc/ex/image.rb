@@ -31,7 +31,7 @@ rvg = Magick::RVG.new(525, 270) do |canvas|
     canvas.line(345, 20, 500, 20)
     canvas.line(150, 250, 305, 250)
     canvas.line(340, 250, 500, 250)
-    canvas.g.styles(:stroke=>'none') do |t|
+    canvas.g.styles(:stroke=>'none', :font_weight=>'normal', :font_style=>'normal') do |t|
         t.text(310, 23, 'meet')
         t.text(60, 140, 'none')
         t.text(170, 140, 'xMinYMin')

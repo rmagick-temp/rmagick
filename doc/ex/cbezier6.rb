@@ -34,6 +34,8 @@ gc.line(200,50, 200,250)
 gc.line(350,150, 350,250)
 
 # Annotate
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(30,170, "'50,150'")

@@ -32,6 +32,8 @@ gc.draw(imgl)
 # Add labels
 gc = Magick::Draw.new
 gc.pointsize(14)
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('transparent')
 gc.gravity(Magick::CenterGravity)
 gc.text(15, 0, "'0,0'")

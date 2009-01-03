@@ -34,6 +34,8 @@ gc.draw(imgl)
 # Add labels using "normal" skew
 gc = Magick::Draw.new
 gc.pointsize(14)
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('transparent')
 gc.gravity(Magick::CenterGravity)
 gc.text(10, -10, "'0,0'")

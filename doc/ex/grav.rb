@@ -15,6 +15,8 @@ gc.line(200,20, 200,180)
 gc.line(20,100, 380,100)
 
 # Draw text at all 9 compass points.
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('transparent')
 gc.fill('black')
 gc.gravity(Magick::NorthWestGravity)

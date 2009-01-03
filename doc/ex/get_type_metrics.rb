@@ -130,6 +130,8 @@ gc.brace(10, metrics.max_advance)
 gc.pop
 
 # Add labels
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.stroke('none')
 gc.fill('black')
 gc.text(metrics.width+40, -(metrics.ascent/2)+4, 'ascent')

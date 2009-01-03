@@ -5,7 +5,7 @@ require 'rvg/rvg'
 rvg = Magick::RVG.new(200, 100) do |canvas|
     canvas.background_fill = 'white'
 
-    canvas.g.styles(:font_size=>16) do |grp|
+    canvas.g.styles(:font_size=>16, :font_weight=>'normal', :font_style=>'normal') do |grp|
         grp.text( 30, 30, ":text_anchor=>'start'").styles(:text_anchor=>'start')
         grp.circle(1, 30, 30).styles(:stroke=>'red')
         grp.text(100, 50, ":text_anchor=>'middle'").styles(:text_anchor=>'middle')

@@ -18,6 +18,7 @@ result = imgs.montage {
     self.background_color = 'black'
     self.stroke = 'transparent'
     self.fill = 'white'
+    self.pointsize =9
     self.geometry = Magick::Geometry.new(img.columns/2, img.rows/2, 5, 5)
     }
 

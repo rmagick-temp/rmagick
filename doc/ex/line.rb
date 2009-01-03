@@ -27,6 +27,8 @@ gc.circle(50,200, 53,203)
 gc.circle(200,200, 203,203)
 
 # Annotate the endpoints
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(30,40, "'50,50'")

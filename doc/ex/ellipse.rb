@@ -27,6 +27,8 @@ gc.circle(180+150, 125, 180+150+3, 125+3)
 gc.circle(180, 125-75, 180+3, 125-75+3)
 
 # Annotate
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill_opacity(1)
 gc.circle(180,125, 183,128)
 gc.fill('black')

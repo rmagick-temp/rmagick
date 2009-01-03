@@ -8,10 +8,11 @@ imgl.new_image(190,190)
 sample = Magick::Draw.new
 sample.stroke('transparent')
 if RUBY_PLATFORM =~ /mswin32/
-	sample.font_family('Georgia')
+   sample.font_family('Georgia')
 else
-	sample.font_family('times')
+   sample.font_family('times')
 end
+sample.font_weight(Magick::NormalWeight)
 sample.pointsize(24)
 
 sample.font_style(Magick::NormalStyle)

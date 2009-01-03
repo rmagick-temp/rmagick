@@ -24,10 +24,12 @@ gc.line( max_x, 0, max_x-10, -10)
 gc.line( max_x, 0, max_x-10,  10)
 
 # Add labels
+gc.font_weight(Magick::NormalWeight)
+gc.font_style(Magick::NormalStyle)
 gc.fill('black')
 gc.stroke('transparent')
 gc.text(8, 15, "'0,0'")
-gc.text(110, 16, "x")
+gc.text(105, 16, "x")
 gc.text(12, 115, "y")
 
 gc.draw(imgl)

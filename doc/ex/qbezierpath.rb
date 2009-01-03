@@ -33,6 +33,9 @@ gc.line 120,25,  320,275
 gc.line 320,275, 420,150
 
 # Add labels
+gc.font_weight Magick::NormalWeight
+gc.font_style Magick::NormalStyle
+
 # Add end point labels
 gc.text  30,155, "'20,150'"
 gc.text 230,155, "'220,150'"

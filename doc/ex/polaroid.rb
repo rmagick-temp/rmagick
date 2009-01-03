@@ -9,6 +9,8 @@ img[:Caption] = "\nLosha\n" + Date.today.to_s
 
 begin
     picture = img.polaroid do
+      self.font_weight = Magick::NormalWeight
+      self.font_style = Magick::NormalStyle
       self.gravity = Magick::CenterGravity
       self.border_color = "#f0f0f8"
     end

@@ -858,7 +858,38 @@ end
           <li><code>XorQuantumOperator</code></li>
 
           <li><code>PowQuantumOperator</code></li>
-        </ul>
+
+          <li><code>LogQuantumOperator</code></li>
+
+          <li><code>ThresholdQuantumOperator</code></li>
+
+          <li><code>ThresholdBlackQuantumOperator</code></li>
+
+          <li><code>ThresholdWhiteQuantumOperator</code></li>
+
+          <li><code>GaussianNoiseQuantumOperator</code></li>
+
+          <li><code>ImpulseNoiseQuantumOperator</code></li>
+
+          <li><code>LaplacianNoiseQuantumOperator</code></li>
+
+          <li><code>MultiplicativeNoiseQuantumOperator</code></li>
+
+          <li><code>PoissonNoiseQuantumOperator</code></li>
+
+          <li><code>UniformNoiseQuantumOperator</code></li>
+
+          <li><code>CosineQuantumOperator</code></li>
+
+          <li><code>SineQuantumOperator</code></li>
+
+          <li><code>AddModulusQuantumOperator</code></li>
+        </ul>Some of these constants are not defined in older
+        releases of ImageMagick. To see which ones are defined,
+        enter this statement in IRB:
+        <pre>
+Magick::QuantumExpressionOperator.values {|v| puts v}
+</pre>
       </dd>
 
       <dt>rvalue</dt>
@@ -868,7 +899,7 @@ end
       <dt>channel</dt>
 
       <dd>A <a href="constants.html#ChannelType">ChannelType</a>
-      value. The default is to operate on all channels.</dd>
+      value. The default is to operate on the R, G. and B channels.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1439,7 +1470,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" /> 
+    alt="resize_to_fill example" />
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1534,7 +1565,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" /> 
+    "Click to see the example script" />
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"

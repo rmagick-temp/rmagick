@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.267 2009/01/01 23:35:59 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.268 2009/01/12 23:08:35 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -260,6 +260,45 @@ typedef enum _QuantumExpressionOperator
     XorQuantumOperator,
 #if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
     PowQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_LOGEVALUATEOPERATOR)
+    LogQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_THRESHOLDEVALUATEOPERATOR)
+    ThresholdQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_THRESHOLDBLACKEVALUATEOPERATOR)
+    ThresholdBlackQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_THRESHOLDWHITEEVALUATEOPERATOR)
+    ThresholdWhiteQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_GAUSSIANNOISEEVALUATEOPERATOR)
+    GaussianNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_IMPULSENOISEEVALUATEOPERATOR)
+    ImpulseNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_LAPLACIANNOISEEVALUATEOPERATOR)
+    LaplacianNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_MULTIPLICATIVENOISEEVALUATEOPERATOR)
+    MultiplicativeNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_POISSONNOISEEVALUATEOPERATOR)
+    PoissonNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_UNIFORMNOISEEVALUATEOPERATOR)
+    UniformNoiseQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_COSINEEVALUATEOPERATOR)
+    CosineQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_SINEEVALUATEOPERATOR)
+    SineQuantumOperator,
+#endif
+#if defined(HAVE_ENUM_ADDMODULUSEVALUATEOPERATOR)
+    AddModulusQuantumOperator
 #endif
 } QuantumExpressionOperator ;
 

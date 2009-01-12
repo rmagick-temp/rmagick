@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.284 2008/12/30 00:22:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.285 2009/01/12 23:08:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1264,6 +1264,45 @@ Init_RMagick2(void)
 #if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
         ENUMERATOR(PowQuantumOperator)
 #endif
+#if defined(HAVE_ENUM_LOGEVALUATEOPERATOR)
+        ENUMERATOR(LogQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_THRESHOLDEVALUATEOPERATOR)
+        ENUMERATOR(ThresholdQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_THRESHOLDBLACKEVALUATEOPERATOR)
+        ENUMERATOR(ThresholdBlackQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_THRESHOLDWHITEEVALUATEOPERATOR)
+        ENUMERATOR(ThresholdWhiteQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_GAUSSIANNOISEEVALUATEOPERATOR)
+        ENUMERATOR(GaussianNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_IMPULSENOISEEVALUATEOPERATOR)
+        ENUMERATOR(ImpulseNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_LAPLACIANNOISEEVALUATEOPERATOR)
+        ENUMERATOR(LaplacianNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_MULTIPLICATIVENOISEEVALUATEOPERATOR)
+        ENUMERATOR(MultiplicativeNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_POISSONNOISEEVALUATEOPERATOR)
+        ENUMERATOR(PoissonNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_UNIFORMNOISEEVALUATEOPERATOR)
+        ENUMERATOR(UniformNoiseQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_COSINEEVALUATEOPERATOR)
+        ENUMERATOR(CosineQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_SINEEVALUATEOPERATOR)
+        ENUMERATOR(SineQuantumOperator)
+#endif
+#if defined(HAVE_ENUM_ADDMODULUSEVALUATEOPERATOR)
+        ENUMERATOR(AddModulusQuantumOperator)
+#endif
     END_ENUM
 
     // RenderingIntent
@@ -1520,7 +1559,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2008/12/30 00:22:20 $) Copyright (C) 2008 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/01/12 23:08:35 $) Copyright (C) 2008 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

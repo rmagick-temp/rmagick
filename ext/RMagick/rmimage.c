@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.342 2009/01/01 23:35:59 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.343 2009/01/12 23:08:35 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -7852,6 +7852,71 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 #if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
         case PowQuantumOperator:
             qop = PowEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_LOGEVALUATEOPERATOR)
+        case LogQuantumOperator:
+            qop = LogEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_THRESHOLDEVALUATEOPERATOR)
+        case ThresholdQuantumOperator:
+            qop = ThresholdEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_THRESHOLDBLACKEVALUATEOPERATOR)
+        case ThresholdBlackQuantumOperator:
+            qop = ThresholdBlackEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_THRESHOLDWHITEEVALUATEOPERATOR)
+        case ThresholdWhiteQuantumOperator:
+            qop = ThresholdWhiteEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_GAUSSIANNOISEEVALUATEOPERATOR)
+        case GaussianNoiseQuantumOperator:
+            qop = GaussianNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_IMPULSENOISEEVALUATEOPERATOR)
+        case ImpulseNoiseQuantumOperator:
+            qop = ImpulseNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_LAPLACIANNOISEEVALUATEOPERATOR)
+        case LaplacianNoiseQuantumOperator:
+            qop = LaplacianNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_MULTIPLICATIVENOISEEVALUATEOPERATOR)
+        case MultiplicativeNoiseQuantumOperator:
+            qop = MultiplicativeNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_POISSONNOISEEVALUATEOPERATOR)
+        case PoissonNoiseQuantumOperator:
+            qop = PoissonNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_UNIFORMNOISEEVALUATEOPERATOR)
+        case UniformNoiseQuantumOperator:
+            qop = UniformNoiseEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_COSINEEVALUATEOPERATOR)
+        case CosineQuantumOperator:
+            qop = CosineEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_SINEEVALUATEOPERATOR)
+        case SineQuantumOperator:
+            qop = SineEvaluateOperator;
+            break;
+#endif
+#if defined(HAVE_ENUM_ADDMODULUSEVALUATEOPERATOR)
+        case AddModulusQuantumOperator:
+            qop = AddModulusEvaluateOperator;
             break;
 #endif
     }

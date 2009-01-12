@@ -6,6 +6,7 @@ RMagick 2.9.0
     o Add Draw#kerning, Draw#interword_spacing primitive methods (available in
       ImageMagick 6.4.8-3)
     o Feature #23171, support ImageList, Draw, Pixel marshaling.
+    o Support all the new EvaluateOperator constants
 
 RMagick 2.8.0
     o Add the endian, scene, and transparent_color attributes to Image::Info

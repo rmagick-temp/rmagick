@@ -346,13 +346,13 @@ class Image1_UT < Test::Unit::TestCase
     end
 
     def test_change_geometry
-        assert_raise(Magick::ImageMagickError) { @img.change_geometry("sss") }
+        assert_raise(ArgumentError) { @img.change_geometry("sss") }
         assert_raise(LocalJumpError) { @img.change_geometry("100x100") }
         assert_nothing_raised do
             res = @img.change_geometry("100x100") { 1 }
             assert_equal(1, res)
         end
-        assert_raise(Magick::ImageMagickError) { @img.change_geometry([]) }
+        assert_raise(ArgumentError) { @img.change_geometry([]) }
     end
 
     def test_changed?

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.343 2009/01/12 23:08:35 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.344 2009/01/17 21:03:46 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1554,13 +1554,9 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 
     memset(&rect, 0, sizeof(rect));
 
-#if defined(HAVE_NEWPARSESIZEGEOMETRY)
-    flags = ParseSizeGeometry(image, geometry, &rect, &image->exception);
-#else
-    flags = ParseSizeGeometry(image, geometry, &rect);
-#endif
+    SetGeometry(image, &rect);
     rm_check_image_exception(image, RetainOnError);
-
+    flags = ParseMetaGeometry(geometry, &rect.x,&rect.y, &rect.width,&rect.height);
     if (flags == NoValue)
     {
         rb_raise(rb_eArgError, "invalid geometry string `%s'", geometry);

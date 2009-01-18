@@ -44,6 +44,7 @@ circle.draw(canvas)
 
 # Label the axes and the circle.
 labels = Magick::Draw.new
+labels.font_weight(Magick::NormalWeight)
 labels.fill('black')
 labels.stroke('transparent')
 labels.font_style(Magick::ItalicStyle)

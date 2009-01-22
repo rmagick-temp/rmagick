@@ -33,6 +33,6 @@ gc.text( 30,15, '"75%"')
 gc.text( 90,15, '"100%"')
 
 gc.draw(canvas)
-
+canvas.matte = false
 canvas.write("opacity.gif")
 exit

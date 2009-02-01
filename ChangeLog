@@ -1,3 +1,7 @@
+RMagick 2.9.1
+    o Fix a bug that prevents the use of transparent background colors when
+      built with ImageMagick 6.4.9-0
+
 RMagick 2.9.0
     o Fix #23209, improve RVG's letter spacing (patch from Jonah Fox)
     o Add Draw#kerning= attribute(available in ImageMagick 6.4.7-8)

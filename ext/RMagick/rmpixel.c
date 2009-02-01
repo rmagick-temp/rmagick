@@ -1,4 +1,4 @@
-/* $Id: rmpixel.c,v 1.2 2008/12/27 00:15:56 rmagick Exp $ */
+/* $Id: rmpixel.c,v 1.3 2009/02/01 14:59:52 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmpixel.c
@@ -749,7 +749,7 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
     (void) DestroyImageInfo(info);
 
     GetMagickPixelPacket(image, &mpp);
-    rm_set_magick_pixel_packet(pixel, NULL, &mpp);
+    rm_set_magick_pixel_packet(pixel, &mpp);
 
     GetExceptionInfo(&exception);
 
@@ -805,12 +805,12 @@ Pixel_to_s(VALUE self)
                 in ImageMagick.
 */
 void
-rm_set_magick_pixel_packet(Pixel *pixel, IndexPacket *index_packet, MagickPixelPacket *pp)
+rm_set_magick_pixel_packet(Pixel *pixel, MagickPixelPacket *pp)
 {
     pp->red     = (MagickRealType) pixel->red;
     pp->green   = (MagickRealType) pixel->green;
     pp->blue    = (MagickRealType) pixel->blue;
-    pp->opacity = (MagickRealType) (pp->matte ? pixel->opacity : OpaqueOpacity);
-    pp->index   = (MagickRealType) ((pp->colorspace == CMYKColorspace) && (index_packet ? *index_packet : 0));
+    pp->opacity = (MagickRealType) pixel->opacity;
+    pp->index   = (MagickRealType) 0.0;
 }
 

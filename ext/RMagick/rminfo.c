@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.75 2009/01/01 23:36:00 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.76 2009/02/01 14:59:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -166,15 +166,17 @@ static VALUE set_dbl_option(VALUE self, const char *option, VALUE value)
     Static:     pixel_packet_to_hexname(pp, name)
     Purpose:    convert a PixelPacket to a hex-format color name
 */
+#if 0
 static char *pixel_packet_to_hexname(PixelPacket *pp, char *name)
 {
     MagickPixelPacket mpp;
 
     GetMagickPixelPacket(NULL, &mpp);
-    rm_set_magick_pixel_packet(pp, NULL, &mpp);
+    rm_set_magick_pixel_packet(pp, &mpp);
     (void) GetColorTuple(&mpp, MagickTrue, name);
     return name;
 }
+#endif
 
 
 DEF_ATTR_ACCESSOR(Info, antialias, bool)
@@ -393,11 +395,11 @@ VALUE
 Info_background_color_eq(VALUE self, VALUE bc_arg)
 {
     Info *info;
-    char colorname[MaxTextExtent];
+    //char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->background_color, bc_arg);
-    SetImageOption(info, "background", pixel_packet_to_hexname(&info->background_color, colorname));
+    //SetImageOption(info, "background", pixel_packet_to_hexname(&info->background_color, colorname));
     return self;
 }
 
@@ -424,11 +426,11 @@ VALUE
 Info_border_color_eq(VALUE self, VALUE bc_arg)
 {
     Info *info;
-    char colorname[MaxTextExtent];
+    //char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->border_color, bc_arg);
-    SetImageOption(info, "bordercolor", pixel_packet_to_hexname(&info->border_color, colorname));
+    //SetImageOption(info, "bordercolor", pixel_packet_to_hexname(&info->border_color, colorname));
     return self;
 }
 
@@ -1268,11 +1270,11 @@ VALUE
 Info_matte_color_eq(VALUE self, VALUE matte_arg)
 {
     Info *info;
-    char colorname[MaxTextExtent];
+    //char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->matte_color, matte_arg);
-    SetImageOption(info, "mattecolor", pixel_packet_to_hexname(&info->matte_color, colorname));
+    //SetImageOption(info, "mattecolor", pixel_packet_to_hexname(&info->matte_color, colorname));
     return self;
 }
 
@@ -1427,7 +1429,7 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     magick_clone_string(&info->page, geometry);
-    (void) SetImageOption(info, "page", StringValuePtr(geom_str));
+    //(void) SetImageOption(info, "page", StringValuePtr(geom_str));
 
     return self;
 }
@@ -1716,11 +1718,11 @@ VALUE
 Info_transparent_color_eq(VALUE self, VALUE tc_arg)
 {
     Info *info;
-    char colorname[MaxTextExtent];
+    //char colorname[MaxTextExtent];
 
     Data_Get_Struct(self, Info, info);
     Color_to_PixelPacket(&info->transparent_color, tc_arg);
-    SetImageOption(info, "transparent", pixel_packet_to_hexname(&info->transparent_color, colorname));
+    //SetImageOption(info, "transparent", pixel_packet_to_hexname(&info->transparent_color, colorname));
     return self;
 }
 

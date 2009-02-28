@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.75 2008/12/31 00:46:45 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.76 2009/02/28 23:42:39 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2008 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -882,17 +882,47 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case AtopCompositeOp:
                 op = "Atop";
                 break;
+            case BlendCompositeOp:
+                op = "Blend";
+                break;
             case BumpmapCompositeOp:
                 op = "Bumpmap";
                 break;
+
+#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
+            case ChangeMaskCompositeOp:
+                op = "ChangeMask";
+                break;
+#endif
             case ClearCompositeOp:
                 op = "Clear";
+                break;
+            case ColorBurnCompositeOp:
+                op = "ColorBurn";
+                break;
+            case ColorDodgeCompositeOp:
+                op = "ColorDodge";
+                break;
+            case ColorizeCompositeOp:
+                op = "Colorize";
+                break;
+            case CopyCompositeOp:
+                op = "Copy";
+                break;
+            case CopyBlackCompositeOp:
+                op = "CopyBlack";
                 break;
             case CopyBlueCompositeOp:
                 op = "CopyBlue";
                 break;
+            case CopyCyanCompositeOp:
+                op = "CopyCyan";
+                break;
             case CopyGreenCompositeOp:
                 op = "CopyGreen";
+                break;
+            case CopyMagentaCompositeOp:
+                op = "CopyMagenta";
                 break;
             case CopyOpacityCompositeOp:
                 op = "CopyOpacity";
@@ -900,17 +930,69 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case CopyRedCompositeOp:
                 op = "CopyRed";
                 break;
-            case CopyCompositeOp:
-                op = "Copy";
+            case CopyYellowCompositeOp:
+                op = "CopyYellow";
+                break;
+            case DarkenCompositeOp:
+                op = "Darken";
+                break;
+#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
+            case DivideCompositeOp:
+                op = "Divide";
+                break;
+#endif
+            case DstCompositeOp:
+                op = "Dst";
+                break;
+            case DstAtopCompositeOp:
+                op = "DstAtop";
+                break;
+            case DstInCompositeOp:
+                op = "DstIn";
+                break;
+            case DstOutCompositeOp:
+                op = "DstOut";
+                break;
+            case DstOverCompositeOp:
+                op = "DstOver";
                 break;
             case DifferenceCompositeOp:
                 op = "Difference";
                 break;
+            case DisplaceCompositeOp:
+                op = "Displace";
+                break;
+            case DissolveCompositeOp:
+                op = "Dissolve";
+                break;
+            case ExclusionCompositeOp:
+                op = "Exclusion";
+                break;
+            case HardLightCompositeOp:
+                op = "HardLight";
+                break;
+            case HueCompositeOp:
+                op = "Hue";
+                break;
             case InCompositeOp:
                 op = "In";
                 break;
+            case LightenCompositeOp:
+                op = "Lighten";
+                break;
+#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
+            case LinearLightCompositeOp:
+                op = "LinearLight";
+                break;
+#endif
+            case LuminizeCompositeOp:
+                op = "Luminize";
+                break;
             case MinusCompositeOp:
                 op = "Minus";
+                break;
+            case ModulateCompositeOp:
+                op = "Modulate";
                 break;
             case MultiplyCompositeOp:
                 op = "Multiply";
@@ -921,11 +1003,44 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case OverCompositeOp:
                 op = "Over";
                 break;
+            case OverlayCompositeOp:
+                op = "Overlay";
+                break;
             case PlusCompositeOp:
                 op = "Plus";
                 break;
+            case ReplaceCompositeOp:
+                op = "Replace";
+                break;
+            case SaturateCompositeOp:
+                op = "Saturate";
+                break;
+            case ScreenCompositeOp:
+                op = "Screen";
+                break;
+            case SoftLightCompositeOp:
+                op = "SoftLight";
+                break;
+            case SrcCompositeOp:
+                op = "Src";
+                break;
+            case SrcAtopCompositeOp:
+                op = "SrcAtop";
+                break;
+            case SrcInCompositeOp:
+                op = "SrcIn";
+                break;
+            case SrcOutCompositeOp:
+                op = "SrcOut";
+                break;
+            case SrcOverCompositeOp:
+                op = "SrcOver";
+                break;
             case SubtractCompositeOp:
                 op = "Subtract";
+                break;
+            case ThresholdCompositeOp:
+                op = "Threshold";
                 break;
             case XorCompositeOp:
                 op = "Xor";

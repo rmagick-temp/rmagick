@@ -1,6 +1,6 @@
-/* $Id: rminfo.c,v 1.76 2009/02/01 14:59:05 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.77 2009/02/28 23:50:36 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2008 by Timothy P. Hunter
+|                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rminfo.c
 | Author:   Tim Hunter
 | Purpose:  Info class method definitions for RMagick.

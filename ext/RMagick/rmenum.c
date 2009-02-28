@@ -1,6 +1,6 @@
-/* $Id: rmenum.c,v 1.1 2008/12/27 16:49:47 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.2 2009/02/28 23:50:35 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2008 by Timothy P. Hunter
+|                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
 | Author:   Tim Hunter
 | Purpose:  Enumeration methods

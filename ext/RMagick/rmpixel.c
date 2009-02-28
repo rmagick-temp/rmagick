@@ -1,6 +1,6 @@
-/* $Id: rmpixel.c,v 1.3 2009/02/01 14:59:52 rmagick Exp $ */
+/* $Id: rmpixel.c,v 1.4 2009/02/28 23:50:36 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2008 by Timothy P. Hunter
+|                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmpixel.c
 | Author:   Tim Hunter
 | Purpose:  Contains Pixel class methods.

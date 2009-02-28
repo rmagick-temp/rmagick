@@ -1,6 +1,6 @@
-/* $Id: rmagick.c,v 1.2 2008/12/27 17:16:03 rmagick Exp $ */
+/* $Id: rmagick.c,v 1.3 2009/02/28 23:50:35 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2008 by Timothy P. Hunter
+|                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.c
 | Author:   Tim Hunter
 | Purpose:  Contains Magick module methods.

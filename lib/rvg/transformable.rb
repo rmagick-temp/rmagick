@@ -1,6 +1,6 @@
 #--
-# $Id: transformable.rb,v 1.4 2008/02/24 18:26:37 rmagick Exp $
-# Copyright (C) 2008 Timothy P. Hunter
+# $Id: transformable.rb,v 1.5 2009/02/28 23:52:28 rmagick Exp $
+# Copyright (C) 2009 Timothy P. Hunter
 #++
 
 module Magick

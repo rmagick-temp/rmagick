@@ -1,6 +1,6 @@
-/* $Id: rmstruct.c,v 1.2 2008/12/27 17:16:04 rmagick Exp $ */
+/* $Id: rmstruct.c,v 1.3 2009/02/28 23:50:36 rmagick Exp $ */
 /*============================================================================\
-|                Copyright (C) 2008 by Timothy P. Hunter
+|                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmstruct.c
 | Author:   Tim Hunter
 | Purpose:  Contains various Struct class methods.

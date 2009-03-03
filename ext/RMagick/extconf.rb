@@ -98,6 +98,24 @@ end
 end
 
 
+unless checking_for("Ruby version >= 1.8.5") do
+  version = RUBY_VERSION.tr(".","").to_i
+  version >= 185
+end
+   msg = <<END_OLD_RUBY_WARNING
+
+#{"=" * 70}
+warning: The RMagick 2 prerequisites are changing.
+         This is the last release that will support Ruby #{RUBY_VERSION}
+         The next release will require Ruby 1.8.5 or later.
+#{"=" * 70}
+
+END_OLD_RUBY_WARNING
+
+   Logging::message msg
+   message msg
+end
+
 
 
 # Magick-config is not available on Windows
@@ -123,6 +141,26 @@ if RUBY_PLATFORM !~ /mswin/
   end
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
   end
+
+  unless checking_for("ImageMagick version >= 6.3.5")  do
+    version = `Magick-config --version`.chomp.tr(".","").to_i
+    version >= 635
+  end
+    msg = <<END_OLD_IM_WARNING
+
+#{"=" * 70}
+warning: The RMagick 2 prerequisites are changing.
+         This is the last release that will support ImageMagick #{`Magick-config --version`.chomp}
+         The next release will require ImageMagick 6.3.5 or later.
+#{"=" * 70}
+
+END_OLD_IM_WARNING
+
+    Logging::message msg
+    message msg
+  end
+
+
 
   $magick_version = `Magick-config --version`.chomp
 
@@ -180,8 +218,6 @@ end
 
 
 have_func("snprintf", headers)
-
-
   ["AcquireQuantumMemory",           # 6.3.5-9
    "AcquireImage",                   # 6.4.1
    "AffinityImage",                  # 6.4.3-6

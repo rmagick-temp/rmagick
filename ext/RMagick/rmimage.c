@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.345 2009/02/28 23:50:35 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.346 2009/03/04 00:35:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5281,7 +5281,11 @@ Image_get_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg, VALUE row
     // Cast AcquireImagePixels to get rid of the const qualifier. We're not going
     // to change the pixels but I don't want to make "pixels" const.
     GetExceptionInfo(&exception);
+#if defined(HAVE_GETVIRTUALPIXELS)
+    pixels = GetVirtualPixels(image, x, y, columns, rows, &exception);
+#else
     pixels = AcquireImagePixels(image, x, y, columns, rows, &exception);
+#endif
     CHECK_EXCEPTION()
 
     (void) DestroyExceptionInfo(&exception);
@@ -6431,10 +6435,18 @@ Image_mask(int argc, VALUE *argv, VALUE self)
         }
 
         // The following section is copied from mogrify.c (6.2.8-8)
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+        GetExceptionInfo(&exception);
+#endif
         for (y = 0; y < (long) clip_mask->rows; y++)
         {
+#if defined(HAVE_GETAUTHENTICPIXELS)
+            q = GetAuthenticPixels(clip_mask, 0, y, clip_mask->columns, 1, &exception);
+            rm_check_exception(&exception, clip_mask, DestroyOnError);
+#else
             q = GetImagePixels(clip_mask, 0, y, clip_mask->columns, 1);
             rm_check_image_exception(clip_mask, DestroyOnError);
+#endif
             if (!q)
             {
                 break;
@@ -6450,9 +6462,18 @@ Image_mask(int argc, VALUE *argv, VALUE self)
                 q->blue = q->opacity;
                 q += 1;
             }
+
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+            SyncAuthenticPixels(clip_mask, &exception);
+            rm_check_exception(&exception, clip_mask, DestroyOnError);
+#else
             SyncImagePixels(clip_mask);
             rm_check_image_exception(clip_mask, DestroyOnError);
+#endif
         }
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+        (void) DestroyExceptionInfo(&exception);
+#endif
 
         SetImageStorageClass(clip_mask, DirectClass);
         rm_check_image_exception(clip_mask, DestroyOnError);
@@ -7518,7 +7539,11 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
     if (!set)
     {
         GetExceptionInfo(&exception);
+#if defined(HAVE_GETVIRTUALPIXELS)
+        old_color = *GetVirtualPixels(image, x, y, 1, 1, &exception);
+#else
         old_color = *AcquireImagePixels(image, x, y, 1, 1, &exception);
+#endif
         CHECK_EXCEPTION()
 
         (void) DestroyExceptionInfo(&exception);
@@ -7526,7 +7551,11 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
         // PseudoClass
         if (image->storage_class == PseudoClass)
         {
+#if defined(HAVE_GETAUTHENTICINDEXQUEUE)
+            IndexPacket *indexes = GetAuthenticIndexQueue(image);
+#else
             IndexPacket *indexes = GetIndexes(image);
+#endif
             old_color = image->colormap[*indexes];
         }
         if (!image->matte)
@@ -7555,8 +7584,19 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
         }
     }
 
+
+#if defined(HAVE_GETAUTHENTICPIXELS) || defined(HAVE_SYNCAUTHENTICPIXELS)
+    GetExceptionInfo(&exception);
+#endif
+
+#if defined(HAVE_GETAUTHENTICPIXELS)
+    pixel = GetAuthenticPixels(image, x, y, 1, 1, &exception);
+    CHECK_EXCEPTION()
+#else
     pixel = GetImagePixels(image, x, y, 1, 1);
     rm_check_image_exception(image, RetainOnError);
+#endif
+
     if (pixel)
     {
         old_color = *pixel;
@@ -7566,8 +7606,18 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
         }
     }
     *pixel = new_color;
+
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+    SyncAuthenticPixels(image, &exception);
+    CHECK_EXCEPTION()
+#else
     SyncImagePixels(image);
     rm_check_image_exception(image, RetainOnError);
+#endif
+
+#if defined(HAVE_GETAUTHENTICPIXELS) || defined(HAVE_SYNCAUTHENTICPIXELS)
+    (void) DestroyExceptionInfo(&exception);
+#endif
 
     return Pixel_from_PixelPacket(&old_color);
 }
@@ -9755,20 +9805,40 @@ Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
 
     // Get a pointer to the pixels. Replace the values with the PixelPackets
     // from the pixels argument.
-    pixels = GetImagePixels(image, x, y, cols, rows);
-    rm_check_image_exception(image, RetainOnError);
-
-    if (pixels)
     {
-        for (n = 0; n < size; n++)
+#if defined(HAVE_SYNCAUTHENTICPIXELS) || defined(HAVE_GETAUTHENTICPIXELS)
+        ExceptionInfo exception;
+        GetExceptionInfo(&exception);
+#endif
+
+#if defined(HAVE_GETAUTHENTICPIXELS)
+        pixels = GetAuthenticPixels(image, x, y, cols, rows, &exception);
+        CHECK_EXCEPTION()
+#else
+        pixels = GetImagePixels(image, x, y, cols, rows);
+        rm_check_image_exception(image, RetainOnError);
+#endif
+
+        if (pixels)
         {
-            new_pixel = rb_ary_entry(new_pixels, n);
-            Data_Get_Struct(new_pixel, Pixel, pixel);
-            pixels[n] = *pixel;
+            for (n = 0; n < size; n++)
+            {
+                new_pixel = rb_ary_entry(new_pixels, n);
+                Data_Get_Struct(new_pixel, Pixel, pixel);
+                pixels[n] = *pixel;
+            }
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+            SyncAuthenticPixels(image, &exception);
+            CHECK_EXCEPTION()
+#else
+            SyncImagePixels(image);
+            rm_check_image_exception(image, RetainOnError);
+#endif
         }
 
-        SyncImagePixels(image);
-        rm_check_image_exception(image, RetainOnError);
+#if defined(HAVE_SYNCAUTHENTICPIXELS) || defined(HAVE_GETAUTHENTICPIXELS)
+        DestroyExceptionInfo(&exception);
+#endif
     }
 
     return self;
@@ -11106,16 +11176,25 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
             opacity = TransparentOpacity;
         }
 
+
+#if defined(HAVE_GETVIRTUALPIXELS)
+        p = GetVirtualPixels(reflection, 0, y, image->columns, 1, &exception);
+#else
         p = AcquireImagePixels(reflection, 0, y, image->columns, 1, &exception);
-        rm_check_exception(&exception, reflection, RetainOnError);
+#endif
+        rm_check_exception(&exception, reflection, DestroyOnError);
         if (!p)
         {
             func = "AcquireImagePixels";
             goto error;
         }
 
+#if defined(HAVE_QUEUEAUTHENTICPIXELS)
+        q = QueueAuthenticPixels(reflection, 0, y, image->columns, 1, &exception);
+#else
         q = SetImagePixels(reflection, 0, y, image->columns, 1);
-        rm_check_image_exception(reflection, DestroyOnError);
+#endif
+        rm_check_exception(&exception, reflection, DestroyOnError);
         if (!q)
         {
             func = "SetImagePixels";
@@ -11129,8 +11208,14 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
             q[x].opacity = max(q[x].opacity, (Quantum)opacity);
         }
 
+
+#if defined(HAVE_SYNCAUTHENTICPIXELS)
+        SyncAuthenticPixels(reflection, &exception);
+        rm_check_exception(&exception, reflection, DestroyOnError);
+#else
         SyncImagePixels(reflection);
         rm_check_image_exception(reflection, DestroyOnError);
+#endif
 
         opacity += step;
     }

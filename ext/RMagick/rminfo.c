@@ -1,4 +1,4 @@
-/* $Id: rminfo.c,v 1.77 2009/02/28 23:50:36 rmagick Exp $ */
+/* $Id: rminfo.c,v 1.78 2009/03/04 00:35:19 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rminfo.c
@@ -1394,11 +1394,9 @@ VALUE
 Info_page(VALUE self)
 {
     Info *info;
-    const char *page;
 
     Data_Get_Struct(self, Info, info);
-    page = GetImageOption(info, "page");
-    return page ? rb_str_new2(page) : Qnil;
+    return info->page ? rb_str_new2(info->page) : Qnil;
 
 }
 
@@ -1429,7 +1427,6 @@ Info_page_eq(VALUE self, VALUE page_arg)
         return self;
     }
     magick_clone_string(&info->page, geometry);
-    //(void) SetImageOption(info, "page", StringValuePtr(geom_str));
 
     return self;
 }

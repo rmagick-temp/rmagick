@@ -233,6 +233,7 @@ have_func("snprintf", headers)
    "ExcerptImage",                   # 6.3.5-8
    "ExtentImage",                    # 6.3.1
    "FloodfillPaintImage",            # 6.3.7
+   "GetAuthenticIndexQueue",         # 6.4.5-6
    "GetAuthenticPixels",             # 6.4.5-6
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetImageProperty",               # 6.3.1
@@ -248,6 +249,7 @@ have_func("snprintf", headers)
    "MagickCoreGenesis",              # 6.3.4
    "OpaquePaintImageChannel",        # 6.3.7-10
    "PolaroidImage",                  # 6.3.1-6
+   "QueueAuthenticPixels",           # 6.4.5-6
    "RecolorImage",                   # 6.3.1-3
    "RemapImage",                     # 6.4.4-0
    "RemoveImageArtifact",            # 6.3.6

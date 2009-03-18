@@ -1,4 +1,7 @@
 RMagick 2.9.2
+    o Add new HorizontalTileEdgeVirtualPixelMethod,
+      VerticalTileEdgeVirtualPixelMethod, CheckerTileVirtualPixelMethod
+      VirtualPixelMethod enum values (available in ImageMagick 6.5.0-1)
     o Add missing composite operators to Magick::Draw#composite method
     o Add warning about IM < 6.3.5 and Ruby < 1.8.5
 
@@ -8,7 +11,7 @@ RMagick 2.9.1
 
 RMagick 2.9.0
     o Fix #23209, improve RVG's letter spacing (patch from Jonah Fox)
-    o Add Draw#kerning= attribute(available in ImageMagick 6.4.7-8)
+    o Add Draw#kerning= attribute (available in ImageMagick 6.4.7-8)
     o Add Draw#interword_spacing= attribute (available in ImageMagick
       6.4.8-0)
     o Add Draw#kerning, Draw#interword_spacing primitive methods (available in

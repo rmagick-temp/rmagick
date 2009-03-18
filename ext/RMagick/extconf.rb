@@ -358,24 +358,28 @@ have_enum_values("MagickEvaluateOperator", ["PowEvaluateOperator",           # 6
                                            "SineEvaluateOperator",           # 6.4.8-5
                                            "AddModulusEvaluateOperator"],    # 6.4.8-5
                                                                  headers)
-have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                 # 6.3.3-4
-                                       "RemoveDupsLayer",                    # 6.3.3-6
-                                       "RemoveZeroLayer",                    # 6.3.3-6
-                                       "CompositeLayer",                     # 6.3.3-6
-                                       "OptimizeImageLayer"], headers)       # 6.3.3-?
-have_enum_values("ImageLayerMethod", ["FlattenLayer",                        # 6.3.6-2
-                                      "MergeLayer",                          # 6.3.6
-                                      "MosaicLayer",                         # 6.3.6-2
-                                      "TrimBoundsLayer" ], headers)          # 6.4.3-8
-have_enum_value("MetricType", "MeanErrorPerPixelMetric", headers)            # 6.3.4-?
-have_enum_value("NoiseType", "RandomNoise", headers)                         # 6.3.5-0
-have_enum_value("SpreadMethod", "ReflectSpread", headers)                    # 6.3.1
-have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",            # 6.3.3
-                                        "BlackVirtualPixelMethod",           # 6.3.5
-                                        "GrayVirtualPixelMethod",            # 6.3.5
-                                        "HorizontalTileVirtualPixelMethod",  # 6.4.2-6
-                                        "VerticalTileVirtualPixelMethod",    # 6.4.2-6
-                                        "WhiteVirtualPixelMethod"], headers) # 6.3.5
+have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                    # 6.3.3-4
+                                       "RemoveDupsLayer",                       # 6.3.3-6
+                                       "RemoveZeroLayer",                       # 6.3.3-6
+                                       "CompositeLayer",                        # 6.3.3-6
+                                       "OptimizeImageLayer"], headers)          # 6.3.3-?
+have_enum_values("ImageLayerMethod", ["FlattenLayer",                           # 6.3.6-2
+                                      "MergeLayer",                             # 6.3.6
+                                      "MosaicLayer",                            # 6.3.6-2
+                                      "TrimBoundsLayer" ], headers)             # 6.4.3-8
+have_enum_value("MetricType", "MeanErrorPerPixelMetric", headers)               # 6.3.4-?
+have_enum_value("NoiseType", "RandomNoise", headers)                            # 6.3.5-0
+have_enum_value("SpreadMethod", "ReflectSpread", headers)                       # 6.3.1
+have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",               # 6.3.3
+                                        "BlackVirtualPixelMethod",              # 6.3.5
+                                        "GrayVirtualPixelMethod",               # 6.3.5
+                                        "HorizontalTileVirtualPixelMethod",     # 6.4.2-6
+                                        "VerticalTileVirtualPixelMethod",       # 6.4.2-6
+                                        "WhiteVirtualPixelMethod",              # 6.3.5
+                                        "HorizontalTileEdgeVirtualPixelMethod", # 6.5.0-1
+                                        "VerticalTileEdgeVirtualPixelMethod",   # 6.5.0-1
+                                        "CheckerTileVirtualPixelMethod"],       # 6.5.0-1
+                                                                 headers)
 
 
 # Now test Ruby 1.9.0 features.

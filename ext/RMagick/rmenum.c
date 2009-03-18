@@ -1,4 +1,4 @@
-/* $Id: rmenum.c,v 1.2 2009/02/28 23:50:35 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.3 2009/03/18 22:40:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
@@ -204,7 +204,7 @@ Enum_type_inspect(VALUE self)
     MagickEnum *magick_enum;
 
     Data_Get_Struct(self, MagickEnum, magick_enum);
-    sprintf(str, "%.32s=%d", rb_id2name(magick_enum->id), magick_enum->val);
+    sprintf(str, "%.48s=%d", rb_id2name(magick_enum->id), magick_enum->val);
 
     return rb_str_new2(str);
 }
@@ -997,6 +997,15 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
 #endif
 #if defined(HAVE_ENUM_VERTICALTILEVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(VerticalTileVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_HORIZONTALTILEEDGEVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(HorizontalTileEdgeVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_VERTICALTILEEDGEVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(VerticalTileEdgeVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_CHECKERTILEVIRTUALPIXELMETHOD)
+        ENUM_TO_NAME(CheckerTileVirtualPixelMethod)
 #endif
     }
 

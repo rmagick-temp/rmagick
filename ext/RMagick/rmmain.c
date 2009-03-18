@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.286 2009/02/28 23:50:36 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.287 2009/03/18 22:40:41 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1409,8 +1409,16 @@ Init_RMagick2(void)
 #if defined(HAVE_ENUM_VERTICALTILEVIRTUALPIXELMETHOD)
         ENUMERATOR(VerticalTileVirtualPixelMethod)
 #endif
+#if defined(HAVE_ENUM_HORIZONTALTILEEDGEVIRTUALPIXELMETHOD)
+        ENUMERATOR(HorizontalTileEdgeVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_VERTICALTILEEDGEVIRTUALPIXELMETHOD)
+        ENUMERATOR(VerticalTileEdgeVirtualPixelMethod)
+#endif
+#if defined(HAVE_ENUM_CHECKERTILEVIRTUALPIXELMETHOD)
+        ENUMERATOR(CheckerTileVirtualPixelMethod)
+#endif
     END_ENUM
-
     // WeightType constants
     DEF_ENUM(WeightType)
         ENUMERATOR(AnyWeight)
@@ -1559,7 +1567,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/02/28 23:50:36 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/03/18 22:40:41 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

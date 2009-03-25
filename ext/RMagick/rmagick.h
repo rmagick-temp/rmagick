@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.270 2009/02/28 23:50:35 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.271 2009/03/25 22:56:03 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -1181,6 +1181,7 @@ extern void   Font_to_TypeInfo(TypeInfo *, VALUE);
 extern void   Export_TypeMetric(TypeMetric *, VALUE);
 extern VALUE  Import_TypeInfo(const TypeInfo *);
 extern VALUE  TypeMetric_to_s(VALUE);
+extern void   Export_TypeInfo(TypeInfo *, VALUE);
 extern VALUE  Import_TypeMetric(TypeMetric *);
 extern const char *StorageType_name(StorageType);
 extern VALUE  VirtualPixelMethod_new(VirtualPixelMethod);

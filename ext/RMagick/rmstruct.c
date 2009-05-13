@@ -1,4 +1,4 @@
-/* $Id: rmstruct.c,v 1.3 2009/02/28 23:50:36 rmagick Exp $ */
+/* $Id: rmstruct.c,v 1.4 2009/05/13 22:50:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmstruct.c
@@ -870,18 +870,26 @@ Export_TypeMetric(TypeMetric *tm, VALUE st)
 VALUE
 TypeMetric_to_s(VALUE self)
 {
+    volatile VALUE str;
     TypeMetric tm;
-    char buff[200];
+    char temp[200];
+    int len;
 
     Export_TypeMetric(&tm, self);
-    sprintf(buff, "pixels_per_em=(x=%g,y=%g) "
-                  "ascent=%g descent=%g width=%g height=%g max_advance=%g "
-                  "bounds.x1=%g bounds.y1=%g bounds.x2=%g bounds.y2=%g "
-                  "underline_position=%g underline_thickness=%g",
-                  tm.pixels_per_em.x, tm.pixels_per_em.y,
-                  tm.ascent, tm.descent, tm.width, tm.height, tm.max_advance,
-                  tm.bounds.x1, tm.bounds.y1, tm.bounds.x2, tm.bounds.y2,
-                  tm.underline_position, tm.underline_thickness);
-    return rb_str_new2(buff);
+
+    len = sprintf(temp, "pixels_per_em=(x=%g,y=%g) ", tm.pixels_per_em.x, tm.pixels_per_em.y);
+    str = rb_str_new(temp, len);
+    len = sprintf(temp, "ascent=%g descent=%g ",tm.ascent, tm.descent);
+    rb_str_cat(str, temp, len);
+    len = sprintf(temp, "width=%g height=%g max_advance=%g ", tm.width, tm.height, tm.max_advance);
+    rb_str_cat(str, temp, len);
+    len = sprintf(temp, "bounds.x1=%g bounds.y1=%g ", tm.bounds.x1, tm.bounds.y1);
+    rb_str_cat(str, temp, len);
+    len = sprintf(temp, "bounds.x2=%g bounds.y2=%g ", tm.bounds.x2, tm.bounds.y2);
+    rb_str_cat(str, temp, len);
+    len = sprintf(temp, "underline_position=%g underline_thickness=%g", tm.underline_position, tm.underline_thickness);
+    rb_str_cat(str, temp, len);
+
+    return str;
 }
 

@@ -2,8 +2,13 @@ RMagick 2.9.2
     o Add new HorizontalTileEdgeVirtualPixelMethod,
       VerticalTileEdgeVirtualPixelMethod, CheckerTileVirtualPixelMethod
       VirtualPixelMethod enum values (available in ImageMagick 6.5.0-1)
+    o Added BilinearForwardDistortion, BilinearReverseDistortion enums
+      (available in ImageMagick 6.5.1-2)
     o Add missing composite operators to Magick::Draw#composite method
-    o Add warning about IM < 6.3.5 and Ruby < 1.8.5
+    o Add warning about dropping support for ImageMagick < 6.3.5 and
+      Ruby < 1.8.5
+    o Fix bug #25892, stack buffer overflow in Magick::TypeMetric.to_s
+      (reported by Roman Simecek)
 
 RMagick 2.9.1
     o Fix a bug that prevents the use of transparent background colors when

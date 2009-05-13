@@ -899,7 +899,8 @@ Magick::QuantumExpressionOperator.values {|v| puts v}
       <dt>channel</dt>
 
       <dd>A <a href="constants.html#ChannelType">ChannelType</a>
-      value. The default is to operate on the R, G. and B channels.</dd>
+      value. The default is to operate on the R, G. and B
+      channels.</dd>
     </dl>
 
     <h4>Returns</h4>
@@ -1470,7 +1471,7 @@ random_threshold_channel(geom, RedChannel)
     "padding-left:62px; padding-right: 62px; padding-top: 87px;padding-bottom:87px;"
     id="after_resize_to_fill" onmouseover=
     "this.style.display='none'; before_resize_to_fill.style.display='';"
-    alt="resize_to_fill example" />
+    alt="resize_to_fill example" /> 
     <!-- This img tag displays the before image when moused over -->
      <img src="ex/images/Flower_Hat.jpg" style="display: none" id=
     "before_resize_to_fill" onmouseout=
@@ -1565,7 +1566,7 @@ random_threshold_channel(geom, RedChannel)
      <img id="rtfless" style="display: none" onmouseout=
     "this.style.display='none';rtf.style.display='';" src=
     "ex/images/Flower_Hat.jpg" alt="resize_to_fit example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!--  This img tag displays the framed image when the mouse is not over-->
      <img style=
     "padding-left:69px; padding-right: 69px; padding-top: 87px;padding-bottom:87px;"
@@ -2461,9 +2462,11 @@ random_threshold_channel(geom, RedChannel)
 
       <dt>midpoint</dt>
 
-      <dd class="imquote">indicates where midtones fall in the
-      resultant image (0 is white; 50% is middle-gray; 100% is
-      black)</dd>
+      <dd><span class="imquote">indicates where midtones fall in
+      the resultant image (0 is white; 50% is middle-gray; 100% is
+      black).</span> Note that "50%" means "50% of the quantum
+      range." This argument is a number between 0 and QuantumRange.
+      To specify "50%" use <code>QuantumRange * 0.50</code>.</dd>
 
       <dt>sharpen</dt>
 

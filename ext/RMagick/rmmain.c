@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.288 2009/04/19 17:38:00 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.289 2009/05/21 23:45:54 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -755,6 +755,9 @@ Init_RMagick2(void)
         ENUMERATOR(OpaqueAlphaChannel)
         ENUMERATOR(ShapeAlphaChannel)
         ENUMERATOR(TransparentAlphaChannel)
+#endif
+#if defined(HAVE_ENUM_BACKGROUNDALPHACHANNEL)
+        ENUMERATOR(BackgroundAlphaChannel)
 #endif
     END_ENUM
 #endif
@@ -1573,7 +1576,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/04/19 17:38:00 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/05/21 23:45:54 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

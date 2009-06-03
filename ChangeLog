@@ -1,5 +1,7 @@
-RMagick 2.9.3
-    o Add new AlphaBackgroundChannel enum value (available in ImageMagick 
+RMagick 2.10.0
+    o ImageMagick releases earlier than 6.3.5-10 and Ruby releases earlier
+      than 1.8.5 no longer supported.
+    o Add new AlphaBackgroundChannel enum value (available in ImageMagick
       6.5.2-5)
 
 RMagick 2.9.2

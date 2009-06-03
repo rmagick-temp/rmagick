@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.178 2009/02/28 23:50:36 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.179 2009/06/03 23:08:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -27,7 +27,6 @@ static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 void *
 magick_safe_malloc(const size_t count, const size_t quantum)
 {
-#if defined(HAVE_ACQUIREQUANTUMMEMORY)
     void *ptr;
 
     ptr = AcquireQuantumMemory(count, quantum);
@@ -36,18 +35,6 @@ magick_safe_malloc(const size_t count, const size_t quantum)
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     return ptr;
-#else
-
-    // Provide an implementation of AcquireQuantumMemory in releases prior to 6.3.5-9.
-    size_t size = count * quantum;
-
-    if (count == 0 || quantum != (size/count))
-    {
-        rb_raise(rb_eRuntimeError, "integer overflow detected in memory size computation. "
-               "Probable image corruption.");
-    }
-    return magick_malloc(size);
-#endif
 }
 
 
@@ -75,7 +62,6 @@ magick_free(void *ptr)
 void *
 magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
 {
-#if defined(HAVE_RESIZEQUANTUMMEMORY)
     void *v;
     v = ResizeQuantumMemory(memory, count, quantum);
     if (!v)
@@ -83,16 +69,6 @@ magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
     return v;
-#else
-    // Provide an implementation of ResizeQuantumMemory in releases prior to 6.3.5-9.
-    size_t size = count * quantum;
-    if (count == 0 || quantum != (size/count))
-    {
-        rb_raise(rb_eRuntimeError, "integer overflow detected in memory size computation. "
-               "Probable image corruption.");
-    }
-    return magick_realloc(memory, size);
-#endif
 }
 
 
@@ -576,7 +552,6 @@ void
 rm_write_temp_image(Image *image, char *temp_name)
 {
 
-#if defined(HAVE_SETIMAGEREGISTRY)
 #define TMPNAM_CLASS_VAR "@@_tmpnam_"
 
     MagickBooleanType okay;
@@ -611,24 +586,6 @@ rm_write_temp_image(Image *image, char *temp_name)
     {
         rb_raise(rb_eRuntimeError, "SetImageRegistry failed.");
     }
-
-#else
-
-    long registry_id;
-
-    rb_warn("`%s' can cause memory leaks with ImageMagick "  MagickLibVersionText
-            ".\nUpgrade to ImageMagick 6.3.4-10 or later to prevent this behavior."
-          , rb_id2name(THIS_FUNC()));
-
-    registry_id = SetMagickRegistry(ImageRegistryType, image, sizeof(Image), &image->exception);
-    rm_check_image_exception(image, RetainOnError);
-    if (registry_id < 0)
-    {
-        rb_raise(rb_eRuntimeError, "SetMagickRegistry failed.");
-    }
-
-    sprintf(temp_name, "mpri:%ld", registry_id);
-#endif
 
 }
 
@@ -737,14 +694,7 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 const char *
 rm_get_property(const Image *img, const char *property)
 {
-#if defined(HAVE_GETIMAGEPROPERTY)
     return GetImageProperty(img, property);
-#else
-    const ImageAttribute *attr;
-
-    attr = GetImageAttribute(img, property);
-    return attr ? (const char *)attr->value : NULL;
-#endif
 }
 
 
@@ -755,11 +705,7 @@ rm_get_property(const Image *img, const char *property)
 MagickBooleanType
 rm_set_property(Image *image, const char *property, const char *value)
 {
-#if defined(HAVE_SETIMAGEPROPERTY)
     return SetImageProperty(image, property, value);
-#else
-    return SetImageAttribute(image, property, value);
-#endif
 }
 
 
@@ -954,13 +900,11 @@ void rm_sync_image_options(Image *image, Info *info)
         image->scene = info->scene;
     }
 
-#if defined(HAVE_ST_TILE_OFFSET)
     option = GetImageOption(info, "tile-offset");
     if (option)
     {
         (void)ParseAbsoluteGeometry(option, &image->tile_offset);
     }
-#endif
 
     option = GetImageOption(info, "transparent");
     if (option)
@@ -1024,7 +968,6 @@ void rm_sync_image_options(Image *image, Info *info)
 VALUE
 rm_exif_by_entry(Image *image)
 {
-#if defined(HAVE_GETIMAGEPROPERTY)
     const char *property, *value;
     char *str;
     size_t len = 0, property_l, value_l;
@@ -1093,13 +1036,6 @@ rm_exif_by_entry(Image *image)
     v = rb_str_new(str, len);
     xfree(str);
     return v;
-
-#else
-
-    const char *attr = rm_get_property(image, "EXIF:*");
-    return attr ? rb_str_new2(attr) : Qnil;
-
-#endif
 }
 
 
@@ -1114,7 +1050,6 @@ rm_exif_by_entry(Image *image)
 VALUE
 rm_exif_by_number(Image *image)
 {
-#if defined(HAVE_GETIMAGEPROPERTY)
     const char *property, *value;
     char *str;
     size_t len = 0, property_l, value_l;
@@ -1183,13 +1118,6 @@ rm_exif_by_number(Image *image)
     v = rb_str_new(str, len);
     xfree(str);
     return v;
-
-#else
-
-    const char *attr = rm_get_property(image, "EXIF:!");
-    return attr ? rb_str_new2(attr) : Qnil;
-
-#endif
 }
 
 

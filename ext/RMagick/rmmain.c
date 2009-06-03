@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.289 2009/05/21 23:45:54 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.290 2009/06/03 23:08:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -32,11 +32,7 @@ Init_RMagick2(void)
 {
     volatile VALUE observable;
 
-#if defined(HAVE_MAGICKCOREGENESIS)
     MagickCoreGenesis("RMagick", MagickFalse);
-#else
-    InitializeMagick("RMagick");
-#endif
 
     test_Magick_version();
 
@@ -742,7 +738,6 @@ Init_RMagick2(void)
     END_ENUM
 
     // AlphaChannelType constants
-#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
     DEF_ENUM(AlphaChannelType)
         ENUMERATOR(UndefinedAlphaChannel)
         ENUMERATOR(ActivateAlphaChannel)
@@ -760,7 +755,6 @@ Init_RMagick2(void)
         ENUMERATOR(BackgroundAlphaChannel)
 #endif
     END_ENUM
-#endif
 
     // AnchorType constants (for Draw#text_anchor - these are not defined by ImageMagick)
     DEF_ENUM(AnchorType)
@@ -845,9 +839,7 @@ Init_RMagick2(void)
         ENUMERATOR(Rec709LumaColorspace)
         ENUMERATOR(Rec709YCbCrColorspace)
         ENUMERATOR(LogColorspace)
-#if defined(HAVE_ENUM_CMYCOLORSPACE)
         ENUMERATOR(CMYColorspace)
-#endif
     END_ENUM
 
     // ComplianceType constants are defined as enums but used as bit flags
@@ -874,9 +866,7 @@ Init_RMagick2(void)
         ENUMERATOR(AtopCompositeOp)
         ENUMERATOR(BlendCompositeOp)
         ENUMERATOR(BumpmapCompositeOp)
-#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
         ENUMERATOR(ChangeMaskCompositeOp)
-#endif
         ENUMERATOR(ClearCompositeOp)
         ENUMERATOR(ColorBurnCompositeOp)
         ENUMERATOR(ColorDodgeCompositeOp)
@@ -891,9 +881,7 @@ Init_RMagick2(void)
         ENUMERATOR(CopyRedCompositeOp)
         ENUMERATOR(CopyYellowCompositeOp)
         ENUMERATOR(DarkenCompositeOp)
-#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
         ENUMERATOR(DivideCompositeOp)
-#endif
         ENUMERATOR(DstAtopCompositeOp)
         ENUMERATOR(DstCompositeOp)
         ENUMERATOR(DstInCompositeOp)
@@ -907,9 +895,7 @@ Init_RMagick2(void)
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
-#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
         ENUMERATOR(LinearLightCompositeOp)
-#endif
         ENUMERATOR(LuminizeCompositeOp)
         ENUMERATOR(MinusCompositeOp)
         ENUMERATOR(ModulateCompositeOp)
@@ -972,15 +958,12 @@ Init_RMagick2(void)
         ENUMERATOR(PreviousDispose)
     END_ENUM
 
-#if defined(HAVE_DISTORTIMAGE)
     // DistortImage "method" argument values
     DEF_ENUM(DistortImageMethod)
         ENUMERATOR(UndefinedDistortion)
         ENUMERATOR(AffineDistortion)
         ENUMERATOR(AffineProjectionDistortion)
-#if defined(HAVE_ENUM_ARCDISTORTION)
         ENUMERATOR(ArcDistortion)
-#endif
 #if defined(HAVE_ENUM_POLARDISTORTION)
         ENUMERATOR(PolarDistortion)
 #endif
@@ -998,9 +981,7 @@ Init_RMagick2(void)
         ENUMERATOR(BilinearReverseDistortion)
 #endif
         ENUMERATOR(PerspectiveDistortion)
-#if defined(HAVE_ENUM_PERSPECTIVEPROJECTIONDISTORTION)
         ENUMERATOR(PerspectiveProjectionDistortion)
-#endif
 #if defined(HAVE_ENUM_POLYNOMIALDISTORTION)
         ENUMERATOR(PolynomialDistortion)
 #endif
@@ -1012,7 +993,6 @@ Init_RMagick2(void)
         ENUMERATOR(BarrelInverseDistortion)
 #endif
     END_ENUM
-#endif
 
 #if defined(HAVE_TYPE_DITHERMETHOD)
     DEF_ENUM(DitherMethod)
@@ -1108,15 +1088,9 @@ Init_RMagick2(void)
         ENUMERATOR(LineInterlace)
         ENUMERATOR(PlaneInterlace)
         ENUMERATOR(PartitionInterlace)
-#if defined(HAVE_ENUM_GIFINTERLACE)
         ENUMERATOR(GIFInterlace)
-#endif
-#if defined(HAVE_ENUM_JPEGINTERLACE)
         ENUMERATOR(JPEGInterlace)
-#endif
-#if defined(HAVE_ENUM_PNGINTERLACE)
         ENUMERATOR(PNGInterlace)
-#endif
     END_ENUM
 
     DEF_ENUM(InterpolatePixelMethod)
@@ -1146,21 +1120,13 @@ Init_RMagick2(void)
         ENUMERATOR(OptimizePlusLayer)
         ENUMERATOR(CoalesceLayer)
         ENUMERATOR(DisposeLayer)
-#if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         ENUMERATOR(OptimizeTransLayer)
-#endif
 #if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
         ENUMERATOR(OptimizeImageLayer)
 #endif
-#if defined(HAVE_ENUM_REMOVEDUPSLAYER)
         ENUMERATOR(RemoveDupsLayer)
-#endif
-#if defined(HAVE_ENUM_REMOVEZEROLAYER)
         ENUMERATOR(RemoveZeroLayer)
-#endif
-#if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUMERATOR(CompositeLayer)
-#endif
 #if defined(HAVE_ENUM_MERGELAYER)
         ENUMERATOR(MergeLayer)
 #endif
@@ -1179,9 +1145,7 @@ Init_RMagick2(void)
         ENUMERATOR(UndefinedMetric)
         ENUMERATOR(AbsoluteErrorMetric)
         ENUMERATOR(MeanAbsoluteErrorMetric)
-#if defined(HAVE_ENUM_MEANERRORPERPIXELMETRIC)
         ENUMERATOR(MeanErrorPerPixelMetric)
-#endif
         ENUMERATOR(MeanSquaredErrorMetric)
         ENUMERATOR(PeakAbsoluteErrorMetric)
         ENUMERATOR(PeakSignalToNoiseRatioMetric)
@@ -1196,9 +1160,7 @@ Init_RMagick2(void)
         ENUMERATOR(ImpulseNoise)
         ENUMERATOR(LaplacianNoise)
         ENUMERATOR(PoissonNoise)
-#if defined(HAVE_ENUM_RANDOMNOISE)
         ENUMERATOR(RandomNoise)
-#endif
     END_ENUM
 
     // Orientation constants
@@ -1342,18 +1304,12 @@ Init_RMagick2(void)
 #endif
 
     // SpreadMethod
-#if defined(HAVE_TYPE_SPREADMETHOD)
-    // In 6.3.0 ReflectSpread is misspelled as ReflectSpead.
-#if !defined(HAVE_ENUM_REFLECTSPREAD)
-#define ReflectSpread 2
-#endif
     DEF_ENUM(SpreadMethod)
         ENUMERATOR(UndefinedSpread)
         ENUMERATOR(PadSpread)
         ENUMERATOR(ReflectSpread)
         ENUMERATOR(RepeatSpread)
     END_ENUM
-#endif
 
     // StorageType
     DEF_ENUM(StorageType)
@@ -1400,18 +1356,10 @@ Init_RMagick2(void)
         ENUMERATOR(DitherVirtualPixelMethod)
         ENUMERATOR(RandomVirtualPixelMethod)
         ENUMERATOR(ConstantVirtualPixelMethod)
-#if defined(HAVE_ENUM_MASKVIRTUALPIXELMETHOD)
         ENUMERATOR(MaskVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_BLACKVIRTUALPIXELMETHOD)
         ENUMERATOR(BlackVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_GRAYVIRTUALPIXELMETHOD)
         ENUMERATOR(GrayVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_WHITEVIRTUALPIXELMETHOD)
         ENUMERATOR(WhiteVirtualPixelMethod)
-#endif
 #if defined(HAVE_ENUM_HORIZONTALTILEVIRTUALPIXELMETHOD)
         ENUMERATOR(HorizontalTileVirtualPixelMethod)
 #endif
@@ -1576,7 +1524,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/05/21 23:45:54 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/06/03 23:08:31 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

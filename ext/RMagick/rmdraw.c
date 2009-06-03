@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.77 2009/02/28 23:50:35 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.78 2009/06/03 23:08:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -774,11 +774,7 @@ VALUE Draw_annotate(
     }
 
     // Translate & store in Draw structure
-#if defined(HAVE_INTERPRETIMAGEPROPERTIES)
     draw->info->text = InterpretImageProperties(NULL, image, StringValuePtr(text));
-#else
-    draw->info->text = InterpretImageAttributes(NULL, image, StringValuePtr(text));
-#endif
     if (!draw->info->text)
     {
         rb_raise(rb_eArgError, "no text");
@@ -888,12 +884,9 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case BumpmapCompositeOp:
                 op = "Bumpmap";
                 break;
-
-#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
             case ChangeMaskCompositeOp:
                 op = "ChangeMask";
                 break;
-#endif
             case ClearCompositeOp:
                 op = "Clear";
                 break;
@@ -936,11 +929,9 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case DarkenCompositeOp:
                 op = "Darken";
                 break;
-#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
             case DivideCompositeOp:
                 op = "Divide";
                 break;
-#endif
             case DstCompositeOp:
                 op = "Dst";
                 break;
@@ -980,11 +971,9 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case LightenCompositeOp:
                 op = "Lighten";
                 break;
-#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
             case LinearLightCompositeOp:
                 op = "LinearLight";
                 break;
-#endif
             case LuminizeCompositeOp:
                 op = "Luminize";
                 break;
@@ -1565,11 +1554,7 @@ get_type_metrics(
     }
 
     Data_Get_Struct(self, Draw, draw);
-#if defined(HAVE_INTERPRETIMAGEPROPERTIES)
     draw->info->text = InterpretImageProperties(NULL, image, text);
-#else
-    draw->info->text = InterpretImageAttributes(NULL, image, text);
-#endif
     if (!draw->info->text)
     {
         rb_raise(rb_eArgError, "no text to measure");

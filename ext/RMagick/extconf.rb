@@ -2,9 +2,9 @@ require "mkmf"
 require "date"
 
 RMAGICK_VERS = "0.0.0"
-MIN_RUBY_VERS = "1.8.2"
+MIN_RUBY_VERS = "1.8.5"
 MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(".","").to_i
-MIN_IM_VERS = "6.3.0"
+MIN_IM_VERS = "6.3.5"
 MIN_IM_VERS_NO = MIN_IM_VERS.tr(".","").to_i
 
 
@@ -98,24 +98,6 @@ end
 end
 
 
-unless checking_for("Ruby version >= 1.8.5") do
-  version = RUBY_VERSION.tr(".","").to_i
-  version >= 185
-end
-   msg = <<END_OLD_RUBY_WARNING
-
-#{"=" * 70}
-warning: The RMagick 2 prerequisites are changing.
-         This is the last release that will support Ruby #{RUBY_VERSION}
-         The next release will require Ruby 1.8.5 or later.
-#{"=" * 70}
-
-END_OLD_RUBY_WARNING
-
-   Logging::message msg
-   message msg
-end
-
 
 
 # Magick-config is not available on Windows
@@ -142,23 +124,6 @@ if RUBY_PLATFORM !~ /mswin/
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. You must have ImageMagick #{MIN_IM_VERS} or later.\n"
   end
 
-  unless checking_for("ImageMagick version >= 6.3.5")  do
-    version = `Magick-config --version`.chomp.tr(".","").to_i
-    version >= 635
-  end
-    msg = <<END_OLD_IM_WARNING
-
-#{"=" * 70}
-warning: The RMagick 2 prerequisites are changing.
-         This is the last release that will support ImageMagick #{`Magick-config --version`.chomp}
-         The next release will require ImageMagick 6.3.5 or later.
-#{"=" * 70}
-
-END_OLD_IM_WARNING
-
-    Logging::message msg
-    message msg
-  end
 
 
 
@@ -198,13 +163,8 @@ end
 headers = %w{assert.h ctype.h stdio.h stdlib.h math.h time.h}
 headers << "stdint.h" if have_header("stdint.h")  # defines uint64_t
 headers << "sys/types.h" if have_header("sys/types.h")
+headers << "magick/MagickCore.h"
 
-
-unless have_header("magick/MagickCore.h")
-  exit_failure "Can't install RMagick #{RMAGICK_VERS}. Can't find MagickCore.h.\n"
-else
-  headers << "magick/MagickCore.h"
-end
 
 
 if RUBY_PLATFORM !~ /mswin/
@@ -218,50 +178,27 @@ end
 
 
 have_func("snprintf", headers)
-  ["AcquireQuantumMemory",           # 6.3.5-9
-   "AcquireImage",                   # 6.4.1
+  ["AcquireImage",                   # 6.4.1
    "AffinityImage",                  # 6.4.3-6
    "AffinityImages",                 # 6.4.3-6
-   "ClutImageChannel",               # 6.3.5-8
-   "CompositeLayers",                # 6.3.3-?
-   "ConvertHSLToRGB",                # 6.3.5-9
-   "ConvertRGBToHSL",                # 6.3.5-9
    "DeskewImage",                    # 6.4.2-5
-   "DistortImage",                   # 6.3.5
    "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9
-   "ExcerptImage",                   # 6.3.5-8
-   "ExtentImage",                    # 6.3.1
    "FloodfillPaintImage",            # 6.3.7
    "GetAuthenticIndexQueue",         # 6.4.5-6
    "GetAuthenticPixels",             # 6.4.5-6
    "GetImageAlphaChannel",           # 6.3.9-2
-   "GetImageProperty",               # 6.3.1
-   "GetNextImageProperty",           # 6.3.1
-   "GetStringInfoDatum",             # 6.3.2
    "GetVirtualPixels",               # 6.4.5-6
-   "InterpretImageProperties",       # 6.3.2
-   "IsHistogramImage",               # 6.3.5
    "LevelImageColors",               # 6.4.2
    "LevelizeImageChannel",           # 6.4.2
-   "LinearStretchImage",             # 6.3.1
    "LiquidRescaleImage",             # 6.3.8-2
-   "MagickCoreGenesis",              # 6.3.4
    "OpaquePaintImageChannel",        # 6.3.7-10
-   "PolaroidImage",                  # 6.3.1-6
    "QueueAuthenticPixels",           # 6.4.5-6
-   "RecolorImage",                   # 6.3.1-3
    "RemapImage",                     # 6.4.4-0
    "RemoveImageArtifact",            # 6.3.6
-   "ResetImagePage",                 # 6.3.3
-   "ResizeQuantumMemory",            # 6.3.5-9
    "SetImageAlphaChannel",           # 6.3.6-9
    "SetImageArtifact",               # 6.3.6
-   "SetImageMask",                   # 6.3.1
-   "SetImageProperty",               # 6.3.1
-   "SetImageRegistry",               # 6.3.4
-   "SparseColorImage",               # 6.3.4-?
-   "SyncImageProfiles",              # 6.3.2
+   "SparseColorImage",               # 6.3.6-?
    "SyncAuthenticPixels",            # 6.4.5-6
    "TransparentPaintImage",          # 6.3.7-10
    "TransparentPaintImageChroma"     # 6.4.5-6
@@ -297,15 +234,11 @@ end
 
 
 
-have_struct_member("ImageInfo", "profile", headers)   # 6.3.2
-have_struct_member("Image", "tile_offset", headers)   # 6.3.4
 have_struct_member("Image", "type", headers)          # ???
 have_struct_member("DrawInfo", "kerning", headers)    # 6.4.7-8
 have_struct_member("DrawInfo", "interword_spacing", headers)   # 6.4.8-0
-have_type("AlphaChannelType", headers)                # 6.3.5
 have_type("DitherMethod", headers)                    # 6.4.2
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod
-have_type("SpreadMethod", headers)                    # 6.3.1
 have_type("long double", headers)
 #have_type("unsigned long long", headers)
 #have_type("uint64_t", headers)
@@ -317,20 +250,14 @@ have_type("long double", headers)
 
 have_enum_values("AlphaChannelType", ["CopyAlphaChannel",                    # 6.4.3-7
                                       "BackgroundAlphaChannel"], headers)    # 6.5.2-5
-have_enum_value("ColorspaceType", "CMYColorspace", headers)                  # 6.3.5
-have_enum_values("CompositeOperator", ["ChangeMaskCompositeOp",              # 6.3.3
-                                       "LinearLightCompositeOp",             # 6.3.5
-                                       "DivideCompositeOp"], headers)        # 6.3.5
 have_enum_values("CompressionType", ["DXT1Compression",                      # 6.3.9-3
                                      "DXT3Compression",                      # 6.3.9-3
                                      "DXT5Compression"], headers)            # 6.3.9-3
-have_enum_values("DistortImageMethod", ["ArcDistortion",                     # 6.3.5-5
-                                        "BarrelDistortion",                  # 6.4.2-5
+have_enum_values("DistortImageMethod", ["BarrelDistortion",                  # 6.4.2-5
                                         "BarrelInverseDistortion",           # 6.4.3-8
                                         "BilinearForwardDistortion",         # 6.5.1-2
                                         "BilinearReverseDistortion",         # 6.5.1-2
                                         "DePolarDistortion",                 # 6.4.2-6
-                                        "PerspectiveProjectionDistortion",   # 6.3.5-9
                                         "PolarDistortion",                   # 6.4.2-6
                                         "PolynomialDistortion",              # 6.4.2-4
                                         "ShepardsDistortion"], headers)      # 6.4.2-4
@@ -342,10 +269,6 @@ have_enum_values("FilterTypes", ["KaiserFilter",                             # 6
                                  "BohmanFilter",                             # 6.3.7-2
                                  "BartlettFilter",                           # 6.3.7-2
                                  "SentinelFilter"], headers)                 # 6.3.7-2
-have_enum_value("InterpolatePixelMethod", "SplineInterpolatePixel", headers) # 6.3.5
-have_enum_values("InterlaceType", ["GIFInterlace",                           # 6.3.4
-                                  "JPEGInterlace",                           # 6.3.4
-                                  "PNGInterlace"], headers)                  # 6.3.4
 have_enum_values("MagickEvaluateOperator", ["PowEvaluateOperator",           # 6.4.1-9
                                            "LogEvaluateOperator",            # 6.4.2
                                            "ThresholdEvaluateOperator",      # 6.4.3
@@ -361,24 +284,12 @@ have_enum_values("MagickEvaluateOperator", ["PowEvaluateOperator",           # 6
                                            "SineEvaluateOperator",           # 6.4.8-5
                                            "AddModulusEvaluateOperator"],    # 6.4.8-5
                                                                  headers)
-have_enum_values("MagickLayerMethod", ["OptimizeTransLayer",                    # 6.3.3-4
-                                       "RemoveDupsLayer",                       # 6.3.3-6
-                                       "RemoveZeroLayer",                       # 6.3.3-6
-                                       "CompositeLayer",                        # 6.3.3-6
-                                       "OptimizeImageLayer"], headers)          # 6.3.3-?
 have_enum_values("ImageLayerMethod", ["FlattenLayer",                           # 6.3.6-2
                                       "MergeLayer",                             # 6.3.6
                                       "MosaicLayer",                            # 6.3.6-2
                                       "TrimBoundsLayer" ], headers)             # 6.4.3-8
-have_enum_value("MetricType", "MeanErrorPerPixelMetric", headers)               # 6.3.4-?
-have_enum_value("NoiseType", "RandomNoise", headers)                            # 6.3.5-0
-have_enum_value("SpreadMethod", "ReflectSpread", headers)                       # 6.3.1
-have_enum_values("VirtualPixelMethod", ["MaskVirtualPixelMethod",               # 6.3.3
-                                        "BlackVirtualPixelMethod",              # 6.3.5
-                                        "GrayVirtualPixelMethod",               # 6.3.5
-                                        "HorizontalTileVirtualPixelMethod",     # 6.4.2-6
+have_enum_values("VirtualPixelMethod", ["HorizontalTileVirtualPixelMethod",     # 6.4.2-6
                                         "VerticalTileVirtualPixelMethod",       # 6.4.2-6
-                                        "WhiteVirtualPixelMethod",              # 6.3.5
                                         "HorizontalTileEdgeVirtualPixelMethod", # 6.5.0-1
                                         "VerticalTileEdgeVirtualPixelMethod",   # 6.5.0-1
                                         "CheckerTileVirtualPixelMethod"],       # 6.5.0-1

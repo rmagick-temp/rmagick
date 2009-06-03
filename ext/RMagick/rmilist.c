@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.91 2009/02/28 23:50:35 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.92 2009/06/03 23:08:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -160,7 +160,6 @@ ImageList_coalesce(VALUE self)
 VALUE
 ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_COMPOSITELAYERS)
     volatile VALUE source_images;
     Image *dest, *source, *new_images;
     RectangleInfo geometry;
@@ -202,16 +201,6 @@ ImageList_composite_layers(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_imagelist_from_images(new_images);
-
-#else
-
-    self = self;
-    argc = argc;
-    argv = argv;
-    rm_not_implemented();
-    return (VALUE)0;
-
-#endif
 }
 
 
@@ -540,31 +529,22 @@ ImageList_optimize_layers(VALUE self, VALUE method)
         case DisposeLayer:
             new_images = DisposeImages(images, &exception);
             break;
-#if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         case OptimizeTransLayer:
             new_images = clone_imagelist(images);
             OptimizeImageTransparency(new_images, &exception);
             break;
-#endif
-#if defined(HAVE_ENUM_REMOVEDUPSLAYER)
         case RemoveDupsLayer:
             new_images = clone_imagelist(images);
             RemoveDuplicateLayers(&new_images, &exception);
             break;
-#endif
-#if defined(HAVE_ENUM_REMOVEZEROLAYER)
         case RemoveZeroLayer:
             new_images = clone_imagelist(images);
             RemoveZeroDelayLayers(&new_images, &exception);
             break;
-#endif
-#if defined(HAVE_ENUM_COMPOSITELAYER)
         case CompositeLayer:
             rm_split(images);
             rb_raise(rb_eNotImpError, "Magick::CompositeLayer is not supported. Use the composite_layers method instead.");
             break;
-#endif
-#if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
             // In 6.3.4-ish, OptimizeImageLayer replaced OptimizeLayer
         case OptimizeImageLayer:
             new_images = OptimizeImageLayers(images, &exception);
@@ -583,11 +563,6 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             // mogrify supports -dither here. We don't.
             (void) MapImages(new_images, NULL, 0);
             break;
-#else
-        case OptimizeLayer:
-            new_images = OptimizeImageLayers(images, &exception);
-            break;
-#endif
         case OptimizePlusLayer:
             new_images = OptimizePlusImageLayers(images, &exception);
             break;

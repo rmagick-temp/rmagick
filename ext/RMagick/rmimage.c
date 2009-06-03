@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.346 2009/03/04 00:35:19 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.347 2009/06/03 23:08:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -284,22 +284,8 @@ Image_add_compose_mask(VALUE self, VALUE mask)
 
     // Delete any previously-existing mask image.
     // Store a clone of the new mask image.
-#if defined(HAVE_SETIMAGEMASK)
     (void) SetImageMask(image, mask_image);
     (void) NegateImage(image->mask, MagickFalse);
-#else
-    if (image->clip_mask)
-    {
-        image->clip_mask = DestroyImage(image->clip_mask);
-    }
-    image->clip_mask = NewImageList();
-    if (SetImageStorageClass(image, DirectClass) == MagickFalse)
-    {
-        rm_magick_error("SetImageStorageClass failed", NULL);
-    }
-    image->clip_mask = rm_clone_image(mask_image);
-    (void) NegateImage(image->clip_mask, MagickFalse);
-#endif
 
     // Since both Set and GetImageMask clone the mask image I don't see any
     // way to negate the mask without referencing it directly. Sigh.
@@ -403,15 +389,11 @@ Image_add_profile(VALUE self, VALUE name)
     {
         rb_raise(rb_eNoMemError, "not enough memory to continue");
     }
-#if defined(HAVE_ST_PROFILE)
     profile = GetImageProfile(image, "iptc");
     if (profile)
     {
         info->profile = (void *)CloneStringInfo(profile);
     }
-#else
-    info->client_data = GetImageProfile(image, "8bim");
-#endif
     strncpy(info->filename, profile_filename, min((size_t)profile_filename_l, sizeof(info->filename)));
     info->filename[MaxTextExtent-1] = '\0';
 
@@ -462,7 +444,6 @@ Image_add_profile(VALUE self, VALUE name)
 VALUE
 Image_alpha(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
     Image *image;
     AlphaChannelType alpha;
 
@@ -516,14 +497,6 @@ Image_alpha(int argc, VALUE *argv, VALUE self)
 #endif
 
     return argv[0];
-
-#else   // HAVE_ALPHACHANNELTYPE
-    argc = argc;
-    argv =argv;
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -555,17 +528,10 @@ Image_alpha_q(VALUE self)
 VALUE
 Image_alpha_eq(VALUE self, VALUE type)
 {
-#if defined(HAVE_TYPE_ALPHACHANNELTYPE)
     VALUE argv[1];
     argv[0] = type;
     Image_alpha(1, argv, self);
     return type;
-#else
-    self = self;
-    type = type;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -1814,7 +1780,6 @@ Image_clone(VALUE self)
 VALUE
 Image_clut_channel(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_CLUTIMAGECHANNEL)
     Image *image, *clut;
     ChannelType channels;
     MagickBooleanType okay;
@@ -1847,14 +1812,6 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
     }
 
     return self;
-
-#else
-    argc = argc;
-    argv = argv;
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -3437,18 +3394,8 @@ Image_delete_compose_mask(VALUE self)
     Image *image = rm_check_frozen(self);
 
     // Store a clone of the mask image
-#if defined(HAVE_SETIMAGEMASK)
-    {
-        (void) SetImageMask(image, NULL);
-        rm_check_image_exception(image, RetainOnError);
-    }
-#else
-    if (image->clip_mask)
-    {
-        image->clip_mask = DestroyImage(image->clip_mask);
-    }
-    image->clip_mask = NewImageList();
-#endif
+    (void) SetImageMask(image, NULL);
+    rm_check_image_exception(image, RetainOnError);
 
     return self;
 }
@@ -3898,7 +3845,6 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_distort(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_DISTORTIMAGE)
     Image *image, *new_image;
     volatile VALUE pts;
     unsigned long n, npoints;
@@ -3942,13 +3888,6 @@ Image_distort(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    self = self;        // defeat "unused parameter" message
-    argv = argv;
-    argc = argc;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -4382,7 +4321,6 @@ Image_erase_bang(VALUE self)
 static VALUE
 excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
-#if defined(HAVE_EXCERPTIMAGE)
     Image *image, *new_image;
     RectangleInfo rect;
     ExceptionInfo exception;
@@ -4409,14 +4347,6 @@ excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
     }
 
     return rm_image_new(new_image);
-
-#else
-    bang = bang; self = self;
-    x = x; y = y;
-    width = width; height = height;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -4525,7 +4455,6 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_extent(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_EXTENTIMAGE)
     Image *image, *new_image;
     RectangleInfo geometry;
     long height, width;
@@ -4574,13 +4503,6 @@ Image_extent(int argc, VALUE *argv, VALUE self)
     (void) DestroyExceptionInfo(&exception);
     rm_ensure_result(new_image);
     return rm_image_new(new_image);
-#else
-    argc = argc;
-    argv = argv;
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -5346,13 +5268,7 @@ Image_gray_q(VALUE self)
 VALUE
 Image_histogram_q(VALUE self)
 {
-#if defined(HAVE_ISHISTOGRAMIMAGE)
     return has_attribute(self, IsHistogramImage);
-#else
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -6020,7 +5936,6 @@ Image_levelize_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_linear_stretch(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_LINEARSTRETCHIMAGE)
     Image *image, *new_image;
     double black_point, white_point;
 
@@ -6032,13 +5947,6 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);
-#else
-    argc = argc;    // defeat "unused parameter" messages
-    argv = argv;
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -6519,7 +6427,7 @@ Image_matte(VALUE self)
 VALUE
 Image_matte_eq(VALUE self, VALUE matte)
 {
-#if defined(HAVE_TYPE_ALPHACHANNELTYPE) || defined(HAVE_SETIMAGEALPHACHANNEL)
+#if defined(HAVE_SETIMAGEALPHACHANNEL)
     VALUE alpha_channel_type;
 
     if (RTEST(matte))
@@ -7656,7 +7564,6 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 VALUE
 Image_polaroid(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_POLAROIDIMAGE)
     Image *image, *clone, *new_image;
     volatile VALUE options;
     double angle = -5.0;
@@ -7693,13 +7600,6 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
     rm_ensure_result(new_image);
 
     return rm_image_new(new_image);
-#else
-    argc = argc;    // defeat "unused parameter" messages
-    argv = argv;
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -8268,7 +8168,6 @@ rd_image(VALUE class, VALUE file, reader_t reader)
 VALUE
 Image_recolor(VALUE self, VALUE color_matrix)
 {
-#if defined(HAVE_RECOLORIMAGE)
     Image *image, *new_image;
     unsigned long order;
     long x, len;
@@ -8297,13 +8196,6 @@ Image_recolor(VALUE self, VALUE color_matrix)
     (void) DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
-
-#else
-    self = self;                    // defeat "unused parameter" message
-    color_matrix = color_matrix;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -8978,46 +8870,6 @@ Image_properties(VALUE self)
     Image *image;
     volatile VALUE attr_hash;
     volatile VALUE ary;
-
-#if !defined(HAVE_GETNEXTIMAGEPROPERTY)
-    const ImageAttribute *attr;
-
-    image = rm_check_destroyed(self);
-
-    // If block, iterate over attributes
-    if (rb_block_given_p())
-    {
-        ary = rb_ary_new2(2);
-
-        ResetImageAttributeIterator(image);
-        attr = GetNextImageAttribute(image);
-        while (attr)
-        {
-            (void) rb_ary_store(ary, 0, rb_str_new2(attr->key));
-            (void) rb_ary_store(ary, 1, rb_str_new2(attr->value));
-            (void) rb_yield(ary);
-            attr = GetNextImageAttribute(image);
-        }
-        rm_check_image_exception(image, RetainOnError);
-        return self;
-    }
-
-    // otherwise return properties hash
-    else
-    {
-        attr_hash = rb_hash_new();
-        ResetImageAttributeIterator(image);
-        attr = GetNextImageAttribute(image);
-        while (attr)
-        {
-            (void) rb_hash_aset(attr_hash, rb_str_new2(attr->key), rb_str_new2(attr->value));
-            attr = GetNextImageAttribute(image);
-        }
-        rm_check_image_exception(image, RetainOnError);
-        return attr_hash;
-    }
-
-#else
     char *property;
     const char *value;
 
@@ -9057,7 +8909,6 @@ Image_properties(VALUE self)
         return attr_hash;
     }
 
-#endif
 }
 
 
@@ -9892,16 +9743,10 @@ Image_swirl(VALUE self, VALUE degrees)
 VALUE
 Image_sync_profiles(VALUE self)
 {
-#if defined(HAVE_SYNCIMAGEPROFILES)
     Image *image = rm_check_destroyed(self);
     volatile VALUE okay =  SyncImageProfiles(image) ? Qtrue : Qfalse;
     rm_check_image_exception(image, RetainOnError);
     return okay;
-#else
-    self = self;
-    rm_not_implemented();
-    return(VALUE)0;
-#endif
 }
 
 
@@ -10593,12 +10438,7 @@ trimmer(int bang, int argc, VALUE *argv, VALUE self)
 
     if (reset_page)
     {
-#if defined(HAVE_RESETIMAGEPAGE)
         ResetImagePage(new_image, "0x0+0+0");
-#else
-        new_image->page.x = new_image->page.y = 0L;
-        new_image->page.width = new_image->page.height = 0UL;
-#endif
     }
 
     if (bang)
@@ -11560,12 +11400,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     if (reset_page)
     {
         Data_Get_Struct(cropped, Image, image);
-#if defined(HAVE_RESETIMAGEPAGE)
         ResetImagePage(image, "0x0+0+0");
-#else
-        image->page.x = image->page.y = 0L;
-        image->page.width = image->page.height = 0UL;
-#endif
     }
     return cropped;
 }

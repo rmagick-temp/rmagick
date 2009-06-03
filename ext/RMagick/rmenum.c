@@ -1,4 +1,4 @@
-/* $Id: rmenum.c,v 1.3 2009/03/18 22:40:41 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.4 2009/06/03 23:08:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
@@ -352,11 +352,9 @@ ColorspaceType_new(ColorspaceType cs)
         case LogColorspace:
             name = "LogColorspace";
             break;
-#if defined(HAVE_ENUM_CMYCOLORSPACE)
         case CMYColorspace:
             name = "CMYColorspace";
             break;
-#endif
     }
 
     return rm_enum_new(Class_ColorspaceType, ID2SYM(rb_intern(name)), INT2FIX(cs));
@@ -378,9 +376,7 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(AddCompositeOp)
         ENUM_TO_NAME(AtopCompositeOp)
         ENUM_TO_NAME(BumpmapCompositeOp)
-#if defined(HAVE_ENUM_CHANGEMASKCOMPOSITEOP)
         ENUM_TO_NAME(ChangeMaskCompositeOp)
-#endif
         ENUM_TO_NAME(ClearCompositeOp)
         ENUM_TO_NAME(ColorBurnCompositeOp)
         ENUM_TO_NAME(BlendCompositeOp)
@@ -399,9 +395,7 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)
         ENUM_TO_NAME(DarkenCompositeOp)
-#if defined(HAVE_ENUM_DIVIDECOMPOSITEOP)
         ENUM_TO_NAME(DivideCompositeOp)
-#endif
         ENUM_TO_NAME(DstAtopCompositeOp)
         ENUM_TO_NAME(DstCompositeOp)
         ENUM_TO_NAME(DstInCompositeOp)
@@ -413,9 +407,7 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(HueCompositeOp)
         ENUM_TO_NAME(InCompositeOp)
         ENUM_TO_NAME(LightenCompositeOp)
-#if defined(HAVE_ENUM_LINEARLIGHTCOMPOSITEOP)
         ENUM_TO_NAME(LinearLightCompositeOp)
-#endif
         ENUM_TO_NAME(LuminizeCompositeOp)
         ENUM_TO_NAME(MinusCompositeOp)
         ENUM_TO_NAME(ModulateCompositeOp)
@@ -714,15 +706,9 @@ InterlaceType_name(InterlaceType interlace)
     switch(interlace)
     {
         ENUM_TO_NAME(UndefinedInterlace)
-#if defined(HAVE_ENUM_GIFINTERLACE)
         ENUM_TO_NAME(GIFInterlace)
-#endif
-#if defined(HAVE_ENUM_JPEGINTERLACE)
         ENUM_TO_NAME(JPEGInterlace)
-#endif
-#if defined(HAVE_ENUM_PNGINTERLACE)
         ENUM_TO_NAME(PNGInterlace)
-#endif
         ENUM_TO_NAME(NoInterlace)
         ENUM_TO_NAME(LineInterlace)
         ENUM_TO_NAME(PlaneInterlace)
@@ -762,9 +748,7 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
         ENUM_TO_NAME(IntegerInterpolatePixel)
         ENUM_TO_NAME(MeshInterpolatePixel)
         ENUM_TO_NAME(NearestNeighborInterpolatePixel)
-#if defined(HAVE_ENUM_SPLINEINTERPOLATEPIXEL)
         ENUM_TO_NAME(SplineInterpolatePixel)
-#endif
     }
 
     return "UndefinedInterpolatePixel";
@@ -800,21 +784,11 @@ LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
         ENUM_TO_NAME(OptimizePlusLayer)
         ENUM_TO_NAME(CoalesceLayer)
         ENUM_TO_NAME(DisposeLayer)
-#if defined(HAVE_ENUM_OPTIMIZETRANSLAYER)
         ENUM_TO_NAME(OptimizeTransLayer)
-#endif
-#if defined(HAVE_ENUM_OPTIMIZEIMAGELAYER)
         ENUM_TO_NAME(OptimizeImageLayer)
-#endif
-#if defined(HAVE_ENUM_REMOVEDUPSLAYER)
         ENUM_TO_NAME(RemoveDupsLayer)
-#endif
-#if defined(HAVE_ENUM_REMOVEZEROLAYER)
         ENUM_TO_NAME(RemoveZeroLayer)
-#endif
-#if defined(HAVE_ENUM_COMPOSITELAYER)
         ENUM_TO_NAME(CompositeLayer)
-#endif
 #if defined(HAVE_ENUM_MERGELAYER)
         ENUM_TO_NAME(MergeLayer)
 #endif
@@ -980,18 +954,10 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
         ENUM_TO_NAME(DitherVirtualPixelMethod)
         ENUM_TO_NAME(RandomVirtualPixelMethod)
         ENUM_TO_NAME(ConstantVirtualPixelMethod)
-#if defined(HAVE_ENUM_MASKVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(MaskVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_BLACKVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(BlackVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_GRAYVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(GrayVirtualPixelMethod)
-#endif
-#if defined(HAVE_ENUM_WHITEVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(WhiteVirtualPixelMethod)
-#endif
 #if defined(HAVE_ENUM_HORIZONTALTILEVIRTUALPIXELMETHOD)
         ENUM_TO_NAME(HorizontalTileVirtualPixelMethod)
 #endif

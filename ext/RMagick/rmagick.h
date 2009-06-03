@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.271 2009/03/25 22:56:03 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.272 2009/06/03 23:08:30 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -139,12 +139,6 @@
     else\
         f = NULL;
 
-
-// These two functions are defined in IM starting with 6.3.2.
-#if !defined(HAVE_GETSTRINGINFODATUM)
-#define GetStringInfoDatum(p) (unsigned char *)((p)->datum)
-#define GetStringInfoLength(p) (size_t)((p)->length)
-#endif
 
 // IM 6.4.1 replaced AllocateImage with AcquireImage.
 // Both have the same signature.
@@ -358,9 +352,7 @@ EXTERN VALUE Class_CompositeOperator;
 EXTERN VALUE Class_CompressionType;
 EXTERN VALUE Class_DecorationType;
 EXTERN VALUE Class_DisposeType;
-#if defined(HAVE_DISTORTIMAGE)
 EXTERN VALUE Class_DistortImageMethod;
-#endif
 #if defined(HAVE_TYPE_DITHERMETHOD)
 EXTERN VALUE Class_DitherMethod;
 #endif

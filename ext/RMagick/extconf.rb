@@ -163,13 +163,19 @@ end
 headers = %w{assert.h ctype.h stdio.h stdlib.h math.h time.h}
 headers << "stdint.h" if have_header("stdint.h")  # defines uint64_t
 headers << "sys/types.h" if have_header("sys/types.h")
-headers << "magick/MagickCore.h"
+
+
+if have_header("wand/MagickWand.h")
+   headers << "wand/MagickWand.h"
+else
+   exit_failure "\nCan't install RMagick #{RMAGICK_VERS}. Can't find MagickWand.h."
+end
 
 
 
 if RUBY_PLATFORM !~ /mswin/
 
-  unless have_library("Magick", "InitializeMagick", headers) || have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick++", "InitializeMagick")
+  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers)
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
            "Can't find the ImageMagick library or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"
@@ -196,6 +202,7 @@ have_func("snprintf", headers)
    "QueueAuthenticPixels",           # 6.4.5-6
    "RemapImage",                     # 6.4.4-0
    "RemoveImageArtifact",            # 6.3.6
+   "SelectiveBlurImageChannel",      # 6.5.0-3
    "SetImageAlphaChannel",           # 6.3.6-9
    "SetImageArtifact",               # 6.3.6
    "SparseColorImage",               # 6.3.6-?
@@ -305,8 +312,6 @@ else
 end
 
 have_func("rb_frame_this_func", headers)
-
-
 
 # Miscellaneous constants
 $defs.push("-DRUBY_VERSION_STRING=\"ruby #{RUBY_VERSION}\"")

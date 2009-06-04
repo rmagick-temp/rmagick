@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.347 2009/06/03 23:08:30 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.348 2009/06/04 23:18:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8701,6 +8701,53 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 
 
 DEF_ATTR_READER(Image, scene, ulong)
+
+
+/*
+ *  Method:     Image#selective_blur_channel(radius, sigma, threshold[, channel...])
+ *  Purpose:    Call SelectiveBlurImageChannel
+ */
+VALUE
+Image_selective_blur_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_SELECTIVEBLURIMAGECHANNEL)
+    Image *image, *new_image;
+    double radius, sigma, threshold;
+    ExceptionInfo exception;
+    ChannelType channels;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+    if (argc > 3)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+    if (argc != 3)
+    {
+        rb_raise(rb_eArgError, "wrong number of arguments (%d for 3 or more)", argc);
+    }
+    radius = NUM2DBL(argv[0]);
+    sigma = NUM2DBL(argv[1]);
+
+    // threshold is either a floating-point number or a string in the form "NN%".
+    // Either way it's supposed to represent a percentage of the QuantumRange.
+    threshold = rm_percentage(argv[2]) * QuantumRange;
+
+    GetExceptionInfo(&exception);
+    new_image = SelectiveBlurImageChannel(image, channels, radius, sigma, threshold, &exception);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    (void) DestroyExceptionInfo(&exception);
+    rm_ensure_result(new_image);
+
+    return rm_image_new(new_image);
+
+#else
+    rm_not_implemented();
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
+}
 
 
 /*

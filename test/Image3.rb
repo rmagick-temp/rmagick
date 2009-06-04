@@ -428,6 +428,21 @@ class Image3_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.segment(Magick::RGBColorspace, 2.0, 'x') }
     end
 
+    def test_selective_blur_channel
+        res = nil
+        assert_nothing_raised { res = @img.selective_blur_channel(0, 1, '10%') }
+        assert_instance_of(Magick::Image, res)
+        assert_not_same(@img, res)
+        assert_equal([@img.columns, @img.rows], [res.columns, res.rows])
+
+        assert_nothing_raised { @img.selective_blur_channel(0, 1, 0.1) }
+        assert_nothing_raised { @img.selective_blur_channel(0, 1, '10%', Magick::RedChannel) }
+        assert_nothing_raised { @img.selective_blur_channel(0, 1, '10%', Magick::RedChannel, Magick::BlueChannel) }
+        assert_nothing_raised { @img.selective_blur_channel(0, 1, '10%', Magick::RedChannel, Magick::BlueChannel, Magick::GreenChannel) }
+        # not enough arguments
+        assert_raise(ArgumentError) { @img.selective_blur_channel(0, 1) }
+    end
+
     def test_sepiatone
         assert_nothing_raised do
             res = @img.sepiatone

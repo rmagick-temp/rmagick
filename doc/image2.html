@@ -1039,7 +1039,7 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
      <img style="padding:25px; display:none" id="frameless"
     onmouseout="this.style.display='none';framed.style.display='';"
     src="ex/images/Flower_Hat.jpg" alt="frame example" title=
-    "Click to see the example script" />
+    "Click to see the example script" /> 
     <!-- This img tag displays the framed image when the mouse is not over -->
      <img onmouseover=
     "this.style.display='none';frameless.style.display='';" src=
@@ -1206,7 +1206,8 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <p><a href="image1.html#blur_image">blur_image</a>, <a href=
     "#motion_blur">motion_blur</a>, <a href=
-    "image3.html#radial_blur">radial_blur</a></p>
+    "image3.html#radial_blur">radial_blur</a>, <a href=
+    "image3.html#selective_blur_channel">selective_blur_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1258,7 +1259,10 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
 
     <h4>See also</h4>
 
-    <p><a href="image1.html#blur_channel">blur_channel</a></p>
+    <p><a href="image1.html#blur_channel">blur_channel</a>,
+    <a href="#motion_blur">motion_blur</a>, <a href=
+    "image3.html#radial_blur">radial_blur</a>, <a href=
+    "image3.html#selective_blur_channel">selective_blur_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -3171,7 +3175,9 @@ img.level(white_point, gamma, black_point) -&gt; image # wrong!
     <h4>See also</h4>
 
     <p><a href="image1.html#blur_image">blur_image</a>, <a href=
-    "#gaussian_blur">gaussian_blur</a></p>
+    "#gaussian_blur">gaussian_blur</a>, <a href=
+    "image3.html#radial_blur">radial_blur</a>, <a href=
+    "image3.html#selective_blur_channel">selective_blur_channel</a></p>
 
     <h4>Magick API</h4>
 

@@ -126,13 +126,13 @@
           <li><a href="#roll">roll</a></li>
 
           <li><a href="#rotate">rotate</a></li>
+
+          <li><a href="#rotate_bang">rotate!</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
-          <li><a href="#rotate_bang">rotate!</a></li>
-
           <li><a href="#sample">sample</a></li>
 
           <li><a href="#sample_bang">sample!</a></li>
@@ -142,6 +142,9 @@
           <li><a href="#scale_bang">scale!</a></li>
 
           <li><a href="#segment">segment</a></li>
+
+          <li><a href=
+          "#selective_blur_channel">selective_blur_channel</a></li>
 
           <li><a href="#separate">separate</a></li>
 
@@ -967,7 +970,8 @@ img.quantum_operator(DivideQuantumOperator, 2, RedChannel)
     <p><a href="image1.html#blur_image">blur_image</a>, <a href=
     "image2.html#gaussian_blur">gaussian_blur</a>, <a href=
     "image2.html#motion_blur">motion_blur</a>, <a href=
-    "#radial_blur_channel">radial_blur_channel</a></p>
+    "#radial_blur_channel">radial_blur_channel</a>, <a href=
+    "#selective_blur_channel">selective_blur_channel</a></p>
 
     <h4>Magick API</h4>
 
@@ -1955,10 +1959,71 @@ random_threshold_channel(geom, RedChannel)
   </div>
 
   <div class="sig">
+    <h3 id="selective_blur_channel">selective_blur_channel</h3>
+
+    <p><span class=
+    "arg">img</span>.selective_blur_channel(<span class=
+    "arg">radius</span>, <span class="arg">sigma</span>,
+    <span class="arg">threshold</span>[, <span class=
+    "arg">channel</span>...]) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p class="imquote">Selectively blur pixels within a contrast
+    threshold.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>radius, sigma</dt>
+
+      <dd class="imquote">Use a Gaussian operator of the given
+      radius and standard deviation (sigma).</dd>
+
+      <dt>threshold</dt>
+
+      <dd>Threshold level represented as a percentage of the
+      quantum range. Either a floating-point number or a string in
+      the form "NN%".</dd>
+
+      <dt>channel...</dt>
+
+      <dd>The channels to blur. 0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, the default is the red, green, and
+      blue channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+   img2 = img.selective_blur_channel(0, 1, '10%')
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href="image1.html#blur_channel">blur_channel</a>,
+    <a href="image1.html#blur_image">blur_image</a>, <a href=
+    "image2.html#gaussian_blur_channel">gaussian_blur_channel</a>,
+    <a href="image2.html#motion_blur">motion_blur</a>, <a href=
+    "#radial_blur">radial_blur</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>SelectiveBlurImageChannel (available in ImageMagick
+    6.5.0-3)</p>
+  </div>
+
+  <div class="sig">
     <h3 id="separate">separate</h3>
 
     <p>Image.separate(<span class="arg">channel</span>...) -&gt;
-    <span class="arg">imagelist</span></p>
+    <em>imagelist</em></p>
   </div>
 
   <div class="desc">

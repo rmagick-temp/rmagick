@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.348 2009/06/04 23:18:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.349 2009/06/05 22:30:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -8746,6 +8746,7 @@ Image_selective_blur_channel(int argc, VALUE *argv, VALUE self)
     argc = argc;
     argv = argv;
     self = self;
+    return (VALUE)0;
 #endif
 }
 

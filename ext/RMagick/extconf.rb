@@ -205,6 +205,7 @@ have_func("snprintf", headers)
    "SelectiveBlurImageChannel",      # 6.5.0-3
    "SetImageAlphaChannel",           # 6.3.6-9
    "SetImageArtifact",               # 6.3.6
+   "SetMagickMemoryMethods",         # 6.4.1
    "SparseColorImage",               # 6.3.6-?
    "SyncAuthenticPixels",            # 6.4.5-6
    "TransparentPaintImage",          # 6.3.7-10

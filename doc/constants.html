@@ -157,7 +157,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 2.0.0 ($Date: 2009/06/05 22:29:26 $)
+    <code>This is RMagick 2.0.0 ($Date: 2009/06/16 23:16:00 $)
     Copyright (C) 2008 by Timothy P. Hunter<br />
     Built with ImageMagick 6.3.7 01/05/08 Q16
     http://www.imagemagick.org<br />
@@ -176,13 +176,12 @@
     <dd>
       If <code>true</code>, RMagick is using Ruby managed memory
       for all allocations. If <code>false</code>, RMagick allocates
-      memory for objects directly from the operating system. By
-      default RMagick uses Ruby managed memory when built with
-      ImageMagick 6.4.0-11 and later. You can disable the use of Ruby
-      managed memory by setting
+      memory for objects directly from the operating system. You
+      can enable RMagick to use Ruby managed memory (when built
+      with ImageMagick 6.4.0-11 and later) by setting
       <pre>
 
-RMAGICK_DISABLE_MANAGED_MEMORY = true
+RMAGICK_ENABLE_MANAGED_MEMORY = true
 </pre><em>before</em> requiring RMagick.
     </dd>
 
@@ -614,6 +613,10 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
 
     <dd>The operator used in the <a href=
     "image1.html#dissolve">dissolve</a> method.</dd>
+
+    <dt>DistortCompositeOp</dt>
+
+    <dd>?</dd>
 
     <dt>DivideCompositeOp</dt>
 

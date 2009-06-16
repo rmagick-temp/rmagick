@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.292 2009/06/05 22:28:55 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.293 2009/06/16 22:40:31 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -48,6 +48,23 @@ static void rm_free(void *ptr)
 {
     xfree(ptr);
 }
+
+
+static void set_managed_memory(void)
+{
+    ID enable_mm = rb_intern("RMAGICK_ENABLE_MANAGED_MEMORY");
+
+    if (RTEST(rb_const_defined(rb_cObject, enable_mm)) && RTEST(rb_const_get(rb_cObject, enable_mm)))
+    {
+        rb_warning("RMagick: %s", "managed memory enabled by caller.");
+        SetMagickMemoryMethods(rm_malloc, rm_realloc, rm_free);
+        rb_define_const(Module_Magick, "MANAGED_MEMORY", Qtrue);
+    }
+    else
+    {
+        rb_define_const(Module_Magick, "MANAGED_MEMORY", Qfalse);
+    }
+}
 #endif
 
 
@@ -63,7 +80,6 @@ void
 Init_RMagick2(void)
 {
     volatile VALUE observable;
-    ID disable = rb_intern("RMAGICK_DISABLE_MANAGED_MEMORY");
 
     MagickCoreGenesis("RMagick", MagickFalse);
 
@@ -71,19 +87,10 @@ Init_RMagick2(void)
 
     Module_Magick = rb_define_module("Magick");
 
-    rb_define_const(Module_Magick, "MANAGED_MEMORY", Qfalse);
 #if defined(HAVE_SETMAGICKMEMORYMETHODS)
-    if (!(RTEST(rb_const_defined(rb_cObject, disable)) && RTEST(rb_const_get(rb_cObject, disable))))
-    {
-        SetMagickMemoryMethods(rm_malloc, rm_realloc, rm_free);
-        rb_define_const(Module_Magick, "MANAGED_MEMORY", Qtrue);
-    }
-    else
-    {
-        rb_warning("%s", "RMagick: managed memory disabled by caller.");
-    }
+    set_managed_memory();
 #else
-    disable = disable;
+    rb_define_const(Module_Magick, "MANAGED_MEMORY", Qfalse);
 #endif
 
     /*-----------------------------------------------------------------------*/
@@ -1573,7 +1580,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/06/05 22:28:55 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/06/16 22:40:31 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmenum.c,v 1.4 2009/06/03 23:08:30 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.5 2009/06/16 23:09:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
@@ -395,6 +395,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(CopyOpacityCompositeOp)
         ENUM_TO_NAME(CopyRedCompositeOp)
         ENUM_TO_NAME(DarkenCompositeOp)
+#if defined(HAVE_ENUM_DISTORTCOMPOSITEOP)
+        ENUM_TO_NAME(DistortCompositeOp)
+#endif
         ENUM_TO_NAME(DivideCompositeOp)
         ENUM_TO_NAME(DstAtopCompositeOp)
         ENUM_TO_NAME(DstCompositeOp)

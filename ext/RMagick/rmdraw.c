@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.78 2009/06/03 23:08:30 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.79 2009/06/16 23:09:27 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -929,6 +929,11 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case DarkenCompositeOp:
                 op = "Darken";
                 break;
+#if defined(HAVE_ENUM_DISTORTCOMPOSITEOP)
+            case DistortCompositeOp:
+                op = "Distort";
+                break;
+#endif
             case DivideCompositeOp:
                 op = "Divide";
                 break;

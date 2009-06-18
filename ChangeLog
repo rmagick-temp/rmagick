@@ -1,8 +1,12 @@
 RMagick 2.10.0
     o ImageMagick releases earlier than 6.3.5-10 and Ruby releases earlier
       than 1.8.5 no longer supported.
+    o (Experimental) Support the use of Ruby managed memory for all memory
+      allocations (available in ImageMagick 6.4.1)
+    o Add Image#selective_blur_channel (available in ImageMagick 6.5.0-3)
     o Add new AlphaBackgroundChannel enum value (available in ImageMagick
       6.5.2-5)
+    o Add new DistortCompositeOp enum value (available in ImageMagick 6.5.3-7)
 
 RMagick 2.9.2
     o Add new HorizontalTileEdgeVirtualPixelMethod,

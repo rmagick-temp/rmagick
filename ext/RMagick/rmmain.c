@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.295 2009/06/18 22:28:20 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.296 2009/06/19 22:07:05 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -72,16 +72,16 @@ static void rm_free(void *ptr)
 
 static void set_managed_memory(void)
 {
-    ID enable_mm = rb_intern("RMAGICK_DISABLE_MANAGED_MEMORY");
+    ID enable_mm = rb_intern("RMAGICK_ENABLE_MANAGED_MEMORY");
 
-    if (!(RTEST(rb_const_defined(rb_cObject, enable_mm)) && RTEST(rb_const_get(rb_cObject, enable_mm))))
+    if (RTEST(rb_const_defined(rb_cObject, enable_mm)) && RTEST(rb_const_get(rb_cObject, enable_mm)))
     {
+        rb_warning("RMagick: %s", "managed memory enabled. This is an experimental feature.");
         SetMagickMemoryMethods(rm_malloc, rm_realloc, rm_free);
         rb_define_const(Module_Magick, "MANAGED_MEMORY", Qtrue);
     }
     else
     {
-        rb_warning("RMagick: %s", "managed memory disabled by caller.");
         rb_define_const(Module_Magick, "MANAGED_MEMORY", Qfalse);
     }
 }
@@ -941,6 +941,9 @@ Init_RMagick2(void)
         ENUMERATOR(AddCompositeOp)
         ENUMERATOR(AtopCompositeOp)
         ENUMERATOR(BlendCompositeOp)
+#if defined(HAVE_ENUM_BLURCOMPOSITEOP)
+        ENUMERATOR(BlurCompositeOp)
+#endif
         ENUMERATOR(BumpmapCompositeOp)
         ENUMERATOR(ChangeMaskCompositeOp)
         ENUMERATOR(ClearCompositeOp)
@@ -1603,7 +1606,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/06/18 22:28:20 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/06/19 22:07:05 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -258,7 +258,8 @@ have_type("long double", headers)
 
 have_enum_values("AlphaChannelType", ["CopyAlphaChannel",                    # 6.4.3-7
                                       "BackgroundAlphaChannel"], headers)    # 6.5.2-5
-have_enum_value("CompositeOperator", "DistortCompositeOp", headers)          # 6.5.3-7
+have_enum_values("CompositeOperator", ["BlurCompositeOp",                    # 6.5.3-7
+                                       "DistortCompositeOp"], headers)       # 6.5.3-10
 have_enum_values("CompressionType", ["DXT1Compression",                      # 6.3.9-3
                                      "DXT3Compression",                      # 6.3.9-3
                                      "DXT5Compression"], headers)            # 6.3.9-3

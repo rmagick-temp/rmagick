@@ -1,4 +1,4 @@
-/* $Id: rmenum.c,v 1.5 2009/06/16 23:09:27 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.6 2009/06/19 22:07:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
@@ -375,6 +375,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(NoCompositeOp)
         ENUM_TO_NAME(AddCompositeOp)
         ENUM_TO_NAME(AtopCompositeOp)
+#if defined(HAVE_ENUM_BLURCOMPOSITEOP)
+        ENUM_TO_NAME(BlurCompositeOp)
+#endif
         ENUM_TO_NAME(BumpmapCompositeOp)
         ENUM_TO_NAME(ChangeMaskCompositeOp)
         ENUM_TO_NAME(ClearCompositeOp)

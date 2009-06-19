@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.79 2009/06/16 23:09:27 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.80 2009/06/19 22:07:40 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -881,6 +881,11 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case BlendCompositeOp:
                 op = "Blend";
                 break;
+#if defined(HAVE_ENUM_BLURCOMPOSITEOP)
+            case BlurCompositeOp:
+                op = "Blur";
+                break;
+#endif
             case BumpmapCompositeOp:
                 op = "Bumpmap";
                 break;

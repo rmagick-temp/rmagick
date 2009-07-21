@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.80 2009/06/19 22:07:40 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.81 2009/07/21 23:12:42 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -981,6 +981,16 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case LightenCompositeOp:
                 op = "Lighten";
                 break;
+#if defined(HAVE_ENUM_LINEARBURNCOMPOSITEOP)
+            case LinearBurnCompositeOp:
+                op = "LinearBurn";
+                break;
+#endif
+#if defined(HAVE_ENUM_LINEARDODGECOMPOSITEOP)
+            case LinearDodgeCompositeOp:
+                op = "LinearDodge";
+                break;
+#endif
             case LinearLightCompositeOp:
                 op = "LinearLight";
                 break;
@@ -1005,6 +1015,16 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case OverlayCompositeOp:
                 op = "Overlay";
                 break;
+#if defined(HAVE_ENUM_PEGTOPLIGHTCOMPOSITEOP)
+            case PegtopLightCompositeOp:
+                op = "PegtopLight";
+                break;
+#endif
+#if defined(HAVE_ENUM_PINLIGHTCOMPOSITEOP)
+            case PinLightCompositeOp:
+                op = "PinLight";
+                break;
+#endif
             case PlusCompositeOp:
                 op = "Plus";
                 break;
@@ -1041,6 +1061,11 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
             case ThresholdCompositeOp:
                 op = "Threshold";
                 break;
+#if defined(HAVE_ENUM_VIVIDLIGHTCOMPOSITEOP)
+            case VividLightCompositeOp:
+                op = "VividLight";
+                break;
+#endif
             case XorCompositeOp:
                 op = "Xor";
                 break;

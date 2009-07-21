@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.273 2009/06/04 23:18:57 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.274 2009/07/21 23:12:42 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -900,6 +900,7 @@ extern VALUE Image_composite_affine(VALUE, VALUE, VALUE);
 extern VALUE Image_composite_bang(int, VALUE *, VALUE);
 extern VALUE Image_composite_channel(int, VALUE *, VALUE);
 extern VALUE Image_composite_channel_bang(int, VALUE *, VALUE);
+extern VALUE Image_composite_mathematics(int, VALUE *, VALUE);
 extern VALUE Image_composite_tiled(int, VALUE *, VALUE);
 extern VALUE Image_composite_tiled_bang(int, VALUE *, VALUE);
 extern VALUE Image_compress_colormap_bang(VALUE);

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.349 2009/06/05 22:30:40 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.350 2009/07/21 23:12:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -2661,6 +2661,67 @@ VALUE
 Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
 {
     return composite_channel(True, argc, argv, self);
+}
+
+
+/*
+    Method:     Image#composite_mathematics
+                img.composite_mathematics(comp_img, A, B, C, D, gravity)
+                img.composite_mathematics(comp_img, A, B, C, D, x_off, y_off)
+                img.composite_mathematics(comp_img, A, B, C, D, gravity, x_off, y_off)
+   Purpose:     Composite using MathematicsCompositeOp
+   Notes:       New in 6.5.4-3.
+ */
+VALUE
+Image_composite_mathematics(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_ENUM_MATHEMATICSCOMPOSITEOP)
+    Image *composite_image;
+    VALUE args[5];
+    signed long x_off = 0L;
+    signed long y_off = 0L;
+    GravityType gravity = ForgetGravity;
+    char compose_args[200];
+
+
+    switch (argc)
+    {
+        case 8:
+            Data_Get_Struct(rm_cur_image(argv[0]), Image, composite_image);
+            VALUE_TO_ENUM(argv[7], gravity, GravityType);
+        case 7:
+            x_off = NUM2LONG(argv[5]);
+            y_off = NUM2LONG(argv[6]);
+            break;
+        case 6:
+            Data_Get_Struct(rm_cur_image(argv[0]), Image, composite_image);
+            VALUE_TO_ENUM(argv[5], gravity, GravityType);
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (got %d, expected 6 to 8)", argc);
+            break;
+    }
+
+
+    (void) sprintf(compose_args, "%-.2f,%-.2f,%-.2f,%-.2f", NUM2DBL(argv[1]), NUM2DBL(argv[2]), NUM2DBL(argv[3]), NUM2DBL(argv[4]));
+    SetImageArtifact(composite_image,"compose:args", compose_args);
+
+    // Call composite(False, gravity, x_off, y_off, MathematicsCompositeOp, DefaultChannels)
+    args[0] = argv[0];
+    args[1] = GravityType_new(gravity);
+    args[2] = LONG2FIX(x_off);
+    args[3] = LONG2FIX(y_off);
+    args[4] = CompositeOperator_new(MathematicsCompositeOp);
+
+    return composite(False, 5, args, self, DefaultChannels);
+
+#else
+    rm_not_implemented();
+    argc = argc;
+    argv = argv;
+    self = self;
+    return (VALUE)0;
+#endif
 }
 
 

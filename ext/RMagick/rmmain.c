@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.296 2009/06/19 22:07:05 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.297 2009/07/21 23:12:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -292,6 +292,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "composite_affine", Image_composite_affine, 2);
     rb_define_method(Class_Image, "composite_channel", Image_composite_channel, -1);
     rb_define_method(Class_Image, "composite_channel!", Image_composite_channel_bang, -1);
+    rb_define_method(Class_Image, "composite_mathematics", Image_composite_mathematics, -1);
     rb_define_method(Class_Image, "composite_tiled", Image_composite_tiled, -1);
     rb_define_method(Class_Image, "composite_tiled!", Image_composite_tiled_bang, -1);
     rb_define_method(Class_Image, "compress_colormap!", Image_compress_colormap_bang, 0);
@@ -977,6 +978,12 @@ Init_RMagick2(void)
         ENUMERATOR(HueCompositeOp)
         ENUMERATOR(InCompositeOp)
         ENUMERATOR(LightenCompositeOp)
+#if defined(HAVE_ENUM_LINEARBURNCOMPOSITEOP)
+        ENUMERATOR(LinearBurnCompositeOp)
+#endif
+#if defined(HAVE_ENUM_LINEARDODGECOMPOSITEOP)
+        ENUMERATOR(LinearDodgeCompositeOp)
+#endif
         ENUMERATOR(LinearLightCompositeOp)
         ENUMERATOR(LuminizeCompositeOp)
         ENUMERATOR(MinusCompositeOp)
@@ -985,6 +992,12 @@ Init_RMagick2(void)
         ENUMERATOR(OutCompositeOp)
         ENUMERATOR(OverCompositeOp)
         ENUMERATOR(OverlayCompositeOp)
+#if defined(HAVE_ENUM_PEGTOPLIGHTCOMPOSITEOP)
+        ENUMERATOR(PegtopLightCompositeOp)
+#endif
+#if defined(HAVE_ENUM_PINLIGHTCOMPOSITEOP)
+        ENUMERATOR(PinLightCompositeOp)
+#endif
         ENUMERATOR(PlusCompositeOp)
         ENUMERATOR(ReplaceCompositeOp)    // synonym for CopyCompositeOp
         ENUMERATOR(SaturateCompositeOp)
@@ -997,6 +1010,9 @@ Init_RMagick2(void)
         ENUMERATOR(SrcOverCompositeOp)
         ENUMERATOR(SubtractCompositeOp)
         ENUMERATOR(ThresholdCompositeOp)
+#if defined(HAVE_ENUM_VIVIDLIGHTCOMPOSITEOP)
+        ENUMERATOR(VividLightCompositeOp)
+#endif
         ENUMERATOR(XorCompositeOp)
     END_ENUM
 
@@ -1606,7 +1622,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/06/19 22:07:05 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/07/21 23:12:43 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

@@ -1,4 +1,4 @@
-/* $Id: rmenum.c,v 1.6 2009/06/19 22:07:40 rmagick Exp $ */
+/* $Id: rmenum.c,v 1.7 2009/07/21 23:12:43 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmenum.c
@@ -413,14 +413,29 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(HueCompositeOp)
         ENUM_TO_NAME(InCompositeOp)
         ENUM_TO_NAME(LightenCompositeOp)
+#if defined(HAVE_ENUM_LINEARBURNCOMPOSITEOP)
+        ENUM_TO_NAME(LinearBurnCompositeOp)
+#endif
+#if defined(HAVE_ENUM_LINEARDODGECOMPOSITEOP)
+        ENUM_TO_NAME(LinearDodgeCompositeOp)
+#endif
         ENUM_TO_NAME(LinearLightCompositeOp)
         ENUM_TO_NAME(LuminizeCompositeOp)
+#if defined(HAVE_ENUM_MATHEMATICSCOMPOSITEOP)
+        ENUM_TO_NAME(MathematicsCompositeOp)
+#endif
         ENUM_TO_NAME(MinusCompositeOp)
         ENUM_TO_NAME(ModulateCompositeOp)
         ENUM_TO_NAME(MultiplyCompositeOp)
         ENUM_TO_NAME(OutCompositeOp)
         ENUM_TO_NAME(OverCompositeOp)
         ENUM_TO_NAME(OverlayCompositeOp)
+#if defined(HAVE_ENUM_PEGTOPLIGHTCOMPOSITEOP)
+        ENUM_TO_NAME(PegtopLightCompositeOp)
+#endif
+#if defined(HAVE_ENUM_PINLIGHTCOMPOSITEOP)
+        ENUM_TO_NAME(PinLightCompositeOp)
+#endif
         ENUM_TO_NAME(PlusCompositeOp)
         ENUM_TO_NAME(ReplaceCompositeOp)
         ENUM_TO_NAME(SaturateCompositeOp)
@@ -432,6 +447,9 @@ CompositeOperator_name(CompositeOperator op)
         ENUM_TO_NAME(SrcOverCompositeOp)
         ENUM_TO_NAME(SubtractCompositeOp)
         ENUM_TO_NAME(ThresholdCompositeOp)
+#if defined(HAVE_ENUM_VIVIDLIGHTCOMPOSITEOP)
+        ENUM_TO_NAME(VividLightCompositeOp)
+#endif
         ENUM_TO_NAME(XorCompositeOp)
     }
 

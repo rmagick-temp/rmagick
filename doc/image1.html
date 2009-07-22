@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 7 December 2008), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (class methods and instance
   methods a-d)</title>
@@ -206,6 +206,9 @@
           <li><a href="#composite_bang">composite!</a></li>
 
           <li><a href="#composite_affine">composite_affine</a></li>
+
+          <li><a href=
+          "#composite_mathematics">composite_mathematics</a></li>
 
           <li><a href="#composite_tiled">composite_tiled</a></li>
         </ul>
@@ -3144,6 +3147,82 @@ f.color_reset!(red)
     <h4>Magick API</h4>
 
     <p>DrawAffineImage</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="composite_mathematics">composite_mathematics</h3>
+
+    <p><span class=
+    "arg">dest</span>.composite_mathematics(<span class=
+    "arg">src</span>, <span class="arg">a</span>, <span class=
+    "arg">b</span>, <span class="arg">c</span>, <span class=
+    "arg">d</span>, <span class="arg">gravity</span>) -&gt;
+    <em>image</em><br />
+    <span class=
+    "arg">dest</span>.composite_mathematics(<span class="arg">src</span>,
+    <span class="arg">a</span>, <span class="arg">b</span>,
+    <span class="arg">c</span>, <span class="arg">d</span>,
+    <span class="arg">x</span>, <span class="arg">y</span>) -&gt;
+    <em>image</em><br />
+    <span class=
+    "arg">dest</span>.composite_mathematics(<span class="arg">src</span>,
+    <span class="arg">a</span>, <span class="arg">b</span>,
+    <span class="arg">c</span>, <span class="arg">d</span>,
+    <span class="arg">gravity</span>, <span class="arg">x</span>,
+    <span class="arg">y</span>) -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Merge the source and destination images according to the
+    formula
+    <em>a*Sc*Dc&nbsp;+&nbsp;b*Sc&nbsp;+&nbsp;c*Dc&nbsp;+&nbsp;d</em>
+    where Sc is the source pixel and Dc is the destination
+    pixel.</p>
+
+    <p>Equivalent to the <code>-compose Mathematics -set
+    option:compose:args a,b,c,d</code> options to ImagMagick's
+    <code>convert</code> command. See <a href=
+    "http://www.imagemagick.org/Usage/compose/#mathematics">Examples
+    of ImageMagick Usage</a>.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>src</dt>
+
+      <dd>Either an imagelist or an image. If an imagelist, uses
+      the current image.</dd>
+
+      <dt>a, b, c, d</dt>
+
+      <dd>See the description.</dd>
+
+      <dt>gravity</dt>
+
+      <dd>A <a href="constants.html#GravityType">GravityType</a>
+      value. If omitted, the default gravity is
+      NorthWestGravity.</dd>
+
+      <dt>x, y</dt>
+
+      <dd>The x- and y-offset of the composited image, measured
+      relative to the <em>gravity</em> argument. If omitted, the
+      default value is 0.0.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>See also</h4>
+
+    <p><a href="#composite">composite</a></p>
+
+    <h4>Magick API</h4>
+
+    <p>CompositeImage</p>
   </div>
 
   <div class="sig">

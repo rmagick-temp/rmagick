@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 7 December 2008), see www.w3.org" />
 
   <title>RMagick 0.0.0: Constants</title>
   <meta http-equiv="Content-Type" content=
@@ -157,7 +157,7 @@
 
     <dd>An extended form of the <code>Version</code> constant with
     the format shown here:<br />
-    <code>This is RMagick 2.0.0 ($Date: 2009/06/19 22:08:03 $)
+    <code>This is RMagick 2.0.0 ($Date: 2009/07/22 22:52:38 $)
     Copyright (C) 2008 by Timothy P. Hunter<br />
     Built with ImageMagick 6.3.7 01/05/08 Q16
     http://www.imagemagick.org<br />
@@ -688,6 +688,21 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dd>Replace target image pixels with lighter pixels from the
     composite image.</dd>
 
+    <dt>LinearBurnCompositeOp</dt>
+
+    <dd>Same as <code>LinearDodgeCompositeOp</code>, but also
+    subtract one from the result. Sort of a additive 'Screen' of
+    the images.</dd>
+
+    <dt>LinearDodgeCompositeOp</dt>
+
+    <dd class="imquote">This is equivelent to
+    <code>PlusCompositeOp</code> in that the color channels are
+    simply added, however it does not "plus" the alpha channel, but
+    uses the normal <code>OverCompositeOp</code> alpha blending,
+    which transparencies are involved. Produces a sort of additive
+    multiply-like result.</dd>
+
     <dt>LinearLightCompositeOp</dt>
 
     <dd class="imquote">Increase contrast slightly with an impact
@@ -742,6 +757,20 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     whilst preserving its highlights and shadows. The destination
     color is not replaced, but is mixed with the source color to
     reflect the lightness or darkness of the destination.</dd>
+
+    <dt>PegtopLightCompositeOp</dt>
+
+    <dd class="imquote">Almost equivalent to
+    <code>SoftLightCompositeOp</code>, but using a continuious
+    mathematical formula rather than two conditionally selected
+    formulae.</dd>
+
+    <dt>PinLightCompositeOp</dt>
+
+    <dd class="imquote">Similar to
+    <code>HardLightCompositeOp</code>, but using sharp linear
+    shadings, to similate the effects of a strong 'pinhole' light
+    source.</dd>
 
     <dt>PlusCompositeOp</dt>
 
@@ -813,6 +842,12 @@ ruby -rRMagick -e"Magick::ColorspaceType.values {|cs| puts cs}"
     <dt>ThresholdCompositeOp</dt>
 
     <dd>?</dd>
+
+    <dt>VividLightCompositeOp</dt>
+
+    <dd class="imquote">A modified
+    <code>LinearLightCompositeOp</code> designed to preserve very
+    stong primary and secondary colors in the image.</dd>
 
     <dt>XorCompositeOp</dt>
 

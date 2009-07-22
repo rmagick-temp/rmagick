@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.350 2009/07/21 23:12:43 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.351 2009/07/22 22:10:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -976,7 +976,6 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 static void
 get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long *y_offset)
 {
-    MagickEnum *m_enum;
     GravityType gravity;
 
     VALUE_TO_ENUM(grav, gravity, GravityType);
@@ -1012,11 +1011,7 @@ get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long
             break;
         case NorthEastGravity:
         case NorthGravity:
-            // Don't let these run into the default case
-            break;
         default:
-            Data_Get_Struct(grav, MagickEnum, m_enum);
-            rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
             break;
     }
 
@@ -2440,7 +2435,6 @@ composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
     Image *comp_image;
     CompositeOperator operator = UndefinedCompositeOp;
     GravityType gravity;
-    MagickEnum *m_enum;
     volatile VALUE comp;
     signed long x_offset = 0;
     signed long y_offset = 0;
@@ -2555,11 +2549,7 @@ composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
                     break;
                 case NorthEastGravity:
                 case NorthGravity:
-                    // Don't let these run into the default case
-                    break;
                 default:
-                    Data_Get_Struct(argv[1], MagickEnum, m_enum);
-                    rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
                     break;
             }
             break;
@@ -2680,21 +2670,27 @@ Image_composite_mathematics(int argc, VALUE *argv, VALUE self)
     VALUE args[5];
     signed long x_off = 0L;
     signed long y_off = 0L;
-    GravityType gravity = ForgetGravity;
+    GravityType gravity = NorthWestGravity;
     char compose_args[200];
 
+    rm_check_destroyed(self);
+    if (argc > 0)
+    {
+        composite_image = rm_check_destroyed(rm_cur_image(argv[0]));
+    }
 
     switch (argc)
     {
         case 8:
-            Data_Get_Struct(rm_cur_image(argv[0]), Image, composite_image);
-            VALUE_TO_ENUM(argv[7], gravity, GravityType);
+            VALUE_TO_ENUM(argv[5], gravity, GravityType);
+            x_off = NUM2LONG(argv[6]);
+            y_off = NUM2LONG(argv[7]);
+            break;
         case 7:
             x_off = NUM2LONG(argv[5]);
             y_off = NUM2LONG(argv[6]);
             break;
         case 6:
-            Data_Get_Struct(rm_cur_image(argv[0]), Image, composite_image);
             VALUE_TO_ENUM(argv[5], gravity, GravityType);
             break;
         default:
@@ -2703,7 +2699,7 @@ Image_composite_mathematics(int argc, VALUE *argv, VALUE self)
     }
 
 
-    (void) sprintf(compose_args, "%-.2f,%-.2f,%-.2f,%-.2f", NUM2DBL(argv[1]), NUM2DBL(argv[2]), NUM2DBL(argv[3]), NUM2DBL(argv[4]));
+    (void) sprintf(compose_args, "%-.16g,%-.16g,%-.16g,%-.16g", NUM2DBL(argv[1]), NUM2DBL(argv[2]), NUM2DBL(argv[3]), NUM2DBL(argv[4]));
     SetImageArtifact(composite_image,"compose:args", compose_args);
 
     // Call composite(False, gravity, x_off, y_off, MathematicsCompositeOp, DefaultChannels)
@@ -11350,7 +11346,6 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
     unsigned long columns, rows;
     int reset_page = 0;
     GravityType gravity;
-    MagickEnum *m_enum;
     Image *image;
     VALUE cropped;
 
@@ -11418,11 +11413,7 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
                     break;
                 case NorthEastGravity:
                 case NorthGravity:
-                    // Don't let these run into the default case
-                    break;
                 default:
-                    Data_Get_Struct(argv[0], MagickEnum, m_enum);
-                    rb_warning("gravity type `%s' has no effect", rb_id2name(m_enum->id));
                     break;
             }
 

@@ -36,14 +36,33 @@ class Image2_UT < Test::Unit::TestCase
         end
     end
 
-    def composite_tiled
+    def test_composite_mathematics
+       bg = Magick::Image.new(50, 50)
+       fg = Magick::Image.new(50, 50) {self.background_color = "black" }
+       res = nil
+       assert_nothing_raised { res = bg.composite_mathematics(fg, 1, 0, 0, 0, Magick::CenterGravity) }
+       assert_instance_of(Magick::Image, res)
+       assert_not_same(bg, res)
+       assert_not_same(fg, res)
+       assert_nothing_raised { res = bg.composite_mathematics(fg, 1, 0, 0, 0, 0.0, 0.0) }
+       assert_nothing_raised { res = bg.composite_mathematics(fg, 1, 0, 0, 0, Magick::CenterGravity, 0.0, 0.0) }
+
+       # too few arguments
+       assert_raise(ArgumentError) { bg.composite_mathematics(fg, 1, 0, 0, 0) }
+       # too many arguments
+       assert_raise(ArgumentError) { bg.composite_mathematics(fg, 1, 0, 0, 0, Magick::CenterGravity, 0.0, 0.0, 'x') }
+    end
+
+    def test_composite_tiled
       bg = Magick::Image.new(200,200)
-      fg = Magick::Image.new(50,100) { self.foreground = 'white' }
+      fg = Magick::Image.new(50,100) { self.background_color = "black" }
+      res = nil
       assert_nothing_raised do
         res = bg.composite_tiled(fg)
-        assert_instance_of(Magick::Image, res)
-        assert_not_same(bg, res)
       end
+      assert_instance_of(Magick::Image, res)
+      assert_not_same(bg, res)
+      assert_not_same(fg, res)
       assert_nothing_raised { bg.composite_tiled!(fg) }
       assert_nothing_raised { bg.composite_tiled(fg, Magick::AtopCompositeOp) }
       assert_nothing_raised { bg.composite_tiled(fg, Magick::OverCompositeOp) }

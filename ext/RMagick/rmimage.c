@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.352 2009/07/23 22:25:06 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.353 2009/07/23 22:55:57 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1276,6 +1276,50 @@ Image_blend(int argc, VALUE *argv, VALUE self)
                              , x_offset, y_offset, BlendCompositeOp);
 
 }
+
+
+
+/*
+ *  Method:     Image#blue_shift(factor=1.5)
+ *  Purpose:    Call BlueShiftImage
+ */
+VALUE
+Image_blue_shift(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_BLUESHIFTIMAGE)
+    Image *image, *new_image;
+    double factor = 1.5;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+
+    switch (argc)
+    {
+        case 1:
+            factor = NUM2DBL(argv[0]);
+        case 0:
+            break;
+        default:
+            rb_raise(rb_eArgError, "wrong number of arguments (%d for 0 or 1)", argc);
+            break;
+    }
+
+
+    GetExceptionInfo(&exception);
+    new_image = BlueShiftImage(image, factor, &exception);
+    CHECK_EXCEPTION();
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
+}
+
 
 
 DEF_ATTR_ACCESSOR(Image, blur, dbl)

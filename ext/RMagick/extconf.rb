@@ -187,6 +187,7 @@ have_func("snprintf", headers)
   ["AcquireImage",                   # 6.4.1
    "AffinityImage",                  # 6.4.3-6
    "AffinityImages",                 # 6.4.3-6
+   "BlueShiftImage",                 # 6.5.4-3
    "DeskewImage",                    # 6.4.2-5
    "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9

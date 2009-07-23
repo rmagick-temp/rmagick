@@ -43,6 +43,16 @@ class Image1_UT < Test::Unit::TestCase
         end
     end
 
+    def test_blue_shift
+         img = Magick::Image.read(IMAGES_DIR+'/Button_0.gif')[0]
+         res = nil
+         assert_nothing_raised { res = img.blue_shift }
+         assert_instance_of(Magick::Image, res)
+         assert_not_same(img, res)
+         assert_nothing_raised { img.blue_shift(2) }
+         assert_raise(ArgumentError) { img.blue_shift(2, 3) }
+    end
+
     # test constitute and dispatch
     def test_constitute
         @img = Magick::Image.read(IMAGES_DIR+'/Button_0.gif')[0]

@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.351 2009/07/22 22:10:49 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.352 2009/07/23 22:25:06 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -1212,6 +1212,9 @@ special_composite(Image *image, Image *overlay, double image_pct, double overlay
 
     blend_geometry(geometry, sizeof(geometry), image_pct, overlay_pct);
     (void) CloneString(&overlay->geometry, geometry);
+#if defined(HAVE_SETIMAGEARTIFACT)
+    (void) SetImageArtifact(overlay,"compose:args", geometry);
+#endif
 
     new_image = rm_clone_image(image);
     (void) CompositeImage(new_image, op, overlay, x_off, y_off);
@@ -10972,6 +10975,9 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
 
     blend_geometry(geometry, sizeof(geometry), src_percent, dst_percent);
     (void) CloneString(&overlay->geometry, geometry);
+#if defined(HAVE_SETIMAGEARTIFACT)
+    (void) SetImageArtifact(overlay,"compose:args", geometry);
+#endif
 
     new_image = rm_clone_image(image);
     (void) CompositeImage(new_image, ModulateCompositeOp, overlay, x_offset, y_offset);

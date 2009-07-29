@@ -1,3 +1,11 @@
+RMagick 2.11.0
+    o Fix bug #26475, dissolve and watermark don't work with new versions of
+      ImageMagick (reported by Jim Crate)
+    o Add Image#composite_mathematics (available in ImageMagick 6.5.4-3)
+    o Add new LinearDodgeCompositeOp, LinearBurnCompositeOp,
+      PegtopCompositeOp, PinLightCompositeOp, VividLightCompositeOp enum values
+      (available in ImageMagick 6.5.4-3)
+
 RMagick 2.10.0
     o ImageMagick releases earlier than 6.3.5-10 and Ruby releases earlier
       than 1.8.5 no longer supported.

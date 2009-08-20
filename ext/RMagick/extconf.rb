@@ -101,7 +101,7 @@ end
 
 
 # Magick-config is not available on Windows
-if RUBY_PLATFORM !~ /mswin/
+if RUBY_PLATFORM !~ /mswin|mingw/
 
   # Check for compiler. Extract first word so ENV['CC'] can be a program name with arguments.
   cc = (ENV["CC"] or Config::CONFIG["CC"] or "gcc").split(' ').first
@@ -144,9 +144,16 @@ if RUBY_PLATFORM !~ /mswin/
   $LDFLAGS    = ENV["LDFLAGS"].to_s  + " " + `Magick-config --ldflags`.chomp
   $LOCAL_LIBS = ENV["LIBS"].to_s     + " " + `Magick-config --libs`.chomp
 
+elsif RUBY_PLATFORM =~ /mingw/  # mingw
+
+  `convert -version` =~ /Version: ImageMagick (\d+\.\d+\.\d+)-\d+ /
+  abort "Unable to get ImageMagick version" unless $1
+  $magick_version = $1
+  $LOCAL_LIBS = '-lCORE_RL_magick_ -lX11'
+
 else  # mswin
 
-  `convert -version` =~ /Version: ImageMagick (\d\.\d\.\d+)-\d /
+  `convert -version` =~ /Version: ImageMagick (\d+\.\d+\.\d+)-\d+ /
   abort "Unable to get ImageMagick version" unless $1
   $magick_version = $1
   $CFLAGS = "-W3"
@@ -173,7 +180,7 @@ end
 
 
 
-if RUBY_PLATFORM !~ /mswin/
+if RUBY_PLATFORM !~ /mswin|mingw/
 
   unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers)
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +

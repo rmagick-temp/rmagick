@@ -1,3 +1,11 @@
+RMagick 2.11.1
+    o Applied Alexey Borzenkov's mingw patches to extconf.rb.
+    o Fixed a bug in Magick.trace_proc that could cause a segv at program exit
+      with Ruby 1.9.1 (bug report by Larry Young)
+    o Added new CompressionType enum values ZipSCompression, PixCompression,
+      Pxr24Compression, B44Compression, B44ACompression (available in
+      ImageMagick 6.5.5-4)
+
 RMagick 2.11.0
     o Fix bug #26475, dissolve and watermark don't work with new versions of
       ImageMagick (reported by Jim Crate)

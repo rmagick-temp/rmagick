@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.298 2009/07/23 22:55:57 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.299 2009/09/05 20:01:08 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -1021,6 +1021,12 @@ Init_RMagick2(void)
     DEF_ENUM(CompressionType)
         ENUMERATOR(UndefinedCompression)
         ENUMERATOR(NoCompression)
+#if defined(HAVE_ENUM_B44COMPRESSION)
+        ENUMERATOR(B44Compression)
+#endif
+#if defined(HAVE_ENUM_B44ACOMPRESSION)
+        ENUMERATOR(B44ACompression)
+#endif
         ENUMERATOR(BZipCompression)
 #if defined(HAVE_ENUM_DXT1COMPRESSION)
         ENUMERATOR(DXT1Compression)
@@ -1037,8 +1043,17 @@ Init_RMagick2(void)
         ENUMERATOR(JPEG2000Compression)
         ENUMERATOR(LosslessJPEGCompression)
         ENUMERATOR(LZWCompression)
+#if defined(HAVE_ENUM_PIZCOMPRESSION)
+        ENUMERATOR(PizCompression)
+#endif
+#if defined(HAVE_ENUM_PXR24COMPRESSION)
+        ENUMERATOR(Pxr24Compression)
+#endif
         ENUMERATOR(RLECompression)
         ENUMERATOR(ZipCompression)
+#if defined(HAVE_ENUM_ZIPSCOMPRESSION)
+        ENUMERATOR(ZipSCompression)
+#endif
     END_ENUM
 
     // DecorationType constants
@@ -1623,7 +1638,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/07/23 22:55:57 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/09/05 20:01:08 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

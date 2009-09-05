@@ -276,7 +276,13 @@ have_enum_values("CompositeOperator", ["BlurCompositeOp",                    # 6
                                        "VividLightCompositeOp"], headers)    # 6.5.4-3
 have_enum_values("CompressionType", ["DXT1Compression",                      # 6.3.9-3
                                      "DXT3Compression",                      # 6.3.9-3
-                                     "DXT5Compression"], headers)            # 6.3.9-3
+                                     "DXT5Compression",                      # 6.3.9-3
+                                     "ZipSCompression",                      # 6.5.5-4
+                                     "PizCompression",                       # 6.5.5-4
+                                     "Pxr24Compression",                     # 6.5.5-4
+                                     "B44Compression",                       # 6.5.5-4
+                                     "B44ACompression"], headers)            # 6.5.5-4
+
 have_enum_values("DistortImageMethod", ["BarrelDistortion",                  # 6.4.2-5
                                         "BarrelInverseDistortion",           # 6.4.3-8
                                         "BilinearForwardDistortion",         # 6.5.1-2

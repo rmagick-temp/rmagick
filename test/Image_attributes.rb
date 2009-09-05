@@ -249,6 +249,8 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_equal(Magick::BZipCompression, @img.compression)
         assert_nothing_raised { @img.compression = Magick::NoCompression }
         assert_nothing_raised { @img.compression = Magick::BZipCompression }
+        assert_nothing_raised { @img.compression = Magick::B44Compression }
+        assert_nothing_raised { @img.compression = Magick::B44ACompression }
         assert_nothing_raised { @img.compression = Magick::DXT1Compression }
         assert_nothing_raised { @img.compression = Magick::DXT3Compression }
         assert_nothing_raised { @img.compression = Magick::DXT5Compression }
@@ -258,8 +260,11 @@ class Image_Attributes_UT < Test::Unit::TestCase
         assert_nothing_raised { @img.compression = Magick::JPEG2000Compression }
         assert_nothing_raised { @img.compression = Magick::LosslessJPEGCompression }
         assert_nothing_raised { @img.compression = Magick::LZWCompression }
+        assert_nothing_raised { @img.compression = Magick::PizCompression }
+        assert_nothing_raised { @img.compression = Magick::Pxr24Compression }
         assert_nothing_raised { @img.compression = Magick::RLECompression }
         assert_nothing_raised { @img.compression = Magick::ZipCompression }
+        assert_nothing_raised { @img.compression = Magick::ZipSCompression }
         assert_raise(TypeError) { @img.compression = 2 }
     end
 

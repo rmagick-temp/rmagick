@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.81 2009/02/28 23:52:27 rmagick Exp $
+# $Id: RMagick.rb,v 1.82 2009/09/05 19:59:40 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2009 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -24,7 +24,14 @@ def Magick.formats(&block)
 end
 
 class << self
-    attr_writer :trace_proc
+    # remove reference to the proc at exit
+    def trace_proc=(p)
+       if @trace_proc.nil? && !p.nil? && !@exit_block_set_up
+          at_exit { @trace_proc = nil }
+          @exit_block_set_up = true
+       end
+       @trace_proc = p
+    end
 end
 
 # Geometry class and related enum constants

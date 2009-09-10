@@ -263,6 +263,27 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(FreezeError) { @img.alpha Magick::SetAlphaChannel }
     end
 
+    def test_auto_gamma
+       res = nil
+       assert_nothing_raised { res = @img.auto_gamma_channel }
+       assert_instance_of(Magick::Image, res)
+       assert_not_same(@img, res)
+       assert_nothing_raised { res = @img.auto_gamma_channel Magick::RedChannel }
+       assert_nothing_raised { res = @img.auto_gamma_channel Magick::RedChannel, Magick::BlueChannel }
+       assert_raise(TypeError) { @img.auto_gamma_channel(1) }
+    end
+
+
+    def test_auto_level
+       res = nil
+       assert_nothing_raised { res = @img.auto_level_channel }
+       assert_instance_of(Magick::Image, res)
+       assert_not_same(@img, res)
+       assert_nothing_raised { res = @img.auto_level_channel Magick::RedChannel }
+       assert_nothing_raised { res = @img.auto_level_channel Magick::RedChannel, Magick::BlueChannel }
+       assert_raise(TypeError) { @img.auto_level_channel(1) }
+    end
+
     def test_auto_orient
         assert_nothing_raised do
             res = @img.auto_orient

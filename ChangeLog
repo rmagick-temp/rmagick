@@ -1,3 +1,7 @@
+RMagick 2.12.0
+    o Added Image#auto_level_channel, Image#auto_gamma_channel (available in
+      ImageMagick 6.5.5-1)
+
 RMagick 2.11.1
     o Applied Alexey Borzenkov's mingw patches to extconf.rb.
     o Fixed a bug in Magick.trace_proc that could cause a segv at program exit

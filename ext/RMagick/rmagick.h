@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.275 2009/07/23 22:55:57 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.276 2009/09/10 23:03:33 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -867,6 +867,8 @@ extern VALUE Image_alpha(int, VALUE *, VALUE);
 extern VALUE Image_alpha_q(VALUE);
 extern VALUE Image_aref(VALUE, VALUE);
 extern VALUE Image_aset(VALUE, VALUE, VALUE);
+extern VALUE Image_auto_gamma_channel(int, VALUE *, VALUE);
+extern VALUE Image_auto_level_channel(int, VALUE *, VALUE);
 extern VALUE Image_auto_orient(VALUE);
 extern VALUE Image_auto_orient_bang(VALUE);
 extern VALUE Image_properties(VALUE);

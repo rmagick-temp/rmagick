@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.353 2009/07/23 22:55:57 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.354 2009/09/10 23:03:33 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -704,6 +704,57 @@ crisscross(int bang, VALUE self, Image *fp(const Image *, ExceptionInfo *))
 
     return rm_image_new(new_image);
 
+}
+
+
+
+static VALUE
+auto_channel(int argc, VALUE *argv, VALUE self, MagickBooleanType (*fp)(Image *, const ChannelType))
+{
+    Image *image, *new_image;
+    ChannelType channels;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+
+    if (argc > 0)
+    {
+        raise_ChannelType_error(argv[argc-1]);
+    }
+
+    new_image = rm_clone_image(image);
+    (void) (fp)(new_image, channels);
+    rm_check_image_exception(new_image, DestroyOnError);
+
+    return rm_image_new(new_image);
+}
+
+
+VALUE
+Image_auto_gamma_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_AUTOGAMMAIMAGECHANNEL)
+    return auto_channel(argc, argv, self, AutoGammaImageChannel);
+#else
+    rm_not_implemented();
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
+}
+
+
+VALUE
+Image_auto_level_channel(int argc, VALUE *argv, VALUE self)
+{
+#if defined(HAVE_AUTOLEVELIMAGECHANNEL)
+    return auto_channel(argc, argv, self, AutoLevelImageChannel);
+#else
+    rm_not_implemented();
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
 }
 
 

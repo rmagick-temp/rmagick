@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.82 2009/09/05 19:59:40 rmagick Exp $
+# $Id: RMagick.rb,v 1.83 2009/09/10 23:11:01 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2009 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -370,6 +370,18 @@ class Draw
         end
         primitive "gravity #{GRAVITY_NAMES[grav.to_i]}"
     end
+
+     # IM 6.5.5-8 and later
+     def interline_spacing(space)
+         begin
+             Float(space)
+         rescue ArgumentError
+             Kernel.raise ArgumentError, "invalid value for interline_spacing"
+         rescue TypeError
+             Kernel.raise TypeError, "can't convert #{space.class} into Float"
+         end
+         primitive "interline-spacing #{space}"
+     end
 
     # IM 6.4.8-3 and later
     def interword_spacing(space)

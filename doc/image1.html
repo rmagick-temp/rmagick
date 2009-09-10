@@ -138,6 +138,12 @@
 
           <li><a href="#annotate">annotate</a></li>
 
+          <li><a href=
+          "#auto_gamma_channel">auto_gamma_channel</a></li>
+
+          <li><a href=
+          "#auto_level_channel">auto_level_channel</a></li>
+
           <li><a href="#auto_orient">auto_orient</a></li>
 
           <li><a href="#auto_orient_bang">auto_orient!</a></li>
@@ -153,13 +159,13 @@
           <li><a href="#blur_channel">blur_channel</a></li>
 
           <li><a href="#blur_image">blur_image</a></li>
-
-          <li><a href="#border">border</a></li>
         </ul>
       </div>
 
       <div class="toccol">
         <ul>
+          <li><a href="#border">border</a></li>
+
           <li><a href="#border_bang">border!</a></li>
 
           <li><a href="#bounding_box">bounding_box</a></li>
@@ -1604,6 +1610,64 @@ img = Image.read_inline(content)
     <h4>Returns</h4>
 
     <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="auto_gamma_channel">auto_gamma_channel</h3>
+
+    <p><span class=
+    "arg">img</span>.auto_gamma_channel([<span class="arg">channel</span>...])
+    -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>"Automagically" adjust the gamma level of an image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, automagically adjusts the gamma level
+      of all the channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="auto_level_channel">auto_level_channel</h3>
+
+    <p><span class=
+    "arg">img</span>.auto_level_channel([<span class="arg">channel</span>...])
+    -&gt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>"Automagically" adjust the color levels of an image.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, automagically adjusts the color level
+      of all the channels.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
   </div>
 
   <div class="sig">

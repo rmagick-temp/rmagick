@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 7 December 2008), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Draw</title>
   <meta http-equiv="Content-Type" content=
@@ -112,18 +112,20 @@
         <li><a href="#font">font</a></li>
 
         <li><a href="#font_family">font_family</a></li>
+
+        <li><a href="#font_stretch">font_stretch</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#font_stretch">font_stretch</a></li>
-
         <li><a href="#font_style">font_style</a></li>
 
         <li><a href="#font_weight">font_weight</a></li>
 
         <li><a href="#gravity">gravity</a></li>
+
+        <li><a href="#interline_spacing">interline_spacing</a></li>
 
         <li><a href="#interword_spacing">interword_spacing</a></li>
 
@@ -216,13 +218,13 @@
         <li><a href="#fill_eq">fill</a></li>
 
         <li><a href="#fill_pattern_eq">fill_pattern</a></li>
+
+        <li><a href="#font_eq">font</a></li>
       </ul>
     </div>
 
     <div class="toccol">
       <ul>
-        <li><a href="#font_eq">font</a></li>
-
         <li><a href="#font_family_eq">font_family</a></li>
 
         <li><a href="#font_stretch_eq">font_stretch</a></li>
@@ -232,6 +234,9 @@
         <li><a href="#font_weight_eq">font_weight</a></li>
 
         <li><a href="#gravity_eq">gravity</a></li>
+
+        <li><a href=
+        "#interline_spacing_eq">interline_spacing</a></li>
 
         <li><a href=
         "#interword_spacing_eq">interword_spacing</a></li>
@@ -392,6 +397,7 @@ title.annotate(montage, 0,0,0,40, 'Named Colors') {
 
       <tr>
         <th>Replaced by</th>
+
         <th>&nbsp;</th>
       </tr>
 
@@ -1635,6 +1641,30 @@ draw.decorate(LineThroughDecoration)
     <h4>See also</h4>
 
     <p><a href="#text_align">text_align</a></p>
+  </div>
+
+  <div class="sig">
+    <h3 id="interline_spacing">interline_spacing</h3>
+
+    <p><span class="arg">draw</span>.interline_spacing(<span class=
+    "arg">space</span>) -&gt; <em>self</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Modify the spacing between lines when text has multiple
+    lines.</p>
+
+    <h4>Argument</h4>
+
+    <p>A numeric value. If positive, inserts additional space
+    between lines. If negative, removes space between lines. The
+    amount of space inserted or removed depends on the font.</p>
+
+    <h4>Returns</h4>
+
+    <p>self</p>
   </div>
 
   <div class="sig">
@@ -3040,6 +3070,27 @@ gc.text(10,10, %q/{"What's up?"}/) &raquo; "What's up?"
 
     <p>A <a href="constants.html#GravityType">GravityType</a>
     constant.</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="interline_spacing_eq">interline_spacing=</h3>
+
+    <p><span class="arg">draw</span>.interline_spacing =
+    <em>space</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p>Modifies the space between lines.</p>
+
+    <h4>Arguments</h4>
+
+    <p>A numeric value. May be positive or negative.</p>
+
+    <h4>Notes</h4>
+
+    <p>Available in ImageMagick 6.5.5-8.</p>
   </div>
 
   <div class="sig">

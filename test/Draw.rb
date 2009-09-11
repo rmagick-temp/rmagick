@@ -49,6 +49,13 @@ class Draw_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @draw.kerning([]) }
     end
 
+    def test_interline_spacing
+        assert_nothing_raised { @draw.interline_spacing = 1 }
+        assert_nothing_raised { @draw.interline_spacing(1) }
+        assert_raise(ArgumentError) { @draw.interline_spacing("a") }
+        assert_raise(TypeError) { @draw.interline_spacing([]) }
+    end
+
     def test_interword_spacing
         assert_nothing_raised { @draw.interword_spacing = 1 }
         assert_nothing_raised { @draw.interword_spacing(1) }

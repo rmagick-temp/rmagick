@@ -254,6 +254,7 @@ end
 
 have_struct_member("Image", "type", headers)          # ???
 have_struct_member("DrawInfo", "kerning", headers)    # 6.4.7-8
+have_struct_member("DrawInfo", "interline_spacing", headers)   # 6.5.5-8
 have_struct_member("DrawInfo", "interword_spacing", headers)   # 6.4.8-0
 have_type("DitherMethod", headers)                    # 6.4.2
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod

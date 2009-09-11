@@ -1,4 +1,4 @@
-/* $Id: rmdraw.c,v 1.81 2009/07/21 23:12:42 rmagick Exp $ */
+/* $Id: rmdraw.c,v 1.82 2009/09/11 22:29:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmdraw.c
@@ -318,6 +318,30 @@ Draw_kerning_eq(VALUE self, VALUE kerning)
     return (VALUE)0;
     self = self;
     kerning = kerning;
+#endif
+}
+
+
+/*
+    Method:     Draw#interline_spacing
+    Purpose:    space between two liness
+    Notes:      new for 6.5.5-8
+*/
+VALUE
+Draw_interline_spacing_eq(VALUE self, VALUE spacing)
+{
+#if defined(HAVE_ST_INTERLINE_SPACING)
+    Draw *draw;
+
+    rb_check_frozen(self);
+    Data_Get_Struct(self, Draw, draw);
+    draw->info->interline_spacing = NUM2DBL(spacing);
+    return self;
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+    self = self;
+    spacing = spacing;
 #endif
 }
 

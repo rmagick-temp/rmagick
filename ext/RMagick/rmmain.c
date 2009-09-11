@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.300 2009/09/10 23:03:33 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.301 2009/09/11 22:29:30 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -507,6 +507,7 @@ Init_RMagick2(void)
     DCL_ATTR_WRITER(Draw, font_style)
     DCL_ATTR_WRITER(Draw, font_weight)
     DCL_ATTR_WRITER(Draw, gravity)
+    DCL_ATTR_WRITER(Draw, interline_spacing)
     DCL_ATTR_WRITER(Draw, interword_spacing)
     DCL_ATTR_WRITER(Draw, kerning)
     DCL_ATTR_WRITER(Draw, pointsize)
@@ -1640,7 +1641,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/09/10 23:03:33 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/09/11 22:29:30 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

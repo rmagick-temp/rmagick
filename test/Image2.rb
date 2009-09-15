@@ -719,6 +719,43 @@ class Image2_UT < Test::Unit::TestCase
         assert_raise(TypeError) { @img.gamma_channel(0.8, Magick::RedChannel, 2) }
     end
 
+    def test_function_channel
+       img = Magick::Image.read("gradient:") {self.size = "20x600"}
+       img = img.first
+       img.rotate!(90)
+       assert_nothing_raised { img.function_channel Magick::PolynomialFunction, 0.33 }
+       assert_nothing_raised { img.function_channel Magick::PolynomialFunction, 4, -1.5 }
+       assert_nothing_raised { img.function_channel Magick::PolynomialFunction, 4, -4, 1 }
+       assert_nothing_raised { img.function_channel Magick::PolynomialFunction, -25, 53, -36, 8.3, 0.2 }
+
+       assert_nothing_raised { img.function_channel Magick::SinusoidFunction, 1 }
+       assert_nothing_raised { img.function_channel Magick::SinusoidFunction, 1, 90 }
+       assert_nothing_raised { img.function_channel Magick::SinusoidFunction, 5, 90, 0.25, 0.75 }
+
+       assert_nothing_raised { img.function_channel Magick::ArcsinFunction, 1 }
+       assert_nothing_raised { img.function_channel Magick::ArcsinFunction, 0.5 }
+       assert_nothing_raised { img.function_channel Magick::ArcsinFunction, 0.4, 0.7 }
+       assert_nothing_raised { img.function_channel Magick::ArcsinFunction, 0.5, 0.5, 0.5, 0.5 }
+
+       assert_nothing_raised { img.function_channel Magick::ArctanFunction, 1 }
+       assert_nothing_raised { img.function_channel Magick::ArctanFunction, 10, 0.7 }
+       assert_nothing_raised { img.function_channel Magick::ArctanFunction, 5, 0.7, 1.2 }
+       assert_nothing_raised { img.function_channel Magick::ArctanFunction, 15, 0.7, 0.5, 0.75 }
+
+       # with channel args
+       assert_nothing_raised { img.function_channel Magick::PolynomialFunction, 0.33, Magick::RedChannel }
+       assert_nothing_raised { img.function_channel Magick::SinusoidFunction, 1, Magick::RedChannel, Magick::BlueChannel }
+
+       # invalid args
+       assert_raise(ArgumentError) { img.function_channel }
+       assert_raise(TypeError) { img.function_channel 1 }
+       assert_raise(ArgumentError) { img.function_channel Magick::PolynomialFunction }
+       assert_raise(TypeError) { img.function_channel Magick::PolynomialFunction, [] }
+       assert_raise(ArgumentError) { img.function_channel Magick::SinusoidFunction, 5, 90, 0.25, 0.75, 0.1 }
+       assert_raise(ArgumentError) { img.function_channel Magick::ArcsinFunction, 0.5, 0.5, 0.5, 0.5, 0.1 }
+       assert_raise(ArgumentError) { img.function_channel Magick::ArctanFunction, 15, 0.7, 0.5, 0.75, 0.1 }
+    end
+
     def test_gramma_correct
         assert_raise(ArgumentError) { @img.gamma_correct }
         # All 4 arguments can't default to 1.0

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta name="generator" content=
-  "HTML Tidy for Linux/x86 (vers 6 November 2007), see www.w3.org" />
+  "HTML Tidy for Linux/x86 (vers 7 December 2008), see www.w3.org" />
 
   <title>RMagick 0.0.0: class Image (instance methods e-o)</title>
   <meta http-equiv="Content-Type" content=
@@ -113,6 +113,8 @@
           <li><a href="#frame">frame</a></li>
 
           <li><a href="#freeze">freeze</a></li>
+
+          <li><a href="#function_channel">function_channel</a></li>
         </ul>
       </div>
 
@@ -1070,6 +1072,78 @@ scanline = img.export_pixels(0, r, img.columns, 1, "RGB");
     <h4>Returns</h4>
 
     <p>self</p>
+  </div>
+
+  <div class="sig">
+    <h3 id="function_channel">function_channel</h3>
+
+    <p><span class="arg">img</span>.function_channel(<span class=
+    "arg">function</span> [, <span class=
+    "arg">parameters</span>...][, <span class=
+    "arg">channel</span>...]) -&lt; <em>image</em></p>
+  </div>
+
+  <div class="desc">
+    <h4>Description</h4>
+
+    <p><span class="imquote">Apply a function to channel
+    values.</span> This method is equivalent to the <a href=
+    "http://www.imagemagick.org/script/command-line-options.php#function">
+    convert -function</a> option. See the ImageMagick documentation
+    for more information.</p>
+
+    <h4>Arguments</h4>
+
+    <dl>
+      <dt>function</dt>
+
+      <dd>
+        One of the following values.
+
+        <ul>
+          <li><code>PolynomialFunction</code></li>
+
+          <li><code>SinusoidFunction</code></li>
+
+          <li><code>ArcsinFunction</code></li>
+
+          <li><code>ArctanFunction</code></li>
+        </ul>Some of these values are not available in earlier
+        versions of ImageMagick. To find out which values are
+        available, enter the following statement in irb:
+        <pre>
+Magick::MagickFunction.values {|value| p value}
+</pre>
+      </dd>
+
+      <dt>parameters</dt>
+
+      <dd>One or more floating-point numbers. The number of
+      parameters depends on the function. See the ImageMagick
+      documentation for details.</dd>
+
+      <dt>channel...</dt>
+
+      <dd>0 or more <a href=
+      "constants.html#ChannelType">ChannelType</a> arguments. If no
+      channels are specified, the red, green, and blue channels are
+      used.</dd>
+    </dl>
+
+    <h4>Returns</h4>
+
+    <p>A new image</p>
+
+    <h4>Example</h4>
+    <pre>
+img2 = img.function_channel(Magick::PolynomialFunction,
+                            -25, 53, -36, 8.3, 0.2)
+</pre>
+
+    <h4>See also</h4>
+
+    <p><a href=
+    "image3.html#quantum_operator">quantum_operator</a></p>
   </div>
 
   <div class="sig">

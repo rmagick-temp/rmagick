@@ -1,4 +1,5 @@
 RMagick 2.12.0
+    o Added Image#function_channel (available in ImageMagick 6.4.8-8)
     o Added Image#auto_level_channel, Image#auto_gamma_channel (available in
       ImageMagick 6.5.5-1)
     o Added Draw#interline_spacing, #interline_spacing= (available in

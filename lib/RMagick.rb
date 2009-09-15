@@ -1,4 +1,4 @@
-# $Id: RMagick.rb,v 1.83 2009/09/10 23:11:01 rmagick Exp $
+# $Id: RMagick.rb,v 1.84 2009/09/15 22:08:41 rmagick Exp $
 #==============================================================================
 #                  Copyright (C) 2009 by Timothy P. Hunter
 #   Name:       RMagick.rb
@@ -11,19 +11,21 @@
 require 'RMagick2.so'
 
 module Magick
-    @@formats = nil
-
-def Magick.formats(&block)
-    @@formats ||= Magick.init_formats
-    if block_given?
-        @@formats.each { |k,v| yield(k,v) }
-        self
-    else
-        @@formats
-    end
-end
+    @formats = nil
+    @trace_proc = nil
+    @exit_block_set_up = nil
 
 class << self
+    def formats(&block)
+       @formats ||= init_formats()
+       if block_given?
+          @formats.each { |k,v| yield k, v }
+          self
+       else
+          @formats
+       end
+    end
+
     # remove reference to the proc at exit
     def trace_proc=(p)
        if @trace_proc.nil? && !p.nil? && !@exit_block_set_up

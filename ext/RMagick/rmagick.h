@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.277 2009/09/11 22:29:30 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.278 2009/09/15 22:09:44 rmagick Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -363,6 +363,7 @@ EXTERN VALUE Class_ImageType;
 EXTERN VALUE Class_InterlaceType;
 EXTERN VALUE Class_InterpolatePixelMethod;
 EXTERN VALUE CLASS_LAYERMETHODTYPE;
+EXTERN VALUE Class_MagickFunction;
 EXTERN VALUE Class_NoiseType;
 EXTERN VALUE Class_OrientationType;
 EXTERN VALUE Class_PaintMethod;
@@ -954,6 +955,7 @@ extern VALUE Image_flop(VALUE);
 extern VALUE Image_flop_bang(VALUE);
 extern VALUE Image_frame(int, VALUE *, VALUE);
 extern VALUE Image_from_blob(VALUE, VALUE);
+extern VALUE Image_function_channel(int, VALUE *, VALUE);
 extern VALUE Image_gamma_channel(int, VALUE *, VALUE);
 extern VALUE Image_gamma_correct(int, VALUE *, VALUE);
 extern VALUE Image_gaussian_blur(int, VALUE *, VALUE);

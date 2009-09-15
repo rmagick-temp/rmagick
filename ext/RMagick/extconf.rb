@@ -201,6 +201,7 @@ have_func("snprintf", headers)
    "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9
    "FloodfillPaintImage",            # 6.3.7
+   "FunctionImageChannel",           # 6.4.8-8
    "GetAuthenticIndexQueue",         # 6.4.5-6
    "GetAuthenticPixels",             # 6.4.5-6
    "GetImageAlphaChannel",           # 6.3.9-2
@@ -257,6 +258,7 @@ have_struct_member("DrawInfo", "kerning", headers)    # 6.4.7-8
 have_struct_member("DrawInfo", "interline_spacing", headers)   # 6.5.5-8
 have_struct_member("DrawInfo", "interword_spacing", headers)   # 6.4.8-0
 have_type("DitherMethod", headers)                    # 6.4.2
+have_type("MagickFunction", headers)                  # 6.4.8-8
 have_type("ImageLayerMethod", headers)                # 6.3.6 replaces MagickLayerMethod
 have_type("long double", headers)
 #have_type("unsigned long long", headers)
@@ -317,6 +319,8 @@ have_enum_values("MagickEvaluateOperator", ["PowEvaluateOperator",           # 6
                                            "SineEvaluateOperator",           # 6.4.8-5
                                            "AddModulusEvaluateOperator"],    # 6.4.8-5
                                                                  headers)
+have_enum_values("MagickFunction", ["ArcsinFunction",                        # 6.5.2-8
+                                    "ArctanFunction"], headers)              # 6.5.2-8
 have_enum_values("ImageLayerMethod", ["FlattenLayer",                           # 6.3.6-2
                                       "MergeLayer",                             # 6.3.6
                                       "MosaicLayer",                            # 6.3.6-2

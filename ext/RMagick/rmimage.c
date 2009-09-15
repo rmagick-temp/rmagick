@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.354 2009/09/10 23:03:33 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.355 2009/09/15 22:09:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5123,6 +5123,77 @@ Image_from_blob(VALUE class, VALUE blob_arg)
     rm_set_user_artifact(images, info);
 
     return array_from_images(images);
+}
+
+
+/*
+ *  Method:     Image#function_channel(function, args[, channel...])
+ */
+VALUE
+Image_function_channel(int argc, VALUE *argv, VALUE self)
+{
+    Image *image, *new_image;
+    MagickFunction function;
+    unsigned long n, nparms;
+    volatile double *parameters;
+    double *parms;
+    ChannelType channels;
+    ExceptionInfo exception;
+
+    image = rm_check_destroyed(self);
+    channels = extract_channels(&argc, argv);
+
+    // The number of parameters depends on the function.
+    if (argc == 0)
+    {
+        rb_raise(rb_eArgError, "no function specified");
+    }
+
+    VALUE_TO_ENUM(argv[0], function, MagickFunction);
+    argc -= 1;
+    argv += 1;
+
+    switch (function)
+    {
+        case PolynomialFunction:
+            if (argc == 0)
+            {
+                rb_raise(rb_eArgError, "PolynomialFunction requires at least one argument.");
+            }
+            break;
+        case SinusoidFunction:
+#if defined(HAVE_ENUM_ARCSINFUNCTION)
+        case ArcsinFunction:
+#endif
+#if defined(HAVE_ENUM_ARCTANFUNCTION)
+        case ArctanFunction:
+#endif
+           if (argc < 1 || argc > 4)
+           {
+               rb_raise(rb_eArgError, "wrong number of arguments (%d for 1 to 4)", argc);
+           }
+           break;
+        default:
+            rb_raise(rb_eArgError, "undefined function");
+            break;
+    }
+
+    nparms = argc;
+    parameters = parms = ALLOC_N(double, nparms);
+
+    for (n = 0; n < nparms; n++)
+    {
+        parms[n] = NUM2DBL(argv[n]);
+    }
+
+    GetExceptionInfo(&exception);
+    new_image = rm_clone_image(image);
+    (void) FunctionImageChannel(new_image, channels, function, nparms, parms, &exception);
+    (void) xfree(parms);
+    rm_check_exception(&exception, new_image, DestroyOnError);
+    DestroyExceptionInfo(&exception);
+
+    return rm_image_new(new_image);
 }
 
 

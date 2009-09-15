@@ -1,4 +1,4 @@
-/* $Id: rmmain.c,v 1.301 2009/09/11 22:29:30 rmagick Exp $ */
+/* $Id: rmmain.c,v 1.302 2009/09/15 22:09:44 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmmain.c
@@ -343,6 +343,7 @@ Init_RMagick2(void)
     rb_define_method(Class_Image, "flop", Image_flop, 0);
     rb_define_method(Class_Image, "flop!", Image_flop_bang, 0);
     rb_define_method(Class_Image, "frame", Image_frame, -1);
+    rb_define_method(Class_Image, "function_channel", Image_function_channel, -1);
     rb_define_method(Class_Image, "gamma_channel", Image_gamma_channel, -1);
     rb_define_method(Class_Image, "gamma_correct", Image_gamma_correct, -1);
     rb_define_method(Class_Image, "gaussian_blur", Image_gaussian_blur, -1);
@@ -1224,6 +1225,20 @@ Init_RMagick2(void)
 #endif
     END_ENUM
 
+#if defined(HAVE_TYPE_MAGICKFUNCTION)
+    DEF_ENUM(MagickFunction)
+        ENUMERATOR(UndefinedFunction)
+        ENUMERATOR(PolynomialFunction)
+        ENUMERATOR(SinusoidFunction)
+#if defined(HAVE_ENUM_ARCSINFUNCTION)
+        ENUMERATOR(ArcsinFunction)
+#endif
+#if defined(HAVE_ENUM_ARCTANFUNCTION)
+        ENUMERATOR(ArctanFunction)
+#endif
+    END_ENUM
+#endif
+
 #if defined(HAVE_TYPE_IMAGELAYERMETHOD)
     DEF_ENUM(ImageLayerMethod)
 #else
@@ -1641,7 +1656,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/09/11 22:29:30 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/09/15 22:09:44 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

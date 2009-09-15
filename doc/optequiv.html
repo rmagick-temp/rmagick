@@ -108,7 +108,7 @@
     the tables on this page to determine which RMagick methods
     correspond to the options used by these tools.</p>
 
-    <p>The options listed below are for ImageMagick 6.5.4. Earlier
+    <p>The options listed below are for ImageMagick 6.5.5. Earlier
     releases of ImageMagick may not support all these options.
     Later releases of ImageMagick may have options that are not
     listed.</p>
@@ -303,6 +303,15 @@
         "image1.html#black_threshold">black_threshold</a>(<em>red_channel</em>
         [, <em>green_channel</em> [, <em>blue_channel</em> [,
         <em>opacity_channel</em>]]])</td>
+      </tr>
+
+      <tr>
+        <td>-blend <em>src-percent</em>x<em>dst-percent</em></td>
+
+        <td>Image#<a href=
+        "image1.html#blend">blend</a>(<em>overlay</em>,
+        <em>src_percent</em>, <em>dst_percent</em>,
+        <em>x_offset</em>=0, <em>y_offset</em>=0)</td>
       </tr>
 
       <tr>
@@ -680,6 +689,12 @@
       </tr>
 
       <tr>
+        <td>-dissimilarity-threshold <em>value</em></td>
+
+        <td>No equivalent</td>
+      </tr>
+
+      <tr>
         <td>-dissolve</td>
 
         <td>See <a href="#dissolve">-dissolve</a>, below</td>
@@ -1051,6 +1066,17 @@
         "imageattrs.html#pixel_interpolation_method">pixel_interpolation_method=</a>
         <em><a href=
         "constants.html#InterpolatePixelMethod">type</a></em></td>
+      </tr>
+
+      <tr>
+        <td>-interline-spacing <em>value</em></td>
+
+        <td>Draw#<a href=
+        "draw.html#interword_spacing">interline_spacing</a>(<em>value</em>)
+        (for drawing)<br />
+        Draw#<a href=
+        "draw.html#interword_spacing_eq">interline_spacing=</a><em>value</em>
+        (for annotation)</td>
       </tr>
 
       <tr>

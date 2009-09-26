@@ -207,6 +207,7 @@ have_func("snprintf", headers)
    "GetImageAlphaChannel",           # 6.3.9-2
    "GetVirtualPixels",               # 6.4.5-6
    "LevelImageColors",               # 6.4.2
+   "LevelColorsImageChannel",        # 6.5.6-4
    "LevelizeImageChannel",           # 6.4.2
    "LiquidRescaleImage",             # 6.3.8-2
    "OpaquePaintImageChannel",        # 6.3.7-10

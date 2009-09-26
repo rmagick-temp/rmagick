@@ -1,4 +1,4 @@
-/* $Id: rmilist.c,v 1.92 2009/06/03 23:08:30 rmagick Exp $ */
+/* $Id: rmilist.c,v 1.93 2009/09/26 22:31:10 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmilist.c
@@ -510,6 +510,7 @@ ImageList_optimize_layers(VALUE self, VALUE method)
     Image *images, *new_images, *new_images2;
     LAYERMETHODTYPE mthd;
     ExceptionInfo exception;
+    QuantizeInfo quantize_info;
 
     new_images2 = NULL;     // defeat "unused variable" message
 
@@ -561,7 +562,12 @@ ImageList_optimize_layers(VALUE self, VALUE method)
             OptimizeImageTransparency(new_images, &exception);
             rm_check_exception(&exception, new_images, DestroyOnError);
             // mogrify supports -dither here. We don't.
+#if defined(HAVE_REMAPIMAGE)
+            GetQuantizeInfo(&quantize_info);
+            (void) RemapImages(&quantize_info, new_images, NULL);
+#else
             (void) MapImages(new_images, NULL, 0);
+#endif
             break;
         case OptimizePlusLayer:
             new_images = OptimizePlusImageLayers(images, &exception);
@@ -867,7 +873,7 @@ ImageList_remap(int argc, VALUE *argv, VALUE self)
 
     images = images_from_imagelist(self);
 
-#if defined(HAVE_REMAPIMAGES)
+#if defined(HAVE_REMAPIMAGE)
     (void) RemapImages(&quantize_info, images, remap_image);
 #else
     (void) AffinityImages(&quantize_info, images, remap_image);

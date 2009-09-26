@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.355 2009/09/15 22:09:44 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.356 2009/09/26 22:30:26 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -6024,7 +6024,7 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
 VALUE
 Image_level_colors(int argc, VALUE *argv, VALUE self)
 {
-#if defined(HAVE_LEVELIMAGECOLORS)
+#if defined(HAVE_LEVELIMAGECOLORS) || defined(HAVE_LEVELCOLORSIMAGECHANNEL)
     Image *image, *new_image;
     MagickPixelPacket black_color, white_color;
     ChannelType channels;
@@ -6077,7 +6077,11 @@ Image_level_colors(int argc, VALUE *argv, VALUE self)
 
     new_image = rm_clone_image(image);
 
+#if defined(HAVE_LEVELCOLORSIMAGECHANNEL)      // new in 6.5.6-4
+    status = LevelColorsImageChannel(new_image, channels, &black_color, &white_color, invert);
+#else
     status = LevelImageColors(new_image, channels, &black_color, &white_color, invert);
+#endif
     rm_check_image_exception(new_image, DestroyOnError);
     if (!status)
     {
@@ -10129,7 +10133,7 @@ Image_threshold(VALUE self, VALUE threshold)
     image = rm_check_destroyed(self);
     new_image = rm_clone_image(image);
 
-    (void) ThresholdImage(new_image, NUM2DBL(threshold));
+    (void) BilevelImageChannel(new_image, DefaultChannels, NUM2DBL(threshold));
     rm_check_image_exception(new_image, DestroyOnError);
 
     return rm_image_new(new_image);

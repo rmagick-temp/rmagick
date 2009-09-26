@@ -1,4 +1,4 @@
-/* $Id: rmutil.c,v 1.179 2009/06/03 23:08:31 rmagick Exp $ */
+/* $Id: rmutil.c,v 1.180 2009/09/26 22:28:59 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmutil.c
@@ -599,22 +599,12 @@ rm_write_temp_image(Image *image, char *temp_name)
 void
 rm_delete_temp_image(char *temp_name)
 {
-#if defined(HAVE_SETIMAGEREGISTRY)
     MagickBooleanType okay = DeleteImageRegistry(temp_name+5);
 
     if (!okay)
     {
         rb_warn("DeleteImageRegistry failed for `%s'", temp_name);
     }
-#else
-    long registry_id = -1;
-
-    sscanf(temp_name, "mpri:%ld", &registry_id);
-    if (registry_id >= 0)
-    {
-        (void) DeleteMagickRegistry(registry_id);
-    }
-#endif
 }
 
 

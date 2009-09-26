@@ -721,8 +721,6 @@ class Image1_UT < Test::Unit::TestCase
 
         # 4 argument form
         assert_nothing_raised { img1.composite(img2, 0, 0, Magick::OverCompositeOp) }
-        # negative offsets are transformed to 0
-        assert_nothing_raised { img1.composite(img2, -10, -10, Magick::OverCompositeOp) }
         # there's way too many CompositeOperators to test them all, so just try few representative ops
         composite_ops.each do |op|
             assert_nothing_raised { img1.composite(img2, 0, 0, op) }
@@ -746,6 +744,9 @@ class Image1_UT < Test::Unit::TestCase
                 end
         end
         assert_raise(TypeError) { img1.composite(img2, 0, 0, 2, Magick::OverCompositeOp) }
+
+        # negative offsets raise an exception
+        assert_raise(Magick::ImageMagickError) { img1.composite(img2, -10, -10, Magick::OverCompositeOp) }
 
         img2.destroy!
         assert_raise(Magick::DestroyedImageError) { img1.composite(img2, Magick::CenterGravity, Magick::OverCompositeOp) }

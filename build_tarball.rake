@@ -1,6 +1,6 @@
 
 # Build the tar.gz, tar.bz2, and .gem files for an RMagick Release
-
+# Expects the CVS tag for release RMagick x.y.z to be in the form RMagick_x-y-z.
 # To use: cd to $HOME
 # run:    rake -f path/to/build_tarball.rake clean
 #         rake -f path/to/build_tarball.rake release=tag beta=whatever

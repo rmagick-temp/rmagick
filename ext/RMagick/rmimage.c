@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.356 2009/09/26 22:30:26 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.357 2009/10/05 21:52:56 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -737,6 +737,7 @@ Image_auto_gamma_channel(int argc, VALUE *argv, VALUE self)
     return auto_channel(argc, argv, self, AutoGammaImageChannel);
 #else
     rm_not_implemented();
+    return (VALUE) 0;
     argc = argc;
     argv = argv;
     self = self;
@@ -751,6 +752,7 @@ Image_auto_level_channel(int argc, VALUE *argv, VALUE self)
     return auto_channel(argc, argv, self, AutoLevelImageChannel);
 #else
     rm_not_implemented();
+    return (VALUE)0;
     argc = argc;
     argv = argv;
     self = self;
@@ -5132,6 +5134,7 @@ Image_from_blob(VALUE class, VALUE blob_arg)
 VALUE
 Image_function_channel(int argc, VALUE *argv, VALUE self)
 {
+#if defined(HAVE_FUNCTIONIMAGECHANNEL)
     Image *image, *new_image;
     MagickFunction function;
     unsigned long n, nparms;
@@ -5194,6 +5197,13 @@ Image_function_channel(int argc, VALUE *argv, VALUE self)
     DestroyExceptionInfo(&exception);
 
     return rm_image_new(new_image);
+#else
+    rm_not_implemented();
+    return (VALUE)0;
+    argc = argc;
+    argv = argv;
+    self = self;
+#endif
 }
 
 

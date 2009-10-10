@@ -1,6 +1,11 @@
+RMagick 2.12.2
+    o Add feature tests for SinusoidFunction and PolynomialFunction enum
+      values to allow compiling with ImageMagick 6.4.8-7 (bug report by Mark
+      Richman)
+
 RMagick 2.12.1
-    o Fix bug #27239, allow 2.12.0 to compile with older releases of RMagick
-      (bug report Sam Lown)
+    o Fix bug #27239, allow 2.12.0 to compile with older releases of ImageMagick
+      (bug report by Sam Lown)
 
 RMagick 2.12.0
     o Added Image#function_channel (available in ImageMagick 6.4.8-8)

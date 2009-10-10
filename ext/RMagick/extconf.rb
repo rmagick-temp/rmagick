@@ -321,7 +321,9 @@ have_enum_values("MagickEvaluateOperator", ["PowEvaluateOperator",           # 6
                                            "AddModulusEvaluateOperator"],    # 6.4.8-5
                                                                  headers)
 have_enum_values("MagickFunction", ["ArcsinFunction",                        # 6.5.2-8
-                                    "ArctanFunction"], headers)              # 6.5.2-8
+                                    "ArctanFunction",                        # 6.5.2-8
+                                    "PolynomialFunction",                    # 6.4.8-8
+                                    "SinusoidFunction"], headers)            # 6.4.8-8
 have_enum_values("ImageLayerMethod", ["FlattenLayer",                           # 6.3.6-2
                                       "MergeLayer",                             # 6.3.6
                                       "MosaicLayer",                            # 6.3.6-2

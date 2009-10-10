@@ -1,4 +1,4 @@
-/* $Id: rmimage.c,v 1.357 2009/10/05 21:52:56 rmagick Exp $ */
+/* $Id: rmimage.c,v 1.358 2009/10/10 21:48:49 rmagick Exp $ */
 /*============================================================================\
 |                Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmimage.c
@@ -5158,13 +5158,17 @@ Image_function_channel(int argc, VALUE *argv, VALUE self)
 
     switch (function)
     {
+#if defined(HAVE_ENUM_POLYNOMIALFUNCTION)
         case PolynomialFunction:
             if (argc == 0)
             {
                 rb_raise(rb_eArgError, "PolynomialFunction requires at least one argument.");
             }
             break;
+#endif
+#if defined(HAVE_ENUM_SINUSOIDFUNCTION)
         case SinusoidFunction:
+#endif
 #if defined(HAVE_ENUM_ARCSINFUNCTION)
         case ArcsinFunction:
 #endif

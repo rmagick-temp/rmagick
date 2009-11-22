@@ -197,6 +197,7 @@ have_func("snprintf", headers)
    "AutoGammaImageChannel",          # 6.5.5-1
    "AutoLevelImageChannel",          # 6.5.5-1
    "BlueShiftImage",                 # 6.5.4-3
+   "ConstituteComponentTerminus",    # 6.5.7-9
    "DeskewImage",                    # 6.4.2-5
    "EncipherImage",                  # 6.3.8-6
    "EqualizeImageChannel",           # 6.3.6-9

@@ -1,4 +1,4 @@
-/* $Id: rmagick.h,v 1.278 2009/09/15 22:09:44 rmagick Exp $ */
+/* $Id: rmagick.h,v 1.279 2009/11/22 00:38:15 baror Exp $ */
 /*=============================================================================
 |               Copyright (C) 2009 by Timothy P. Hunter
 | Name:     rmagick.h
@@ -139,6 +139,12 @@
     else\
         f = NULL;
 
+
+// ImageMagick 6.5.7 replaced DestroyConstitute with ConstituteComponentTerminus
+// Both have the same signature.
+#if defined(HAVE_CONSTITUTECOMPONENTTERMINUS)
+#define DestroyConstitute(void) ConstituteComponentTerminus(void)
+#endif
 
 // IM 6.4.1 replaced AllocateImage with AcquireImage.
 // Both have the same signature.

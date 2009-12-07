@@ -73,6 +73,27 @@ def check_multiple_imagemagick_versions()
 end
 
 
+# Ubuntu (maybe other systems) comes with a partial installation of
+# ImageMagick in the prefix /usr (some libraries, no includes, and no
+# binaries). This causes problems when /usr/lib is in the path (e.g., using
+# the default Ruby installation).
+def check_partial_imagemagick_versions()
+   prefix = config_string("prefix")
+   matches = [
+     prefix+"/lib/lib?agick*",
+     prefix+"/include/ImageMagick",
+     prefix+"/bin/Magick-config",
+   ].map do |file_glob|
+     Dir.glob(file_glob)
+   end
+   matches.delete_if { |arr| arr.empty? }
+   if 0 < matches.length and matches.length < 3
+      msg = "\nWarning: Found a partial ImageMagick installation. Your operating system likely has some built-in ImageMagick libraries but not all of ImageMagick. This will most likely cause problems at both compile and runtime.\nFound partial installation at: "+prefix+"\n"
+      Logging::message msg
+      message msg
+   end
+end
+
 
 
 if RUBY_PLATFORM =~ /mswin/
@@ -115,6 +136,7 @@ if RUBY_PLATFORM !~ /mswin|mingw/
   end
 
   check_multiple_imagemagick_versions()
+  check_partial_imagemagick_versions()
 
   # Ensure minimum ImageMagick version
   unless checking_for("ImageMagick version >= #{MIN_IM_VERS}")  do

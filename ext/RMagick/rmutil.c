@@ -1,10 +1,14 @@
-/* $Id: rmutil.c,v 1.180 2009/09/26 22:28:59 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmutil.c
-| Author:   Tim Hunter
-| Purpose:  Utility functions for RMagick
-\============================================================================*/
+/**************************************************************************//**
+ * Utility functions for RMagick.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmutil.c
+ * @version  $Id: rmutil.c,v 1.181 2009/12/20 02:33:34 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 #include <errno.h>
@@ -12,18 +16,22 @@
 static void handle_exception(ExceptionInfo *, Image *, ErrorRetention);
 
 
-/*
-    Extern:     magick_safe_malloc, magick_malloc, magick_free, magick_realloc
-    Purpose:    ImageMagick versions of standard memory routines.
-    Notes:      use when managing memory that ImageMagick may have
-                allocated or may free.
-
-                If malloc fails, it raises an exception.
-
-                magick_safe_malloc and magick_safe_realloc prevent exceptions
-                caused by integer overflow. Added in 6.3.5-9 but backwards
-                compatible with prior releases.
-*/
+/**
+ * ImageMagick safe version of malloc.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Use when managing memory that ImageMagick may have allocated or may free.
+ *   - If malloc fails, it raises an exception.
+ *   - magick_safe_malloc and magick_safe_realloc prevent exceptions caused by
+ *     integer overflow. Added in 6.3.5-9 but backwards compatible with prior
+ *     releases.
+ *
+ * @param count the number of quantum elements to allocate
+ * @param quantum the number of bytes in each quantum
+ * @return a pointer to a block of memory that is at least count*quantum
+ */
 void *
 magick_safe_malloc(const size_t count, const size_t quantum)
 {
@@ -38,6 +46,14 @@ magick_safe_malloc(const size_t count, const size_t quantum)
 }
 
 
+/**
+ * ImageMagick version of malloc.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param size the size of memory to allocate
+ * @return pointer to a block of memory
+ */
 void *
 magick_malloc(const size_t size)
 {
@@ -52,6 +68,13 @@ magick_malloc(const size_t size)
 }
 
 
+/**
+ * ImageMagick version of free.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ptr pointer to the existing block of memory
+ */
 void
 magick_free(void *ptr)
 {
@@ -59,6 +82,23 @@ magick_free(void *ptr)
 }
 
 
+/**
+ * ImageMagick safe version of realloc.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Use when managing memory that ImageMagick may have allocated or may free.
+ *   - If malloc fails, it raises an exception.
+ *   - magick_safe_malloc and magick_safe_realloc prevent exceptions caused by
+ *     integer overflow. Added in 6.3.5-9 but backwards compatible with prior
+ *     releases.
+ *
+ * @param memory the existing block of memory
+ * @param count the number of quantum elements to allocate
+ * @param quantum the number of bytes in each quantum
+ * @return a pointer to a block of memory that is at least count*quantum in size
+ */
 void *
 magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
 {
@@ -72,6 +112,15 @@ magick_safe_realloc(void *memory, const size_t count, const size_t quantum)
 }
 
 
+/**
+ * ImageMagick version of realloc.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ptr pointer to the existing block of memory
+ * @param size the new size of memory to allocate
+ * @return pointer to a block of memory
+ */
 void *
 magick_realloc(void *ptr, const size_t size)
 {
@@ -85,14 +134,18 @@ magick_realloc(void *ptr, const size_t size)
 }
 
 
-/*
-    Extern:     magick_clone_string
-    Purpose:    make a copy of a string in malloc'd memory
-    Notes:      Any existing string pointed to by *new_str is freed.
-                CloneString asserts if no memory. No need to check
-                its return value.
-
-*/
+/**
+ * Make a copy of a string in malloc'd memory.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Any existing string pointed to by *new_str is freed.
+ *   - CloneString asserts if no memory. No need to check its return value.
+ *
+ * @param new_str pointer to the new string
+ * @param str the string to copy
+ */
 void
  magick_clone_string(char **new_str, const char *str)
 {
@@ -100,11 +153,15 @@ void
 }
 
 
-/*
- *  Extern:     rm_strcasecmp(s1, s2)
- *  Purpose:    compare s1 and s2 ignoring case
- *  Returns:    same as strcmp(3)
-*/
+/**
+ * Compare s1 and s2 ignoring case.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param s1 the first string
+ * @param s2 the second string
+ * @return same as strcmp(3)
+ */
 int
 rm_strcasecmp(const char *s1, const char *s2)
 {
@@ -121,11 +178,16 @@ rm_strcasecmp(const char *s1, const char *s2)
 }
 
 
-/*
- *  Extern:     rm_strncasecmp(s1, s2, n)
- *  Purpose:    compare s1 and s2 ignoring case
- *  Returns:    same as strcmp(3)
-*/
+/**
+ * Compare s1 and s2 ignoring case.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param s1 the first string
+ * @param s2 the second string
+ * @param n number of characters to compare
+ * @return same as strcmp(3)
+ */
 int
 rm_strncasecmp(const char *s1, const char *s2, size_t n)
 {
@@ -146,10 +208,15 @@ rm_strncasecmp(const char *s1, const char *s2, size_t n)
 }
 
 
-/*
- *  Extern:     rm_check_ary_len(ary, len)
- *  Purpose:    raise exception if array too short
-*/
+/**
+ * Raise exception if array too short.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ary the array
+ * @param len the minimum length
+ * @throw IndexError
+ */
 void
 rm_check_ary_len(VALUE ary, long len)
 {
@@ -161,10 +228,15 @@ rm_check_ary_len(VALUE ary, long len)
 }
 
 
-/*
-    Extern:     rm_check_destroyed
-    Purpose:    raise an error if the image has been destroyed
-*/
+/**
+ * Raise an error if the image has been destroyed.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the image
+ * @return the C image structure for the image
+ * @throw DestroyedImageError
+ */
 Image *
 rm_check_destroyed(VALUE obj)
 {
@@ -180,10 +252,14 @@ rm_check_destroyed(VALUE obj)
 }
 
 
-/*
-    Extern:     rm_check_frozen
-    Purpose:    raise an error if the image has been destroyed or is frozen
-*/
+/**
+ * Raise an error if the image has been destroyed or is frozen.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the image
+ * @return the C image structure for the image
+ */
 Image *
 rm_check_frozen(VALUE obj)
 {
@@ -193,10 +269,15 @@ rm_check_frozen(VALUE obj)
 }
 
 
-/*
-    Extern:     rm_no_freeze(obj)
-    Purpose:    overrides freeze in classes that can't be frozen.
-*/
+/**
+ * Overrides freeze in classes that can't be frozen.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the object of the class to override
+ * @return 0
+ * @throw TypeError
+ */
 VALUE
 rm_no_freeze(VALUE obj)
 {
@@ -205,10 +286,14 @@ rm_no_freeze(VALUE obj)
 }
 
 
-/*
-    Extern:     rm_to_s
-    Purpose:    return obj.to_s, or obj if obj is already a string.
-*/
+/**
+ * Return obj.to_s, or obj if obj is already a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj a Ruby object
+ * @return a String representation of obj
+ */
 VALUE
 rm_to_s(VALUE obj)
 {
@@ -221,10 +306,15 @@ rm_to_s(VALUE obj)
 }
 
 
-/*
-    Extern:     rm_str2cstr(str, &len);
-    Purpose:    Supply our own version of the "obsolete" rb_str2cstr.
-*/
+/**
+ * Supply our own version of the "obsolete" rb_str2cstr.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param str the Ruby string
+ * @param len pointer to a long in which to store the number of characters
+ * @return a C string version of str
+ */
 char *
 rm_str2cstr(VALUE str, long *len)
 {
@@ -237,11 +327,14 @@ rm_str2cstr(VALUE str, long *len)
 }
 
 
-/*
- *  Static:     arg_is_number
- *  Purpose:    Try to convert the argument to a double,
- *              raise an exception if fail.
-*/
+/**
+ * Try to convert the argument to a double, raise an exception if fail.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the argument
+ * @return arg
+ */
 static VALUE
 arg_is_number(VALUE arg)
 {
@@ -252,10 +345,15 @@ arg_is_number(VALUE arg)
 }
 
 
-/*
- *  Static:     rescue_not_str
- *  Purpose:    called when `rb_str_to_str' raised an exception below
-*/
+/**
+ * Called when `rb_str_to_str' raises an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the argument
+ * @return 0
+ * @throw TypeError
+ */
 static VALUE
 rescue_not_str(VALUE arg)
 {
@@ -265,13 +363,16 @@ rescue_not_str(VALUE arg)
 }
 
 
-/*
- *  Extern:     rm_percentage(obj)
- *  Purpose:    Return a double between 0.0 and 1.0, inclusive.
- *              If the argument is a number convert to a Float object,
- *              otherwise it's supposed to be a string in the form "NN%".
- *              Convert to a number and then to a Float.
-*/
+/**
+ * Return a double between 0.0 and 1.0, inclusive. If the argument is a number
+ * convert to a Float object, otherwise it's supposed to be a string in the form
+ * "NN%". Convert to a number and then to a Float.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the argument
+ * @return a double
+ */
 double
 rm_percentage(VALUE arg)
 {
@@ -324,9 +425,13 @@ rm_percentage(VALUE arg)
 }
 
 
-/*
-    Static:     check_num2dbl
-    Purpose:    return 0 if rb_num2dbl doesn't raise an exception
+/**
+ * Return 0 if rb_num2dbl doesn't raise an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the object to convert to a double
+ * @return 0
  */
 static VALUE
 check_num2dbl(VALUE obj)
@@ -336,9 +441,13 @@ check_num2dbl(VALUE obj)
 }
 
 
-/*
-    Static:     rescue_not_dbl
-    Purpose:    called if rb_num2dbl raises an exception
+/**
+ * Called if rb_num2dbl raises an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ignored a Ruby object (unused)
+ * @return 0
  */
 static VALUE
 rescue_not_dbl(VALUE ignored)
@@ -348,10 +457,14 @@ rescue_not_dbl(VALUE ignored)
 }
 
 
-/*
-    Extern:     rm_check_num2dbl
-    Purpose:    Return 1 if the object can be converted to a double, 0 otherwise.
-*/
+/**
+ * Return 1 if the object can be converted to a double, 0 otherwise.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the object
+ * @return 1 or 0
+ */
 int
 rm_check_num2dbl(VALUE obj)
 {
@@ -359,11 +472,14 @@ rm_check_num2dbl(VALUE obj)
 }
 
 
-/*
- *  Extern:     rm_str_to_pct
- *  Purpose:    Given a string in the form NN% return the corresponding double.
+/**
+ * Given a string in the form NN% return the corresponding double.
  *
-*/
+ * No Ruby usage (internal function)
+ *
+ * @param str the string
+ * @return a double
+ */
 double
 rm_str_to_pct(VALUE str)
 {
@@ -392,13 +508,17 @@ rm_str_to_pct(VALUE str)
 }
 
 
-/*
- *  Extern:     rm_fuzz_to_dbl(obj)
- *  Purpose:    If the argument is a number, convert it to a double.
- *              Otherwise it's supposed to be a string in the form 'NN%'.
- *              Return a percentage of QuantumRange.
- *  Notes:      Called from Image#fuzz= and Info#fuzz=
-*/
+/**
+ * If the argument is a number, convert it to a double. Otherwise it's supposed
+ * to be a string in the form 'NN%'.  Return a percentage of QuantumRange.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param fuzz_arg the fuzz argument
+ * @return a double
+ * @see Image_fuzz
+ * @see Image_fuzz_eq
+ */
 double
 rm_fuzz_to_dbl(VALUE fuzz_arg)
 {
@@ -446,15 +566,21 @@ rm_fuzz_to_dbl(VALUE fuzz_arg)
 }
 
 
-/*
-    Extern:     rm_app2quantum
-    Purpose:    Convert a application-supplied number to a Quantum. If the object
-                is a Float, truncate it before converting.
-    Notes:      Ruby says that 2147483647.5 doesn't fit into an unsigned long.
-                If you truncate it, it works.
-                Should use this only when the input value is possibly subject
-                to this problem.
-*/
+/**
+ * Convert a application-supplied number to a Quantum. If the object is a Float,
+ * truncate it before converting.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Ruby says that 2147483647.5 doesn't fit into an unsigned long. If you
+ *     truncate it, it works.
+ *   - Should use this only when the input value is possibly subject to this
+ *     problem.
+ *
+ * @param obj the application-supplied number
+ * @return a Quantum
+ */
 Quantum
 rm_app2quantum(VALUE obj)
 {
@@ -469,14 +595,16 @@ rm_app2quantum(VALUE obj)
 }
 
 
-/*
-    Extern:     rm_cur_image
-    Purpose:    Sends the "cur_image" method to the object. If 'img'
-                is an ImageList, then cur_image is self[@scene].
-                If 'img' is an image, then cur_image is simply
-                'self'.
-    Returns:    the return value from "cur_image"
-*/
+/**
+ * Send the "cur_image" method to the object. If 'img' is an ImageList, then
+ * cur_image is self[\@scene]. If 'img' is an image, then cur_image is simply
+ * 'self'.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param img the object
+ * @return the return value from "cur_image"
+ */
 VALUE
 rm_cur_image(VALUE img)
 {
@@ -484,13 +612,16 @@ rm_cur_image(VALUE img)
 }
 
 
-/*
-    Extern:     rm_pixelpacket_to_color_name
-    Purpose:    Map the color intensity to a named color
-    Returns:    the named color as a String
-    Notes:      See below for the equivalent function that accepts an Info
-                structure instead of an Image.
-*/
+/**
+ * Map the color intensity to a named color.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @param color the color intensity as a PixelPacket
+ * @return the named color as a String
+ * @see rm_pixelpacket_to_color_name_info
+ */
 VALUE
 rm_pixelpacket_to_color_name(Image *image, PixelPacket *color)
 {
@@ -507,18 +638,23 @@ rm_pixelpacket_to_color_name(Image *image, PixelPacket *color)
 }
 
 
-/*
-    Extern:     rm_pixelpacket_to_color_name_info
-    Purpose:    Map the color intensity to a named color
-    Returns:    the named color as a String
-    Notes:      Accepts an Info structure instead of an Image (see above).
-                Simply create an Image from the Info, call QueryColorname,
-                and then destroy the Image.
-                If the Info structure is NULL, creates a new one.
-
-                Note that the default depth is always used, and the matte
-                value is set to False, which means "don't use the alpha channel".
-*/
+/**
+ * Map the color intensity to a named color.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Simply create an Image from the Info, call QueryColorname, and then
+ *     destroy the Image.
+ *   - If the Info structure is NULL, creates a new one.
+ *   - The default depth is always used, and the matte value is set to False,
+ *     which means "don't use the alpha channel".
+ *
+ * @param info the info
+ * @param color the color intensity as a PixelPacket
+ * @return the named color as a String
+ * @see rm_pixelpacket_to_color_name
+ */
 VALUE
 rm_pixelpacket_to_color_name_info(Info *info, PixelPacket *color)
 {
@@ -541,13 +677,19 @@ rm_pixelpacket_to_color_name_info(Info *info, PixelPacket *color)
 }
 
 
-/*
-    External:   write_temp_image
-    Purpose:    Write a temporary copy of the image to the IM registry
-    Returns:    the "filename" of the registered image
-    Notes:      The `temp_name' argument must point to an char array
-                of size MaxTextExtent.
-*/
+/**
+ * Write a temporary copy of the image to the IM registry.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - The `temp_name' argument must point to an char array of size
+ *     MaxTextExtent.
+ *
+ * @param image the image
+ * @param temp_name the temporary name to use
+ * @return the "filename" of the registered image
+ */
 void
 rm_write_temp_image(Image *image, char *temp_name)
 {
@@ -590,12 +732,13 @@ rm_write_temp_image(Image *image, char *temp_name)
 }
 
 
-/*
-    External:   delete_temp_image
-    Purpose:    Delete the temporary image from the registry
-    Returns:    void
-*/
-
+/**
+ * Delete the temporary image from the registry.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param temp_name the name of temporary image in the registry.
+ */
 void
 rm_delete_temp_image(char *temp_name)
 {
@@ -608,12 +751,17 @@ rm_delete_temp_image(char *temp_name)
 }
 
 
-/*
-    External:   rm_not_implemented
-    Purpose:    raise NotImplementedError
-    Notes:      Called when a xMagick API is not available.
-                Replaces Ruby's rb_notimplement function.
-*/
+/**
+ * Raise NotImplementedError.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Called when a xMagick API is not available.
+ *   - Replaces Ruby's rb_notimplement function.
+ *
+ * @throw NotImpError
+ */
 void
 rm_not_implemented(void)
 {
@@ -623,14 +771,20 @@ rm_not_implemented(void)
 }
 
 
-/*
-    Static:     rm_magick_error(msg, loc)
-    Purpose:    create a new ImageMagickError object and raise an exception
-    Notes:      does not return
-                This funky technique allows me to safely add additional
-                information to the ImageMagickError object in both 1.6.8 and
-                1.8.0. See www.ruby_talk.org/36408.
-*/
+/**
+ * Create a new ImageMagickError object and raise an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - This funky technique allows me to safely add additional information to
+ *     the ImageMagickError object in both 1.6.8 and 1.8.0.
+ *
+ * @param msg the error mesage
+ * @param loc the location of the error
+ * @throw ImageMagickError
+ * @see www.ruby_talk.org/36408.
+ */
 void
 rm_magick_error(const char *msg, const char *loc)
 {
@@ -644,11 +798,22 @@ rm_magick_error(const char *msg, const char *loc)
 }
 
 
-/*
-    Method:     ImageMagickError#initialize(msg, loc)
-    Purpose:    initialize a new ImageMagickError object - store
-                the "loc" string in the @magick_location instance variable
-*/
+/**
+ * Initialize a new ImageMagickError object - store the "loc" string in the
+ * \@magick_location instance variable.
+ *
+ * Ruby usage:
+ *   - @verbatim ImageMagickError#initialize(msg) @endverbatim
+ *   - @verbatim ImageMagickError#initialize(msg, loc) @endverbatim
+ *
+ * Notes:
+ *   - Default loc is nil
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -677,10 +842,15 @@ ImageMagickError_initialize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Function:   rm_get_property
-    Purpose:    Backport GetImageProperty for pre-6.3.1 versions of ImageMagick
-*/
+/**
+ * Backport GetImageProperty for pre-6.3.1 versions of ImageMagick.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param img the image
+ * @param property the property name
+ * @return the property value
+ */
 const char *
 rm_get_property(const Image *img, const char *property)
 {
@@ -688,10 +858,16 @@ rm_get_property(const Image *img, const char *property)
 }
 
 
-/*
-    Function:   rm_set_property
-    Purpose:    Backport SetImageProperty for pre-6.3.1 versions of ImageMagick
-*/
+/**
+ * Backport SetImageProperty for pre-6.3.1 versions of ImageMagick.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @param property the property name 
+ * @param value the property value
+ * @return true if successful, otherwise false
+ */
 MagickBooleanType
 rm_set_property(Image *image, const char *property, const char *value)
 {
@@ -699,11 +875,15 @@ rm_set_property(Image *image, const char *property, const char *value)
 }
 
 
-/*
-    Function:   rm_set_user_artifact
-    Purpose:    If a "user" option is present in the Info, assign its value to
-                a "user" artifact in each image.
-*/
+/**
+ * If a "user" option is present in the Info, assign its value to a "user"
+ * artifact in each image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param images a list of images
+ * @param info the info
+ */
 void rm_set_user_artifact(Image *images, Info *info)
 {
 #if defined(HAVE_SETIMAGEARTIFACT)
@@ -727,12 +907,17 @@ void rm_set_user_artifact(Image *images, Info *info)
 }
 
 
-/*
-    Function:   rm_get_optional_arguments
-    Purpose:    Collect optional method arguments via Magick::OptionalMethodArguments
-    Notes:      Creates an instance of Magick::OptionalMethodArguments, then yields
-                to a block in the context of the instance.
-*/
+/**
+ * Collect optional method arguments via Magick::OptionalMethodArguments.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Creates an instance of Magick::OptionalMethodArguments, then yields to a
+ *     block in the context of the instance.
+ *
+ * @param img the image
+ */
 void
 rm_get_optional_arguments(VALUE img)
 {
@@ -754,11 +939,15 @@ rm_get_optional_arguments(VALUE img)
 }
 
 
-/*
-    Static:     copy_options
-    Purpose:    copy image options from the Info structure to the Image structure
-*/
 #if defined(HAVE_SETIMAGEARTIFACT)
+/**
+ * Copy image options from the Info structure to the Image structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the Image structure to modify
+ * @param info the Info structure
+ */
 static void copy_options(Image *image, Info *info)
 {
     char property[MaxTextExtent];
@@ -779,11 +968,15 @@ static void copy_options(Image *image, Info *info)
 #endif
 
 
-/*
-    Extern:     rm_sync_image_options
-    Purpose:    Propagate ImageInfo values to the Image
-    Ref:        SyncImageSettings (in mogrify.c)
-*/
+/**
+ * Propagate ImageInfo values to the Image
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the Image structure to modify
+ * @param info the Info structure
+ * @see SyncImageSettings in mogrify.c in ImageMagick
+ */
 void rm_sync_image_options(Image *image, Info *info)
 {
     MagickStatusType flags;
@@ -947,14 +1140,18 @@ void rm_sync_image_options(Image *image, Info *info)
 }
 
 
-/*
-    Function:   rm_exif_by_entry
-    Purpose:    replicate old (< 6.3.2) EXIF:* functionality using GetImageProperty
-                by returning the exif entries as a single string, separated by \n's.
-                Do this so that RMagick.rb works no matter which version of
-                ImageMagick is in use.
-    Notes:      see magick/identify.c
-*/
+/**
+ * Replicate old (ImageMagick < 6.3.2) EXIF:* functionality using
+ * GetImageProperty by returning the exif entries as a single string, separated
+ * by \n's.  Do this so that RMagick.rb works no matter which version of
+ * ImageMagick is in use.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @return string representation of exif properties
+ * @see magick/identify.c in ImageMagick
+ */
 VALUE
 rm_exif_by_entry(Image *image)
 {
@@ -1029,14 +1226,18 @@ rm_exif_by_entry(Image *image)
 }
 
 
-/*
-    Function:   rm_exif_by_number
-    Purpose:    replicate old (< 6.3.2) EXIF:! functionality using GetImageProperty
-                by returning the exif entries as a single string, separated by \n's.
-                Do this so that RMagick.rb works no matter which version of
-                ImageMagick is in use.
-    Notes:      see magick/identify.c
-*/
+/**
+ * Replicate old (ImageMagick < 6.3.2) EXIF:! functionality using
+ * GetImageProperty by returning the exif entries as a single string, separated
+ * by \n's. Do this so that RMagick.rb works no matter which version of
+ * ImageMagick is in use.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @return string representation of exif properties
+ * @see magick/identify.c in ImageMagick
+ */
 VALUE
 rm_exif_by_number(Image *image)
 {
@@ -1111,11 +1312,21 @@ rm_exif_by_number(Image *image)
 }
 
 
-/*
- *  Extern:     rm_get_geometry
- *  Purpose:    Get the values from a Geometry object and return
- *              them in C variables.
-*/
+/**
+ * Get the values from a Geometry object and return them in C variables.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - No return value: modifies x, y, width, height, and flag
+ *
+ * @param geom the Geometry object
+ * @param x pointer to the x position of the start of the rectangle
+ * @param y pointer to the y position of the start of the rectangle
+ * @param width pointer to the width of the rectangle
+ * @param height pointer to the height of the rectangle
+ * @param flag pointer to the Geometry's flag
+ */
 void
 rm_get_geometry(
     VALUE geom,
@@ -1161,11 +1372,17 @@ rm_get_geometry(
 }
 
 
-/*
- *  Extern:     rm_clone_image
- *  Purpose:    clone an image, handle errors
- *  Notes:      don't trace creation - the clone may not be used as an Image
- *              object. Let the caller do the trace if desired.
+/**
+ * Clone an image, handle errors.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Don't trace creation - the clone may not be used as an Image object. Let
+ *     the caller do the trace if desired.
+ *
+ * @param image the image to clone
+ * @return the cloned image
  */
 Image *
 rm_clone_image(Image *image)
@@ -1186,11 +1403,21 @@ rm_clone_image(Image *image)
 }
 
 
-/*
-    Extern:     rm_progress_monitor
-    Purpose:    SetImage(Info)ProgressMonitor exit
-    Notes:      ImageMagick's "tag" argument is unused. We pass along the method name instead.
-*/
+/**
+ * SetImage(Info)ProgressMonitor exit.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - ImageMagick's "tag" argument is unused. We pass along the method name
+ *     instead.
+ *
+ * @param tag ImageMagick argument (unused)
+ * @param of the offset type
+ * @param sp the size type
+ * @param client_data pointer to the progress method to call
+ * @return true if calling client_data returns a non-nil value, otherwise false
+ */
 MagickBooleanType
 rm_progress_monitor(
     const char *tag,
@@ -1219,12 +1446,16 @@ rm_progress_monitor(
 }
 
 
-/*
-    Extern:     rm_split
-    Purpose:    Remove the ImageMagick links between images in an scene
-                sequence.
-    Notes:      The images remain grouped via the ImageList
-*/
+/**
+ * Remove the ImageMagick links between images in an scene sequence.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - The images remain grouped via the ImageList
+ *
+ * @param image the image
+ */
 void
 rm_split(Image *image)
 {
@@ -1240,11 +1471,16 @@ rm_split(Image *image)
 }
 
 
-/*
-    Extern:     rm_check_image_exception
-    Purpose:    If an ExceptionInfo struct in a list of images indicates a warning,
-                issue a warning message. If an ExceptionInfo struct indicates an
-                error, raise an exception and optionally destroy the images.
+/**
+ * If an ExceptionInfo struct in a list of images indicates a warning, issue a
+ * warning message. If an ExceptionInfo struct indicates an error, raise an
+ * exception and optionally destroy the images.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param imglist the list of images
+ * @param retention retention strategy in case of an error (either RetainOnError
+ * or DestroyOnError)
  */
 void
 rm_check_image_exception(Image *imglist, ErrorRetention retention)
@@ -1286,9 +1522,15 @@ rm_check_image_exception(Image *imglist, ErrorRetention retention)
 }
 
 
-/*
- *  Extern:     rm_check_exception
- *  Purpose:    Call handle_exception if there is an exception to handle.
+/**
+ * Call handle_exception if there is an exception to handle.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param exception information about the exception
+ * @param imglist the images that caused the exception
+ * @param retention retention strategy in case of an error (either RetainOnError
+ * or DestroyOnError)
  */
 void
 rm_check_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retention)
@@ -1303,10 +1545,15 @@ rm_check_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention rete
 
 
 
-/*
- *  Extern:     rm_warning_handler
- *  Purpose:    called from ImageMagick for a warning
-*/
+/**
+ * Called from ImageMagick for a warning.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param severity information about the severity of the warning (ignored)
+ * @param reason the reason for the warning
+ * @param description description of the warning
+ */
 void
 rm_warning_handler(const ExceptionType severity, const char *reason, const char *description)
 {
@@ -1318,10 +1565,15 @@ rm_warning_handler(const ExceptionType severity, const char *reason, const char 
 }
 
 
-/*
- *  Extern:     rm_error_handler
- *  Purpose:    called from ImageMagick for a error
-*/
+/**
+ * Called from ImageMagick for a error.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param severity information about the severity of the error (ignored)
+ * @param reason the reason for the error
+ * @param description description of the error
+ */
 void
 rm_error_handler(const ExceptionType severity, const char *reason, const char *description)
 {
@@ -1343,10 +1595,16 @@ rm_error_handler(const ExceptionType severity, const char *reason, const char *d
 }
 
 
-/*
- *  Extern:     rm_fatal_error_handler
- *  Purpose:    called from ImageMagick for a fatal error
-*/
+/**
+ * Called from ImageMagick for a fatal error.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param severity information about the severity of the error
+ * @param reason the reason for the error
+ * @param description description of the error (ignored)
+ * @throw FatalImageMagickError
+ */
 void
 rm_fatal_error_handler(const ExceptionType severity, const char *reason, const char *description)
 {
@@ -1355,13 +1613,18 @@ rm_fatal_error_handler(const ExceptionType severity, const char *reason, const c
 }
 
 
-/*
- *  Static:     handle_exception
- *  Purpose:    called when rm_check_exception determines that we need
- *              to either issue a warning message or raise an exception.
- *              This function allocates a bunch of stack so we don't call
- *              it unless we have to.
-*/
+/**
+ * Called when rm_check_exception determines that we need to either issue a
+ * warning message or raise an exception. This function allocates a bunch of
+ * stack so we don't call it unless we have to.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param exception information about the exception
+ * @param imglist the images that caused the exception
+ * @param retention retention strategy in case of an error (either RetainOnError
+ * or DestroyOnError)
+ */
 static void
 handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retention)
 {
@@ -1447,9 +1710,13 @@ handle_exception(ExceptionInfo *exception, Image *imglist, ErrorRetention retent
 }
 
 
-/*
- *  Extern:     rm_ensure_result
- *  Purpose:    RMagick expected a result. If it got NULL instead raise an exception.
+/**
+ * RMagick expected a result. If it got NULL instead raise an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the expected result
+ * @throw RuntimeError
  */
 void
 rm_ensure_result(Image *image)

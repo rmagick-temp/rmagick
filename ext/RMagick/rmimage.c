@@ -1,20 +1,31 @@
-/* $Id: rmimage.c,v 1.358 2009/10/10 21:48:49 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmimage.c
-| Author:   Tim Hunter
-| Purpose:  Image class method definitions for RMagick
-\============================================================================*/
+/**************************************************************************//**
+ * Image class method definitions for RMagick.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmimage.c
+ * @version  $Id: rmimage.c,v 1.359 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 #include "magick/xwindow.h"     // XImageInfo
 
+/** Method that effects an image */
 typedef Image *(effector_t)(const Image *, const double, const double, ExceptionInfo *);
+/** Method that flips an image */
 typedef Image *(flipper_t)(const Image *, ExceptionInfo *);
+/** Method that magnifies an image */
 typedef Image *(magnifier_t)(const Image *, ExceptionInfo *);
+/** Method that reads an image */
 typedef Image *(reader_t)(const Info *, ExceptionInfo *);
+/** Method that scales an image */
 typedef Image *(scaler_t)(const Image *, const unsigned long, const unsigned long, ExceptionInfo *);
+/** Method that computes threshold on an image */
 typedef MagickBooleanType (thresholder_t)(Image *, const char *);
+/** Method that transforms an image */
 typedef Image *(xformer_t)(const Image *, const RectangleInfo *, ExceptionInfo *);
 
 static VALUE cropper(int, int, VALUE *, VALUE);
@@ -33,10 +44,17 @@ static const char *BlackPointCompensationKey = "PROFILE:black-point-compensation
 
 
 
-/*
-    Static:     adaptive_method
-    Purpose:    call Adaptive(Blur|Sharpen)Image
-*/
+/**
+ * Call Adaptive(Blur|Sharpen)Image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param fp pointer to the function to call
+ * @return a new image
+ */
 static VALUE
 adaptive_method(int argc, VALUE *argv, VALUE self
                 , Image *fp(const Image *, const double, const double, ExceptionInfo *))
@@ -75,10 +93,17 @@ adaptive_method(int argc, VALUE *argv, VALUE self
 
 
 
-/*
-    Static:     adaptive_channel_method
-    Purpose:    call Adaptive(Blur|Sharpen)ImageChannel
-*/
+/**
+ * Call Adaptive(Blur|Sharpen)ImageChannel.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param fp pointer to the function to call
+ * @return a new image
+ */
 static VALUE
 adaptive_channel_method(int argc, VALUE *argv, VALUE self
                         , Image *fp(const Image *, const ChannelType, const double, const double, ExceptionInfo *))
@@ -118,10 +143,23 @@ adaptive_channel_method(int argc, VALUE *argv, VALUE self
 }
 
 
-/*
-    Method:     Image#adaptive_blur(radius=0.0, sigma=1.0)
-    Purpose:    call AdaptiveBlurImage
-*/
+/**
+ * Call AdaptiveBlurImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_blur @endverbatim
+ *   - @verbatim Image#adaptive_blur(radius) @endverbatim
+ *   - @verbatim Image#adaptive_blur(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_blur(int argc, VALUE *argv, VALUE self)
 {
@@ -130,10 +168,26 @@ Image_adaptive_blur(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#adaptive_blur_channel(radius=0.0, sigma=1.0[ , channel...])
-    Purpose:    call AdaptiveBlurImageChannel
-*/
+/**
+ * Call AdaptiveBlurImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_blur_channel @endverbatim
+ *   - @verbatim Image#adaptive_blur_channel(radius) @endverbatim
+ *   - @verbatim Image#adaptive_blur_channel(radius, sigma) @endverbatim
+ *   - @verbatim Image#adaptive_blur_channel(radius, sigma, channel) @endverbatim
+ *   - @verbatim Image#adaptive_blur_channel(radius, sigma, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -141,11 +195,18 @@ Image_adaptive_blur_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#adaptive_resize(scale_val)
-                Image#adaptive_resize(cols, rows)
-    Purpose:    Call AdaptiveResizeImage
-*/
+/**
+ * Call AdaptiveResizeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_resize(scale_val) @endverbatim
+ *   - @verbatim Image#adaptive_resize(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
 {
@@ -194,10 +255,23 @@ Image_adaptive_resize(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#adaptive_sharpen(radius=0.0, sigma=1.0)
-    Purpose:    call AdaptiveSharpenImage
-*/
+/**
+ * Call AdaptiveSharpenImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_sharpen @endverbatim
+ *   - @verbatim Image#adaptive_sharpen(radius) @endverbatim
+ *   - @verbatim Image#adaptive_sharpen(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
 {
@@ -206,10 +280,17 @@ Image_adaptive_sharpen(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#adaptive_sharpen_channel(radius=0.0, sigma=1.0[, channel...])
-    Purpose:    Call AdaptiveSharpenImageChannel
-*/
+/**
+ * Call AdaptiveSharpenImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_sharpen_channel(radius=0.0, sigma=1.0[, channel...]) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -218,14 +299,27 @@ Image_adaptive_sharpen_channel(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#adaptive_threshold(width=3, height=3, offset=0)
-    Purpose:    selects an individual threshold for each pixel based on
-                the range of intensity values in its local neighborhood.
-                This allows for thresholding of an image whose global
-                intensity histogram doesn't contain distinctive peaks.
-    Returns:    a new image
-*/
+/**
+ * Selects an individual threshold for each pixel based on the range of
+ * intensity values in its local neighborhood. This allows for thresholding of
+ * an image whose global intensity histogram doesn't contain distinctive peaks.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#adaptive_threshold @endverbatim
+ *   - @verbatim Image#adaptive_threshold(width) @endverbatim
+ *   - @verbatim Image#adaptive_threshold(width, height) @endverbatim
+ *   - @verbatim Image#adaptive_threshold(width, height, offset) @endverbatim
+ *
+ * Notes:
+ *   - Default width is 3
+ *   - Default height is 3
+ *   - Default offset is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
 {
@@ -262,13 +356,19 @@ Image_adaptive_threshold(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#add_compose_mask(mask)
-    Purpose:    Set the image composite mask
-    Ref:        SetImageMask
-    Notes:      Returns self
-    See also:   Image#mask(), #delete_compose_mask()
-*/
+/**
+ * Set the image composite mask. 
+ *
+ * Ruby usage:
+ *   - @verbatim Image#add_compose_mask(mask) @endverbatim
+ *
+ * @param self this object
+ * @param mask the composite mask
+ * @return self
+ * @see Image_mask
+ * @see Image_delete_compose_mask
+ * @see SetImageMask in ImageMagick
+ */
 VALUE
 Image_add_compose_mask(VALUE self, VALUE mask)
 {
@@ -294,11 +394,16 @@ Image_add_compose_mask(VALUE self, VALUE mask)
 }
 
 
-/*
-    Method:     Image#add_noise(noise_type)
-    Purpose:    add random noise to a copy of the image
-    Returns:    a new image
-*/
+/**
+ * Add random noise to a copy of the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#add_noise(noise_type) @endverbatim
+ *
+ * @param self this object
+ * @param noise the noise
+ * @return a new image
+ */
 VALUE
 Image_add_noise(VALUE self, VALUE noise)
 {
@@ -321,11 +426,22 @@ Image_add_noise(VALUE self, VALUE noise)
     return rm_image_new(new_image);
 }
 
-/*
-    Method:     Image#add_noise_channel(noise_type[,channel...])
-    Purpose:    add random noise to a copy of the image
-    Returns:    a new image
-*/
+/**
+ * Add random noise to a copy of the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#add_noise_channel(noise_type) @endverbatim
+ *   - @verbatim Image#add_noise_channel(noise_type,channel) @endverbatim
+ *   - @verbatim Image#add_noise_channel(noise_type,channel,channel,...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -362,11 +478,16 @@ Image_add_noise_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#add_profile(name)
-    Purpose:    adds all the profiles in the specified file
-    Notes:      `name' is the profile filename
-*/
+/**
+ * Add all the profiles in the specified file.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#add_profile(name) @endverbatim
+ *
+ * @param self this object
+ * @param name the profile filename
+ * @return self
+ */
 VALUE
 Image_add_profile(VALUE self, VALUE name)
 {
@@ -430,17 +551,25 @@ Image_add_profile(VALUE self, VALUE name)
 
 
 
-/*
-    Method:         Image#alpha(type)
-    Purpose:        Calls SetImageAlphaChannel
-    Notes:          Replaces matte=, alpha=
-                    Originally there was an alpha attribute getter and setter.
-                    These are replaced with alpha? and alpha(type). We
-                    still define (but don't document) alpha=. For backward
-                    compatibility, if this method is called without an argument,
-                    make it act like the old alpha getter and return true if the
-                    matte channel is active, false otherwise.
-*/
+/**
+ * Calls SetImageAlphaChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#alpha(type) @endverbatim
+ *
+ * Notes:
+ *   - Replaces matte=, alpha=
+ *   - Originally there was an alpha attribute getter and setter. These are
+ *     replaced with alpha? and alpha(type). We still define (but don't
+ *     document) alpha=. For backward compatibility, if this method is called
+ *     without an argument, make it act like the old alpha getter and return
+ *     true if the matte channel is active, false otherwise.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the type (or true/false if called without an argument, see above)
+ */
 VALUE
 Image_alpha(int argc, VALUE *argv, VALUE self)
 {
@@ -501,11 +630,18 @@ Image_alpha(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#alpha?
-    Returns:    true if the image's alpha channel is activated
-    Notes:      Replaces Image#matte
-*/
+/**
+ * Determine whether the image's alpha channel is activated.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#alpha? @endverbatim
+ *
+ * Notes:
+ *   - Replaces Image#matte
+ *
+ * @param self this object
+ * @return true if the image's alpha channel is activated
+ */
 VALUE
 Image_alpha_q(VALUE self)
 {
@@ -518,13 +654,19 @@ Image_alpha_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#alpha=(alpha)
-    Purpose:    Equivalent to -alpha option
-    Returns:    alpha
-    Notes:      see mogrify.c
-    Notes:      Deprecated. See Image_alpha.
-*/
+/**
+ * Equivalent to -alpha option.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#alpha=(alpha) @endverbatim
+ *
+ * @param self this object
+ * @param type the alpha type
+ * @return alpha
+ * @deprecated This method has been deprecated. Please use Image_alpha.
+ * @see Image_alpha
+ * @see mogrify.c (in ImageMagick)
+ */
 VALUE
 Image_alpha_eq(VALUE self, VALUE type)
 {
@@ -535,11 +677,16 @@ Image_alpha_eq(VALUE self, VALUE type)
 }
 
 
-/*
-    Method:     Image#affine_transform(affine_matrix)
-    Purpose:    transforms an image as dictated by the affine matrix argument
-    Returns:    a new image
-*/
+/**
+ * Transform an image as dictated by the affine matrix argument.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#affine_transform(affine_matrix) @endverbatim
+ *
+ * @param self this object
+ * @param affine the affine matrix
+ * @return a new image
+ */
 VALUE
 Image_affine_transform(VALUE self, VALUE affine)
 {
@@ -563,14 +710,21 @@ Image_affine_transform(VALUE self, VALUE affine)
     return rm_image_new(new_image);
 }
 
-/*
-    Method:     Image#["key"]
-                Image#[:key]
-    Purpose:    Return the image property associated with "key"
-    Returns:    property value or nil if key doesn't exist
-    Notes:      Use Image#[]= (aset) to establish more properties
-                or change the value of an existing property.
-*/
+/**
+ * Return the image property associated with "key".
+ *
+ * Ruby usage:
+ *   - @verbatim Image#["key"] @endverbatim
+ *   - @verbatim Image#[:key] @endverbatim
+ *
+ * Notes:
+ *   - Use Image#[]= (aset) to establish more properties or change the value of
+ *     an existing property.
+ *
+ * @param self this object
+ * @param key_arg the key to get
+ * @return property value or nil if key doesn't exist
+ */
 VALUE
 Image_aref(VALUE self, VALUE key_arg)
 {
@@ -612,22 +766,26 @@ Image_aref(VALUE self, VALUE key_arg)
     return attr ? rb_str_new2(attr) : Qnil;
 }
 
-/*
-    Method:     Image#["key"] = attr
-                Image#[:key] = attr
-    Purpose:    Update or add image attribute "key"
-    Returns:    self
-    Notes:      Specify attr=nil to remove the key from the list.
-
-                SetImageProperty normally APPENDS the new value
-                to any existing value. Since this usage is tremendously
-                counter-intuitive, this function always deletes the
-                existing value before setting the new value.
-
-                There's no use checking the return value since
-                SetImageProperty returns "False" for many reasons,
-                some legitimate.
-*/
+/**
+ * Update or add image attribute "key".
+ *
+ * Ruby usage:
+ *   - @verbatim Image#["key"] = attr @endverbatim
+ *   - @verbatim Image#[:key] = attr @endverbatim
+ *
+ * Notes:
+ *   - Specify attr=nil to remove the key from the list.  
+ *   - SetImageProperty normally APPENDS the new value to any existing value.
+ *     Since this usage is tremendously counter-intuitive, this function always
+ *     deletes the existing value before setting the new value.
+ *   - There's no use checking the return value since SetImageProperty returns
+ *     "False" for many reasons, some legitimate.
+ *
+ * @param self this object
+ * @param key_arg the key to set
+ * @param attr_arg the value to which to set it
+ * @return self
+ */
 VALUE
 Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 {
@@ -675,10 +833,16 @@ Image_aset(VALUE self, VALUE key_arg, VALUE attr_arg)
 }
 
 
-/*
-    Static:     crisscross
-    Purpose:    Handle #transverse, #transform methods
-*/
+/**
+ * Handle #transverse, #transform methods.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param fp the transverse/transform method to call
+ * @return self if bang, otherwise a new image
+ */
 static VALUE
 crisscross(int bang, VALUE self, Image *fp(const Image *, ExceptionInfo *))
 {
@@ -708,6 +872,17 @@ crisscross(int bang, VALUE self, Image *fp(const Image *, ExceptionInfo *))
 
 
 
+/**
+ * Handle #auto_gamma_channel, #auto_level_channel methods.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param fp the channel method to call
+ * @return a new image
+ */
 static VALUE
 auto_channel(int argc, VALUE *argv, VALUE self, MagickBooleanType (*fp)(Image *, const ChannelType))
 {
@@ -730,6 +905,20 @@ auto_channel(int argc, VALUE *argv, VALUE self, MagickBooleanType (*fp)(Image *,
 }
 
 
+/**
+ * Get/set the auto Gamma channel
+ *
+ * Ruby usage:
+ *   - @verbatim Image#auto_gamma_channel @endverbatim
+ *   - @verbatim Image#auto_gamma_channel channel @endverbatim
+ *   - @verbatim Image#auto_gamma_channel channel, ... @endverbatim
+ *
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_auto_gamma_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -745,6 +934,20 @@ Image_auto_gamma_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Get/set the auto level channel
+ *
+ * Ruby usage:
+ *   - @verbatim Image#auto_level_channel @endverbatim
+ *   - @verbatim Image#auto_level_channel channel @endverbatim
+ *   - @verbatim Image#auto_level_channel channel, ... @endverbatim
+ *
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_auto_level_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -760,12 +963,17 @@ Image_auto_level_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#auto_orient
-    Purpose:    Implement mogrify's -auto_orient option
-                automatically orient image based on EXIF orientation value
-    Notes:      See mogrify.c in ImageMagick 6.2.8.
-*/
+/**
+ * Implement mogrify's -auto_orient option automatically orient image based on
+ * EXIF orientation value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see mogrify.c (in ImageMagick 6.2.8)
+ */
 static VALUE
 auto_orient(int bang, VALUE self)
 {
@@ -821,6 +1029,17 @@ auto_orient(int bang, VALUE self)
 }
 
 
+/**
+ * Implement mogrify's -auto_orient option automatically orient image based on
+ * EXIF orientation value.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#auto_orient @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see mogrify.c (in ImageMagick 6.2.8)
+ */
 VALUE
 Image_auto_orient(VALUE self)
 {
@@ -829,8 +1048,15 @@ Image_auto_orient(VALUE self)
 }
 
 
-/*
-    Returns nil if the image is already properly oriented
+/**
+ * Implement mogrify's -auto_orient option automatically orient image based on
+ * EXIF orientation value.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#auto_orient! @endverbatim
+ *
+ * @param self this object
+ * @return nil if the image is already properly oriented, otherwise self
 */
 VALUE
 Image_auto_orient_bang(VALUE self)
@@ -840,10 +1066,15 @@ Image_auto_orient_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#background_color
-    Purpose:    Return the name of the background color as a String.
-*/
+/**
+ * Return the name of the background color as a String.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#background_color @endverbatim
+ *
+ * @param self this object
+ * @return the background color
+ */
 VALUE
 Image_background_color(VALUE self)
 {
@@ -852,10 +1083,16 @@ Image_background_color(VALUE self)
 }
 
 
-/*
-    Method:     Image#background_color=
-    Purpose:    Set the the background color to the specified color spec.
-*/
+/**
+ * Set the the background color to the specified color spec.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#background_color= @endverbatim
+ *
+ * @param self this object
+ * @param color the color
+ * @return self
+ */
 VALUE
 Image_background_color_eq(VALUE self, VALUE color)
 {
@@ -865,10 +1102,15 @@ Image_background_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Image#base_columns
-    Purpose:    Return the number of rows (before transformations)
-*/
+/**
+ * Return the number of rows (before transformations).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#base_columns @endverbatim
+ *
+ * @param self this object
+ * @return the number of rows
+ */
 VALUE
 Image_base_columns(VALUE self)
 {
@@ -876,11 +1118,15 @@ Image_base_columns(VALUE self)
     return INT2FIX(image->magick_columns);
 }
 
-/*
-    Method:     Image#base_filename
-    Purpose:    Return the image filename (before transformations)
-    Notes:      If there is no base filename, return the current filename.
-*/
+/**
+ * Return the image filename (before transformations).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#base_filename @endverbatim
+ *
+ * @param self this object
+ * @return the base image filename (or the current filename if there is no base)
+ */
 VALUE
 Image_base_filename(VALUE self)
 {
@@ -895,10 +1141,15 @@ Image_base_filename(VALUE self)
     }
 }
 
-/*
-    Method:     Image#base_rows
-    Purpose:    Return the number of rows (before transformations)
-*/
+/**
+ * Return the number of rows (before transformations).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#base_rows @endverbatim
+ *
+ * @param self this object
+ * @return the number of rows
+ */
 VALUE
 Image_base_rows(VALUE self)
 {
@@ -907,11 +1158,15 @@ Image_base_rows(VALUE self)
 }
 
 
-/*
-    Method:     Image#bias  -> bias
-                Image#bias = a number between 0.0 and 1.0 or "NN%"
-    Purpose:    Get/set image bias (used when convolving an image)
-*/
+/**
+ * Get image bias (used when convolving an image).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#bias @endverbatim
+ *
+ * @param self this object
+ * @return the image bias
+ */
 VALUE
 Image_bias(VALUE self)
 {
@@ -920,6 +1175,16 @@ Image_bias(VALUE self)
 }
 
 
+/**
+ * Set image bias (used when convolving an image).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#bias = a number between 0.0 and 1.0 or "NN%" @endverbatim
+ *
+ * @param self this object
+ * @param pct the bias
+ * @return self
+ */
 VALUE
 Image_bias_eq(VALUE self, VALUE pct)
 {
@@ -933,10 +1198,21 @@ Image_bias_eq(VALUE self, VALUE pct)
     return self;
 }
 
-/*
- *  Method:     Image#bilevel_channel(threshold, channel=AllChannels)
- *  Returns     a new image
-*/
+/**
+ * Create a bilevel image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#bilevel_channel(threshold) @endverbatim
+ *   - @verbatim Image#bilevel_channel(threshold, channel) @endverbatim
+ *
+ * Notes:
+ *   - If no channel is specified AllChannels is used
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -964,10 +1240,15 @@ Image_bilevel_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#black_point_compensation
-    Purpose:    Return current value
-*/
+/**
+ * Return current black point compensation attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#black_point_compensation @endverbatim
+ *
+ * @param self this object
+ * @return the black point compensation
+ */
 VALUE
 Image_black_point_compensation(VALUE self)
 {
@@ -990,10 +1271,16 @@ Image_black_point_compensation(VALUE self)
 }
 
 
-/*
-    Method:     Image#black_point_compensation=true or false
-    Purpose:    Set black point compensation attribute
-*/
+/**
+ * Set black point compensation attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#black_point_compensation=true or false @endverbatim
+ *
+ * @param self this object
+ * @param arg the compensation
+ * @return self
+ */
 VALUE
 Image_black_point_compensation_eq(VALUE self, VALUE arg)
 {
@@ -1009,11 +1296,22 @@ Image_black_point_compensation_eq(VALUE self, VALUE arg)
 }
 
 
-/*
- *  Method:     Image#black_threshold(red_channel [, green_channel
- *                                    [, blue_channel [, opacity_channel]]]);
- *  Purpose:    Call BlackThresholdImage
-*/
+/**
+ * Call BlackThresholdImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#black_threshold(red_channel) @endverbatim
+ *   - @verbatim Image#black_threshold(red_channel, green_channel) @endverbatim
+ *   - @verbatim Image#black_threshold(red_channel, green_channel, blue_channel) @endverbatim
+ *   - @verbatim Image#black_threshold(red_channel, green_channel, blue_channel, opacity_channel) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see threshold_image
+ * @see Image_white_threshold
+ */
 VALUE
 Image_black_threshold(int argc, VALUE *argv, VALUE self)
 {
@@ -1021,11 +1319,21 @@ Image_black_threshold(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Static:     get_relative_offsets
-    Purpose:    compute offsets using the gravity to determine what the
-                offsets are relative to
-*/
+/**
+ * Compute offsets using the gravity to determine what the offsets are relative
+ * to.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - No return value: modifies x_offset and y_offset directly.
+ *
+ * @param grav the gravity
+ * @param image the destination image
+ * @param mark the source image
+ * @param x_offset pointer to x offset
+ * @param y_offset pointer to y offset
+ */
 static void
 get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long *y_offset)
 {
@@ -1071,10 +1379,20 @@ get_relative_offsets(VALUE grav, Image *image, Image *mark, long *x_offset, long
 }
 
 
-/*
-    Static:     get_offsets_from_gravity
-    Purpose:    compute watermark offsets from gravity type
-*/
+/**
+ * Compute watermark offsets from gravity type.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - No return value: modifies x_offset and y_offset directly.
+ *
+ * @param grav the gravity
+ * @param image the destination image
+ * @param mark the source image
+ * @param x_offset pointer to x offset
+ * @param y_offset pointer to y offset
+ */
 static void
 get_offsets_from_gravity(GravityType gravity, Image *image, Image *mark
                          , long *x_offset, long *y_offset)
@@ -1125,11 +1443,15 @@ get_offsets_from_gravity(GravityType gravity, Image *image, Image *mark
 }
 
 
-/*
-    Static:     check_for_long_value
-    Purpose:    called from rb_protect, returns the number if obj is really
-                a numeric value.
-*/
+/**
+ * Called from rb_protect, returns the number if obj is really a numeric value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param obj the value
+ * @return numeric value of obj
+ * @todo Make sure that we are really returning the obj here
+ */
 static VALUE
 check_for_long_value(VALUE obj)
 {
@@ -1140,10 +1462,21 @@ check_for_long_value(VALUE obj)
 }
 
 
-/*
-    Static:     get_composite_offsets
-    Purpose:    compute x- and y-offset of source image for a compositing method
-*/
+/**
+ * Compute x- and y-offset of source image for a compositing method.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - No return value: modifies x_offset and y_offset directly.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param dest the destination image
+ * @param src the source image
+ * @param x_offset pointer to x offset
+ * @param y_offset pointer to y offset
+ */
 static void
 get_composite_offsets(int argc, VALUE *argv, Image *dest, Image *src
                       , long *x_offset, long *y_offset)
@@ -1191,15 +1524,23 @@ get_composite_offsets(int argc, VALUE *argv, Image *dest, Image *src
 }
 
 
-/*
-    Static:     blend_geometry
-    Purpose:    Convert 2 doubles to a blend or dissolve geometry string.
-    Notes:      the geometry buffer needs to be at least 16 characters long.
-                For safety's sake this function asserts that it is at least
-                20 characters long.
-                The percentages must be in the range -1000 < n < 1000. This
-                is far in excess of what xMagick will allow.
-*/
+/**
+ * Convert 2 doubles to a blend or dissolve geometry string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - the geometry buffer needs to be at least 16 characters long.
+ *   - For safety's sake this function asserts that it is at least 20 characters
+ *     long.
+ *   - The percentages must be in the range -1000 < n < 1000. This is far in
+ *     excess of what xMagick will allow.
+ *
+ * @param geometry the geometry
+ * @param geometry_l length of geometry
+ * @param src_percent source percentage
+ * @param dst_percent destination percentage
+ */
 static void
 blend_geometry(char *geometry, size_t geometry_l, double src_percent, double dst_percent)
 {
@@ -1256,6 +1597,20 @@ blend_geometry(char *geometry, size_t geometry_l, double src_percent, double dst
 }
 
 
+/**
+ * Create a composite of an image and an overlay (for blending, dissolving, etc.).
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the original image
+ * @param overlay the overlay
+ * @param image_pct image percentage
+ * @param overlay_pct overlay percentage
+ * @param x_off the x offset
+ * @param y_off the y offset
+ * @param op the composite operator to use
+ * @return a new image
+ */
 static VALUE
 special_composite(Image *image, Image *overlay, double image_pct, double overlay_pct
                   , long x_off, long y_off, CompositeOperator op)
@@ -1278,13 +1633,28 @@ special_composite(Image *image, Image *overlay, double image_pct, double overlay
 }
 
 
-/*
-    Method:     Image#blend(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
-                Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
-    Purpose:    Corresponds to the composite -blend operation
-    Notes:      `percent' can be a number or a string in the form "NN%"
-                The default value for dst_percent is 100.0-src_percent
-*/
+/**
+ * Corresponds to the composite -blend operation.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#blend(overlay, src_percent, dst_percent) @endverbatim
+ *   - @verbatim Image#blend(overlay, src_percent, dst_percent, x_offset) @endverbatim
+ *   - @verbatim Image#blend(overlay, src_percent, dst_percent, x_offset, y_offset) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset, y_offset) @endverbatim
+ *
+ * Notes:
+ *   - Default x_offset is 0
+ *   - Default y_offset is 0
+ *   - Percent can be a number or a string in the form "NN%"
+ *   - The default value for dst_percent is 100.0-src_percent
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_blend(int argc, VALUE *argv, VALUE self)
 {
@@ -1332,9 +1702,20 @@ Image_blend(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
- *  Method:     Image#blue_shift(factor=1.5)
- *  Purpose:    Call BlueShiftImage
+/**
+ * Call BlueShiftImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#blue_shift @endverbatim
+ *   - @verbatim Image#blue_shift(factor) @endverbatim
+ *
+ * Notes:
+ *   - Default factor is 1.5
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
  */
 VALUE
 Image_blue_shift(int argc, VALUE *argv, VALUE self)
@@ -1378,10 +1759,25 @@ Image_blue_shift(int argc, VALUE *argv, VALUE self)
 DEF_ATTR_ACCESSOR(Image, blur, dbl)
 
 
-/*
- *  Method:     Image#blur_channel(radius = 0.0, sigma = 1.0, channel=AllChannels)
- *  Purpose:    Call BlurImageChannel
-*/
+/**
+ * Call BlurImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#blur_channel @endverbatim
+ *   - @verbatim Image#blur_channel(radius) @endverbatim
+ *   - @verbatim Image#blur_channel(radius, sigma) @endverbatim
+ *   - @verbatim Image#blur_channel(radius, sigma, channel) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_blur_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -1419,11 +1815,24 @@ Image_blur_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#blur_image(radius=0.0, sigma=1.0)
-    Purpose:    Blur the image
-    Notes:      The "blur" name is used for the attribute
-*/
+/**
+ * Blur the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#blur_image @endverbatim
+ *   - @verbatim Image#blur_image(radius) @endverbatim
+ *   - @verbatim Image#blur_image(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - The "blur" name is used for the attribute
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_blur_image(int argc, VALUE *argv, VALUE self)
 {
@@ -1431,12 +1840,21 @@ Image_blur_image(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#border(width, height, color)
-                Image#border!(width, height, color)
-    Purpose:    surrounds the image with a border of the specified width,
-                height, and named color
-*/
+/**
+ * Surrounds the image with a border of the specified width, height, and named
+ * color.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param width the width of the border
+ * @param height the height of the border
+ * @param color the color of the border
+ * @return self if bang, otherwise a new image
+ * @see Image_border
+ * @see Image_border_bang
+ */
 static VALUE
 border(int bang, VALUE self, VALUE width, VALUE height, VALUE color)
 {
@@ -1475,6 +1893,21 @@ border(int bang, VALUE self, VALUE width, VALUE height, VALUE color)
     return rm_image_new(new_image);
 }
 
+/**
+ * Surrounds the image with a border of the specified width, height, and named
+ * color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#border!(width, height, color) @endverbatim
+ *
+ * @param self this object
+ * @param width the width of the border
+ * @param height the height of the border
+ * @param color the color of the border
+ * @return self
+ * @see border
+ * @see Image_border
+ */
 VALUE
 Image_border_bang(VALUE self, VALUE width, VALUE height, VALUE color)
 {
@@ -1483,6 +1916,21 @@ Image_border_bang(VALUE self, VALUE width, VALUE height, VALUE color)
 }
 
 
+/**
+ * Surrounds the image with a border of the specified width, height, and named
+ * color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#border(width, height, color) @endverbatim
+ *
+ * @param self this object
+ * @param width the width of the border
+ * @param height the height of the border
+ * @param color the color of the border
+ * @return a new image
+ * @see border
+ * @see Image_border_bang
+ */
 VALUE
 Image_border(VALUE self, VALUE width, VALUE height, VALUE color)
 {
@@ -1491,10 +1939,15 @@ Image_border(VALUE self, VALUE width, VALUE height, VALUE color)
 }
 
 
-/*
-    Method:     Image#border_color
-    Purpose:    Return the name of the border color as a String.
-*/
+/**
+ * Return the name of the border color as a String.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#border_color @endverbatim
+ *
+ * @param self this object
+ * @return the name of the border color
+ */
 VALUE
 Image_border_color(VALUE self)
 {
@@ -1503,10 +1956,16 @@ Image_border_color(VALUE self)
 }
 
 
-/*
-    Method:     Image#border_color=
-    Purpose:    Set the the border color
-*/
+/**
+ * Set the the border color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#border_color= @endverbatim
+ *
+ * @param self this object
+ * @param color the color
+ * @return self
+ */
 VALUE
 Image_border_color_eq(VALUE self, VALUE color)
 {
@@ -1516,10 +1975,15 @@ Image_border_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Image#bounding_box
-    Purpose:    returns the bounding box of an image canvas
-*/
+/**
+ * returns the bounding box of an image canvas.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#bounding_box @endverbatim
+ *
+ * @param self this object
+ * @return the bounding box
+ */
 VALUE
 Image_bounding_box(VALUE self)
 {
@@ -1538,14 +2002,29 @@ Image_bounding_box(VALUE self)
 }
 
 
-/*
-    Method:     Image.capture(silent=false,
-                              frame=false,
-                              descend=false,
-                              screen=false,
-                              borders=false) { optional parms }
-    Purpose:    do a screen capture
-*/
+/**
+ * do a screen capture.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.capture @endverbatim
+ *   - @verbatim Image.capture(silent) { optional parms } @endverbatim
+ *   - @verbatim Image.capture(silent,frame) { optional parms } @endverbatim
+ *   - @verbatim Image.capture(silent,frame,descend) { optional parms } @endverbatim
+ *   - @verbatim Image.capture(silent,frame,descend,screen) { optional parms } @endverbatim
+ *   - @verbatim Image.capture(silent,frame,descend,screen,borders) { optional parms } @endverbatim
+ *
+ * Notes:
+ *   - Default silent is false
+ *   - Default frame is false
+ *   - Default descent is false
+ *   - Default screen is false
+ *   - Default borders if false
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_capture(int argc, VALUE *argv, VALUE self)
 {
@@ -1595,10 +2074,16 @@ Image_capture(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#change_geometry(geometry_string) { |cols, rows, image| }
-    Purpose:    parse geometry string, compute new image geometry
-*/
+/**
+ * parse geometry string, compute new image geometry.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#change_geometry(geometry_string) { |cols, rows, image| } @endverbatim
+ *
+ * @param self this object
+ * @param geom_arg the geometry string
+ * @return new image geometry
+ */
 VALUE
 Image_change_geometry(VALUE self, VALUE geom_arg)
 {
@@ -1632,11 +2117,16 @@ Image_change_geometry(VALUE self, VALUE geom_arg)
 }
 
 
-/*
-    Method:     Image#changed?
-    Purpose:    Return true if any pixel in the image has been altered since
-                the image was constituted.
-*/
+/**
+ * Return true if any pixel in the image has been altered since the image was
+ * constituted.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#changed? @endverbatim
+ *
+ * @param self this object
+ * @return true if altered, false otherwise
+ */
 VALUE
 Image_changed_q(VALUE self)
 {
@@ -1647,11 +2137,17 @@ Image_changed_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#channel
-    Purpose:    Extract a channel from the image.  A channel is a particular color
-                component of each pixel in the image.
-*/
+/**
+ * Extract a channel from the image.  A channel is a particular color component
+ * of each pixel in the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#channel @endverbatim
+ *
+ * @param self this object
+ * @param channel_arg the type of the channel to extract
+ * @return the channel of the specified type
+ */
 VALUE
 Image_channel(VALUE self, VALUE channel_arg)
 {
@@ -1673,10 +2169,21 @@ Image_channel(VALUE self, VALUE channel_arg)
 }
 
 
-/*
-    Method:     Image#channel_depth(channel_depth=AllChannels)
-    Purpose:    GetImageChannelDepth
-*/
+/**
+ * GetImageChannelDepth.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#channel_depth @endverbatim
+ *   - @verbatim Image#channel_depth(channel_depth) @endverbatim
+ *
+ * Notes:
+ *   - Default channel_depth is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the channel depth
+ */
 VALUE
 Image_channel_depth(int argc, VALUE *argv, VALUE self)
 {
@@ -1705,16 +2212,26 @@ Image_channel_depth(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#channel_extrema(channel=AllChannels)
-    Purpose:    Returns an array [min, max] where 'min' and 'max'
-                are the minimum and maximum values of all channels.
-    Notes:      GM's implementation is very different from ImageMagick.
-                This method follows the IM API very closely and then
-                shoehorn's the GM API to more-or-less fit. Note that
-                IM allows you to specify more than one channel argument.
-                GM does not.
-*/
+/**
+ * Return an array [min, max] where 'min' and 'max' are the minimum and maximum
+ * values of all channels.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#channel_extrema @endverbatim
+ *   - @verbatim Image#channel_extrema(channel) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *   - GM's implementation is very different from ImageMagick. This method
+ *     follows the IM API very closely and then shoehorn's the GM API to
+ *     more-or-less fit. Note that IM allows you to specify more than one
+ *     channel argument. GM does not.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return [min,max] of the channel
+ */
 VALUE
 Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 {
@@ -1748,10 +2265,21 @@ Image_channel_extrema(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#channel_mean(channel=AllChannels)
- *  Returns     An array [mean, std. deviation]
-*/
+/**
+ * Return an array of the mean and standard deviation for the channel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#channel_mean @endverbatim
+ *   - @verbatim Image#channel_mean(channel) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return an array [mean, std. deviation]
+ */
 VALUE
 Image_channel_mean(int argc, VALUE *argv, VALUE self)
 {
@@ -1785,11 +2313,24 @@ Image_channel_mean(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#charcoal(radius=0.0, sigma=1.0)
-    Purpose:    Return a new image that is a copy of the input image with the
-                edges highlighted
-*/
+/**
+ * Return a new image that is a copy of the input image with the edges
+ * highlighted.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#charcoal @endverbatim
+ *   - @verbatim Image#charcoal(radius) @endverbatim
+ *   - @verbatim Image#charcoal(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_charcoal(int argc, VALUE *argv, VALUE self)
 {
@@ -1797,10 +2338,16 @@ Image_charcoal(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#check_destroyed
-    Purpose:    If the target image has been destroyed, raises Magick::DestroyedImageError
-*/
+/**
+ * If the target image has been destroyed, raise Magick::DestroyedImageError.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#check_destroyed @endverbatim
+ *
+ * @param self this object
+ * @return nil
+ * @throw Magick::DestroyedImageError
+ */
 VALUE
 Image_check_destroyed(VALUE self)
 {
@@ -1809,11 +2356,20 @@ Image_check_destroyed(VALUE self)
 }
 
 
-/*
-    Method:     Image#chop
-    Purpose:    removes a region of an image and collapses the image to occupy
-                the removed portion
-*/
+/**
+ * Remove a region of an image and collapses the image to occupy the removed
+ * portion.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#chop @endverbatim
+ *
+ * @param self this object
+ * @param x x position of start of region
+ * @param y y position of start of region
+ * @param width width of region
+ * @param height height of region
+ * @return a new image
+ */
 VALUE
 Image_chop(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
@@ -1822,11 +2378,16 @@ Image_chop(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 }
 
 
-/*
-    Method:     Image#chromaticity
-    Purpose:    Return the red, green, blue, and white-point chromaticity
-                values as a Magick::ChromaticityInfo.
-*/
+/**
+ * Return the red, green, blue, and white-point chromaticity values as a
+ * Magick::ChromaticityInfo.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#chromaticity @endverbatim
+ *
+ * @param self this object
+ * @return the chromaticity values
+ */
 VALUE
 Image_chromaticity(VALUE self)
 {
@@ -1835,11 +2396,17 @@ Image_chromaticity(VALUE self)
 }
 
 
-/*
-    Method:     Image#chromaticity=
-    Purpose:    Set the red, green, blue, and white-point chromaticity
-                values from a Magick::ChromaticityInfo.
-*/
+/**
+ * Set the red, green, blue, and white-point chromaticity values from a
+ * Magick::ChromaticityInfo.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#chromaticity= @endverbatim
+ *
+ * @param self this object
+ * @param chroma the chromaticity
+ * @return self
+ */
 VALUE
 Image_chromaticity_eq(VALUE self, VALUE chroma)
 {
@@ -1849,10 +2416,15 @@ Image_chromaticity_eq(VALUE self, VALUE chroma)
 }
 
 
-/*
-    Method:     Image#clone
-    Purpose:    Copy an image, along with its frozen and tainted state.
-*/
+/**
+ * Copy an image, along with its frozen and tainted state.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#clone @endverbatim
+ *
+ * @param self this object
+ * @return a clone of this object
+ */
 VALUE
 Image_clone(VALUE self)
 {
@@ -1868,10 +2440,17 @@ Image_clone(VALUE self)
 }
 
 
-/*
-    Method:     Image#clut_channel
-    Purpose:    Equivalent to -clut option.
-*/
+/**
+ * Equivalent to -clut option.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#clut_channel @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_clut_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -1910,11 +2489,18 @@ Image_clut_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image_color_histogram(VALUE self);
-    Purpose:    Call GetImageHistogram
-    Notes:      returns hash {aPixel=>count}
-*/
+/**
+ * Call GetImageHistogram.
+ *
+ * Ruby usage:
+ *   - @verbatim Image_color_histogram(VALUE self); @endverbatim
+ *
+ * Notes:
+ *   - returns hash @verbatim {aPixel=>count} @endverbatim
+ *
+ * @param self this object
+ * @return a histogram
+ */
 VALUE
 Image_color_histogram(VALUE self)
 {
@@ -1978,12 +2564,17 @@ Image_color_histogram(VALUE self)
 }
 
 
-/*
-    Static:     set_profile(target_image, name, profile_image)
-    Purpose:    The `profile_image' argument is an IPTC or ICC profile. Store
-                all the profiles in the profile in the target image.
-                Called from Image_color_profile_eq and Image_iptc_profile_eq
-*/
+/**
+ * Store all the profiles in the profile in the target image. Called from
+ * Image_color_profile_eq and Image_iptc_profile_eq.
+ *
+ * No Ruby usage (internal function)
+ * 
+ * @param self this object
+ * @param name profile name
+ * @param profile an IPTC or ICC profile
+ * @return self
+ */
 static VALUE
 set_profile(VALUE self, const char *name, VALUE profile)
 {
@@ -2046,13 +2637,20 @@ set_profile(VALUE self, const char *name, VALUE profile)
 }
 
 
-/*
-    Method:     Image#color_profile
-    Purpose:    Return the ICC color profile as a String.
-    Notes:      If there is no profile, returns ""
-                This method has no real use but is retained for compatibility
-                with earlier releases of RMagick, where it had no real use either.
-*/
+/**
+ * Return the ICC color profile as a String.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#color_profile @endverbatim
+ *
+ * Notes:
+ *   - If there is no profile, returns ""
+ *   - This method has no real use but is retained for compatibility with
+ *     earlier releases of RMagick, where it had no real use either.
+ *
+ * @param self this object
+ * @return the ICC color profile
+ */
 VALUE
 Image_color_profile(VALUE self)
 {
@@ -2071,12 +2669,20 @@ Image_color_profile(VALUE self)
 }
 
 
-/*
-    Method:     Image#color_profile=(String)
-    Purpose:    Set the ICC color profile. The argument is a string.
-    Notes:      Pass nil to remove any existing profile.
-                Removes any existing profile before adding the new one.
-*/
+/**
+ * Set the ICC color profile.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#color_profile=(String) @endverbatim
+ *
+ * Notes:
+ *   - Pass nil to remove any existing profile.
+ *   - Removes any existing profile before adding the new one.
+ *
+ * @param self this object
+ * @param profile the profile to set, as a Ruby string
+ * @return self
+ */
 VALUE
 Image_color_profile_eq(VALUE self, VALUE profile)
 {
@@ -2089,13 +2695,26 @@ Image_color_profile_eq(VALUE self, VALUE profile)
 }
 
 
-/*
-    Method:     Image#color_flood_fill(target_color, fill_color, x, y, method)
-    Purpose:    changes the color value of any pixel that matches target_color
-                and is an immediate neighbor.
-    Notes:      use fuzz= to specify the tolerance amount (see Image_opaque)
-                Accepts either the FloodfillMethod or the FillToBorderMethod
-*/
+/**
+ * Change the color value of any pixel that matches target_color and is an
+ * immediate neighbor.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#color_flood_fill(target_color, fill_color, x, y, method) @endverbatim
+ *
+ * Notes:
+ *   - Use fuzz= to specify the tolerance amount
+ *   - Accepts either the FloodfillMethod or the FillToBorderMethod
+ *
+ * @param self this object
+ * @param target_color the color
+ * @param fill_color the color to fill
+ * @param xv the x position
+ * @param yv the y position
+ * @param method the method to call
+ * @return a new image
+ * @see Image_opaque
+ */
 VALUE
 Image_color_flood_fill( VALUE self, VALUE target_color, VALUE fill_color
                         , VALUE xv, VALUE yv, VALUE method)
@@ -2171,12 +2790,19 @@ Image_color_flood_fill( VALUE self, VALUE target_color, VALUE fill_color
 }
 
 
-/*
-    Method:     Image#colorize(r, g, b, target)
-    Purpose:    blends the fill color specified by "target" with each pixel in
-                the image. Specify the percentage blend for each r, g, b
-                component.
-*/
+/**
+ * Blend the fill color specified by "target" with each pixel in the image.
+ * Specify the percentage blend for each r, g, b component.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#colorize(r, g, b, target) @endverbatim
+ *   - @verbatim Image#colorize(r, g, b, matte, target) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_colorize(int argc, VALUE *argv, VALUE self)
 {
@@ -2222,15 +2848,22 @@ Image_colorize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#colormap(index<, new-color>)
-    Purpose:    return the color in the colormap at the specified index. If
-                a new color is specified, replaces the color at the index
-                with the new color.
-    Returns:    the name of the color.
-    Notes:      The "new-color" argument can be either a color name or
-                a Magick::Pixel.
-*/
+/**
+ * Return the color in the colormap at the specified index. If a new color is
+ * specified, replaces the color at the index with the new color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#colormap(index) @endverbatim
+ *   - @verbatim Image#colormap(index, new-color) @endverbatim
+ *
+ * Notes:
+ *   - The "new-color" argument can be either a color name or a Magick::Pixel.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the name of the color
+ */
 VALUE
 Image_colormap(int argc, VALUE *argv, VALUE self)
 {
@@ -2308,16 +2941,29 @@ Image_colormap(int argc, VALUE *argv, VALUE self)
     return rm_pixelpacket_to_color_name(image, &color);
 }
 
+/**
+ * Get image colors.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#colors @endverbatim
+ *
+ * @param self this object
+ * @return the colors
+ */
 DEF_ATTR_READER(Image, colors, ulong)
 
-/*
-    Method:     Image#colorspace
-    Purpose:    Return theImage pixel interpretation. If the colorspace is
-                RGB the pixels are red, green, blue. If matte is true, then
-                red, green, blue, and index. If it is CMYK, the pixels are
-                cyan, yellow, magenta, black. Otherwise the colorspace is
-                ignored.
-*/
+/**
+ * Return the Image pixel interpretation. If the colorspace is RGB the pixels
+ * are red, green, blue. If matte is true, then red, green, blue, and index. If
+ * it is CMYK, the pixels are cyan, yellow, magenta, black. Otherwise the
+ * colorspace is ignored.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#colorspace @endverbatim
+ *
+ * @param self this object
+ * @return the colorspace
+ */
 VALUE
 Image_colorspace(VALUE self)
 {
@@ -2328,11 +2974,17 @@ Image_colorspace(VALUE self)
 }
 
 
-/*
-    Method:     Image#colorspace=Magick::ColorspaceType
-    Purpose:    Set the image's colorspace
-    Notes:      Ref: Magick++'s Magick::colorSpace method
-*/
+/**
+ * Set the image's colorspace.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#colorspace=Magick::ColorspaceType @endverbatim
+ *
+ * @param self this object
+ * @param colorspace the colorspace
+ * @return self
+ * @see Magick::colorSpace in Magick++'s Magick::colorSpace
+ */
 VALUE
 Image_colorspace_eq(VALUE self, VALUE colorspace)
 {
@@ -2347,18 +2999,37 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
 }
 
 
+/**
+ * Get image columns.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#columns @endverbatim
+ *
+ * @param self this object
+ * @return the columns
+ */
 DEF_ATTR_READER(Image, columns, int)
 
 
-/*
-    Method:     new_image = Image.combine(red[, green[, blue[, opacity]]])
-    Purpose:    Combines the Red channel of the first image with the Green
-                channel of the 2nd image and the Blue channel of the 3rd
-                image. Any of the image arguments may be omitted or replaced
-                by nil.
-
-                Calls CombineImages
-*/
+/**
+ * Combine the Red channel of the first image with the Green channel of the
+ * 2nd image and the Blue channel of the 3rd image. Any of the image arguments
+ * may be omitted or replaced by nil.
+ *
+ * Ruby usage:
+ *   - @verbatim new_image = Image.combine(red) @endverbatim
+ *   - @verbatim new_image = Image.combine(red, green) @endverbatim
+ *   - @verbatim new_image = Image.combine(red, green, blue) @endverbatim
+ *   - @verbatim new_image = Image.combine(red, green, blue, opacity) @endverbatim
+ *
+ * Notes:
+ *   - Calls CombineImages.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE Image_combine(int argc, VALUE *argv, VALUE self)
 {
     ChannelType channel = 0;
@@ -2420,26 +3091,32 @@ VALUE Image_combine(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#compare_channel(ref_image, metric [, channel...]) { optional arguments }
-    Purpose:    compares one or more channels in two images and returns
-                the specified distortion metric and a comparison image.
-    Notes:      If no channels are specified, the default is AllChannels.
-                That case is the equivalent of the CompareImages method in
-                ImageMagick.
-
-                Originally this method was called channel_compare, but
-                that doesn't match the general naming convention that
-                methods which accept multiple optional ChannelType
-                arguments have names that end in _channel.  So I renamed
-                the method to compare_channel but kept channel_compare as
-                an alias.
-
-                The optional arguments are specified thusly:
-                    self.highlight_color color
-                    self.lowlight-color color
-                where color is either a color name or a Pixel.
-*/
+/**
+ * Compare one or more channels in two images and returns the specified
+ * distortion metric and a comparison image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compare_channel(ref_image, metric) { optional arguments } @endverbatim
+ *   - @verbatim Image#compare_channel(ref_image, metric, channel) { optional arguments } @endverbatim
+ *   - @verbatim Image#compare_channel(ref_image, metric, channel, ...) { optional arguments } @endverbatim
+ *
+ * Notes:
+ *   - If no channels are specified, the default is AllChannels. That case is
+ *     the equivalent of the CompareImages method in ImageMagick.
+ *   - Originally this method was called channel_compare, but that doesn't match
+ *     the general naming convention that methods which accept multiple optional
+ *     ChannelType arguments have names that end in _channel. So I renamed the
+ *     method to compare_channel but kept channel_compare as an alias.
+ *   - The optional arguments are specified thusly:
+ *     - self.highlight_color color
+ *     - self.lowlight-color color
+ *     where color is either a color name or a Pixel.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return an array of [difference_image,distortion]
+ */
 VALUE
 Image_compare_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -2491,10 +3168,15 @@ Image_compare_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#compose -> composite_op
-    Purpose:    Return the composite operator attribute
-*/
+/**
+ * Return the composite operator attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compose @endverbatim
+ *
+ * @param self this object
+ * @return the composite operator
+ */
 VALUE
 Image_compose(VALUE self)
 {
@@ -2503,10 +3185,16 @@ Image_compose(VALUE self)
 }
 
 
-/*
-    Method:     Image#compose=composite_op
-    Purpose:    Set the composite operator attribute
-*/
+/**
+ * Set the composite operator attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compose=composite_op @endverbatim
+ *
+ * @param self this object
+ * @param compose_arg the composite operator
+ * @return self
+ */
 VALUE
 Image_compose_eq(VALUE self, VALUE compose_arg)
 {
@@ -2515,19 +3203,27 @@ Image_compose_eq(VALUE self, VALUE compose_arg)
     return self;
 }
 
-/*
-    Method:     Image#composite(image, x_off, y_off, composite_op)
-                Image#composite(image, gravity, composite_op)
-                Image#composite(image, gravity, x_off, y_off, composite_op)
-    Purpose:    Call CompositeImage
-    Notes:      the other image can be either an Image or an Image.
-                The use of the GravityType to position the composited
-                image is based on Magick++. The `gravity' argument has
-                the same effect as the -gravity option does in the
-                `composite' utility.
-    Returns:    new composited image, or nil
-*/
-
+/**
+ * Call CompositeImage.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - The other image can be either an Image or an Image.
+ *   - The use of the GravityType to position the composited image is based on
+ *     Magick++.
+ *   - The `gravity' argument has the same effect as the -gravity option does in
+ *     the `composite' utility.
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param channels 
+ * @return self if bang, otherwise new composited image
+ * @see Image_composite
+ * @see Image_composite_bang
+ */
 static VALUE
 composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
 {
@@ -2675,6 +3371,21 @@ composite(int bang, int argc, VALUE *argv, VALUE self, ChannelType channels)
 }
 
 
+/**
+ * Call CompositeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite!(image, x_off, y_off, composite_op) @endverbatim
+ *   - @verbatim Image#composite!(image, gravity, composite_op) @endverbatim
+ *   - @verbatim Image#composite!(image, gravity, x_off, y_off, composite_op) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see composite
+ * @see Image_composite
+ */
 VALUE
 Image_composite_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -2682,6 +3393,21 @@ Image_composite_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Call CompositeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite(image, x_off, y_off, composite_op) @endverbatim
+ *   - @verbatim Image#composite(image, gravity, composite_op) @endverbatim
+ *   - @verbatim Image#composite(image, gravity, x_off, y_off, composite_op) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see composite
+ * @see Image_composite_bang
+ */
 VALUE
 Image_composite(int argc, VALUE *argv, VALUE self)
 {
@@ -2689,11 +3415,18 @@ Image_composite(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#composite_affine(composite, affine_matrix)
-    Purpose:    composites the source over the destination image as
-                dictated by the affine transform.
-*/
+/**
+ * Composite the source over the destination image as dictated by the affine
+ * transform.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite_affine(composite, affine_matrix) @endverbatim
+ *
+ * @param self this object
+ * @param source the source image
+ * @param affine_matrix affine transform matrix
+ * @return a new image
+ */
 VALUE
 Image_composite_affine(VALUE self, VALUE source, VALUE affine_matrix)
 {
@@ -2712,11 +3445,22 @@ Image_composite_affine(VALUE self, VALUE source, VALUE affine_matrix)
 }
 
 
-/*
-    Method:     Image#composite_channel(src_image, geometry, composite_operator[, channel...])
-                Image#composite_channel!(src_image, geometry, composite_operator[, channel...])
-    Purpose:    Call CompositeImageChannel
-*/
+/**
+ * Call CompositeImageChannel.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_composite_channel
+ * @see Image_composite_channel_bang
+ */
 static VALUE
 composite_channel(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -2740,6 +3484,21 @@ composite_channel(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Call CompositeImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite_channel(src_image, geometry, composite_operator) @endverbatim
+ *   - @verbatim Image#composite_channel(src_image, geometry, composite_operator, channel) @endverbatim
+ *   - @verbatim Image#composite_channel(src_image, geometry, composite_operator, channel, ...) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see composite_channel
+ * @see Image_composite_channel_bang
+ */
 VALUE
 Image_composite_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -2747,6 +3506,21 @@ Image_composite_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Call CompositeImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite_channel!(src_image, geometry, composite_operator) @endverbatim
+ *   - @verbatim Image#composite_channel!(src_image, geometry, composite_operator, channel) @endverbatim
+ *   - @verbatim Image#composite_channel!(src_image, geometry, composite_operator, channel, ...) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see composite_channel
+ * @see Image_composite_channel
+ */
 VALUE
 Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -2754,13 +3528,23 @@ Image_composite_channel_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#composite_mathematics
-                img.composite_mathematics(comp_img, A, B, C, D, gravity)
-                img.composite_mathematics(comp_img, A, B, C, D, x_off, y_off)
-                img.composite_mathematics(comp_img, A, B, C, D, gravity, x_off, y_off)
-   Purpose:     Composite using MathematicsCompositeOp
-   Notes:       New in 6.5.4-3.
+/**
+ * Composite using MathematicsCompositeOp.
+ *
+ * Ruby usage:
+ *   - @verbatim img.composite_mathematics(comp_img, A, B, C, D, gravity) @endverbatim
+ *   - @verbatim img.composite_mathematics(comp_img, A, B, C, D, x_off, y_off) @endverbatim
+ *   - @verbatim img.composite_mathematics(comp_img, A, B, C, D, gravity, x_off, y_off) @endverbatim
+ *
+ * Notes:
+ *   - Default x_off is 0
+ *   - Default y_off is 0
+ *   - New in ImageMagick 6.5.4-3.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
  */
 VALUE
 Image_composite_mathematics(int argc, VALUE *argv, VALUE self)
@@ -2821,12 +3605,24 @@ Image_composite_mathematics(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#composite_tiled(src [, composite_op = Magick::OverCompositeOp][, channel...])
-    Purpose:    Emulate the -tile option to the composite command.
-    Returns:    new image
-    Notes:      Ref: wand/composite.c (6.2.4)
-*/
+/**
+ * Emulate the -tile option to the composite command.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Default composite_op is Magick::OverCompositeOp
+ *   - Default channel is AllChannels
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_composite_tiled
+ * @see Image_composite_tiled_bang
+ * @see wand/composite.c in ImageMagick (6.2.4)
+ */
 static VALUE
 composite_tiled(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -2897,6 +3693,22 @@ composite_tiled(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Emulate the -tile option to the composite command.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite_tiled(src) @endverbatim
+ *   - @verbatim Image#composite_tiled(src, composite_op) @endverbatim
+ *   - @verbatim Image#composite_tiled(src, composite_op, channel) @endverbatim
+ *   - @verbatim Image#composite_tiled(src, composite_op, channel, ...) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see composite_tiled
+ * @see Image_composite_tiled_bang
+ */
 VALUE
 Image_composite_tiled(int argc, VALUE *argv, VALUE self)
 {
@@ -2904,6 +3716,22 @@ Image_composite_tiled(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Emulate the -tile option to the composite command.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#composite_tiled!(src) @endverbatim
+ *   - @verbatim Image#composite_tiled!(src, composite_op) @endverbatim
+ *   - @verbatim Image#composite_tiled!(src, composite_op, channel) @endverbatim
+ *   - @verbatim Image#composite_tiled!(src, composite_op, channel, ...) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see composite_tiled
+ * @see Image_composite_tiled_bang
+ */
 VALUE
 Image_composite_tiled_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -2911,11 +3739,15 @@ Image_composite_tiled_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#compression
-                Image#compression=
-    Purpose:    Get/set the compresion attribute
-*/
+/**
+ * Get/set the compression attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compression @endverbatim
+ *
+ * @param self this object
+ * @return the compression
+ */
 VALUE
 Image_compression(VALUE self)
 {
@@ -2923,6 +3755,16 @@ Image_compression(VALUE self)
     return CompressionType_new(image->compression);
 }
 
+/**
+ * Get/set the compression attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compression= @endverbatim
+ *
+ * @param self this object
+ * @param compression the compression
+ * @return self
+ */
 VALUE
 Image_compression_eq(VALUE self, VALUE compression)
 {
@@ -2931,11 +3773,18 @@ Image_compression_eq(VALUE self, VALUE compression)
     return self;
 }
 
-/*
-    Method:     Image#compress_colormap!
-    Purpose:    call CompressImageColormap
-    Notes:      API was CompressColormap until 5.4.9
-*/
+/**
+ * call CompressImageColormap.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#compress_colormap! @endverbatim
+ *
+ * Notes:
+ *   - API was CompressColormap until 5.4.9
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_compress_colormap_bang(VALUE self)
 {
@@ -2946,22 +3795,30 @@ Image_compress_colormap_bang(VALUE self)
     return self;
 }
 
-/*
-    Method:     Image.constitute(width, height, map, pixels)
-    Purpose:    Creates an Image from the supplied pixel data. The
-                pixel data must be in scanline order, top-to-bottom.
-                The pixel data is an array of either all Fixed or all Float
-                elements. If Fixed, the elements must be in the range
-                [0..QuantumRange]. If Float, the elements must be normalized [0..1].
-                The "map" argument reflects the expected ordering of the pixel
-                array. It can be any combination or order of R = red, G = green,
-                B = blue, A = alpha, C = cyan, Y = yellow, M = magenta,
-                K = black, or I = intensity (for grayscale).
-
-                The pixel array must have width X height X strlen(map) elements.
-    Raises:     ArgumentError, TypeError
-*/
-
+/**
+ * Creates an Image from the supplied pixel data. The pixel data must be in
+ * scanline order, top-to-bottom. The pixel data is an array of either all Fixed
+ * or all Float elements. If Fixed, the elements must be in the range
+ * [0..QuantumRange]. If Float, the elements must be normalized [0..1]. The
+ * "map" argument reflects the expected ordering of the pixel array. It can be
+ * any combination or order of R = red, G = green, B = blue, A = alpha,
+ * C = cyan, Y = yellow, M = magenta, K = black, or I = intensity (for
+ * grayscale).
+ *
+ * The pixel array must have width X height X strlen(map) elements.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.constitute(width, height, map, pixels) @endverbatim
+ *
+ * @param class the Ruby class for an Image (unused)
+ * @param width_arg the width of the array
+ * @param height_arg the height of the array
+ * @param map_arg the map (expected ordering of the pixel array)
+ * @param pixels_arg the pixel array
+ * @return a new image
+ * @throw ArgumentError
+ * @throw TypeError
+ */
 VALUE
 Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
                  , VALUE map_arg, VALUE pixels_arg)
@@ -3077,14 +3934,23 @@ Image_constitute(VALUE class, VALUE width_arg, VALUE height_arg
     return rm_image_new(image);
 }
 
-/*
-    Method:     Image#contrast(<sharpen>)
-    Purpose:    enhances the intensity differences between the lighter and
-                darker elements of the image. Set sharpen to "true" to
-                increase the image contrast otherwise the contrast is reduced.
-    Notes:      if omitted, "sharpen" defaults to 0
-    Returns:    new contrasted image
-*/
+/**
+ * Enhance the intensity differences between the lighter and darker elements of
+ * the image. Set sharpen to "true" to increase the image contrast otherwise the
+ * contrast is reduced.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#contrast @endverbatim
+ *   - @verbatim Image#contrast(sharpen) @endverbatim
+ *
+ * Notes:
+ *   - Default sharpen is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_contrast(int argc, VALUE *argv, VALUE self)
 {
@@ -3110,11 +3976,21 @@ Image_contrast(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Static:     get_black_white_point
-    Purpose:    Convert percentages to #pixels. If the white-point (2nd)
-                argument is not supplied set it to #pixels - black-point.
-*/
+/**
+ * Convert percentages to #pixels. If the white-point (2nd) argument is not
+ * supplied set it to #pixels - black-point.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - No return value: modifies black_point and white_point directly.
+ *
+ * @param image the image
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param black_point pointer to the black point
+ * @param white_point pointer to the white point
+ */
 static void
 get_black_white_point(Image *image, int argc, VALUE *argv, double *black_point, double *white_point)
 {
@@ -3164,13 +4040,26 @@ get_black_white_point(Image *image, int argc, VALUE *argv, double *black_point, 
 }
 
 
-/*
-    Method:     Image#contrast_stretch_channel(black_point <, white_point> <, channel...>)
-    Purpose:    Call ContrastStretchImageChannel
-    Notes:      If white_point is not specified then it is #pixels-black_point.
-                Both black_point and white_point can be specified as Floats
-                or as percentages, i.e. "10%"
-*/
+/**
+ * Call ContrastStretchImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#contrast_stretch_channel(black_point) @endverbatim
+ *   - @verbatim Image#contrast_stretch_channel(black_point, white_point) @endverbatim
+ *   - @verbatim Image#contrast_stretch_channel(black_point, white_point, channel) @endverbatim
+ *   - @verbatim Image#contrast_stretch_channel(black_point, white_point, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default white_point is pixels-black_point
+ *   - Default channel is AllChannels
+ *   - Both black_point and white_point can be specified as Floats or as
+ *     percentages, i.e. "10%"
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -3195,12 +4084,17 @@ Image_contrast_stretch_channel(int argc, VALUE *argv, VALUE self)
     return rm_image_new(new_image);
 }
 
-/*
-    Method:     Image#convolve(order, kernel)
-    Purpose:    apply a custom convolution kernel to the image
-    Notes:      "order" is the number of rows and columns in the kernel
-                "kernel" is an order**2 array of doubles
-*/
+/**
+ * Apply a custom convolution kernel to the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#convolve(order, kernel) @endverbatim
+ *
+ * @param self this object
+ * @param order_arg the number of rows and columns in the kernel
+ * @param kernel_arg an order**2 array of doubles
+ * @return a new image
+ */
 VALUE
 Image_convolve(VALUE self, VALUE order_arg, VALUE kernel_arg)
 {
@@ -3238,10 +4132,19 @@ Image_convolve(VALUE self, VALUE order_arg, VALUE kernel_arg)
 }
 
 
-/*
- *  Method:     Image#convolve_channel(order, kernel[, channel[, channel...]])
- *  Purpose:    call ConvolveImageChannel
-*/
+/**
+ * call ConvolveImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#convolve_channel(order, kernel) @endverbatim
+ *   - @verbatim Image#convolve_channel(order, kernel, channel) @endverbatim
+ *   - @verbatim Image#convolve_channel(order, kernel, channel, ...) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_convolve_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -3294,20 +4197,35 @@ Image_convolve_channel(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#copy
-    Purpose:    Alias for dup
-*/
+/**
+ * Alias for dup.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#copy @endverbatim
+ *
+ * @param self this object
+ * @return a copy of self
+ * @see Image_dup
+ */
 VALUE
 Image_copy(VALUE self)
 {
     return rb_funcall(self, rm_ID_dup, 0);
 }
 
-/*
-    Method:     Image#initialize_copy
-    Purpose:    initialize copy, clone, dup
-*/
+/**
+ * Initialize copy, clone, dup.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#initialize_copy @endverbatim
+ *
+ * @param copy the destination image
+ * @param orig the source image
+ * @return copy
+ * @see Image_copy
+ * @see Image_clone
+ * @see Image_dup
+ */
 VALUE
 Image_init_copy(VALUE copy, VALUE orig)
 {
@@ -3321,13 +4239,20 @@ Image_init_copy(VALUE copy, VALUE orig)
 }
 
 
-/*
-    Method:     Image#crop(x, y, width, height)
-                Image#crop(gravity, width, height)
-                Image#crop!(x, y, width, height)
-                Image#crop!(gravity, width, height)
-    Purpose:    Extract a region of the image defined by width, height, x, y
-*/
+/**
+ * Extract a region of the image defined by width, height, x, y.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#crop(x, y, width, height) @endverbatim
+ *   - @verbatim Image#crop(gravity, width, height) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see cropper
+ * @see Image_crop_bang
+ */
 VALUE
 Image_crop(int argc, VALUE *argv, VALUE self)
 {
@@ -3336,6 +4261,20 @@ Image_crop(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Extract a region of the image defined by width, height, x, y.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#crop!(x, y, width, height) @endverbatim
+ *   - @verbatim Image#crop!(gravity, width, height) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see cropper
+ * @see Image_crop
+ */
 VALUE
 Image_crop_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -3344,10 +4283,16 @@ Image_crop_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#cycle_colormap
-    Purpose:    Call CycleColormapImage
-*/
+/**
+ * Call CycleColormapImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#cycle_colormap @endverbatim
+ *
+ * @param self this object
+ * @param amount amount to cycle the colormap
+ * @return a new image
+ */
 VALUE
 Image_cycle_colormap(VALUE self, VALUE amount)
 {
@@ -3365,11 +4310,15 @@ Image_cycle_colormap(VALUE self, VALUE amount)
 }
 
 
-/*
-    Method:     Image#density
-    Purpose:    Get the x & y resolutions.
-    Returns:    A string in the form "XresxYres"
-*/
+/**
+ * Get the x & y resolutions.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#density @endverbatim
+ *
+ * @param self this object
+ * @return a string in the form "XresxYres"
+ */
 VALUE
 Image_density(VALUE self)
 {
@@ -3383,21 +4332,25 @@ Image_density(VALUE self)
 }
 
 
-/*
-    Method:     Image#density="XxY"
-                Image#density=aGeometry
-    Purpose:    Set the x & y resolutions in the image
-    Notes:      The density is a string of the form "XresxYres" or simply "Xres".
-                If the y resolution is not specified, set it equal to the x
-                resolution. This is equivalent to PerlMagick's handling of
-                density.
-
-                The density can also be a Geometry object. The width attribute
-                is used for the x resolution. The height attribute is used for
-                the y resolution. If the height attribute is missing, the
-                width attribute is used for both.
-*/
-
+/**
+ * Set the x & y resolutions in the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#density="XxY" @endverbatim
+ *   - @verbatim Image#density=aGeometry @endverbatim
+ *
+ * Notes:
+ *   - The density is a string of the form "XresxYres" or simply "Xres".
+ *   - If the y resolution is not specified, set it equal to the x resolution.
+ *   - This is equivalent to PerlMagick's handling of density.
+ *   - The density can also be a Geometry object. The width attribute is used
+ *     for the x resolution. The height attribute is used for the y resolution.
+ *     If the height attribute is missing, the width attribute is used for both.
+ *
+ * @param self this object
+ * @param density_arg The density String or Geometry
+ * @return self
+ */
 VALUE
 Image_density_eq(VALUE self, VALUE density_arg)
 {
@@ -3451,10 +4404,16 @@ Image_density_eq(VALUE self, VALUE density_arg)
 }
 
 
-/*
-    Method:     Image#decipher(passphrase)
-    Purpose:    call DecipherImage
-*/
+/**
+ * call DecipherImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#decipher(passphrase) @endverbatim
+ *
+ * @param self this object
+ * @param passphrase the passphrase
+ * @return a new deciphered image
+ */
 VALUE
 Image_decipher(VALUE self, VALUE passphrase)
 {
@@ -3490,13 +4449,23 @@ Image_decipher(VALUE self, VALUE passphrase)
 }
 
 
-/*
-    Method:     value = Image#define(artifact, value)
-    Purpose:    Call SetImageArtifact
-    Note:       Normally a script should never call this method. Any calls
-                to SetImageArtifact will be part of the methods in which they're
-                needed, or be called via the OptionalMethodArguments class.
-*/
+/**
+ * Call SetImageArtifact.
+ *
+ * Ruby usage:
+ *   - @verbatim value = Image#define(artifact, value) @endverbatim
+ *
+ * Notes:
+ *   - Normally a script should never call this method. Any calls to
+ *     SetImageArtifact will be part of the methods in which they're needed, or
+ *     be called via the OptionalMethodArguments class.
+ *   - If value is nil, the artifact will be removed
+ *
+ * @param self this object
+ * @param artifact the artifact to set
+ * @param value the value to which to set the artifact
+ * @return the value
+ */
 VALUE
 Image_define(VALUE self, VALUE artifact, VALUE value)
 {
@@ -3538,13 +4507,17 @@ Image_define(VALUE self, VALUE artifact, VALUE value)
 DEF_ATTR_ACCESSOR(Image, delay, ulong)
 
 
-/*
-    Method:     Image#delete_compose_mask()
-    Purpose:    Delete the image composite mask
-    Ref:        SetImageMask
-    Notes:      Returns self
-    See also:   #add_compose_mask()
-*/
+/**
+ * Delete the image composite mask.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#delete_compose_mask() @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see Image_add_compose_mask
+ * @see SetImageMask in ImageMagick
+ */
 VALUE
 Image_delete_compose_mask(VALUE self)
 {
@@ -3558,11 +4531,16 @@ Image_delete_compose_mask(VALUE self)
 }
 
 
-/*
-    Method:     Image#delete_profile(name)
-    Purpose:    call ProfileImage
-    Notes:      name is the name of the profile to be deleted
-*/
+/**
+ * Call ProfileImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#delete_profile(name) @endverbatim
+ *
+ * @param self this object
+ * @param name the name of the profile to be deleted
+ * @return self
+ */
 VALUE
 Image_delete_profile(VALUE self, VALUE name)
 {
@@ -3574,13 +4552,20 @@ Image_delete_profile(VALUE self, VALUE name)
 }
 
 
-/*
-    Method:     Image#depth
-    Purpose:    Return the image depth (8 or 16).
-    Note:       If all pixels have lower-order bytes equal to higher-order
-                bytes, the depth will be reported as 8 even if the depth
-                field in the Image structure says 16.
-*/
+/**
+ * Return the image depth (8 or 16).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#depth @endverbatim
+ *
+ * Notes:
+ *   - If all pixels have lower-order bytes equal to higher-order bytes, the
+ *     depth will be reported as 8 even if the depth field in the Image
+ *     structure says 16.
+ *
+ * @param self this object
+ * @return the depth
+ */
 VALUE
 Image_depth(VALUE self)
 {
@@ -3600,10 +4585,23 @@ Image_depth(VALUE self)
 }
 
 
-/*
-    Method:     Image#deskew(threshold=0.40, auto-crop-width)
-    Purpose:    Implement convert -deskew option
-*/
+/**
+ * Implement convert -deskew option.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#deskew @endverbatim
+ *   - @verbatim Image#deskew(threshold) @endverbatim
+ *   - @verbatim Image#deskew(threshold, auto-crop-width) @endverbatim
+ *
+ * Notes:
+ *   - Default threshold is 0.40
+ *   - Default auto-crop-width is the auto crop width of the image
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_deskew(int argc, VALUE *argv, VALUE self)
 {
@@ -3650,12 +4648,16 @@ Image_deskew(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#despeckle
-    Purpose:    reduces the speckle noise in an image while preserving the
-                edges of the original image
-    Returns:    a new image
-*/
+/**
+ * Reduce the speckle noise in an image while preserving the edges of the
+ * original image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#despeckle @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_despeckle(VALUE self)
 {
@@ -3676,10 +4678,15 @@ Image_despeckle(VALUE self)
 }
 
 
-/*
-    Method:     Image#destroy!
-    Purpose:    Free all the memory associated with an image
-*/
+/**
+ * Free all the memory associated with an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#destroy! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_destroy_bang(VALUE self)
 {
@@ -3693,10 +4700,15 @@ Image_destroy_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#destroyed?
-    Purpose:    Returns true if the image has been destroyed, false otherwise
-*/
+/**
+ * Return true if the image has been destroyed, false otherwise.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#destroyed? @endverbatim
+ *
+ * @param self this object
+ * @return true if destroyed, false otherwise
+ */
 VALUE
 Image_destroyed_q(VALUE self)
 {
@@ -3707,15 +4719,20 @@ Image_destroyed_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#difference
-    Purpose:    Call the IsImagesEqual function
-    Returns:    An array with 3 values:
-                [0] mean error per pixel
-                [1] normalized mean error
-                [2] normalized maximum error
-    Notes:      "other" can be either an Image or an Image
-*/
+/**
+ * Call the IsImagesEqual function.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#difference @endverbatim
+ *
+ * Notes:
+ *   - "other" can be either an Image or an Image
+ *
+ * @param self this object
+ * @param other another Image
+ * @return An array with 3 values: [mean error per pixel, normalized mean error,
+ * normalized maximum error]
+ */
 VALUE
 Image_difference(VALUE self, VALUE other)
 {
@@ -3737,15 +4754,41 @@ Image_difference(VALUE self, VALUE other)
 }
 
 
+/**
+ * Get image directory.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#directory @endverbatim
+ *
+ * @param self this object
+ * @return the directory
+ */
 DEF_ATTR_READER(Image, directory, str)
 
 
-/*
-    Method:     Image#displace(displacement_map, x_amp, y_amp, x_offset=0, y_offset=0)
-                Image#displace(displacement_map, x_amp, y_amp, gravity, x_offset=0, y_offset=0)
-    Purpose:    Implement the -displace option of xMagick's composite command
-    Notes:      If y_amp is omitted the default is x_amp.
-*/
+/**
+ * Implement the -displace option of xMagick's composite command.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#displace(displacement_map, x_amp) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp, x_offset) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp, x_offset, y_offset) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp, gravity) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp, gravity, x_offset) @endverbatim
+ *   - @verbatim Image#displace(displacement_map, x_amp, y_amp, gravity, x_offset, y_offset) @endverbatim
+ *
+ * Notes:
+ *   - If y_amp is omitted the default is x_amp.
+ *   - Default x_offset is 0
+ *   - Default y_offset is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see special_composite
+ */
 VALUE
 Image_displace(int argc, VALUE *argv, VALUE self)
 {
@@ -3788,21 +4831,26 @@ Image_displace(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#dispatch(x, y, columns, rows, map <, float>)
-    Purpose:    Extracts pixel data from the image and returns it as an
-                array of pixels. The "x", "y", "width" and "height" parameters
-                specify the rectangle to be extracted. The "map" parameter
-                reflects the expected ordering of the pixel array. It can be
-                any combination or order of R = red, G = green, B = blue, A =
-                alpha, C = cyan, Y = yellow, M = magenta, K = black, or I =
-                intensity (for grayscale). If the "float" parameter is specified
-                and true, the pixel data is returned as floating-point numbers
-                in the range [0..1]. By default the pixel data is returned as
-                integers in the range [0..QuantumRange].
-    Returns:    an Array
-    Raises:     ArgumentError
-*/
+/**
+ * Extract pixel data from the image and returns it as an array of pixels. The
+ * "x", "y", "width" and "height" parameters specify the rectangle to be
+ * extracted. The "map" parameter reflects the expected ordering of the pixel
+ * array. It can be any combination or order of R = red, G = green, B = blue,
+ * A = alpha, C = cyan, Y = yellow, M = magenta, K = black, or I = intensity
+ * (for grayscale). If the "float" parameter is specified and true, the pixel
+ * data is returned as floating-point numbers in the range [0..1]. By default
+ * the pixel data is returned as integers in the range [0..QuantumRange].
+ *
+ * Ruby usage:
+ *   - @verbatim Image#dispatch(x, y, columns, rows, map) @endverbatim
+ *   - @verbatim Image#dispatch(x, y, columns, rows, map, float) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return an Array of pixel data
+ * @throw ArgumentError
+ */
 VALUE
 Image_dispatch(int argc, VALUE *argv, VALUE self)
 {
@@ -3883,10 +4931,15 @@ Image_dispatch(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#display
-    Purpose:    display the image to an X window screen
-*/
+/**
+ * Display the image to an X window screen.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#display @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_display(VALUE self)
 {
@@ -3911,10 +4964,15 @@ Image_display(VALUE self)
 }
 
 
-/*
-    Method:     Image#dispose
-    Purpose:    Return the dispose attribute as a DisposeType enum
-*/
+/**
+ * Return the dispose attribute as a DisposeType enum.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#dispose @endverbatim
+ * 
+ * @param self this object
+ * @return the dispose
+ */
 VALUE
 Image_dispose(VALUE self)
 {
@@ -3923,10 +4981,16 @@ Image_dispose(VALUE self)
 }
 
 
-/*
-    Method:     Image#dispose=
-    Purpose:    Set the dispose attribute
-*/
+/**
+ * Set the dispose attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#dispose= @endverbatim
+ *
+ * @param self this object
+ * @param dispose the dispose
+ * @return self
+ */
 VALUE
 Image_dispose_eq(VALUE self, VALUE dispose)
 {
@@ -3936,14 +5000,31 @@ Image_dispose_eq(VALUE self, VALUE dispose)
 }
 
 
-/*
-    Method:     Image#dissolve(overlay, src_percent, dst_percent, x_offset=0, y_offset=0)
-                Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset=0, y_offset=0)
-    Purpose:    Corresponds to the composite_image -dissolve operation
-    Notes:      `percent' can be a number or a string in the form "NN%"
-                The "default" value of dst_percent is -1.0, which tells
-                blend_geometry to leave it out of the geometry string.
-*/
+/**
+ * Corresponds to the composite_image -dissolve operation.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#dissolve(overlay, src_percent) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, x_offset) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, x_offset, y_offset) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset) @endverbatim
+ *   - @verbatim Image#dissolve(overlay, src_percent, dst_percent, gravity, x_offset, y_offset) @endverbatim
+ *
+ * Notes:
+ *   - `percent' can be a number or a string in the form "NN%"
+ *   - Default dst_percent is -1.0 (tells blend_geometry to leave it out of the
+ *     geometry string)
+ *   - Default x_offset is 0
+ *   - Default y_offset is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see special_composite
+ */
 VALUE
 Image_dissolve(int argc, VALUE *argv, VALUE self)
 {
@@ -3988,17 +5069,26 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#distort(type, points, bestfit=false) { optional arguments }
- *  Purpose:    Call DistortImage
- *  Notes:      points is an Array of Numeric values
- *              optional arguments are
- *                self.define "distort:viewport", WxH+X+Y
- *                self.define "distort:scale", N
- *                self.verbose true
-*/
-
-
+/**
+ * Call DistortImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#distort(type, points) { optional arguments } @endverbatim
+ *   - @verbatim Image#distort(type, points, bestfit) { optional arguments } @endverbatim
+ *
+ * Notes:
+ *   - Default bestfit is false
+ *   - Points is an Array of Numeric values
+ *   - Optional arguments are:
+ *     - self.define "distort:viewport", WxH+X+Y
+ *     - self.define "distort:scale", N
+ *     - self.verbose true
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_distort(int argc, VALUE *argv, VALUE self)
 {
@@ -4048,10 +5138,22 @@ Image_distort(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#distortion_channel(reconstructed_image, metric[, channel...])
- *  Purpose:    Call GetImageChannelDistortion
-*/
+/**
+ * Call GetImageChannelDistortion.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#distortion_channel(reconstructed_image, metric) @endverbatim
+ *   - @verbatim Image#distortion_channel(reconstructed_image, metric, channel) @endverbatim
+ *   - @verbatim Image#distortion_channel(reconstructed_image, metric, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the image channel distortion (Ruby float)
+ */
 VALUE
 Image_distortion_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -4087,13 +5189,20 @@ Image_distortion_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#_dump(aDepth)
-    Purpose:    implement marshalling
-    Returns:    a string representing the dumped image
-    Notes:      uses ImageToBlob - use the MIFF format
-                in the blob since it's the most general
-*/
+/**
+ * Implement marshalling.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#_dump(aDepth) @endverbatim
+ *
+ * Notes:
+ *   - Uses ImageToBlob - use the MIFF format in the blob since it's the most
+ *     general
+ *
+ * @param self this object
+ * @param depth the depth to which to dump (unused)
+ * @return a string representing the dumped image
+ */
 VALUE
 Image__dump(VALUE self, VALUE depth)
 {
@@ -4149,10 +5258,17 @@ Image__dump(VALUE self, VALUE depth)
 }
 
 
-/*
-    Method:     Image#dup
-    Purpose:    Construct a new image object and call initialize_copy
-*/
+/**
+ * Construct a new image object and call initialize_copy.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#dup @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see Image_copy
+ * @see Image_init_copy
+ */
 VALUE
 Image_dup(VALUE self)
 {
@@ -4168,11 +5284,18 @@ Image_dup(VALUE self)
 }
 
 
-/*
-    Method:  Image#each_profile
-    Purpose: Iterate over image profiles
-    Notes:   ImageMagick only
-*/
+/**
+ * Iterate over image profiles.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#each_profile @endverbatim
+ *
+ * Notes:
+ *   - ImageMagick only
+ *
+ * @param self this object
+ * @return iterator over image profiles
+ */
 VALUE
 Image_each_profile(VALUE self)
 {
@@ -4208,13 +5331,22 @@ Image_each_profile(VALUE self)
 }
 
 
-/*
-    Method:     Image#edge(radius=0)
-    Purpose:    finds edges in an image. "radius" defines the radius of the
-                convolution filter. Use a radius of 0 and edge selects a
-                suitable radius
-    Returns:    a new image
-*/
+/**
+ * Find edges in an image. "radius" defines the radius of the convolution
+ * filter.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#edge @endverbatim
+ *   - @verbatim Image#edge(radius) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0 (have edge select a suitable radius)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_edge(int argc, VALUE *argv, VALUE self)
 {
@@ -4247,10 +5379,17 @@ Image_edge(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Static:     effect_image
-    Purpose:    call one of the effects methods
-*/
+/**
+ * Call one of the effects methods.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param self this object
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param effector the effector to call
+ * @return a new image
+ */
 static VALUE
 effect_image(VALUE self, int argc, VALUE *argv, effector_t effector)
 {
@@ -4290,10 +5429,24 @@ effect_image(VALUE self, int argc, VALUE *argv, effector_t effector)
 }
 
 
-/*
-    Method:     Image#emboss(radius=0.0, sigma=1.0)
-    Purpose:    creates a grayscale image with a three-dimensional effect
-*/
+/**
+ * Create a grayscale image with a three-dimensional effect.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#emboss @endverbatim
+ *   - @verbatim Image#emboss(radius) @endverbatim
+ *   - @verbatim Image#emboss(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see effect_image
+ */
 VALUE
 Image_emboss(int argc, VALUE *argv, VALUE self)
 {
@@ -4301,10 +5454,16 @@ Image_emboss(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#encipher(passphrase)
-    Purpose:    call EncipherImage
-*/
+/**
+ * Call EncipherImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#encipher(passphrase) @endverbatim
+ *
+ * @param self this object
+ * @param passphrase the passphrase with which to encipher
+ * @return a new image
+ */
 VALUE
 Image_encipher(VALUE self, VALUE passphrase)
 {
@@ -4341,10 +5500,15 @@ Image_encipher(VALUE self, VALUE passphrase)
 
 
 
-/*
-    Method:     Image#endian
-    Purpose:    Return endian option for images that support it.
-*/
+/**
+ * Return endian option for images that support it.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#endian @endverbatim
+ *
+ * @param self this object
+ * @return the endian option
+ */
 VALUE
 Image_endian(VALUE self)
 {
@@ -4353,10 +5517,16 @@ Image_endian(VALUE self)
 }
 
 
-/*
-    Method:     Image#endian=
-    Purpose:    Set endian option for images that support it.
-*/
+/**
+ * Set endian option for images that support it.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#endian= @endverbatim
+ *
+ * @param self this object
+ * @param type the endian type
+ * @return self
+ */
 VALUE
 Image_endian_eq(VALUE self, VALUE type)
 {
@@ -4365,10 +5535,15 @@ Image_endian_eq(VALUE self, VALUE type)
     return self;
 }
 
-/*
-    Method:     Image#enhance
-    Purpose:    applies a digital filter that improves the quality of a noisy image
-*/
+/**
+ * Apply a digital filter that improves the quality of a noisy image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#enhance @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_enhance(VALUE self)
 {
@@ -4389,10 +5564,15 @@ Image_enhance(VALUE self)
 }
 
 
-/*
-    Method:     Image#equalize
-    Purpose:    applies a histogram equalization to the image
-*/
+/**
+ * Apply a histogram equalization to the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#equalize @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_equalize(VALUE self)
 {
@@ -4412,10 +5592,22 @@ Image_equalize(VALUE self)
 }
 
 
-/*
-    Method:     Image#equalize_channel
-    Purpose:    call EqualizeImageChannel
-*/
+/**
+ * Call EqualizeImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#equalize_channel @endverbatim
+ *   - @verbatim Image#equalize_channel(channel) @endverbatim
+ *   - @verbatim Image#equalize_channel(channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_equalize_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -4451,12 +5643,18 @@ Image_equalize_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#erase!
-    Purpose:    reset the image to the background color
-    Notes:      one of the very few Image methods that do not
-                return a new image.
-*/
+/**
+ * Reset the image to the background color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#erase! @endverbatim
+ *
+ * Notes:
+ *   - One of the very few Image methods that do not return a new image.
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_erase_bang(VALUE self)
 {
@@ -4469,12 +5667,27 @@ Image_erase_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#excerpt(x, y, width, height)
-    Purpose:    lightweight crop
-    Notes:      christy says "does not respect the virtual page offset (-page) and does
-                not update the page offset and its more efficient than cropping."
-*/
+/**
+ * Lightweight crop.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - christy says "does not respect the virtual page offset (-page) and does
+ *     not update the page offset and its more efficient than cropping."
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param x the x position for the start of the rectangle
+ * @param y the y position for the start of the rectangle
+ * @param width the width of the rectancle
+ * @param height the height of the rectangle
+ * @return self if bang, otherwise a new image
+ * @see Image_excerpt
+ * @see Image_excerpt_bang
+ * @see Image_crop
+ * @see Image_crop_bang
+ */
 static VALUE
 excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
@@ -4507,6 +5720,23 @@ excerpt(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 }
 
 
+/**
+ * Lightweight crop.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#excerpt(x, y, width, height) @endverbatim
+ *
+ * @param self this object
+ * @param x the x position for the start of the rectangle
+ * @param y the y position for the start of the rectangle
+ * @param width the width of the rectancle
+ * @param height the height of the rectangle
+ * @return self if bang, otherwise a new image
+ * @see excerpt
+ * @see Image_excerpt_bang
+ * @see Image_crop
+ * @see Image_crop_bang
+ */
 VALUE
 Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
@@ -4515,6 +5745,23 @@ Image_excerpt(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 }
 
 
+/**
+ * Lightweight crop.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#excerpt!(x, y, width, height) @endverbatim
+ *
+ * @param self this object
+ * @param x the x position for the start of the rectangle
+ * @param y the y position for the start of the rectangle
+ * @param width the width of the rectancle
+ * @param height the height of the rectangle
+ * @return self
+ * @see excerpt
+ * @see Image_excerpt
+ * @see Image_crop
+ * @see Image_crop_bang
+ */
 VALUE
 Image_excerpt_bang(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 {
@@ -4523,10 +5770,29 @@ Image_excerpt_bang(VALUE self, VALUE x, VALUE y, VALUE width, VALUE height)
 }
 
 
-/*
-    Method:     Image#export_pixels(x=0, y=0, cols=self.columns, rows=self.rows, map="RGB")
-    Purpose:    extract image pixels in the form of an array
-*/
+/**
+ * Extract image pixels in the form of an array.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#export_pixels @endverbatim
+ *   - @verbatim Image#export_pixels(x) @endverbatim
+ *   - @verbatim Image#export_pixels(x, y) @endverbatim
+ *   - @verbatim Image#export_pixels(x, y, cols) @endverbatim
+ *   - @verbatim Image#export_pixels(x, y, cols, rows) @endverbatim
+ *   - @verbatim Image#export_pixels(x, y, cols, rows, map) @endverbatim
+ *
+ * Notes:
+ *   - Default x is 0
+ *   - Default y is 0
+ *   - Default cols is self.columns
+ *   - Default rows is self.rows
+ *   - Default map is "RGB"
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return array of pixels
+ */
 VALUE
 Image_export_pixels(int argc, VALUE *argv, VALUE self)
 {
@@ -4605,10 +5871,23 @@ Image_export_pixels(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#extent(width, height, x=0, y=0)
-    Purpose:    Call ExtentImage
-*/
+/**
+ * Call ExtentImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#extent(width, height) @endverbatim
+ *   - @verbatim Image#extent(width, height, x) @endverbatim
+ *   - @verbatim Image#extent(width, height, x, y) @endverbatim
+ *
+ * Notes:
+ *   - Default x is 0
+ *   - Default y is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_extent(int argc, VALUE *argv, VALUE self)
 {
@@ -4663,11 +5942,31 @@ Image_extent(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#export_pixels_to_str(x=0, y=0, cols=self.columns,
-                       rows=self.rows, map="RGB", type=Magick::CharPixel)
-    Purpose:    extract image pixels to a Ruby string
-*/
+/**
+ * Extract image pixels to a Ruby string.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#export_pixels_to_str @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x) @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x, y) @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x, y, cols) @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x, y, cols, rows) @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x, y, cols, rows, map) @endverbatim
+ *   - @verbatim Image#export_pixels_to_str(x, y, cols, rows, map, type) @endverbatim
+ *
+ * Notes:
+ *   - Default x is 0
+ *   - Default y is 0
+ *   - Default cols is self.columns
+ *   - Default rows is self.rows
+ *   - Default map is "RGB"
+ *   - Default type is Magick::CharPixel
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return pixels as a string
+ */
 VALUE
 Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
 {
@@ -4771,10 +6070,15 @@ Image_export_pixels_to_str(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#extract_info, extract_info=
-    Purpose:    the extract_info attribute accessors
-*/
+/**
+ * The extract_info attribute reader.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#extract_info @endverbatim
+ *
+ * @param self this object
+ * @return extract_info
+ */
 VALUE
 Image_extract_info(VALUE self)
 {
@@ -4783,6 +6087,16 @@ Image_extract_info(VALUE self)
 }
 
 
+/**
+ * The extract_info attribute reader.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#extract_info= @endverbatim
+ *
+ * @param self this object
+ * @param rect extract_info
+ * @return self
+ */
 VALUE
 Image_extract_info_eq(VALUE self, VALUE rect)
 {
@@ -4792,13 +6106,27 @@ Image_extract_info_eq(VALUE self, VALUE rect)
 }
 
 
+/**
+ * Get image filename.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#filename @endverbatim
+ *
+ * @param self this object
+ * @return the filename
+ */
 DEF_ATTR_READER(Image, filename, str)
 
 
-/*
-    Method:     Image#filesize
-    Purpose:    Return the image filesize
-*/
+/**
+ * Return the image filesize.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#filesize @endverbatim
+ *
+ * @param self this object
+ * @return the filesize
+ */
 VALUE Image_filesize(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
@@ -4806,10 +6134,15 @@ VALUE Image_filesize(VALUE self)
 }
 
 
-/*
-    Method:     Image#filter, filter=
-    Purpose:    Get/set filter type
-*/
+/**
+ * Get filter type.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#filter @endverbatim
+ *
+ * @param self this object
+ * @return the filter
+ */
 VALUE
 Image_filter(VALUE self)
 {
@@ -4818,6 +6151,16 @@ Image_filter(VALUE self)
 }
 
 
+/**
+ * Set filter type.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#filter= @endverbatim
+ *
+ * @param self this object
+ * @param filter the filter
+ * @return self
+ */
 VALUE
 Image_filter_eq(VALUE self, VALUE filter)
 {
@@ -4827,10 +6170,22 @@ Image_filter_eq(VALUE self, VALUE filter)
 }
 
 
-/*
- *  Method:     Image#find_similar_region(target, x=0, y=0)
- *  Purpose:    Search for a region in the image that is "similar" to the
- *              target image.
+/**
+ * Search for a region in the image that is "similar" to the target image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#find_similar_region(target) @endverbatim
+ *   - @verbatim Image#find_similar_region(target, x) @endverbatim
+ *   - @verbatim Image#find_similar_region(target, x, y) @endverbatim
+ *
+ * Notes:
+ *   - Default x is 0
+ *   - Default y is 0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the region
  */
 VALUE
 Image_find_similar_region(int argc, VALUE *argv, VALUE self)
@@ -4876,15 +6231,20 @@ Image_find_similar_region(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#flip
-                Image#flip!
-    Purpose:    creates a vertical mirror image by reflecting the pixels around
-                the central x-axis
-    Returns:    flip: a new, flipped image
-                flip!: self, flipped
-*/
-
+/**
+ * Call a flipflopper (a function that either flips or flops the image).
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param flipflopper the flip/flop method to call
+ * @return self if bang, otherwise a new image
+ * @see Image_flip
+ * @see Image_flip_bang
+ * @see Image_flop
+ * @see Image_flop_bang
+ */
 static VALUE
 flipflop(int bang, VALUE self, flipper_t flipflopper)
 {
@@ -4912,6 +6272,20 @@ flipflop(int bang, VALUE self, flipper_t flipflopper)
 }
 
 
+/**
+ * Create a vertical mirror image by reflecting the pixels around the central
+ * x-axis.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#flip @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see flipflop
+ * @see Image_flip_bang
+ * @see Image_flop
+ * @see Image_flop_bang
+ */
 VALUE
 Image_flip(VALUE self)
 {
@@ -4920,6 +6294,20 @@ Image_flip(VALUE self)
 }
 
 
+/**
+ * Create a vertical mirror image by reflecting the pixels around the central
+ * x-axis.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#flip! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see flipflop
+ * @see Image_flip
+ * @see Image_flop
+ * @see Image_flop_bang
+ */
 VALUE
 Image_flip_bang(VALUE self)
 {
@@ -4928,14 +6316,20 @@ Image_flip_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#flop
-                Image#flop!
-    Purpose:    creates a horizontal mirror image by reflecting the pixels around
-                the central y-axis
-    Returns:    flop: a new, flopped image
-                flop!: self, flopped
-*/
+/**
+ * Create a horizonal mirror image by reflecting the pixels around the central
+ * y-axis.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#flop @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see flipflop
+ * @see Image_flop_bang
+ * @see Image_flip
+ * @see Image_flip_bang
+ */
 VALUE
 Image_flop(VALUE self)
 {
@@ -4944,6 +6338,20 @@ Image_flop(VALUE self)
 }
 
 
+/**
+ * Create a horizonal mirror image by reflecting the pixels around the central
+ * y-axis.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#flop! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see flipflop
+ * @see Image_flop
+ * @see Image_flip
+ * @see Image_flip_bang
+ */
 VALUE
 Image_flop_bang(VALUE self)
 {
@@ -4952,11 +6360,18 @@ Image_flop_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#format
-    Purpose:    Return the image encoding format
-    Note:       This is what PerlMagick does for "format"
-*/
+/**
+ * Return the image encoding format.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#format @endverbatim
+ *
+ * Notes:
+ *   - This is what PerlMagick does for "format".
+ *
+ * @param self this object
+ * @return the encoding format
+ */
 VALUE
 Image_format(VALUE self)
 {
@@ -4979,10 +6394,16 @@ Image_format(VALUE self)
 }
 
 
-/*
-    Method:     Image#format=
-    Purpose:    Set the image encoding format
-*/
+/**
+ * Set the image encoding format.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#format= @endverbatim
+ *
+ * @param self this object
+ * @param magick the encoding format
+ * @return self
+ */
 VALUE
 Image_format_eq(VALUE self, VALUE magick)
 {
@@ -5012,34 +6433,42 @@ Image_format_eq(VALUE self, VALUE magick)
 }
 
 
-/*
-    Method:     Image#frame(<width<, height<, x<, y<, inner_bevel<, outer_bevel
-                                                                <, color>>>>>>>)
-    Purpose:    adds a simulated three-dimensional border around the image.
-                "Width" and "height" specify the width and height of the frame.
-                The "x" and "y" arguments position the image within the frame.
-                If the image is supposed to be centered in the frame, x and y
-                should be 1/2 the width and height of the frame. (I.e. if the
-                frame is 50 pixels high and 50 pixels wide, x and y should both
-                be 25)."Inner_bevel" and "outer_bevel" indicate the width of the
-                inner and outer shadows of the frame. They should be much
-                smaller than the frame and cannot be > 1/2 the frame width or
-                height of the image.
-    Default:    All arguments are optional. The defaults are the same as they
-                are in Magick++:
-
-                width:  image-columns+25*2
-                height: image-rows+25*2
-                x:      25
-                y:      25
-                inner:  6
-                outer:  6
-                color:  image matte_color (which defaults to #bdbdbd, whatever
-                        self.matte_color was set to when the image was created,
-                        or whatever image.matte_color is currently set to)
-
-    Returns:    a new image.
-*/
+/**
+ * Add a simulated three-dimensional border around the image. "Width" and
+ * "height" specify the width and height of the frame. The "x" and "y" arguments
+ * position the image within the frame. If the image is supposed to be centered
+ * in the frame, x and y should be 1/2 the width and height of the frame. (I.e.,
+ * if the frame is 50 pixels high and 50 pixels wide, x and y should both be
+ * 25). "Inner_bevel" and "outer_bevel" indicate the width of the inner and
+ * outer shadows of the frame. They should be much smaller than the frame and
+ * cannot be > 1/2 the frame width or height of the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#frame @endverbatim
+ *   - @verbatim Image#frame(width) @endverbatim
+ *   - @verbatim Image#frame(width, height) @endverbatim
+ *   - @verbatim Image#frame(width, height, x) @endverbatim
+ *   - @verbatim Image#frame(width, height, x, y) @endverbatim
+ *   - @verbatim Image#frame(width, height, x, y, inner_bevel) @endverbatim
+ *   - @verbatim Image#frame(width, height, x, y, inner_bevel, outer_bevel) @endverbatim
+ *   - @verbatim Image#frame(width, height, x, y, inner_bevel, outer_bevel, color) @endverbatim
+ *
+ * Notes:
+ *   - The defaults are the same as they are in Magick++
+ *   - Default width is image-columns+25*2
+ *   - Default height is image-rows+25*2
+ *   - Default x is 25
+ *   - Default y is 25
+ *   - Default inner is 6
+ *   - Default outer is 6
+ *   - Default color is image matte_color (which defaults to "#bdbdbd", whatever
+ *     self.matte_color was set to when the image was created, or whatever
+ *     image.matte_color is currently set to)
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image.
+ */
 VALUE
 Image_frame(int argc, VALUE *argv, VALUE self)
 {
@@ -5091,11 +6520,16 @@ Image_frame(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image.from_blob(blob) <{ parm block }>
-    Purpose:    Call BlobToImage
-    Notes:      The blob is a String
-*/
+/**
+ * Call BlobToImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.from_blob(blob) <{ parm block }> @endverbatim
+ *
+ * @param class the Ruby Image class (unused)
+ * @param blob_arg the blog as a Ruby string
+ * @return an array of new images
+ */
 VALUE
 Image_from_blob(VALUE class, VALUE blob_arg)
 {
@@ -5128,8 +6562,21 @@ Image_from_blob(VALUE class, VALUE blob_arg)
 }
 
 
-/*
- *  Method:     Image#function_channel(function, args[, channel...])
+/**
+ * Set the function on a channel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#function_channel(function, args) @endverbatim
+ *   - @verbatim Image#function_channel(function, args, channel) @endverbatim
+ *   - @verbatim Image#function_channel(function, args, channel, ...) @endverbatim
+ *
+ *  Notes:
+ *    - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
  */
 VALUE
 Image_function_channel(int argc, VALUE *argv, VALUE self)
@@ -5211,14 +6658,31 @@ Image_function_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Get image fuzz.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#fuzz @endverbatim
+ *
+ * @param self this object
+ * @return the fuzz
+ * @see Info_fuzz
+ */
 DEF_ATTR_READER(Image, fuzz, dbl)
 
 
-/*
-    Method:     Image#fuzz=number
-                Image#fuzz=NN%
-    Notes:      See Info#fuzz.
-*/
+/**
+ * Set image fuzz.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#fuzz=number @endverbatim
+ *   - @verbatim Image#fuzz=NN% @endverbatim
+ *
+ * @param self this object
+ * @param fuzz the fuzz
+ * @return self
+ * @see Info_fuzz_eq
+ */
 VALUE
 Image_fuzz_eq(VALUE self, VALUE fuzz)
 {
@@ -5231,10 +6695,22 @@ Image_fuzz_eq(VALUE self, VALUE fuzz)
 DEF_ATTR_ACCESSOR(Image, gamma, dbl)
 
 
-/*
- *  Method:     Image#gamma_channel(gamma, channel=AllChannels)
- *  Returns     a new image
-*/
+/**
+ * Apply gamma to a channel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gamma_channel(gamma) @endverbatim
+ *   - @verbatim Image#gamma_channel(gamma, channel) @endverbatim
+ *   - @verbatim Image#gamma_channel(gamma, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -5263,13 +6739,24 @@ Image_gamma_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#gamma_correct(red_gamma<, green_gamma<, blue_gamma>>>)
-    Purpose:    gamma-correct an image
-    Notes:      At least red_gamma must be specified. If one or more levels are
-                omitted, the last specified number is used as the default.
-                For backward compatibility accept a 4th argument but ignore it.
-*/
+/**
+ * gamma-correct an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gamma_correct(red_gamma) @endverbatim
+ *   - @verbatim Image#gamma_correct(red_gamma, green_gamma) @endverbatim
+ *   - @verbatim Image#gamma_correct(red_gamma, green_gamma, blue_gamma) @endverbatim
+ *
+ * Notes:
+ *   - Default green_gamma is red_gamma
+ *   - Default blue_gamma is green_gamma
+ *   - For backward compatibility accept a 4th argument but ignore it.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_gamma_correct(int argc, VALUE *argv, VALUE self)
 {
@@ -5318,11 +6805,24 @@ Image_gamma_correct(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#gaussian_blur(radius, sigma)
-    Purpose:    blur the image
-    Returns:    a new image
-*/
+/**
+ * Blur the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gaussian_blur @endverbatim
+ *   - @verbatim Image#gaussian_blur(radius) @endverbatim
+ *   - @verbatim Image#gaussian_blur(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see effect_image
+ */
 VALUE
 Image_gaussian_blur(int argc, VALUE *argv, VALUE self)
 {
@@ -5330,10 +6830,23 @@ Image_gaussian_blur(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#gaussian_blur_channel(radius=0, sigma=1, channel=AllChannels)
- *  Notes:      new in IM 6.0.0
-*/
+/**
+ * Blur the image on a channel.
+ * Ruby usage:
+ *   - @verbatim Image#gaussian_blur_channel @endverbatim
+ *   - @verbatim Image#gaussian_blur_channel(radius) @endverbatim
+ *   - @verbatim Image#gaussian_blur_channel(radius, sigma) @endverbatim
+ *   - @verbatim Image#gaussian_blur_channel(radius, sigma, channel) @endverbatim
+ *   - @verbatim Image#gaussian_blur_channel(radius, sigma, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default channel is AllChannels
+ *   - New in IM 6.0.0
+ *
+ *
+ */
 VALUE
 Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -5370,13 +6883,28 @@ Image_gaussian_blur_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#geometry, geometry=
-    Purpose:    the preferred size of the image when encoding
-*/
+/**
+ * Get the preferred size of the image when encoding.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#geometry @endverbatim
+ *
+ * @param self this object
+ * @return the geometry
+ */
 DEF_ATTR_READER(Image, geometry, str)
 
 
+/**
+ * Set the preferred size of the image when encoding.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#geometry= @endverbatim
+ *
+ * @param self this object
+ * @param geometry the geometry
+ * @return self
+ */
 VALUE
 Image_geometry_eq(
                  VALUE self,
@@ -5407,16 +6935,26 @@ Image_geometry_eq(
 }
 
 
-/*
-    Method:     Image#get_pixels(x, y, columns. rows)
-    Purpose:    Call AcquireImagePixels
-    Returns:    An array of Magick::Pixel objects corresponding to the pixels in
-                the rectangle defined by the geometry parameters.
-    Note:       This is the complement of store_pixels. Notice that the
-                return value is an array object even when only one pixel is
-                returned.
-                store_pixels calls GetImagePixels, then SyncImage
-*/
+/**
+ * Call AcquireImagePixels.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#get_pixels(x, y, columns. rows) @endverbatim
+ *
+ * Notes:
+ *   - This is the complement of store_pixels. Notice that the return value is
+ *     an array object even when only one pixel is returned. store_pixels calls
+ *     GetImagePixels, then SyncImage
+ *
+ * @param self this object
+ * @param x_arg x position of start of region
+ * @param y_arg y position of start of region
+ * @param cols_arg width of region
+ * @param rows_arg height of region
+ * @return An array of Magick::Pixel objects corresponding to the pixels in the
+ * rectangle defined by the geometry parameters.
+ * @see Image_store_pixels
+ */
 VALUE
 Image_get_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg, VALUE rows_arg)
 {
@@ -5472,6 +7010,15 @@ Image_get_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg, VALUE row
 }
 
 
+/**
+ * Run a function testing whether this image has an attribute.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param self this object
+ * @param attr_test the attribute testing function
+ * @return the result of attr_test.
+ */
 static VALUE
 has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, ExceptionInfo *))
 {
@@ -5489,11 +7036,17 @@ has_attribute(VALUE self, MagickBooleanType (attr_test)(const Image *, Exception
 }
 
 
-/*
-    Method:     Image#gray?
-    Purpose:    return true if all the pixels in the image have the same red,
-                green, and blue intensities.
-*/
+/**
+ * Return true if all the pixels in the image have the same red, green, and blue
+ * intensities.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gray? @endverbatim
+ *
+ * @param self this object
+ * @return true if image is gray, false otherwise
+ * @see has_attribute
+ */
 VALUE
 Image_gray_q(VALUE self)
 {
@@ -5501,10 +7054,16 @@ Image_gray_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#histogram?
-    Purpose:    return true if has 1024 unique colors or less.
-*/
+/**
+ * Return true if has 1024 unique colors or less.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#histogram? @endverbatim
+ *
+ * @param self this object
+ * @return true if image has <=1024 unique colors
+ * @see has_attribute
+ */
 VALUE
 Image_histogram_q(VALUE self)
 {
@@ -5512,11 +7071,21 @@ Image_histogram_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#implode(amount=0.50)
-    Purpose:    implode the image by the specified percentage
-    Returns:    a new image
-*/
+/**
+ * Implode the image by the specified percentage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#implode @endverbatim
+ *   - @verbatim Image#implode(amount) @endverbatim
+ *
+ * Notes:
+ *   - Default amount is 0.50
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_implode(int argc, VALUE *argv, VALUE self)
 {
@@ -5547,11 +7116,18 @@ Image_implode(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#import_pixels
-    Purpose:    store image pixel data from an array
-    Notes:      See Image#export_pixels
-*/
+/**
+ * Store image pixel data from an array.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#import_pixels @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see Image_export_pixels
+ */
 VALUE
 Image_import_pixels(int argc, VALUE *argv, VALUE self)
 {
@@ -5712,14 +7288,20 @@ Image_import_pixels(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#inspect
-    Purpose:    Overrides Object#inspect - returns a string description of the
-                image.
-    Returns:    the string
-    Notes:      this is essentially the IdentifyImage except the description is
-                built in a char buffer instead of being written to a file.
-*/
+/**
+ * Override Object#inspect - return a string description of the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - This is essentially the IdentifyImage except the description is built in
+ *     a char buffer instead of being written to a file.
+ *
+ * @param image the image to inspect
+ * @param buffer buffer for the output string
+ * @param len length of buffer
+ * @see Image_inspect
+ */
 static void
 build_inspect_string(Image *image, char *buffer, size_t len)
 {
@@ -5850,6 +7432,20 @@ build_inspect_string(Image *image, char *buffer, size_t len)
 }
 
 
+/**
+ * Override Object#inspect - return a string description of the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#inspect @endverbatim
+ *
+ * Notes:
+ *   - This is essentially the IdentifyImage except the description is built in
+ *     a char buffer instead of being written to a file.
+ *
+ * @param self this object
+ * @return the string
+ * @see build_inspect_string
+ */
 VALUE
 Image_inspect(VALUE self)
 {
@@ -5866,10 +7462,15 @@ Image_inspect(VALUE self)
 }
 
 
-/*
-    Method:     Image#interlace
-    Purpose:    get the interlace attribute
-*/
+/**
+ * Get the interlace attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#interlace @endverbatim
+ *
+ * @param self this object
+ * @return the interlace
+ */
 VALUE
 Image_interlace(VALUE self)
 {
@@ -5878,10 +7479,16 @@ Image_interlace(VALUE self)
 }
 
 
-/*
-    Method:     Image#interlace=
-    Purpose:    set the interlace attribute
-*/
+/**
+ * Set the interlace attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#interlace= @endverbatim
+ *
+ * @param self this object
+ * @param interlace the interlace
+ * @return self
+ */
 VALUE
 Image_interlace_eq(VALUE self, VALUE interlace)
 {
@@ -5891,11 +7498,15 @@ Image_interlace_eq(VALUE self, VALUE interlace)
 }
 
 
-/*
-    Method:     Image#iptc_profile
-    Purpose:    Return the IPTC profile as a String.
-    Notes:      If there is no profile, returns Qnil
-*/
+/**
+ * Return the IPTC profile as a String.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#iptc_profile @endverbatim
+ *
+ * @param self
+ * @return the IPTC profile if it exists, otherwise nil
+ */
 VALUE
 Image_iptc_profile(VALUE self)
 {
@@ -5916,11 +7527,19 @@ Image_iptc_profile(VALUE self)
 
 
 
-/*
-    Method:     Image#iptc_profile=(String)
-    Purpose:    Set the IPTC profile. The argument is a string.
-    Notes:      Pass nil to remove any existing profile
-*/
+/**
+ * Set the IPTC profile. The argument is a string.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#iptc_profile= @endverbatim
+ *
+ * Notes:
+ *   - Pass nil to remove any existing profile
+ *
+ * @param self
+ * @param profile the IPTC profile (as a string)
+ * @return self
+ */
 VALUE
 Image_iptc_profile_eq(VALUE self, VALUE profile)
 {
@@ -5934,17 +7553,31 @@ Image_iptc_profile_eq(VALUE self, VALUE profile)
 
 
 /*
-    These are undocumented methods. The writer is
-    called only by Image#iterations=.
-    The reader is only used by the unit tests!
-*/
+ *  These are undocumented methods. The writer is
+ *  called only by Image#iterations=.
+ *  The reader is only used by the unit tests!
+ */
 DEF_ATTR_ACCESSOR(Image, iterations, int)
 
-/*
-    Method:     Image#level(black_point=0.0, white_point=QuantumRange, gamma=1.0)
-    Purpose:    adjusts the levels of an image given these points: black, mid, and white
-    Notes:      all three arguments are optional
-*/
+/**
+ * Adjust the levels of an image given these points: black, mid, and white.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#level @endverbatim
+ *   - @verbatim Image#level(black_point) @endverbatim
+ *   - @verbatim Image#level(black_point, white_point) @endverbatim
+ *   - @verbatim Image#level(black_point, white_point, gamma) @endverbatim
+ *
+ * Notes:
+ *   - Default black_point is 0.0
+ *   - Default white_point is QuantumRange
+ *   - Default gamma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_level2(int argc, VALUE *argv, VALUE self)
 {
@@ -5985,11 +7618,26 @@ Image_level2(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#level_channel(aChannelType, black=0, white=QuantumRange, gamma=1.0)
-    Purpose:    similar to Image#level but applies to a single channel only
-    Notes:      black and white are 0-QuantumRange, gamma is 0-10.
-*/
+/**
+ * Similar to Image#level but applies to a single channel only.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#level_channel(aChannelType) @endverbatim
+ *   - @verbatim Image#level_channel(aChannelType, black) @endverbatim
+ *   - @verbatim Image#level_channel(aChannelType, black, white) @endverbatim
+ *   - @verbatim Image#level_channel(aChannelType, black, white, gamma) @endverbatim
+ *
+ * Notes:
+ *   - Default black is 0.0
+ *   - Default white is QuantumRange
+ *   - Default gamma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see Image_level2
+ */
 VALUE
 Image_level_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -6031,10 +7679,28 @@ Image_level_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#level_colors(black_color="black", white_color="white", invert=true [, channel...])
-    Purpose:    Implement +level_colors blank_color,white_color
-*/
+/**
+ * Implement +level_colors blank_color,white_color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#level_colors @endverbatim
+ *   - @verbatim Image#level_colors(black_color) @endverbatim
+ *   - @verbatim Image#level_colors(black_color, white_color) @endverbatim
+ *   - @verbatim Image#level_colors(black_color, white_color, invert) @endverbatim
+ *   - @verbatim Image#level_colors(black_color, white_color, invert, channel) @endverbatim
+ *   - @verbatim Image#level_colors(black_color, white_color, invert, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default black_color is "black"
+ *   - Default white_color is "white"
+ *   - Default invert is true
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_level_colors(int argc, VALUE *argv, VALUE self)
 {
@@ -6115,9 +7781,26 @@ Image_level_colors(int argc, VALUE *argv, VALUE self)
 
 
 
-/*
-    Method:     Image#levelize_channel(black_point[, white_point[, gamma=1.0[, channel...]])
-*/
+/**
+ * Levelize on a channel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#levelize_channel(black_point) @endverbatim
+ *   - @verbatim Image#levelize_channel(black_point, white_point) @endverbatim
+ *   - @verbatim Image#levelize_channel(black_point, white_point, gamma) @endverbatim
+ *   - @verbatim Image#levelize_channel(black_point, white_point, gamma, channel) @endverbatim
+ *   - @verbatim Image#levelize_channel(black_point, white_point, gamma, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default white_point is QuantumRange
+ *   - Default gamma is 1.0
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_levelize_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -6171,12 +7854,23 @@ Image_levelize_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image_linear_stretch(black_point <, white_point>)
-    Purpose:    Call LinearStretchImage
-    Notes:      The default for white_point is #pixels-black_point.
-                See Image_contrast_stretch_channel.
-*/
+/**
+ * Call LinearStretchImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image_linear_stretch(black_point) @endverbatim
+ *   - @verbatim Image_linear_stretch(black_point , white_point) @endverbatim
+ *
+ * Notes:
+ *   - Default white_point is pixels-black_point
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see Image_contrast_stretch_channel.
+ * @see get_black_white_point
+ */
 VALUE
 Image_linear_stretch(int argc, VALUE *argv, VALUE self)
 {
@@ -6194,10 +7888,23 @@ Image_linear_stretch(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#liquid_rescale(columns, rows, delta_x=0.0, rigidity=0.0)
-    Purpose:    Call the LiquidRescaleImage API
-*/
+/**
+ * Call the LiquidRescaleImage API.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#liquid_rescale(columns, rows) @endverbatim
+ *   - @verbatim Image#liquid_rescale(columns, rows, delta_x) @endverbatim
+ *   - @verbatim Image#liquid_rescale(columns, rows, delta_x, rigidity) @endverbatim
+ *
+ * Notes:
+ *   - Default delta_x is 0.0
+ *   - Default rigidity is 0.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_liquid_rescale(int argc, VALUE *argv, VALUE self)
 {
@@ -6242,11 +7949,20 @@ Image_liquid_rescale(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image._load
-    Purpose:    implement marshalling
-    Notes:      calls BlobToImage - see Image#_dump
-*/
+/**
+ * Implement marshalling.
+ *
+ * Ruby usage:
+ *   - @verbatim Image._load @endverbatim
+ *
+ * Notes:
+ *   - calls BlobToImage
+ *
+ * @param class Ruby class for Image
+ * @param str the marshalled string
+ * @return a new image
+ * @see Image__dump
+ */
 VALUE
 Image__load(VALUE class, VALUE str)
 {
@@ -6315,14 +8031,16 @@ Image__load(VALUE class, VALUE str)
 }
 
 
-/*
-    Method:     Image#magnify
-                Image#magnify!
-    Purpose:    Scales an image proportionally to twice its size
-    Returns:    magnify: a new image 2x the size of the input image
-                magnify!: self, 2x
-
-*/
+/**
+ * Scale an image proportionally to twice its size.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param magnifier function to use for magnification
+ * @return self if bang, otherwise a new image
+ */
 static VALUE
 magnify(int bang, VALUE self, magnifier_t magnifier)
 {
@@ -6351,6 +8069,17 @@ magnify(int bang, VALUE self, magnifier_t magnifier)
 }
 
 
+/**
+ * Scale an image proportionally to twice its size.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#magnify @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see magnify
+ * @see Image_magnify_bang
+ */
 VALUE
 Image_magnify(VALUE self)
 {
@@ -6359,6 +8088,17 @@ Image_magnify(VALUE self)
 }
 
 
+/**
+ * Scale an image proportionally to twice its size.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#magnify! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see magnify
+ * @see Image_magnify
+ */
 VALUE
 Image_magnify_bang(VALUE self)
 {
@@ -6367,11 +8107,21 @@ Image_magnify_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#map(map_image, dither=false)
-    Purpose:    Call MapImage
-    Returns:    a new image
-*/
+/**
+ * Call MapImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#map(map_image) @endverbatim
+ *   - @verbatim Image#map(map_image, dither) @endverbatim
+ *
+ * Notes:
+ *   - Default dither is false
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_map(int argc, VALUE *argv, VALUE self)
 {
@@ -6409,11 +8159,15 @@ Image_map(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#marshal_dump
-    Purpose:    Support Marshal.dump >= 1.8
-    Returns:    [img.filename, img.to_blob]
-*/
+/**
+ * Support Marshal.dump >= 1.8.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#marshal_dump @endverbatim
+ *
+ * @param self this object
+ * @return [img.filename, img.to_blob]
+ */
 VALUE
 Image_marshal_dump(VALUE self)
 {
@@ -6457,11 +8211,16 @@ Image_marshal_dump(VALUE self)
 }
 
 
-/*
-    Method:     Image#marshal_load
-    Purpose:    Support Marshal.load >= 1.8
-    Notes:      On entry, ary is the array returned from marshal_dump.
-*/
+/**
+ * Support Marshal.load >= 1.8.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#marshal_load @endverbatim
+ *
+ * @param self this object
+ * @param ary the array returned from marshal_dump
+ * @return self
+ */
 VALUE
 Image_marshal_load(VALUE self, VALUE ary)
 {
@@ -6497,12 +8256,17 @@ Image_marshal_load(VALUE self, VALUE ary)
 }
 
 
-/*
-    Static:     get_image_mask
-    Purpose:    Return the image's clip mask, or nil if it doesn't have a clip
-                mask.
-    Notes:      Distinguish from Image#clip_mask
-*/
+/**
+ * Return the image's clip mask, or nil if it doesn't have a clip mask.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Distinguish from Image#clip_mask
+ *
+ * @param image the image
+ * @return copy of the current clip-mask or nil
+ */
 static VALUE
 get_image_mask(Image *image)
 {
@@ -6521,10 +8285,19 @@ get_image_mask(Image *image)
 }
 
 
-/*
-    Method:     Image#mask=(mask-image)
-    Notes:      Deprecated in favor of Image#mask(mask-image). See below.
-*/
+/**
+ * Set the image mask.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#mask= @endverbatim
+ *
+ * @param self this object
+ * @param mask the mask to use
+ * @return copy of the current clip-mask or nil
+ * @deprecated Please use Image_mask(mask-image).
+ * @see Image_mask(mask-image)
+ * @see get_image_mask
+ */
 VALUE
 Image_mask_eq(VALUE self, VALUE mask)
 {
@@ -6534,16 +8307,26 @@ Image_mask_eq(VALUE self, VALUE mask)
 }
 
 
-/*
-    Method:     Image#mask([mask-image])
-    Purpose:    associates a clip mask with the image
-    Returns:    Copy of the current clip-mask
-    Notes:      Omit the argument to get a copy of the current clip mask.
-    Notes:      pass "nil" for the mask-image to remove the current clip mask.
-                If the clip mask is not the same size as the target image,
-                resizes the clip mask to match the target.
-    Notes:      Distinguish from Image#clip_mask=
-*/
+/**
+ * Associate a clip mask with the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#mask @endverbatim
+ *   - @verbatim Image#mask(mask-image) @endverbatim
+ *
+ * Notes:
+ *   - Omit the argument to get a copy of the current clip mask.
+ *   - Pass "nil" for the mask-image to remove the current clip mask.
+ *   - If the clip mask is not the same size as the target image, resizes the
+ *     clip mask to match the target.
+ *   - Distinguish from Image#clip_mask=
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return copy of the current clip-mask or nil
+ * @see get_image_mask
+ */
 VALUE
 Image_mask(int argc, VALUE *argv, VALUE self)
 {
@@ -6648,11 +8431,18 @@ Image_mask(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#matte
-    Purpose:    Get matte attribute
-    Notes:      Deprecated as of ImageMagick 6.3.6. See Image#alpha
-*/
+/**
+ * Get matte attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#matte @endverbatim
+ *
+ * @param self this object
+ * @return the matte
+ * @deprecated Deprecated as of ImageMagick 6.3.6. See Image_alpha
+ * @see Image_alpha
+ * @see Image_alpha_eq
+ */
 VALUE
 Image_matte(VALUE self)
 {
@@ -6663,11 +8453,19 @@ Image_matte(VALUE self)
 }
 
 
-/*
-    Method:     Image#matte=
-    Purpose:    Set matte attribute
-    Notes:      Deprecated as of ImageMagick 6.3.6. See Image#alpha
-*/
+/**
+ * Set matte attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#matte= @endverbatim
+ *
+ * @param self this object
+ * @param matte the matte
+ * @return the matte
+ * @deprecated Deprecated as of ImageMagick 6.3.6. See Image_alpha_eq
+ * @see Image_alpha_eq
+ * @see Image_alpha
+ */
 VALUE
 Image_matte_eq(VALUE self, VALUE matte)
 {
@@ -6692,10 +8490,15 @@ Image_matte_eq(VALUE self, VALUE matte)
 }
 
 
-/*
-    Method:     Image#matte_color
-    Purpose:    Return the matte color
-*/
+/**
+ * Return the matte color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#matte_color @endverbatim
+ *
+ * @param self this object
+ * @return the matte color
+ */
 VALUE
 Image_matte_color(VALUE self)
 {
@@ -6703,10 +8506,16 @@ Image_matte_color(VALUE self)
     return rm_pixelpacket_to_color_name(image, &image->matte_color);
 }
 
-/*
-    Method:     Image#matte_color=
-    Purpose:    Set the matte color
-*/
+/**
+ * Set the matte color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#matte_color= @endverbatim
+ *
+ * @param self this object
+ * @param color the matte color
+ * @return self
+ */
 VALUE
 Image_matte_color_eq(VALUE self, VALUE color)
 {
@@ -6716,10 +8525,20 @@ Image_matte_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Image#matte_flood_fill(color, opacity, x, y, method_obj)
-    Purpose:    Call MatteFloodFillImage
-*/
+/**
+ * Call MatteFloodFillImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#matte_flood_fill(color, opacity, x, y, method_obj) @endverbatim
+ *
+ * @param self this object
+ * @param color the color
+ * @param opacity the opacity
+ * @param x_obj x position
+ * @param y_obj y position
+ * @param method_obj which method to call: FloodfillMethod or FillToBorderMethod
+ * @return a new image
+ */
 VALUE
 Image_matte_flood_fill(VALUE self, VALUE color, VALUE opacity, VALUE x_obj, VALUE y_obj, VALUE method_obj)
 {
@@ -6791,13 +8610,23 @@ Image_matte_flood_fill(VALUE self, VALUE color, VALUE opacity, VALUE x_obj, VALU
 }
 
 
-/*
-    Method:     Image#median_filter(radius=0.0)
-    Purpose:    applies a digital filter that improves the quality of a noisy
-                image. Each pixel is replaced by the median in a set of
-                neighboring pixels as defined by radius.
-    Returns:    a new image
-*/
+/**
+ * Apply a digital filter that improves the quality of a noisy image. Each pixel
+ * is replaced by the median in a set of neighboring pixels as defined by
+ * radius.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#median_filter @endverbatim
+ *   - @verbatim Image#median_filter(radius) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_median_filter(int argc, VALUE *argv, VALUE self)
 {
@@ -6830,14 +8659,28 @@ Image_median_filter(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Get image mean error per pixel
+ *
+ * Ruby usage:
+ *   - @verbatim Image#mean_error_per_pixel @endverbatim
+ *
+ * @param self this object
+ * @return the mean error per pixel
+ */
 DEF_ATTR_READERF(Image, mean_error_per_pixel, error.mean_error_per_pixel, dbl)
 
 
-/*
-    Method:     Image#mime_type
-    Purpose:    Return the officially registered (or de facto) MIME media-type
-                corresponding to the image format.
-*/
+/**
+ * Return the officially registered (or de facto) MIME media-type corresponding
+ * to the image format.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#mime_type @endverbatim
+ *
+ * @param self this object
+ * @return the mime type
+ */
 VALUE
 Image_mime_type(VALUE self)
 {
@@ -6860,13 +8703,17 @@ Image_mime_type(VALUE self)
 }
 
 
-/*
-    Method:     Image#minify
-                Image#minify!
-    Purpose:    Scales an image proportionally to half its size
-    Returns:    minify: a new image 1/2x the size of the input image
-                minify!: self, 1/2x
-*/
+/**
+ * Scale an image proportionally to half its size.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#minify @endverbatim
+ *
+ * @return minify: a new image 1/2x the size of the input image
+ * @return minify!: self, 1/2x
+ * @return a new image
+ * @see Image_minify_bang
+ */
 VALUE
 Image_minify(VALUE self)
 {
@@ -6875,6 +8722,16 @@ Image_minify(VALUE self)
 }
 
 
+/**
+ * Scale an image proportionally to half its size.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#minify! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see Image_minify
+ */
 VALUE
 Image_minify_bang(VALUE self)
 {
@@ -6883,11 +8740,26 @@ Image_minify_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#modulate(<brightness<, saturation<, hue>>>)
-    Purpose:    control the brightness, saturation, and hue of an image
-    Notes:      all three arguments are optional and default to 100%
-*/
+/**
+ * Control the brightness, saturation, and hue of an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#modulate @endverbatim
+ *   - @verbatim Image#modulate(brightness) @endverbatim
+ *   - @verbatim Image#modulate(brightness, saturation) @endverbatim
+ *   - @verbatim Image#modulate(brightness, saturation, hue) @endverbatim
+ *
+ * Notes:
+ *   - Default brightness is 100.0
+ *   - Default saturation is 100.0
+ *   - Default hue is 100.0
+ *   - all three arguments are optional and default to 100%
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_modulate(int argc, VALUE *argv, VALUE self)
 {
@@ -6929,14 +8801,21 @@ Image_modulate(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#monitor= proc
-    Purpose:    Establish a progress monitor
-    Notes:      A progress monitor is a callable object. Save the monitor proc
-                as the client_data and establish `progress_monitor' as the
-                monitor exit. When `progress_monitor' is called, retrieve
-                the proc and call it.
-*/
+/**
+ * Establish a progress monitor.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#monitor= proc @endverbatim
+ *
+ * Notes:
+ *   - A progress monitor is a callable object. Save the monitor proc as the
+ *     client_data and establish `progress_monitor' as the monitor exit. When
+ *     `progress_monitor' is called, retrieve the proc and call it.
+ *
+ * @param self this object
+ * @param monitor the progress monitor
+ * @return self
+ */
 VALUE
 Image_monitor_eq(VALUE self, VALUE monitor)
 {
@@ -6956,12 +8835,16 @@ Image_monitor_eq(VALUE self, VALUE monitor)
 }
 
 
-/*
-    Method:     Image#monochrome?
-    Purpose:    return true if all the pixels in the image have the same red,
-                green, and blue intensities and the intensity is either 0 or
-                QuantumRange.
-*/
+/**
+ * Return true if all the pixels in the image have the same red, green, and blue
+ * intensities and the intensity is either 0 or QuantumRange.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#monochrome? @endverbatim
+ *
+ * @param self this object
+ * @return true if monochrome, false otherwise
+ */
 VALUE
 Image_monochrome_q(VALUE self)
 {
@@ -6969,18 +8852,31 @@ Image_monochrome_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#montage
-    Purpose:    Tile size and offset within an image montage.
-                Only valid for montage images.
-*/
+/**
+ * Tile size and offset within an image montage. Only valid for montage images.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#montage @endverbatim
+ *
+ * @param self this object
+ * @return the tile size and offset
+ */
 DEF_ATTR_READER(Image, montage, str)
 
 
-/*
-    Static:     motion_blur(int argc, VALUE *argv, VALUE self, Image *fp)
-    Purpose:    called from Image_motion_blur and Image_sketch
-*/
+/**
+ * Called from Image_motion_blur and Image_sketch.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param fp the blur function to call
+ * @return a new image
+ * @see Image_motion_blur
+ * @see Image_sketch
+ */
 static VALUE
 motion_blur(int argc, VALUE *argv, VALUE self
             , Image *fp(const Image *, const double, const double, const double, ExceptionInfo *))
@@ -7025,14 +8921,28 @@ motion_blur(int argc, VALUE *argv, VALUE self
 }
 
 
-/*
-    Method:     Image#motion_blur(radius=0.0, sigma=1.0, angle=0.0)
-    Purpose:    simulates motion blur. Convolves the image with a Gaussian
-                operator of the given radius and standard deviation (sigma).
-                For reasonable results, radius should be larger than sigma.
-                Use a radius of 0 and motion_blur selects a suitable radius
-                for you. Angle gives the angle of the blurring motion.
-*/
+/**
+ * Simulate motion blur. Convolve the image with a Gaussian operator of the
+ * given radius and standard deviation (sigma). For reasonable results, radius
+ * should be larger than sigma. Use a radius of 0 and motion_blur selects a
+ * suitable radius for you. Angle gives the angle of the blurring motion.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#motion_blur @endverbatim
+ *   - @verbatim Image#motion_blur(radius) @endverbatim
+ *   - @verbatim Image#motion_blur(radius, sigma) @endverbatim
+ *   - @verbatim Image#motion_blur(radius, sigma, angle) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default angle is 0.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_motion_blur(int argc, VALUE *argv, VALUE self)
 {
@@ -7041,13 +8951,22 @@ Image_motion_blur(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#negate(grayscale=false)
-    Purpose:    negates the colors in the reference image. The grayscale option
-                means that only grayscale values within the image are negated.
-    Notes:      The default for grayscale is false.
-
-*/
+/**
+ * Negate the colors in the reference image. The grayscale option means that
+ * only grayscale values within the image are negated.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#negate @endverbatim
+ *   - @verbatim Image#negate(grayscale) @endverbatim
+ *
+ * Notes:
+ *   - Default grayscale is false.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_negate(int argc, VALUE *argv, VALUE self)
 {
@@ -7073,10 +8992,28 @@ Image_negate(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#negate_channel(grayscale=false, channel=AllChannels)
- *  Returns     a new image
-*/
+/**
+ * Negate the colors on a particular channel. The grayscale option means that
+ * only grayscale values within the image are negated.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#negate_channel(grayscale=false, channel=AllChannels) @endverbatim
+ *
+ * Ruby usage:
+ *   - @verbatim Image#negate_channel @endverbatim
+ *   - @verbatim Image#negate_channel(grayscale) @endverbatim
+ *   - @verbatim Image#negate_channel(grayscale, channel) @endverbatim
+ *   - @verbatim Image#negate_channel(grayscale, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default grayscale is false.
+ *   - Default channel is AllChannels.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_negate_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -7108,13 +9045,18 @@ Image_negate_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Extern:     Image_alloc(cols,rows,[fill])
-    Purpose:    "allocate" a new Image object
-    Note:       actually we defer allocating the image
-                until the initialize method so we can
-                run the parm block if it's present
-*/
+/**
+ * "Allocate" a new Image object
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Actually we defer allocating the image until the initialize method so we
+ *     can run the parm block if it's present.
+ * 
+ * @param class the Ruby class for an Image
+ * @return a newly allocated image
+ */
 VALUE
 Image_alloc(VALUE class)
 {
@@ -7124,11 +9066,22 @@ Image_alloc(VALUE class)
     return image_obj;
 }
 
-/*
-    Method:     Image#initialize(cols,rows,[fill])
-    Purpose:    initialize a new Image object
-                If the fill argument is omitted, fill with background color
-*/
+/**
+ * Initialize a new Image object If the fill argument is omitted, fill with
+ * background color.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#initialize(cols,rows) @endverbatim
+ *   - @verbatim Image#initialize(cols,rows,fill) @endverbatim
+ *
+ * Notes:
+ *   - Default fill is false
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -7185,12 +9138,18 @@ Image_initialize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    External:   rm_image_new(Image *)
-    Purpose:    create a new Image object from an Image structure
-    Notes:      since the Image is already created we don't need
-                to call Image_alloc or Image_initialize.
-*/
+/**
+ * Create a new Image object from an Image structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Since the Image is already created we don't need to call Image_alloc or
+ *     Image_initialize.
+ *
+ * @param image the Image structure
+ * @return a new image
+ */
 VALUE
 rm_image_new(Image *image)
 {
@@ -7205,11 +9164,16 @@ rm_image_new(Image *image)
 }
 
 
-/*
-    Method:     Image#normalize
-    Purpose:    enhances the contrast of a color image by adjusting the pixels
-                color to span the entire range of colors available
-*/
+/**
+ * Enhance the contrast of a color image by adjusting the pixels color to span
+ * the entire range of colors available.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#normalize @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_normalize(VALUE self)
 {
@@ -7225,10 +9189,21 @@ Image_normalize(VALUE self)
 }
 
 
-/*
-    Method:     Image#normalize_channel(channel=AllChannels)
-    Purpose:    Call NormalizeImageChannel
-*/
+/**
+ * Call NormalizeImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#normalize_channel @endverbatim
+ *   - @verbatim Image#normalize_channel(channel) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_normalize_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -7252,14 +9227,38 @@ Image_normalize_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Get image normalized mean error
+ *
+ * Ruby usage:
+ *   - @verbatim Image#normalized_mean_error @endverbatim
+ *
+ * @param self this object
+ * @return the normalized mean error
+ */
 DEF_ATTR_READERF(Image, normalized_mean_error, error.normalized_mean_error, dbl)
+
+/**
+ * Get image normalized maximum error
+ *
+ * Ruby usage:
+ *   - @verbatim Image#normalized_maximum_error @endverbatim
+ *
+ * @param self this object
+ * @return the normalized maximum error
+ */
 DEF_ATTR_READERF(Image, normalized_maximum_error, error.normalized_maximum_error, dbl)
 
 
-/*
-    Method:     Image#number_colors
-    Purpose:    return the number of unique colors in the image
-*/
+/**
+ * Return the number of unique colors in the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#number_colors @endverbatim
+ *
+ * @param self this object
+ * @return number of unique colors
+ */
 VALUE
 Image_number_colors(VALUE self)
 {
@@ -7282,10 +9281,21 @@ Image_number_colors(VALUE self)
 DEF_ATTR_ACCESSOR(Image, offset, long)
 
 
-/*
-    Method:     Image#oil_paint(radius=3.0)
-    Purpose:    applies a special effect filter that simulates an oil painting
-*/
+/**
+ * Apply a special effect filter that simulates an oil painting.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#oil_paint @endverbatim
+ *   - @verbatim Image#oil_paint(radius) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 3.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_oil_paint(int argc, VALUE *argv, VALUE self)
 {
@@ -7318,14 +9328,23 @@ Image_oil_paint(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#opaque(target-color-name, fill-color-name)
-                Image#opaque(target-pixel, fill-pixel)
-    Purpose:    changes any pixel that matches target with the color defined by fill
-    Notes:      By default a pixel must match the specified target color exactly.
-                Use image.fuzz to set the amount of tolerance acceptable to consider
-                two colors as the same.
-*/
+/**
+ * Change any pixel that matches target with the color defined by fill.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#opaque(target-color-name, fill-color-name) @endverbatim
+ *   - @verbatim Image#opaque(target-pixel, fill-pixel) @endverbatim
+ *
+ * Notes:
+ *   - By default a pixel must match the specified target color exactly.
+ *   - Use Image_fuzz_eq to set the amount of tolerance acceptable to consider
+ *     two colors as the same.
+ *
+ * @param self this object
+ * @param target either the color name or the pixel
+ * @param fill the color for filling
+ * @see Image_fuzz_eq
+ */
 VALUE
 Image_opaque(VALUE self, VALUE target, VALUE fill)
 {
@@ -7359,11 +9378,27 @@ Image_opaque(VALUE self, VALUE target, VALUE fill)
 }
 
 
-/*
-    Method:     Image#opaque_channel
-    Purpose:    Improved Image#opaque available in 6.3.7-10
-    Notes:      opaque_channel(target, fill, invert=false, fuzz=img.fuzz [, channel...])
-*/
+/**
+ * Improved Image#opaque available in ImageMagick 6.3.7-10.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#opaque_channel @endverbatim
+ *   - @verbatim opaque_channel(target, fill) @endverbatim
+ *   - @verbatim opaque_channel(target, fill, invert) @endverbatim
+ *   - @verbatim opaque_channel(target, fill, invert, fuzz) @endverbatim
+ *   - @verbatim opaque_channel(target, fill, invert, fuzz, channel) @endverbatim
+ *   - @verbatim opaque_channel(target, fill, invert, fuzz, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default invert is false
+ *   - Default fuzz is the image's fuzz (see Image_fuzz_eq)
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_opaque_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -7433,11 +9468,16 @@ Image_opaque_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#opaque?
-    Purpose:    return true if any of the pixels in the image have an opacity
-                value other than opaque ( 0 )
-*/
+/**
+ * Return true if any of the pixels in the image have an opacity value other
+ * than opaque ( 0 ).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#opaque? @endverbatim
+ *
+ * @param self this object
+ * @return true if opaque, false otherwise
+ */
 VALUE
 Image_opaque_q(VALUE self)
 {
@@ -7445,16 +9485,27 @@ Image_opaque_q(VALUE self)
 }
 
 
-/*
-    Method:     Image#ordered_dither(threshold_map='2x2')
-    Purpose:    perform ordered dither on image
-    Notes:      order must be 2, 3, or 4
-                (6.3.0) order can be any of the threshold strings listed
-                by "convert -list Thresholds" but the default is still "2x2".
-                I don't call OrderedDitherImages anymore. Sometime after
-                IM 6.0.0 it quit working. IM and GM use the routines I use
-                below to implement the "ordered-dither" option.
-*/
+/**
+ * Perform ordered dither on image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#ordered_dither @endverbatim
+ *   - @verbatim Image#ordered_dither(threshold_map) @endverbatim
+ *
+ * Notes:
+ *   - Default threshold_map is '2x2'
+ *   - Order of threshold_map must be 2, 3, or 4.
+ *   - If using ImageMagick >= 6.3.0, order can be any of the threshold strings
+ *     listed by "convert -list Thresholds"
+ *   - Does not call OrderedDitherImages anymore. Sometime after ImageMagick
+ *     6.0.0 it quit working. Uses the same routines as ImageMagick and
+ *     GraphicsMagick for their "ordered-dither" option.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 {
@@ -7507,10 +9558,15 @@ Image_ordered_dither(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#orientation
-    Purpose:    Return the orientation attribute as an OrientationType enum value.
-*/
+/**
+ * Return the orientation attribute as an OrientationType enum value.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#orientation @endverbatim
+ *
+ * @param self this object
+ * @return the orientation
+ */
 VALUE
 Image_orientation(VALUE self)
 {
@@ -7519,10 +9575,16 @@ Image_orientation(VALUE self)
 }
 
 
-/*
-    Method:     Image#orientation=
-    Purpose:    Set the orientation attribute
-*/
+/**
+ * Set the orientation attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#orientation= @endverbatim
+ *
+ * @param self this object
+ * @param orientation the orientation
+ * @return self
+ */
 VALUE
 Image_orientation_eq(VALUE self, VALUE orientation)
 {
@@ -7532,10 +9594,15 @@ Image_orientation_eq(VALUE self, VALUE orientation)
 }
 
 
-/*
-    Method:     Image#page
-    Purpose:    the page attribute getter
-*/
+/**
+ * The page attribute getter.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#page @endverbatim
+ *
+ * @param self
+ * @return the page rectangle
+ */
 VALUE
 Image_page(VALUE self)
 {
@@ -7544,10 +9611,16 @@ Image_page(VALUE self)
 }
 
 
-/*
-    Method:     Image#page=
-    Purpose:    the page attribute setter
-*/
+/**
+ * The page attribute setter.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#page= @endverbatim
+ *
+ * @param self this object
+ * @param rect the page rectangle
+ * @return self
+ */
 VALUE
 Image_page_eq(VALUE self, VALUE rect)
 {
@@ -7557,10 +9630,25 @@ Image_page_eq(VALUE self, VALUE rect)
 }
 
 
-/*
-    Method:     Image#paint_transparent(target, opacity=TransparentOpacity, invert=false, fuzz=img.fuzz)
-    Purpose:    Improved version of Image#transparent available in 6.3.7-10
-*/
+/**
+ * Improved version of Image#transparent available in ImageMagick 6.3.7-10.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#paint_transparent(target) @endverbatim
+ *   - @verbatim Image#paint_transparent(target, opacity) @endverbatim
+ *   - @verbatim Image#paint_transparent(target, opacity, invert) @endverbatim
+ *   - @verbatim Image#paint_transparent(target, opacity, invert, fuzz) @endverbatim
+ *
+ * Notes:
+ *   - Default opacity is TransparentOpacity
+ *   - Default invert is false
+ *   - Default fuzz is the image's fuzz (see Image_fuzz_eq)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_paint_transparent(int argc, VALUE *argv, VALUE self)
 {
@@ -7621,11 +9709,15 @@ Image_paint_transparent(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#palette?
-    Purpose:    return true if the image is PseudoClass and has 256 unique
-                colors or less.
-*/
+/**
+ * Return true if the image is PseudoClass and has 256 unique colors or less.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#palette? @endverbatim
+ *
+ * @param self this object
+ * @return true if palette, otherwise false
+ */
 VALUE
 Image_palette_q(VALUE self)
 {
@@ -7633,12 +9725,18 @@ Image_palette_q(VALUE self)
 }
 
 
-/*
-    Method:     Image.ping(file)
-    Purpose:    Call ImagePing
-    Returns:    Same as Image.read, except that PingImage does not
-                return the pixel data.
-*/
+/**
+ * Call ImagePing.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.ping(file) @endverbatim
+ *
+ * @param class the Ruby class for an Image
+ * @param file_arg the file containing image info
+ * @return an array of 1 or more new image objects (without pixel data)
+ * @see Image_read
+ * @see rd_image
+ */
 VALUE
 Image_ping(VALUE class, VALUE file_arg)
 {
@@ -7646,15 +9744,24 @@ Image_ping(VALUE class, VALUE file_arg)
 }
 
 
-/*
-    Method:     Image#pixel_color(x, y<, color>)
-    Purpose:    Gets/sets the color of the pixel at x,y
-    Returns:    Magick::Pixel for pixel x,y. If called to set a new
-                color, the return value is the old color.
-    Notes:      "color", if present, may be either a color name or a
-                Magick::Pixel.
-                Based on Magick++'s Magick::pixelColor methods
-*/
+/**
+ * Get/set the color of the pixel at x,y.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#pixel_color(x, y) @endverbatim
+ *   - @verbatim Image#pixel_color(x, y, color) @endverbatim
+ *
+ * Notes:
+ *   - Without color, does a get. With color, does a set.
+ *   - "color", if present, may be either a color name or a Magick::Pixel.
+ *   - Based on Magick++'s Magick::pixelColor methods
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return Magick::Pixel for pixel x,y. If called to set a new color, the
+ * return value is the old color.
+ */
 VALUE
 Image_pixel_color(int argc, VALUE *argv, VALUE self)
 {
@@ -7775,12 +9882,17 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image.pixel_interpolation_method
-                Image.pixel_interpolation_method=method
-    Purpose:    Get/set the "interpolate" field in the Image structure.
-    Ref:        Image.interpolate_pixel_color
-*/
+/**
+ * Get the "interpolate" field in the Image structure.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.pixel_interpolation_method @endverbatim
+ *
+ * @param self this object
+ * @return the interpolate field
+ * @see Image_pixel_interpolation_method_eq
+ * @see Image.interpolate_pixel_color
+ */
 VALUE
 Image_pixel_interpolation_method(VALUE self)
 {
@@ -7789,6 +9901,18 @@ Image_pixel_interpolation_method(VALUE self)
 }
 
 
+/**
+ * Set the "interpolate" field in the Image structure.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.pixel_interpolation_method=method @endverbatim
+ *
+ * @param self this object
+ * @param method the interpolate field
+ * @return self
+ * @see Image_pixel_interpolation_method
+ * @see Image.interpolate_pixel_color
+ */
 VALUE
 Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 {
@@ -7798,13 +9922,23 @@ Image_pixel_interpolation_method_eq(VALUE self, VALUE method)
 }
 
 
-/*
-    Method:     Image#polaroid([angle=-5])
-    Purpose:    Call PolaroidImage
-    Notes:      Accepts an options block to get Draw attributes for drawing
-                the label. Specify self.border_color to set a non-default
-                border color.
-*/
+/**
+ * Call PolaroidImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#polaroid { optional parms } @endverbatim
+ *   - @verbatim Image#polaroid(angle) { optional parms } @endverbatim
+ *
+ * Notes:
+ *   - Default angle is -5
+ *   - Accepts an options block to get Draw attributes for drawing the label.
+ *     Specify self.border_color to set a non-default border color.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_polaroid(int argc, VALUE *argv, VALUE self)
 {
@@ -7847,11 +9981,21 @@ Image_polaroid(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     posterize
-    Purpose:    call PosterizeImage
-    Notes:      Image#posterize(levels=4, dither=false)
-*/
+/**
+ * Call PosterizeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#posterize(levels=4, dither=false) @endverbatim
+ *
+ * Notes:
+ *   - Default levels is 4
+ *   - Default dither is false
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_posterize(int argc, VALUE *argv, VALUE self)
 {
@@ -7883,10 +10027,16 @@ Image_posterize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:  preview
-    Purpose: Call PreviewImage
-*/
+/**
+ * Call PreviewImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#preview(preview) @endverbatim
+ *
+ * @param self this object
+ * @param preview the preview
+ * @return a new image
+ */
 VALUE
 Image_preview(VALUE self, VALUE preview)
 {
@@ -7909,11 +10059,18 @@ Image_preview(VALUE self, VALUE preview)
 }
 
 
-/*
-    Method:     Image#profile!(name, profile)
-    Purpose:    If "profile" is nil, deletes the profile. Otherwise "profile"
-                must be a string containing the specified profile.
-*/
+/**
+ * Set the image profile. If "profile" is nil, deletes the profile. Otherwise
+ * "profile" must be a string containing the specified profile.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#profile!(name, profile) @endverbatim
+ *
+ * @param self this object
+ * @param name the profile name
+ * @param profile the profile
+ * @return self
+ */
 VALUE
 Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 {
@@ -7930,16 +10087,32 @@ Image_profile_bang(VALUE self, VALUE name, VALUE profile)
 }
 
 
+/**
+ * Get image quality.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#quality @endverbatim
+ *
+ * @param self this object
+ * @return the quality
+ */
 DEF_ATTR_READER(Image, quality, ulong)
 
 
-/*
-    Method:     Image#quantum_depth -> 8, 16, or 32
-    Purpose:    Return image depth to nearest quantum
-    Notes:      IM 6.0.0 introduced GetImageQuantumDepth, IM 6.0.5
-                added a 2nd argument. The MagickFalse argument
-                gives the 6.0.5 version the same behavior as before.
-*/
+/**
+ * Return image depth to nearest quantum.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#quantum_depth -> 8, 16, or 32 @endverbatim
+ *
+ * Notes:
+ *   - IM 6.0.0 introduced GetImageQuantumDepth
+ *   - IM 6.0.5 added a 2nd argument. The MagickFalse argument gives the 6.0.5
+ *     version the same behavior as before.
+ *
+ * @param self this object
+ * @return image depth
+ */
 VALUE
 Image_quantum_depth(VALUE self)
 {
@@ -7955,16 +10128,25 @@ Image_quantum_depth(VALUE self)
 }
 
 
-/*
-    Method:     Image#quantum_operator(operator, rvalue[, channel] )
-    Purpose:    This method is an adapter method that calls the
-                    EvaluateImageChannel method
-    Note 1:     Historically this method used QuantumOperatorRegionImage
-                in GraphicsMagick. By necessity this method implements
-                the "lowest common denominator" of the two implementations.
-
-    Note 2:     If the channel argument is omitted, the default is AllChannels.
-*/
+/**
+ * This method is an adapter method that calls the EvaluateImageChannel method.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#quantum_operator(operator, rvalue) @endverbatim
+ *   - @verbatim Image#quantum_operator(operator, rvalue, channel) @endverbatim
+ *   - @verbatim Image#quantum_operator(operator, rvalue, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Historically this method used QuantumOperatorRegionImage in
+ *     GraphicsMagick. By necessity this method implements the "lowest common
+ *     denominator" of the two implementations.
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 {
@@ -8121,11 +10303,29 @@ Image_quantum_operator(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#quantize(<number_colors<, colorspace<, dither<, tree_depth<, measure_error>>>>>)
-                defaults: 256, Magick::RGBColorspace, true, 0, false
-    Purpose:    call QuantizeImage
-*/
+/**
+ * Call QuantizeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#quantize @endverbatim
+ *   - @verbatim Image#quantize(number_colors) @endverbatim
+ *   - @verbatim Image#quantize(number_colors, colorspace) @endverbatim
+ *   - @verbatim Image#quantize(number_colors, colorspace, dither) @endverbatim
+ *   - @verbatim Image#quantize(number_colors, colorspace, dither, tree_depth) @endverbatim
+ *   - @verbatim Image#quantize(number_colors, colorspace, dither, tree_depth, measure_error) @endverbatim
+ *
+ * Notes:
+ *   - Default number_colors is 256
+ *   - Default colorspace is Magick::RGBColorspace
+ *   - Default dither is true
+ *   - Default tree_depth is 0
+ *   - Default measure_error is false
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_quantize(int argc, VALUE *argv, VALUE self)
 {
@@ -8171,11 +10371,16 @@ Image_quantize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#radial_blur(angle)
-    Purpose:    Call RadialBlurImage
-    Notes:      Angle is in degrees
-*/
+/**
+ * Call RadialBlurImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#radial_blur(angle) @endverbatim
+ *
+ * @param self this object
+ * @param angle the angle (in degrees)
+ * @return a new image
+ */
 VALUE
 Image_radial_blur(VALUE self, VALUE angle)
 {
@@ -8196,16 +10401,25 @@ Image_radial_blur(VALUE self, VALUE angle)
 }
 
 
-/*
-    Method:     Image#radial_blur_channel(angle[, channel..])
-    Purpose:    Call RadialBlurImageChannel
-    Notes:      Angle is in degrees
-*/
+/**
+ * Call RadialBlurImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#radial_blur_channel(angle) @endverbatim
+ *   - @verbatim Image#radial_blur_channel(angle, channel) @endverbatim
+ *   - @verbatim Image#radial_blur_channel(angle, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *   - Angle is in degrees
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
-Image_radial_blur_channel(
-                         int argc,
-                         VALUE *argv,
-                         VALUE self)
+Image_radial_blur_channel(int argc, VALUE *argv, VALUE self)
 {
     Image *image, *new_image;
     ExceptionInfo exception;
@@ -8236,10 +10450,22 @@ Image_radial_blur_channel(
 }
 
 
-/*
-    Method:     Image#random_threshold_channel
-    PUrpose:    Call RandomThresholdImageChannel
-*/
+/**
+ * Call RandomThresholdImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#random_threshold_channel(geometry_str) @endverbatim
+ *   - @verbatim Image#random_threshold_channel(geometry_str, channel) @endverbatim
+ *   - @verbatim Image#random_threshold_channel(geometry_str, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_random_threshold_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -8280,15 +10506,28 @@ Image_random_threshold_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#raise(width=6, height=6, raised=true)
-    Purpose:    creates a simulated three-dimensional button-like effect by
-                lightening and darkening the edges of the image. The "width"
-                and "height" arguments define the width of the vertical and
-                horizontal edge of the effect. If "raised" is true, creates
-                a raised effect, otherwise a lowered effect.
-    Returns:    a new image
-*/
+/**
+ * Create a simulated three-dimensional button-like effect by lightening and
+ * darkening the edges of the image. The "width" and "height" arguments define
+ * the width of the vertical and horizontal edge of the effect. If "raised" is
+ * true, creates a raised effect, otherwise a lowered effect.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#raise @endverbatim
+ *   - @verbatim Image#raise(width) @endverbatim
+ *   - @verbatim Image#raise(width, height) @endverbatim
+ *   - @verbatim Image#raise(width, height, raised) @endverbatim
+ *
+ * Notes:
+ *   - Default width is 6
+ *   - Default height is 6
+ *   - Default raised is true
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_raise(int argc, VALUE *argv, VALUE self)
 {
@@ -8325,11 +10564,17 @@ Image_raise(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image.read(file)
-    Purpose:    Call ReadImage
-    Returns:    An array of 1 or more new image objects.
-*/
+/**
+ * Call ReadImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.read(file) @endverbatim
+ *
+ * @param class the Ruby class for an Image
+ * @param file_arg the file containing image data
+ * @return an array of 1 or more new image objects
+ * @see rd_image
+ */
 VALUE
 Image_read(VALUE class, VALUE file_arg)
 {
@@ -8337,10 +10582,14 @@ Image_read(VALUE class, VALUE file_arg)
 }
 
 
-/*
- *  Static:     file_arg_rescue
- *  Purpose:    called when `rm_obj_to_s' raised an exception
-*/
+/**
+ * Called when `rm_obj_to_s' raised an exception.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the bad arg given
+ * @return 0
+ */
 static VALUE
 file_arg_rescue(VALUE arg)
 {
@@ -8350,13 +10599,23 @@ file_arg_rescue(VALUE arg)
 }
 
 
-/*
-    Static:     rd_image(class, file, reader)
-    Purpose:    Transform arguments, call either ReadImage or PingImage
-    Returns:    see Image_read or Image_ping
-    Notes:      yields to a block to get Image::Info attributes
-                before calling Read/PingImage
-*/
+/**
+ * Transform arguments, call either ReadImage or PingImage.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Yields to a block to get Image::Info attributes before calling
+ *     Read/PingImage
+ *
+ * @param class the Ruby class for an Image
+ * @param file the file containing image data
+ * @param reader which image reader to use (ReadImage or PingImage)
+ * @return an array of 1 or more new image objects
+ * @see Image_read
+ * @see Image_ping
+ * @see array_from_images
+ */
 static VALUE
 rd_image(VALUE class, VALUE file, reader_t reader)
 {
@@ -8405,10 +10664,16 @@ rd_image(VALUE class, VALUE file, reader_t reader)
 }
 
 
-/*
-    Method:     Image#recolor(matrix)
-    Purpose:    Call RecolorImage
-*/
+/**
+ * Call RecolorImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#recolor(matrix) @endverbatim
+ *
+ * @param self this object
+ * @param color_matrix the matrix
+ * @return a new image
+ */
 VALUE
 Image_recolor(VALUE self, VALUE color_matrix)
 {
@@ -8443,14 +10708,22 @@ Image_recolor(VALUE self, VALUE color_matrix)
 }
 
 
-/*
-    Method:     Image.read_inline(content)
-    Purpose:    Read a Base64-encoded image
-    Returns:    an array of new images
-    Notes:      this is similar to, but not the same as ReadInlineImage.
-                ReadInlineImage requires a comma preceeding the image
-                data. This method allows but does not require a comma.
-*/
+/**
+ * Read a Base64-encoded image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image.read_inline(content) @endverbatim
+ *
+ * Notes:
+ *   - This is similar to, but not the same as ReadInlineImage. ReadInlineImage
+ *     requires a comma preceeding the image data. This method allows but does
+ *     not require a comma.
+ *
+ * @param self this object
+ * @param content the content
+ * @return an array of new images
+ * @see array_from_images
+ */
 VALUE
 Image_read_inline(VALUE self, VALUE content)
 {
@@ -8507,10 +10780,14 @@ Image_read_inline(VALUE self, VALUE content)
 }
 
 
-/*
-     Static:    array_from_images
-     Purpose:   convert a list of images to an array of Image objects
-*/
+/**
+ * Convert a list of images to an array of Image objects.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param images the images
+ * @return array of images
+ */
 static VALUE
 array_from_images(Image *images)
 {
@@ -8531,11 +10808,16 @@ array_from_images(Image *images)
 }
 
 
-/*
-    Method:     Image#reduce_noise(radius)
-    Purpose:    smooths the contours of an image while still preserving edge information
-    Returns:    a new image
-*/
+/**
+ * Smooth the contours of an image while still preserving edge information.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#reduce_noise(radius) @endverbatim
+ *
+ * @param self this object
+ * @param radius the radius
+ * @return a new image
+ */
 VALUE
 Image_reduce_noise(VALUE self, VALUE radius)
 {
@@ -8554,11 +10836,21 @@ Image_reduce_noise(VALUE self, VALUE radius)
 }
 
 
-/*
-     Method:    Image#remap(remap_image, dither_method=RiemersmaDitherMethod)
-     Purpose:   Call RemapImage
-     Notes:     Immediate - modifies image in-place
-*/
+/**
+ * Call RemapImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#remap(remap_image) @endverbatim
+ *   - @verbatim Image#remap(remap_image, dither_method) @endverbatim
+ *
+ * Notes:
+ *   - Default dither_method is RiemersmaDitherMethod
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_remap(int argc, VALUE *argv, VALUE self)
 {
@@ -8606,10 +10898,15 @@ Image_remap(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#rendering_intent=
-    Purpose:    get rendering_intent
-*/
+/**
+ * Get rendering_intent.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#rendering_intent @endverbatim
+ *
+ * @param self this object
+ * @return the rendering intent
+ */
 VALUE
 Image_rendering_intent(VALUE self)
 {
@@ -8618,10 +10915,16 @@ Image_rendering_intent(VALUE self)
 }
 
 
-/*
-    Method:     Image#rendering_intent=
-    Purpose:    set rendering_intent
-*/
+/**
+ * Set rendering_intent.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#rendering_intent= @endverbatim
+ *
+ * @param self this object
+ * @param ri the rendering intent
+ * @return self
+ */
 VALUE
 Image_rendering_intent_eq(VALUE self, VALUE ri)
 {
@@ -8631,16 +10934,20 @@ Image_rendering_intent_eq(VALUE self, VALUE ri)
 }
 
 
-/*
-    Method:     Image#resize(scale) or (cols, rows<, filter<, blur>>)
-                Image#resize!(scale) or (cols, rows<, filter<, blur>>)
-    Purpose:    scales an image to the desired dimensions using the specified filter
-                and blur factor
-    Returns:    resize: a resized copy of the input image
-                resize!: self, resized
-    Default:    if filter is not specified, use image->filter
-                if blur is not specified, use image->blur
-*/
+/**
+ * Scale an image to the desired dimensions using the specified filter and blur
+ * factor.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_resize
+ * @see Image_resize_bang
+ */
 static VALUE
 resize(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -8711,6 +11018,27 @@ resize(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Scale an image to the desired dimensions using the specified filter and blur
+ * factor.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#resize(scale) @endverbatim
+ *   - @verbatim Image#resize(cols, rows) @endverbatim
+ *   - @verbatim Image#resize(cols, rows, filter) @endverbatim
+ *   - @verbatim Image#resize(cols, rows, filter, blur) @endverbatim
+ *
+ * Notes:
+ *   - Default filter is image->filter
+ *   - Default blur is image->blur
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see resize
+ * @see Image_resize_bang
+ */
 VALUE
 Image_resize(int argc, VALUE *argv, VALUE self)
 {
@@ -8719,6 +11047,27 @@ Image_resize(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Scale an image to the desired dimensions using the specified filter and blur
+ * factor.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#resize!(scale) @endverbatim
+ *   - @verbatim Image#resize!(cols, rows) @endverbatim
+ *   - @verbatim Image#resize!(cols, rows, filter) @endverbatim
+ *   - @verbatim Image#resize!(cols, rows, filter, blur) @endverbatim
+ *
+ * Notes:
+ *   - Default filter is image->filter
+ *   - Default blur is image->blur
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see resize
+ * @see Image_resize
+ */
 VALUE
 Image_resize_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -8727,11 +11076,17 @@ Image_resize_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#roll(x_offset, y_offset)
-    Purpose:    offsets an image as defined by x_offset and y_offset
-    Returns:    a rolled copy of the input image
-*/
+/**
+ * Offset an image as defined by x_offset and y_offset.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#roll(x_offset, y_offset) @endverbatim
+ *
+ * @param self this object
+ * @param x_offset the x offset
+ * @param y_offset the y offset
+ * @return a new image
+ */
 VALUE
 Image_roll(VALUE self, VALUE x_offset, VALUE y_offset)
 {
@@ -8752,14 +11107,19 @@ Image_roll(VALUE self, VALUE x_offset, VALUE y_offset)
 }
 
 
-/*
-    Method:     Image#rotate(degrees [,'<' | '>'])
-    Purpose:    creates a new image that is a rotated copy of an existing one
-                Image#rotate!(degrees)
-    Purpose:    rotates the image by the specified number of degrees
-    Note:       If the 2nd argument is '<' rotate only if width < height.
-                If the 2nd argument is '>' rotate only if width > height.
-*/
+/**
+ * Rotate the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_rotate
+ * @see Image_rotate_bang
+ */
 static VALUE
 rotate(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -8814,6 +11174,26 @@ rotate(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Rotate the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#rotate(degrees) @endverbatim
+ *   - @verbatim Image#rotate(degrees, '<') @endverbatim
+ *   - @verbatim Image#rotate(degrees, '>') @endverbatim
+ *
+ * Notes:
+ *   - If the 2nd argument is '<' rotate only if width < height. If the 2nd
+ *     argument is '>' rotate only if width > height.
+ *   - Default is to always rotate
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see rotate
+ * @see Image_rotate_bang
+ */
 VALUE
 Image_rotate(int argc, VALUE *argv, VALUE self)
 {
@@ -8822,6 +11202,26 @@ Image_rotate(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Rotate the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#rotate!(degrees) @endverbatim
+ *   - @verbatim Image#rotate!(degrees, '<') @endverbatim
+ *   - @verbatim Image#rotate!(degrees, '>') @endverbatim
+ *
+ * Notes:
+ *   - If the 2nd argument is '<' rotate only if width < height. If the 2nd
+ *     argument is '>' rotate only if width > height.
+ *   - Default is to always rotate
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see rotate
+ * @see Image_rotate
+ */
 VALUE
 Image_rotate_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -8830,16 +11230,32 @@ Image_rotate_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Return image rows.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#rows @endverbatim
+ *
+ * @param self this object
+ * @return the image rows
+ */
 DEF_ATTR_READER(Image, rows, int)
 
 
-/*
-    Method:     Image#sample(scale) or (cols, rows)
-                Image#sample!
-    Purpose:    scales an image to the desired dimensions with pixel sampling
-    Returns:    sampled: a sampled copy of the input image
-                sample!: self, sampled
-*/
+/**
+ * Scale an image to the desired dimensions with pixel sampling.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sample(scale) @endverbatim
+ *   - @verbatim Image#sample(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see scale
+ * @see Image_sample_bang
+ */
 VALUE
 Image_sample(int argc, VALUE *argv, VALUE self)
 {
@@ -8848,6 +11264,20 @@ Image_sample(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Scale an image to the desired dimensions with pixel sampling.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sample!(scale) @endverbatim
+ *   - @verbatim Image#sample!(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see scale
+ * @see Image_sample
+ */
 VALUE
 Image_sample_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -8856,13 +11286,20 @@ Image_sample_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#scale(scale) or (cols, rows)
-                Image#scale!
-    Purpose:    changes the size of an image to the given dimensions
-    Returns:    scale: a scaled copy of the input image
-                scale!: self, scaled
-*/
+/**
+ * Change the size of an image to the given dimensions.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#scale(scale) @endverbatim
+ *   - @verbatim Image#scale(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see scale
+ * @see Image_scale_bang
+ */
 VALUE
 Image_scale(int argc, VALUE *argv, VALUE self)
 {
@@ -8871,6 +11308,20 @@ Image_scale(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Change the size of an image to the given dimensions.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#scale!(scale) @endverbatim
+ *   - @verbatim Image#scale!(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see scale
+ * @see Image_scale
+ */
 VALUE
 Image_scale_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -8879,12 +11330,26 @@ Image_scale_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Static:     scale
-    Purpose:    Call ScaleImage or SampleImage
-    Arguments:  if 1 argument > 0, multiply current size by this much
-                if 2 arguments, (cols, rows)
-*/
+/**
+ * Call ScaleImage or SampleImage
+ *
+ * Notes:
+ *   - If 1 argument > 0, multiply current size by this much.
+ *   - If 2 arguments, (cols, rows).
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param scaler which scalar to use (ScaleImage or SampleImage)
+ * @return self if bang, otherwise a new image
+ * @see Image_sample
+ * @see Image_sample_bang
+ * @see Image_scale
+ * @see Image_scale_bang
+ */
 static VALUE
 scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 {
@@ -8944,12 +11409,33 @@ scale(int bang, int argc, VALUE *argv, VALUE self, scaler_t scaler)
 }
 
 
+/**
+ * Return image scene.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#scene @endverbatim
+ *
+ * @param self this object
+ * @return the image scene
+ */
 DEF_ATTR_READER(Image, scene, ulong)
 
 
-/*
- *  Method:     Image#selective_blur_channel(radius, sigma, threshold[, channel...])
- *  Purpose:    Call SelectiveBlurImageChannel
+/**
+ * Call SelectiveBlurImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#selective_blur_channel(radius, sigma, threshold) @endverbatim
+ *   - @verbatim Image#selective_blur_channel(radius, sigma, threshold, channel) @endverbatim
+ *   - @verbatim Image#selective_blur_channel(radius, sigma, threshold, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
  */
 VALUE
 Image_selective_blur_channel(int argc, VALUE *argv, VALUE self)
@@ -8995,10 +11481,17 @@ Image_selective_blur_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#set_channel_depth(channel, depth)
- *  Purpose:    Call SetImageChannelDepth
-*/
+/**
+ * Call SetImageChannelDepth.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#set_channel_depth(channel, depth) @endverbatim
+ *
+ * @param self this object
+ * @param channel_arg the channel
+ * @param depth the depth
+ * @return self
+ */
 VALUE
 Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 {
@@ -9018,11 +11511,22 @@ Image_set_channel_depth(VALUE self, VALUE channel_arg, VALUE depth)
 }
 
 
-/*
-    Method:     separate(channel[, channel...])
-    Purpose:    call SeparateImages
-    Returns:    returns a new ImageList
-*/
+/**
+ * Call SeparateImages.
+ *
+ * Ruby usage:
+ *   - @verbatim separate @endverbatim
+ *   - @verbatim separate(channel) @endverbatim
+ *   - @verbatim separate(channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new ImageList
+ */
 VALUE
 Image_separate(int argc, VALUE *argv, VALUE self)
 {
@@ -9049,10 +11553,21 @@ Image_separate(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- * Method:  Image#sepiatone(threshold=QuantumRange)
- * Purpose: Call SepiaToneImage
-*/
+/**
+ * Call SepiaToneImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sepiatone @endverbatim
+ *   - @verbatim Image#sepiatone(threshold) @endverbatim
+ *
+ * Notes:
+ *   - Default threshold is QuantumRange
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_sepiatone(int argc, VALUE *argv, VALUE self)
 {
@@ -9084,14 +11599,28 @@ Image_sepiatone(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#segment(colorspace=RGBColorspace,
-                                   cluster_threshold=1.0,
-                                   smoothing_threshold=1.5,
-                                   verbose=false)
-    Purpose:    Call SegmentImage
-    Notes:      the default values are the same as Magick++
-*/
+/**
+ * Call SegmentImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#segment @endverbatim
+ *   - @verbatim Image#segment(colorspace) @endverbatim
+ *   - @verbatim Image#segment(colorspace,cluster_threshold) @endverbatim
+ *   - @verbatim Image#segment(colorspace,cluster_threshold,smoothing_threshold) @endverbatim
+ *   - @verbatim Image#segment(colorspace,cluster_threshold,smoothing_threshold,verbose) @endverbatim
+ *
+ * Notes:
+ *   - Default colorspace is RGBColorspace
+ *   - Default cluster_threshold is 1.0
+ *   - Default smoothing_threshold is 1.5
+ *   - Default verbose is false
+ *   - The default values are the same as Magick++
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_segment(int argc, VALUE *argv, VALUE self)
 {
@@ -9129,10 +11658,16 @@ Image_segment(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#opacity=
-    Purpose:    Call SetImageOpacity
-*/
+/**
+ * Call SetImageOpacity.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#opacity= @endverbatim
+ *
+ * @param self this object
+ * @param opacity_arg the opacity
+ * @return self
+ */
 VALUE
 Image_opacity_eq(VALUE self, VALUE opacity_arg)
 {
@@ -9147,15 +11682,20 @@ Image_opacity_eq(VALUE self, VALUE opacity_arg)
 }
 
 
-/*
-    Method:     Image#properties [{ |k,v| block }]
-    Purpose:    Traverse the attributes and yield to the block.
-                If no block, return a hash of all the attribute
-                keys & values
-    Notes:      I use the word "properties" to distinguish between
-                these "user-added" attribute strings and Image
-                object attributes.
-*/
+/**
+ * Traverse the attributes and yield to the block. If no block, return a hash
+ * of all the attribute keys & values.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#properties [{ |k,v| block }] @endverbatim
+ *
+ * Notes:
+ *   - I use the word "properties" to distinguish between these "user-added"
+ *     attribute strings and Image object attributes.
+ *
+ * @param self this object
+ * @return self if block, else hash of attribute keys and values.
+ */
 VALUE
 Image_properties(VALUE self)
 {
@@ -9204,14 +11744,28 @@ Image_properties(VALUE self)
 }
 
 
-/*
-    Method:     Image#shade(shading=false, azimuth=30, elevation=30)
-    Purpose:    shines a distant light on an image to create a three-dimensional
-                effect. You control the positioning of the light with azimuth
-                and elevation; azimuth is measured in degrees off the x axis
-                and elevation is measured in pixels above the Z axis
-    Returns:    a new image
-*/
+/**
+ * Shine a distant light on an image to create a three-dimensional effect. You
+ * control the positioning of the light with azimuth and elevation; azimuth is
+ * measured in degrees off the x axis and elevation is measured in pixels above
+ * the Z axis.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#shade @endverbatim
+ *   - @verbatim Image#shade(shading) @endverbatim
+ *   - @verbatim Image#shade(shading, azimuth) @endverbatim
+ *   - @verbatim Image#shade(shading, azimuth, elevation) @endverbatim
+ *
+ * Notes:
+ *   - Default shading is false
+ *   - Default azimuth is 30
+ *   - Default elevation is 30
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_shade(int argc, VALUE *argv, VALUE self)
 {
@@ -9247,16 +11801,32 @@ Image_shade(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#shadow(x_offset=4, y_offset=4, sigma=4.0, opacity=1.0)
-                x- and y-offsets are the pixel offset
-                opacity is either a number between 0 and 1 or a string "NN%"
-                sigma is the std. dev. of the Gaussian, in pixels.
-    Purpose:    Call ShadowImage
-    Notes:      The defaults are taken from the mogrify.c source, except
-                for opacity, which has no default.
-                Introduced in 6.1.7
-*/
+/**
+ * Call ShadowImage. X- and y-offsets are the pixel offset. Opacity is either a
+ * number between 0 and 1 or a string "NN%". Sigma is the std. dev. of the
+ * Gaussian, in pixels.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#shadow @endverbatim
+ *   - @verbatim Image#shadow(x_offset) @endverbatim
+ *   - @verbatim Image#shadow(x_offset, y_offset) @endverbatim
+ *   - @verbatim Image#shadow(x_offset, y_offset, sigma) @endverbatim
+ *   - @verbatim Image#shadow(x_offset, y_offset, sigma, opacity) @endverbatim
+ *
+ * Notes:
+ *   - Default x_offset is 4
+ *   - Default y_offset is 4
+ *   - Default sigma is 4.0
+ *   - Default opacity is 1.0
+ *   - The defaults are taken from the mogrify.c source, except for opacity,
+ *     which has no default.
+ *   - Introduced in ImageMagick 6.1.7
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_shadow(int argc, VALUE *argv, VALUE self)
 {
@@ -9303,11 +11873,24 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#sharpen(radius=0, sigma=1)
-    Purpose:    sharpens an image
-    Returns:    a new image
-*/
+/**
+ * Sharpen an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sharpen @endverbatim
+ *   - @verbatim Image#sharpen(radius) @endverbatim
+ *   - @verbatim Image#sharpen(radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see effect_image
+ */
 VALUE
 Image_sharpen(int argc, VALUE *argv, VALUE self)
 {
@@ -9315,10 +11898,26 @@ Image_sharpen(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#sharpen_channel(radius=0, sigma=1, channel=AllChannels)
- *  Returns:    a new image
-*/
+/**
+ * Sharpen image on a channel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sharpen_channel @endverbatim
+ *   - @verbatim Image#sharpen_channel(radius) @endverbatim
+ *   - @verbatim Image#sharpen_channel(radius, sigma) @endverbatim
+ *   - @verbatim Image#sharpen_channel(radius, sigma, channel) @endverbatim
+ *   - @verbatim Image#sharpen_channel(radius, sigma, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -9357,14 +11956,20 @@ Image_sharpen_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#shave(width, height)
-                Image#shave!(width, height)
-    Purpose:    shaves pixels from the image edges, leaving a rectangle
-                of the specified width & height in the center
-    Returns:    shave: a new image
-                shave!: self, shaved
-*/
+/**
+ * Shave pixels from the image edges, leaving a rectangle of the specified width
+ * & height in the center.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#shave(width, height) @endverbatim
+ *
+ * @param self this object
+ * @param width the width to leave
+ * @param height the hight to leave
+ * @return a new image
+ * @see xform_image
+ * @see Image_shave_bang
+ */
 VALUE
 Image_shave(VALUE self, VALUE width, VALUE height)
 {
@@ -9373,6 +11978,20 @@ Image_shave(VALUE self, VALUE width, VALUE height)
 }
 
 
+/**
+ * Shave pixels from the image edges, leaving a rectangle of the specified width
+ * & height in the center.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#shave!(width, height) @endverbatim
+ *
+ * @param self this object
+ * @param width the width to leave
+ * @param height the hight to leave
+ * @return self
+ * @see xform_image
+ * @see Image_shave
+ */
 VALUE
 Image_shave_bang(VALUE self, VALUE width, VALUE height)
 {
@@ -9381,12 +12000,17 @@ Image_shave_bang(VALUE self, VALUE width, VALUE height)
 }
 
 
-/*
-    Method:     Image#shear(x_shear, y_shear)
-    Purpose:    Calls ShearImage
-    Notes:      shear angles are measured in degrees
-    Returns:    a new image
-*/
+/**
+ * Call ShearImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#shear(x_shear, y_shear) @endverbatim
+ *
+ * @param self this object
+ * @param x_shear the x shear (in degrees)
+ * @param y_shear the y shear (in degrees)
+ * @return a new image
+ */
 VALUE
 Image_shear(VALUE self, VALUE x_shear, VALUE y_shear)
 {
@@ -9406,10 +12030,28 @@ Image_shear(VALUE self, VALUE x_shear, VALUE y_shear)
 }
 
 
-/*
- *  Method: Image#sigmoidal_contrast_channel(contrast=3.0, midpoint=50.0,
-                        sharpen=false [, channel=AllChannels]);
-*/
+/**
+ * Call SigmoidalContrastImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sigmoidal_contrast_channel @endverbatim
+ *   - @verbatim Image#sigmoidal_contrast_channel(contrast) @endverbatim
+ *   - @verbatim Image#sigmoidal_contrast_channel(contrast, midpoint) @endverbatim
+ *   - @verbatim Image#sigmoidal_contrast_channel(contrast, midpoint, sharpen) @endverbatim
+ *   - @verbatim Image#sigmoidal_contrast_channel(contrast, midpoint, sharpen, channel) @endverbatim
+ *   - @verbatim Image#sigmoidal_contrast_channel(contrast, midpoint, sharpen, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default contrast is 3.0
+ *   - Default midpoint is 50.0
+ *   - Default sharpen is false
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -9446,11 +12088,16 @@ Image_sigmoidal_contrast_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#signature
-    Purpose:    computes a message digest from an image pixel stream with an
-                implementation of the NIST SHA-256 Message Digest algorithm.
-*/
+/**
+ * Compute a message digest from an image pixel stream with an implementation of
+ * the NIST SHA-256 Message Digest algorithm.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#signature @endverbatim
+ *
+ * @param self this object
+ * @return the message digest
+ */
 VALUE
 Image_signature(VALUE self)
 {
@@ -9470,10 +12117,26 @@ Image_signature(VALUE self)
 }
 
 
-/*
-    Method:     Image#sketch(radius=0.0, sigma=1.0, angle=0.0)
-    Purpose:    Call SketchImage
-*/
+/**
+ * Call SketchImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sketch @endverbatim
+ *   - @verbatim Image#sketch(radius) @endverbatim
+ *   - @verbatim Image#sketch(radius, sigma) @endverbatim
+ *   - @verbatim Image#sketch(radius, sigma, angle) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default angle is 0.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see motion_blur
+ */
 VALUE
 Image_sketch(int argc, VALUE *argv, VALUE self)
 {
@@ -9482,13 +12145,24 @@ Image_sketch(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#solarize(threshold=50.0)
-    Purpose:    applies a special effect to the image, similar to the effect
-                achieved in a photo darkroom by selectively exposing areas of
-                photo sensitive paper to light. Threshold ranges from 0 to
-                QuantumRange and is a measure of the extent of the solarization.
-*/
+/**
+ * Apply a special effect to the image, similar to the effect achieved in a
+ * photo darkroom by selectively exposing areas of photo sensitive paper to
+ * light. Threshold ranges from 0 to QuantumRange and is a measure of the extent
+ * of the solarization.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#solarize @endverbatim
+ *   - @verbatim Image#solarize(threshold) @endverbatim
+ *
+ * Notes:
+ *   - Default threshold is 50.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_solarize(int argc, VALUE *argv, VALUE self)
 {
@@ -9520,11 +12194,16 @@ Image_solarize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#spaceship     (a <=> b)
-    Purpose:    compare two images
-    Returns:    -1, 0, 1
-*/
+/**
+ * Compare two images.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#<=> @endverbatim
+ *
+ * @param self this image
+ * @param other other image
+ * @return -1, 0, 1
+ */
 VALUE
 Image_spaceship(VALUE self, VALUE other)
 {
@@ -9558,12 +12237,17 @@ Image_spaceship(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:     Image#sparse_color(method, x1, y1, color [, xn, yn,  color] [, channel...])
-    Purpose:    Call SparseColorInterpolate
-    Notes:      As usual, 'color' can be either a color name or a pixel
-*/
 #if defined(HAVE_SPARSECOLORIMAGE)
+/**
+ * Count the number of channels from the specified list are in an image. Note
+ * that this method also removes invalid channels based on the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @param channels the channels
+ * @return number of channels
+ */
 static unsigned long
 count_channels(Image *image, ChannelType *channels)
 {
@@ -9604,6 +12288,29 @@ count_channels(Image *image, ChannelType *channels)
 #endif
 
 
+/**
+ * Call SparseColorInterpolate.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sparse_color(method, x1, y1, color) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color, ...) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, channel) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color, channel) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color, ..., channel) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, channel, ...) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color, channel, ...) @endverbatim
+ *   - @verbatim Image#sparse_color(method, x1, y1, color, x2, y2, color, ..., channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default channel is AllChannels
+ *   - As usual, 'color' can be either a color name or a pixel
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_sparse_color(int argc, VALUE *argv, VALUE self)
 {
@@ -9694,15 +12401,25 @@ Image_sparse_color(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#splice(x, y, width, height[, color])
-    Purpose:    Splice a solid color into the part of the image specified
-                by the x, y, width, and height arguments. If the color
-                argument is specified it must be a color name or Pixel.
-                If not specified uses the background color.
-    Notes:      splice is the inverse of chop
-*/
-
+/**
+ * Splice a solid color into the part of the image specified by the x, y, width,
+ * and height arguments. If the color argument is specified it must be a color
+ * name or Pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#splice(x, y, width, height) @endverbatim
+ *   - @verbatim Image#splice(x, y, width, height, color) @endverbatim
+ *
+ * Notes:
+ *   - Default color is the background color.
+ *   - Splice is the inverse of chop
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see Image_chop
+ */
 VALUE
 Image_splice(int argc, VALUE *argv, VALUE self)
 {
@@ -9751,11 +12468,21 @@ Image_splice(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#spread(radius=3)
-    Purpose:    randomly displaces each pixel in a block defined by "radius"
-    Returns:    a new image
-*/
+/**
+ * Randomly displace each pixel in a block defined by "radius".
+ *
+ * Ruby usage:
+ *   - @verbatim Image#spread @endverbatim
+ *   - @verbatim Image#spread(radius) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 3.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_spread(int argc, VALUE *argv, VALUE self)
 {
@@ -9789,14 +12516,18 @@ Image_spread(int argc, VALUE *argv, VALUE self)
 DEF_ATTR_ACCESSOR(Image, start_loop, bool)
 
 
-/*
-    Method:     Image#stegano(watermark, offset)
-    Purpose:    hides a digital watermark within the image. Recover the hidden
-                watermark later to prove that the authenticity of an image.
-                "Offset" is the start position within the image to hide the
-                watermark.
-    Returns:    a new image
-*/
+/**
+ * Hide a digital watermark within the image. Recover the hidden watermark later
+ * to prove that the authenticity of an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#stegano(watermark, offset) @endverbatim
+ *
+ * @param self this object
+ * @param watermark_image the watermark image
+ * @param offset the start position within the image to hide the watermark.
+ * @return a new image
+ */
 VALUE
 Image_stegano(VALUE self, VALUE watermark_image, VALUE offset)
 {
@@ -9824,14 +12555,18 @@ Image_stegano(VALUE self, VALUE watermark_image, VALUE offset)
 }
 
 
-/*
-    Method:     Image#stereo(offset_image)
-    Purpose:    combines two images and produces a single image that is the
-                composite of a left and right image of a stereo pair.
-                Special red-green stereo glasses are required to view this
-                effect.
-    Returns:    a new image
-*/
+/**
+ * Combine two images and produces a single image that is the composite of a
+ * left and right image of a stereo pair. Special red-green stereo glasses are
+ * required to view this effect.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#stereo(offset_image) @endverbatim
+ *
+ * @param self this object
+ * @param offset_image_arg the other image
+ * @return a new image
+ */
 VALUE
 Image_stereo(VALUE self, VALUE offset_image_arg)
 {
@@ -9857,11 +12592,18 @@ Image_stereo(VALUE self, VALUE offset_image_arg)
 }
 
 
-/*
-    Method:     Image#class_type
-    Purpose:    return the image's storage class (a.k.a. storage type, class type)
-    Notes:      based on Magick++'s Magick::Magick::classType
-*/
+/**
+ * Return the image's storage class (a.k.a. storage type, class type).
+ *
+ * Ruby usage:
+ *   - @verbatim Image#class_type @endverbatim
+ *
+ * Notes:
+ *   - Based on Magick++'s Magick::Magick::classType
+ * 
+ * @param self this object
+ * @return the storage class
+ */
 VALUE
 Image_class_type(VALUE self)
 {
@@ -9870,11 +12612,19 @@ Image_class_type(VALUE self)
 }
 
 
-/*
-    Method:     Image#class_type=
-    Purpose:    change the image's storage class
-    Notes:      based on Magick++'s Magick::Magick::classType
-*/
+/**
+ * Change the image's storage class.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#class_type= @endverbatim
+ *
+ * Notes:
+ *   - Based on Magick++'s Magick::Magick::classType
+ *
+ * @param self this object
+ * @param new_class_type the storage class
+ * @return self
+ */
 VALUE
 Image_class_type_eq(VALUE self, VALUE new_class_type)
 {
@@ -9904,14 +12654,25 @@ Image_class_type_eq(VALUE self, VALUE new_class_type)
 }
 
 
-/*
-    Method:     Image#store_pixels
-    Purpose:    Replace the pixels in the specified rectangle
-    Notes:      Calls GetImagePixels, then SyncImagePixels after replacing
-                the pixels. This is the complement of get_pixels. The array
-                object returned by get_pixels is suitable for use as the
-                "new_pixels" argument.
-*/
+/**
+ * Replace the pixels in the specified rectangle.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#store_pixels(x,y,cols,rows,new_pixels) @endverbatim
+ *
+ * Notes:
+ *   - Calls GetImagePixels, then SyncImagePixels after replacing the pixels.
+ *   - This is the complement of get_pixels. The array object returned by
+ *     get_pixels is suitable for use as the "new_pixels" argument.
+ *
+ * @param self this object
+ * @param x_arg x position of start of region
+ * @param y_arg y position of start of region
+ * @param cols_arg width of region
+ * @param rows_arg height of region
+ * @param new_pixels the replacing pixels
+ * @return self
+ */
 VALUE
 Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
                    , VALUE rows_arg, VALUE new_pixels)
@@ -9988,10 +12749,15 @@ Image_store_pixels(VALUE self, VALUE x_arg, VALUE y_arg, VALUE cols_arg
 }
 
 
-/*
-    Method:     Image#strip!
-    Purpose:    strips an image of all profiles and comments.
-*/
+/**
+ * Strips an image of all profiles and comments.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#strip! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Image_strip_bang(VALUE self)
 {
@@ -10002,12 +12768,18 @@ Image_strip_bang(VALUE self)
 }
 
 
-/*
-    Method:     Image#swirl(degrees)
-    Purpose:    swirls the pixels about the center of the image, where degrees
-                indicates the sweep of the arc through which each pixel is moved.
-                You get a more dramatic effect as the degrees move from 1 to 360.
-*/
+/**
+ * Swirl the pixels about the center of the image, where degrees indicates the
+ * sweep of the arc through which each pixel is moved. You get a more dramatic
+ * effect as the degrees move from 1 to 360.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#swirl(degrees) @endverbatim
+ *
+ * @param self this object
+ * @param degrees the degrees
+ * @return a new image
+ */
 VALUE
 Image_swirl(VALUE self, VALUE degrees)
 {
@@ -10028,10 +12800,15 @@ Image_swirl(VALUE self, VALUE degrees)
 }
 
 
-/*
-    Method:     Image#sync_profiles()
-    Purpose:    synchronizes image properties with the image profiles
-*/
+/**
+ * Synchronize image properties with the image profiles.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#sync_profiles @endverbatim
+ *
+ * @param self this object
+ * @return true if succeeded, otherwise false
+ */
 VALUE
 Image_sync_profiles(VALUE self)
 {
@@ -10042,17 +12819,27 @@ Image_sync_profiles(VALUE self)
 }
 
 
-/*
-    Method:     Image#texture_flood_fill(color, texture, x, y, method)
-    Purpose:    Emulates Magick++'s floodFillTexture
-                If the FloodfillMethod method is specified, flood-fills
-                texture across pixels starting at the target pixel and
-                matching the specified color.
-
-                If the FillToBorderMethod method is specified, flood-fills
-                "texture across pixels starting at the target pixel and
-                stopping at pixels matching the specified color."
-*/
+/**
+ * Emulates Magick++'s floodFillTexture.
+ *
+ * If the FloodfillMethod method is specified, flood-fills texture across pixels
+ * starting at the target pixel and matching the specified color.
+ *
+ * If the FillToBorderMethod method is specified, flood-fills 'texture across
+ * pixels starting at the target pixel and stopping at pixels matching the
+ * specified color.'
+ *
+ * Ruby usage:
+ *   - @verbatim Image#texture_flood_fill(color, texture, x, y, method) @endverbatim
+ *
+ * @param self this object
+ * @param color_obj the color
+ * @param texture_obj the texture to fill
+ * @param x_obj the x position
+ * @param y_obj the y position
+ * @param method_obj the method to call (FloodfillMethod or FillToBorderMethod)
+ * @return a new image
+ */
 VALUE
 Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
                          , VALUE x_obj, VALUE y_obj, VALUE method_obj)
@@ -10133,12 +12920,17 @@ Image_texture_flood_fill(VALUE self, VALUE color_obj, VALUE texture_obj
 }
 
 
-/*
-    Method:     Image#threshold(threshold)
-    Purpose:    changes the value of individual pixels based on the intensity of
-                each pixel compared to threshold. The result is a high-contrast,
-                two color image.
-*/
+/**
+ * Change the value of individual pixels based on the intensity of each pixel
+ * compared to threshold. The result is a high-contrast, two color image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#threshold(threshold) @endverbatim
+ *
+ * @param self this object
+ * @param threshold the threshold
+ * @return a new image
+ */
 VALUE
 Image_threshold(VALUE self, VALUE threshold)
 {
@@ -10154,10 +12946,17 @@ Image_threshold(VALUE self, VALUE threshold)
 }
 
 
-/*
- *  Static:     threshold_image
- *  Purpose:    call one of the xxxxThresholdImage methods
-*/
+/**
+ * Call one of the xxxxThresholdImage methods.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param thresholder which xxxxThresholdImage method to call
+ * @return a new image
+ */
 static
 VALUE threshold_image(int argc, VALUE *argv, VALUE self, thresholder_t thresholder)
 {
@@ -10204,13 +13003,22 @@ VALUE threshold_image(int argc, VALUE *argv, VALUE self, thresholder_t threshold
 }
 
 
-/*
-    Method:     Image#thumbnail(scale) or (cols, rows)
-                Image#thumbnail!(scale) or (cols, rows)
-    Purpose:    fast resize for thumbnail images
-    Returns:    a resized copy of the input image
-    Notes:      Uses BoxFilter, blur attribute of input image
-*/
+/**
+ * Fast resize for thumbnail images.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Uses BoxFilter, blur attribute of input image
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_thumbnail
+ * @see Image_thumbnail_bang
+ */
 static VALUE
 thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -10270,6 +13078,20 @@ thumbnail(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Fast resize for thumbnail images.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#thumbnail(scale) @endverbatim
+ *   - @verbatim Image#thumbnail(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see thumbnail
+ * @see Image_thumbnail_bang
+ */
 VALUE
 Image_thumbnail(int argc, VALUE *argv, VALUE self)
 {
@@ -10278,6 +13100,20 @@ Image_thumbnail(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Fast resize for thumbnail images.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#thumbnail!(scale) @endverbatim
+ *   - @verbatim Image#thumbnail!(cols, rows) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see thumbnail
+ * @see Image_thumbnail
+ */
 VALUE
 Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -10286,10 +13122,15 @@ Image_thumbnail_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#ticks_per_second, ticks_per_second=
-    Purpose:    the ticks_per_second attribute accessors
-*/
+/**
+ * The ticks_per_second attribute reader.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#ticks_per_second @endverbatim
+ *
+ * @param self this object
+ * @return ticks per second
+ */
 VALUE
 Image_ticks_per_second(VALUE self)
 {
@@ -10298,6 +13139,16 @@ Image_ticks_per_second(VALUE self)
 }
 
 
+/**
+ * The ticks_per_second attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#ticks_per_second= @endverbatim
+ *
+ * @param self this object
+ * @param tps ticks per second
+ * @return self
+ */
 VALUE
 Image_ticks_per_second_eq(VALUE self, VALUE tps)
 {
@@ -10307,11 +13158,26 @@ Image_ticks_per_second_eq(VALUE self, VALUE tps)
 }
 
 
-/*
-    Method:     Image#tint
-    Purpose:    Call TintImage
-    Notes:      Opacity values are percentages: 0.10 -> 10%.
-*/
+/**
+ * Call TintImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#tint(tint, red_opacity) @endverbatim
+ *   - @verbatim Image#tint(tint, red_opacity, green_opacity) @endverbatim
+ *   - @verbatim Image#tint(tint, red_opacity, green_opacity, blue_opacity) @endverbatim
+ *   - @verbatim Image#tint(tint, red_opacity, green_opacity, blue_opacity, alpha_opacity) @endverbatim
+ *
+ * Notes:
+ *   - Default green_opacity is red_opacity
+ *   - Default blue_opacity is red_opacity
+ *   - Default alpha_opacity is 1.0
+ *   - Opacity values are percentages: 0.10 -> 10%.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_tint(int argc, VALUE *argv, VALUE self)
 {
@@ -10379,13 +13245,19 @@ Image_tint(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#to_blob
-    Purpose:    Return a "blob" (a String) from the image
-    Notes:      The magick member of the Image structure
-                determines the format of the returned blob
-                (GIG, JPEG,  PNG, etc.)
-*/
+/**
+ * Return a "blob" (a String) from the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#to_blob @endverbatim
+ *
+ * Notes:
+ *   - The magick member of the Image structure determines the format of the
+ *     returned blob (GIG, JPEG,  PNG, etc.)
+ *
+ * @param self this object
+ * @return the blob
+ */
 VALUE
 Image_to_blob(VALUE self)
 {
@@ -10461,12 +13333,20 @@ Image_to_blob(VALUE self)
 }
 
 
-/*
-    Method:     Image#to_color
-    Purpose:    Return a color name for the color intensity specified by the
-                Magick::Pixel argument.
-    Notes:      Respects depth and matte attributes
-*/
+/**
+ * Return a color name for the color intensity specified by the Magick::Pixel
+ * argument.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#to_color(pixel) @endverbatim
+ *
+ * Notes:
+ *   - Respects depth and matte attributes
+ *
+ * @param self this object
+ * @param pixel_arg the pixel
+ * @return the color name
+ */
 VALUE
 Image_to_color(VALUE self, VALUE pixel_arg)
 {
@@ -10494,12 +13374,20 @@ Image_to_color(VALUE self, VALUE pixel_arg)
 }
 
 
-/*
-    Method:     Image#total_colors
-    Purpose:    alias for Image#number_colors
-    Notes:      This used to be a direct reference to the `total_colors' field in Image
-                but that field is not reliable.
-*/
+/**
+ * Alias for Image#number_colors.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#total_colors @endverbatim
+ *
+ * Notes:
+ *   - This used to be a direct reference to the `total_colors' field in Image
+ *     but that field is not reliable.
+ *
+ * @param self this object
+ * @return number of unique colors
+ * @see Image_number_colors
+ */
 VALUE
 Image_total_colors(VALUE self)
 {
@@ -10507,11 +13395,18 @@ Image_total_colors(VALUE self)
 }
 
 
-/*
-    Method:     Image#total_ink_density
-    Purpose:    Return value from GetImageTotalInkDensity
-    Notes:      Raises an exception if the image is not CMYK
-*/
+/**
+ * Return value from GetImageTotalInkDensity.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#total_ink_density @endverbatim
+ *
+ * Notes:
+ *   - Raises an exception if the image is not CMYK
+ *
+ * @param self this object
+ * @return the total ink density
+ */
 VALUE
 Image_total_ink_density(VALUE self)
 {
@@ -10525,15 +13420,26 @@ Image_total_ink_density(VALUE self)
 }
 
 
-/*
-    Method:     Image#transparent(color-name<, opacity>)
-                Image#transparent(pixel<, opacity>)
-    Purpose:    Call TransparentPaintImage
-    Notes:      Can use Magick::OpaqueOpacity or Magick::TransparentOpacity,
-                or any value >= 0 && <= QuantumRange. The default is
-                Magick::TransparentOpacity.
-                Use Image#fuzz= to define the tolerance level.
-*/
+/**
+ * Call TransparentPaintImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transparent(color-name) @endverbatim
+ *   - @verbatim Image#transparent(color-name, opacity) @endverbatim
+ *   - @verbatim Image#transparent(pixel) @endverbatim
+ *   - @verbatim Image#transparent(pixel, opacity) @endverbatim
+ *
+ * Notes:
+ *   - Default opacity is Magick::TransparentOpacity.
+ *   - Can use Magick::OpaqueOpacity or Magick::TransparentOpacity, or any
+ *     value >= 0 && <= QuantumRange.
+ *   - Use Image#fuzz= to define the tolerance level.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_transparent(int argc, VALUE *argv, VALUE self)
 {
@@ -10575,10 +13481,24 @@ Image_transparent(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#transparent_chroma(low, high, opacity=TransparentOpacity, invert=false)
-    Purpose:    Call TransparentPaintImageChroma (>= 6.4.5-6)
-*/
+/**
+ * Call TransparentPaintImageChroma.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transparent_chroma(low, high) @endverbatim
+ *   - @verbatim Image#transparent_chroma(low, high, opacity) @endverbatim
+ *   - @verbatim Image#transparent_chroma(low, high, opacity, invert) @endverbatim
+ *
+ * Notes:
+ *   - Default opacity is TransparentOpacity
+ *   - Default invert is false
+ *   - Available in ImageMagick >= 6.4.5-6
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_transparent_chroma(int argc, VALUE *argv, VALUE self)
 {
@@ -10628,10 +13548,15 @@ Image_transparent_chroma(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#transparent_color
-    Purpose:    Return the name of the transparent color as a String.
-*/
+/**
+ * Return the name of the transparent color as a String.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transparent_color @endverbatim
+ *
+ * @param self this object
+ * @return the name of the transparent color
+ */
 VALUE
 Image_transparent_color(VALUE self)
 {
@@ -10640,10 +13565,16 @@ Image_transparent_color(VALUE self)
 }
 
 
-/*
-    Method:     Image#transparent_color=
-    Purpose:    Set the the transparent color to the specified color spec.
-*/
+/**
+ * Set the the transparent color to the specified color spec.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transparent_color= @endverbatim
+ *
+ * @param self this object
+ * @param color the transparent color
+ * @return self
+ */
 VALUE
 Image_transparent_color_eq(VALUE self, VALUE color)
 {
@@ -10653,10 +13584,16 @@ Image_transparent_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
- *  Method:     Image#transpose
- *              Image#transpose!
- *  Purpose:    Call TransposeImage
+/**
+ * Call TransposeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transpose @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see crisscross
+ * @see Image_transpose_bang
  */
 VALUE
 Image_transpose(VALUE self)
@@ -10666,6 +13603,17 @@ Image_transpose(VALUE self)
 }
 
 
+/**
+ * Call TransposeImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transpose! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see crisscross
+ * @see Image_transpose
+ */
 VALUE
 Image_transpose_bang(VALUE self)
 {
@@ -10674,10 +13622,16 @@ Image_transpose_bang(VALUE self)
 }
 
 
-/*
- *  Method:     Image#transverse
- *              Image#transverse!
- *  Purpose:    Call TransverseImage
+/**
+ * Call TransverseImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transverse @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ * @see crisscross
+ * @see Image_transverse_bang
  */
 VALUE
 Image_transverse(VALUE self)
@@ -10686,6 +13640,17 @@ Image_transverse(VALUE self)
     return crisscross(False, self, TransverseImage);
 }
 
+/**
+ * Call TransverseImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#transverse! @endverbatim
+ *
+ * @param self this object
+ * @return self
+ * @see crisscross
+ * @see Image_transverse_bang
+ */
 VALUE
 Image_transverse_bang(VALUE self)
 {
@@ -10694,12 +13659,22 @@ Image_transverse_bang(VALUE self)
 }
 
 
-/*
- *  Method:     Image#trim, Image#trim!
- *  Purpose:    convenience front-end to CropImage
- *  Notes:      respects fuzz attribute
+/**
+ * Convenient front-end to CropImage.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Respects fuzz attribute.
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see Image_trim
+ * @see Image_trim_bang
  */
-
 static VALUE
 trimmer(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -10744,6 +13719,24 @@ trimmer(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Convenient front-end to CropImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#trim @endverbatim
+ *   - @verbatim Image#trim(reset_page) @endverbatim
+ *
+ * Notes:
+ *   - Default reset_page is false
+ *   - Respects fuzz attribute.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see trimmer
+ * @see Image_trim_bang
+ */
 VALUE
 Image_trim(int argc, VALUE *argv, VALUE self)
 {
@@ -10752,6 +13745,24 @@ Image_trim(int argc, VALUE *argv, VALUE self)
 }
 
 
+/**
+ * Convenient front-end to CropImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#trim! @endverbatim
+ *   - @verbatim Image#trim!(reset_page) @endverbatim
+ *
+ * Notes:
+ *   - Default reset_page is false
+ *   - Respects fuzz attribute.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ * @see trimmer
+ * @see Image_trim
+ */
 VALUE
 Image_trim_bang(int argc, VALUE *argv, VALUE self)
 {
@@ -10760,10 +13771,15 @@ Image_trim_bang(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#gravity, gravity=
-    Purpose:    Get/set the image gravity attribute
-*/
+/**
+ * Get the image gravity attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gravity @endverbatim
+ *
+ * @param self this object
+ * @return the image gravity
+ */
 VALUE Image_gravity(VALUE self)
 {
     Image *image = rm_check_destroyed(self);
@@ -10771,6 +13787,16 @@ VALUE Image_gravity(VALUE self)
 }
 
 
+/**
+ * Set the image gravity attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#gravity= @endverbatim
+ *
+ * @param self this object
+ * @param gravity the image gravity
+ * @return the image gravity
+ */
 VALUE Image_gravity_eq(VALUE self, VALUE gravity)
 {
     Image *image = rm_check_frozen(self);
@@ -10779,10 +13805,15 @@ VALUE Image_gravity_eq(VALUE self, VALUE gravity)
 }
 
 
-/*
-    Method:     Image#image_type, image_type=
-    Purpose:    Call GetImageType/SetImageType to get/set the image type
-*/
+/**
+ * Call GetImageType to get the image type.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#image_type @endverbatim
+ *
+ * @param self this object
+ * @return the image type
+ */
 VALUE Image_image_type(VALUE self)
 {
     Image *image;
@@ -10800,6 +13831,16 @@ VALUE Image_image_type(VALUE self)
 }
 
 
+/**
+ * Call SetImageType to set the image type.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#image_type= @endverbatim
+ *
+ * @param self this object
+ * @param image_type the image type
+ * @return the image type
+ */
 VALUE Image_image_type_eq(VALUE self, VALUE image_type)
 {
     Image *image;
@@ -10812,12 +13853,20 @@ VALUE Image_image_type_eq(VALUE self, VALUE image_type)
 }
 
 
-/*
-    Method:     Image#undefine(artifact)
-    Purpose:    Call RemoveImageArtifact
-    Note:       Normally a script should never call this method.
-                See Image_define.
-*/
+/**
+ * Call RemoveImageArtifact.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#undefine(artifact) @endverbatim
+ *
+ * Notes:
+ *   - Normally a script should never call this method.
+ *
+ * @param self this object
+ * @param artifact the artifact
+ * @return self
+ * @see Image_define
+ */
 VALUE
 Image_undefine(VALUE self, VALUE artifact)
 {
@@ -10839,10 +13888,15 @@ Image_undefine(VALUE self, VALUE artifact)
 }
 
 
-/*
-    Method:     Image#unique_colors
-    Purpose:    Call UniqueImageColors
-*/
+/**
+ * Call UniqueImageColors.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#unique_colors @endverbatim
+ *
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_unique_colors(VALUE self)
 {
@@ -10862,10 +13916,15 @@ Image_unique_colors(VALUE self)
 }
 
 
-/*
-    Method:     Image#units
-    Purpose:    Get the resolution type field
-*/
+/**
+ * Get the resolution type field.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#units @endverbatim
+ *
+ * @param self this object
+ * @return the resolution type
+ */
 VALUE
 Image_units(VALUE self)
 {
@@ -10874,14 +13933,18 @@ Image_units(VALUE self)
 }
 
 
-/*
-    Method:     Image#units=
-    Purpose:    Set the resolution type field
-*/
+/**
+ * Set the resolution type field.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#units= @endverbatim
+ *
+ * @param self this object
+ * @param restype the resolution type
+ * @return self
+ */
 VALUE
-Image_units_eq(
-              VALUE self,
-              VALUE restype)
+Image_units_eq(VALUE self, VALUE restype)
 {
     ResolutionType units;
     Image *image = rm_check_frozen(self);
@@ -10922,13 +13985,21 @@ Image_units_eq(
 }
 
 
-/*
-    Method:     Image#unsharp_mask(radius=0.0, sigma=1.0, amount=1.0, threshold=0.05)
-    Purpose:    sharpens an image. "amount" is the percentage of the difference
-                between the original and the blur image that is added back into
-                the original. "threshold" is the threshold in pixels needed to
-                apply the diffence amount.
-*/
+/**
+ * Sharpen an image. "amount" is the percentage of the difference between the
+ * original and the blur image that is added back into the original. "threshold"
+ * is the threshold in pixels needed to apply the diffence amount.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param radious the radious
+ * @param sigma the sigma
+ * @param amount the amount
+ * @param threshold the threshold
+ * @see Image_unsharp_mask
+ */
 static void
 unsharp_mask_args(int argc, VALUE *argv, double *radius, double *sigma
                   , double *amount, double *threshold)
@@ -10970,6 +14041,30 @@ unsharp_mask_args(int argc, VALUE *argv, double *radius, double *sigma
 }
 
 
+/**
+ * Sharpen an image. "amount" is the percentage of the difference between the
+ * original and the blur image that is added back into the original. "threshold"
+ * is the threshold in pixels needed to apply the diffence amount.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#unsharp_mask @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount, threshold) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default amount is 1.0
+ *   - Default threshold is 0.05
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see unsharp_mask_args
+ */
 VALUE
 Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
 {
@@ -10993,11 +14088,31 @@ Image_unsharp_mask(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#unsharp_mask_channel(radius, sigma, amount,threshold,
-                                           channel=AllChannels)
-    Purpose:    Call UnsharpMaskImageChannel
-*/
+/**
+ * Call UnsharpMaskImageChannel.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#unsharp_mask @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount, threshold) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount, threshold, channel) @endverbatim
+ *   - @verbatim Image#unsharp_mask(radius, sigma, amount, threshold, channel, ...) @endverbatim
+ *
+ * Notes:
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - Default amount is 1.0
+ *   - Default threshold is 0.05
+ *   - Default channel is AllChannels
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see unsharp_mask_args
+ */
 VALUE
 Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
 {
@@ -11028,11 +14143,28 @@ Image_unsharp_mask_channel(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-  Method:   Image#vignette(horz_radius, vert_radius, radius, sigma);
-  Purpose:  soften the edges of an image
-  Notes:    The outer edges of the image are replaced by the background color.
-*/
+/**
+ * Soften the edges of an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#vignette @endverbatim
+ *   - @verbatim Image#vignette(horz_radius) @endverbatim
+ *   - @verbatim Image#vignette(horz_radius, vert_radius) @endverbatim
+ *   - @verbatim Image#vignette(horz_radius, vert_radius, radius) @endverbatim
+ *   - @verbatim Image#vignette(horz_radius, vert_radius, radius, sigma) @endverbatim
+ *
+ * Notes:
+ *   - Default horz_radius is image-columns*0.1+0.5
+ *   - Default vert_radius is image-rows*0.1+0.5
+ *   - Default radius is 0.0
+ *   - Default sigma is 1.0
+ *   - The outer edges of the image are replaced by the background color.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_vignette(int argc, VALUE *argv, VALUE self)
 {
@@ -11076,10 +14208,15 @@ Image_vignette(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-  Method:   Image#virtual_pixel_method
-  Purpose:  get the VirtualPixelMethod for the image
-*/
+/**
+ * Get the VirtualPixelMethod for the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#virtual_pixel_method @endverbatim
+ *
+ * @param self this object
+ * @return the VirtualPixelMethod
+ */
 VALUE
 Image_virtual_pixel_method(VALUE self)
 {
@@ -11093,10 +14230,16 @@ Image_virtual_pixel_method(VALUE self)
 }
 
 
-/*
-  Method:   Image#virtual_pixel_method=
-  Purpose:  set the virtual pixel method for the image
-*/
+/**
+ * Set the virtual pixel method for the image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#virtual_pixel_method= @endverbatim
+ *
+ * @param self this object
+ * @param method the VirtualPixelMethod
+ * @return self
+ */
 VALUE
 Image_virtual_pixel_method_eq(VALUE self, VALUE method)
 {
@@ -11111,13 +14254,28 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
 }
 
 
-/*
-  Method:   Image#watermark(mark, brightness=100.0, saturation=100.0
-                          , [gravity,] x_off=0, y_off=0)
-  Purpose:  add a watermark to an image
-  Notes:    x_off and y_off can be negative, which means measure from the right/bottom
-            of the target image.
-*/
+/**
+ * Add a watermark to an image.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#watermark(mark) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation, gravity) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation, gravity, x_off) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation, gravity, x_off, y_off) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation, x_off) @endverbatim
+ *   - @verbatim Image#watermark(mark, brightness, saturation, x_off, y_off) @endverbatim
+ *
+ * Notes:
+ *   - Default brightness is 100.0
+ *   - Default saturation is 100.0
+ *   - Default x_off is 0
+ *   - Default y_off is 0
+ *   - x_off and y_off can be negative, which means measure from the
+ *     right/bottom of the target image.
+ *
+ */
 VALUE
 Image_watermark(int argc, VALUE *argv, VALUE self)
 {
@@ -11172,13 +14330,25 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-  Method:   Image#wave(amplitude=25.0, wavelength=150.0)
-  Purpose:  creates a "ripple" effect in the image by shifting the pixels
-            vertically along a sine wave whose amplitude and wavelength is
-            specified by the given parameters.
-  Returns:  self
-*/
+/**
+ * Create a "ripple" effect in the image by shifting the pixels vertically along
+ * a sine wave whose amplitude and wavelength is specified by the given
+ * parameters.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#wave @endverbatim
+ *   - @verbatim Image#wave(amplitude) @endverbatim
+ *   - @verbatim Image#wave(amplitude, wavelength) @endverbatim
+ *
+ * Notes:
+ *   - Default amplitude is 25.0
+ *   - Default wavelength is 150.0
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ */
 VALUE
 Image_wave(int argc, VALUE *argv, VALUE self)
 {
@@ -11212,22 +14382,33 @@ Image_wave(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Image#wet_floor(initial, rate)
-    Purpose:    Construct a "wet floor" reflection.
-    Notes:      `initial' is a number between 0 and 1, inclusive, that represents
-                the initial level of transparency. Smaller numbers are less
-                transparent than larger numbers. 0 is fully opaque. 1.0 is
-                fully transparent. The default is 0.5.
-                `rate' is the rate at which the initial level of transparency
-                changes to complete transparency. The default is 1.0. Values
-                larger than 1.0 cause the change to occur more rapidly. The
-                resulting reflection will be shorter. Values smaller than 1.0
-                cause the change to occur less rapidly. The resulting
-                reflection will be taller. If the rate is exactly 0 then the
-                amount of transparency doesn't change at all.
-    Notes:      http://en.wikipedia.org/wiki/Wet_floor_effect
-*/
+/**
+ * Construct a "wet floor" reflection.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#wet_floor @endverbatim
+ *   - @verbatim Image#wet_floor(initial) @endverbatim
+ *   - @verbatim Image#wet_floor(initial, rate) @endverbatim
+ *
+ * Notes:
+ *   - Default initial is 0.5
+ *   - Default rate is 1.0
+ *   - `initial' is a number between 0 and 1, inclusive, that represents the
+ *     initial level of transparency. Smaller numbers are less transparent than
+ *     larger numbers. 0 is fully opaque. 1.0 is fully transparent.
+ *   - `rate' is the rate at which the initial level of transparency changes to
+ *     complete transparency. Larger values cause the change to occur more
+ *     rapidly. The resulting reflection will be shorter. Smaller values cause
+ *     the change to occur less rapidly. The resulting reflection will be
+ *     taller. If the rate is exactly 0 then the amount of transparency doesn't
+ *     change at all.
+ * 
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see http://en.wikipedia.org/wiki/Wet_floor_effect
+ */
 VALUE
 Image_wet_floor(int argc, VALUE *argv, VALUE self)
 {
@@ -11367,11 +14548,22 @@ Image_wet_floor(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
- *  Method:     Image#white_threshold(red_channel [, green_channel
- *                                    [, blue_channel [, opacity_channel]]]);
- *  Purpose:    Call WhiteThresholdImage
-*/
+/**
+ * Call WhiteThresholdImage.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#white_threshold(red_channel) @endverbatim
+ *   - @verbatim Image#white_threshold(red_channel, green_channel) @endverbatim
+ *   - @verbatim Image#white_threshold(red_channel, green_channel, blue_channel) @endverbatim
+ *   - @verbatim Image#white_threshold(red_channel, green_channel, blue_channel, opacity_channel) @endverbatim
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return a new image
+ * @see threshold_image
+ * @see Image_black_threshold
+ */
 VALUE
 Image_white_threshold(int argc, VALUE *argv, VALUE self)
 {
@@ -11379,12 +14571,17 @@ Image_white_threshold(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-   Copy the filename to the Info and to the Image. Add format
-   prefix if necessary. This complicated code is necessary to handle filenames
-   like the kind Tempfile.new produces, which have an "extension" in the form
-   ".n", which confuses SetMagickInfo. So we don't use SetMagickInfo any longer.
-*/
+/**
+ * Copy the filename to the Info and to the Image. Add format prefix if
+ * necessary. This complicated code is necessary to handle filenames like the
+ * kind Tempfile.new produces, which have an "extension" in the form ".n", which
+ * confuses SetMagickInfo. So we don't use SetMagickInfo any longer.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param info the Info
+ * @param file the file
+ */
 void add_format_prefix(Info *info, VALUE file)
 {
     char *filename;
@@ -11464,11 +14661,16 @@ void add_format_prefix(Info *info, VALUE file)
 }
 
 
-/*
-  Method:   Image#write(filename)
-  Purpose:  Write the image to the file.
-  Returns:  self
-*/
+/**
+ * Write the image to the file.
+ *
+ * Ruby usage:
+ *   - @verbatim Image#write(filename) @endverbatim
+ *
+ * @param self this object
+ * @param file the filename
+ * @return self
+ */
 VALUE
 Image_write(VALUE self, VALUE file)
 {
@@ -11513,21 +14715,30 @@ DEF_ATTR_ACCESSOR(Image, x_resolution, dbl)
 DEF_ATTR_ACCESSOR(Image, y_resolution, dbl)
 
 
-/*
-    Static:     cropper
-    Purpose:    determine if the argument list is
-                    x, y, width, height
-                or
-                    gravity, width, height
-                or
-                    gravity, x, y, width, height
-                If the 2nd or 3rd, compute new x, y values.
-
-                The argument list can have a trailing true, false, or nil argument.
-                If present and true, after cropping reset the page fields in the image.
-
-                Call xform_image to do the cropping.
-*/
+/**
+ * Determine if the argument list is x, y, width, height
+ * or
+ * gravity, width, height
+ * or
+ * gravity, x, y, width, height
+ *
+ * If the 2nd or 3rd, compute new x, y values.
+ *
+ * The argument list can have a trailing true, false, or nil argument. If
+ * present and true, after cropping reset the page fields in the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Call xform_image to do the cropping.
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self if bang, otherwise a new image
+ * @see xform_image
+ */
 static VALUE
 cropper(int bang, int argc, VALUE *argv, VALUE self)
 {
@@ -11696,11 +14907,20 @@ cropper(int bang, int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Static:     xform_image
-    Purpose:    call one of the image transformation functions
-    Returns:    a new image, or transformed self
-*/
+/**
+ * Call one of the image transformation functions.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param bang whether the bang (!) version of the method was called
+ * @param self this object
+ * @param x x position of start of region
+ * @param y y position of start of region
+ * @param width width of region
+ * @param height height of region
+ * @param xformer the transformation function
+ * @return self if bang, otherwise a new image
+ */
 static VALUE
 xform_image(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height, xformer_t xformer)
 {
@@ -11738,15 +14958,19 @@ xform_image(int bang, VALUE self, VALUE x, VALUE y, VALUE width, VALUE height, x
 }
 
 
-/*
-    Extern:     extract_channels
-    Purpose:    Remove all the ChannelType arguments from the
-                end of the argument list.
-    Returns:    A ChannelType value suitable for passing into
-                an xMagick function. Returns DefaultChannels if
-                no channel arguments were found. Returns the
-                number of remaining arguments.
-*/
+/**
+ * Remove all the ChannelType arguments from the end of the argument list.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Returns DefaultChannels if no channel arguments were found.
+ *   - Returns the number of remaining arguments.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @return A ChannelType value suitable for passing into an xMagick function.
+ */
 ChannelType extract_channels(int *argc, VALUE *argv)
 {
     volatile VALUE arg;
@@ -11776,11 +15000,13 @@ ChannelType extract_channels(int *argc, VALUE *argv)
 }
 
 
-/*
-    Extern:     raise_ChannelType_error
-    Purpose:    raise TypeError when an non-ChannelType object
-                is unexpectedly encountered
-*/
+/**
+ * Raise TypeError when an non-ChannelType object is unexpectedly encountered.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the argument
+ */
 void
 raise_ChannelType_error(VALUE arg)
 {
@@ -11790,11 +15016,14 @@ raise_ChannelType_error(VALUE arg)
 
 
 
-/*
-    Static:     call_trace_proc
-    Purpose:    If Magick.trace_proc is not nil, build an argument
-                list and call the proc.
-*/
+/**
+ * If Magick.trace_proc is not nil, build an argument list and call the proc.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @param which which operation the proc is being called for
+ */
 static void call_trace_proc(Image *image, const char *which)
 {
     volatile VALUE trace;
@@ -11825,10 +15054,14 @@ static void call_trace_proc(Image *image, const char *which)
 }
 
 
-/*
-    External:   rm_trace_creation
-    Purpose:    should be obvious
-*/
+/**
+ * Trace image creation
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image
+ * @see call_trace_proc
+ */
 void rm_trace_creation(Image *image)
 {
     call_trace_proc(image, "c");
@@ -11836,13 +15069,18 @@ void rm_trace_creation(Image *image)
 
 
 
-/*
-    External:   rm_image_destroy
-    Purpose:    Called from GC when all references to the image have gone out
-                of scope.
-    Notes:      A NULL Image pointer indicates that the image has already been
-                destroyed by Image#destroy!
-*/
+/**
+ * Destroy an image. Called from GC when all references to the image have gone
+ * out of scope.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - A NULL Image pointer indicates that the image has already been destroyed
+ *     by Image#destroy!
+ *
+ * @param img the image
+ */
 void rm_image_destroy(void *img)
 {
     Image *image = (Image *)img;

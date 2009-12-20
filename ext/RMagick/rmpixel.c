@@ -1,10 +1,14 @@
-/* $Id: rmpixel.c,v 1.5 2009/06/03 23:08:31 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmpixel.c
-| Author:   Tim Hunter
-| Purpose:  Contains Pixel class methods.
-\============================================================================*/
+/**************************************************************************//**
+ * Contains Pixel class methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmpixel.c
+ * @version  $Id: rmpixel.c,v 1.6 2009/12/20 02:33:34 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 
@@ -16,10 +20,13 @@ static void Color_Name_to_PixelPacket(PixelPacket *, VALUE);
 
 
 
-/*
-    Extern:     destroy_Pixel
-    Purpose:    Free the storage associated with a Pixel object
-*/
+/**
+ * Free the storage associated with a Pixel object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param pixel the Pixel object to destroy
+ */
 void
 destroy_Pixel(Pixel *pixel)
 {
@@ -27,41 +34,138 @@ destroy_Pixel(Pixel *pixel)
 }
 
 
-/*
-    Methods:    Pixel RGBA attribute accessors
-    Purpose:    Get/set Pixel attributes
-    Note:       Pixel is Observable. Setters call changed, notify_observers
-    Note:       Setters return their argument values for backward compatibility
-                to when Pixel was a Struct class.
-*/
+/**
+ * Get Pixel red attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#red @endverbatim
+ *
+ * @param self this object
+ * @return the red value
+ */
 DEF_ATTR_READER(Pixel, red, int)
+
+/**
+ * Get Pixel green attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#green @endverbatim
+ *
+ * @param self this object
+ * @return the green value
+ */
 DEF_ATTR_READER(Pixel, green, int)
+
+/**
+ * Get Pixel blue attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#blue @endverbatim
+ *
+ * @param self this object
+ * @return the blue value
+ */
 DEF_ATTR_READER(Pixel, blue, int)
+
+/**
+ * Get Pixel opacity attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#opacity @endverbatim
+ *
+ * @param self this object
+ * @return the opacity value
+ */
 DEF_ATTR_READER(Pixel, opacity, int)
+
+/**
+ * Set Pixel red attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#red= @endverbatim
+ *
+ * Notes:
+ *   - Pixel is Observable. Setters call changed, notify_observers
+ *   - Setters return their argument values for backward compatibility to when
+ *     Pixel was a Struct class.
+ *
+ * @param self this object
+ * @param v the red value
+ * @return self
+ */
 DEF_PIXEL_CHANNEL_WRITER(red)
+
+/**
+ * Set Pixel green attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#green= @endverbatim
+ *
+ * Notes:
+ *   - Pixel is Observable. Setters call changed, notify_observers
+ *   - Setters return their argument values for backward compatibility to when
+ *     Pixel was a Struct class.
+ *
+ * @param self this object
+ * @param v the green value
+ * @return self
+ */
 DEF_PIXEL_CHANNEL_WRITER(green)
+
+/**
+ * Set Pixel blue attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#blue= @endverbatim
+ *
+ * Notes:
+ *   - Pixel is Observable. Setters call changed, notify_observers
+ *   - Setters return their argument values for backward compatibility to when
+ *     Pixel was a Struct class.
+ *
+ * @param self this object
+ * @param v the blue value
+ * @return self
+ */
 DEF_PIXEL_CHANNEL_WRITER(blue)
+
+/**
+ * Set Pixel opacity attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#opacity= @endverbatim
+ *
+ * Notes:
+ *   - Pixel is Observable. Setters call changed, notify_observers
+ *   - Setters return their argument values for backward compatibility to when
+ *     Pixel was a Struct class.
+ *
+ * @param self this object
+ * @param v the opacity value
+ * @return self
+ */
 DEF_PIXEL_CHANNEL_WRITER(opacity)
 
 
 /*
-    Methods:    Pixel CMYK attribute accessors
-    Purpose:    Get/set Pixel attributes
-    Note:       Pixel is Observable. Setters call changed, notify_observers
-    Note:       Setters return their argument values for backward compatibility
-                to when Pixel was a Struct class.
-*/
+ * Get/set Pixel CMYK attributes.
+ */
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(cyan, red)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(magenta, green)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(yellow, blue)
 DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(black, opacity)
 
 
-/*
- *  Static:     color_arg_rescue
- *  Purpose:    raise ArgumentError if the color name cannot be converted
- *              to a string via rb_str_to_str.
-*/
+/**
+ * Raise ArgumentError if the color name cannot be converted to a string via
+ * rb_str_to_str.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param arg the argument to convert
+ * @return 0
+ * @throw ArgumentError
+ */
 static VALUE
 color_arg_rescue(VALUE arg)
 {
@@ -71,11 +175,14 @@ color_arg_rescue(VALUE arg)
 }
 
 
-/*
-    Extern:     Color_to_PixelPacket
-    Purpose:    Convert either a String color name or
-                a Magick::Pixel to a PixelPacket
-*/
+/**
+ * Convert either a String color name or a Magick::Pixel to a PixelPacket.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param pp the PixelPacket to modify
+ * @param color the color name or Magick::Pixel
+ */
 void
 Color_to_PixelPacket(PixelPacket *pp, VALUE color)
 {
@@ -96,11 +203,15 @@ Color_to_PixelPacket(PixelPacket *pp, VALUE color)
 }
 
 
-/*
-    Static:     Color_Name_to_PixelPacket
-    Purpose:    Convert a color name to a PixelPacket
-    Raises:     ArgumentError
-*/
+/**
+ * Convert a color name to a PixelPacket
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param color the PixelPacket to modify
+ * @param name_arg the coor name
+ * @throw ArgumentError
+ */
 static void
 Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 {
@@ -120,10 +231,14 @@ Color_Name_to_PixelPacket(PixelPacket *color, VALUE name_arg)
 
 
 
-/*
-    Extern:     Pixel_alloc
-    Purpose:    Allocate a Pixel object
-*/
+/**
+ * Allocate a Pixel object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param class the Ruby class to use
+ * @return a new Magick::Pixel object
+ */
 VALUE
 Pixel_alloc(VALUE class)
 {
@@ -135,10 +250,16 @@ Pixel_alloc(VALUE class)
 }
 
 
-/*
-    Method: Pixel#===
-    Purpose:    "Case equal" operator for Pixel
-*/
+/**
+ * "Case equal" operator for Pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#=== @endverbatim
+ *
+ * @param self this object
+ * @param other the other object
+ * @return true or false
+ */
 
 VALUE
 Pixel_case_eq(VALUE self, VALUE other)
@@ -159,10 +280,17 @@ Pixel_case_eq(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:     Pixel#clone
-    Notes:      see dup, init_copy
-*/
+/**
+ * Clone a Pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#clone @endverbatim
+ *
+ * @param self this object
+ * @return a clone
+ * @see Pixel_dup
+ * @see Pixel_init_copy
+ */
 VALUE
 Pixel_clone(VALUE self)
 {
@@ -178,6 +306,17 @@ Pixel_clone(VALUE self)
 }
 
 
+/**
+ * Duplicate a Pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#dup @endverbatim
+ *
+ * @param self this object
+ * @return a clone
+ * @see Pixel_clone
+ * @see Pixel_init_copy
+ */
 VALUE
 Pixel_dup(VALUE self)
 {
@@ -195,10 +334,16 @@ Pixel_dup(VALUE self)
 }
 
 
-/*
-    Method:     Pixel#eql?
-    Purpose:    For use with Hash
-*/
+/**
+ * For use with Hash.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#eql? @endverbatim
+ *
+ * @param self this object
+ * @param other the other object
+ * @return true if hash to the same value, otherwise false
+ */
 VALUE
 Pixel_eql_q(VALUE self, VALUE other)
 {
@@ -206,10 +351,21 @@ Pixel_eql_q(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:  Pixel#fcmp(other[, fuzz[, colorspace]])
-    Purpose: Compare pixel values for equality
-*/
+/**
+ * Compare pixel values for equality.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#fcmp(other, fuzz, colorspace) @endverbatim
+ *
+ * Notes:
+ *   - Default fuzz is 0.0
+ *   - Default colorspace is RGBColorspace
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return true if equal, otherwise false
+ */
 VALUE
 Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 {
@@ -267,15 +423,23 @@ Pixel_fcmp(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Magick::Pixel.from_color(string)
-    Purpose:    Construct an Magick::Pixel corresponding to the given color name.
-    Notes:      the "inverse" is Image *#to_color, b/c the conversion of a pixel
-                to a color name requires both a color depth and if the opacity
-                value has meaning (i.e. whether image->matte == True or not).
-
-                Also see Magick::Pixel#to_color, below.
-*/
+/**
+ * Construct an Magick::Pixel corresponding to the given color name.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Pixel.from_color(string) @endverbatim
+ *
+ * Notes:
+ *   - The "inverse" is Image_to_color, b/c the conversion of a pixel to a
+ *     color name requires both a color depth and if the opacity value has
+ *     meaning (i.e. whether image->matte == True or not).
+ *
+ * @param class the Ruby class to use
+ * @param name the color name
+ * @return a new Magic::Pixel object
+ * @see Image_to_color
+ * @see Pixel_to_color
+ */
 VALUE
 Pixel_from_color(VALUE class, VALUE name)
 {
@@ -299,12 +463,25 @@ Pixel_from_color(VALUE class, VALUE name)
 }
 
 
-/*
-    Method:     Pixel#from_hsla(hue, saturation, lightness, alpha=1)
-    Purpose:    Replace brain-dead from_HSL, above.
-    Notes:      0 <= hue < 360, 0 <= saturation <= 1, 0 <= lightness <= 1
-                0 <= alpha <= 1 (0 is transparent, 1 is opaque)
-*/
+/**
+ * Construct an RGB pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#from_hsla(hue, saturation, lightness, alpha) @endverbatim
+ *
+ * Notes:
+ *   - Default alpha is 1.0
+ *   - 0 <= hue < 360
+ *   - 0 <= saturation <= 1
+ *   - 0 <= lightness <= 1
+ *   - 0 <= alpha <= 1 (0 is transparent, 1 is opaque)
+ *   - Replaces brain-dead Pixel_from_HSL.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param class the Ruby class to use
+ * @return a new Magick::Pixel object
+ */
 VALUE
 Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
 {
@@ -369,11 +546,17 @@ Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
 }
 
 
-/*
-    Method:     Pixel.from_HSL  *** DEPRECATED ***
-    Purpose:    Constructs an RGB pixel from the array
-                [hue, saturation, luminosity].
-*/
+/**
+ * Construct an RGB pixel from the array [hue, saturation, luminosity].
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel.from_HSL  @endverbatim
+ *
+ * @param class the Ruby class to use
+ * @param hsl the array
+ * @return a new Magick::Pixel object
+ * @deprecated This method has been deprecated. Please use Pixel_from_hsla.
+ */
 VALUE
 Pixel_from_HSL(VALUE class, VALUE hsl)
 {
@@ -400,11 +583,17 @@ Pixel_from_HSL(VALUE class, VALUE hsl)
 }
 
 
-/*
-    Static:     Pixel_from_MagickPixelPacket
-    Purpose:    Create a Magick::Pixel object from a MagickPixelPacket structure.
-    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
-*/
+/**
+ * Create a Magick::Pixel object from a MagickPixelPacket structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Bypasses normal Pixel.new, Pixel#initialize methods
+ *
+ * @param pp the MagickPixelPacket
+ * @return a new Magick::Pixel object
+ */
 VALUE
 Pixel_from_MagickPixelPacket(const MagickPixelPacket *pp)
 {
@@ -420,11 +609,17 @@ Pixel_from_MagickPixelPacket(const MagickPixelPacket *pp)
 }
 
 
-/*
-    Extern:     Pixel_from_PixelPacket
-    Purpose:    Create a Magick::Pixel object from a PixelPacket structure.
-    Notes:      bypasses normal Pixel.new, Pixel#initialize methods
-*/
+/**
+ * Create a Magick::Pixel object from a PixelPacket structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Bypasses normal Pixel.new, Pixel#initialize methods
+ *
+ * @param pp the PixelPacket
+ * @return a new Magick::Pixel object
+ */
 VALUE
 Pixel_from_PixelPacket(const PixelPacket *pp)
 {
@@ -436,11 +631,17 @@ Pixel_from_PixelPacket(const PixelPacket *pp)
 }
 
 
-/*
-    Method:     Pixel#hash
-    Notes:      INT2FIX left-shifts 1 bit. Sacrifice 1 bit
-                from the opacity attribute to the FIXNUM_FLAG.
-*/
+/**
+ * Ruby usage:
+ *   - @verbatim Pixel#hash @endverbatim
+ *
+ * Notes:
+ *   - INT2FIX left-shifts 1 bit. Sacrifice 1 bit from the opacity attribute to
+ *     the FIXNUM_FLAG.
+ *
+ * @param self this object
+ * @return the hash of self
+ */
 VALUE
 Pixel_hash(VALUE self)
 {
@@ -460,10 +661,18 @@ Pixel_hash(VALUE self)
 }
 
 
-/*
-    Method:     Pixel#initialize_copy
-    Purpose:    initialize clone, dup methods
-*/
+/**
+ * Initialize clone, dup methods.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#initialize_copy @endverbatim
+ *
+ * @param self this object
+ * @param orig the original Pixel
+ * @return self
+ * @see Pixel_clone
+ * @see Pixel_dup
+ */
 VALUE
 Pixel_init_copy(VALUE self, VALUE orig)
 {
@@ -478,10 +687,26 @@ Pixel_init_copy(VALUE self, VALUE orig)
 }
 
 
-/*
-    Method:     Pixel#initialize(red=0,green=0,blue=0,opacity=0)
-    Notes:      For backward compatibility, arguments may be nil.
-*/
+/**
+ * Ruby usage:
+ *   - @verbatim Pixel#initialize @endverbatim
+ *   - @verbatim Pixel#initialize(red) @endverbatim
+ *   - @verbatim Pixel#initialize(red,green) @endverbatim
+ *   - @verbatim Pixel#initialize(red,green,blue) @endverbatim
+ *   - @verbatim Pixel#initialize(red,green,blue,opacity) @endverbatim
+ *
+ * Notes:
+ *   - Default red is 0.0
+ *   - Default green is 0.0
+ *   - Default blue is 0.0
+ *   - Default opacity is 0.0
+ *   - For backward compatibility, arguments may be nil.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Pixel_initialize(int argc, VALUE *argv, VALUE self)
 {
@@ -521,10 +746,15 @@ Pixel_initialize(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:  Pixel#intensity
-    Purpose: Return the "intensity" of a pixel
-*/
+/**
+ * Return the "intensity" of a pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#intensity @endverbatim
+ *
+ * @param self this object
+ * @return the intensity
+ */
 VALUE
 Pixel_intensity(VALUE self)
 {
@@ -541,10 +771,15 @@ Pixel_intensity(VALUE self)
 }
 
 
-/*
-    Method:     Pixel#marshal_dump
-    Purpose:    Support Marshal.dump
-*/
+/**
+ * Support Marshal.dump.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#marshal_dump @endverbatim
+ *
+ * @param self this object
+ * @return a string representing the dumped pixel
+ */
 VALUE
 Pixel_marshal_dump(VALUE self)
 {
@@ -561,10 +796,16 @@ Pixel_marshal_dump(VALUE self)
 }
 
 
-/*
-    Method:     Pixel#marshal_load
-    Purpose:    Support Marshal.load
-*/
+/**
+ * Support Marshal.load.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#marshal_load @endverbatim
+ *
+ * @param self this object
+ * @param dpixel the dumped pixel
+ * @return self
+ */
 VALUE
 Pixel_marshal_load(VALUE self, VALUE dpixel)
 {
@@ -579,10 +820,16 @@ Pixel_marshal_load(VALUE self, VALUE dpixel)
 }
 
 
-/*
-    Method:     Pixel#<=>
-    Purpose:    Support Comparable mixin
-*/
+/**
+ * Support Comparable mixin.
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#<=> @endverbatim
+ *
+ * @param self this object
+ * @param other the other Pixel
+ * @return -1, 0, 1
+ */
 VALUE
 Pixel_spaceship(VALUE self, VALUE other)
 {
@@ -615,11 +862,21 @@ Pixel_spaceship(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:     Pixel#to_hsla()
-    Purpose:    Replace brain-dead to_HSL, above.
-    Notes:      Returns [hue, saturation, lightness, alpha] in the same ranges as from_hsla()
-*/
+/**
+ * Return [hue, saturation, lightness, alpha] in the same ranges as
+ * Pixel_from_hsla.
+ * 
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#to_hsla @endverbatim
+ *
+ * Notes:
+ *   - Replace brain-dead Pixel_to_HSL.
+ *
+ * @param self this object
+ * @return an array with hsla data
+ * @see Pixel_from_hsla
+ */
 VALUE
 Pixel_to_hsla(VALUE self)
 {
@@ -651,11 +908,16 @@ Pixel_to_hsla(VALUE self)
     return hsla;
 }
 
-/*
-    Method:     Pixel#to_HSL    *** DEPRECATED ***
-    Purpose:    Converts an RGB pixel to the array
-                [hue, saturation, luminosity].
-*/
+/**
+ * Convert an RGB pixel to the array [hue, saturation, luminosity].
+ *
+ * Ruby usage:
+ *   - @verbatim Pixel#to_HSL @endverbatim
+ *
+ * @param self this object
+ * @return an array with hsl data
+ * @deprecated This method has been deprecated. Please use Pixel_to_hsla.
+ */
 VALUE
 Pixel_to_HSL(VALUE self)
 {
@@ -675,13 +937,28 @@ Pixel_to_HSL(VALUE self)
 }
 
 
-/*
-    Method:     Magick::Pixel#to_color(compliance=AllCompliance, matte=false,
-                                       depth=QuantumDepth, hex=false)
-    Purpose:    return the color name corresponding to the pixel values
-    Notes:      the conversion respects the value of the 'opacity' field
-                in the Pixel.
-*/
+/**
+ * Return the color name corresponding to the pixel values.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Pixel#to_color @endverbatim
+ *   - @verbatim Magick::Pixel#to_color(compliance) @endverbatim
+ *   - @verbatim Magick::Pixel#to_color(compliance, matte) @endverbatim
+ *   - @verbatim Magick::Pixel#to_color(compliance, matte, depth) @endverbatim
+ *   - @verbatim Magick::Pixel#to_color(compliance, matte, depth, hex) @endverbatim
+ *
+ * Notes:
+ *   - Default compliance is AllCompliance
+ *   - Default matte is false
+ *   - Default depth is QuantumDepth
+ *   - Default hex is false
+ *   - The conversion respects the value of the 'opacity' field in the Pixel
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the color name as a String
+ */
 VALUE
 Pixel_to_color(int argc, VALUE *argv, VALUE self)
 {
@@ -769,10 +1046,15 @@ Pixel_to_color(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Magick::Pixel#to_s
-    Purpose:    Create a string representation of a Magick::Pixel
-*/
+/**
+ * Create a string representation of a Magick::Pixel.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Pixel#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 Pixel_to_s(VALUE self)
 {
@@ -786,12 +1068,17 @@ Pixel_to_s(VALUE self)
 }
 
 
-/*
-    Static:     rm_set_magick_pixel_packet
-    Purpose:    Convert a PixelPacket to a MagickPixelPacket
-    Notes:      Same code as the private function SetMagickPixelPacket
-                in ImageMagick.
-*/
+/**
+ * Convert a PixelPacket to a MagickPixelPacket.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Same code as the private function SetMagickPixelPacket in ImageMagick.
+ *
+ * @param pixel the pixel
+ * @param pp the MagickPixelPacket to be modified
+ */
 void
 rm_set_magick_pixel_packet(Pixel *pixel, MagickPixelPacket *pp)
 {

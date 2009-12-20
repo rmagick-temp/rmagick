@@ -1,12 +1,15 @@
-/* $Id: rmmain.c,v 1.302 2009/09/15 22:09:44 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmmain.c
-| Author:   Tim Hunter
-| Purpose:  Contains all module, class, method declarations.
-|           Defines all constants
-|           Contains Magick module methods.
-\============================================================================*/
+/**************************************************************************//**
+ * Contains all module, class, method declarations. Defines all constants.
+ * Contains Magick module methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmmain.c
+ * @version  $Id: rmmain.c,v 1.303 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #define MAIN                        // Define external variables
 #include "rmagick.h"
@@ -28,6 +31,14 @@ static void version_constants(void);
  *  These functions have the same signature as the equivalent C functions.
  */
 #if defined(HAVE_SETMAGICKMEMORYMETHODS)
+/**
+ * Allocate memory.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param size the size of memory to allocate
+ * @return pointer to a block of memory
+ */
 static void *rm_malloc(size_t size)
 {
     void *p;
@@ -46,6 +57,15 @@ static void *rm_malloc(size_t size)
 
 
 
+/**
+ * Reallocate memory.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ptr pointer to the existing block of memory
+ * @param size the new size of memory to allocate
+ * @return pointer to a block of memory
+ */
 static void *rm_realloc(void *ptr, size_t size)
 {
     void *p;
@@ -64,12 +84,24 @@ static void *rm_realloc(void *ptr, size_t size)
 
 
 
+/**
+ * Free memory.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ptr pointer to the existing block of memory
+ */
 static void rm_free(void *ptr)
 {
     xfree(ptr);
 }
 
 
+/**
+ * Use managed memory.
+ *
+ * No Ruby usage (internal function)
+ */
 static void set_managed_memory(void)
 {
     ID enable_mm = rb_intern("RMAGICK_ENABLE_MANAGED_MEMORY");
@@ -90,12 +122,11 @@ static void set_managed_memory(void)
 
 
 
-/*
-  External:     Init_RMagick2
-  Purpose:      define the classes and constants
-  Arguments:    void
-  Returns:      void
-*/
+/**
+ * Define the classes and constants.
+ *
+ * No Ruby usage (internal function)
+ */
 void
 Init_RMagick2(void)
 {
@@ -1590,13 +1621,16 @@ Init_RMagick2(void)
 
 
 
-/*
- *  Static:     test_Magick_version
- *  Purpose:    Ensure the version of ImageMagick we're running with matches
- *              the version we were compiled with.
- *  Notes:      Bypass the test by defining the constant RMAGICK_BYPASS_VERSION_TEST
- *              to 'true' at the top level, before requiring 'RMagick'
-*/
+/**
+ * Ensure the version of ImageMagick we're running with matches the version we
+ * were compiled with.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Bypass the test by defining the constant RMAGICK_BYPASS_VERSION_TEST to
+ *     'true' at the top level, before requiring 'RMagick'
+ */
 static void
 test_Magick_version(void)
 {
@@ -1634,10 +1668,11 @@ test_Magick_version(void)
 
 
 
-/*
-    Static:     version_constants
-    Purpose:    create Version, Magick_version, and Version_long constants.
-*/
+/**
+ * Create Version, Magick_version, and Version_long constants.
+ *
+ * No Ruby usage (internal function)
+ */
 static void
 version_constants(void)
 {
@@ -1656,7 +1691,7 @@ version_constants(void)
     rb_define_const(Module_Magick, "Version", str);
 
     sprintf(long_version,
-            "This is %s ($Date: 2009/09/15 22:09:44 $) Copyright (C) 2009 by Timothy P. Hunter\n"
+            "This is %s ($Date: 2009/12/20 02:33:33 $) Copyright (C) 2009 by Timothy P. Hunter\n"
             "Built with %s\n"
             "Built for %s\n"
             "Web page: http://rmagick.rubyforge.org\n"

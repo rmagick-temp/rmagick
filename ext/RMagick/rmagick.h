@@ -1,15 +1,19 @@
-/* $Id: rmagick.h,v 1.279 2009/11/22 00:38:15 baror Exp $ */
-/*=============================================================================
-|               Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmagick.h
-| Purpose:  RMagick declarations and definitions
-| Author:   Tim Hunter
-\============================================================================*/
+/**************************************************************************//**
+ * RMagick declarations and definitions.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmagick.h
+ * @version  $Id: rmagick.h,v 1.280 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #ifndef _RMAGICK_H_
 #define _RMAGICK_H_
 
-// Suppress warnings about deprecated functions on Windows
+//! Suppress warnings about deprecated functions on Windows
 #define _CRT_SECURE_NO_DEPRECATE 1
 
 #include <assert.h>
@@ -41,6 +45,7 @@
 #undef WORDS_BIGENDIAN
 
 #include "magick/MagickCore.h"
+#include "magick/magick-config.h"
 
 // Undef ImageMagick's versions of these symbols
 #undef PACKAGE_STRING
@@ -49,12 +54,13 @@
 #include "extconf.h"
 
 
-// For quoting preprocessor symbols
+//! For quoting preprocessor symbols
 #define Q2(q) #q
+//! For quoting preprocessor symbols
 #define Q(q) Q2(q)
 
 
-// Trace new image creation in bang methods
+//! Trace new image creation in bang methods
 #define UPDATE_DATA_PTR(_obj_, _new_) \
     do { (void) rm_trace_creation(_new_);\
     DATA_PTR(_obj_) = (void *)(_new_);\
@@ -63,76 +69,85 @@
 
 // Handle Quantum <-> Ruby Numeric object conversion
 #if (QuantumDepth == 8 || QuantumDepth == 16)
-#define QUANTUM2NUM(q) INT2FIX((q))
-#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n))
+#define QUANTUM2NUM(q) INT2FIX((q)) /**< Quantum -> Ruby Numeric conversion */
+#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n)) /**< Quantum <- Ruby Numeric conversion */
 #elif (QuantumDepth == 32)
-#define QUANTUM2NUM(q) UINT2NUM((q))
-#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n))
+#define QUANTUM2NUM(q) UINT2NUM((q)) /**< Quantum -> Ruby Numeric conversion */
+#define NUM2QUANTUM(n) (Quantum)NUM2UINT((n)) /**< Quntum <- Ruby Numeric conversion */
 #elif (QuantumDepth == 64)
-#define QUANTUM2NUM(q) ULL2NUM((q))
-#define NUM2QUANTUM(n) (Quantum)NUM2ULL((n))
+#define QUANTUM2NUM(q) ULL2NUM((q)) /**< Quantum -> Ruby Numeric conversion */
+#define NUM2QUANTUM(n) (Quantum)NUM2ULL((n)) /**< Quntum <- Ruby Numeric conversion */
 #else
 #error Specified QuantumDepth is not supported.
 #endif
-// Convert user-supplied objects to Quantum
+//! Convert user-supplied objects to Quantum
 #define APP2QUANTUM(n) rm_app2quantum((n))
 
+//! degrees to radians conversion
 #undef DegreesToRadians     // defined in ImageMagick.h in 6.0.2
-#define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0)
+#define DegreesToRadians(x) ((x)*3.14159265358979323846/180.0) 
 
-#define PIXEL_INTENSITY(q) \
-        ((Quantum)(0.299*(q)->red + 0.587*(q)->green + 0.114*(q)->blue + 0.5))
+//! pixel intensity calculation
+#define PIXEL_INTENSITY(q) ((Quantum)(0.299*(q)->red + 0.587*(q)->green + 0.114*(q)->blue + 0.5))
 
+//! find maximum of longs
 #define LMAX(a,b) ((((long)(a))>((long)(b)))?((long)(a)):((long)(b)))
+//! find maximum of floats
 #define FMAX(a,b) ((((double)(a))>((double)(b)))?((double)(a)):((double)(b)))
+//! find minimum of floats
 #define FMIN(a,b) ((((double)(a))<=((double)(b)))?((double)(a)):((double)(b)))
-#define RMAGICK_PI 3.14159265358979
+
+#define RMAGICK_PI 3.14159265358979  /**< pi */
+
+//! round to Quantum
 #define ROUND_TO_QUANTUM(value) ((Quantum) ((value) > (Quantum)QuantumRange ? QuantumRange : (value) + 0.5))
 
 
 // Ruby 1.9.0 changed the name to rb_frame_this_func
 #if defined(HAVE_RB_FRAME_THIS_FUNC)
-#define THIS_FUNC() rb_frame_this_func()
+#define THIS_FUNC() rb_frame_this_func() /**< get the Ruby function being called */
 #else
-#define THIS_FUNC() rb_frame_last_func()
+#define THIS_FUNC() rb_frame_last_func() /**< get the Ruby function being called */
 #endif
 
 // GetReadFile doesn't exist in Ruby 1.9.0
 #if !defined(GetReadFile)
-#define GetReadFile(fptr) rb_io_stdio_file(fptr)
-#define GetWriteFile(fptr) rb_io_stdio_file(fptr)
+#define GetReadFile(fptr) rb_io_stdio_file(fptr) /**< Ruby read file pointer */
+#define GetWriteFile(fptr) rb_io_stdio_file(fptr) /**< Ruby write file pointer */
 #endif
 
 // rb_io_t replaces OpenFile in Ruby 1.9.0
 #if defined(HAVE_RB_IO_T)
 #undef OpenFile
-#define OpenFile rb_io_t
+#define OpenFile rb_io_t /**< Ruby open file */
 #endif
 
 // These macros are required in 1.9.1 but aren't defined prior to 1.8.6.
 #if !defined(RSTRING_LEN)
-#define RSTRING_LEN(s) (RSTRING((s))->len)
+#define RSTRING_LEN(s) (RSTRING((s))->len) /**< Ruby string length */
 #endif
 #if !defined(RSTRING_PTR)
-#define RSTRING_PTR(s) (RSTRING((s))->ptr)
+#define RSTRING_PTR(s) (RSTRING((s))->ptr) /**< Ruby string pointer */
 #endif
 
 // Backport these two macros to 1.8
 #if !defined(RARRAY_LEN)
-#define RARRAY_LEN(a) RARRAY((a))->len
+#define RARRAY_LEN(a) RARRAY((a))->len /**< Ruby array length */
 #endif
 // Matz says this macro is read-only! (see http://www.ruby-forum.com/topic/146072)
 #if !defined(RARRAY_PTR)
-#define RARRAY_PTR(a) RARRAY((a))->ptr
+#define RARRAY_PTR(a) RARRAY((a))->ptr /**< Ruby array pointer */
 #endif
 
 
-// Convert a C string to a Ruby symbol. Used in marshal_dump/marshal_load methods
+//! Convert a C string to a Ruby symbol. Used in marshal_dump/marshal_load methods
 #define CSTR2SYM(s) ID2SYM(rb_intern(s))
-// Convert a C string to a Ruby String, or nil if the ptr is NULL
+//! Convert a C string to a Ruby String, or nil if the ptr is NULL
 #define MAGICK_STRING_TO_OBJ(f) (f) ? rb_str_new2(f) : Qnil
-// Copy the C string in a Ruby String object to ImageMagick memory, or set
-// the pointer to NULL if the object is nil.
+/**
+ * Copy the C string in a Ruby String object to ImageMagick memory, or set the
+ * pointer to NULL if the object is nil.
+ */
 #define OBJ_TO_MAGICK_STRING(f, obj) \
     if ((obj) != Qnil)\
         magick_clone_string(&f, RSTRING_PTR(obj));\
@@ -140,173 +155,183 @@
         f = NULL;
 
 
-// ImageMagick 6.5.7 replaced DestroyConstitute with ConstituteComponentTerminus
-// Both have the same signature.
+/** ImageMagick 6.5.7 replaced DestroyConstitute with
+ * ConstituteComponentTerminus. Both have the same signature.
+ */
 #if defined(HAVE_CONSTITUTECOMPONENTTERMINUS)
 #define DestroyConstitute(void) ConstituteComponentTerminus(void)
 #endif
 
-// IM 6.4.1 replaced AllocateImage with AcquireImage.
-// Both have the same signature.
+/** IM 6.4.1 replaced AllocateImage with AcquireImage.
+ * Both have the same signature.
+ */
 #if !defined(HAVE_ACQUIREIMAGE)
 #define AcquireImage(info) AllocateImage(info)
 #endif
 
 // ImageLayerMethod replaced MagickLayerMethod starting with 6.3.6
 #if defined(HAVE_TYPE_IMAGELAYERMETHOD)
-#define LAYERMETHODTYPE ImageLayerMethod
-#define CLASS_LAYERMETHODTYPE Class_ImageLayerMethod
-#define LAYERMETHODTYPE_NAME ImageLayerMethod_name
-#define LAYERMETHODTYPE_NEW  ImageLayerMethod_new
+#define LAYERMETHODTYPE ImageLayerMethod /**< layer method */
+#define CLASS_LAYERMETHODTYPE Class_ImageLayerMethod /**< layer method class */
+#define LAYERMETHODTYPE_NAME ImageLayerMethod_name /**< layer method name */
+#define LAYERMETHODTYPE_NEW  ImageLayerMethod_new /**< new layer method */
 #else
-#define LAYERMETHODTYPE MagickLayerMethod
-#define CLASS_LAYERMETHODTYPE Class_MagickLayerMethod
-#define LAYERMETHODTYPE_NAME MagickLayerMethod_name
-#define LAYERMETHODTYPE_NEW  MagickLayerMethod_new
+#define LAYERMETHODTYPE MagickLayerMethod /**< layer method */
+#define CLASS_LAYERMETHODTYPE Class_MagickLayerMethod /**< layer method class */
+#define LAYERMETHODTYPE_NAME MagickLayerMethod_name /**< layer method name */
+#define LAYERMETHODTYPE_NEW  MagickLayerMethod_new /**< new layer method */
 #endif
 
 
-typedef ImageInfo Info; // Make type name match class name
-typedef PixelPacket Pixel;
+typedef ImageInfo Info; /**< Make type name match class name */
+typedef PixelPacket Pixel; /**< Make type name match class name */
 
-// Montage
+//! Montage
 typedef struct
 {
-    CompositeOperator compose;
-    MontageInfo *info;
+    CompositeOperator compose; /**< compose operator */
+    MontageInfo *info; /**< montage info */
 } Montage;
 
 // Draw
+//! tmp filename linked list
 struct TmpFile_Name
 {
-    struct TmpFile_Name *next;
-    char name[1];
+    struct TmpFile_Name *next; /**< the next tmp filename */
+    char name[1]; /**< expandable char array for this filename */
 };
 
+//! Draw class.
 typedef struct
 {
-    DrawInfo *info;             // the DrawInfo struct
-    VALUE primitives;           // the primitive string
-    struct TmpFile_Name *tmpfile_ary;
-    PixelPacket shadow_color;   // PolaroidOptions#shadow_color
+    DrawInfo *info;             /**< the DrawInfo struct */
+    VALUE primitives;           /**< the primitive string */
+    struct TmpFile_Name *tmpfile_ary; /**< the tmp filenames */
+    PixelPacket shadow_color;   /**< PolaroidOptions#shadow_color */
 } Draw;             // make the type match the class name
 
 // Enum
+//! enumerator over Magick ids
 typedef struct
 {
-   ID id;
-   int val;
+   ID id; /**< the Magick id */
+   int val; /**< its value */
 } MagickEnum;
 
 #undef False    // defined in deprecate.h in 6.0.2
 #undef True     // defined in deprecate.h in 6.0.2
+//! generic boolean
 typedef enum
 {
-    False = 0,
-    True = 1
+    False = 0, /**< false */
+    True = 1   /**< true */
 } rm_boolean;
 
+//! enumerator over weight types
 typedef enum {
-    AnyWeight,
-    NormalWeight,
-    BoldWeight,
-    BolderWeight,
-    LighterWeight
+    AnyWeight,     /**< any */
+    NormalWeight,  /**< normal */
+    BoldWeight,    /**< bold */
+    BolderWeight,  /**< bolder */
+    LighterWeight  /**< lighter */
 } WeightType;
 
-// Draw#text_anchor AnchorType argument
+//! Draw#text_anchor AnchorType argument
 typedef enum {
-    StartAnchor = 1,
-    MiddleAnchor = 2,
-    EndAnchor = 3
+    StartAnchor = 1,  /**< start */
+    MiddleAnchor = 2, /**< midle */
+    EndAnchor = 3     /**< end */
 } AnchorType;
 
 
+//! dumped image
 typedef struct
 {
-    unsigned char id;   // Dumped image id = 0xd1
-    unsigned char mj;   // Major format number = 1
-    unsigned char mi;   // Minor format number = 0
-    unsigned char len;  // Length of image magick string
-    char magick[MaxTextExtent]; // magick string
+    unsigned char id;   /**< Dumped image id = 0xd1 */
+    unsigned char mj;   /**< Major format number = 1 */
+    unsigned char mi;   /**< Minor format number = 0 */
+    unsigned char len;  /**< Length of image magick string */
+    char magick[MaxTextExtent]; /**< magick string */
 } DumpedImage;
 
-#define DUMPED_IMAGE_ID      0xd1
-#define DUMPED_IMAGE_MAJOR_VERS 1
-#define DUMPED_IMAGE_MINOR_VERS 0
+#define DUMPED_IMAGE_ID      0xd1 /**< ID of Dumped image id */
+#define DUMPED_IMAGE_MAJOR_VERS 1 /**< Dumped image major version */
+#define DUMPED_IMAGE_MINOR_VERS 0 /**< Dumped image minor version */
 
-#define MAGICK_LOC "magick_location"     // instance variable name in ImageMagickError class
+#define MAGICK_LOC "magick_location"     /**< instance variable name in ImageMagickError class */
 
-#define MAX_GEOM_STR 51                 // max length of a geometry string
+#define MAX_GEOM_STR 51                 /**< max length of a geometry string */
 
-/*
+//! Quantum expression adapter.
+/**
  * Both ImageMagick and GraphicsMagick define an enum type for quantum-level
  * expressions, but they're different types. The QuantumExpressionOperator
  * type is an adapter type that can be mapped to either one.
-*/
+ */
 typedef enum _QuantumExpressionOperator
 {
-    UndefinedQuantumOperator,
-    AddQuantumOperator,
-    AndQuantumOperator,
-    DivideQuantumOperator,
-    LShiftQuantumOperator,
-    MaxQuantumOperator,
-    MinQuantumOperator,
-    MultiplyQuantumOperator,
-    OrQuantumOperator,
-    RShiftQuantumOperator,
-    SubtractQuantumOperator,
-    XorQuantumOperator,
+    UndefinedQuantumOperator, /**< undefined */
+    AddQuantumOperator,       /**< add */
+    AndQuantumOperator,       /**< and */
+    DivideQuantumOperator,    /**< divide */
+    LShiftQuantumOperator,    /**< lshift */
+    MaxQuantumOperator,       /**< max */
+    MinQuantumOperator,       /**< min */
+    MultiplyQuantumOperator,  /**< multiply */
+    OrQuantumOperator,        /**< or */
+    RShiftQuantumOperator,    /**< rshift */
+    SubtractQuantumOperator,  /**< subtract */
+    XorQuantumOperator,       /**< xor */
 #if defined(HAVE_ENUM_POWEVALUATEOPERATOR)
-    PowQuantumOperator,
+    PowQuantumOperator,       /**< pow */
 #endif
 #if defined(HAVE_ENUM_LOGEVALUATEOPERATOR)
-    LogQuantumOperator,
+    LogQuantumOperator,       /**< log */
 #endif
 #if defined(HAVE_ENUM_THRESHOLDEVALUATEOPERATOR)
-    ThresholdQuantumOperator,
+    ThresholdQuantumOperator, /**< threshold */
 #endif
 #if defined(HAVE_ENUM_THRESHOLDBLACKEVALUATEOPERATOR)
-    ThresholdBlackQuantumOperator,
+    ThresholdBlackQuantumOperator, /**< threshold black */
 #endif
 #if defined(HAVE_ENUM_THRESHOLDWHITEEVALUATEOPERATOR)
-    ThresholdWhiteQuantumOperator,
+    ThresholdWhiteQuantumOperator, /**< threshold white */
 #endif
 #if defined(HAVE_ENUM_GAUSSIANNOISEEVALUATEOPERATOR)
-    GaussianNoiseQuantumOperator,
+    GaussianNoiseQuantumOperator, /**< gaussian noise */
 #endif
 #if defined(HAVE_ENUM_IMPULSENOISEEVALUATEOPERATOR)
-    ImpulseNoiseQuantumOperator,
+    ImpulseNoiseQuantumOperator, /**< impulse noise */
 #endif
 #if defined(HAVE_ENUM_LAPLACIANNOISEEVALUATEOPERATOR)
-    LaplacianNoiseQuantumOperator,
+    LaplacianNoiseQuantumOperator, /**< laplacian noise */
 #endif
 #if defined(HAVE_ENUM_MULTIPLICATIVENOISEEVALUATEOPERATOR)
-    MultiplicativeNoiseQuantumOperator,
+    MultiplicativeNoiseQuantumOperator, /**< multiplicative noise */
 #endif
 #if defined(HAVE_ENUM_POISSONNOISEEVALUATEOPERATOR)
-    PoissonNoiseQuantumOperator,
+    PoissonNoiseQuantumOperator, /**< poisson noise */
 #endif
 #if defined(HAVE_ENUM_UNIFORMNOISEEVALUATEOPERATOR)
-    UniformNoiseQuantumOperator,
+    UniformNoiseQuantumOperator, /**< uniform noise */
 #endif
 #if defined(HAVE_ENUM_COSINEEVALUATEOPERATOR)
-    CosineQuantumOperator,
+    CosineQuantumOperator,    /**< cosine */
 #endif
 #if defined(HAVE_ENUM_SINEEVALUATEOPERATOR)
-    SineQuantumOperator,
+    SineQuantumOperator,      /**< sine */
 #endif
 #if defined(HAVE_ENUM_ADDMODULUSEVALUATEOPERATOR)
-    AddModulusQuantumOperator
+    AddModulusQuantumOperator /**< add modulus */
 #endif
 } QuantumExpressionOperator ;
 
 
-// This implements the "omitted storage class model" for external variables.
-// (Ref: Harbison & Steele.) The rmmain.c file defines MAIN, which causes
-// the single defining declarations to be generated. No other source files
-// define MAIN and therefore generate referencing declarations.
+/** This implements the "omitted storage class model" for external variables.
+ * (Ref: Harbison & Steele.) The rmmain.c file defines MAIN, which causes
+ * the single defining declarations to be generated. No other source files
+ * define MAIN and therefore generate referencing declarations.
+ */
 #undef EXTERN
 #if defined(MAIN)
 #define EXTERN
@@ -386,76 +411,81 @@ EXTERN VALUE Class_StyleType;
 EXTERN VALUE Class_WeightType;
 EXTERN VALUE Class_VirtualPixelMethod;
 
-/*
+/**
 *   Commonly-used IDs
 */
-EXTERN ID rm_ID_trace_proc;        // "@trace_proc"
-EXTERN ID rm_ID_call;              // "call"
-EXTERN ID rm_ID_changed;           // "changed"
-EXTERN ID rm_ID_cur_image;         // "cur_image"
-EXTERN ID rm_ID_dup;               // "dup"
-EXTERN ID rm_ID_fill;              // "fill"
-EXTERN ID rm_ID_flag;              // "flag"
-EXTERN ID rm_ID_from_s;            // "from_s"
-EXTERN ID rm_ID_Geometry;          // "Geometry"
-EXTERN ID rm_ID_GeometryValue;     // "GeometryValue"
-EXTERN ID rm_ID_has_key_q;         // "has_key?"
-EXTERN ID rm_ID_height;            // "height"
-EXTERN ID rm_ID_initialize_copy;   // "initialize_copy"
-EXTERN ID rm_ID_length;            // "length"
-EXTERN ID rm_ID_notify_observers;  // "notify_observers"
-EXTERN ID rm_ID_new;               // "new"
-EXTERN ID rm_ID_push;              // "push"
-EXTERN ID rm_ID_spaceship;         // "<=>
-EXTERN ID rm_ID_to_i;              // "to_i"
-EXTERN ID rm_ID_to_s;              // "to_s"
-EXTERN ID rm_ID_values;            // "values"
-EXTERN ID rm_ID_width;             // "width"
-EXTERN ID rm_ID_x;                 // "x"
-EXTERN ID rm_ID_y;                 // "y"
+EXTERN ID rm_ID_trace_proc;        /**< "@trace_proc" */
+EXTERN ID rm_ID_call;              /**< "call" */
+EXTERN ID rm_ID_changed;           /**< "changed" */
+EXTERN ID rm_ID_cur_image;         /**< "cur_image" */
+EXTERN ID rm_ID_dup;               /**< "dup" */
+EXTERN ID rm_ID_fill;              /**< "fill" */
+EXTERN ID rm_ID_flag;              /**< "flag" */
+EXTERN ID rm_ID_from_s;            /**< "from_s" */
+EXTERN ID rm_ID_Geometry;          /**< "Geometry" */
+EXTERN ID rm_ID_GeometryValue;     /**< "GeometryValue" */
+EXTERN ID rm_ID_has_key_q;         /**< "has_key?" */
+EXTERN ID rm_ID_height;            /**< "height" */
+EXTERN ID rm_ID_initialize_copy;   /**< "initialize_copy" */
+EXTERN ID rm_ID_length;            /**< "length" */
+EXTERN ID rm_ID_notify_observers;  /**< "notify_observers" */
+EXTERN ID rm_ID_new;               /**< "new" */
+EXTERN ID rm_ID_push;              /**< "push" */
+EXTERN ID rm_ID_spaceship;         /**< "<=>" */
+EXTERN ID rm_ID_to_i;              /**< "to_i" */
+EXTERN ID rm_ID_to_s;              /**< "to_s" */
+EXTERN ID rm_ID_values;            /**< "values" */
+EXTERN ID rm_ID_width;             /**< "width" */
+EXTERN ID rm_ID_x;                 /**< "x" */
+EXTERN ID rm_ID_y;                 /**< "y" */
 
 #if !defined(min)
-#define min(a,b) ((a)<(b)?(a):(b))
+#define min(a,b) ((a)<(b)?(a):(b)) /**< min of two values */
 #endif
 #if !defined(max)
-#define max(a,b) ((a)>(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b)) /**< max of two values */
 #endif
 
-/*
+/**
    Handle warnings & errors
 */
+//! Handle warnings & errors
 #define CHECK_EXCEPTION() rm_check_exception(&exception, NULL, RetainOnError);
 
 
 /*
     Call rb_define_method for an attribute accessor method
 */
+//! attribute reader
 #define DCL_ATTR_READER(class, attr) \
-    rb_define_method(Class_##class, #attr, class##_##attr, 0);
+    rb_define_method(Class_##class, #attr, class##_##attr, 0); 
+//! attribute writer
 #define DCL_ATTR_WRITER(class, attr) \
     rb_define_method(Class_##class, #attr "=", class##_##attr##_eq, 1);
+//! attribute accessor
 #define DCL_ATTR_ACCESSOR(class, attr) \
     DCL_ATTR_READER(class, attr) \
     DCL_ATTR_WRITER(class, attr)
-// Borrow another class' attribute writer definition
+//! Borrow another class' attribute writer definition
 #define SHARE_ATTR_WRITER(to, from, attr) \
     rb_define_method(Class_##to, #attr "=", from##_##attr##_eq, 1);
 
 /*
     Define simple attribute accessor methods (boolean, int, string, and double types)
 */
-#define C_bool_to_R_bool(attr) (attr) ? Qtrue : Qfalse
-#define R_bool_to_C_bool(attr) RTEST(attr)
-#define C_int_to_R_int(attr) INT2FIX(attr)
-#define R_int_to_C_int(attr) NUM2INT(attr)
-#define C_long_to_R_long(attr) INT2NUM(attr)
-#define R_long_to_C_long(attr) NUM2LONG(attr)
-#define C_ulong_to_R_ulong(attr) UINT2NUM(attr)
-#define R_ulong_to_C_ulong(attr) NUM2ULONG(attr)
-#define C_str_to_R_str(attr) attr ? rb_str_new2(attr) : Qnil
-#define C_dbl_to_R_dbl(attr) rb_float_new(attr)
-#define R_dbl_to_C_dbl(attr) NUM2DBL(attr)
+#define C_bool_to_R_bool(attr) (attr) ? Qtrue : Qfalse /**< C boolean -> Ruby boolean */
+#define R_bool_to_C_bool(attr) RTEST(attr) /**<  C boolean <- Ruby boolean */
+#define C_int_to_R_int(attr) INT2FIX(attr) /**< C int -> Ruby int */
+#define R_int_to_C_int(attr) NUM2INT(attr) /**< C int <- Ruby int */
+#define C_long_to_R_long(attr) INT2NUM(attr) /**< C long -> Ruby long */
+#define R_long_to_C_long(attr) NUM2LONG(attr) /**< C long <- Ruby long */
+#define C_ulong_to_R_ulong(attr) UINT2NUM(attr) /**< C unsigned long -> Ruby unsigned long */
+#define R_ulong_to_C_ulong(attr) NUM2ULONG(attr) /**< C unsigned long <- Ruby unsigned long */
+#define C_str_to_R_str(attr) attr ? rb_str_new2(attr) : Qnil /**< C string -> Ruby string */
+#define C_dbl_to_R_dbl(attr) rb_float_new(attr) /**< C double -> Ruby double */
+#define R_dbl_to_C_dbl(attr) NUM2DBL(attr) /**< C double <- Ruby double */
 
+//! define attribute reader
 #define DEF_ATTR_READER(class, attr, type) \
     VALUE class##_##attr(VALUE self)\
     {\
@@ -467,7 +497,7 @@ EXTERN ID rm_ID_y;                 // "y"
         return C_##type##_to_R_##type(ptr->attr);\
     }
 
-// Use when attribute name is different from the field name
+//! define attribute reader when attribute name is different from the field name
 #define DEF_ATTR_READERF(class, attr, field, type) \
     VALUE class##_##attr(VALUE self)\
     {\
@@ -476,6 +506,8 @@ EXTERN ID rm_ID_y;                 // "y"
         Data_Get_Struct(self, class, ptr);\
         return C_##type##_to_R_##type(ptr->field);\
     }
+
+//! define attribute writer
 #define DEF_ATTR_WRITER(class, attr, type) \
     VALUE class##_##attr##_eq(VALUE self, VALUE val)\
     {\
@@ -488,6 +520,8 @@ EXTERN ID rm_ID_y;                 // "y"
         ptr->attr = R_##type##_to_C_##type(val);\
         return self;\
     }
+
+//! define attribute accessor
 #define DEF_ATTR_ACCESSOR(class, attr, type)\
     DEF_ATTR_READER(class, attr, type)\
     DEF_ATTR_WRITER(class, attr, type)
@@ -495,10 +529,13 @@ EXTERN ID rm_ID_y;                 // "y"
 /*
  *  Declare attribute accessors
  */
+//! declare attribute reader
 #define ATTR_READER(class, attr) \
     extern VALUE class##_##attr(VALUE);
+//! declare attribute writer
 #define ATTR_WRITER(class, attr) \
     extern VALUE class##_##attr##_eq(VALUE, VALUE);
+//! declare attribute accessor
 #define ATTR_ACCESSOR(class, attr) \
     ATTR_READER(class, attr)\
     ATTR_WRITER(class, attr)
@@ -507,16 +544,19 @@ EXTERN ID rm_ID_y;                 // "y"
  *  Define functions to get/set attributes in Image::Info that
  *  use the Get/SetImageOption API.
 */
+//! Option attribute reader. For Image::Info.
 #define OPTION_ATTR_READER(opt, key) \
     VALUE Info_##opt(VALUE self)\
     {\
         return get_option(self, #key);\
     }
+//! Option attribute writer. For Image::Info.
 #define OPTION_ATTR_WRITER(opt, key) \
     VALUE Info_##opt##_eq(VALUE self, VALUE string)\
     {\
         return set_option(self, #key, string);\
     }
+//! Option attribute accessor. For Image::Info.
 #define OPTION_ATTR_ACCESSOR(opt, key)\
     OPTION_ATTR_READER(opt, key)\
     OPTION_ATTR_WRITER(opt, key)
@@ -525,6 +565,7 @@ EXTERN ID rm_ID_y;                 // "y"
 /*
  *  Declare Pixel channel attribute writers
 */
+//! Pixel channel attribute writer.
 #define DEF_PIXEL_CHANNEL_WRITER(_channel_) \
 extern VALUE \
 Pixel_##_channel_##_eq(VALUE self, VALUE v) \
@@ -543,6 +584,7 @@ Pixel_##_channel_##_eq(VALUE self, VALUE v) \
 /*
  *  Declare Pixel CMYK channel attribute accessors
 */
+//! Pixel CMYK channel attribute accessor.
 #define DEF_PIXEL_CMYK_CHANNEL_ACCESSOR(_cmyk_channel_, _rgb_channel_) \
 extern VALUE \
 Pixel_##_cmyk_channel_##_eq(VALUE self, VALUE v) \
@@ -572,16 +614,19 @@ Pixel_##_cmyk_channel_(VALUE self) \
  *  Define an instance of the subclass for each member in the enumeration.
  *  Initialize each instance with its name and value.
  */
+//! define Ruby enum
 #define DEF_ENUM(tag) {\
    VALUE _cls, _enum;\
    _cls =  Class_##tag = rm_define_enum_type(#tag);
 
+//! define Ruby enumerator elements
 #define ENUMERATOR(val)\
    _enum = rm_enum_new(_cls, ID2SYM(rb_intern(#val)), INT2NUM(val));\
    rb_define_const(Module_Magick, #val, _enum);
+//! end of an enumerator
 #define END_ENUM }
 
-//  Define a Magick module constant
+//!  Define a Magick module constant
 #if QuantumDepth == 64
 #define DEF_CONST(constant) rb_define_const(Module_Magick, #constant, ULL2NUM(constant))
 #else   // QuantumDepth == 8, 16, 32
@@ -589,7 +634,7 @@ Pixel_##_cmyk_channel_(VALUE self) \
 #endif
 
 
-// Convert a Ruby enum constant back to a C enum member.
+//! Convert a Ruby enum constant back to a C enum member.
 #define VALUE_TO_ENUM(value, e, type) \
    do {\
    MagickEnum *magick_enum;\
@@ -600,6 +645,7 @@ Pixel_##_cmyk_channel_(VALUE self) \
    e = (type)(magick_enum->val);\
    } while(0)
 
+//! create case statement, mapping enum to its name
 #define ENUM_TO_NAME(_enum) case _enum: return #_enum;
 
 
@@ -1232,10 +1278,11 @@ extern void   rm_sync_image_options(Image *, Info *);
 extern void   rm_split(Image *);
 extern void   rm_magick_error(const char *, const char *);
 
+//! whether to retain on errors
 typedef enum
 {
-    RetainOnError = 0,
-    DestroyOnError = 1
+    RetainOnError = 0, /**< retain on error */
+    DestroyOnError = 1 /**< do not retain on error */
 } ErrorRetention;
 
 extern void   rm_check_image_exception(Image *, ErrorRetention);

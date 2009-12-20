@@ -1,10 +1,14 @@
-/* $Id: rmmontage.c,v 1.4 2009/02/28 23:50:36 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmdraw.c
-| Author:   Tim Hunter
-| Purpose:  Contains Montage class methods.
-\============================================================================*/
+/**************************************************************************//**
+ * Contains Montage class methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmmontage.c
+ * @version  $Id: rmmontage.c,v 1.5 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 
@@ -12,12 +16,17 @@
 
 
 
-/*
-    Static:     destroy_Montage
-    Purpose:    destory the MontageInfo struct and free the Montage struct
-    Notes:      if the Magick::Montage#texture method wrote a texture file,
-                the file is deleted here.
-*/
+/**
+ * Destory the MontageInfo struct and free the Montage struct.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - If the Magick::Montage#texture method wrote a texture file, the file is
+ *     deleted here.
+ *
+ * @param obj the montage object
+ */
 static void
 destroy_Montage(void *obj)
 {
@@ -39,10 +48,15 @@ destroy_Montage(void *obj)
 }
 
 
-/*
-    Method:     Montage.new
-    Purpose:    Create a new Montage object
-*/
+/**
+ * Create a new Montage object.
+ *
+ * Ruby usage:
+ *   - @verbatim Montage.new @endverbatim
+ *
+ * @param class the Ruby class to use
+ * @return a new Montage object
+ */
 VALUE
 Montage_alloc(VALUE class)
 {
@@ -75,10 +89,16 @@ Montage_alloc(VALUE class)
 }
 
 
-/*
-    Method:     Magick::Montage#background_color(color-name)
-    Purpose:    set background_color value
-*/
+/**
+ * Set background_color value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#background_color(color-name) @endverbatim
+ *
+ * @param self this object
+ * @param color the color name
+ * @return self
+ */
 VALUE
 Montage_background_color_eq(VALUE self, VALUE color)
 {
@@ -90,10 +110,16 @@ Montage_background_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Magick::Montage#border_color(color-name)
-    Purpose:    set border_color value
-*/
+/**
+ * Set border_color value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#border_color(color-name) @endverbatim
+ *
+ * @param self this object
+ * @param color the color name
+ * @return self
+ */
 VALUE
 Montage_border_color_eq(VALUE self, VALUE color)
 {
@@ -105,10 +131,16 @@ Montage_border_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Magick::Montage#border_width(width)
-    Purpose:    set border_width value
-*/
+/**
+ * Set border_width value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#border_width(width) @endverbatim
+ *
+ * @param self this object
+ * @param width the width
+ * @return self
+ */
 VALUE
 Montage_border_width_eq(VALUE self, VALUE width)
 {
@@ -120,10 +152,16 @@ Montage_border_width_eq(VALUE self, VALUE width)
 }
 
 
-/*
-    Method:     Magick::Montage#compose(width)
-    Purpose:    set a composition operator
-*/
+/**
+ * Set a composition operator.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#compose(width) @endverbatim
+ *
+ * @param self this object
+ * @param compose the composition operator
+ * @return self
+ */
 VALUE
 Montage_compose_eq(VALUE self, VALUE compose)
 {
@@ -135,10 +173,16 @@ Montage_compose_eq(VALUE self, VALUE compose)
 }
 
 
-/*
-    Method:     Magick::Montage#filename(name)
-    Purpose:    set filename value
-*/
+/**
+ * Set filename value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#filename(name) @endverbatim
+ *
+ * @param self this object
+ * @param filename the filename
+ * @return self
+ */
 VALUE
 Montage_filename_eq(VALUE self, VALUE filename)
 {
@@ -150,10 +194,16 @@ Montage_filename_eq(VALUE self, VALUE filename)
 }
 
 
-/*
-    Method:     Magick::Montage#fill(color-name)
-    Purpose:    set fill value
-*/
+/**
+ * Set fill value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#fill(color-name) @endverbatim
+ *
+ * @param self this object
+ * @param color the color name
+ * @return self
+ */
 VALUE
 Montage_fill_eq(VALUE self, VALUE color)
 {
@@ -165,10 +215,16 @@ Montage_fill_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Magick::Montage#font(font-name)
-    Purpose:    set font value
-*/
+/**
+ * Set font value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#font(font-name) @endverbatim
+ *
+ * @param self this object
+ * @param font the font name
+ * @return self
+ */
 VALUE
 Montage_font_eq(VALUE self, VALUE font)
 {
@@ -181,13 +237,21 @@ Montage_font_eq(VALUE self, VALUE font)
 }
 
 
-/*
-    Method:     Magick::Montage#frame(frame-geometry)
-    Purpose:    set frame value
-    Notes:      The geometry is a string in the form:
-                <width>x<height>+<outer-bevel-width>+<inner-bevel-width>
-                or a Geometry object
-*/
+/**
+ * Set frame value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#frame(frame-geometry) @endverbatim
+ *
+ * Notes:
+ *   - The geometry is a string in the form:
+ *     @verbatim <width>x<height>+<outer-bevel-width>+<inner-bevel-width> @endverbatim
+ *     or a Geometry object
+ *
+ * @param self this object
+ * @param frame_arg the frame geometry
+ * @return self
+ */
 VALUE
 Montage_frame_eq(VALUE self, VALUE frame_arg)
 {
@@ -202,10 +266,16 @@ Montage_frame_eq(VALUE self, VALUE frame_arg)
 }
 
 
-/*
-    Method:     Magick::Montage#geometry(geometry)
-    Purpose:    set geometry value
-*/
+/**
+ * Set geometry value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#geometry(geometry) @endverbatim
+ *
+ * @param self this object
+ * @param geometry_arg the geometry
+ * @return self
+ */
 VALUE
 Montage_geometry_eq(VALUE self, VALUE geometry_arg)
 {
@@ -220,10 +290,16 @@ Montage_geometry_eq(VALUE self, VALUE geometry_arg)
 }
 
 
-/*
-    Method:     Magick::Montage#gravity(gravity-type)
-    Purpose:    set gravity value
-*/
+/**
+ * Set gravity value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#gravity(gravity-type) @endverbatim
+ *
+ * @param self this object
+ * @param gravity the gravity type
+ * @return self
+ */
 VALUE
 Montage_gravity_eq(VALUE self, VALUE gravity)
 {
@@ -235,10 +311,15 @@ Montage_gravity_eq(VALUE self, VALUE gravity)
 }
 
 
-/*
-    Method:     Magick::Montage#initialize
-    Purpose:    Place-holder
-*/
+/**
+ * Initialize a Montage object. Does nothing currently.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#initialize @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Montage_initialize(VALUE self)
 {
@@ -247,10 +328,16 @@ Montage_initialize(VALUE self)
 }
 
 
-/*
-    Method:     Magick::Montage#matte_color(color-name)
-    Purpose:    set matte_color value
-*/
+/**
+ * Set matte_color value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#matte_color(color-name) @endverbatim
+ *
+ * @param self this object
+ * @param color the color name
+ * @return self
+ */
 VALUE
 Montage_matte_color_eq(VALUE self, VALUE color)
 {
@@ -262,10 +349,16 @@ Montage_matte_color_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Magick::Montage#pointsize=size
-    Purpose:    set pointsize value
-*/
+/**
+ * Set pointsize value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#pointsize= @endverbatim
+ *
+ * @param self this object
+ * @param size the point size
+ * @return self
+ */
 VALUE
 Montage_pointsize_eq(VALUE self, VALUE size)
 {
@@ -277,10 +370,16 @@ Montage_pointsize_eq(VALUE self, VALUE size)
 }
 
 
-/*
-    Method:     Magick::Montage#shadow=shadow
-    Purpose:    set shadow value
-*/
+/**
+ * Set shadow value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#shadow= @endverbatim
+ *
+ * @param self this object
+ * @param shadow the shadow
+ * @return self
+ */
 VALUE
 Montage_shadow_eq(VALUE self, VALUE shadow)
 {
@@ -292,10 +391,16 @@ Montage_shadow_eq(VALUE self, VALUE shadow)
 }
 
 
-/*
-    Method:     Magick::Montage#stroke(color-name)
-    Purpose:    set stroke value
-*/
+/**
+ * Set stroke value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#stroke(color-name) @endverbatim
+ *
+ * @param self this object
+ * @param color the color name
+ * @return self
+ */
 VALUE
 Montage_stroke_eq(VALUE self, VALUE color)
 {
@@ -307,10 +412,16 @@ Montage_stroke_eq(VALUE self, VALUE color)
 }
 
 
-/*
-    Method:     Montage#texture(texture-image)
-    Purpose:    set texture value
-*/
+/**
+ * Set texture value.
+ *
+ * Ruby usage:
+ *   - @verbatim Montage#texture(texture-image) @endverbatim
+ *
+ * @param self this object
+ * @param texture the texture image
+ * @return self
+ */
 VALUE
 Montage_texture_eq(VALUE self, VALUE texture)
 {
@@ -340,10 +451,16 @@ Montage_texture_eq(VALUE self, VALUE texture)
 }
 
 
-/*
-    Method:     Magick::Montage#tile(tile)
-    Purpose:    set tile value
-*/
+/**
+ * Set tile value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#tile(tile) @endverbatim
+ *
+ * @param self this object
+ * @param tile_arg the tile
+ * @return self
+ */
 VALUE
 Montage_tile_eq(VALUE self, VALUE tile_arg)
 {
@@ -358,10 +475,16 @@ Montage_tile_eq(VALUE self, VALUE tile_arg)
 }
 
 
-/*
-    Method:     Magick::Montage#title(title)
-    Purpose:    set title value
-*/
+/**
+ * Set title value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Montage#title(title) @endverbatim
+ *
+ * @param self this object
+ * @param title the title
+ * @return self
+ */
 VALUE
 Montage_title_eq(VALUE self, VALUE title)
 {
@@ -373,11 +496,13 @@ Montage_title_eq(VALUE self, VALUE title)
 }
 
 
-/*
-    Extern:     rm_montage_new()
-    Purpose:    Return a new Magick::Montage object
-*/
-
+/**
+ * Return a new Magick::Montage object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @return a new Magick::Montage object
+ */
 VALUE
 rm_montage_new(void)
 {

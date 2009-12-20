@@ -1,10 +1,14 @@
-/* $Id: rmdraw.c,v 1.82 2009/09/11 22:29:30 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmdraw.c
-| Author:   Tim Hunter
-| Purpose:  Contains Draw class methods.
-\============================================================================*/
+/**************************************************************************//**
+ * Contains Draw class methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmdraw.c
+ * @version  $Id: rmdraw.c,v 1.83 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 #include "float.h"
@@ -13,14 +17,21 @@ static void mark_Draw(void *);
 static void destroy_Draw(void *);
 static VALUE new_DrawOptions(void);
 
+/** Method that gets type metrics */
 typedef MagickBooleanType (get_type_metrics_func_t)(Image *, const DrawInfo *, TypeMetric *);
 static VALUE get_type_metrics(int, VALUE *, VALUE, get_type_metrics_func_t);
 
 
-/*
-    Method:     Draw#affine=
-    Purpose:    set the affine matrix from an Magick::AffineMatrix
-*/
+/**
+ * Set the affine matrix from an Magick::AffineMatrix.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#affine= @endverbatim
+ *
+ * @param self this object
+ * @param matrix the affine matrix to set
+ * @return self
+ */
 VALUE
 Draw_affine_eq(VALUE self, VALUE matrix)
 {
@@ -33,10 +44,16 @@ Draw_affine_eq(VALUE self, VALUE matrix)
 }
 
 
-/*
-    Method:     Draw#align=
-    Purpose:    set the text alignment
-*/
+/**
+ * Set the text alignment.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#align= @endverbatim
+ *
+ * @param self this object
+ * @param align the alignment
+ * @return self
+ */
 VALUE
 Draw_align_eq(VALUE self, VALUE align)
 {
@@ -49,10 +66,16 @@ Draw_align_eq(VALUE self, VALUE align)
 }
 
 
-/*
-    Method:     Draw#decorate=
-    Purpose:    decorate attribute writer
-*/
+/**
+ * Decorate attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#decorate= @endverbatim
+ *
+ * @param self this object
+ * @param decorate the decorate
+ * @return self
+ */
 VALUE
 Draw_decorate_eq(VALUE self, VALUE decorate)
 {
@@ -65,10 +88,16 @@ Draw_decorate_eq(VALUE self, VALUE decorate)
 }
 
 
-/*
-    Method:     Draw#density=
-    Purpose:    density attribute writer
-*/
+/**
+ * Density attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#density= @endverbatim
+ *
+ * @param self this object
+ * @param density the density
+ * @return self
+ */
 VALUE
 Draw_density_eq(VALUE self, VALUE density)
 {
@@ -82,10 +111,16 @@ Draw_density_eq(VALUE self, VALUE density)
 }
 
 
-/*
-    Method:     Draw#encoding=
-    Purpose:    encoding attribute writer
-*/
+/**
+ * Encoding attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#encoding= @endverbatim
+ *
+ * @param self this object
+ * @param encoding the encoding
+ * @return self
+ */
 VALUE
 Draw_encoding_eq(VALUE self, VALUE encoding)
 {
@@ -99,10 +134,16 @@ Draw_encoding_eq(VALUE self, VALUE encoding)
 }
 
 
-/*
-    Method:     Draw#fill=
-    Purpose:    fill attribute writer
-*/
+/**
+ * Fill attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#fill= @endverbatim
+ *
+ * @param self this object
+ * @param fill the fill
+ * @return self
+ */
 VALUE
 Draw_fill_eq(VALUE self, VALUE fill)
 {
@@ -115,11 +156,18 @@ Draw_fill_eq(VALUE self, VALUE fill)
 }
 
 
-/*
-    Method:     Draw#fill_pattern=
-    Purpose:    Accept an image as a fill pattern
-    Notes:      See also stroke_pattern=, tile=
-*/
+/**
+ * Accept an image as a fill pattern.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#fill_pattern= @endverbatim
+ *
+ * @param self this object
+ * @param pattern the fill pattern
+ * @return self
+ * @see Draw_stroke_pattern_eq
+ * @see Draw_tile_eq
+ */
 VALUE
 Draw_fill_pattern_eq(VALUE self, VALUE pattern)
 {
@@ -148,10 +196,16 @@ Draw_fill_pattern_eq(VALUE self, VALUE pattern)
 }
 
 
-/*
-    Method:     Draw#font=
-    Purpose:    font attribute writer
-*/
+/**
+ * Font attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#font= @endverbatim
+ *
+ * @param self this object
+ * @param font the font
+ * @return self
+ */
 VALUE
 Draw_font_eq(VALUE self, VALUE font)
 {
@@ -165,10 +219,16 @@ Draw_font_eq(VALUE self, VALUE font)
 }
 
 
-/*
-    Method:     Draw#font_family=
-    Purpose:    font_family attribute writer
-*/
+/**
+ * Font family attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#family= @endverbatim
+ *
+ * @param self this object
+ * @param family the family
+ * @return self
+ */
 VALUE
 Draw_font_family_eq(VALUE self, VALUE family)
 {
@@ -182,10 +242,16 @@ Draw_font_family_eq(VALUE self, VALUE family)
 }
 
 
-/*
-    Method:     Draw#font_stretch=
-    Purpose:    font_stretch attribute writer
-*/
+/**
+ * Font_stretch attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#font_stretch= @endverbatim
+ *
+ * @param self this object
+ * @param stretch the font_stretch
+ * @return self
+ */
 VALUE
 Draw_font_stretch_eq(VALUE self, VALUE stretch)
 {
@@ -198,10 +264,16 @@ Draw_font_stretch_eq(VALUE self, VALUE stretch)
 }
 
 
-/*
-    Method:     Draw#font_style=
-    Purpose:    font_style attribute writer
-*/
+/**
+ * Font_style attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#font_style= @endverbatim
+ *
+ * @param self this object
+ * @param style the font_style
+ * @return self
+ */
 VALUE
 Draw_font_style_eq(VALUE self, VALUE style)
 {
@@ -214,12 +286,20 @@ Draw_font_style_eq(VALUE self, VALUE style)
 }
 
 
-/*
-    Method:     Draw#font_weight=
-    Purpose:    font_weight attribute writer
-    Notes:      The font weight can be one of the font weight constants
-                or a number between 100 and 900
-*/
+/**
+ * Font_weight attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#font_weight= @endverbatim
+ *
+ * Notes:
+ *   - The font weight can be one of the font weight constants or a number
+ *     between 100 and 900
+ *
+ * @param self this object
+ * @param weight the font_weight
+ * @return self
+ */
 VALUE
 Draw_font_weight_eq(VALUE self, VALUE weight)
 {
@@ -270,21 +350,29 @@ Draw_font_weight_eq(VALUE self, VALUE weight)
 }
 
 
-/*
-    Method:     Draw#gravity=
-    Purpose:    gravity attribute writer
-    Notes:      From Magick++'s Image.h header file:
-       Gravity affects text placement in bounding area according to rules:
-        NorthWestGravity  text bottom-left corner placed at top-left
-        NorthGravity      text bottom-center placed at top-center
-        NorthEastGravity  text bottom-right corner placed at top-right
-        WestGravity       text left-center placed at left-center
-        CenterGravity     text center placed at center
-        EastGravity       text right-center placed at right-center
-        SouthWestGravity  text top-left placed at bottom-left
-        SouthGravity      text top-center placed at bottom-center
-        SouthEastGravity  text top-right placed at bottom-right
-*/
+/**
+ * Gravity attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#gravity= @endverbatim
+ *
+ * Notes:
+ *   - From Magick++'s Image.h header file:
+ *     Gravity affects text placement in bounding area according to rules:
+ *     - NorthWestGravity  text bottom-left corner placed at top-left
+ *     - NorthGravity      text bottom-center placed at top-center
+ *     - NorthEastGravity  text bottom-right corner placed at top-right
+ *     - WestGravity       text left-center placed at left-center
+ *     - CenterGravity     text center placed at center
+ *     - EastGravity       text right-center placed at right-center
+ *     - SouthWestGravity  text top-left placed at bottom-left
+ *     - SouthGravity      text top-center placed at bottom-center
+ *     - SouthEastGravity  text top-right placed at bottom-right
+ *
+ * @param self this object
+ * @param grav the gravity
+ * @return self
+ */
 VALUE
 Draw_gravity_eq(VALUE self, VALUE grav)
 {
@@ -298,11 +386,19 @@ Draw_gravity_eq(VALUE self, VALUE grav)
 }
 
 
-/*
-    Method:     Draw#kerning=float
-    Purpose:    space between two letters
-    Notes:      new for 6.4.7-8
-*/
+/**
+ * Space between two letters.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#gravity=float @endverbatim
+ *
+ * Notes:
+ *   - New for ImageMagick 6.4.7-8
+ *
+ * @param self this object
+ * @param kerning the kerning
+ * @return self
+ */
 VALUE
 Draw_kerning_eq(VALUE self, VALUE kerning)
 {
@@ -322,11 +418,19 @@ Draw_kerning_eq(VALUE self, VALUE kerning)
 }
 
 
-/*
-    Method:     Draw#interline_spacing
-    Purpose:    space between two liness
-    Notes:      new for 6.5.5-8
-*/
+/**
+ * Space between two lines.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#interline_spacing= @endverbatim
+ *
+ * Notes:
+ *   - New for ImageMagick 6.5.5-8
+ *
+ * @param self this object
+ * @param spacing the spacing
+ * @return self
+ */
 VALUE
 Draw_interline_spacing_eq(VALUE self, VALUE spacing)
 {
@@ -346,11 +450,19 @@ Draw_interline_spacing_eq(VALUE self, VALUE spacing)
 }
 
 
-/*
-    Method:     Draw#interword_spacing
-    Purpose:    space between two words
-    Notes:      new for 6.4.8-0
-*/
+/**
+ * Space between two words.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#interword_spacing= @endverbatim
+ *
+ * Notes:
+ *   - New for ImageMagick 6.4.8-0
+ *
+ * @param self this object
+ * @param spacing the spacing
+ * @return self
+ */
 VALUE
 Draw_interword_spacing_eq(VALUE self, VALUE spacing)
 {
@@ -370,11 +482,18 @@ Draw_interword_spacing_eq(VALUE self, VALUE spacing)
 }
 
 
-/*
-    Static:     image_to_str
-    Purpose:    Convert an image to a blob and the blob to a String
-    Notes:      Returns Qnil if there is no image
-*/
+/**
+ * Convert an image to a blob and the blob to a String.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Returns Qnil if there is no image
+ *
+ * @param image the Image to convert
+ * @return Ruby string representation of image
+ * @see str_to_image
+ */
 static VALUE
 image_to_str(Image *image)
 {
@@ -400,11 +519,18 @@ image_to_str(Image *image)
 }
 
 
-/*
-    Static:     str_to_image
-    Purpose:    Undo the image_to_str, above.
-    Notes:      Returns NULL if the argument is Qnil
-*/
+/**
+ * Undo the image_to_str, above.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Returns NULL if the argument is Qnil
+ *
+ * @param str the Ruby string to convert
+ * @return Image represented by str
+ * @see image_to_str
+ */
 static
 Image *str_to_image(VALUE str)
 {
@@ -426,19 +552,24 @@ Image *str_to_image(VALUE str)
 }
 
 
-/*
-    Method:     Draw#marshal_dump
-    Purpose:    Custom marshal for Draw objects
-    Notes:      Instead of trying to replicate Ruby's support for cross-system
-                marshalling, exploit it. Convert the Draw fields to Ruby objects
-                and store them in a hash. Let Ruby marshal the hash.
-
-                Commented out code that dumps/loads fields that are used internally
-                by ImageMagick and shouldn't be marshaled. I left the code as
-                placeholders so I'll know which fields have been deliberately
-                omitted.
-    To do:      Handle gradients when christy gets the new gradient support added (23Dec08)
-*/
+/**
+ * Custom marshal for Draw objects.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#marshal_dump @endverbatim
+ *
+ * Notes:
+ *   - Instead of trying to replicate Ruby's support for cross-system
+ *     marshalling, exploit it. Convert the Draw fields to Ruby objects and
+ *     store them in a hash. Let Ruby marshal the hash.
+ *   - Commented out code that dumps/loads fields that are used internally by
+ *     ImageMagick and shouldn't be marshaled. I left the code as placeholders
+ *     so I'll know which fields have been deliberately omitted.
+ *
+ * @param self this object
+ * @return the marshalled object (as a Ruby hash)
+ * @todo Handle gradients when christy gets the new gradient support added (23Dec08)
+ */
 VALUE
 Draw_marshal_dump(VALUE self)
 {
@@ -515,11 +646,19 @@ Draw_marshal_dump(VALUE self)
 }
 
 
-/*
-    Method:     Draw#marshal_load
-    Purpose:    Support Marsal.load
-    Notes:      On entry all fields are all-bits-0
-*/
+/**
+ * Support Marsal.load.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#marshal_load @endverbatim
+ *
+ * Notes:
+ *   - On entry all fields are all-bits-0
+ *
+ * @param self this object
+ * @param ddraw the marshalled object
+ * @return self, once marshalled
+ */
 VALUE
 Draw_marshal_load(VALUE self, VALUE ddraw)
 {
@@ -590,10 +729,16 @@ Draw_marshal_load(VALUE self, VALUE ddraw)
 }
 
 
-/*
-    Method:     Draw#pointsize=
-    Purpose:    pointsize attribute writer
-*/
+/**
+ * Pointsize attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#pointsize= @endverbatim
+ *
+ * @param self this object
+ * @param pointsize the pointsize
+ * @return self
+ */
 VALUE
 Draw_pointsize_eq(VALUE self, VALUE pointsize)
 {
@@ -606,12 +751,21 @@ Draw_pointsize_eq(VALUE self, VALUE pointsize)
 }
 
 
-/*
-    Method:     Magick::Draw#rotation=degrees
-    Purpose:    set rotation attribute value
-    Notes:      Taken from Magick++'s Magick::Image::annotate method
-                Copyright Bob Friesenhahn, 1999, 2000, 2001, 2002
-*/
+/**
+ * Set rotation attribute value.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Draw#rotation= @endverbatim
+ *
+ * Notes:
+ *   - Argument should be in degrees
+ *   - Taken from Magick++'s Magick::Image::annotate method.
+ *     Copyright Bob Friesenhahn, 1999, 2000, 2001, 2002
+ *
+ * @param self this object
+ * @param deg the number of degrees
+ * @return self
+ */
 VALUE
 Draw_rotation_eq(VALUE self, VALUE deg)
 {
@@ -649,10 +803,16 @@ Draw_rotation_eq(VALUE self, VALUE deg)
 }
 
 
-/*
-    Method:     Draw#stroke=
-    Purpose:    stroke attribute writer
-*/
+/**
+ * Stroke attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#stroke= @endverbatim
+ *
+ * @param self this object
+ * @param stroke the stroke
+ * @return self
+ */
 VALUE
 Draw_stroke_eq(VALUE self, VALUE stroke)
 {
@@ -665,11 +825,17 @@ Draw_stroke_eq(VALUE self, VALUE stroke)
 }
 
 
-/*
-    Method:     Draw#stroke_pattern=
-    Purpose:    Accept an image as a stroke pattern
-    Notes:      See also fill_pattern=
-*/
+/**
+ * Accept an image as a stroke pattern.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#stroke_pattern= @endverbatim
+ *
+ * @param self this object
+ * @param pattern the pattern
+ * @return self
+ * @see Draw_fill_pattern_eq
+ */
 VALUE
 Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
 {
@@ -699,10 +865,16 @@ Draw_stroke_pattern_eq(VALUE self, VALUE pattern)
 }
 
 
-/*
-    Method:     Draw#stroke_width=
-    Purpose:    stroke_width attribute writer
-*/
+/**
+ * Stroke_width attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#stroke_width= @endverbatim
+ *
+ * @param self this object
+ * @param stroke_width the stroke_width
+ * @return self
+ */
 VALUE
 Draw_stroke_width_eq(VALUE self, VALUE stroke_width)
 {
@@ -715,10 +887,16 @@ Draw_stroke_width_eq(VALUE self, VALUE stroke_width)
 }
 
 
-/*
-    Method:     Draw#text_antialias=
-    Purpose:    text_antialias attribute writer
-*/
+/**
+ * Text_antialias attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#text_antialias= @endverbatim
+ *
+ * @param self this object
+ * @param text_antialias the text_antialias
+ * @return self
+ */
 VALUE
 Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 {
@@ -731,10 +909,16 @@ Draw_text_antialias_eq(VALUE self, VALUE text_antialias)
 }
 
 
-/*
-    Method:     Draw#tile=
-    Purpose:    tile attribute writer
-*/
+/**
+ * Tile attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#tile= @endverbatim
+ *
+ * @param self this object
+ * @param image the image to tile
+ * @return self
+ */
 VALUE
 Draw_tile_eq(VALUE self, VALUE image)
 {
@@ -742,10 +926,16 @@ Draw_tile_eq(VALUE self, VALUE image)
 }
 
 
-/*
-    Method:     Draw#undercolor=
-    Purpose:    undercolor attribute writer
-*/
+/**
+ * Undercolor attribute writer.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#undercolor= @endverbatim
+ *
+ * @param self this object
+ * @param undercolor the undercolor
+ * @return self
+ */
 VALUE
 Draw_undercolor_eq(VALUE self, VALUE undercolor)
 {
@@ -758,14 +948,25 @@ Draw_undercolor_eq(VALUE self, VALUE undercolor)
 }
 
 
-/*
-    Method:     Draw#annotate(img, w, h, x, y, text) <{optional parms}>
-    Purpose:    annotates an image with text
-    Returns:    self
-    Notes:      Additional Draw attribute methods may be called in the
-                optional block, which is executed in the context of an
-                Draw object.
-*/
+/**
+ * Annotates an image with text.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#annotate(img, w, h, x, y, text) <{optional parms}> @endverbatim
+ *
+ * Notes:
+ *   - Additional Draw attribute methods may be called in the optional block,
+ *     which is executed in the context of an Draw object.
+ *
+ * @param self this object
+ * @param image_arg the image
+ * @param width_arg the width
+ * @param height_arg the height
+ * @param x_arg x position
+ * @param y_arg y position
+ * @param text the annotation text
+ * @return self
+ */
 VALUE Draw_annotate(
                    VALUE self,
                    VALUE image_arg,
@@ -836,10 +1037,17 @@ VALUE Draw_annotate(
 }
 
 
-/*
-    Method:     Draw#clone
-    Notes:      see dup, init_copy
-*/
+/**
+ * Clones this object.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#clone @endverbatim
+ *
+ * @param self this object
+ * @return the clone
+ * @see Draw_dup
+ * @see Draw_init_copy
+ */
 VALUE
 Draw_clone(VALUE self)
 {
@@ -855,12 +1063,23 @@ Draw_clone(VALUE self)
 }
 
 
-/*
-    Method:     Draw#composite(x,y,width,height,img,operator=OverCompositeOp)
-    Purpose:    Implement the "image" drawing primitive
-    Notes:      The "img" argument can be either an ImageList object
-                or an Image argument.
-*/
+/**
+ * Implement the "image" drawing primitive.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#composite(x,y,width,height,img) @endverbatim
+ *   - @verbatim Draw#composite(x,y,width,height,img,operator) @endverbatim
+ *
+ * Notes:
+ *   - Default operator is overComposite
+ *   - The "img" argument can be either an ImageList object or an Image
+ *     argument.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return self
+ */
 VALUE
 Draw_composite(int argc, VALUE *argv, VALUE self)
 {
@@ -1124,11 +1343,16 @@ Draw_composite(int argc, VALUE *argv, VALUE self)
 }
 
 
-/*
-    Method:     Draw#draw(i)
-    Purpose:    Execute the stored drawing primitives on the current image
-                image
-*/
+/**
+ * Execute the stored drawing primitives on the current image.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#draw(i) @endverbatim
+ *
+ * @param self this object
+ * @param image_arg the image argument
+ * @return self
+ */
 VALUE
 Draw_draw(VALUE self, VALUE image_arg)
 {
@@ -1157,11 +1381,20 @@ Draw_draw(VALUE self, VALUE image_arg)
 }
 
 
-/*
-    Methods:    Draw#dup
-    Purpose:    Copy a Draw object
-    Notes:      Constructs a new Draw object, then calls initialize_copy
-*/
+/**
+ * Copy a Draw object.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#dup @endverbatim
+ *
+ * Notes:
+ *   - Constructs a new Draw object, then calls initialize_copy.
+ *
+ * @param self this object
+ * @return the duplicate
+ * @see Draw_clone
+ * @see Draw_init_copy
+ */
 VALUE
 Draw_dup(VALUE self)
 {
@@ -1179,14 +1412,23 @@ Draw_dup(VALUE self)
 }
 
 
-/*
-    Method:     Draw#get_type_metrics([image, ]text)
-                Draw#get_multiline_type_metrics([image, ]text)
-    Purpose:    returns measurements for a given font and text string
-    Notes:      If the image argument has been omitted, use a dummy
-                image, but make sure the text has none of the special
-                characters that refer to image attributes.
-*/
+/**
+ * Returns measurements for a given font and text string.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#get_type_metrics(text) @endverbatim
+ *   - @verbatim Draw#get_type_metrics(image, text) @endverbatim
+ *
+ * Notes:
+ *   - If the image argument has been omitted, use a dummy image, but make sure
+ *     the text has none of the special characters that refer to image
+ *     attributes.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the duplicate
+ */
 VALUE
 Draw_get_type_metrics(
                      int argc,
@@ -1197,6 +1439,23 @@ Draw_get_type_metrics(
 }
 
 
+/**
+ * Returns measurements for a given font and text string.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#get_multiline_type_metrics(text) @endverbatim
+ *   - @verbatim Draw#get_multiline_type_metrics(image, text) @endverbatim
+ *
+ * Notes:
+ *   - If the image argument has been omitted, use a dummy image, but make sure
+ *     the text has none of the special characters that refer to image
+ *     attributes.
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @return the duplicate
+ */
 VALUE
 Draw_get_multiline_type_metrics(
                                int argc,
@@ -1207,10 +1466,18 @@ Draw_get_multiline_type_metrics(
 }
 
 
-/*
-    Method:     Draw#initialize_copy
-    Purpose:    initialize clone, dup methods
-*/
+/**
+ * Initialize clone, dup methods.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#initialize_copy @endverbatim
+ *
+ * @param self this object
+ * @param orig the original object
+ * @return self
+ * @see Draw_clone
+ * @see Draw_dup
+ */
 VALUE Draw_init_copy(VALUE self, VALUE orig)
 {
     Draw *copy, *original;
@@ -1233,10 +1500,15 @@ VALUE Draw_init_copy(VALUE self, VALUE orig)
 }
 
 
-/*
-    Method:     Draw#initialize <{ info initializers }>
-    Purpose:    Initialize Draw object
-*/
+/**
+ * Initialize Draw object.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#initialize <{ info initializers }> @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 Draw_initialize(VALUE self)
 {
@@ -1254,10 +1526,16 @@ Draw_initialize(VALUE self)
 }
 
 
-/*
-    Method:     inspect
-    Purpose:    display the primitives
-*/
+/**
+ * Display the primitives.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#inspect @endverbatim
+ *
+ * @param self this object
+ * @return the draw primitives or the Ruby string "(no primitives defined)" if
+ * they are not defined
+ */
 VALUE
 Draw_inspect(VALUE self)
 {
@@ -1268,11 +1546,17 @@ Draw_inspect(VALUE self)
 }
 
 
-/*
-    Method:     Draw.new/Draw.allocate
-    Purpose:    Create a new Draw object
-    Raises:     ImageMagickError if no memory
-*/
+/**
+ * Create a new Draw object.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw.new @endverbatim
+ *   - @verbatim Draw.allocate @endverbatim
+ *
+ * @param class the Ruby Draw class
+ * @return a new Draw object
+ * @throw ImageMagickError if no memory
+ */
 VALUE Draw_alloc(VALUE class)
 {
     Draw *draw;
@@ -1286,11 +1570,16 @@ VALUE Draw_alloc(VALUE class)
 }
 
 
-/*
-    Method:     Draw#primitive
-    Purpose:    Add a drawing primitive to the list of primitives in the
-                Draw object
-*/
+/**
+ * Add a drawing primitive to the list of primitives in the Draw object.
+ *
+ * Ruby usage:
+ *   - @verbatim Draw#primitive @endverbatim
+ *
+ * @param self this object
+ * @param primitive the primitive to add
+ * @return self
+ */
 VALUE
 Draw_primitive(VALUE self, VALUE primitive)
 {
@@ -1313,10 +1602,13 @@ Draw_primitive(VALUE self, VALUE primitive)
 }
 
 
-/*
-    Static:     mark_Draw
-    Purpose:    mark referenced objects
-*/
+/**
+ * Mark referenced objects.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param drawptr pointer to a Draw object
+ */
 static void
 mark_Draw(void *drawptr)
 {
@@ -1329,10 +1621,13 @@ mark_Draw(void *drawptr)
 }
 
 
-/*
-    Static:     destroy_Draw
-    Purpose:    free the memory associated with an Draw object
-*/
+/**
+ * Free the memory associated with an Draw object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param drawptr pointer to a Draw object
+ */
 static void
 destroy_Draw(void *drawptr)
 {
@@ -1358,10 +1653,13 @@ destroy_Draw(void *drawptr)
 }
 
 
-/*
-    Static:     new_DrawOptions
-    Purpose:    Allocate & initialize a DrawOptions object.
-*/
+/**
+ * Allocate & initialize a DrawOptions object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @return a new DrawOptions object
+ */
 static VALUE
 new_DrawOptions(void)
 {
@@ -1369,13 +1667,20 @@ new_DrawOptions(void)
 }
 
 
-/*
-    Method:     DrawOptions#allocate
-                DarwOptions#new
-    Purpose:    Create a DrawOptions object
-    Notes:      The DrawOptions class is the same as the Draw class except
-                is has only the attribute writer functions.
-*/
+/**
+ * Create a DrawOptions object.
+ *
+ * Ruby usage:
+ *   - @verbatim DrawOptions#allocate @endverbatim
+ *   - @verbatim DrawOptions#new @endverbatim
+ *
+ * Notes:
+ *   - The DrawOptions class is the same as the Draw class except is has only
+ *     the attribute writer functions
+ *
+ * @param class the Ruby DrawOptions class
+ * @return a new DrawOptions object
+ */
 VALUE
 DrawOptions_alloc(VALUE class)
 {
@@ -1390,10 +1695,15 @@ DrawOptions_alloc(VALUE class)
 }
 
 
-/*
-    Method:     DrawOptions#initialize
-    Purpose:    Initialize a DrawOptions object
-*/
+/**
+ * Initialize a DrawOptions object.
+ *
+ * Ruby usage:
+ *   - @verbatim DrawOptions#initialize @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 DrawOptions_initialize(VALUE self)
 {
@@ -1418,13 +1728,20 @@ DrawOptions_initialize(VALUE self)
 }
 
 
-/*
-    Extern:     PolaroidOptions_alloc()
-    Purpose:    Allocate a new Magick::PolaroidOptions object
-    Notes:      Internally a PolaroidOptions object is the same as a Draw
-                object. The methods are implemented by Draw methods in
-                rmdraw.c.
-*/
+/**
+ * Allocate a new Magick::PolaroidOptions object.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::PolaroidOptions#allocate @endverbatim
+ *   - @verbatim Magick::PolaroidOptions#new @endverbatim
+ *
+ * Notes:
+ *   - Internally a PolaroidOptions object is the same as a Draw object. The
+ *     methods are implemented by Draw methods in rmdraw.c.
+ *
+ * @param class the Ruby PoloradoidOptions class
+ * @return a new DrawOptions object
+ */
 VALUE
 PolaroidOptions_alloc(VALUE class)
 {
@@ -1446,10 +1763,15 @@ PolaroidOptions_alloc(VALUE class)
 }
 
 
-/*
-    Method:     Magick::PolaroidOptions#initialize
-    Purpose:    Yield to an optional block
-*/
+/**
+ * Yield to an optional block.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::PolaroidOptions#initialize @endverbatim
+ *
+ * @param self this object
+ * @return self
+ */
 VALUE
 PolaroidOptions_initialize(VALUE self)
 {
@@ -1473,11 +1795,13 @@ PolaroidOptions_initialize(VALUE self)
 }
 
 
-/*
-    Extern:     rm_polaroid_new
-    Purpose:    allocate a PolaroidOptions instance
-    Notes:      Internal use
-*/
+/**
+ * Allocate a PolaroidOptions instance.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @return new PolaroidOptions object
+ */
 VALUE
 rm_polaroid_new(void)
 {
@@ -1485,10 +1809,16 @@ rm_polaroid_new(void)
 }
 
 
-/*
-    Method:     PolaroidOptions#shadow_color=
-    Purpose:    Set the shadow color attribute
-*/
+/**
+ * Set the shadow color attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim PolaroidOptions#shadow_color= @endverbatim
+ *
+ * @param self this object
+ * @param shadow the shadow color
+ * @return self
+ */
 VALUE
 PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
 {
@@ -1500,10 +1830,16 @@ PolaroidOptions_shadow_color_eq(VALUE self, VALUE shadow)
 }
 
 
-/*
-    Method:     PolaroidOptions#border_color=
-    Purpose:    Set the border color attribute
-*/
+/**
+ * Set the border color attribute.
+ *
+ * Ruby usage:
+ *   - @verbatim PolaroidOptions#border_color= @endverbatim
+ *
+ * @param self this object
+ * @param border the border color
+ * @return self
+ */
 VALUE
 PolaroidOptions_border_color_eq(VALUE self, VALUE border)
 {
@@ -1515,6 +1851,14 @@ PolaroidOptions_border_color_eq(VALUE self, VALUE border)
 }
 
 
+/**
+ * Create a dummy object of an image class.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param klass the class for which to create a dummy
+ * @return the newly allocated dummy
+ */
 static VALUE
 get_dummy_tm_img(VALUE klass)
 {
@@ -1547,11 +1891,22 @@ get_dummy_tm_img(VALUE klass)
 }
 
 
-/*
- *  Static:     get_type_metrics
- *  Purpose:    Call a get-type-metrics function
- *  Notes:      called by Draw_get_type_metrics and Draw_get_multiline_type_metrics
-*/
+/**
+ * Call a get-type-metrics function.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - called by Draw_get_type_metrics and Draw_get_multiline_type_metrics
+ *
+ * @param argc number of input arguments
+ * @param argv array of input arguments
+ * @param self this object
+ * @param getter which type metrics to get
+ * @return the type metrics
+ * @see Draw_get_type_metrics
+ * @see Draw_get_multiline_type_metrics
+ */
 static VALUE
 get_type_metrics(
                 int argc,

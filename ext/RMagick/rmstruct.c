@@ -1,10 +1,14 @@
-/* $Id: rmstruct.c,v 1.4 2009/05/13 22:50:40 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmstruct.c
-| Author:   Tim Hunter
-| Purpose:  Contains various Struct class methods.
-\============================================================================*/
+/**************************************************************************//**
+ * Contains various Struct class methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmstruct.c
+ * @version  $Id: rmstruct.c,v 1.5 2009/12/20 02:33:34 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 
@@ -21,12 +25,17 @@ static VALUE StyleType_new(StyleType);
 
 
 
-/*
-    Extern:     Import_AffineMatrix
-    Purpose:    Given a C AffineMatrix, create the equivalent
-                AffineMatrix object.
-    Notes:      am = Magick::AffineMatrix.new(sx, rx, ry, sy, tx, ty)
-*/
+/**
+ * Given a C AffineMatrix, create the equivalent AffineMatrix object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - am = Magick::AffineMatrix.new(sx, rx, ry, sy, tx, ty)
+ *
+ * @param affine the C AffineMatrix
+ * @return a Ruby AffineMatrix object
+ */
 VALUE
 Import_AffineMatrix(AffineMatrix *affine)
 {
@@ -42,11 +51,17 @@ Import_AffineMatrix(AffineMatrix *affine)
 }
 
 
-/*
-    Extern:     Export_AffineMatrix
-    Purpose:    Convert a Magick::AffineMatrix object to a AffineMatrix structure.
-    Notes:      If not initialized, the defaults are [sx,rx,ry,sy,tx,ty] = [1,0,0,1,0,0]
-*/
+/**
+ * Convert a Magick::AffineMatrix object to a AffineMatrix structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - If not initialized, the defaults are [sx,rx,ry,sy,tx,ty] = [1,0,0,1,0,0]
+ *
+ * @param am The C AffineMatrix to modify
+ * @param st the Ruby AffineMatrix object
+ */
 void
 Export_AffineMatrix(AffineMatrix *am, VALUE st)
 {
@@ -73,11 +88,14 @@ Export_AffineMatrix(AffineMatrix *am, VALUE st)
 }
 
 
-/*
-    Extern:     ChromaticityInfo_new(pp)
-    Purpose:    Create a Magick::ChromaticityInfo object from a
-                ChromaticityInfo structure.
-*/
+/**
+ * Create a Magick::ChromaticityInfo object from a ChromaticityInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ci the C ChromaticityInfo
+ * @return a Ruby Magick::ChromaticityInfo object
+ */
 VALUE
 ChromaticityInfo_new(ChromaticityInfo *ci)
 {
@@ -96,11 +114,15 @@ ChromaticityInfo_new(ChromaticityInfo *ci)
 }
 
 
-/*
-    Extern:     Export_ChromaticityInfo
-    Purpose:    Extract the elements from a Magick::ChromaticityInfo
-                and store in a ChromaticityInfo structure.
-*/
+/**
+ * Extract the elements from a Magick::ChromaticityInfo and store in a
+ * ChromaticityInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ci the C ChromaticityInfo structure to modify
+ * @param chrom the Ruby Magick::ChromaticityInfo object
+ */
 void
 Export_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 {
@@ -157,10 +179,15 @@ Export_ChromaticityInfo(ChromaticityInfo *ci, VALUE chrom)
 }
 
 
-/*
-    Method:     Magick::Chromaticity#to_s
-    Purpose:    Create a string representation of a Magick::Chromaticity
-*/
+/**
+ * Create a string representation of a Magick::Chromaticity.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Chromaticity#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 ChromaticityInfo_to_s(VALUE self)
 {
@@ -180,10 +207,14 @@ ChromaticityInfo_to_s(VALUE self)
 }
 
 
-/*
-    External:   Import_ColorInfo
-    Purpose:    Convert a ColorInfo structure to a Magick::Color
-*/
+/**
+ * Convert a ColorInfo structure to a Magick::Color.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ci the C ColorInfo structure
+ * @return a Ruby Magick::Color object
+ */
 VALUE
 Import_ColorInfo(const ColorInfo *ci)
 {
@@ -203,10 +234,14 @@ Import_ColorInfo(const ColorInfo *ci)
 }
 
 
-/*
-    External:   Export_ColorInfo
-    Purpose:    Convert a Magick::Color to a ColorInfo structure
-*/
+/**
+ * Convert a Magick::Color to a ColorInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ci the C ColorInfo structure to modify
+ * @param st the Ruby Magick::Color object
+ */
 void
 Export_ColorInfo(ColorInfo *ci, VALUE st)
 {
@@ -249,12 +284,18 @@ Export_ColorInfo(ColorInfo *ci, VALUE st)
 }
 
 
-/*
-    Extern:     Color_to_MagickPixelPacket
-    Purpose:    Convert either a String color name or
-                a Magick::Pixel to a MagickPixelPacket
-    Notes:      The channel values in a MagickPixelPacket are doubles.
-*/
+/**
+ * Convert either a String color name or a Magick::Pixel to a MagickPixelPacket.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - The channel values in a MagickPixelPacket are doubles.
+ *
+ * @param image the Image
+ * @param mpp The MagickPixelPacket to modify
+ * @param color the name of the color
+ */
 void
 Color_to_MagickPixelPacket(Image *image, MagickPixelPacket *mpp, VALUE color)
 {
@@ -272,10 +313,14 @@ Color_to_MagickPixelPacket(Image *image, MagickPixelPacket *mpp, VALUE color)
 }
 
 
-/*
-    Static:     destroy_ColorInfo
-    Purpose:    free the storage allocated by Export_ColorInfo, above.
-*/
+/**
+ * Free the storage allocated by Export_ColorInfo.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ci the ColorInfo object
+ * @see Export_ColorInfo
+ */
 static void
 destroy_ColorInfo(ColorInfo *ci)
 {
@@ -284,10 +329,15 @@ destroy_ColorInfo(ColorInfo *ci)
 }
 
 
-/*
-    Method:     Color#to_s
-    Purpose:    Return a string representation of a Magick::Color object
-*/
+/**
+ * Return a string representation of a Magick::Color object.
+ *
+ * Ruby usage:
+ *   - @verbatim Color#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 Color_to_s(VALUE self)
 {
@@ -311,13 +361,19 @@ Color_to_s(VALUE self)
 }
 
 
-/*
-    Static:     ComplianceType_name
-    Purpose:    Return the string representation of a ComplianceType value
-    Notes:      xMagick will OR multiple compliance types so we have to
-                arbitrarily pick one name. Set the compliance argument
-                to the selected value.
-*/
+/**
+ * Return the string representation of a ComplianceType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - xMagick will OR multiple compliance types so we have to arbitrarily pick
+ *     one name.
+ *   - Set the compliance argument to the selected value.
+ *
+ * @param c the ComplianceType value
+ * @return the string
+ */
 static const char *
 ComplianceType_name(ComplianceType *c)
 {
@@ -354,10 +410,14 @@ ComplianceType_name(ComplianceType *c)
 }
 
 
-/*
- *  Static:     ComplianceType_new
-    Purpose:    construct a ComplianceType enum object for the specified value
-*/
+/**
+ * Construct a ComplianceType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param compliance the C ComplianceType value
+ * @return the Ruby ComplianceType enum object
+ */
 static VALUE
 ComplianceType_new(ComplianceType compliance)
 {
@@ -370,10 +430,14 @@ ComplianceType_new(ComplianceType compliance)
 }
 
 
-/*
-    External:   Import_TypeInfo
-    Purpose:    Convert a TypeInfo structure to a Magick::Font
-*/
+/**
+ * Convert a TypeInfo structure to a Magick::Font.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ti the C TypeInfo structure
+ * @return a Ruby Magick::Font object
+ */
 VALUE
 Import_TypeInfo(const TypeInfo *ti)
 {
@@ -397,10 +461,14 @@ Import_TypeInfo(const TypeInfo *ti)
 }
 
 
-/*
-    External:   Export_TypeInfo
-    Purpose:    Convert a Magick::Font to a TypeInfo structure
-*/
+/**
+ * Convert a Magick::Font to a TypeInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ti the C TypeInfo structure to modify
+ * @param st the Ruby Magick::Font object
+ */
 void
 Export_TypeInfo(TypeInfo *ti, VALUE st)
 {
@@ -446,10 +514,14 @@ Export_TypeInfo(TypeInfo *ti, VALUE st)
 }
 
 
-/*
-    Static:     destroy_TypeInfo
-    Purpose:    free the storage allocated by Export_TypeInfo, above.
-*/
+/**
+ * Free the storage allocated by Export_TypeInfo.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ti the TypeInfo object
+ * @see Export_TypeInfo
+ */
 static void
 destroy_TypeInfo(TypeInfo *ti)
 {
@@ -468,10 +540,14 @@ destroy_TypeInfo(TypeInfo *ti)
 }
 
 
-/*
-    External:   Font_to_s
-    Purpose:    implement the Font#to_s method
-*/
+/**
+ * Implement the Font#to_s method.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 Font_to_s(VALUE self)
 {
@@ -513,10 +589,14 @@ Font_to_s(VALUE self)
 }
 
 
-/*
-    Extern:     Import_PointInfo(pp)
-    Purpose:    Create a Magick::Point object from a PointInfo structure.
-*/
+/**
+ * Create a Magick::Point object from a PointInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param p the C PointInfo structure
+ * @return a Ruby Magick::Point object
+ */
 VALUE
 Import_PointInfo(PointInfo *p)
 {
@@ -525,10 +605,14 @@ Import_PointInfo(PointInfo *p)
 }
 
 
-/*
-    Extern:     Export_PointInfo
-    Purpose:    Convert a Magick::Point object to a PointInfo structure
-*/
+/**
+ * Convert a Magick::Point object to a PointInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param pi the C PointInfo structure to modify
+ * @param sp the Ruby Magick::Point object
+ */
 void
 Export_PointInfo(PointInfo *pi, VALUE sp)
 {
@@ -547,10 +631,14 @@ Export_PointInfo(PointInfo *pi, VALUE sp)
 }
 
 
-/*
-    Extern:     Import_PrimaryInfo(pp)
-    Purpose:    Create a Magick::PrimaryInfo object from a PrimaryInfo structure.
-*/
+/**
+ * Create a Magick::PrimaryInfo object from a PrimaryInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param p the C PrimaryInfo structure
+ * @return a Ruby Magick::PrimaryInfo object
+ */
 VALUE
 Import_PrimaryInfo(PrimaryInfo *p)
 {
@@ -559,10 +647,14 @@ Import_PrimaryInfo(PrimaryInfo *p)
 }
 
 
-/*
-    Extern:     Export_PrimaryInfo
-    Purpose:    Convert a Magick::PrimaryInfo object to a PrimaryInfo structure
-*/
+/**
+ * Convert a Magick::PrimaryInfo object to a PrimaryInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param pi the C PrimaryInfo structure to modify
+ * @param sp the Ruby Magick::PrimaryInfo object
+ */
 void
 Export_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 {
@@ -583,10 +675,15 @@ Export_PrimaryInfo(PrimaryInfo *pi, VALUE sp)
 }
 
 
-/*
-    Method:     Magick::PrimaryInfo#to_s
-    Purpose:    Create a string representation of a Magick::PrimaryInfo
-*/
+/**
+ * Create a string representation of a Magick::PrimaryInfo.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::PrimaryInfo#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 PrimaryInfo_to_s(VALUE self)
 {
@@ -599,10 +696,14 @@ PrimaryInfo_to_s(VALUE self)
 }
 
 
-/*
-    External:   Import_RectangleInfo
-    Purpose:    Convert a RectangleInfo structure to a Magick::Rectangle
-*/
+/**
+ * Convert a RectangleInfo structure to a Magick::Rectangle.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param rect the C RectangleInfo structure
+ * @return a Ruby Magick::Rectangle object
+ */
 VALUE
 Import_RectangleInfo(RectangleInfo *rect)
 {
@@ -619,10 +720,14 @@ Import_RectangleInfo(RectangleInfo *rect)
 }
 
 
-/*
-    External:   Export_RectangleInfo
-    Purpose:    Convert a Magick::Rectangle to a RectangleInfo structure.
-*/
+/**
+ * Convert a Magick::Rectangle to a RectangleInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param rect the C RectangleInfo structure to modify
+ * @param sr the Ruby Magick::Rectangle object
+ */
 void
 Export_RectangleInfo(RectangleInfo *rect, VALUE sr)
 {
@@ -645,10 +750,15 @@ Export_RectangleInfo(RectangleInfo *rect, VALUE sr)
 }
 
 
-/*
-    Method:     Magick::Rectangle#to_s
-    Purpose:    Create a string representation of a Magick::Rectangle
-*/
+/**
+ * Create a string representation of a Magick::Rectangle.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::Rectangle#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 RectangleInfo_to_s(VALUE self)
 {
@@ -662,10 +772,14 @@ RectangleInfo_to_s(VALUE self)
 }
 
 
-/*
-    External:   Import_SegmentInfo
-    Purpose:    Convert a SegmentInfo structure to a Magick::Segment
-*/
+/**
+ * Convert a SegmentInfo structure to a Magick::Segment.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param segment the C SegmentInfo structure
+ * @return a Ruby Magick::Segment object
+ */
 VALUE
 Import_SegmentInfo(SegmentInfo *segment)
 {
@@ -679,10 +793,14 @@ Import_SegmentInfo(SegmentInfo *segment)
 }
 
 
-/*
-    External:   Export_SegmentInfo
-    Purpose:    Convert a Magick::Segment to a SegmentInfo structure.
-*/
+/**
+ * Convert a Magick::Segment to a SegmentInfo structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param segment the C SegmentInfo structure to modify
+ * @param s the Ruby Magick::Segment object
+ */
 void
 Export_SegmentInfo(SegmentInfo *segment, VALUE s)
 {
@@ -706,10 +824,15 @@ Export_SegmentInfo(SegmentInfo *segment, VALUE s)
 }
 
 
-/*
-    Method:     Magick::SegmentInfo#to_s
-    Purpose:    Create a string representation of a Magick::Segment
-*/
+/**
+ * Create a string representation of a Magick::Segment.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::SegmentInfo#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 SegmentInfo_to_s(VALUE self)
 {
@@ -723,10 +846,14 @@ SegmentInfo_to_s(VALUE self)
 }
 
 
-/*
-    Static:     StretchType_name
-    Purpose:    Return the string representation of a StretchType value
-*/
+/**
+ * Return the string representation of a StretchType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param stretch the StretchType value
+ * @return the string
+ */
 static const char *
 StretchType_name(StretchType stretch)
 {
@@ -749,10 +876,14 @@ StretchType_name(StretchType stretch)
 }
 
 
-/*
-    Static:     StretchType_new
-    Purpose:    Construct a StretchType enum for a specified StretchType value
-*/
+/**
+ * Construct a StretchType enum for a specified StretchType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param stretch the C StretchType value
+ * @return a Ruby StretchType enum
+ */
 static VALUE
 StretchType_new(StretchType stretch)
 {
@@ -761,10 +892,14 @@ StretchType_new(StretchType stretch)
 }
 
 
-/*
-    Static:     StyleType_name
-    Purpose:    Return the string representation of a StyleType value
-*/
+/**
+ * Return the string representation of a StyleType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param style the StyleType value
+ * @return the string
+ */
 static const char *
 StyleType_name(StyleType style)
 {
@@ -781,10 +916,14 @@ StyleType_name(StyleType style)
 }
 
 
-/*
-    Static:     StyleType_new
-    Purpose:    Construct a StyleType enum for a specified StyleType value
-*/
+/**
+ * Construct a StyleType enum for a specified StyleType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param style the C StyleType value
+ * @return a Ruby StyleType enum
+ */
 static VALUE
 StyleType_new(StyleType style)
 {
@@ -793,10 +932,14 @@ StyleType_new(StyleType style)
 }
 
 
-/*
-    External:   Import_TypeMetric
-    Purpose:    Convert a TypeMetric structure to a Magick::TypeMetric
-*/
+/**
+ * Convert a TypeMetric structure to a Magick::TypeMetric.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param tm the C TypeMetric structure
+ * @return a Ruby Magick::TypeMetric object
+ */
 VALUE
 Import_TypeMetric(TypeMetric *tm)
 {
@@ -822,10 +965,14 @@ Import_TypeMetric(TypeMetric *tm)
 }
 
 
-/*
-    External:   Export_TypeMetric
-    Purpose:    Convert a Magick::TypeMetric to a TypeMetric structure.
-*/
+/**
+ * Convert a Magick::TypeMetric to a TypeMetric structure.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param tm the C TypeMetric structure to modify
+ * @param st the Ruby Magick::TypeMetric object
+ */
 void
 Export_TypeMetric(TypeMetric *tm, VALUE st)
 {
@@ -863,10 +1010,15 @@ Export_TypeMetric(TypeMetric *tm, VALUE st)
 }
 
 
-/*
-    Method:     Magick::TypeMetric#to_s
-    Purpose:    Create a string representation of a Magick::TypeMetric
-*/
+/**
+ * Create a string representation of a Magick::TypeMetric.
+ *
+ * Ruby usage:
+ *   - @verbatim Magick::TypeMetric#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the string
+ */
 VALUE
 TypeMetric_to_s(VALUE self)
 {

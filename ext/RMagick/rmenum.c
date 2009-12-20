@@ -1,13 +1,14 @@
-/* $Id: rmenum.c,v 1.8 2009/09/05 20:01:08 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmenum.c
-| Author:   Tim Hunter
-| Purpose:  Enumeration methods
-\============================================================================*/
-
-
-
+/**************************************************************************//**
+ * Enumeration methods.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmenum.c
+ * @version  $Id: rmenum.c,v 1.9 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 
@@ -22,10 +23,14 @@ static VALUE Enum_type_inspect(VALUE);
 
 
 
-/*
- *  Extern:     rm_define_enum_type
- *  Purpose:    set up a subclass of Enum
-*/
+/**
+ * Set up a subclass of Enum.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param tag the name of the subclass
+ * @return the subclass
+ */
 VALUE
 rm_define_enum_type(const char *tag)
 {
@@ -40,10 +45,16 @@ rm_define_enum_type(const char *tag)
 }
 
 
-/*
-    Extern:  rm_enum_new (1.8)
-    Purpose: Construct a new Enum subclass instance
-*/
+/**
+ * Construct a new Enum subclass instance.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param class the subclass
+ * @param sym the symbol
+ * @param val the value for the symbol
+ * @return a new instance of class
+ */
 VALUE
 rm_enum_new(VALUE class, VALUE sym, VALUE val)
 {
@@ -55,10 +66,14 @@ rm_enum_new(VALUE class, VALUE sym, VALUE val)
 }
 
 
-/*
-    Extern:  Enum_alloc (1.8)
-    Purpose: Enum class alloc function
-*/
+/**
+ * Enum class alloc function.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param class the Ruby class to use
+ * @return a new enumerator
+ */
 VALUE
 Enum_alloc(VALUE class)
 {
@@ -71,12 +86,19 @@ Enum_alloc(VALUE class)
 }
 
 
-/*
-    Method:  Enum#===
-    Purpose: "Case equal" operator for Enum
-    Returns: true or false
-    Notes:   Yes, I know "case equal" is a misnomer.
-*/
+/**
+ * "Case equal" operator for Enum.
+ *
+ * Ruby usage:
+ *   - @verbatim Enum#=== @endverbatim
+ *
+ * Notes:
+ *   - Yes, I know "case equal" is a misnomer.
+ *
+ * @param self this object
+ * @param other the other object
+ * @return true or false
+ */
 VALUE
 Enum_case_eq(VALUE self, VALUE other)
 {
@@ -93,10 +115,17 @@ Enum_case_eq(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:  Enum#initialize
-    Purpose: Initialize a new Enum instance
-*/
+/**
+ * Initialize a new Enum instance.
+ *
+ * Ruby usage:
+ *   - @verbatim Enum#initialize(sym,val) @endverbatim
+ *
+ * @param self this object
+ * @param sym the symbol
+ * @param val the value for the symbol
+ * @return self
+ */
 VALUE
 Enum_initialize(VALUE self, VALUE sym, VALUE val)
 {
@@ -110,10 +139,15 @@ Enum_initialize(VALUE self, VALUE sym, VALUE val)
 }
 
 
-/*
-    Method:  Enum#to_i
-    Purpose: Return the value of an enum
-*/
+/**
+ * Return the value of an enum.
+ *
+ * Ruby usage:
+ *   - @verbatim Enum#to_i @endverbatim
+ *
+ * @param self this object
+ * @return this object's value
+ */
 VALUE
 Enum_to_i(VALUE self)
 {
@@ -124,12 +158,19 @@ Enum_to_i(VALUE self)
 }
 
 
-/*
-    Method:  Enum#<=>
-    Purpose: Support Comparable module in Enum
-    Returns: -1, 0, 1, or nil
-    Notes:   Enums must be instances of the same class to be equal.
-*/
+/**
+ * Support Comparable module in Enum.
+ *
+ * Ruby usage:
+ *   - @verbatim Enum#<=> @endverbatim
+ *
+ * Notes:
+ *   - Enums must be instances of the same class to be equal.
+ *
+ * @param self this object
+ * @param other the other object
+ * @return -1, 0, 1, or nil
+ */
 VALUE
 Enum_spaceship(VALUE self, VALUE other)
 {
@@ -153,10 +194,15 @@ Enum_spaceship(VALUE self, VALUE other)
 }
 
 
-/*
-    Method:  Enum#to_s
-    Purpose: Return the name of an enum
-*/
+/**
+ * Return the name of an enum.
+ *
+ * Ruby usage:
+ *   - @verbatim Enum#to_s @endverbatim
+ *
+ * @param self this object
+ * @return the name
+ */
 VALUE
 Enum_to_s(VALUE self)
 {
@@ -167,10 +213,17 @@ Enum_to_s(VALUE self)
 }
 
 
-/*
- *  Method:     xxx#initialize
- *  Purpose:    initialize method for all Enum subclasses
-*/
+/**
+ * Initialize method for all Enum subclasses.
+ *
+ * Ruby usage:
+ *   - @verbatim xxx#initialize(sym,val) @endverbatim
+ *
+ * @param self this object
+ * @param sym the symbol
+ * @param val the value of the symbol
+ * @return self
+ */
 VALUE
 Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 {
@@ -193,10 +246,15 @@ Enum_type_initialize(VALUE self, VALUE sym, VALUE val)
 }
 
 
-/*
- *  Method:     xxx#inspect
- *  Purpose:    Enum subclass #inspect
-*/
+/**
+ * Enum subclass #inspect.
+ *
+ * Ruby usage:
+ *   - @verbatim xxx#inspect @endverbatim
+ *
+ * @param self this object
+ * @return string representation of self
+ */
 static VALUE
 Enum_type_inspect(VALUE self)
 {
@@ -210,11 +268,19 @@ Enum_type_inspect(VALUE self)
 }
 
 
-/*
- *  Method:     xxx.values
- *  Purpose:    Behaves like #each if a block is present, otherwise like #to_a.
- *  Notes:      defined for each Enum subclass
-*/
+/**
+ * Behaves like #each if a block is present, otherwise like #to_a.
+ *
+ * Ruby usage:
+ *   - @verbatim xxx.values @endverbatim
+ *   - @verbatim xxx.values {|v| } @endverbatim
+ *
+ * Notes:
+ *   - Defined for each Enum subclass
+ *
+ * @param class the subclass
+ * @return iterator over values if given block, a copy of the values otherwise
+ */
 static VALUE
 Enum_type_values(VALUE class)
 {
@@ -247,10 +313,14 @@ Enum_type_values(VALUE class)
 }
 
 
-/*
-    Extern:     ClassType_new
-    Purpose:    Construct a ClassType enum object for the specified value
-*/
+/**
+ * Construct a ClassType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param cls the class type
+ * @return a new enumerator
+ */
 VALUE
 ClassType_new(ClassType cls)
 {
@@ -274,10 +344,14 @@ ClassType_new(ClassType cls)
 }
 
 
-/*
-    Extern:     ColorspaceType_new
-    Purpose:    construct a ColorspaceType enum object for the specified value
-*/
+/**
+ * Construct a ColorspaceType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param cs the ColorspaceType
+ * @return a new ColorspaceType enumerator
+ */
 VALUE
 ColorspaceType_new(ColorspaceType cs)
 {
@@ -362,10 +436,14 @@ ColorspaceType_new(ColorspaceType cs)
 }
 
 
-/*
-    Static:     CompositeOperator_new
-    Purpose:    return the name of a CompositeOperator enum as a string
-*/
+/**
+ * Return the name of a CompositeOperator enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param op the CompositeOperator
+ * @return the name
+ */
 static const char *
 CompositeOperator_name(CompositeOperator op)
 {
@@ -457,10 +535,14 @@ CompositeOperator_name(CompositeOperator op)
 }
 
 
-/*
-   External:    CompositeOperator_new
-   Purpose:     Construct a CompositeOperator enum object for the specified value
-*/
+/**
+ * Construct a CompositeOperator enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param op the CompositeOperator
+ * @return a new CompositeOperator enumerator
+ */
 VALUE
 CompositeOperator_new(CompositeOperator op)
 {
@@ -469,10 +551,14 @@ CompositeOperator_new(CompositeOperator op)
 }
 
 
-/*
-    Static:     CompressionType_name
-    Purpose:    Return the name of a CompressionType enum as a string
-*/
+/**
+ * Return the name of a CompressionType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ct the CompressionType
+ * @return the name
+ */
 static const char *
 CompressionType_name(CompressionType ct)
 {
@@ -519,10 +605,14 @@ CompressionType_name(CompressionType ct)
 }
 
 
-/*
- * External:    CompressionType_new
-   Purpose:     Construct a CompressionType enum object for the specified value
-*/
+/**
+ * Construct a CompressionType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param ct the CompressionType
+ * @return a new CompressionType enumerator
+ */
 VALUE
 CompressionType_new(CompressionType ct)
 {
@@ -531,10 +621,14 @@ CompressionType_new(CompressionType ct)
 }
 
 
-/*
-    Static:     DisposeType_name
-    Purpose:    Return the name of a DisposeType enum as a string
-*/
+/**
+ * Return the name of a DisposeType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the DisposeType
+ * @return the name
+ */
 static const char *
 DisposeType_name(DisposeType type)
 {
@@ -550,10 +644,14 @@ DisposeType_name(DisposeType type)
 }
 
 
-/*
-    External:   DisposeType.new
-    Purpose:    Construct a DisposeType enum object for the specified value..new
-*/
+/**
+ * Construct a DisposeType enum object for the specified value..new.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the DisposeType
+ * @return a new DisposeType enumerator
+ */
 VALUE
 DisposeType_new(DisposeType type)
 {
@@ -562,10 +660,14 @@ DisposeType_new(DisposeType type)
 }
 
 
-/*
-    Static:     FilterTypes_name
-    Purpose:    Return the name of a FilterTypes enum as a string
-*/
+/**
+ * Return the name of a FilterTypes enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the FilterTypes
+ * @return the name
+ */
 static const char *
 FilterTypes_name(FilterTypes type)
 {
@@ -616,10 +718,14 @@ FilterTypes_name(FilterTypes type)
 }
 
 
-/*
-    External:  FilterTypes.new
-    Purpose: Construct an FilterTypes enum object for the specified value
-*/
+/**
+ * Construct an FilterTypes enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the FilterTypes
+ * @return a new FilterTypes enumerator
+ */
 VALUE
 FilterTypes_new(FilterTypes type)
 {
@@ -628,10 +734,14 @@ FilterTypes_new(FilterTypes type)
 }
 
 
-/*
-    Static:     EndianType_name
-    Purpose:    Return the name of a EndianType enum as a string
-*/
+/**
+ * Return the name of a EndianType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the EndianType
+ * @return the name
+ */
 static const char *
 EndianType_name(EndianType type)
 {
@@ -645,10 +755,14 @@ EndianType_name(EndianType type)
 }
 
 
-/*
-    External:   EndianType.new
-    Purpose:    Construct an EndianType enum object
-*/
+/**
+ * Construct an EndianType enum object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the EndianType
+ * @return a new EndianType enumerator
+ */
 VALUE
 EndianType_new(EndianType type)
 {
@@ -657,10 +771,14 @@ EndianType_new(EndianType type)
 }
 
 
-/*
-    Static:     GravityType_name
-    Purpose:    Return the name of a GravityType enum as a string
-*/
+/**
+ * Return the name of a GravityType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the GravityType
+ * @return the name
+ */
 static const char *
 GravityType_name(GravityType type)
 {
@@ -684,10 +802,14 @@ GravityType_name(GravityType type)
 }
 
 
-/*
-    External:  GravityType.new
-    Purpose: Construct an GravityType enum object for the specified value
-*/
+/**
+ * Construct an GravityType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the GravityType
+ * @return a new GravityType enumerator
+ */
 VALUE
 GravityType_new(GravityType type)
 {
@@ -696,10 +818,14 @@ GravityType_new(GravityType type)
 }
 
 
-/*
-    Static:     ImageType_name
-    Purpose:    Return the name of a ImageType enum as a string
-*/
+/**
+ * Return the name of a ImageType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the ImageType
+ * @return the name
+ */
 static const char *
 ImageType_name(ImageType type)
 {
@@ -723,10 +849,14 @@ ImageType_name(ImageType type)
 }
 
 
-/*
-    External:   ImageType.new
-    Purpose:    Construct an ImageType enum object for the specified value
-*/
+/**
+ * Construct an ImageType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the ImageType
+ * @return a new ImageType enumerator
+ */
 VALUE
 ImageType_new(ImageType type)
 {
@@ -735,10 +865,14 @@ ImageType_new(ImageType type)
 }
 
 
-/*
-    Static:     InterlaceType_name
-    Purpose:    Return the name of a InterlaceType enum as a string
-*/
+/**
+ * Return the name of a InterlaceType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param interlace the InterlaceType
+ * @return the name
+ */
 static const char *
 InterlaceType_name(InterlaceType interlace)
 {
@@ -758,10 +892,14 @@ InterlaceType_name(InterlaceType interlace)
 }
 
 
-/*
-    External:   InterlaceType_new
-    Purpose:    Construct an InterlaceType enum object for the specified value.
-*/
+/**
+ * Construct an InterlaceType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param interlace the InterlaceType
+ * @return a new InterlaceType enumerator
+ */
 VALUE
 InterlaceType_new(InterlaceType interlace)
 {
@@ -770,10 +908,14 @@ InterlaceType_new(InterlaceType interlace)
 }
 
 
-/*
-    Static:     InterpolatePixelMethod_name
-    Purpose:    Return the name of a InterpolatePixelMethod enum as a string
-*/
+/**
+ * Return the name of a InterpolatePixelMethod enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param interpolate the InterpolatePixelMethod
+ * @return the name
+ */
 static const char *
 InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
 {
@@ -794,10 +936,14 @@ InterpolatePixelMethod_name(InterpolatePixelMethod interpolate)
 }
 
 
-/*
-    External:   InterpolatePixelMethod_new
-    Purpose:    Construct an InterpolatePixelMethod enum object for the specified value.
-*/
+/**
+ * Construct an InterpolatePixelMethod enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param interpolate the InterpolatePixelMethod
+ * @return a new InterpolatePixelMethod enumerator
+ */
 VALUE
 InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
 {
@@ -806,10 +952,14 @@ InterpolatePixelMethod_new(InterpolatePixelMethod interpolate)
 }
 
 
-/*
-    External:   MagickLayerMethod_new
-    Purpose:    Construct an MagickLayerMethod enum object for the specified value.
-*/
+/**
+ * Return the name of a MagickLayerMethod enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param method the MagickLayerMethod
+ * @return the name
+ */
 static const char *
 LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
 {
@@ -846,6 +996,14 @@ LAYERMETHODTYPE_NAME(LAYERMETHODTYPE method)
 }
 
 
+/**
+ * Construct an MagickLayerMethod enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param method the MagickLayerMethod
+ * @return a new MagickLayerMethod enumerator
+ */
 VALUE
 LAYERMETHODTYPE_NEW(LAYERMETHODTYPE method)
 {
@@ -854,10 +1012,14 @@ LAYERMETHODTYPE_NEW(LAYERMETHODTYPE method)
 }
 
 
-/*
-    Static:     OrientationType_name
-    Purpose:    Return the name of a OrientationType enum as a string
-*/
+/**
+ * Return the name of a OrientationType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the OreintationType
+ * @return the name
+ */
 static const char *
 OrientationType_name(OrientationType type)
 {
@@ -878,10 +1040,14 @@ OrientationType_name(OrientationType type)
 }
 
 
-/*
-    External:   OrientationType_new
-    Purpose:    Construct an OrientationType enum object for the specified value.
-*/
+/**
+ * Construct an OrientationType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the OrientationType
+ * @return a new OrientationType enumerator
+ */
 VALUE
 OrientationType_new(OrientationType type)
 {
@@ -890,10 +1056,14 @@ OrientationType_new(OrientationType type)
 }
 
 
-/*
-    Static:     RenderingIntent_name
-    Purpose:    Return the name of a RenderingIntent enum as a string
-*/
+/**
+ * Return the name of a RenderingIntent enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param intent the RenderingIntent
+ * @return the name
+ */
 static const char *
 RenderingIntent_name(RenderingIntent intent)
 {
@@ -910,10 +1080,14 @@ RenderingIntent_name(RenderingIntent intent)
 }
 
 
-/*
-    External:   RenderingIntent_new
-    Purpose:    Construct an RenderingIntent enum object for the specified value.
-*/
+/**
+ * Construct an RenderingIntent enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param intent the RenderingIntent
+ * @return a new RenderingIntent enumerator
+ */
 VALUE
 RenderingIntent_new(RenderingIntent intent)
 {
@@ -922,10 +1096,14 @@ RenderingIntent_new(RenderingIntent intent)
 }
 
 
-/*
-    Static:     ResolutionType_name
-    Purpose:    Return the name of a ResolutionType enum as a string
-*/
+/**
+ * Return the name of a ResolutionType enum as a string.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the ResolutionType
+ * @return the name
+ */
 static const char *
 ResolutionType_name(ResolutionType type)
 {
@@ -940,10 +1118,14 @@ ResolutionType_name(ResolutionType type)
 }
 
 
-/*
-    External:   ResolutionType_new
-    Purpose:    Construct an ResolutionType enum object for the specified value.
-*/
+/**
+ * Construct an ResolutionType enum object for the specified value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the ResolutionType
+ * @return a new ResolutionType enumerator
+ */
 VALUE
 ResolutionType_new(ResolutionType type)
 {
@@ -952,10 +1134,14 @@ ResolutionType_new(ResolutionType type)
 }
 
 
-/*
-    Extern:     StorageType_name
-    Purpose:    Return the string representation of a StorageType value
-*/
+/**
+ * Return the string representation of a StorageType value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param type the StorageType
+ * @return the name
+ */
 const char *
 StorageType_name(StorageType type)
 {
@@ -975,10 +1161,14 @@ StorageType_name(StorageType type)
 }
 
 
-/*
-    Static:     VirtualPixelMethod_name
-    Purpose:    Return the string representation of a VirtualPixelMethod value
-*/
+/**
+ * Return the string representation of a VirtualPixelMethod value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param method the VirtualPixelMethod
+ * @return the name
+ */
 static const char *
 VirtualPixelMethod_name(VirtualPixelMethod method)
 {
@@ -1018,10 +1208,14 @@ VirtualPixelMethod_name(VirtualPixelMethod method)
 }
 
 
-/*
-    Static:     VirtualPixelMethod_new
-    Purpose:    Construct a VirtualPixelMethod enum for a specified VirtualPixelMethod value
-*/
+/**
+ * Construct a VirtualPixelMethod enum for a specified VirtualPixelMethod value.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param style theVirtualPixelMethod
+ * @return a new VirtualPixelMethod enumerator
+ */
 VALUE
 VirtualPixelMethod_new(VirtualPixelMethod style)
 {

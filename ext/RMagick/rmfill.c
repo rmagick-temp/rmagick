@@ -1,39 +1,54 @@
-/* $Id: rmfill.c,v 1.32 2009/03/04 00:35:18 rmagick Exp $ */
-/*============================================================================\
-|                Copyright (C) 2009 by Timothy P. Hunter
-| Name:     rmfill.c
-| Author:   Tim Hunter
-| Purpose:  GradientFill, TextureFill class definitions for RMagick
-\============================================================================*/
+/**************************************************************************//**
+ * GradientFill, TextureFill class definitions for RMagick.
+ *
+ * Copyright &copy; 2002 - 2009 by Timothy P. Hunter
+ *
+ * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
+ *
+ * @file     rmfill.c
+ * @version  $Id: rmfill.c,v 1.33 2009/12/20 02:33:33 baror Exp $
+ * @author   Tim Hunter
+ ******************************************************************************/
 
 #include "rmagick.h"
 
+/** Data associated with a GradientFill */
 typedef struct
 {
-    double x1, y1, x2, y2;
-    PixelPacket start_color;
-    PixelPacket stop_color;
+    double x1; /**< x position of first point */
+    double y1; /**< y position of first point */
+    double x2; /**< x position of second point */
+    double y2; /**< y position of second point */
+    PixelPacket start_color; /**< the start color */
+    PixelPacket stop_color; /**< the stop color */
 } rm_GradientFill;
 
+/** Data associated with a TextureFill */
 typedef struct
 {
-    Image *texture;
+    Image *texture; /**< the texture */
 } rm_TextureFill;
 
-/*
-    Static:     free_Fill
-    Purpose:    free Fill or Fill subclass object (except for
-                TextureFill)
-*/
+/**
+ * Free Fill or Fill subclass object (except for TextureFill).
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param fill the fill
+ */
 static void free_Fill(void *fill)
 {
     xfree(fill);
 }
 
-/*
-    Extern:     GradientFill.allocate(x1, y1, x2, y2, start_color, stop_color)
-    Purpose:    Create new GradientFill object
-*/
+/**
+ * Create new GradientFill object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param class the Ruby class to use
+ * @return a new GradientFill object
+ */
 VALUE
 GradientFill_alloc(VALUE class)
 {
@@ -43,10 +58,21 @@ GradientFill_alloc(VALUE class)
 }
 
 
-/*
-    Extern:     GradientFill#initialize(start_color, stop_color)
-    Purpose:    store the vector points and the start and stop colors
-*/
+/**
+ * Store the vector points and the start and stop colors.
+ *
+ * Ruby usage:
+ *   - @verbatim GradientFill#initialize(x1,y1,x2,y2,start_color,stop_color) @endverbatim
+ *
+ * @param self this object
+ * @param x1 x position of first point
+ * @param y1 y position of first point
+ * @param x2 x position of second point
+ * @param y2 y position of second point
+ * @param start_color the start color
+ * @param stop_color the stop color
+ * @return self
+ */
 VALUE
 GradientFill_initialize(
                        VALUE self,
@@ -71,10 +97,17 @@ GradientFill_initialize(
     return self;
 }
 
-/*
-    Static:     point_fill
-    Purpose:    do a gradient that radiates from a point
-*/
+/**
+ * Do a gradient that radiates from a point.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image on which to do the gradient
+ * @param x0 x position of the point
+ * @param y0 y position of the point
+ * @param start_color the start color
+ * @param stop_color the stop color
+ */
 static void
 point_fill(
           Image *image,
@@ -133,11 +166,17 @@ point_fill(
 #endif
 }
 
-/*
-    Static:     vertical_fill
-    Purpose:    do a gradient fill that proceeds from a vertical line to the
-                right and left sides of the image
-*/
+/**
+ * Do a gradient fill that proceeds from a vertical line to the right and left
+ * sides of the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image on which to do the gradient
+ * @param x1 x position of the vertical line
+ * @param start_color the start color
+ * @param stop_color the stop color
+ */
 static void
 vertical_fill(
              Image *image,
@@ -213,10 +252,16 @@ vertical_fill(
     xfree((void *)master);
 }
 
-/*
-    Static:     horizontal_fill
-    Purpose:    do a gradient fill that starts from a horizontal line
-*/
+/**
+ * Do a gradient fill that starts from a horizontal line.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image on which to do the gradient
+ * @param y1 y position of the horizontal line
+ * @param start_color the start color
+ * @param stop_color the stop color
+ */
 static void
 horizontal_fill(
                Image *image,
@@ -288,11 +333,20 @@ horizontal_fill(
     xfree((PixelPacket *)master);
 }
 
-/*
-    Static:     v_diagonal_fill
-    Purpose:    do a gradient fill that starts from a diagonal line and
-                ends at the top and bottom of the image
-*/
+/**
+ * Do a gradient fill that starts from a diagonal line and ends at the top and
+ * bottom of the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image on which to do the gradient
+ * @param x1 x position of the start of the diagonal line
+ * @param y1 y position of the start of the diagonal line
+ * @param x2 x position of the end of the diagonal line
+ * @param y2 y position of the end of the diagonal line
+ * @param start_color the start color
+ * @param stop_color the stop color
+ */
 static void
 v_diagonal_fill(
                Image *image,
@@ -384,11 +438,20 @@ v_diagonal_fill(
 
 }
 
-/*
-    Static:     h_diagonal_fill
-    Purpose:    do a gradient fill that starts from a diagonal line and
-                ends at the sides of the image
-*/
+/**
+ * Do a gradient fill that starts from a diagonal line and ends at the sides of
+ * the image.
+ *
+ * No Ruby usage (internal function)
+ *
+ * @param image the image on which to do the gradient
+ * @param x1 x position of the start of the diagonal line
+ * @param y1 y position of the start of the diagonal line
+ * @param x2 x position of the end of the diagonal line
+ * @param y2 y position of the end of the diagonal line
+ * @param start_color the start color
+ * @param stop_color the stop color
+ */
 static void
 h_diagonal_fill(
                Image *image,
@@ -481,12 +544,17 @@ h_diagonal_fill(
 #endif
 }
 
-/*
-    Extern:     GradientFill_fill(image_obj)
-    Purpose:    the GradientFill#fill method - call GradientFill with the
-                start and stop colors specified when this fill object
-                was created.
-*/
+/**
+ * Call GradientFill with the start and stop colors specified when this fill
+ * object was created.
+ *
+ * Ruby usage:
+ *   - @verbatim GradientFill#fill(image) @endverbatim
+ *
+ * @param self this object
+ * @param image_obj the image
+ * @return self
+ */
 VALUE
 GradientFill_fill(VALUE self, VALUE image_obj)
 {
@@ -547,11 +615,16 @@ GradientFill_fill(VALUE self, VALUE image_obj)
 }
 
 
-/*
-    Static:     free_TextureFill
-    Purpose:    free the TextureFill struct and the texture image it points to
-    Notes:      called from GC
-*/
+/**
+ * Free the TextureFill struct and the texture image it points to.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - Called from GC
+ *
+ * @param fill_obj the TextureFill
+ */
 static void
 free_TextureFill(void *fill_obj)
 {
@@ -562,11 +635,17 @@ free_TextureFill(void *fill_obj)
     xfree(fill);
 }
 
-/*
-    Extern:     TextureFill.allocate(texture)
-    Purpose:    Create new TextureFill object
-    Notes:      the texture is an Image or Image *object
-*/
+/**
+ * Create new TextureFill object.
+ *
+ * No Ruby usage (internal function)
+ *
+ * Notes:
+ *   - The texture is an Image or Image *object
+ *
+ * @param class the Ruby class to use
+ * @return a new TextureFill object
+ */
 VALUE
 TextureFill_alloc(VALUE class)
 {
@@ -578,10 +657,19 @@ TextureFill_alloc(VALUE class)
                             , fill);
 }
 
-/*
-    Extern:     TextureFill#initialize
-    Purpose:    Store the texture image
-*/
+/**
+ * Store the texture image.
+ *
+ * Ruby usage:
+ *   - @verbatim TextureFill#initialize(texture) @endverbatim
+ *
+ * Notes:
+ *   - The texture is an Image or Image *object
+ *
+ * @param self this object
+ * @param texture_arg the texture
+ * @return self
+ */
 VALUE
 TextureFill_initialize(VALUE self, VALUE texture_arg)
 {
@@ -601,10 +689,17 @@ TextureFill_initialize(VALUE self, VALUE texture_arg)
     return self;
 }
 
-/*
-    Extern:     TextureFill_fill(image_obj)
-    Purpose:    the TextureFill#fill method
-*/
+/**
+ * Call TextureFill with the texture specified when this fill object was
+ * created.
+ *
+ * Ruby usage:
+ *   - @verbatim TextureFill#fill(image) @endverbatim
+ *
+ * @param self this object
+ * @param image_obj the image
+ * @return self
+ */
 VALUE
 TextureFill_fill(VALUE self, VALUE image_obj)
 {

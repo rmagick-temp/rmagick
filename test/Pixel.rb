@@ -50,11 +50,12 @@ class Pixel_UT < Test::Unit::TestCase
       assert_raises(TypeError) { red.fcmp(blue, 'x') }
       assert_raises(TypeError) { red.fcmp(blue, 10, 'x') }
     end
-=begin
-   changed in 6.5.6-6
+
     def test_from_hsla
       assert_nothing_raised { Magick::Pixel.from_hsla(127, 50, 50) }
       assert_nothing_raised { Magick::Pixel.from_hsla(127, 50, 50, 0) }
+      assert_nothing_raised { Magick::Pixel.from_hsla(127, "50%", 50, 0) }
+      assert_nothing_raised { Magick::Pixel.from_hsla("10%", "50%", 50, 0) }
       assert_raise(TypeError) { Magick::Pixel.from_hsla([], 50, 50, 0) }
       assert_raise(TypeError) { Magick::Pixel.from_hsla(127, [], 50, 0) }
       assert_raise(TypeError) { Magick::Pixel.from_hsla(127, 50, [], 0) }
@@ -73,16 +74,29 @@ class Pixel_UT < Test::Unit::TestCase
               #hsla[0] = ((hsla[0] + 0.005) % 360.0) - 0.005
               #hsla[1] = ((hsla[1] + 0.005) % 360.0) - 0.005
               #hsla[2] = ((hsla[2] + 0.005) % 360.0) - 0.005
-              assert_in_delta(args[0], hsla[0], 0.01, "expected #{args.inspect} got #{hsla.inspect}")
-              assert_in_delta(args[1], hsla[1], 0.01, "expected #{args.inspect} got #{hsla.inspect}")
-              assert_in_delta(args[2], hsla[2], 0.01, "expected #{args.inspect} got #{hsla.inspect}")
+              assert_in_delta(args[0], hsla[0], 0.25, "expected #{args.inspect} got #{hsla.inspect}")
+              assert_in_delta(args[1], hsla[1], 0.25, "expected #{args.inspect} got #{hsla.inspect}")
+              assert_in_delta(args[2], hsla[2], 0.25, "expected #{args.inspect} got #{hsla.inspect}")
               assert_in_delta(args[3], hsla[3], 0.005, "expected #{args.inspect} got #{hsla.inspect}")
             end
           end
         end
       end
+
+      # test percentages
+      args = ["20%","20%","20%","20%"]
+      args2 = [360.0/5,255.0/5,255.0/5,1.0/5]
+      px = Magick::Pixel.from_hsla(*args)
+      hsla = px.to_hsla
+      px2 = Magick::Pixel.from_hsla(*args2)
+      hsla2 = px2.to_hsla
+
+      assert_in_delta(hsla[0], hsla2[0], 0.25, "#{hsla.inspect} != #{hsla2.inspect} with args: #{args.inspect} and #{args2.inspect}")
+      assert_in_delta(hsla[1], hsla2[1], 0.25, "#{hsla.inspect} != #{hsla2.inspect} with args: #{args.inspect} and #{args2.inspect}")
+      assert_in_delta(hsla[2], hsla2[2], 0.25, "#{hsla.inspect} != #{hsla2.inspect} with args: #{args.inspect} and #{args2.inspect}")
+      assert_in_delta(hsla[3], hsla2[3], 0.005,  "#{hsla.inspect} != #{hsla2.inspect} with args: #{args.inspect} and #{args2.inspect}")
     end
-=end
+
     def test_to_color
       assert_nothing_raised { @pixel.to_color(Magick::AllCompliance) }
       assert_nothing_raised { @pixel.to_color(Magick::SVGCompliance) }

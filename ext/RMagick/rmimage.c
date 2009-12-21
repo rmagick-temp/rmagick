@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmimage.c
- * @version  $Id: rmimage.c,v 1.359 2009/12/20 02:33:33 baror Exp $
+ * @version  $Id: rmimage.c,v 1.360 2009/12/21 10:34:57 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -1192,7 +1192,7 @@ Image_bias_eq(VALUE self, VALUE pct)
     double bias;
 
     image = rm_check_frozen(self);
-    bias = rm_percentage(pct);
+    bias = rm_percentage(pct,1.0);
     image->bias = bias * QuantumRange;
 
     return self;
@@ -1648,7 +1648,7 @@ special_composite(Image *image, Image *overlay, double image_pct, double overlay
  *   - Default x_offset is 0
  *   - Default y_offset is 0
  *   - Percent can be a number or a string in the form "NN%"
- *   - The default value for dst_percent is 100.0-src_percent
+ *   - The default value for dst_percent is 100%-src_percent
  *
  * @param argc number of input arguments
  * @param argv array of input arguments
@@ -1683,11 +1683,11 @@ Image_blend(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            dst_percent = rm_percentage(argv[2]) * 100.0;
-            src_percent = rm_percentage(argv[1]) * 100.0;
+            dst_percent = rm_percentage(argv[2],1.0) * 100.0;
+            src_percent = rm_percentage(argv[1],1.0) * 100.0;
             break;
         case 2:
-            src_percent = rm_percentage(argv[1]) * 100.0;
+            src_percent = rm_percentage(argv[1],1.0) * 100.0;
             dst_percent = FMAX(100.0 - src_percent, 0);
             break;
         default:
@@ -4622,7 +4622,7 @@ Image_deskew(int argc, VALUE *argv, VALUE self)
             sprintf(auto_crop_width, "%ld", width);
             SetImageArtifact(image, "deskew:auto-crop", auto_crop_width);
         case 1:
-            threshold = rm_percentage(argv[0]) * QuantumRange;
+            threshold = rm_percentage(argv[0],1.0) * QuantumRange;
         case 0:
             break;
         default:
@@ -5053,9 +5053,9 @@ Image_dissolve(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            dst_percent = rm_percentage(argv[2]) * 100.0;
+            dst_percent = rm_percentage(argv[2],1.0) * 100.0;
         case 2:
-            src_percent = rm_percentage(argv[1]) * 100.0;
+            src_percent = rm_percentage(argv[1],1.0) * 100.0;
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 2 to 6)", argc);
@@ -11461,7 +11461,7 @@ Image_selective_blur_channel(int argc, VALUE *argv, VALUE self)
 
     // threshold is either a floating-point number or a string in the form "NN%".
     // Either way it's supposed to represent a percentage of the QuantumRange.
-    threshold = rm_percentage(argv[2]) * QuantumRange;
+    threshold = rm_percentage(argv[2],1.0) * QuantumRange;
 
     GetExceptionInfo(&exception);
     new_image = SelectiveBlurImageChannel(image, channels, radius, sigma, threshold, &exception);
@@ -11841,7 +11841,7 @@ Image_shadow(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 4:
-            opacity = rm_percentage(argv[3]);   // Clamp to 1.0 < x <= 100.0
+            opacity = rm_percentage(argv[3],1.0);   // Clamp to 1.0 < x <= 100.0
             if (fabs(opacity) < 0.01)
             {
                 rb_warning("shadow will be transparent - opacity %g very small", opacity);
@@ -14268,8 +14268,8 @@ Image_virtual_pixel_method_eq(VALUE self, VALUE method)
  *   - @verbatim Image#watermark(mark, brightness, saturation, x_off, y_off) @endverbatim
  *
  * Notes:
- *   - Default brightness is 100.0
- *   - Default saturation is 100.0
+ *   - Default brightness is 100%
+ *   - Default saturation is 100%
  *   - Default x_off is 0
  *   - Default y_off is 0
  *   - x_off and y_off can be negative, which means measure from the
@@ -14305,9 +14305,9 @@ Image_watermark(int argc, VALUE *argv, VALUE self)
     switch (argc)
     {
         case 3:
-            dst_percent = rm_percentage(argv[2]) * 100.0;
+            dst_percent = rm_percentage(argv[2],1.0) * 100.0;
         case 2:
-            src_percent = rm_percentage(argv[1]) * 100.0;
+            src_percent = rm_percentage(argv[1],1.0) * 100.0;
         case 1:
             break;
         default:

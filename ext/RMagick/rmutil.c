@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmutil.c
- * @version  $Id: rmutil.c,v 1.181 2009/12/20 02:33:34 baror Exp $
+ * @version  $Id: rmutil.c,v 1.182 2009/12/21 10:34:58 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -364,17 +364,18 @@ rescue_not_str(VALUE arg)
 
 
 /**
- * Return a double between 0.0 and 1.0, inclusive. If the argument is a number
- * convert to a Float object, otherwise it's supposed to be a string in the form
- * "NN%". Convert to a number and then to a Float.
+ * Return a double between 0.0 and max (the second argument), inclusive. If the
+ * argument is a number convert to a Float object, otherwise it's supposed to be
+ * a string in the form * "NN%". Convert to a number and then to a Float.
  *
  * No Ruby usage (internal function)
  *
  * @param arg the argument
+ * @param max the maximum allowed value
  * @return a double
  */
 double
-rm_percentage(VALUE arg)
+rm_percentage(VALUE arg, double max)
 {
     double pct;
     long pct_long;
@@ -401,7 +402,7 @@ rm_percentage(VALUE arg)
 
         if (*end == '%' && pct_long != 0)
         {
-            pct = ((double)pct_long) / 100.0;
+            pct = (((double)pct_long) / 100.0) * max;
         }
         else
         {

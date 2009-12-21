@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmagick.h
- * @version  $Id: rmagick.h,v 1.280 2009/12/20 02:33:33 baror Exp $
+ * @version  $Id: rmagick.h,v 1.281 2009/12/21 10:34:56 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -1262,7 +1262,7 @@ extern char  *rm_str2cstr(VALUE, long *);
 extern int    rm_check_num2dbl(VALUE);
 extern double rm_fuzz_to_dbl(VALUE);
 extern Quantum rm_app2quantum(VALUE);
-extern double rm_percentage(VALUE);
+extern double rm_percentage(VALUE,double);
 extern double rm_str_to_pct(VALUE);
 extern VALUE  rm_define_enum_type(const char *);
 extern void   rm_write_temp_image(Image *, char *);

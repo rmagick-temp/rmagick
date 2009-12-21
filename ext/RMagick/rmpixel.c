@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmpixel.c
- * @version  $Id: rmpixel.c,v 1.6 2009/12/20 02:33:34 baror Exp $
+ * @version  $Id: rmpixel.c,v 1.7 2009/12/21 10:34:58 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -467,14 +467,15 @@ Pixel_from_color(VALUE class, VALUE name)
  * Construct an RGB pixel.
  *
  * Ruby usage:
+ *   - @verbatim Pixel#from_hsla(hue, saturation, lightness) @endverbatim
  *   - @verbatim Pixel#from_hsla(hue, saturation, lightness, alpha) @endverbatim
  *
  * Notes:
  *   - Default alpha is 1.0
- *   - 0 <= hue < 360
- *   - 0 <= saturation <= 1
- *   - 0 <= lightness <= 1
- *   - 0 <= alpha <= 1 (0 is transparent, 1 is opaque)
+ *   - 0 <= hue < 360 OR "0%" <= hue < "100%"
+ *   - 0 <= saturation <= 255 OR "0%" <= saturation <= "100%"
+ *   - 0 <= lightness <= 255 OR "0%" <= lightness <= "100%"
+ *   - 0 <= alpha <= 1 (0 is transparent, 1 is opaque) OR "0%" <= alpha <= "100%"
  *   - Replaces brain-dead Pixel_from_HSL.
  *
  * @param argc number of input arguments
@@ -496,12 +497,14 @@ Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
     switch (argc)
     {
         case 4:
-            a = NUM2DBL(argv[3]);
+            a = rm_percentage(argv[3],1.0);
             alpha = MagickTrue;
         case 3:
-            l = NUM2DBL(argv[2]);
-            s = NUM2DBL(argv[1]);
-            h = NUM2DBL(argv[0]);
+            // saturation and lightness are out of 255 in new ImageMagicks and
+            // out of 100 in old ImageMagicks. Compromise: always use %.
+            l = rm_percentage(argv[2],255.0); 
+            s = rm_percentage(argv[1],255.0);
+            h = rm_percentage(argv[0],360.0);
             break;
         default:
             rb_raise(rb_eArgError, "wrong number of arguments (%d for 3 or 4)", argc);
@@ -512,17 +515,26 @@ Pixel_from_hsla(int argc, VALUE *argv, VALUE class)
     {
         rb_raise(rb_eRangeError, "alpha %g out of range [0.0, 1.0]", a);
     }
-    if (l < 0.0 || l > 100.0)
+    if (l < 0.0 || l > 255.0)
     {
-        rb_raise(rb_eRangeError, "lightness %g out of range [0.0, 100.0]", l);
+        rb_raise(rb_eRangeError, "lightness %g out of range [0.0, 255.0]", l);
     }
-    if (s < 0.0 || s > 100.0)
+    if (s < 0.0 || s > 255.0)
     {
-        rb_raise(rb_eRangeError, "saturation %g out of range [0.0, 100.0]", s);
+        rb_raise(rb_eRangeError, "saturation %g out of range [0.0, 255.0]", s);
     }
     if (h < 0.0 || h >= 360.0)
     {
         rb_raise(rb_eRangeError, "hue %g out of range [0.0, 360.0)", h);
+    }
+
+    // Ugly way of checking for change in ImageMagick 6.5.6-5 to see whether
+    // saturation/lightness should be out of 255 or out of 100.
+    if(MagickLibVersion < 0x656 ||
+        (MagickLibVersion == 0x656 && strcmp(MagickLibSubversion,"-5") <= 0) )
+    {
+      s = s/2.55;
+      l = l/2.55;
     }
 
     memset(name, 0, sizeof(name));
@@ -888,8 +900,8 @@ Pixel_to_hsla(VALUE self)
 
     ConvertRGBToHSL(pixel->red, pixel->green, pixel->blue, &hue, &sat, &lum);
     hue *= 360.0;
-    sat *= 100.0;
-    lum *= 100.0;
+    sat *= 255.0;
+    lum *= 255.0;
 
     if (pixel->opacity == OpaqueOpacity)
     {

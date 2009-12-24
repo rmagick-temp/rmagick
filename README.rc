@@ -189,7 +189,7 @@ or the "ImageMagick Forum":http://www.imagemagick.org/discourse-server.
 
 h2(#contact). Contact Information
 
-*Author:* Tim Hunter
+*Author:* Tim Hunter, Omer Bar-or, Benjamin Thomas
 
 *Email:* "rmagick@rubyforge.org":mailto:rmagick@rubyforge.org
 
@@ -203,7 +203,9 @@ and for hosting the RMagick documentation.
 h2(#license). License
 
 <pre>
-Copyright © 2002-2009 by Timothy P. Hunter
+Copyright &copy; 2002-2009 by Timothy P. Hunter
+
+Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),

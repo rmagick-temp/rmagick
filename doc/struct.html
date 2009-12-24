@@ -692,21 +692,25 @@ g = Magick::Geometry.new(100,200,nil,nil,Magick::AspectGeometry)
       <dl>
         <dt>hue</dt>
 
-        <dd>A value in the range [0.0, 360.0).</dd>
+        <dd>Either a String percentage (e.g., "25%") or a value in
+        the range [0.0, 360.0).</dd>
 
         <dt>saturation</dt>
 
-        <dd>A value in the range [0.0, 100.0].</dd>
+        <dd>Either a String percentage (e.g., "25%") or a value in
+        the range [0.0, 255.0].</dd>
 
         <dt>lightness</dt>
 
-        <dd>A value in the range 0.0, 100.0].</dd>
+        <dd>Either a String percentage (e.g., "25%") or a value in
+        the range [0.0, 255.0].</dd>
 
         <dt>alpha</dt>
 
-        <dd>A value in the range [0.0, 1.0], where 1.0 is fully
-        opaque and 0.0 is fully transparent. This argument may be
-        omitted. The default is 1.0.</dd>
+        <dd>Either a String percentage (e.g., "25%") or a value in
+        the range [0.0, 1.0], where 1.0 is fully opaque and 0.0 is
+        fully transparent. This argument may be omitted. The default
+        is 1.0.</dd>
       </dl>
 
       <h5>See also</h5>

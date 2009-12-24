@@ -4,7 +4,7 @@ require "date"
 RMAGICK_VERS = "0.0.0"
 MIN_RUBY_VERS = "1.8.5"
 MIN_RUBY_VERS_NO = MIN_RUBY_VERS.tr(".","").to_i
-MIN_IM_VERS = "6.3.5"
+MIN_IM_VERS = "6.4.9"
 MIN_IM_VERS_NO = MIN_IM_VERS.tr(".","").to_i
 
 

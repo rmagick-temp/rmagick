@@ -1,3 +1,12 @@
+RMagick 2.13.0
+    o Added Doxygen documentation, for automatic documentation
+    o Fixed bug #27467, get RMagick to compile witH ImageMagick 6.5.7
+    o Fixed bug #27607, switch Pixel#from_hsla and Pixel#to_hsla to use ranges
+      0-255 instead of 0-100 for saturation and lightness (range used by 
+      ImageMagick 6.5.6-5 and higher). Also added ability to specify all
+      arguments to these functions as percentages (bug report by Arthur Chan).
+	
+
 RMagick 2.12.2
     o Add feature tests for SinusoidFunction and PolynomialFunction enum
       values to allow compiling with ImageMagick 6.4.8-7 (bug report by Mark

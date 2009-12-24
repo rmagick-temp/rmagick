@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.date = Date.today.to_s
   s.summary = %q{Ruby binding to ImageMagick}
   s.description = %q{RMagick is an interface between Ruby and ImageMagick.}
-  s.author = %q{Tim Hunter}
+  s.authors = [%q{Tim Hunter}, %q{Omer Bar-or}, %q{Benjamin Thomas}]
   s.email = %q{rmagick@rubyforge.org}
   s.homepage = %q{http://rubyforge.org/projects/rmagick}
   s.files = Dir.glob('**/*')
@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.extensions = %w{ext/RMagick/extconf.rb}
   s.has_rdoc = false
   s.required_ruby_version = '>= 1.8.5'
-  s.requirements << 'ImageMagick 6.3.5 or later'
+  s.requirements << 'ImageMagick 6.4.9 or later'
 end

@@ -204,7 +204,7 @@ end
 
 if RUBY_PLATFORM !~ /mswin|mingw/
 
-  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers)
+  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers) || have_library("Magick++", "InitializeMagick", headers)
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
            "Can't find the ImageMagick library or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"

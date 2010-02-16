@@ -204,7 +204,7 @@ end
 
 if RUBY_PLATFORM !~ /mswin|mingw/
 
-  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers) || have_library("Magick++", "InitializeMagick", headers)
+  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers) || have_library("Magick++","InitializeMagick",headers)
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
            "Can't find the ImageMagick library or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"
@@ -233,6 +233,7 @@ have_func("snprintf", headers)
    "LevelColorsImageChannel",        # 6.5.6-4
    "LevelizeImageChannel",           # 6.4.2
    "LiquidRescaleImage",             # 6.3.8-2
+   "MagickLibAddendum",              # 6.5.9-1
    "OpaquePaintImageChannel",        # 6.3.7-10
    "QueueAuthenticPixels",           # 6.4.5-6
    "RemapImage",                     # 6.4.4-0

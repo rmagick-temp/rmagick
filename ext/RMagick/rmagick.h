@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmagick.h
- * @version  $Id: rmagick.h,v 1.281 2009/12/21 10:34:56 baror Exp $
+ * @version  $Id: rmagick.h,v 1.282 2010/02/16 06:50:28 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -160,6 +160,13 @@
  */
 #if defined(HAVE_CONSTITUTECOMPONENTTERMINUS)
 #define DestroyConstitute(void) ConstituteComponentTerminus(void)
+#endif
+
+/** ImageMagick 6.5.9 replaced MagickLibSubversion with
+ * MagickLibAddendum.
+ */
+#if defined(HAVE_MAGICKLIBADDENDUM)
+#define MagickLibSubversion MagickLibAddendum
 #endif
 
 /** IM 6.4.1 replaced AllocateImage with AcquireImage.

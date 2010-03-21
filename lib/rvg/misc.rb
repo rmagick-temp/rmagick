@@ -1,4 +1,4 @@
-# $Id: misc.rb,v 1.16 2010/02/18 07:36:08 baror Exp $
+# $Id: misc.rb,v 1.17 2010/03/21 01:43:01 baror Exp $
 # Copyright (C) 2009 Timothy P. Hunter
 module Magick
     class RVG
@@ -326,7 +326,7 @@ module Magick
                             when :middle
                                  tm.width / 2
                             when :end
-                                 -tm.width
+                                 0
                           end
                     [dx, 0]
                 end

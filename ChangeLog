@@ -1,3 +1,6 @@
+RMagick 2.13.1
+    o Fixed bug preventing RMagick from working with version 6.5.9 or higher
+
 RMagick 2.13.0
     o Added Doxygen documentation, for automatic documentation
     o Fixed bug #27467, get RMagick to compile witH ImageMagick 6.5.7

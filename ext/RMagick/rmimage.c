@@ -6,7 +6,7 @@
  * Changes since Nov. 2009 copyright &copy; by Benjamin Thomas and Omer Bar-or
  *
  * @file     rmimage.c
- * @version  $Id: rmimage.c,v 1.360 2009/12/21 10:34:57 baror Exp $
+ * @version  $Id: rmimage.c,v 1.361 2010/05/03 03:34:48 baror Exp $
  * @author   Tim Hunter
  ******************************************************************************/
 
@@ -2993,7 +2993,11 @@ Image_colorspace_eq(VALUE self, VALUE colorspace)
 
     image = rm_check_frozen(self);
     VALUE_TO_ENUM(colorspace, new_cs, ColorspaceType);
+#if defined(HAVE_TRANSFORMIMAGECOLORSPACE)
+    (void) TransformImageColorspace(image, new_cs);
+#else
     (void) SetImageColorspace(image, new_cs);
+#endif
 
     return self;
 }

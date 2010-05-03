@@ -244,6 +244,7 @@ have_func("snprintf", headers)
    "SetMagickMemoryMethods",         # 6.4.1
    "SparseColorImage",               # 6.3.6-?
    "SyncAuthenticPixels",            # 6.4.5-6
+   "TransformImageColorspace",       # 6.5.1
    "TransparentPaintImage",          # 6.3.7-10
    "TransparentPaintImageChroma"     # 6.4.5-6
    ].each do |func|

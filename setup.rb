@@ -784,7 +784,7 @@ class ToplevelInstaller
     else
       require 'rbconfig'
     end
-    ::Config::CONFIG
+    defined?(RbConfig) ? ::RbConfig::CONFIG : ::Config::CONFIG
   end
 
   def initialize(ardir_root, config)

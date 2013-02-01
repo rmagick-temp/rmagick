@@ -51,18 +51,20 @@ while arg = ARGV.shift
 end
 
 require rbconfig                      # get specified/default rbconfig.rb
+config = defined?(RbConfig) ? ::RbConfig : ::Config
+version = config::CONFIG['ruby_version']
+arch    = config::CONFIG['arch']
 
-version = ::Config::CONFIG['ruby_version']
-arch    = ::Config::CONFIG['arch']
-
-prefix    ||= ::Config::CONFIG['prefix']
-site_ruby ||= ::Config::CONFIG['sitelibdir']
-so_dir    ||= ::Config::CONFIG['sitearchdir']
+prefix    ||= config::CONFIG['prefix']
+site_ruby ||= config::CONFIG['sitelibdir']
+so_dir    ||= config::CONFIG['sitearchdir']
 doc_dir   ||= File.join(prefix, 'share', 'RMagick')
-dlext       = ::Config::CONFIG['DLEXT']
+dlext       = config::CONFIG['DLEXT']
 
 FileUtils.safe_unlink File.join(site_ruby, 'RMagick.rb'), :verbose => true
 FileUtils.safe_unlink File.join(so_dir, 'RMagick.' + dlext), :verbose =>  true
+puts site_ruby
+puts doc_dir
 
 rmdir File.join(site_ruby, 'rvg'), true
 rmdir File.join(doc_dir, 'ex', 'images')

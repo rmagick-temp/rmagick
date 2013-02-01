@@ -125,7 +125,8 @@ end
 if RUBY_PLATFORM !~ /mswin|mingw/
 
   # Check for compiler. Extract first word so ENV['CC'] can be a program name with arguments.
-  cc = (ENV["CC"] or Config::CONFIG["CC"] or "gcc").split(' ').first
+  config = defined?(RbConfig) ? ::RbConfig : ::Config
+  cc = (ENV["CC"] or config::CONFIG["CC"] or "gcc").split(' ').first
   unless find_executable(cc)
     exit_failure "No C compiler found in ${ENV['PATH']}. See mkmf.log for details."
   end
@@ -204,7 +205,7 @@ end
 
 if RUBY_PLATFORM !~ /mswin|mingw/
 
-  unless have_library("MagickCore", "InitializeMagick", headers) || have_library("Magick", "InitializeMagick", headers) || have_library("Magick++","InitializeMagick",headers)
+  unless `Magick-config --libs`[/\bl\s*(MagickCore|Magick)\b/]
     exit_failure "Can't install RMagick #{RMAGICK_VERS}. " +
            "Can't find the ImageMagick library or one of the dependent libraries. " +
            "Check the mkmf.log file for more detailed information.\n"

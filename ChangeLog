@@ -1,3 +1,7 @@
+RMagick 2.13.2
+    o Fixed issues preventing RMagick from working with version 6.8 or higher
+    o Fixed issues preventing RMagick from working with ruby 1.9.3	
+	
 RMagick 2.13.1
     o Fixed bug preventing RMagick from working with version 6.5.9 or higher
 

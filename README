@@ -1,7 +1,6 @@
-Hi, everyone -
+A new release 12.3.2 of RMagick is now available.
 
-We're happy to announce that we have found a new developer for RMagick: Moncef Maiza.
+This release will fix the installation issues due to ruby 1.9.3 and ImageMagick 6.8+
+We will soon release 12.3.3 that will fix the deprecate messages.
 
-Please join us in welcoming him. Thank you for taking this project on, Moncef!
-
-- Benjamin and Omer.
+- Moncef Maiza.

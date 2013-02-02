@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.date = Date.today.to_s
   s.summary = %q{Ruby binding to ImageMagick}
   s.description = %q{RMagick is an interface between Ruby and ImageMagick.}
-  s.authors = [%q{Tim Hunter}, %q{Omer Bar-or}, %q{Benjamin Thomas}]
+  s.authors = [%q{Tim Hunter}, %q{Omer Bar-or}, %q{Benjamin Thomas}, %q{Moncef Maiza}]
   s.email = %q{rmagick@rubyforge.org}
   s.homepage = %q{http://rubyforge.org/projects/rmagick}
   s.files = Dir.glob('**/*')

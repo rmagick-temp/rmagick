@@ -1,9 +1,15 @@
-A new release 2.13.2 of RMagick is now available on github.
+A new release 2.13.2 of RMagick is now available on github as well as rubygems.
 
-This release will fix the installation issues due to ruby 1.9.3 and ImageMagick 6.8+. For now please install directly from github if you are using bundle add the following to your Gemfile: 
+This release will fix the installation issues due to ruby 1.9.3 and ImageMagick 6.8+. You can install it the usual way with bundle by adding to Gemfile:
+
+gem 'rmagick', '2.13.2'
+
+if you want to be on edge:
 
 gem 'rmagick', '2.13.2', :git=>'http://github.com/rmagick/rmagick.git'
 
-We will update rubygems.org metadata asap and inform you and then you will be able to install from rubygems.org.
+You also install directly by doing:
+
+gem install rmagick
 
 - Moncef Maiza.

@@ -4,11 +4,11 @@ This release will fix the installation issues due to ruby 1.9.3 and ImageMagick 
 
 gem 'rmagick', '2.13.2'
 
-if you want to be on edge:
+or if you want to be on edge:
 
 gem 'rmagick', '2.13.2', :git=>'http://github.com/rmagick/rmagick.git'
 
-You also install directly by doing:
+You also install it directly by doing:
 
 gem install rmagick
 

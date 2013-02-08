@@ -3,7 +3,7 @@
 require 'fileutils'
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
+require 'test/unit/ui/console/testrunner'  if !RUBY_VERSION[/^1\.9|^2/]
 
 # TODO
 #   test frozen attributes!
@@ -12,7 +12,7 @@ require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
 
 
 class Image_Attributes_UT < Test::Unit::TestCase
-    FreezeError = RUBY_VERSION == '1.9.1' ? RuntimeError : TypeError
+    FreezeError = RUBY_VERSION[/^1\.9|^2/] ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(100, 100)
@@ -23,6 +23,7 @@ class Image_Attributes_UT < Test::Unit::TestCase
         gc.draw(@img)
 
         @hat = Magick::Image.read(FLOWER_HAT).first
+        @p = Magick::Image.read(IMAGE_WITH_PROFILE).first.color_profile
     end
 
     # Test old alpha attribute. New alpha() behavior is tested in Image1.rb
@@ -145,8 +146,8 @@ class Image_Attributes_UT < Test::Unit::TestCase
     def test_color_profile
         assert_nothing_raised { @img.color_profile }
         assert_nil(@img.color_profile)
-        assert_nothing_raised { @img.color_profile = 'xxx' }
-        assert_equal('xxx', @img.color_profile)
+        assert_nothing_raised { @img.color_profile = @p }
+        assert_equal(@p, @img.color_profile)
         assert_raise(TypeError) { @img.color_profile = 2 }
     end
 
@@ -678,5 +679,5 @@ end     # class Image_Attributes_UT
 
 if __FILE__ == $0
 FLOWER_HAT = '../doc/ex/images/Flower_Hat.jpg'
-Test::Unit::UI::Console::TestRunner.run(Image_Attributes_UT) if RUBY_VERSION != '1.9.1'
+Test::Unit::UI::Console::TestRunner.run(Image_Attributes_UT) if !RUBY_VERSION[/^1\.9|^2/]
 end

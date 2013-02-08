@@ -2,7 +2,7 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
+require 'test/unit/ui/console/testrunner'  if !RUBY_VERSION[/^1\.9|^2/]
 require 'fileutils'
 
 ColorspaceTypes = [
@@ -33,10 +33,11 @@ ColorspaceTypes = [
 
 
 class Image3_UT < Test::Unit::TestCase
-    FreezeError = RUBY_VERSION == '1.9.1' ? RuntimeError : TypeError
+    FreezeError = RUBY_VERSION[/^1\.9|^2/] ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
+        @p = Magick::Image.read(IMAGE_WITH_PROFILE).first.color_profile
     end
 
     def test_profile!
@@ -44,7 +45,7 @@ class Image3_UT < Test::Unit::TestCase
             res = @img.profile!('*', nil)
             assert_same(@img, res)
         end
-        assert_nothing_raised { @img.profile!('icc', 'xxx') }
+        assert_nothing_raised { @img.profile!('icc', @p) }
         assert_nothing_raised { @img.profile!('iptc', 'xxx') }
         assert_nothing_raised { @img.profile!('icc', nil) }
         assert_nothing_raised { @img.profile!('iptc', nil) }
@@ -997,5 +998,5 @@ end
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
 FILES = Dir[IMAGES_DIR+'/Button_*.gif']
-Test::Unit::UI::Console::TestRunner.run(Image3_UT) if RUBY_VERSION != '1.9.1'
+Test::Unit::UI::Console::TestRunner.run(Image3_UT) if !RUBY_VERSION[/^1\.9|^2/]
 end

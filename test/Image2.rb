@@ -2,13 +2,13 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner'  if RUBY_VERSION != '1.9.1'
+require 'test/unit/ui/console/testrunner'  if !RUBY_VERSION[/^1\.9|^2/]
 
 # TODO: improve exif tests - need a benchmark image with EXIF data
 
 
 class Image2_UT < Test::Unit::TestCase
-    FreezeError = RUBY_VERSION == '1.9.1' ? RuntimeError : TypeError
+    FreezeError = RUBY_VERSION[/^1\.9|^2/] ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
@@ -254,7 +254,7 @@ class Image2_UT < Test::Unit::TestCase
     # ensure methods detect destroyed images
     def test_destroy
       methods = Magick::Image.instance_methods(false).sort
-      if RUBY_VERSION == '1.9.1'
+      if RUBY_VERSION[/^1\.9|^2/]
           methods -= [:__display__, :destroy!, :destroyed?, :inspect, :cur_image, :marshal_load]
       else
           methods -= %w{ __display__ destroy! destroyed? inspect cur_image  marshal_load}
@@ -582,7 +582,7 @@ class Image2_UT < Test::Unit::TestCase
         end
         assert_nothing_raised do
             res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::LongPixel)
-            assert_equal(10*10*4, res.length)
+            assert_equal(10*10*8, res.length)
         end
         assert_nothing_raised do
             res = @img.export_pixels_to_str(0, 0, 10, 10, "I", Magick::FloatPixel)
@@ -1304,5 +1304,5 @@ end
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
 FILES = Dir[IMAGES_DIR+'/Button_*.gif']
-Test::Unit::UI::Console::TestRunner.run(Image2_UT) if RUBY_VERSION != '1.9.1'
+Test::Unit::UI::Console::TestRunner.run(Image2_UT) if !RUBY_VERSION[/^1\.9|^2/]
 end

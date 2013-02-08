@@ -2,11 +2,11 @@
 
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner' if RUBY_VERSION != '1.9.1'
+require 'test/unit/ui/console/testrunner' if !RUBY_VERSION[/^1\.9|^2/]
 
 
 class Image1_UT < Test::Unit::TestCase
-    FreezeError = RUBY_VERSION == '1.9.1' ? RuntimeError : TypeError
+    FreezeError = RUBY_VERSION[/^1\.9|^2/] ? RuntimeError : TypeError
 
     def setup
         @img = Magick::Image.new(20, 20)
@@ -746,7 +746,8 @@ class Image1_UT < Test::Unit::TestCase
         assert_raise(TypeError) { img1.composite(img2, 0, 0, 2, Magick::OverCompositeOp) }
 
         # negative offsets raise an exception
-        assert_raise(Magick::ImageMagickError) { img1.composite(img2, -10, -10, Magick::OverCompositeOp) }
+        # No longer true, negative offset are accepted as virtual pixels
+        #assert_raise(Magick::ImageMagickError) { img1.composite(img2, -10, -10, Magick::OverCompositeOp) }
 
         img2.destroy!
         assert_raise(Magick::DestroyedImageError) { img1.composite(img2, Magick::CenterGravity, Magick::OverCompositeOp) }
@@ -758,5 +759,5 @@ end
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
 FILES = Dir[IMAGES_DIR+'/Button_*.gif']
-Test::Unit::UI::Console::TestRunner.run(Image1_UT)  if RUBY_VERSION != '1.9.1'
+Test::Unit::UI::Console::TestRunner.run(Image1_UT)  if !RUBY_VERSION[/^1\.9|^2/]
 end

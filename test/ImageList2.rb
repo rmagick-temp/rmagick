@@ -4,7 +4,7 @@
 require 'fileutils'
 require 'RMagick'
 require 'test/unit'
-require 'test/unit/ui/console/testrunner' if RUBY_VERSION != '1.9.1'
+require 'test/unit/ui/console/testrunner' if !RUBY_VERSION[/^1\.9|^2/]
 
 
 class ImageList2_UT < Test::Unit::TestCase
@@ -385,5 +385,5 @@ end
 if __FILE__ == $0
 IMAGES_DIR = '../doc/ex/images'
 FLOWER_HAT = IMAGES_DIR+'/Flower_Hat.jpg'
-Test::Unit::UI::Console::TestRunner.run(ImageList2_UT) if RUBY_VERSION != '1.9.1'
+Test::Unit::UI::Console::TestRunner.run(ImageList2_UT) if !RUBY_VERSION[/^1\.9|^2/]
 end

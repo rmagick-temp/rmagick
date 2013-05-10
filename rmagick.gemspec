@@ -8,6 +8,7 @@ Gem::Specification.new do |s|
   s.authors = [%q{Tim Hunter}, %q{Omer Bar-or}, %q{Benjamin Thomas}, %q{Moncef Maiza}]
   s.email = %q{rmagick@rubyforge.org}
   s.homepage = %q{http://rubyforge.org/projects/rmagick}
+  s.license = 'MIT'
   s.files = Dir.glob('**/*')
   s.bindir = 'bin'
   s.executables = Dir.glob('bin/*').collect {|f| File.basename(f)}

@@ -9819,7 +9819,7 @@ Image_pixel_color(int argc, VALUE *argv, VALUE self)
 #else
             IndexPacket *indexes = GetIndexes(image);
 #endif
-            old_color = image->colormap[*indexes];
+            old_color = image->colormap[(unsigned long)*indexes];
         }
         if (!image->matte)
         {

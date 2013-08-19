@@ -152,14 +152,6 @@ if RUBY_PLATFORM !~ /mswin|mingw/
 
   $magick_version = `Magick-config --version`.chomp
 
-  # Ensure ImageMagick is not configured for HDRI
-  unless checking_for("HDRI disabled version of ImageMagick") do
-    not (`Magick-config --version`["HDRI"])
-  end
-    exit_failure "\nCan't install RMagick #{RMAGICK_VERS}."+
-           "\nRMagick does not work when ImageMagick is configured for High Dynamic Range Images."+
-           "\nDon't use the --enable-hdri option when configuring ImageMagick.\n"
-  end
 
   # Save flags
   $CFLAGS     = ENV["CFLAGS"].to_s   + " " + `Magick-config --cflags`.chomp
